@@ -32,6 +32,7 @@ Known issues identify problems that might prevent you from using the product suc
 
 == Fixed issues
 
+* The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
 * When using Trident 20.07.1 for non-CSI deployments [Kubernetes 1.11 - 1.13], you might observe existing igroups being cleared of all existing IQNs. This has been fixed in the 20.10 release of Trident. This can only be observed when Trident initializes a backend/restarts if scheduled on a new node.
 +
 TIP: We recommend that you upgrade to 20.10.

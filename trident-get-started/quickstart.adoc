@@ -1,0 +1,92 @@
+---
+sidebar: sidebar
+permalink: trident-get-started/quickstart.html
+keywords: kubernetes cluster, simple installation, Kubernetes installation
+summary: If you are just getting started with Kubernetes, use the instructions to install Kubernetes to try it out. These instructions provide a bare-bones, single-node cluster that Trident can integrate with for demonstration purposes.
+---
+
+= Quick start Kubernetes installation
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+If you are just getting started with Kubernetes, use the instructions to install Kubernetes to try it out. These instructions provide a bare-bones, single-node cluster that Trident can integrate with for demonstration purposes.
+
+WARNING: Do not use the cluster you build using these instructions in production. Use the production deployment guides provided by your distribution for that.
+
+NOTE: For detailed information, see the instructions provided by https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/[Kubernetes^].
+
+== Prerequisites
+
+A machine running Ubuntu 16.04 machine with at least 1 GB of RAM.
+
+WARNING: The steps provided here work only for Ubuntu 16.04. For more generic instructions, see the steps provided by https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/[Kubernetes^].
+
+== Install Docker CE 17.03
+
+[source,curl]
+apt-get update && apt-get install -y curl apt-transport-https
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/docker.list
+deb https://download.docker.com/linux/$(lsb_release -si | tr '[:upper:]' '[:lower:]') $(lsb_release -cs) stable
+EOF
+apt-get update && apt-get install -y docker-ce=$(apt-cache madison docker-ce | grep 17.03 | head -1 | awk '{print $3}')
+
+== Install the appropriate version of `kubeadm`, `kubectl`, and `kubelet`
+
+[source,curl]
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+apt-get install -y kubeadm=1.11\* kubectl=1.11\* kubelet=1.11\* kubernetes-cni=0.6\*
+
+== Configure the host
+
+----
+swapoff -a
+# Comment out swap line in fstab so that it remains disabled after reboot
+vi /etc/fstab
+----
+
+== Create the cluster
+
+----
+kubeadm init --kubernetes-version stable-1.11 --token-ttl 0 --pod-network-cidr=192.168.0.0/16
+----
+
+== Install the `kubectl` credentials and untaint the cluster
+
+----
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl taint nodes --all node-role.kubernetes.io/master-
+----
+
+== Add an overlay network
+
+----
+kubectl apply -f https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
+----
+
+== Verify that all of the services started
+
+----
+# kubectl get po -n kube-system
+NAME                                       READY     STATUS    RESTARTS   AGE
+calico-etcd-rvgzs                          1/1       Running   0          9d
+calico-kube-controllers-6ff88bf6d4-db64s   1/1       Running   0          9d
+calico-node-xpg2l                          2/2       Running   0          9d
+etcd-scspa0333127001                       1/1       Running   0          9d
+kube-apiserver-scspa0333127001             1/1       Running   0          9d
+kube-controller-manager-scspa0333127001    1/1       Running   0          9d
+kube-dns-545bc4bfd4-qgkrn                  3/3       Running   0          9d
+kube-proxy-zvjcf                           1/1       Running   0          9d
+kube-scheduler-scspa0333127001             1/1       Running   0          9d
+----
+
+Notice that all of the Kubernetes services are in a Running state. Congratulations! Your cluster is operational.
+
+If this is the first time you are using Kubernetes, familiarize yourself with the https://kubernetes.io/docs/tutorials/kubernetes-basics/[Kubernetes basics^].

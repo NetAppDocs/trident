@@ -5,7 +5,7 @@ keywords: bugs, known issues, problems, fixed  issues
 summary: Known issues identify problems that might prevent you from using the product successfully.
 ---
 
-= Known issues and fixed issues
+= Known issues 
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -29,20 +29,3 @@ Known issues identify problems that might prevent you from using the product suc
 * When using Trident over IPv6, you should specify `managementLIF` and `dataLIF` in the backend definition within square brackets. For example, ``[fd20:8b1e:b258:2000:f816:3eff:feec:0]``.
 
 * If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm. See Worker node Preparation for instructions.
-
-== Fixed issues
-
-* The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
-* When using Trident 20.07.1 for non-CSI deployments [Kubernetes 1.11 - 1.13], you might observe existing igroups being cleared of all existing IQNs. This has been fixed in the 20.10 release of Trident. This can only be observed when Trident initializes a backend/restarts if scheduled on a new node.
-+
-TIP: We recommend that you upgrade to 20.10.
-
-* An upstream Kubernetes bug that could be encountered when rapidly attaching/detaching volumes is fixed with Trident 20.07.1 and the v2.0.1 release of the CSI external-provisioner sidecar. Trident v20.07.1 will use the 2.0.1 release of the external-provisioner sidecar for all Kubernetes clusters running 1.17 and later. If you are using Kubernetes 1.16 or earlier, you should upgrade your Kubernetes cluster to 1.17 or later.
-
-* A previously identified issue with updating the storage prefix for a Trident backend is resolved with Trident 20.07.1. You can work with backends that use an empty storage prefix ("") or one that includes ``"-"``.
-
-* Trident 20.07.1 using the 2.0.1 release of the CSI external-provisioner sidecar enforces a blank fsType (fsType="") for volumes that do not have the fsType in their StorageClass. When working with Kubernetes 1.17 or later, upgrading to Trident 20.07.1 would enable you to provide a blank fsType for NFS volumes. For iSCSI volumes, if you are enforcing an fsGroup using a Security Context, you are required to set the fsType on your StorageClass.
-
-* Trident 20.07.1 improves the resiliency for iSCSI volumes. The v20.07.0 release implements multiple additional checks that eliminate accidental deletions from occurring.
-
-* The bug where Trident creates multiple unintended secrets when it attempts to patch Trident service accounts is fixed in 20.07.1.

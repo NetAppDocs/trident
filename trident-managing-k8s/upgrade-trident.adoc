@@ -18,14 +18,14 @@ NOTE:  Upgrading to a Trident release that is five releases ahead will require y
 
 == Determine the Trident version to upgrade to
 
-* You can upgrade to the `YY.MM` release from the ``YY-1.MM`` release and any in-between releases. For example, you can perform a direct upgrade to 20.07 from 19.07 and later (including dot releases, such as 19.07.1).
+* You can upgrade to the `YY.MM` release from the `YY-1.MM` release and any in-between releases. For example, you can perform a direct upgrade to 20.07 from 19.07 and later (including dot releases, such as 19.07.1).
 * If you have an earlier release, you should perform a multistep upgrade. This requires you to first upgrade to the most recent release that fits your four-release window. For example, if you are running 18.07 and want to upgrade to the 20.07 release, then follow the multistep upgrade process as given below:
 ** First upgrade from 18.07 to 19.07. See the documentation of the respective release to obtain specific instructions for upgrading.
 ** Now upgrade from 19.07 to 20.07.
 
 IMPORTANT: All upgrades for versions 19.04 and earlier require the migration of Trident's metadata from it's own `etcd` to CRD objects. Ensure that you check the documentation of the release to understand how the upgrade works.
 
-WARNING: If you are running Kubernetes 1.17 or later, and are looking to upgrade to 20.07.1 or later, it is important you provide ``parameter.fsType`` in `StorageClasses` used by Trident. You can delete and re-create `StorageClasses` without disrupting pre-existing volumes. This is a **requirement** for enforcing https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[security contexts] for SAN volumes. The https://github.com/NetApp/trident/tree/master/trident-installer/sample-input[sample input^] directory contains examples, such as https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-basic.yaml.templ[`storage-class-basic.yaml.templ`^] and https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-bronze-default.yaml[`storage-class-bronze-default.yaml`^].
+WARNING: If you are running Kubernetes 1.17 or later, and are looking to upgrade to 20.07.1 or later, it is important you provide `parameter.fsType` in `StorageClasses` used by Trident. You can delete and re-create `StorageClasses` without disrupting pre-existing volumes. This is a **requirement** for enforcing https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[security contexts] for SAN volumes. The https://github.com/NetApp/trident/tree/master/trident-installer/sample-input[sample input^] directory contains examples, such as https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-basic.yaml.templ[`storage-class-basic.yaml.templ`^] and https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-bronze-default.yaml[`storage-class-bronze-default.yaml`^].
 For more information, see <insert link to known issues>.
 
 == Which upgrade path should I choose?

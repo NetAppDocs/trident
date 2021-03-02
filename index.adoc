@@ -5,7 +5,7 @@ summary: Trident is a fully supported open source storage provisioner and orches
 keywords: netapp, trident, kubernetes, containers, docker, storage provisioning
 ---
 
-= Trident 21.xx Documentation
+= Trident 21.04 Documentation
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -16,12 +16,10 @@ keywords: netapp, trident, kubernetes, containers, docker, storage provisioning
 
 Trident is a fully supported open source storage provisioner and orchestrator maintained by NetApp.
 
-Trident supports popular container platforms, such as Kubernetes and Docker. In doing so, Trident understands the natural and evolving languages of these platforms and translates requirements expressed or implied through them into an automated and orchestrated response from the infrastructure.
-
-Today, that includes ONTAP (AFF/FAS/Select/Cloud), Element (NetApp HCI/SolidFire), and SANtricity (E/EF-Series) data management software, plus the Azure NetApp Files service in Azure, the Cloud Volumes Service for AWS in Amazon Web Services, and the Cloud Volumes Service for GCP in Google Cloud. This list continues to grow.
-
-NOTE: For information about Trident’s support policy, see https://mysupport.netapp.com/site/info/trident-support[Trident's Release and Support Lifecycle^].
+Trident supports popular container platforms, such as Kubernetes and Docker. It natively integrates with Kubernetes in order to dynamically provision persistent volume requests on demand, at the time of the request. Additionally, Trident has a REST interface which can be used by any application to create and manage storage across the configured resources.
+Trident is compatible with ONTAP (AFF/FAS/Select/Cloud), Element (NetApp HCI/SolidFire), and SANtricity (E/EF-Series) data management software, plus the Azure NetApp Files service in Azure, the Cloud Volumes Service for AWS in Amazon Web Services, and the Cloud Volumes Service for GCP in Google Cloud.
 
 [discrete]
 == Find more information
 * https://github.com/NetApp/trident[Trident GitHub^]
+* https://mysupport.netapp.com/site/info/trident-support[Trident's Release and Support Lifecycle^]

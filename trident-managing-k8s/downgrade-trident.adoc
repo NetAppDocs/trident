@@ -10,7 +10,9 @@ summary: Learn about the steps involved in downgrading to an earlier version of 
 :icons: font
 :imagesdir: ../media/
 
-Learn about the steps involved in downgrading to an earlier version of Trident. You might consider downgrading for various reasons, such as the following:
+Learn about the steps involved in downgrading to an earlier version of Trident.
+
+You might consider downgrading for various reasons, such as the following:
 * Contingency planning
 * Immediate fix for bugs observed as a result of an upgrade
 * Dependency issues, unsuccessful and incomplete upgrades
@@ -170,6 +172,7 @@ INFO The uninstaller did not delete Trident's namespace in case it is going to b
 INFO Trident uninstallation succeeded.
 ----
 . After this is complete, obtain the Trident binary for the desired version (in this example, Trident 19.07), and use it to install Trident. You can generate custom YAMLs for a link:../trident-deploy-k8s/kubernetes-customize-deploy-tridentctl.html[customized installation^] if needed.
++
 [source,console]
 ----
 $ cd 19.07/trident-installer/

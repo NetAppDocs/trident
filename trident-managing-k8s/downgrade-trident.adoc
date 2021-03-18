@@ -23,10 +23,170 @@ You should consider a downgrade when moving to a Trident release that uses CRDs.
 
 You should not downgrade to a release of Trident that uses `etcd` to maintain state (19.04 and earlier). All operations performed with the current Trident release are not reflected after the downgrade. Newly created PVs are not usable when moving back to an earlier version. Changes made to objects such as backends, PVs, storage classes, and volume snapshots (created/updated/deleted) are not visible to Trident when moving back to an earlier version. Going back to an earlier version does not disrupt access for PVs that were already created by using the older release, unless they have been upgraded.
 
-== Overview of downgrade process
+== Downgrade process when Trident is installed by using the operator
 
+If you installed Trident by using the operator, the downgrade process involves the following steps.
 
+.Steps
+. If you are unsure about how Trident is installed, run this simple test:
+.. List the pods present in the Trident namespace. If you see a pod named
+`trident-operator-xxxxxxxxxx-xxxxx`, Trident is installed by using the operator.
+.. Identify the version of Trident running in your cluster. You can either use `tridentctl` or take a look at the image used in the Trident
+pods.
+.. For Trident 21.01 or later, list the `tridentorchestrator` objects
+present, and check the status to confirm that it is `Installed`. This confirms that Trident is installed by using the *cluster-scoped operator*.
++
+See the following example:
++
+[source,console]
+----
+#Obtain a list of pods in the Trident namespace. Do you see a trident-operator-xxxxxxxxxx-xxxxx pod?
+#If yes, then you have Trident installed using the operator.
+$ kubectl get pods -n trident
+NAME                                READY   STATUS    RESTARTS   AGE
+trident-csi-79df798bdc-2jzpq        6/6     Running   0          19h
+trident-csi-mhw2d                   2/2     Running   0          19h
+trident-operator-5574dbbc68-nthjv   1/1     Running   0          20h
+
+#Obtain the version of Trident installed. Either use tridentctl or check the Trident
+#image that is used.
+$ tridentctl -n trident version
++----------------+----------------+
+| SERVER VERSION | CLIENT VERSION |
++----------------+----------------+
+| 21.04.0        | 21.04.0        |
++----------------+----------------+
+
+$ kubectl describe pod trident-csi-79df798bdc-2jzpq -n trident | grep "Image" -A 2 -B 2 | head -4
+trident-main:
+  Container ID:  docker://e088b1ffc7017ddba8144d334cbc1eb646bf3491be031ef583a3f189ed965213
+  Image:         netapp/trident:21.04.0
+  Image ID:      docker-pullable://netapp/trident@sha256:28095a20d8cfffaaaaakkkkkeeeeeec4925ac5d652341b6eaa2ea9352f1e0
+
+#Is the version of Trident being used >=21.01? If yes, check if a ``tridentorchestrator`` is present.
+#If yes, then you have installed Trident using the operator.
+$ kubectl get torc
+NAME        AGE
+trident     19h
+
+$ kubectl describe torc trident | grep Message: -A 3
+Message:                Trident installed
+Namespace:              trident
+Status:                 Installed
+Version:                v21.04.0
+
+#Is the version of Trident being used in the range [20.04 - 20.10]? If yes, check if a ``tridentprovisioner`` is present.
+#If yes, then you have installed Trident using the operator.
+$ kubectl get tprov -n trident
+NAME         AGE
+trident-2010 38d
+
+$ kubectl describe tprov trident-2010 -n trident | grep Message: -A 3
+Message:                Trident installed
+Status:                 Installed
+Version:                v20.10.1
+----
+. Delete the existing Trident install *as well as* the operator.
+. Install the downgrade candidate by using the operator or `tridentctl`.
+
+=== Downgrade process from cluster-scoped operator to namespace-scoped operator
+
+Trident 21.01 and later use the cluster-scoped operator. Trident 20.04 through 20.10 use the namespace-scoped operator. Perform the steps below to downgrade from a version of Trident that uses the cluster-scoped operator to a version that used the namespace-scoped operator:
+
+.Steps
+. link:uninstall-trident.html[Uninstall Trident^].
++
+NOTE: Do not wipe out the CRDs unless you want to completely remove an existing installation.
+. Verify that `tridentorchestrator` is deleted:
++
+[source,console]
+----
+#Check to see if there are any tridentorchestrators present
+$ kubectl get torc
+NAME        AGE
+trident     20h
+
+#Looks like there is a tridentorchestrator that needs deleting
+$ kubectl delete torc trident
+tridentorchestrator.trident.netapp.io "trident" deleted
+----
+. Delete the cluster-scoped operator. To do this, you need the manifest used to deploy the operator. You can obtain it from the https://github.com/NetApp/trident/blob/stable/v21.01/deploy/bundle.yaml[Trident GitHub repository^]. Make sure you switch to the required branch.
+. Delete the `tridentorchestrator` CRD.
++
+[source,console]
+----
+#Check to see if ``tridentorchestrators.trident.netapp.io`` CRD is present and delete it.
+$ kubectl get crd tridentorchestrators.trident.netapp.io
+NAME                                     CREATED AT
+tridentorchestrators.trident.netapp.io   2021-01-21T21:11:37Z
+$ kubectl delete crd tridentorchestrators.trident.netapp.io
+customresourcedefinition.apiextensions.k8s.io "tridentorchestrators.trident.netapp.io" deleted
+----
+Trident has been uninstalled.
+. Now install the desired version of Trident. Follow the documentation for the version you are installing.
+
+=== Downgrade by using Helm
+
+To downgrade, use the `helm rollback` command. See the following example:
+----
+$ helm rollback trident [revision #]
+----
+
+== Downgrade process when Trident is installed by using `tridentctl`
+
+If you installed Trident by using `tridentctl`, the downgrade process involves the following steps.
+
+NOTE: Before beginning the downgrade, you should take a snapshot of your Kubernetes cluster’s `etcd`. This enables you to back up the current state of Trident’s CRDs.
+
+.Steps
+. Make sure that Trident is installed by using `tridentctl`. If you are unsure about how Trident is installed, run this simple test:
+.. List the pods present in the Trident namespace.
+.. Identify the version of Trident running in your cluster. You can either use tridentctl or take a look at the image used in the Trident
+pods.
+.. If you *do not see* a `tridentOrchestrator`, (or) a
+`tridentprovisioner`, (or) a pod named
+`trident-operator-xxxxxxxxxx-xxxxx`, Trident *is installed* with `tridentctl`.
+. Uninstall Trident with the existing `tridentctl` binary. In the following example, we are downgrading from Trident 19.10 to 19.07. The 19.10 binary is used for uninstalling Trident.
++
+[source,console]
+----
+$ tridentctl version -n trident
++----------------+----------------+
+| SERVER VERSION | CLIENT VERSION |
++----------------+----------------+
+| 19.10.0        | 19.10.0        |
++----------------+----------------+
+
+$ tridentctl uninstall -n trident
+INFO Deleted Trident deployment.
+INFO Deleted Trident daemonset.
+INFO Deleted Trident service.
+INFO Deleted Trident secret.
+INFO Deleted cluster role binding.
+INFO Deleted cluster role.
+INFO Deleted service account.
+INFO Deleted pod security policy.                  podSecurityPolicy=tridentpods
+INFO The uninstaller did not delete Trident's namespace in case it is going to be reused.
+INFO Trident uninstallation succeeded.
+----
+. After this is complete, obtain the Trident binary for the desired version (in this example, Trident 19.07), and use it to install Trident. You can generate custom YAMLs for a link:../trident-deploy-k8s/kubernetes-customize-deploy-tridentctl.html[customized installation^] if needed.
+[source,console]
+----
+$ cd 19.07/trident-installer/
+$ ./tridentctl install -n trident-ns
+INFO Created installer service account.            serviceaccount=trident-installer
+INFO Created installer cluster role.               clusterrole=trident-installer
+INFO Created installer cluster role binding.       clusterrolebinding=trident-installer
+INFO Created installer configmap.                  configmap=trident-installer
+...
+...
+INFO Deleted installer cluster role binding.
+INFO Deleted installer cluster role.
+INFO Deleted installer service account.
+----
+The downgrade process is complete.
 
 == Find more information
 * link:upgrade-operator.html[Upgrade by using the Trident operator^]
 * link:upgrade-tridentctl.html[Upgrade by using `tridentctl`]
+* https://netapp-trident.readthedocs.io/en/stable-v21.01/[Trident 21.01 documentation^]

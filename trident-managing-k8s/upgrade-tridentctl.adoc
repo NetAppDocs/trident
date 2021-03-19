@@ -63,7 +63,6 @@ Consider the following when deciding to upgrade volumes to the CSI type:
 
 Before proceeding, you should determine if your Trident deployment is capable of upgrading legacy volumes. The version of Trident installed should be at least 19.07 and Trident should be configured as a CSI provisioner. This can be confirmed by doing a `kubectl get pods -n <trident-namespace>`. The presence of a `trident-csi-<generated-id>` indicates that it is running as a CSI provisioner and supports upgrading legacy volumes. See the following code sample:
 
-[source,console]
 ----
 $ tridentctl version
 
@@ -85,7 +84,6 @@ Here is an example that shows how a volume upgrade is performed.
 
 . Run `kubectl get pv` to list the PVs.
 +
-[source,console]
 ----
 $ kubectl get pv
 NAME                         CAPACITY     ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                  STORAGECLASS    REASON   AGE
@@ -99,7 +97,6 @@ trident                      2Gi          RWO            Retain           Bound 
 There are currently four PVs that have been created by Trident 19.04, using the `netapp.io/trident` provisioner.
 . Run `kubectl describe pv` to get the details of the PV.
 +
-[source,console]
 ----
 $ kubectl describe pv default-pvc-2-a8486
 
@@ -127,7 +124,6 @@ Source:
 The PV was created by using the `netapp.io/trident` provisioner and is of the type NFS. To support all the new features provided by Trident, this PV should be upgraded to the CSI type.
 . Run the `tridenctl upgrade volume <name-of-trident-volume>` command to upgrade a legacy Trident volume to the CSI spec.
 +
-[source,console]
 ----
 $ ./tridentctl get volumes -n trident
 +---------------------+---------+---------------+----------+--------------------------------------+--------+---------+
@@ -148,7 +144,6 @@ $ ./tridentctl upgrade volume default-pvc-2-a8486 -n trident
 ----
 . Run a `kubectl describe pv` to verify that the volume is a CSI volume.
 +
-[source,console]
 ----
 $ kubectl describe pv default-pvc-2-a8486
 Name:            default-pvc-2-a8486

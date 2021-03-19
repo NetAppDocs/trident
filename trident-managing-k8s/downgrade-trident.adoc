@@ -41,7 +41,6 @@ present, and check the status to confirm that it is `Installed`. This confirms t
 +
 See the following example:
 +
-[source,console]
 ----
 #Obtain a list of pods in the Trident namespace. Do you see a trident-operator-xxxxxxxxxx-xxxxx pod?
 #If yes, then you have Trident installed using the operator.
@@ -102,7 +101,6 @@ Trident 21.01 and later use the cluster-scoped operator. Trident 20.04 through 2
 NOTE: Do not wipe out the CRDs unless you want to completely remove an existing installation.
 . Verify that `tridentorchestrator` is deleted:
 +
-[source,console]
 ----
 #Check to see if there are any tridentorchestrators present
 $ kubectl get torc
@@ -116,7 +114,6 @@ tridentorchestrator.trident.netapp.io "trident" deleted
 . Delete the cluster-scoped operator. To do this, you need the manifest used to deploy the operator. You can obtain it from the https://github.com/NetApp/trident/blob/stable/v21.01/deploy/bundle.yaml[Trident GitHub repository^]. Make sure you switch to the required branch.
 . Delete the `tridentorchestrator` CRD.
 +
-[source,console]
 ----
 #Check to see if ``tridentorchestrators.trident.netapp.io`` CRD is present and delete it.
 $ kubectl get crd tridentorchestrators.trident.netapp.io
@@ -151,7 +148,6 @@ pods.
 `trident-operator-xxxxxxxxxx-xxxxx`, Trident *is installed* with `tridentctl`.
 . Uninstall Trident with the existing `tridentctl` binary. In the following example, we are downgrading from Trident 19.10 to 19.07. The 19.10 binary is used for uninstalling Trident.
 +
-[source,console]
 ----
 $ tridentctl version -n trident
 +----------------+----------------+
@@ -174,7 +170,6 @@ INFO Trident uninstallation succeeded.
 ----
 . After this is complete, obtain the Trident binary for the desired version (in this example, Trident 19.07), and use it to install Trident. You can generate custom YAMLs for a link:../trident-deploy-k8s/kubernetes-customize-deploy-tridentctl.html[customized installation^] if needed.
 +
-[source,console]
 ----
 $ cd 19.07/trident-installer/
 $ ./tridentctl install -n trident-ns

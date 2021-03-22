@@ -14,9 +14,11 @@ keywords: netapp, trident, kubernetes, containers, docker, storage provisioning
 
 [.lead]
 
-Trident is a fully supported open source storage provisioner and orchestrator maintained by NetApp.
+Trident is a fully supported open source storage provisioner and orchestrator maintained by NetApp. It enables you to create storage volumes for containerized applications managed by Docker and Kubernetes.
+Trident works with the portfolio of NetApp storage platforms to deliver storage on-demand to applications according to policies defined by the administrator.
 
-Trident supports popular container platforms, such as Kubernetes and Docker. It natively integrates with Kubernetes in order to dynamically provision persistent volume requests on demand, at the time of the request. Additionally, Trident has a REST interface which can be used by any application to create and manage storage across the configured resources.
+Trident is deployed by using native paradigms and provides persistent storage to all the namespaces in the cluster. Trident can dynamically provision persistent volume requests on demand, at the time of the request. Additionally, Trident has a REST interface which can be used by any application to create and manage storage across the configured resources.
+
 Trident is compatible with ONTAP (AFF/FAS/Select/Cloud), Element (NetApp HCI/SolidFire), and SANtricity (E/EF-Series) data management software, plus the Azure NetApp Files service in Azure, the Cloud Volumes Service for AWS in Amazon Web Services, and the Cloud Volumes Service for GCP in Google Cloud.
 
 [discrete]

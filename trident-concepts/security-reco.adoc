@@ -1,0 +1,40 @@
+---
+sidebar: sidebar
+permalink: trident-concepts/security-reco.html
+keywords: security, chap, trident, namespace
+summary: Use the recommendations listed here to ensure that your Trident installation is secure.
+---
+
+= Security recommendations
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Use the recommendations listed here to ensure that your Trident installation is secure.
+
+== Run Trident in its own namespace
+
+It is important to prevent applications, application administrators, users, and management applications from accessing Trident object definitions or the pods to ensure reliable storage and block potential malicious activity.
+
+To separate the other applications and users from Trident, always install Trident in its own Kubernetes namespace
+(`trident`). Putting Trident in its own namespace assures that only the Kubernetes administrative personnel have access to the Trident pod and the artifacts (such as backend and CHAP secrets if applicable) stored in the namespaced CRD objects.
+You should ensure that you allow only administrators access to the Trident namespace and thus access to the `tridentctl` application.
+
+== CHAP authentication with ONTAP SAN backends
+
+Trident supports CHAP-based authentication for ONTAP SAN workloads (using the `ontap-san` and `ontap-san-economy` drivers). NetApp recommends using bidirectional CHAP with Trident for
+authentication between a host and the storage backend.
+
+For ONTAP backends that use the SAN storage drivers, Trident can set up bidirectional CHAP and manage CHAP usernames and secrets through `tridentctl`.
+See Using CHAP with ONTAP SAN drivers to understand how Trident configures CHAP on ONTAP backends. <INSERT LINK>
+
+NOTE: CHAP support for ONTAP backends is available with Trident 20.04 and later.
+
+== CHAP authentication with NetApp HCI and SolidFire backends
+
+NetApp recommends deploying bi-directional CHAP to ensure authentication between a host and the NetApp HCI and SolidFire backends. Trident uses a secret object that includes two CHAP passwords per tenant. When Trident is installed as a CSI provisioner, it manages the CHAP secrets and stores them in a `tridentvolume` CR object for the respective PV. When you create a PV, CSI Trident uses the CHAP secrets to initiate an iSCSI session and communicate with the NetApp HCI and SolidFire system over CHAP.
+
+NOTE: The volumes that are created by CSI Trident are not associated with any Volume Access Group.
+
+In the non-CSI frontend, the attachment of volumes as devices on the worker nodes is handled by Kubernetes. After volume creation, Trident makes an API call to the NetApp HCI/SolidFire system to retrieve the secrets if the secret for that tenant does not already exist. Trident then passes the secrets on to Kubernetes. The kubelet
+located on each node accesses the secrets via the Kubernetes API and uses them to run/enable CHAP between each node accessing the volume and the NetApp HCI/SolidFire system where the volumes are located.

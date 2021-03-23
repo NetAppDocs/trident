@@ -10,13 +10,17 @@ summary: A Kubernetes cluster typically consists of two types of nodes, each res
 :icons: font
 :imagesdir: ../media/
 
+Each storage platform in NetApp's portfolio has unique capabilities that benefit applications, containerized or not. Trident works with each of the major platforms: ONTAP, Element, and E-Series. There is not one platform which is better suited for all applications and scenarios than another, however, the needs of the application and the team administering the device should be taken into account when choosing a platform.
+
+You should follow the baseline best practices for the host operating system with the protocol that you are leveraging. Optionally, you might want to consider incorporating application best practices, when available, with backend, storage class, and PVC settings to optimize storage for specific applications.
+
 == ONTAP and Cloud Volumes ONTAP best practices
 
 Learn the best practices for configuring ONTAP and Cloud Volumes ONTAP for Trident.
 
 The following recommendations are guidelines for configuring ONTAP for containerized workloads, which consume volumes that are dynamically provisioned by Trident. Each should be considered and evaluated for appropriateness in your environment.
 
-*Use SVM(s) dedicated to Trident*
+=== Use SVM(s) dedicated to Trident
 
 Storage Virtual Machines (SVMs) provide isolation and administrative separation between tenants on an ONTAP system.  Dedicating an SVM to applications enables the delegation of privileges and enables applying best practices for limiting resource consumption.
 
@@ -30,7 +34,7 @@ In each case, the interface should be in DNS, and the DNS name should be used wh
 
 There is no preference between having a dedicated or shared management LIF for the SVM, however, you should ensure that your network security policies align with the approach you choose. Regardless, the management LIF should be accessible via DNS to facilitate maximum flexibility should https://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-dap/GUID-B9E36563-1C7A-48F5-A9FF-1578B99AADA9.html[SVM-DR^] be used in conjunction with Trident.
 
-*Limit the maximum volume count*
+=== Limit the maximum volume count
 
 ONTAP storage systems have a maximum volume count, which varies based on the software version and hardware platform. See https://hwu.netapp.com/[NetApp Hardware Universe^] for your specific platform and ONTAP version to determine the exact limits. When the volume count is exhausted, provisioning operations fail not only for Trident, but for all the storage requests.
 
@@ -50,17 +54,17 @@ The `max-volumes` value is the total volumes provisioned across all the nodes in
 
 For example, a two-node ONTAP cluster has the ability to host a maximum of 2000 FlexVolumes. Having the maximum volume count set to 1250 appears very reasonable.  However, if only https://library.netapp.com/ecmdocs/ECMP1368859/html/GUID-3AC7685D-B150-4C1F-A408-5ECEB3FF0011.html[aggregates^] from one node are assigned to the SVM, or the aggregates assigned from one node are unable to be provisioned against (for example, due to capacity), then the other node becomes the target for all Trident provisioned volumes. This means that the volume limit might be reached for that node before the `max-volumes` value is reached, resulting in impacting both Trident and other volume operations that use that node. *You can avoid this situation by ensuring that aggregates from each node in the cluster are assigned to the SVM used by Trident in equal numbers.*
 
-*Limit the maximum size of volumes created by Trident*
+=== Limit the maximum size of volumes created by Trident
 
 To configure the maximum size for volumes that can be created by Trident, use the `limitVolumeSize` parameter in your `backend.json` definition.
 
 In addition to controlling the volume size at the storage array, you should also leverage Kubernetes capabilities.
 
-*Configure Trident to use bidirectional CHAP*
+=== Configure Trident to use bidirectional CHAP
 
 You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. Bidirectional CHAP support is available with Trident 20.04 and above. See *Using CHAP with ONTAP SAN drivers*. <INSERT LINK HERE.>
 
-*Create and use an SVM QoS policy*
+=== Create and use an SVM QoS policy
 
 Leveraging an ONTAP QoS policy, applied to the SVM, limits the number of IOPS consumable by the Trident provisioned volumes.  This helps to http://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-perf-mon/GUID-77DF9BAF-4ED7-43F6-AECE-95DFB0680D2F.html?cp=7_1_2_1_2[prevent a bully^] or out-of-control container from affecting workloads outside of the Trident SVM.
 
@@ -87,7 +91,7 @@ It's important to remember that a QoS policy assigned at the SVM level results i
 
 IMPORTANT: You should assign the QoS policy group to the SVM *only* if your ONTAP version is earlier than 9.8.
 
-*Create QoS policy groups for Trident*
+=== Create QoS policy groups for Trident
 
 Quality of service (QoS) guarantees that performance of critical workloads is not degraded by competing workloads. ONTAP QoS policy groups provide QoS options for volumes, and enable users to define the throughput ceiling for one or more workloads. For more information about QoS, see https://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-perf-mon/GUID-77DF9BAF-4ED7-43F6-AECE-95DFB0680D2F.html[Guaranteeing throughput with QoS^].
 You can specify QoS policy groups in the backend or in a storage pool, and they are applied to each volume created in that pool or backend.
@@ -130,12 +134,9 @@ Consider the following when you create QoS policy groups:
 
 * You should apply the policy groups per volume, so that each volume gets the entire throughput as specified by the policy group. Shared policy groups are not supported.
 
-For more information about QoS policy groups, see the following links:
+For more information about QoS policy groups, see https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-cmpr-980/TOC__qos.html[ONTAP 9.8 QoS commands^].
 
-* https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-cmpr-980/TOC__qos.html[ONTAP 9.8 QoS commands^]
-* https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-cmpr-980/TOC__qos__policy-group.html[ONTAP 9.8 QoS policy group commands^]
-
-*Limit storage resource access to Kubernetes cluster members*
+=== Limit storage resource access to Kubernetes cluster members
 
 Limiting access to the NFS volumes and iSCSI LUNs created by Trident is a critical component of the security posture for your Kubernetes deployment. Doing so prevents hosts that are not a part of the Kubernetes cluster from accessing the volumes and potentially modifying data unexpectedly.
 
@@ -149,17 +150,19 @@ For volumes where access is desired from both Kubernetes and external hosts, the
 
 For deployments which have dedicated infrastructure nodes (for example, OpenShift) or other nodes which are not schedulable for user applications, separate export policies should be used to further limit access to storage resources. This includes creating an export policy for services which are deployed to those infrastructure nodes (for example, the OpenShift Metrics and Logging services), and standard applications which are deployed to non-infrastructure nodes.
 
-*Use a dedicated export policy*
+=== Use a dedicated export policy
 
 You should ensure that an export policy exists for each backend that only allows access to the nodes present in the Kubernetes cluster. Trident can automatically create and manage export policies starting from the 20.04 release. See Dynamic Export Policies with ONTAP NAS. <INSERT LINK HERE.> This way, Trident limits access to the
 volumes it provisions to the nodes in the Kubernetes cluster and simplifies the addition/deletion of nodes.
 
 Alternatively, you can also create an export policy manually and populate it with one or more export rules that process each node access request:
+
 * Use the `vserver export-policy create` ONTAP CLI command to create the export policy.
 * Add rules to the export policy by using the `vserver export-policy rule create` ONTAP CLI command.
+
 Running these commands enables you to restrict which Kubernetes nodes have access to the data.
 
-*Disable `showmount` for the application SVM*
+=== Disable `showmount` for the application SVM
 
 The `showmount` feature enables an NFS client to query the SVM for a list of available NFS exports. A pod deployed to the Kubernetes cluster can issue the `showmount -e` command against the data LIF and receive a list of available mounts, including those which it does not have access to. While this, by itself, is not a security compromise, it does provide unnecessary information potentially aiding an unauthorized user with connecting to an NFS export.
 
@@ -173,11 +176,11 @@ vserver nfs modify -vserver <svm_name> -showmount disabled
 
 Learn the best practices for configuring SolidFire storage for Trident.
 
-*Create Solidfire Account*
+=== Create Solidfire Account
 
 Each SolidFire account represents a unique volume owner and receives its own set of Challenge-Handshake Authentication Protocol (CHAP) credentials. You can access volumes assigned to an account either by using the account name and the relative CHAP credentials or through a volume access group. An account can have up to two-thousand volumes assigned to it, but a volume can belong to only one account.
 
-**Create a QoS policy**
+=== Create a QoS policy
 
 Use SolidFire Quality of Service (QoS) policies if you want to create and save a standardized quality of service setting that can be applied to many volumes.
 
@@ -219,7 +222,7 @@ NOTE: Although the Max IOPS and Burst IOPS can be set as high as 200,000, the re
 
 Block size and bandwidth have a direct influence on the number of IOPS. As block sizes increase, the system increases bandwidth to a level necessary to process the larger block sizes. As bandwidth increases, the number of IOPS the system is able to attain decreases. See https://www.netapp.com/pdf.html?item=/media/10502-tr-4644pdf.pdf[SolidFire Quality of Service^] for more information about QoS and performance.
 
-*SolidFire authentication*
+=== SolidFire authentication
 
 Element supports two methods for authentication: CHAP and Volume Access Groups (VAG). CHAP uses the CHAP protocol to authenticate the host to the backend. Volume Access Groups controls access to the volumes it provisions. NetApp recommends using CHAP for authentication as it's simpler and has no scaling limits.
 
@@ -233,19 +236,19 @@ However, if CHAP cannot be enabled and VAGs are required, create the access grou
 
 Learn the best practices for configuring E-Series storage for Trident.
 
-*E-Series disk pools and volume groups*
+=== E-Series disk pools and volume groups
 
 Create disk pools and volume groups based on your requirement and determine how the total storage capacity should be organized into volumes and shared among hosts. Both the disk pool and the volume group consist of a set of drives that are logically grouped to provide one or more volumes to an application host. All of the drives in a disk pool or volume group should be of the same media type.
 
-*E-Series host groups*
+=== E-Series host groups
 
 Trident uses host groups to access the volumes (LUNs) that it provisions. By default, Trident uses the host group called `trident` unless you specify a different host group name in the configuration. Trident, by itself does not create or manage host groups. You have to create the host group before the E-Series storage backend is set up on Trident. Ensure that all the Kubernetes worker nodes iSCSI IQN names are updated in the host group.
 
-*E-Series snapshot schedule*
+=== E-Series snapshot schedule
 
 Create a snapshot schedule and assign the volume created by Trident to a snapshot schedule so that volume backups can be taken at the required interval. Based on the snapshots taken as per the snapshot policy, rollback operations can be done on volumes by restoring a snapshot image to the base volume. You should use SANtricity System Manager to create the snapshot schedule.
 
-*Snapshot consistency groups*
+=== Snapshot consistency groups
 
 Setting up snapshot consistency groups are also ideal for applications that span multiple volumes. The purpose of a consistency group is to take simultaneous snapshot images of multiple volumes, thus ensuring consistent copies of a collection of volumes at a particular point in time. You should use SANtricity System Manager to create consistency groups.
 
@@ -253,15 +256,15 @@ Setting up snapshot consistency groups are also ideal for applications that span
 
 Learn the best practices for configuring Cloud Volumes Service on AWS for Trident.
 
-*Create an export policy*
+=== Create an export policy
 
 To ensure that only the authorized set of nodes have access to the volume provisioned through Cloud Volumes Service, set appropriate rules for the export policy while creating a Cloud Volumes Service. When provisioning volumes on Cloud Volume Services through Trident, make sure to use the `exportRule` parameter in the backend file to give access to the required Kubernetes nodes.
 
-*Create a snapshot policy*
+=== Create a snapshot policy
 
 Create a snapshot policy for the volumes provisioned through Cloud Volume Service to ensure that snapshots are taken at required intervals. This guarantees data backup at regular intervals and enables data to be restored in the event of a data loss or data corruption. You can set the snapshot policy for volumes hosted by Cloud Volume Service by selecting the appropriate schedule on the volumes details page.
 
-*Choose the appropriate service level, storage capacity, and storage bandwidth*
+=== Choose the appropriate service level, storage capacity, and storage bandwidth
 
 Cloud Volume Services for AWS offers different service levels, such as, standard, premium, and extreme. These service levels cater to different storage capacity and storage bandwidth requirements. Ensure that you select the appropriate service level based on your business needs.
 
@@ -272,13 +275,11 @@ You should select the required size of the allocated storage during volume creat
 
 The storage bandwidth depends on the combination of the service level and the allocated capacity that you have selected. Therefore, select the right service level and allocated capacity keeping the required bandwidth in mind.
 
-*Limit the maximum size of volumes created by Trident*
+=== Limit the maximum size of volumes created by Trident
 
 It i possible to restrict the maximum size of volumes created by Trident on Cloud Volume Services for AWS by using the `limitVolumeSize` parameter in the backend configuration file. Setting this parameter ensures that provisioning fails if the requested volume size is above the set value.
 
 == Where to find more information?
-
-You should follow the baseline best practices for the host operating system with the protocol that you are leveraging. Optionally, you might want to consider incorporating application best practices, when available, with backend, storage class, and PVC settings to optimize storage for specific applications.
 
 Some of the best practices documentation is listed below. Search the https://www.netapp.com/search/[NetApp library^] for the most current versions.
 

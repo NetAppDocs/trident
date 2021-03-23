@@ -1,0 +1,57 @@
+---
+sidebar: sidebar
+permalink: trident-concepts/backup.html
+keywords: security, chap, trident, namespace
+summary: Learn about data protection and recoverability options that NetApp’s storage platforms provide. Trident can provision volumes that can take advantage of some of these features. You should have a full data protection and recovery strategy for each application with a persistence requirement.
+---
+
+= Data protection capabilities
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Learn about data protection and recoverability options that NetApp’s storage platforms provide. Trident can provision volumes that can take advantage of some of these features. You should have a data protection and recovery strategy for each application with a persistence requirement.
+
+== Back up the `etcd` cluster data
+
+Trident stores its metadata in the Kubernetes cluster's `etcd` database. Periodically backing up the `etcd` cluster data is important to recover Kubernetes clusters under disaster scenarios.
+
+.Steps
+. The `etcdctl snapshot save` command enables you to take a point-in-time snapshot of the `etcd` cluster:
++
+[source,console]
+----
+sudo docker run --rm -v /backup:/backup \
+  --network host \
+  -v /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd \
+  --env ETCDCTL_API=3 \
+  k8s.gcr.io/etcd-amd64:3.2.18 \
+  etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
+  --key=/etc/kubernetes/pki/etcd/healthcheck-client.key \
+  snapshot save /backup/etcd-snapshot.db
+----
++
+This command creates an etcd snapshot by spinning up an etcd container and saves it in the `/backup` directory.
+
+. In the event of a disaster, you can spin up a Kubernetes cluster by using the etcd snapshots.
+Use the `etcdctl snapshot restore` command to restore a specific snapshot taken to the `/var/lib/etcd` folder. After restoring, confirm if the `/var/lib/etcd` folder has been populated with the `member` folder. The following is an example of `etcdctl snapshot restore` command:
++
+[source,console]
+----
+# etcdctl snapshot restore '/backup/etcd-snapshot-latest.db' ; mv /default.etcd/member/ /var/lib/etcd/
+----
+
+. Before you initialize the Kubernetes cluster, copy all the necessary certificates.
+. Create the cluster with the ``--ignore-preflight-errors=DirAvailable--var-lib-etcd`` flag.
+. After the cluster comes up ensure that the kube-system pods have started.
+. Use the `kubectl get crd` command to verify if the custom resources created by Trident are present and retrieve Trident objects to make sure that all the data is available.
+
+== Use ONTAP snapshots
+
+Snapshots play an important role by providing point-in-time recovery options for application data. However, snapshots are not backups by themselves, they will not protect against storage system failure or other catastrophes. But, they are a convenient, quick, and easy way to recover data in most scenarios. Learn about how you can use ONTAP snapshot technology to take backups of the volume and how to restore them.
+
+* If the snapshot policy has not been defined in the backend, it defaults to using the `none` policy. This results in ONTAP taking no automatic snapshots. However, the storage administrator can take manual snapshots or change the snapshot policy via the ONTAP management interface. This does not affect Trident operation.
+* The snapshot directory is hidden by default. This helps facilitate maximum compatibility of volumes provisioned using the `ontap-nas` and `ontap-nas-economy` drivers. Enable the `.snapshot` directory when using the `ontap-nas` and `ontap-nas-economy` drivers to allow applications to recover data from snapshots directly.
+* 

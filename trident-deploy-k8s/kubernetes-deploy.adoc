@@ -5,7 +5,7 @@ keywords: deploy, trident, methods, operator, tridentctl, helm
 summary: You can deploy Trident using the Trident operator or with `tridentctl`.
 ---
 
-= Deploy Trident
+= Deployment overview
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -59,3 +59,59 @@ It is not hard to imagine a scenario where moving between deployment methods is 
 * Always use the same method for uninstalling Trident. If you have deployed Trident with `tridentctl`, you should use the appropriate version of the `tridentctl` binary to uninstall Trident. Similarly, if deploying Trident with the operator, you should edit the TridentOrchestrator CR and set `spec.uninstall=true` to uninstall Trident.
 * If you have a Trident operator deployment that you want to remove and use `tridentctl` to deploy Trident, you should first edit the TridentOrchestrator and set `spec.uninstall=true` to uninstall Trident. Then delete the TridentOrchestrator and the operator deployment. You can then install Trident with `tridentctl`.
 * If you have a manual Trident operator deployment, and you want to use Helm-based Trident operator deployment, you should manually uninstall the operator first, and then do the Helm install. This enables Helm to deploy the Trident operator with the required labels and annotations. If you do not do this, your Helm-based Trident Operator deployment will fail with label validation error and annotation validation error. If you have a `tridentctl`-based deployment, you can use Helm-based deployment without running into issues.
+
+== Deployment modes
+
+There are three ways to deploy Trident.
+
+=== Normal/standard deployment
+
+Deploying Trident on a Kubernetes cluster results in the Trident installer doing two things:
+
+* Fetching the container images over the Internet
+* Creating a deployment and/or node daemonset, which spins up Trident pods on all the eligible nodes in the Kubernetes cluster.
+
+A normal/standard deployment such as this can be performed in two differen ways:
+
+* Using `tridentctl install` to install Trident.
+* Using the Trident operator. You can deploy Trident operator either manually or by using Helm.
+
+This mode of installing is the easiest way to install Trident and works for most environments that do not impose network restrictions.
+
+=== Offline deployment
+
+To perform an air-gapped deployment of Trident, you can use the `--image-registry` flag when invoking `tridentctl install` to point to a private image registry. If deploying with the Trident operator, you can alternatively specify `spec.imageRegistry` in your TridentOrchestrator. This registry should contain the https://hub.docker.com/r/netapp/trident/[Trident image^], the https://hub.docker.com/r/netapp/trident-autosupport/[Trident Autosupport image^], and the CSI sidecar images as required by your Kubernetes version.
+
+To customize your deployment, you can use `tridentctl` to generate the manifests for Trident's resources. This includes the deployment, daemonset, service account, and the cluster role that Trident creates as part of its installation.
+See these links for more information about customizing your deployment:
+* link:kubernetes-customize-deploy.html[Customize your Trident deployment by using the operator^]
+* link:kubernetes-customize-deploy-tridentctl.html[Customize your Trident deployment by using `tridentctl`^]
+
+IMPORTANT: If you are using a private image repository, you should add `/k8scsi` for Kubernetes versions earlier than 1.17 or `/sig-storage` for Kubernetes versions later than 1.17 to the end of the private registry URL. When using a private registry for `tridentctl` deployment, you should use `--trident-image` and `--autosupport-image` in conjunction with `--image-registry`. If you are deploying Trident by using the Trident operator, ensure that the orchestrator CR includes `tridentImage` and `autosupportImage` in the installation parameters.
+
+=== Remote deployment
+
+Here is a high-level overview of the remote deployment process:
+
+* Deploy the appropriate version of `kubectl` on the remote machine from where you want to deploy Trident.
+* Copy the configuration files from the Kubernetes cluster and set the `KUBECONFIG` environment variable on the remote machine.
+* Initiate a `kubectl get nodes` command to verify that you can connect to the required Kubernetes cluster.
+* Complete the Trident deployment from the remote machine by using the standard installation steps.
+
+== Supported Kubernetes cluster architectures
+
+Trident is supported with the following Kubernetes architectures:
+
+[cols=3*,options="header"]
+|===
+|Kubernetes cluster architectures
+|Supported
+|Default install
+|Single master, compute |Yes a| Yes
+|Multiple master, compute |Yes a|
+Yes
+|Master, etcd, compute |Yes a|
+Yes
+|Master, infrastructure, compute |Yes a|
+Yes
+|===

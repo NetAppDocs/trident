@@ -1,0 +1,55 @@
+---
+sidebar: sidebar
+permalink: trident-concepts/k8s-netapp.html
+keywords: kubernetes, netapp storage, ontap, cloud columes ontap, santricity, element software, netapp hci, anf, azure netapp files, cloud volumes service for google cloud, cloud volumes service for aws, gcp, aws
+summary: The NetApp portfolio of storage products integrates with many different aspects of a Kubernetes cluster, providing advanced data management capabilities, which enhance the functionality, capability, performance, and availability of the Kubernetes deployment.
+---
+
+= NetApp products integrated with Kubernetes
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+The NetApp portfolio of storage products integrates with many different aspects of a Kubernetes cluster, providing advanced data management capabilities, which enhance the functionality, capability, performance, and availability of the Kubernetes deployment.
+
+== Astra
+
+https://docs.netapp.com/us-en/astra/[Astra^] makes it easier for enterprises to manage, protect, and move their data-rich containerized workloads running on Kubernetes within and across public clouds and on-premises. Astra provisions and provides persistent container storage using Trident from NetApp’s proven and expansive storage portfolio in the public cloud and on-premises. It also offers a rich set of advanced application-aware data management functionality, such as snapshot, backup and restore, activity logs, and active cloning for data protection, disaster/data recovery, data audit, and migration use cases for Kubernetes workloads.
+
+== ONTAP
+
+ONTAP is NetApp’s multiprotocol, unified storage operating system that provides advanced data management capabilities for any application. ONTAP systems have all-flash, hybrid, or all-HDD configurations and offer many different deployment models, including engineered hardware (FAS and AFF), white-box (ONTAP Select), and cloud-only (Cloud Volumes ONTAP).
+
+NOTE: Trident supports all the above mentioned ONTAP deployment models.
+
+== Cloud Volumes ONTAP
+
+http://cloud.netapp.com/ontap-cloud?utm_source=GitHub&utm_campaign=Trident[Cloud Volumes ONTAP^] is a software-only storage appliance that runs the ONTAP data management software in the cloud. You can use Cloud Volumes ONTAP for production workloads, disaster recovery, DevOps, file shares, and database management. It extends enterprise storage to the cloud by offering storage efficiencies, high availability, data replication, data tiering and application consistency.
+
+== Element software
+
+https://www.netapp.com/data-management/element-software/[Element^] enables the storage administrator to consolidate workloads by guaranteeing performance and enabling a simplified and streamlined storage footprint. Coupled with an API to enable automation of all aspects of storage management, Element enables storage administrators to do more with less effort.
+
+== NetApp HCI
+
+https://www.netapp.com/virtual-desktop-infrastructure/netapp-hci/[NetApp HCI^] simplifies the management and scale of the datacenter by automating routine tasks and enabling infrastructure administrators to focus on more important functions.
+
+NetApp HCI is fully supported by Trident. Trident can provision and manage storage devices for containerized applications directly against the underlying NetApp HCI storage platform.
+
+== SANtricity
+
+NetApp's E-Series and EF-Series storage platforms use the https://www.netapp.com/us/products/data-management-software/santricity-os.aspx[SANtricity^] operating system to provides robust storage that is highly available, performant, and capable of delivering storage services for applications at any scale.
+
+Trident can create and manage SANtricity volumes across the portfolio of products.
+
+== Azure NetApp Files
+
+https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] is an enterprise-grade Azure file share service, powered by NetApp. You can run your most demanding file-based workloads in Azure natively, with the performance and rich data management you expect from NetApp.
+
+== Cloud Volumes Service for AWS
+
+https://cloud.netapp.com/cloud-volumes-service-for-aws?utm_source=GitHub&utm_campaign=Trident[NetApp Cloud Volumes Service for AWS^] is a cloud native file service that provides NAS volumes over NFS and SMB with all-flash performance. This service enables any workload, including legacy applications, to run in the AWS cloud. It provides a fully managed service, which offers consistent high performance, instant cloning, data protection and secure access to Elastic Container Service (ECS) instances.
+
+== Cloud Volumes Service for Google Cloud
+
+https://cloud.netapp.com/cloud-volumes-service-for-gcp?utm_source=GitHub&utm_campaign=Trident[NetApp Cloud Volumes Service for Google Cloud^] is a cloud native file service that provides NAS volumes over NFS and SMB with all-flash performance. This service enables any workload, including legacy applications, to run in the GCP cloud. It provides a fully managed service which offers consistent high performance, instant cloning, data protection and secure access to Google Compute Engine (GCE) instances.

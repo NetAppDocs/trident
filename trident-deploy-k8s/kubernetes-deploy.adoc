@@ -60,7 +60,7 @@ It is not hard to imagine a scenario where moving between deployment methods is 
 * If you have a Trident operator deployment that you want to remove and use `tridentctl` to deploy Trident, you should first edit the TridentOrchestrator and set `spec.uninstall=true` to uninstall Trident. Then delete the TridentOrchestrator and the operator deployment. You can then install Trident with `tridentctl`.
 * If you have a manual Trident operator deployment, and you want to use Helm-based Trident operator deployment, you should manually uninstall the operator first, and then do the Helm install. This enables Helm to deploy the Trident operator with the required labels and annotations. If you do not do this, your Helm-based Trident Operator deployment will fail with label validation error and annotation validation error. If you have a `tridentctl`-based deployment, you can use Helm-based deployment without running into issues.
 
-== Deployment modes
+== Understand the deployment modes
 
 There are three ways to deploy Trident.
 
@@ -83,7 +83,9 @@ This mode of installing is the easiest way to install Trident and works for most
 To perform an air-gapped deployment of Trident, you can use the `--image-registry` flag when invoking `tridentctl install` to point to a private image registry. If deploying with the Trident operator, you can alternatively specify `spec.imageRegistry` in your TridentOrchestrator. This registry should contain the https://hub.docker.com/r/netapp/trident/[Trident image^], the https://hub.docker.com/r/netapp/trident-autosupport/[Trident Autosupport image^], and the CSI sidecar images as required by your Kubernetes version.
 
 To customize your deployment, you can use `tridentctl` to generate the manifests for Trident's resources. This includes the deployment, daemonset, service account, and the cluster role that Trident creates as part of its installation.
+
 See these links for more information about customizing your deployment:
+
 * link:kubernetes-customize-deploy.html[Customize your Trident deployment by using the operator^]
 * link:kubernetes-customize-deploy-tridentctl.html[Customize your Trident deployment by using `tridentctl`^]
 
@@ -110,7 +112,7 @@ Trident is supported with the following Kubernetes architectures:
 |Single master, compute |Yes a| Yes
 |Multiple master, compute |Yes a|
 Yes
-|Master, etcd, compute |Yes a|
+|Master, `etcd`, compute |Yes a|
 Yes
 |Master, infrastructure, compute |Yes a|
 Yes

@@ -100,7 +100,7 @@ sum (trident_volume_allocated_bytes) by (backend_uuid)
 
 === Get individual volume usage
 
-NOTE: This is only enabled if kubelet metrics are also gathered.
+NOTE: This is enabled only if kubelet metrics are also gathered.
 
 * **Percentage of used space for each volume**
 
@@ -108,7 +108,7 @@ NOTE: This is only enabled if kubelet metrics are also gathered.
 kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes * 100
 ----
 
-== Understand Trident AutoSupport telemetry
+== Learn about Trident AutoSupport telemetry
 
 By default, Trident sends Prometheus metrics and basic backend information to NetApp on a daily cadence.
 

@@ -90,6 +90,7 @@ NOTE: For all the volumes created on an ANF backend, Trident copies all the labe
 This is the absolute minimum backend configuration. With this configuration, Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to ANF in every location worldwide, and places new volumes on one of them randomly.
 
 This configuration is ideal when you are just getting started with ANF and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision.
+
 [source,console]
 ----
 {
@@ -107,6 +108,7 @@ This configuration is ideal when you are just getting started with ANF and tryin
 This backend configuration places volumes in Azure's `eastus` location in a `Premium` capacity pool. Trident
 automatically discovers all of the subnets delegated to ANF in that location and places a new volume on one of
 them randomly.
+
 [source,console]
 ----
     {
@@ -118,11 +120,13 @@ them randomly.
         "clientSecret": "SECRET",
         "location": "eastus",
         "serviceLevel": "Premium"
+    }
 ----
 
 == Example 3: Advanced configuration
 
 This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
+
 [source,console]
 ----
     {
@@ -148,6 +152,7 @@ This backend configuration further reduces the scope of volume placement to a si
 == Example 4: Virtual storage pool configuration
 
 This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those.
+
 [source,console]
 ----
     {
@@ -186,7 +191,8 @@ This backend configuration defines multiple storage pools in a single file. This
     }
 ----
 
-The following `StorageClass` definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each `StorageClass` the pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+The following `StorageClass` definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each `StorageClass` the visrtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+
 [source,console]
 ----
 apiVersion: storage.k8s.io/v1
@@ -216,3 +222,21 @@ parameters:
   selector: "performance=bronze"
 allowVolumeExpansion: true
 ----
+
+== What's next?
+
+After you create the backend configuration file, run the following command:
+
+[source,console]
+----
+tridentctl create backend -f <backend-file>
+----
+
+If the backend creation fails, something is wrong with the backend configuration. You can view the logs to determine the cause by running the following command:
+
+[source,console]
+----
+tridentctl logs
+----
+
+After you identify and correct the problem with the configuration file, you can run the create command again.

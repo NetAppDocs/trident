@@ -1,6 +1,6 @@
 ---
 sidebar: sidebar
-permalink: trident-concepts/deploy-reco.html
+permalink: trident-reco/deploy-reco.html
 keywords: deployment, deploy, trident, namespace
 summary: Use the recommendations listed here when you deploy Trident.
 ---
@@ -22,4 +22,4 @@ Additionally, access to the Trident pod might enable a user to access storage sy
 
 Kubernetes has two features which, when combined, provide a powerful mechanism for limiting the resource consumption by applications.  The https://kubernetes.io/docs/concepts/policy/resource-quotas/#storage-resource-quota[storage quota mechanism^] enables the administrator to implement global, and storage class specific, capacity and object count consumption limits on a per-namespace basis. Further, using a https://kubernetes.io/docs/tasks/administer-cluster/limit-storage-consumption/#limitrange-to-limit-requests-for-storage[range limit^] ensures that the PVC requests are within both a minimum and maximum value before the request is forwarded to the provisioner.
 
-These values are defined on a per-namespace basis, which means that each namespace should have values defined which fall in line with their resource requirements. See here for information about https://netapp.io/2017/06/09/self-provisioning-storage-kubernetes-without-worry[how to leverage quotas^]. 
+These values are defined on a per-namespace basis, which means that each namespace should have values defined which fall in line with their resource requirements. See here for information about https://netapp.io/2017/06/09/self-provisioning-storage-kubernetes-without-worry[how to leverage quotas^].

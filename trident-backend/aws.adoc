@@ -32,8 +32,7 @@ See the following table for the backend configuration options:
 
 |`storageDriverName` | Name of the storage driver |"aws-cvs"
 
-|`backendName`  |Custom name or the storage backend
-|Driver name + "_" + part of API key
+|`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
 
 |`apiRegion` |CVS account region. You can find the value in the CVS web portal in Account settings/API access. |
 
@@ -53,12 +52,10 @@ self-signed certificates in the proxy server. Proxy servers with authentication 
 
 | `serviceLevel` |The CVS service level for new volumes. The values are "standard", "premium", and "extreme". |"standard"
 
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example:
-`\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. a|null
+|`debugTraceFlags` |Debug flags to use when troubleshooting. Example: `\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
 |===
 
-NOTE: `apiURL` is unique for each `apiRegion`. For example, the us-west-2 `apiRegion` has the https://cv.us-west-2.netapp.com:8080/v1/ `apiURL`. Similarly, the us-east-1 `apiRegion` has the https://cds-aws-bundles.netapp.com:8080/v1/ `apiURL`. Make sure to check the CVS Dashboard for the correct `apiRegion` and
-`apiURL` parameters for your backend configuration.
+NOTE: `apiURL` is unique for each `apiRegion`. For example, the us-west-2 `apiRegion` has the https://cv.us-west-2.netapp.com:8080/v1/ `apiURL`. Similarly, the us-east-1 `apiRegion` has the https://cds-aws-bundles.netapp.com:8080/v1/ `apiURL`. Make sure to check the CVS Dashboard for the correct `apiRegion` and `apiURL` parameters for your backend configuration.
 
 Each backend provisions volumes in a single AWS region. To create volumes in other regions, you can define additional backends.
 

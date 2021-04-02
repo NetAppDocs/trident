@@ -66,8 +66,7 @@ Registration |
 |`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value |"" (not enforced by default)
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example:
-`\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. a|null
+|`debugTraceFlags` |Debug flags to use when troubleshooting. Example: `\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
 |===
 
 NOTE: If you want to mount the volumes by using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Any mount options set in a storage class overrides the mount options set in a backend configuration file.

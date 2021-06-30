@@ -1,0 +1,59 @@
+---
+sidebar: sidebar
+permalink: trident-docker/deploy-docker.html
+keywords: deploy, trident, trident for docker, docker
+summary: Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms, as well as the Cloud Volumes Service in AWS. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
+---
+
+= Deploy Trident
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms, as well as the Cloud Volumes Service in AWS. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
+
+Multiple instances of Trident can run concurrently on the same host. This allows simultaneous connections to multiple storage systems and storage types, with the ablity to customize the storage used for the Docker volumes.
+
+.What you'll need
+
+See the link:prereqs-docker.html[prerequisites for deployment^]. After you ensure the prerequisites are met, you aree ready to deploy Trident.
+
+.Steps
+
+. Create a configuration file.
++
+The default location is ``/etc/netappdvp/config.json`. Be sure to use the correct options for your storage system.
+See the following example:
++
+[source,yaml]
+# create a location for the config files
+sudo mkdir -p /etc/netappdvp
+# create the configuration file, see below for more configuration examples
+cat << EOF > /etc/netappdvp/config.json
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "secret",
+    "aggregate": "aggr1"
+}
+EOF
+
+. Start Trident by using the managed plugin system.
+----
+docker plugin install netapp/trident-plugin:21.07 --alias netapp --grant-all-permissions config=config.json
+----
+
+.What's next?
+
+* Begin using Trident to consume storage from the configured system.
+[source,yaml]
+# create a volume named "firstVolume"
+docker volume create -d netapp --name firstVolume
+# create a default volume at container instantiation
+docker run --rm -it --volume-driver netapp --volume secondVolume:/my_vol alpine ash
+# remove the volume "firstVolume"
+docker volume rm firstVolume

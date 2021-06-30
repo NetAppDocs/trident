@@ -25,10 +25,12 @@ See the link:prereqs-docker.html[prerequisites for deployment^]. After you ensur
 The default location is ``/etc/netappdvp/config.json`. Be sure to use the correct options for your storage system.
 See the following example:
 +
+.. Create a location for the configuration file.
 [source,yaml]
-# create a location for the config files
 sudo mkdir -p /etc/netappdvp
-# create the configuration file, see below for more configuration examples
++
+.. Create the configuration file.
+[source,yaml]
 cat << EOF > /etc/netappdvp/config.json
 {
     "version": 1,
@@ -50,10 +52,14 @@ docker plugin install netapp/trident-plugin:21.07 --alias netapp --grant-all-per
 .What's next?
 
 * Begin using Trident to consume storage from the configured system.
+.. Create a volume named `firstVolume`.
 [source,yaml]
-# create a volume named "firstVolume"
 docker volume create -d netapp --name firstVolume
-# create a default volume at container instantiation
++
+.. Create a default volume at container instantiation.
+[source,yaml]
 docker run --rm -it --volume-driver netapp --volume secondVolume:/my_vol alpine ash
-# remove the volume "firstVolume"
++
+.. Remove the volume `firstVolume`.
+[source,yaml]
 docker volume rm firstVolume

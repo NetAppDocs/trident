@@ -26,11 +26,11 @@ The default location is ``/etc/netappdvp/config.json`. Be sure to use the correc
 See the following example:
 +
 .. Create a location for the configuration file.
-[source,yaml]
+[source,console]
 sudo mkdir -p /etc/netappdvp
 +
 .. Create the configuration file.
-[source,yaml]
+[source,console]
 cat << EOF > /etc/netappdvp/config.json
 {
     "version": 1,
@@ -45,21 +45,21 @@ cat << EOF > /etc/netappdvp/config.json
 EOF
 
 . Start Trident by using the managed plugin system.
-----
++
+[source,console]
 docker plugin install netapp/trident-plugin:21.07 --alias netapp --grant-all-permissions config=config.json
-----
 
 .What's next?
 
 * Begin using Trident to consume storage from the configured system.
 .. Create a volume named `firstVolume`.
-[source,yaml]
+[source,console]
 docker volume create -d netapp --name firstVolume
 +
 .. Create a default volume at container instantiation.
-[source,yaml]
+[source,console]
 docker run --rm -it --volume-driver netapp --volume secondVolume:/my_vol alpine ash
 +
 .. Remove the volume `firstVolume`.
-[source,yaml]
+[source,console]
 docker volume rm firstVolume

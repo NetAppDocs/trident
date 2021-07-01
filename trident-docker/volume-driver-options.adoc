@@ -1,16 +1,30 @@
 ---
 sidebar: sidebar
-permalink: trident-docker/upgrade-uninstall-docker.html
-keywords: uninstall, trident, trident for docker, docker, upgrade trident for docker
-summary: You can safely upgrade Trident for Docker without any impact to volumes that are in use. During the upgrade process there will be a brief period where `docker volume` commands directed at the plugin will not succeed, and applications will be unable to mount volumes until the plugin is running again. Under most circumstances, this is a matter of seconds.
+permalink: trident-docker/volumes-docker.html
+keywords: create volumes, trident, trident for docker, docker, docker volume
+summary: To create volumes, use the standard `docker volume` commands with the Trident driver name specified when needed.
 ---
 
-= Upgrade or uninstall Trident
+= Work with volumes
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
-You can safely upgrade Trident for Docker without any impact to volumes that are in use. During the upgrade process there will be a brief period where `docker volume` commands directed at the plugin will not succeed, and applications will be unable to mount volumes until the plugin is running again. Under most circumstances, this is a matter of seconds.
+You can easily create, clone, and remove volumes using the standard `docker volume` commands with the Trident driver name specified when needed.
+
+== Create a volume
+
+* Create a volume with a Trident driver using the default name:
++
+[source,console]
+docker volume create -d netapp --name firstVolume
+
+* Create a volume with a specific Trident instance:
++
+[source,console]
+docker volume create -d ntap_bronze --name bronzeVolume
+
+NOTE: If you do not specify any link:storage-driver-options.html[options^], the defaults for the driver are used. 
 
 == Upgrade
 Perform the steps below to upgrade Trident for Docker.

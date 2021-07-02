@@ -1,0 +1,54 @@
+---
+sidebar: sidebar
+permalink: trident-docker/collect-logs-docker.html
+keywords: deploy, trident, trident for docker, docker, logs, binary, managed plugin
+summary: You can collect logs for help with troubleshooting. The method you use to collect the logs varies based on how you are running the Docker plugin.
+---
+
+= Collect logs
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+You can collect logs for help with troubleshooting. The method you use to collect the logs varies based on how you are running the Docker plugin.
+
+.Steps
+
+. If you are running Trident using the recommended managed plugin method (i.e., using `docker plugin` commands), view them as follows:
++
+[source,console]
+# docker plugin ls
++
+----
+ID                  NAME                DESCRIPTION                          ENABLED
+4fb97d2b956b        netapp:latest       nDVP - NetApp Docker Volume Plugin   false
+----
++
+[source,console]
+# journalctl -u docker | grep 4fb97d2b956b
++
+The standard logging level should allow you to diagnose most issues. If you find that’s not enough, you can enable debug logging.
+
+. To enable debug logging, install the plugin with debug logging enabled:
++
+[source,console]
+docker plugin install netapp/trident-plugin:<version> --alias <alias> debug=true
++
+Or, enable debug logging when the plugin is already installed:
++
+[source,console]
+docker plugin disable <plugin>
+docker plugin set <plugin> debug=true
+docker plugin enable <plugin>
+
+. If you are running the binary itself on the host, logs are available in the host’s `/var/log/netappdvp` directory. To enable debug logging, specify `-debug` when you run the plugin.
+
+=== General troubleshooting tips
+
+* The most common problem new users run into is a misconfiguration that prevents the plugin from initializing. When this happens you will likely see a message such as this when you try to install or enable the plugin:
++
+`Error response from daemon: dial unix /run/docker/plugins/<id>/netapp.sock: connect: no such file or directory`
++
+This means that the plugin failed to start. Luckily, the plugin has been built with a comprehensive logging capability that should help you diagnose most of the issues you are likely to come across.
+
+* If there are problems with mounting a PV to a container, ensure that `rpcbind` is installed and running. Use the required package manager for the host OS and check if `rpcbind` is running. You can check the status of the rpcbind service by running a `systemctl status rpcbind` or its equivalent.

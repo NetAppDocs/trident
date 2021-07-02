@@ -1,114 +1,291 @@
 ---
 sidebar: sidebar
-permalink: trident-docker/volumes-docker.html
-keywords: create volumes, trident, trident for docker, docker, docker volume
-summary: To create volumes, use the standard `docker volume` commands with the Trident driver name specified when needed.
+permalink: trident-docker/volume-driver-options.html
+keywords: create volumes, trident, trident for docker, docker, docker volume, driver options, ontap, element volumes, cloud volumes service on aws, cvs, cloud volumes service on gcp, azure netapp files
+summary: Each storage driver has a different set of options, which you can specify at volume creation time to customize the outcome. See below for options that apply to your configured storage system.
 ---
 
-= Work with volumes
+= Volume driver options
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
-You can easily create, clone, and remove volumes using the standard `docker volume` commands with the Trident driver name specified when needed.
+Each storage driver has a different set of options, which you can specify at volume creation time to customize the outcome. See below for options that apply to your configured storage system.
 
-== Create a volume
+Using these options during the volume create operation is simple. Provide the option and the value using the `-o` operator during the CLI operation. These override any equivalent values from the JSON configuration file.
 
-* Create a volume with a Trident driver using the default name:
-+
-[source,console]
-docker volume create -d netapp --name firstVolume
+== ONTAP volume options
 
-* Create a volume with a specific Trident instance:
-+
-[source,console]
-docker volume create -d ntap_bronze --name bronzeVolume
+Volume create options for both NFS and iSCSI include the following:
 
-NOTE: If you do not specify any link:storage-driver-options.html[options^], the defaults for the driver are used. 
+[%header,cols=2*]
+|===
+|Option
+|Description
 
-== Upgrade
-Perform the steps below to upgrade Trident for Docker.
+|`size`
+a|The size of the volume, defaults to 1 GiB.
 
-.Steps
+|`spaceReserve`
+a|Thin or thick provision the volume, defaults to thin. Valid values are `none` (thin provisioned) and `volume` (thick provisioned).
 
-. List the existing volumes:
-+
-[source,console]
-docker volume ls
-+
-----
-DRIVER              VOLUME NAME
-netapp:latest       my_volume
-----
+|`snapshotPolicy`
+a|This will set the snapshot policy to the desired value. The default is `none`, meaning no snapshots will automatically be created for the volume. Unless modified by your storage administrator, a policy named “default” exists on all ONTAP systems which creates and retains six hourly, two daily, and two weekly snapshots. The data preserved in a snapshot can be recovered by browsing to the `.snapshot` directory in any directory in the volume.
 
-. Disable the plugin:
-+
-[source,console]
-docker plugin disable -f netapp:latest
-+
-[source,console]
-docker plugin ls
-+
-----
-ID                  NAME                DESCRIPTION                          ENABLED
-7067f39a5df5        netapp:latest       nDVP - NetApp Docker Volume Plugin   false
-----
+|`snapshotReserve`
+a|This will set the snapshot reserve to the desired percentage. The default is no value, meaning ONTAP will select the snapshotReserve (usually 5%) if you have selected a snapshotPolicy, or 0% if the snapshotPolicy is none. You can set the default snapshotReserve value in the config file for all ONTAP backends, and you can use it as a volume creation option for all ONTAP backends except ontap-nas-economy.
 
-. Upgrade the plugin:
-+
-[source,console]
-docker plugin upgrade --skip-remote-check --grant-all-permissions netapp:latest netapp/trident-plugin:21.07
-+
-NOTE: The 18.01 release of Trident replaces the nDVP. You should upgrade directly from the `netapp/ndvp-plugin` image to the `netapp/trident-plugin` image.
+|`splitOnClone`
+a|When cloning a volume, this will cause ONTAP to immediately split the clone from its parent. The default is `false`. Some use cases for cloning volumes are best served by splitting the clone from its parent immediately upon creation, because there is unlikely to be any opportunity for storage efficiencies. For example, cloning an empty database can offer large time savings but little storage savings, so it’s best to split the clone immediately.
+|`encryption`
+a|This will enable NetApp Volume Encryption (NVE) on the new volume, defaults to `false`. NVE must be licensed and enabled on the cluster to use this option.
+|`tieringPolicy`
+a|Sets the tiering policy to be used for the volume. This decides whether data is moved to the cloud tier when it becomes inactive (cold).
+|===
 
-. Enable the plugin:
-+
-[source,console]
-docker plugin enable netapp:latest
+The following additional options are for NFS *only*:
 
-. Verify that the plugin is enabled:
-+
-[source,console]
-docker plugin ls
-+
-----
-ID                  NAME                DESCRIPTION                             ENABLED
-7067f39a5df5        netapp:latest       Trident - NetApp Docker Volume Plugin   true
-----
+[%header,cols=2*]
+|===
+|Option
+|Description
 
-. Verify that the volumes are visible:
-+
-[source,console]
-docker volume ls
-+
-----
-DRIVER              VOLUME NAME
-netapp:latest       my_volume
-----
-IMPORTANT: If you are upgrading from an old version of Trident (pre-20.10) to Trident 20.10 or later, you might run into an error. For more information, see Known Issues. If you run into the error, you should first disable the plugin, then remove the plugin, and then install the required Trident version by passing an extra config parameter: `docker plugin install netapp/trident-plugin:20.10 --alias netapp --grant-all-permissions config=config.json`
+|`unixPermissions`
+a|This controls the permission set for the volume itself. By default the permissions will be set to ``---rwxr-xr-x`, or in numerical notation 0755, and `root` will be the owner. Either the text or numerical format will work.
 
-== Uninstall
+|`snapshotDir`
+a|Setting this to `true` will make the `.snapshot` directory visible to clients accessing the volume. The default value is `false`, meaning that visibility of the `.snapshot` directory is disabled by default. Some images, for example the official MySQL image, don’t function as expected when the `.snapshot` directory is visible.
 
-Perform the steps below to uninstall Trident for Docker.
+|`exportPolicy`
+a|Sets the export policy to be used for the volume. The default is `default`.
 
-.Steps
+|`securityStyle`
+a|Sets the security style to be used for access to the volume. The default is `unix`. Valid values are `unix` and `mixed`.
+|===
 
-. Remove any volumes that the plugin created.
+The following additional options are for iSCSI *only*:
 
-. Disable the plugin:
-+
-[source,console]
-docker plugin disable netapp:latest
-+
-[source,console]
-docker plugin ls
+[%header,cols=2*]
+|===
+|Option
+|Description
+
+|`fileSystemType`
+|Sets the file system used to format iSCSI volumes. The default is `ext4`. Valid values are `ext3`, `ext4`, and `xfs`.
+
+|`spaceAllocation`
+|Setting this to `false` will turn off the LUN’s space-allocation feature. The default value is `true`, meaning ONTAP notifies the host when the volume has run out of space and the LUN in the volume cannot accept writes. This option also enables ONTAP to reclaim space automatically when your host deletes data.
+|===
+
+=== Examples
+
+See the examples below:
+
+* Create a 10GiB volume:
 +
 ----
-ID                  NAME                DESCRIPTION                          ENABLED
-7067f39a5df5        netapp:latest       nDVP - NetApp Docker Volume Plugin   false
+docker volume create -d netapp --name demo -o size=10G -o encryption=true
 ----
 
-. Remove the plugin:
+* Create a 100GiB volume with snapshots:
 +
-[source,console]
-docker plugin rm netapp:latest
+----
+docker volume create -d netapp --name demo -o size=100G -o snapshotPolicy=default -o snapshotReserve=10
+----
+
+* Create a volume which has the setUID bit enabled:
++
+----
+docker volume create -d netapp --name demo -o unixPermissions=4755
+----
+
+The minimum volume size is 20MiB.
+
+If the snapshot reserve is not specified and the snapshot policy is `none`, Trident will use a snapshot reserve of 0%.
+
+* Create a volume with no snapshot policy and no snapshot reserve:
++
+----
+docker volume create -d netapp --name my_vol --opt snapshotPolicy=none
+----
+
+* Create a volume with no snapshot policy and a custom snapshot reserve of 10%:
++
+----
+docker volume create -d netapp --name my_vol --opt snapshotPolicy=none --opt snapshotReserve=10
+----
+
+* Create a volume with a snapshot policy and a custom snapshot reserve of 10%:
++
+----
+docker volume create -d netapp --name my_vol --opt snapshotPolicy=myPolicy --opt snapshotReserve=10
+----
+
+* Create a volume with a snapshot policy, and accept ONTAP's default snapshot reserve (usually 5%):
++
+----
+docker volume create -d netapp --name my_vol --opt snapshotPolicy=myPolicy
+----
+
+== Element software volume options
+
+The Element software options expose the size and quality of service (QoS) policies associated with the volume. When the volume is created, the QoS policy associated with it is specified using the `-o type=service_level` nomenclature.
+
+The first step to defining a QoS service level with the Element driver is to create at least one type and specify the minimum, maximum, and burst IOPS associated with a name in the configuration file.
+
+Other Element software volume create options include the following:
+
+[%header,cols=2*]
+|===
+|Option
+|Description
+
+|`size`
+a|The size of the volume, defaults to 1GiB or config entry ... "defaults": {"size": "5G"}.
+
+|`blocksize`
+a|Use either 512 or 4096, defaults to 512 or config entry DefaultBlockSize.
+|===
+
+=== Example
+
+See the following sample configuration file with QoS definitions:
+
+----
+{
+    "...": "..."
+    "Types": [
+        {
+            "Type": "Bronze",
+            "Qos": {
+                "minIOPS": 1000,
+                "maxIOPS": 2000,
+                "burstIOPS": 4000
+            }
+        },
+        {
+            "Type": "Silver",
+            "Qos": {
+                "minIOPS": 4000,
+                "maxIOPS": 6000,
+                "burstIOPS": 8000
+            }
+        },
+        {
+            "Type": "Gold",
+            "Qos": {
+                "minIOPS": 6000,
+                "maxIOPS": 8000,
+                "burstIOPS": 10000
+            }
+        }
+    ]
+}
+----
+
+In the above configuration, we have three policy definitions: Bronze, Silver, and Gold. These names are arbitrary.
+
+* Create a 10GiB Gold volume:
++
+----
+docker volume create -d solidfire --name sfGold -o type=Gold -o size=10G
+----
+
+* Create a 100GiB Bronze volume:
++
+----
+docker volume create -d solidfire --name sfBronze -o type=Bronze -o size=100G
+----
+
+== Cloud Volumes Service (CVS) on AWS volume options
+
+Volume create options for the CVS on AWS driver include the following:
+
+[%header,cols=2*]
+|===
+|Option
+|Description
+
+|`size`
+a|The size of the volume, defaults to 100 GB.
+
+|`serviceLevel`
+a|The CVS service level of the volume, defaults to standard. Valid values are standard, premium, and extreme.
+
+|`snapshotReserve`
+a|`This will set the snapshot reserve to the desired percentage. The default is no value, meaning CVS will select the snapshot reserve (usually 0%).
+|===
+
+=== Examples
+
+* Create a 200GiB volume:
++
+----
+docker volume create -d netapp --name demo -o size=200G
+----
+
+* Create a 500GiB premium volume:
++
+----
+docker volume create -d netapp --name demo -o size=500G -o serviceLevel=premium
+----
+
+The minimum volume size is 100 GB.
+
+== CVS on GCP volume options
+
+Volume create options for the CVS on GCP driver include the following:
+
+[%header,cols=2*]
+|===
+|Option
+|Description
+
+|`size`
+a|The size of the volume, defaults to 100 GiB for CVS-Performance volumes or 300 GiB for CVS volumes.
+
+|`serviceLevel`
+a|The CVS service level of the volume, defaults to standard. Valid values are standard, premium, and extreme.
+
+|`snapshotReserve`
+a|This will set the snapshot reserve to the desired percentage. The default is no value, meaning CVS will select the snapshot reserve (usually 0%).
+|===
+
+=== Examples
+
+* Create a 2TiB volume:
++
+----
+docker volume create -d netapp --name demo -o size=2T
+----
+
+* Create a 5TiB premium volume:
++
+----
+docker volume create -d netapp --name demo -o size=5T -o serviceLevel=premium
+----
+
+The minimum volume size is 100 GiB for CVS-Performance volumes, or 300 GiB for CVS volumes.
+
+== Azure NetApp Files volume options
+
+Volume create options for the Azure NetApp Files driver include the following:
+
+[%header,cols=2*]
+|===
+|Option
+|Description
+
+|`size`
+a|The size of the volume, defaults to 100 GB.
+|===
+
+=== Examples
+
+* Create a 200GiB volume:
++
+----
+docker volume create -d netapp --name demo -o size=200G
+----
+
+The minimum volume size is 100 GB.

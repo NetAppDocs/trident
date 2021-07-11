@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-concepts/snapshots.html
 keywords: provisioning, trident
-summary: Find information about how Trident handles the creation of volume snapshots for its drivers.
+summary: Learn more about how Trident handles the creation of volume snapshots for its drivers.
 ---
 
 = Volume snapshots
@@ -10,7 +10,7 @@ summary: Find information about how Trident handles the creation of volume snaps
 :icons: font
 :imagesdir: ../media/
 
-Find information about how Trident handles the creation of volume snapshots for its drivers.
+Learn more about how Trident handles the creation of volume snapshots for its drivers.
 
 * For the `ontap-nas`, `ontap-san`, `aws-cvs`, `gcp-cvs`, and `azure-netapp-files` drivers, each PV maps to a FlexVol. As a result, volume snapshots are created as NetApp snapshots. NetApp’s snapshot technology delivers more stability, scalability, recoverability, and performance than competing snapshot technologies. These snapshot copies are extremely efficient both in the time needed to create them and in storage space.
 * For the `ontap-san-economy` driver, PVs map to LUNs created on shared FlexVols. VolumeSnapshots of PVs are achieved by performing FlexClones of the associated LUN. ONTAP’s FlexClone technology makes it possible to create copies of even the largest datasets almost instantaneously. Copies share data blocks with their parents, consuming no storage except what is required for metadata.

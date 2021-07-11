@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/element.html
 keywords: trident backend, solidfire, netapp hci
-summary: Learn about how to configure Cloud Volumes Service for Google Cloud as the backend for your Trident installation using the sample configurations provided.
+summary: Learn about how to create and use an Element backend with your Trident installation.
 ---
 
 = Configure NetApp HCI and SolidFire
@@ -10,18 +10,60 @@ summary: Learn about how to configure Cloud Volumes Service for Google Cloud as 
 :icons: font
 :imagesdir: ../media/
 
-Learn about how to configure NetApp Cloud Volumes Service (CVS) for Google Cloud as the backend for your Trident installation using the sample configurations provided.
-
-NOTE: NetApp Cloud Volumes Service for Google Cloud does not support CVS-Performance volumes less than 100 GiB in size, or CVS volumes less than 1 TiB in size. Trident automatically creates volumes of the minimum size if a the volume requested is smaller than the minimum size.
+Learn about how to create and use an Element backend with your Trident installation.
 
 .What you'll need
 
-To configure and use the https://cloud.netapp.com/cloud-volumes-service-for-gcp?utm_source=NetAppTrident_ReadTheDocs&utm_campaign=Trident[Cloud Volumes Service for Google Cloud^] backend, you need the following:
+* A supported storage system that runs Element software.
+* Credentials to a NetApp HCI/SolidFire cluster admin or tenant user that can manage volumes.
+* All of your Kubernetes worker nodes should have the appropriate iSCSI tools installed. See link:../trident-use/worker-node-prep.html[worker node preparation information^].
 
-* A Google Cloud account configured with NetApp CVS
-* Project number of your Google Cloud account
-* Google Cloud service account with the `netappcloudvolumes.admin` role
-* API key file for your CVS service account
+.What you need to know
+
+The `solidfire-san` storage driver supports both volume modes: file and block. For the `Filesystem` volumeMode, Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
+
+[cols=5,options="header"]
+|===
+|Driver
+|Protocol
+|VolumeMode
+|Access modes supported
+|File systems supported
+
+|`solidfire-san`
+a|iSCSI
+a|Block
+a|RWO,ROX,RWX
+a|No Filesystem. Raw block device.
+
+|`solidfire-san`
+a|iSCSI
+a|Block
+a|RWO,ROX,RWX
+a|No Filesystem. Raw block device.
+
+|`solidfire-san`
+a|iSCSI
+a|Filesystem
+a|RWO,ROX
+a|`xfs`, `ext3`, `ext4`
+
+|`solidfire-san`
+a|iSCSI
+a|Filesystem
+a|RWO,ROX
+a|`xfs`, `ext3`, `ext4`
+
+|===
+
+NOTE: Trident uses CHAP when functioning as an enhanced CSI Provisioner. If you’re using CHAP (which is the default for CSI), no further preparation is required. It is recommended to explicitly set the `UseCHAP` option to use CHAP with non-CSI Trident. Otherwise, see link:../trident-concepts/vol-access-groups.html[here^].
+
+WARNING: Volume access groups are only supported by the conventional, non-CSI framework for Trident. When configured to work in CSI mode, Trident uses CHAP.
+
+If neither `AccessGroups` or `UseCHAP` are set, one of the following rules applies:
+
+* If the default `trident` access group is detected, access groups are used.
+* If no access group is detected and Kubernetes version is 1.7 or later, then CHAP is used.
 
 == Backend configuration options
 
@@ -32,303 +74,152 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |"gcp-cvs"
+|`storageDriverName` | Name of the storage driver |Always “solidfire-san”
 
-|`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
+|`backendName`  |Custom name or the storage backend |“solidfire_” + storage (iSCSI) IP address
 
-|`storageClass` |Type of storage. Choose from `hardware` (performance optimized) or `software` [scale optimized (beta)] |
+|`Endpoint` |MVIP for the SolidFire cluster with tenant credentials |
 
-|`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal's Home page. |
+|`SVIP` |Storage (iSCSI) IP address and port |
 
-|`apiRegion` |CVS account region. It is the region where the backend will provision the volumes. |
+|`labels` |Set of arbitrary JSON-formatted labels to apply on volumes. |“”
 
-|`apiKey` |API key for the Google Cloud service account with the `netappcloudvolumes.admin` role. It includes the JSON-formatted contents of a Google Cloud service account's private key file (copied verbatim into the backend configuration file). |
+|`TenantName` |Tenant name to use (created if not found) |
 
-|`proxyURL` |Proxy URL if proxy server required to connect to CVS Account. The proxy server can either
-be an HTTP proxy or an HTTPS proxy. For an HTTPS proxy, certificate validation is skipped to allow the usage of
-self-signed certificates in the proxy server. Proxy servers with authentication enabled are not supported. |
+|`InitiatorIFace` |Restrict iSCSI traffic to a specific host interface |“default”
 
-|`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
+|`UseCHAP` |Use CHAP to authenticate iSCSI |"nfsvers=3"
 
-|`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value |"" (not enforced by default)
+|`AccessGroups`  |List of Access Group IDs to use |Finds the ID of an access group named “trident”
 
-| `serviceLevel` |The CVS service level for new volumes. The values are "standard", "premium", and "extreme". |"standard"
+| `Types` |QoS specifications |
 
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example: `\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value |“” (not enforced by default)
+
+| `debugTraceFlags` |Debug flags to use when troubleshooting. Example: {“api”:false, “method”:true} |null
+
 |===
 
-NOTE: The `storageClass` is an optional parameter that you can use to select the desired https://cloud.google.com/solutions/partners/netapp-cloud-volumes/service-types?hl=en_US[CVS service type^]. You can choose from the base CVS service type (`storageClass=software`) or the CVS-Performance service type (`storageClass=hardware`), which Trident uses by default. Make sure you specify an `apiRegion` that provides the respective CVS `storageClass` in your backend definition.
+WARNING: Do not use `debugTraceFlags` unless you are troubleshooting and require a detailed log dump.
 
-IMPORTANT: Trident's integration with the base CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
+NOTE: For all volumes created, Trident will copy all labels present on a storage pool to the backing storage LUN at the time it is provisioned. Storage admins can define labels per storage pool and group all volumes created in a storage pool. This provides a convenient way of differentiating volumes based on a set of customizable labels that are provided in the backend configuration.
 
-Each backend provisions volumes in a single Google Cloud region. To create volumes in other regions, you can define additional backends.
+== Example 1: Backend configuration for `solidfire-san` driver with three volume types
 
-You can control how each volume is provisioned by default by specifying the following options in a special section of the configuration file. See the configuration examples below.
+This example shows a backend file using CHAP authentication and modeling three volume types with specific QoS guarantees. Most likely you would then define storage classes to consume each of these using the IOPS storage class parameter.
 
-[cols=",,",options="header",]
-|===
-|Parameter |Description |Default
-|`exportRule` |The export rule(s) for new volumes |"0.0.0.0/0"
-|`snapshotDir` |Access to the `.snapshot` directory | "false"
-|`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept CVS default of 0)
-|`size` |The default size of new volumes |"1T"
-|===
-
-The `exportRule` value must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.
-
-NOTE: For all the volumes created on a CVS Google Cloud backend, Trident copies all the labels present on a storage pool to the storage volume at the time it is provisioned. Storage administrators can define labels per storage pool and group all the volumes created in a storage pool. This provides a convenient way of differentiating volumes based on a set of customizable labels that are provided in the backend configuration.
-
-== Example 1: Minimal configuration
-
-This is the absolute minimum backend configuration.
-
-[source,console]
 ----
 {
     "version": 1,
-    "storageDriverName": "gcp-cvs",
-    "projectNumber": "012345678901",
-    "apiRegion": "us-west2",
-    "apiKey": {
-        "type": "service_account",
-        "project_id": "my-gcp-project",
-        "private_key_id": "1234567890123456789012345678901234567890",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nXsYg6gyxy4zq7OlwWgLwGa==\n-----END PRIVATE KEY-----\n",
-        "client_email": "cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com",
-        "client_id": "123456789012345678901",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com"
-    }
+    "storageDriverName": "solidfire-san",
+    "Endpoint": "https://<user>:<password>@<mvip>/json-rpc/8.0",
+    "SVIP": "<svip>:3260",
+    "TenantName": "<tenant>",
+    "labels": {"k8scluster": "dev1", "backend": "dev1-element-cluster"},
+    "UseCHAP": true,
+    "Types": [{"Type": "Bronze", "Qos": {"minIOPS": 1000, "maxIOPS": 2000, "burstIOPS": 4000}},
+              {"Type": "Silver", "Qos": {"minIOPS": 4000, "maxIOPS": 6000, "burstIOPS": 8000}},
+              {"Type": "Gold", "Qos": {"minIOPS": 6000, "maxIOPS": 8000, "burstIOPS": 10000}}]
 }
 ----
 
-== Example 2: Base CVS service type configuration
+== Example 2: Backend and storage class configuration for `solidfire-san` driver with virtual storage pools
 
-This example shows a backend definition that uses the base CVS service type, which is meant for general-purpose workloads and provides light/moderate performance, coupled with high zonal availability. This is a **beta** Trident integration that can be used in test environments.
+This example shows the backend definition file configured with virtual storage pools along with StorageClasses that refer back to them.
 
-[source,console]
+In the sample backend definition file shown below, specific defaults are set for all storage pools, which set the `type` at Silver. The virtual storage pools are defined in the `storage` section. In this example, some of the storage pool sets their own type, and some pools overwrite the default values set above.
+
 ----
 {
     "version": 1,
-    "storageDriverName": "gcp-cvs",
-    "projectNumber": "012345678901",
-    "storageClass": "software",
-    "apiRegion": "us-east4",
-    "apiKey": {
-        "type": "service_account",
-        "project_id": "my-gcp-project",
-        "private_key_id": "1234567890123456789012345678901234567890",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nXsYg6gyxy4zq7OlwWgLwGa==\n-----END PRIVATE KEY-----\n",
-        "client_email": "cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com",
-        "client_id": "123456789012345678901",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com"
-    }
-}
-----
+    "storageDriverName": "solidfire-san",
+    "Endpoint": "https://<user>:<password>@<mvip>/json-rpc/8.0",
+    "SVIP": "<svip>:3260",
+    "TenantName": "<tenant>",
+    "UseCHAP": true,
+    "Types": [{"Type": "Bronze", "Qos": {"minIOPS": 1000, "maxIOPS": 2000, "burstIOPS": 4000}},
+              {"Type": "Silver", "Qos": {"minIOPS": 4000, "maxIOPS": 6000, "burstIOPS": 8000}},
+              {"Type": "Gold", "Qos": {"minIOPS": 6000, "maxIOPS": 8000, "burstIOPS": 10000}}],
 
-== Example 3: Single service level configuration
-
-This example shows a backend file that applies the same aspects to all Trident created storage in the Google Cloud us-west2 region. This example also shows the usage of `proxyURL` in the backend configuration file.
-
-[source,console]
-----
-{
-    "version": 1,
-    "storageDriverName": "gcp-cvs",
-    "projectNumber": "012345678901",
-    "apiRegion": "us-west2",
-    "apiKey": {
-        "type": "service_account",
-        "project_id": "my-gcp-project",
-        "private_key_id": "1234567890123456789012345678901234567890",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nXsYg6gyxy4zq7OlwWgLwGa==\n-----END PRIVATE KEY-----\n",
-        "client_email": "cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com",
-        "client_id": "123456789012345678901",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com"
-    },
-    "proxyURL": "http://proxy-server-hostname/",
-    "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
-    "limitVolumeSize": "10Ti",
-    "serviceLevel": "premium",
-    "defaults": {
-        "snapshotDir": "true",
-        "snapshotReserve": "5",
-        "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
-        "size": "5Ti"
-    }
-}
-----
-
-== Example 4: Virtual storage pool configuration
-
-This example shows the backend definition file configured with virtual storage pools along with `StorageClasses` that refer back to them.
-
-In the sample backend definition file shown below, specific defaults are set for all storage pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual storage pools are defined in the `storage` section. In this example, each individual storage pool sets its own `serviceLevel`, and some pools overwrite the default values.
-
-[source,console]
-----
-{
-    "version": 1,
-    "storageDriverName": "gcp-cvs",
-    "projectNumber": "012345678901",
-    "apiRegion": "us-west2",
-    "apiKey": {
-        "type": "service_account",
-        "project_id": "my-gcp-project",
-        "private_key_id": "1234567890123456789012345678901234567890",
-        "private_key": "-----BEGIN PRIVATE KEY-----\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nXsYg6gyxy4zq7OlwWgLwGa==\n-----END PRIVATE KEY-----\n",
-        "client_email": "cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com",
-        "client_id": "123456789012345678901",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com"
-    },
-    "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
-
-    "defaults": {
-        "snapshotReserve": "5",
-        "exportRule": "0.0.0.0/0"
-    },
-
-    "labels": {
-        "cloud": "gcp"
-    },
-    "region": "us-west2",
+    "type": "Silver",
+    "labels":{"store":"solidfire", "k8scluster": "dev-1-cluster"},
+    "region": "us-east-1",
 
     "storage": [
         {
-            "labels": {
-                "performance": "extreme",
-                "protection": "extra"
-            },
-            "serviceLevel": "extreme",
-            "defaults": {
-                "snapshotDir": "true",
-                "snapshotReserve": "10",
-                "exportRule": "10.0.0.0/24"
-            }
+            "labels":{"performance":"gold", "cost":"4"},
+            "zone":"us-east-1a",
+            "type":"Gold"
         },
         {
-            "labels": {
-                "performance": "extreme",
-                "protection": "standard"
-            },
-            "serviceLevel": "extreme"
+            "labels":{"performance":"silver", "cost":"3"},
+            "zone":"us-east-1b",
+            "type":"Silver"
         },
         {
-            "labels": {
-                "performance": "premium",
-                "protection": "extra"
-            },
-            "serviceLevel": "premium",
-            "defaults": {
-                "snapshotDir": "true",
-                "snapshotReserve": "10"
-            }
+            "labels":{"performance":"bronze", "cost":"2"},
+            "zone":"us-east-1c",
+            "type":"Bronze"
         },
-
         {
-            "labels": {
-                "performance": "premium",
-                "protection": "standard"
-            },
-            "serviceLevel": "premium"
-        },
-
-        {
-            "labels": {
-                "performance": "standard"
-            },
-            "serviceLevel": "standard"
+            "labels":{"performance":"silver", "cost":"1"},
+            "zone":"us-east-1d"
         }
     ]
 }
 ----
 
-The following `StorageClass` definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each `StorageClass` the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+The following StorageClass definitions refer to the above virtual storage pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-The first `StorageClass` (`cvs-extreme-extra-protection`) maps to the first virtual storage pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. The last `StorageClass` (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Trident decides which virtual storage pool is selected and ensures that the snapshot reserve requirement is met.
+The first StorageClass (`solidfire-gold-four`) will map to the first virtual storage pool. This is the only pool offering gold performance with a `Volume Type QoS` of Gold. The last StorageClass (`solidfire-silver`) calls out any storage pool which offers a silver performance. Trident will decide which virtual storage pool is selected and will ensure the storage requirement is met.
 
-[source,console]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cvs-extreme-extra-protection
-provisioner: netapp.io/trident
+  name: solidfire-gold-four
+provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=extreme; protection=extra"
-allowVolumeExpansion: true
+  selector: "performance=gold; cost=4"
+  fsType: "ext4"
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cvs-extreme-standard-protection
-provisioner: netapp.io/trident
+  name: solidfire-silver-three
+provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=premium; protection=standard"
-allowVolumeExpansion: true
+  selector: "performance=silver; cost=3"
+  fsType: "ext4"
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cvs-premium-extra-protection
-provisioner: netapp.io/trident
+  name: solidfire-bronze-two
+provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=premium; protection=extra"
-allowVolumeExpansion: true
+  selector: "performance=bronze; cost=2"
+  fsType: "ext4"
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cvs-premium
-provisioner: netapp.io/trident
+  name: solidfire-silver-one
+provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=premium; protection=standard"
-allowVolumeExpansion: true
+  selector: "performance=silver; cost=1"
+  fsType: "ext4"
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: cvs-standard
-provisioner: netapp.io/trident
+  name: solidfire-silver
+provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=standard"
-allowVolumeExpansion: true
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: cvs-extra-protection
-provisioner: netapp.io/trident
-parameters:
-  selector: "protection=extra"
-allowVolumeExpansion: true
+  selector: "performance=silver"
+  fsType: "ext4"
 ----
 
-== What's next?
+== Find more information
 
-After you create the backend configuration file, run the following command:
-
-[source,console]
-----
-tridentctl create backend -f <backend-file>
-----
-
-If the backend creation fails, something is wrong with the backend configuration. You can view the logs to determine the cause by running the following command:
-
-[source,console]
-----
-tridentctl logs
-----
-
-After you identify and correct the problem with the configuration file, you can run the create command again.
+* link:../trident-concepts/vol-access-groups.html[Volume access groups^]

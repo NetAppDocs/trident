@@ -1,0 +1,19 @@
+---
+sidebar: sidebar
+permalink: trident-use/backends.html
+keywords: backends, storage system, anf, cvs for aws, cvs for gcp, element, hci, solidfire, ontap, aff, fas, ontap select, configure backends
+summary: A Trident backend defines the relationship between Trident and a storage system. It tells Trident how to communicate with that storage system and how Trident should provision volumes from it. Trident will automatically offer up storage pools from backends that together match the requirements defined by a storage class. Learn more about configuring the backend based on the type of storage system you have.
+---
+
+= Configure backends
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+A Trident backend defines the relationship between Trident and a storage system. It tells Trident how to communicate with that storage system and how Trident should provision volumes from it. Trident will automatically offer up storage pools from backends that together match the requirements defined by a storage class. Learn more about configuring the backend based on the type of storage system you have.
+
+* link:anf.html[Azure NetApp Files^]
+* link:aws.html[Cloud Volumes Service for AWS^]
+* link:gcp.html[Cloud Volumes Service for Google Cloud Platform^]
+* link:element.html[NetApp HCI and SolidFire^]
+* link:ontap.html[ONTAP (AFF/FAS/Select/Cloud)^]

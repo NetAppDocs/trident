@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-rn.html
 keywords: what's new, new features, enhancements, known issues, resolved issues, troubleshooting
-summary: NetApp is continually improving and enhancing its products and services. Here are some of the latest features, enhancements, and bug fixes in the latest version of Trident.
+summary: NetApp is continually improving and enhancing its products and services. Here are some of the latest features, enhancements, and bug fixes in the latest version of Astra Trident.
 ---
 
 = Release Notes
@@ -10,25 +10,32 @@ summary: NetApp is continually improving and enhancing its products and services
 :icons: font
 :imagesdir: ../media/
 
-Release Notes provide information about new features, enhancements, and bug fixes in the latest version of Trident.
+Release Notes provide information about new features, enhancements, and bug fixes in the latest version of Astra Trident.
 
 == What's new
 
 NetApp is continually improving and enhancing its products and services. Here are some of the latest features and functionalities available with Trident.
 
-* NEED TO ADD NEW FEATURES IN 21.07 AND REMOVE THE REST.
-* The 21.01 release of Trident introduced the following key architectural changes to the operator:
-** The operator is now cluster scoped. Previous instances of the Trident operator (versions 20.04 through 20.10) were namespace scoped. The advantages of a cluster-scoped operator are as follows:
-*** Resource accountability: The operator can now manage resources associated with a Trident installation at the cluster level. As part of installing Trident, the operator creates and maintains several resources by using `ownerReferences`. Maintaining `ownerReferences` on cluster-scoped resources can throw up errors on certain Kubernetes distributors, such as OpenShift. This is mitigated with a cluster-scoped operator. For auto-healing and patching Trident resources, this is an essential requirement.
-*** Cleaning up during uninstalls: A complete removal of Trident requires all the associated resources to be deleted. A namespace-scoped operator might experience issues with the removal of cluster-scoped resources (such as, `clusterRole`, `ClusterRoleBinding`, and `PodSecurityPolicy`) and lead to an incomplete clean up. A cluster-scoped operator eliminates this issue.
-** `TridentProvisioner` is replaced with `TridentOrchestrator` as the Custom Resource used to install and manage Trident. In addition, a new field is introduced to the `TridentOrchestrator` spec. You can specify the namespace Trident must be installed/upgraded from by using the `spec.namespace` field. See https://github.com/NetApp/trident/blob/stable/v21.01/deploy/crds/tridentorchestrator_cr.yaml[an example here^].
-* The 21.01 release of Trident introduced Helm-based installs and upgrades.
+=== Astra Trident 21.07.01
+
+* Fixed custom YAML installer issue with different image.
+* Fixed snapshot size calculation issue.
+
+See https://github.com/NetApp/trident/releases/tag/v21.07.1[Trident GitHub^] for more information.
+
+=== Astra Trident 21.07
+
+Astra Trident 21.07.0 is *not available for download*. Changes introduced to `snapshotReserve` with version 21.07.0 can result in CSI `VolumeSnapshots` being unusable for creating PersistentVolumeClaim(s).
+
+If you have already upgraded to version 21.07.0, it is recommended that you delete the newly created `VolumeSnapshots` (provisioned with version 21.07.0) and downgrade to the previous release.
+
+See https://github.com/NetApp/trident/releases/tag/v21.07.0[Trident GitHub^] for more information.
 
 == Known issues
 
 Known issues identify problems that might prevent you from using the product successfully.
 
-* WHAT ARE THE KNOWN ISSUES IN 21.07?
+* Trident now enforces a blank `fsType` (`fsType=""`) for volumes that do not have the `fsType` specified in their StorageClass. When working with Kubernetes 1.17 or later, Trident supports providing a blank `fsType` for NFS volumes. For iSCSI volumes, you are required to set the `fsType` on your StorageClass when enforcing an `fsGroup` using a Security Context.
 
 * When using a backend across multiple Trident instances, each backend configuration file should have a different `storagePrefix` value for ONTAP backends or use a different `TenantName` for SolidFire backends. Trident cannot detect volumes that other instances of Trident have created. Attempting to create an existing volume on either ONTAP or SolidFire backends succeeds, because Trident treats volume creation as an idempotent operation. If `storagePrefix` or `TenantName` do not differ, there might be name collisions for volumes created on the same backend.
 
@@ -48,21 +55,5 @@ Known issues identify problems that might prevent you from using the product suc
 
 * If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm. See Worker node Preparation for instructions.
 
-== Resolved issues
-
-* WHAT ARE THE RESOLVED ISSUES IN 21.07?
-
-* The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
-* When using Trident 20.07.1 for non-CSI deployments [Kubernetes 1.11 - 1.13], you might observe existing igroups being cleared of all existing IQNs. This has been fixed in the 20.10 release of Trident. This can only be observed when Trident initializes a backend/restarts if scheduled on a new node.
-+
-TIP: We recommend that you upgrade to 20.10.
-
-* An upstream Kubernetes bug that could be encountered when rapidly attaching/detaching volumes is fixed with Trident 20.07.1 and the v2.0.1 release of the CSI external-provisioner sidecar. Trident v20.07.1 will use the 2.0.1 release of the external-provisioner sidecar for all Kubernetes clusters running 1.17 and later. If you are using Kubernetes 1.16 or earlier, you should upgrade your Kubernetes cluster to 1.17 or later.
-
-* A previously identified issue with updating the storage prefix for a Trident backend is resolved with Trident 20.07.1. You can work with backends that use an empty storage prefix ("") or one that includes ``"-"``.
-
-* Trident 20.07.1 using the 2.0.1 release of the CSI external-provisioner sidecar enforces a blank fsType (fsType="") for volumes that do not have the fsType in their StorageClass. When working with Kubernetes 1.17 or later, upgrading to Trident 20.07.1 would enable you to provide a blank fsType for NFS volumes. For iSCSI volumes, if you are enforcing an fsGroup using a Security Context, you are required to set the fsType on your StorageClass.
-
-* Trident 20.07.1 improves the resiliency for iSCSI volumes. The v20.07.0 release implements multiple additional checks that eliminate accidental deletions from occurring.
-
-* The bug where Trident creates multiple unintended secrets when it attempts to patch Trident service accounts is fixed in 20.07.1.
+== Find more information
+* https://github.com/NetApp/trident[NetApp Trident GitHub^]

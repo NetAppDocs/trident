@@ -5,13 +5,13 @@ keywords: rest api, get, post, json, object, backends
 summary: You can use the REST endpoint directly if you prefer to interact with Trident's REST API.
 ---
 
-= REST API
+= Trident REST API
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-While link:trident-reference/trident-cl.html[`tridentctl`] is the easiest way to interact with Trident's REST API, you can use the REST endpoint directly if you prefer.
+While `tridentctl`(link:trident-reference/tridentctl.html) is the easiest way to interact with Trident's REST API, you can use the REST endpoint directly if you prefer.
 
 This is useful for advanced installations that use Trident as a standalone binary in non-Kubernetes deployments.
 
@@ -19,18 +19,19 @@ For better security, Trident's `REST API` is restricted to localhost by default 
 
 The API works as follows:
 
-* `GET <trident-address>/trident/v1/<object-type>`: Lists all objects of
-that type.
-* `GET <trident-address>/trident/v1/<object-type>/<object-name>`: Gets
-the details of the named object.
-* `POST <trident-address>/trident/v1/<object-type>`: Creates an object
-of the specified type.
-** Requires a JSON configuration for the object to be created. For the specification of each
-object type, see link:trident-reference/tridentctl.html[`tridentctl`].
-** If the object already exists, behavior varies: backends update the existing object, while all other object types will fail the
-operation.
-* `DELETE <trident-address>/trident/v1/<object-type>/<object-name>`: Deletes the named resource.
-+
-NOTE: Volumes associated with backends or storage classes will continue to exist; these must be deleted separately. For more information, see link:trident-reference/tridentctl.html[`tridentctl`].
+== GET
+* `GET <trident-address>/trident/v1/<object-type>`: Lists all objects of that type.
+* `GET <trident-address>/trident/v1/<object-type>/<object-name>`: Gets the details of the named object.
 
-To see an example of how these APIs are called, pass the debug (`-d`) flag to link:trident-reference/tridentctl.html[`tridentctl`].
+== POST
+`POST <trident-address>/trident/v1/<object-type>`: Creates an object of the specified type.
+
+* Requires a JSON configuration for the object to be created. For the specification of each object type, see link:trident-reference/tridentctl.html[`tridentctl` commands and options].
+* If the object already exists, behavior varies: backends update the existing object, while all other object types will fail the operation.
+
+== DELETE
+`DELETE <trident-address>/trident/v1/<object-type>/<object-name>`: Deletes the named resource.
+
+NOTE: Volumes associated with backends or storage classes will continue to exist; these must be deleted separately. For more information, see link:trident-reference/tridentctl.html[`tridentctl` commands and options].
+
+For examples of how these APIs are called, pass the debug (`-d`) flag. For more information, see link:trident-reference/tridentctl.html[`tridentctl` commands and options].

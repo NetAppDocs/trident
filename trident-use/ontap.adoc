@@ -1,0 +1,66 @@
+---
+sidebar: sidebar
+permalink: trident-use/ontap.html
+keywords: trident backend, AFF, FAS, ONTAP Select, Cloud, Amazon FSx for NetApp ONTAP, drivers, ONTAP drivers
+summary: Learn about how to create and use an Element backend with your Trident installation.
+---
+
+= Configure an ONTAP backend
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Learn about configuring an ONTAP backend. These instructions apply for all ONTAP clusters no matter where you choose to run it; on dedicated hardware (AFF/FAS), on commodity hardware (Select), or on a hyperscaler (Cloud).
+
+.What you'll need
+
+* A supported ONTAP storage system
+* An link:/ontap-drivers.html[ONTAP storage driver^] that you want to use
+* Complete ONTAP backend preparation for the driver of your choice
+* Authentication credentials (username/password or certificate) to an ONTAP SVM with appropriate access
+
+NOTE: ONTAP backends can be authenticated by one of two means: Login credentials for a security role (username/password) or certificate-based, using the private key and the certificate that is installed on the ONTAP cluster. You can update existing backends to move from one authentication mode to the other by running `tridentctl update backend`.
+
+== `ontap-san` and `ontap-san-economy`
+
+The `ontap-san` and `ontap-san-economy` drivers support the Filesystem and Block volumeModes. You can choose to create a raw block volume with no file system (or) have Trident create a volume with a file system. For the latter, the `fsType` is specified through the Storage Class.
+
+See the following example:
+----
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+name: netapp-san-economy
+provisioner: csi.trident.netapp.io
+parameters:
+backendType: "ontap-san-economy"
+fsType: "ext4"
+----
+
+NOTE: See http://hwu.netapp.com/[NetApp Hardware Universe (login required)^] for up-to-date information on volume limits for your storage cluster. Based on the number of nodes, the platform and the version of ONTAP being used, these limits will vary.
+
+The `ontap-nas` and `ontap-san` drivers create an ONTAP FlexVol for each persistent volume. You can choose to use these drivers if your persistent volume requirements fit within that limitation. These drivers provide granular data management capabilities.
+
+If you need more persistent volumes than can be accommodated by the FlexVol limits, choose the `ontap-nas-economy` or the `ontap-san-economy` driver.
+
+== `ontap-nas-economy`
+
+The `ontap-nas-economy` driver creates persistent volumes as ONTAP Qtrees within a pool of automatically managed FlexVols. Qtrees offer far greater scaling at the expense of granular data management features. You can configure the number of Qtrees created per FlexVol (between 50 and 300) for a backend. By default, a FlexVol created by Trident can contain 200 Qtrees.
+
+== `ontap-san-economy`
+
+The `ontap-san-economy` driver creates persistent volumes as ONTAP LUNs within a pool of automatically managed FlexVols. Each persistent volume maps to an ONTAP LUN and this driver offers higher scalability for SAN workloads. Because persistent volumes map to LUNs within shared FlexVols, Kubernetes VolumeSnapshots are created by using ONTAP’s FlexClone technology. FlexClone LUNs and their parent LUNs share blocks, minimizing disk usage.
+
+== `ontap-nas-flexgroup`
+
+You can choose the `ontap-nas-flexgroup` driver to increase parallelism to a single volume that can grow into the petabyte range with billions of files. Some ideal use cases for FlexGroups include AI/ML/DL, big data and analytics, software builds, streaming, file repositories, and so on. Trident uses all aggregates assigned to an SVM when provisioning a FlexGroup Volume.
+
+FlexGroup support in Trident has the following considerations:
+
+* Requires ONTAP version 9.2 or later.
+* With ONTAP 9.7, FlexGroups work with NFSv4. For ONTAP clusters that are running 9.6 and earlier, NFSv3 must be used (required to set mountOptions: ["nfsvers=3"] in the Kubernetes storage class).
+* When using NFSv3, it is recommended to enable the 64-bit NFSv3 identifiers for the SVM.
+* The minimum recommended FlexGroup size is 100GB.
+* Cloning FlexGroup volumes is supported with ONTAP 9.7 and later.
+
+For information about FlexGroups and workloads that are appropriate for FlexGroups, see the https://www.netapp.com/pdf.html?item=/media/12385-tr4571pdf.pdf[NetApp FlexGroup Volumes Best Practices and Implementation Guide^].

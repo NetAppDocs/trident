@@ -114,7 +114,7 @@ The next step is to create a `TridentBackendConfig` CR that will automatically b
 * Virtual Storage Pools (if present) must retain the same order as in the original backend.
 * Credentials are provided through a Kubernetes Secret and not in plain text.
 
-In this case, the TridentBackendConfig will look like this:
+In this case, the `TridentBackendConfig` will look like this:
 ----
 $ cat backend-tbc-ontap-nas.yaml
 apiVersion: trident.netapp.io/v1

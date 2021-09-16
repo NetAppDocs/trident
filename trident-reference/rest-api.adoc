@@ -2,20 +2,20 @@
 sidebar: sidebar
 permalink: trident-reference/rest-api.html
 keywords: rest api, get, post, json, object, backends
-summary: You can use the REST endpoint directly if you prefer to interact with Trident's REST API.
+summary: You can use the REST endpoint directly if you prefer to interact with Astra Trident's REST API.
 ---
 
-= Trident REST API
+= Astra Trident REST API
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-While link:trident-reference/tridentctl.html[`tridentctl` commands and options] is the easiest way to interact with Trident's REST API, you can use the REST endpoint directly if you prefer.
+While link:trident-reference/tridentctl.html[tridentctl commands and options^] is the easiest way to interact with Astra Trident's REST API, you can use the REST endpoint directly if you prefer.
 
 This is useful for advanced installations that use Trident as a standalone binary in non-Kubernetes deployments.
 
-For better security, Trident's `REST API` is restricted to localhost by default when running inside a pod. To change this behavior, you need to set Trident's `-address` argument in its pod configuration.
+For better security, Trident's `REST API` is restricted to localhost by default when running inside a pod. To change this behavior, you need to set Astra Trident's `-address` argument in its pod configuration.
 
 The API works as follows:
 

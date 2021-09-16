@@ -21,7 +21,7 @@ Run the following command:
 $ kubectl delete tbc <tbc-name> -n trident
 ----
 
-Trident does not delete the Kubernetes Secrets that were in use by `TridentBackendConfig`. The Kubernetes user is responsible for cleaning up secrets. Care must be taken when deleting secrets. You should delete secrets only if they are not in use by the backends.
+Astra Trident does not delete the Kubernetes Secrets that were in use by `TridentBackendConfig`. The Kubernetes user is responsible for cleaning up secrets. Care must be taken when deleting secrets. You should delete secrets only if they are not in use by the backends.
 
 == View the existing backends
 
@@ -35,6 +35,7 @@ You can also run `tridentctl get backend -n trident` or `tridentctl get backend 
 == Update a backend
 
 There can be multiple reasons to update a backend:
+
 * Credentials to the storage system have changed. To update credentials, the Kubernetes Secret that is used in the `TridentBackendConfig` object must be updated. Astra Trident will automatically update the backend with the latest credentials provided. Run the following command to update the Kubernetes Secret:
 ----
 $ kubectl apply -f <updated-secret-file.yaml> -n trident

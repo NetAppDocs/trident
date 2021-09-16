@@ -11,7 +11,7 @@ summary: Learn more about tridentctl, a command-line utility that provides simpl
 :imagesdir: ../media/
 
 [.lead]
-The https://github.com/NetApp/trident/releases[Trident installer bundle] includes a command-line utility, `tridentctl`, that provides simple access to Trident. Kubernetes users with sufficient privileges can use it to install Trident as well as to interact with it directly to manage the namespace that contains the Trident pod.
+The https://github.com/NetApp/trident/releases[Astra Trident installer bundle^] includes a command-line utility, `tridentctl`, that provides simple access to Trident. Kubernetes users with sufficient privileges can use it to install Trident as well as to interact with it directly to manage the namespace that contains the Trident pod.
 
 For usage information, run `tridentctl --help`.
 
@@ -23,30 +23,30 @@ Usage:
   tridentctl [command]
 ----
 Available commands:
-* `create`: Add a resource to Trident.
-* `delete`: Remove one or more resources from Trident.
-* `get`: Get one or more resources from Trident.
+* `create`: Add a resource to Astra Trident.
+* `delete`: Remove one or more resources from Astra Trident.
+* `get`: Get one or more resources from Astra Trident.
 * `help`: Help about any command.
-* `images`: Print a table of the container images Trident needs.
-* `import`: Import an existing resource to Trident.
-* `install`: Install Trident.
-* `logs`: Print the logs from Trident.
-* `send`: Send a resource from Trident.
-* `uninstall`: Uninstall Trident.
+* `images`: Print a table of the container images Astra Trident needs.
+* `import`: Import an existing resource to Astra Trident.
+* `install`: Install Astra Trident.
+* `logs`: Print the logs from Astra Trident.
+* `send`: Send a resource from Astra Trident.
+* `uninstall`: Uninstall Astra Trident.
 * `update`: Modify a resource in Trident.
-* `upgrade`:Upgrade a resource in Trident.
-* `version`: Print the version of Trident.
+* `upgrade`:Upgrade a resource in Astra Trident.
+* `version`: Print the version of Astra Trident.
 
 Flags:
 * ``-d, --debug`: Debug output.
 * ``-h, --help`: Help for `tridentctl`.
-* ``-n, --namespace string`: Namespace of Trident deployment.
+* ``-n, --namespace string`: Namespace of Astra Trident deployment.
 * ``-o, --output string`: Output format. One of json|yaml|name|wide|ps (default).
-* ``-s, --server string`: Address/port of Trident REST interface.
+* ``-s, --server string`: Address/port of Astra Trident REST interface.
 
 == `create`
 
-You can use run the `create` command to add a resource to Trident.
+You can use run the `create` command to add a resource to Astra Trident.
 
 [source,console]
 ----
@@ -54,11 +54,11 @@ Usage:
   tridentctl create [option]
 ----
 Available option:
-`backend`: Add a backend to Trident.
+`backend`: Add a backend to Astra Trident.
 
 == `delete`
 
-You can run the `delete` command to remove one or more resources from Trident.
+You can run the `delete` command to remove one or more resources from Astra Trident.
 
 [source,console]
 ----
@@ -66,15 +66,15 @@ Usage:
   tridentctl delete [option]
 ----
 Available options:
-* `backend`: Delete one or more storage backends from Trident.
-* `node`: Delete one or more CSI nodes from Trident.
-* `snapshot`: Delete one or more volume snapshots from Trident.
-* `storageclass`: Delete one or more storage classes from Trident.
-* `volume`: Delete one or more storage volumes from Trident.
+* `backend`: Delete one or more storage backends from Astra Trident.
+* `node`: Delete one or more CSI nodes from Astra Trident.
+* `snapshot`: Delete one or more volume snapshots from Astra Trident.
+* `storageclass`: Delete one or more storage classes from Astra Trident.
+* `volume`: Delete one or more storage volumes from Astra Trident.
 
 == `get`
 
-You can run the `get` command to get one or more resources from Trident.
+You can run the `get` command to get one or more resources from Astra Trident.
 
 [source,console]
 ----
@@ -82,14 +82,14 @@ Usage:
   tridentctl get [option]
 ----
 Available options:
-* `backend`: Get one or more storage backends from Trident.
-* `snapshot`: Get one or more snapshots from Trident.
-* `storageclass`: Get one or more storage classes from Trident.
-* `volume`: Get one or more volumes from Trident.
+* `backend`: Get one or more storage backends from Astra Trident.
+* `snapshot`: Get one or more snapshots from Astra Trident.
+* `storageclass`: Get one or more storage classes from Astra Trident.
+* `volume`: Get one or more volumes from Astra Trident.
 
 == `images`
 
-You can run the `images` flag to print a table of the container images Trident needs.
+You can run the `images` flag to print a table of the container images Astra Trident needs.
 
 [source,console]
 ----
@@ -102,7 +102,7 @@ Flags:
 
 == `import volume`
 
-You can run the `import volume` command to import an existing volume to Trident.
+You can run the `import volume` command to import an existing volume to Astra Trident.
 
 [source,console]
 ----
@@ -119,7 +119,7 @@ Flags:
 
 == `install`
 
-You can run the `install` flags to install Trident.
+You can run the `install` flags to install Astra Trident.
 
 [source,console]
 ----
@@ -136,18 +136,18 @@ Flags:
 * ``--image-registry string`: The address/port of an internal image registry.
 * ``--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
 * ``--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
-* ``--log-format string`: The Trident logging format (text, json) (default "text").
-* ``--pv string`: The name of the legacy PV used by Trident, makes sure this doesn't exist (default "trident").
-* ``--pvc string`: The name of the legacy PVC used by Trident, makes sure this doesn't exist (default "trident").
+* ``--log-format string`: The Astra Trident logging format (text, json) (default "text").
+* ``--pv string`: The name of the legacy PV used by Astra Trident, makes sure this doesn't exist (default "trident").
+* ``--pvc string`: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
 * ``--silence-autosupport`: Don't send autosupport bundles to NetApp automatically (default true).
 * ``--silent`: Disable most output during installation.
-* ``--trident-image string`: The Trident image to install.
+* ``--trident-image string`: The Astra Trident image to install.
 * ``--use-custom-yaml`: Use any existing YAML files that exist in setup directory.
-* ``--use-ipv6`: Use IPv6 for Trident's communication.
+* ``--use-ipv6`: Use IPv6 for Astra Trident's communication.
 
 == `logs`
 
-You can run the `logs` flags to print the logs from Trident.
+You can run the `logs` flags to print the logs from Astra Trident.
 
 [source,console]
 ----
@@ -157,14 +157,14 @@ Usage:
 Flags:
 * ``-a, --archive`: Create a support archive with all logs unless otherwise specified.
 * ``-h, --help`: Help for logs.
-* ``-l, --log string`: Trident log to display. One of trident|auto|trident-operator|all (default "auto").
+* ``-l, --log string`: Astra Trident log to display. One of trident|auto|trident-operator|all (default "auto").
 * ``--node string`: The Kubernetes node name from which to gather node pod logs.
 * ``-p, --previous`: Get the logs for the previous container instance if it exists.
 * ``--sidecars`: Get the logs for the sidecar containers.
 
 == `send`
 
-You can run the `send` command to send a resource from Trident.
+You can run the `send` command to send a resource from Astra Trident.
 
 [source,console]
 ----
@@ -176,7 +176,7 @@ Available option:
 
 == `uninstall`
 
-You can run the `uninstall` flags to uninstall Trident.
+You can run the `uninstall` flags to uninstall Astra Trident.
 
 [source,console]
 ----
@@ -189,7 +189,7 @@ Flags:
 
 == `update`
 
-You can run the `update` commands to modify a resource in Trident.
+You can run the `update` commands to modify a resource in Astra Trident.
 
 [source,console]
 ----
@@ -197,11 +197,11 @@ Usage:
   tridentctl update [option]
 ----
 Available options:
-`backend`: Update a backend in Trident.
+`backend`: Update a backend in Astra Trident.
 
 == `upgrade`
 
-You can run the `upgrade` commands to upgrade a resource in Trident.
+You can run the `upgrade` commands to upgrade a resource in Astra Trident.
 
 [source,console]
 ----

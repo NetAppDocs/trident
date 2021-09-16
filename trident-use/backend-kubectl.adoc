@@ -44,7 +44,7 @@ spec:
 
 You can also take a look at the examples in the https://github.com/NetApp/trident/tree/stable/v21.07/trident-installer/sample-input/backends-samples[trident-installer^] directory for sample configurations for the desired storage platform/service.
 
-The `spec` takes backend-specific configuration parameters. In this example, the backend uses the `ontap-san` storage driver and uses the configuration parameters that are tabulated here. For the list of configuration options for your desired storage driver, see the link:trident-use/backends.html[backend configuration information for your storage driver^].
+The `spec` takes backend-specific configuration parameters. In this example, the backend uses the `ontap-san` storage driver and uses the configuration parameters that are tabulated here. For the list of configuration options for your desired storage driver, see the link:backends.html[backend configuration information for your storage driver^].
 
 The `spec` section also includes `credentials` and `deletionPolicy` fields, which are newly introduced in the `TridentBackendConfig` CR:
 
@@ -191,7 +191,7 @@ Phase can take one of the following values:
 * `Lost`: The backend associated with the `TridentBackendConfig` CR was accidentally or deliberately deleted and the `TridentBackendConfig` CR still has a reference to the deleted backend. The `TridentBackendConfig` CR can still be deleted irrespective of the `deletionPolicy` value.
 * `Unknown`: Astra Trident is unable to determine the state or existence of the backend associated with the `TridentBackendConfig` CR. For example, if the API server is not responding or if the `tridentbackends.trident.netapp.io` CRD is missing. This might require the user’s intervention.
 
-At this stage, a backend is successfully created! There are several operations that can additionally be handled, such as link:trident-use/backend_ops_kubectl.html[backend updates and backend deletions^].
+At this stage, a backend is successfully created! There are several operations that can additionally be handled, such as link:backend_ops_kubectl.html[backend updates and backend deletions^].
 
 == (Optional) Step 4: Get more details
 
@@ -245,4 +245,4 @@ status:
 
 You can run the `kubectl -n trident describe tbc <tbc-cr-name>` command to get details of the event logs.
 
-WARNING: You cannot update or delete a backend which contains an associated `TridentBackendConfig` object using `tridentctl`. To understand the steps involved in switching between `tridentctl` and `TridentBackendConfig`, link:trident-use/backend_options.html[see here^].
+WARNING: You cannot update or delete a backend which contains an associated `TridentBackendConfig` object using `tridentctl`. To understand the steps involved in switching between `tridentctl` and `TridentBackendConfig`, link:backend_options.html[see here^].

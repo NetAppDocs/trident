@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-concepts/virtual-storage-pool.html
-keywords: virtual storage pools, trident, trident backends
-summary: Virtual storage pools provide a layer of abstraction between Trident's storage backends and Kubernetes' StorageClasses. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a StorageClass specify which physical backend, backend pool, or backend type to use to meet desired criteria.
+keywords: virtual storage pools, astra trident, backends
+summary: Virtual storage pools provide a layer of abstraction between Astra Trident's storage backends and Kubernetes' StorageClasses. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a StorageClass specify which physical backend, backend pool, or backend type to use to meet desired criteria.
 ---
 
 = Virtual storage pools
@@ -10,9 +10,9 @@ summary: Virtual storage pools provide a layer of abstraction between Trident's 
 :icons: font
 :imagesdir: ../media/
 
-Virtual storage pools provide a layer of abstraction between Trident's storage backends and Kubernetes' StorageClasses. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a StorageClass specify which physical backend, backend pool, or backend type to use to meet desired criteria.
+Virtual storage pools provide a layer of abstraction between Astra Trident's storage backends and Kubernetes' `StorageClasses`. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a `StorageClass` specify which physical backend, backend pool, or backend type to use to meet desired criteria.
 
-The storage administrator can define virtual storage pools on any of the Trident backends in a JSON or YAML definition file.
+The storage administrator can define virtual storage pools on any of the Astra Trident backends in a JSON or YAML definition file.
 
 image::virtual_storage_pools.png[Shows the conceptual diagram of virtual storage pools.]
 
@@ -23,8 +23,7 @@ It is also advisable to not edit/modify attributes for an existing virtual pool 
 
 Most aspects are specified in backend-specific terms. Crucially, the aspect values are not exposed outside the backend's driver and are not available for matching in `StorageClasses`. Instead, the administrator defines one or more labels for each virtual pool. Each label is a key:value pair, and labels might be common across unique backends. Like aspects, labels can be specified per-pool or global to the backend. Unlike aspects, which have predefined names and values, the administrator has full discretion to define label keys and values as needed.
 
-A `StorageClass` identifies which virtual pool to use by referencing the labels within a selector parameter. Virtual pool selectors support
-six operators:
+A `StorageClass` identifies which virtual pool to use by referencing the labels within a selector parameter. Virtual pool selectors support six operators:
 
 [width="100%",cols="14%,34%,52%",options="header",]
 |===

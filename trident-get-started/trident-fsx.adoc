@@ -21,21 +21,22 @@ By using Trident with Amazon FSx for NetApp ONTAP, you can ensure that their Kub
 If you are new to Trident, familiarize yourself by using the links provided below:
 
 * link:../faq.html[FAQs^]
-* link:/requirements.html[Requirements for using Trident^]
-* link:/kubernetes-deploy.html[Deploying Trident^]
+* link:requirements.html[Requirements for using Trident^]
+* link:kubernetes-deploy.html[Deploy Trident^]
 * link:../trident-reco/storage-config-best-practices.html[Best practices for configuring ONTAP, Cloud Volumes ONTAP, and Amazon FSx^]
-* Integrating Trident [NEED LINK HERE]
-* ONTAP backend configuration [NEED LINK HERE]
+* link:../trident-reco/integrate-trident.html#ontap[Integrate Trident^]
+* link:../trident-use/ontap-san.html[ONTAP SAN backend configuration^]
+* link:../trident-use/ontap-nas.html[ONTAP NAS backend configuration^]
 
-Learn more about driver capabilities here.[NEED LINK HERE.]
+Learn more about driver capabilities link:../trident-concepts/ontap-drivers.html[here^].
 
 Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-5A78F93F-7539-4840-AB0B-4A6E3252CF84.html[FabricPool^] to manage storage tiers. It enables you to store data in a tier, based on whether the data is frequently accessed.
 
-Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the `admin` cluster user. Trident typically uses the `admin` cluster user for non-Amazon FSx for ONTAP deployments.
+Astra Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the `admin` cluster user. Astra Trident typically uses the `admin` cluster user for non-Amazon FSx for ONTAP deployments.
 
 === Drivers
 
-You can integrate Trident with Amazon FSx for NetApp ONTAP by using the following drivers:
+You can integrate Astra Trident with Amazon FSx for NetApp ONTAP by using the following drivers:
 
 `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume.
 `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
@@ -45,13 +46,12 @@ You can integrate Trident with Amazon FSx for NetApp ONTAP by using the followin
 
 === Authentication
 
-Trident offers two modes of authentication:
+Astra Trident offers two modes of authentication:
 
-Credential-based: You can use the fsxadmin user for your file system or the vsadmin user configured for your SVM. We recommend using the vsadmin user to configure your backend. Trident will communicate with the FSx file system using this username and password.
-Certificate-based: Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
-* Easy updates to existing installations: You can easily update an existing Trident deployment with the operator. You only need to edit the TridentOrchestrator CR to make updates to a Trident installation.
+* Credential-based: You can use the fsxadmin user for your file system or the vsadmin user configured for your SVM. We recommend using the vsadmin user to configure your backend. Trident will communicate with the FSx file system using this username and password.
+* Certificate-based: Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
 
-== Deploy and configure Trident on EKS with Amazon FSx for NetApp ONTAP
+== Deploy and configure Astra Trident on EKS with Amazon FSx for NetApp ONTAP
 
 .What you'll need
 
@@ -61,18 +61,18 @@ Certificate-based: Trident will communicate with the SVM on your FSx file system
 +
 NOTE: Ensure that you follow the node preparation steps required for Amazon Linux and Ubuntu https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html[Amazon Machine Images^] (AMIs) depending on your EKS AMI type.
 
-For other Trident requirements, see link:/requirements.html[here^].
+For other Trident requirements, see link:requirements.html[here^].
 
 .Steps
 
-. Deploy Trident using one of the /kubernetes-deploy.html[deployment methods^].
+. Deploy Trident using one of the link:kubernetes-deploy.html[deployment methods^].
 . Configure Trident as follows:
 .. Collect your SVM’s management LIF DNS name. For example, by using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
 +
 ----
 aws fsx describe-storage-virtual-machines --region <file system region>
 ----
-. Create and install certificates for authentication. If you are using an `ontap-san` backend, see here.[NEED LINK]. If you are using an `ontap-nas` backend, see here. [NEED LINK]
+. Create and install certificates for authentication. If you are using an `ontap-san` backend, see link:../trident-use/ontap-san.html[here^]. If you are using an `ontap-nas` backend, see link:../trident-use/ontap-nas.html[here^].
 +
 NOTE: You can log in to your file system (for example to install certificates) using SSH from anywhere that can reach your file system. Use the `fsxadmin` user, the password you configured when you created your file system, and the management DNS name from `aws fsx describe-file-systems`.
 . Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
@@ -91,8 +91,8 @@ NOTE: You can log in to your file system (for example to install certificates) u
  }
 ----
 
-For information about creating backends, see here [NEED LINK].
+For information about creating backends, see link:../trident-use/backends.html[here^].
 
 WARNING: When using Amazon FSx for NetApp ONTAP with Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
 
-After deployment, perform the steps to create a link:/trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].
+After deployment, perform the steps to create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].

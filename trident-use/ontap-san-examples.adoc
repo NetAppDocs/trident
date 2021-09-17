@@ -1,0 +1,225 @@
+---
+sidebar: sidebar
+permalink: trident-use/ontap-san-examples.html
+keywords: trident backend, solidfire, netapp hci
+summary: Learn about how to create and use an Element backend with your Trident installation.
+---
+
+= Configuration options and examples
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+UPDATE THIS TOPIC. Learn about how to create and use an Element backend with your Trident installation.
+
+.What you'll need
+
+* A supported storage system that runs Element software.
+* Credentials to a NetApp HCI/SolidFire cluster admin or tenant user that can manage volumes.
+* All of your Kubernetes worker nodes should have the appropriate iSCSI tools installed. See link:../trident-use/worker-node-prep.html[worker node preparation information^].
+
+.What you need to know
+
+The `solidfire-san` storage driver supports both volume modes: file and block. For the `Filesystem` volumeMode, Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
+
+[cols=5,options="header"]
+|===
+|Driver
+|Protocol
+|VolumeMode
+|Access modes supported
+|File systems supported
+
+|`solidfire-san`
+a|iSCSI
+a|Block
+a|RWO,ROX,RWX
+a|No Filesystem. Raw block device.
+
+|`solidfire-san`
+a|iSCSI
+a|Block
+a|RWO,ROX,RWX
+a|No Filesystem. Raw block device.
+
+|`solidfire-san`
+a|iSCSI
+a|Filesystem
+a|RWO,ROX
+a|`xfs`, `ext3`, `ext4`
+
+|`solidfire-san`
+a|iSCSI
+a|Filesystem
+a|RWO,ROX
+a|`xfs`, `ext3`, `ext4`
+
+|===
+
+NOTE: Trident uses CHAP when functioning as an enhanced CSI Provisioner. If you’re using CHAP (which is the default for CSI), no further preparation is required. It is recommended to explicitly set the `UseCHAP` option to use CHAP with non-CSI Trident. Otherwise, see link:../trident-concepts/vol-access-groups.html[here^].
+
+WARNING: Volume access groups are only supported by the conventional, non-CSI framework for Trident. When configured to work in CSI mode, Trident uses CHAP.
+
+If neither `AccessGroups` or `UseCHAP` are set, one of the following rules applies:
+
+* If the default `trident` access group is detected, access groups are used.
+* If no access group is detected and Kubernetes version is 1.7 or later, then CHAP is used.
+
+== Backend configuration options
+
+See the following table for the backend configuration options:
+
+[cols=3,options="header"]
+|===
+|Parameter |Description |Default
+|`version` | |Always 1
+
+|`storageDriverName` | Name of the storage driver |“ontap-nas”, “ontap-nas-economy”, “ontap-nas-flexgroup”, “ontap-san”, “ontap-san-economy”
+
+|`backendName`  |Custom name or the storage backend |Driver name + “_” + dataLIF
+
+|`Endpoint` |MVIP for the SolidFire cluster with tenant credentials |
+
+|`SVIP` |Storage (iSCSI) IP address and port |
+
+|`labels` |Set of arbitrary JSON-formatted labels to apply on volumes. |“”
+
+|`TenantName` |Tenant name to use (created if not found) |
+
+|`InitiatorIFace` |Restrict iSCSI traffic to a specific host interface |“default”
+
+|`UseCHAP` |Use CHAP to authenticate iSCSI |"nfsvers=3"
+
+|`AccessGroups`  |List of Access Group IDs to use |Finds the ID of an access group named “trident”
+
+| `Types` |QoS specifications |
+
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value |“” (not enforced by default)
+
+| `debugTraceFlags` |Debug flags to use when troubleshooting. Example: {“api”:false, “method”:true} |null
+
+|===
+
+WARNING: Do not use `debugTraceFlags` unless you are troubleshooting and require a detailed log dump.
+
+NOTE: For all volumes created, Trident will copy all labels present on a storage pool to the backing storage LUN at the time it is provisioned. Storage admins can define labels per storage pool and group all volumes created in a storage pool. This provides a convenient way of differentiating volumes based on a set of customizable labels that are provided in the backend configuration.
+
+== Example 1: Backend configuration for `solidfire-san` driver with three volume types
+
+This example shows a backend file using CHAP authentication and modeling three volume types with specific QoS guarantees. Most likely you would then define storage classes to consume each of these using the IOPS storage class parameter.
+
+----
+{
+    "version": 1,
+    "storageDriverName": "solidfire-san",
+    "Endpoint": "https://<user>:<password>@<mvip>/json-rpc/8.0",
+    "SVIP": "<svip>:3260",
+    "TenantName": "<tenant>",
+    "labels": {"k8scluster": "dev1", "backend": "dev1-element-cluster"},
+    "UseCHAP": true,
+    "Types": [{"Type": "Bronze", "Qos": {"minIOPS": 1000, "maxIOPS": 2000, "burstIOPS": 4000}},
+              {"Type": "Silver", "Qos": {"minIOPS": 4000, "maxIOPS": 6000, "burstIOPS": 8000}},
+              {"Type": "Gold", "Qos": {"minIOPS": 6000, "maxIOPS": 8000, "burstIOPS": 10000}}]
+}
+----
+
+== Example 2: Backend and storage class configuration for `solidfire-san` driver with virtual storage pools
+
+This example shows the backend definition file configured with virtual storage pools along with StorageClasses that refer back to them.
+
+In the sample backend definition file shown below, specific defaults are set for all storage pools, which set the `type` at Silver. The virtual storage pools are defined in the `storage` section. In this example, some of the storage pool sets their own type, and some pools overwrite the default values set above.
+
+----
+{
+    "version": 1,
+    "storageDriverName": "solidfire-san",
+    "Endpoint": "https://<user>:<password>@<mvip>/json-rpc/8.0",
+    "SVIP": "<svip>:3260",
+    "TenantName": "<tenant>",
+    "UseCHAP": true,
+    "Types": [{"Type": "Bronze", "Qos": {"minIOPS": 1000, "maxIOPS": 2000, "burstIOPS": 4000}},
+              {"Type": "Silver", "Qos": {"minIOPS": 4000, "maxIOPS": 6000, "burstIOPS": 8000}},
+              {"Type": "Gold", "Qos": {"minIOPS": 6000, "maxIOPS": 8000, "burstIOPS": 10000}}],
+
+    "type": "Silver",
+    "labels":{"store":"solidfire", "k8scluster": "dev-1-cluster"},
+    "region": "us-east-1",
+
+    "storage": [
+        {
+            "labels":{"performance":"gold", "cost":"4"},
+            "zone":"us-east-1a",
+            "type":"Gold"
+        },
+        {
+            "labels":{"performance":"silver", "cost":"3"},
+            "zone":"us-east-1b",
+            "type":"Silver"
+        },
+        {
+            "labels":{"performance":"bronze", "cost":"2"},
+            "zone":"us-east-1c",
+            "type":"Bronze"
+        },
+        {
+            "labels":{"performance":"silver", "cost":"1"},
+            "zone":"us-east-1d"
+        }
+    ]
+}
+----
+
+The following StorageClass definitions refer to the above virtual storage pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
+
+The first StorageClass (`solidfire-gold-four`) will map to the first virtual storage pool. This is the only pool offering gold performance with a `Volume Type QoS` of Gold. The last StorageClass (`solidfire-silver`) calls out any storage pool which offers a silver performance. Trident will decide which virtual storage pool is selected and will ensure the storage requirement is met.
+
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-gold-four
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=gold; cost=4"
+  fsType: "ext4"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-silver-three
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=silver; cost=3"
+  fsType: "ext4"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-bronze-two
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=bronze; cost=2"
+  fsType: "ext4"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-silver-one
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=silver; cost=1"
+  fsType: "ext4"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-silver
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=silver"
+  fsType: "ext4"
+----
+
+== Find more information
+
+* link:../trident-concepts/vol-access-groups.html[Volume access groups^]

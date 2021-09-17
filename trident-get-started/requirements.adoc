@@ -46,53 +46,47 @@ To use Astra Trident, you need one or more of the following supported backends:
 The table below summarizes the features available with this release of
 Astra Trident and the versions of Kubernetes it supports.
 
-[cols=",,",options="header",]
+[cols=3,options="header"]
 |===
-|Feature |Kubernetes version |Feature gates required?
-|CSI Trident |1.17 and later a|
-____
-No
-____
+|Feature
+|Kubernetes version
+|Feature gates required?
 
-|Volume Snapshots |1.17 and later a|
-____
-No
-____
+|CSI Trident
+a|1.17 and later
+a|No
 
-|PVC from Volume Snapshots |1.17 and later a|
-____
-No
-____
+|Volume Snapshots
+a|1.17 and later
+a|No
 
-|iSCSI PV resize |1.17 and later a|
-____
-No
-____
+|PVC from Volume Snapshots
+a|1.17 and later
+a|No
 
-|ONTAP Bidirectional CHAP |1.17 and later a|
-____
-No
-____
+|iSCSI PV resize
+a|1.17 and later
+a|No
 
-|Dynamic Export Policies |1.17 and later a|
-____
-No
-____
+|ONTAP Bidirectional CHAP
+a|1.17 and later
+a|No
 
-|Trident Operator |1.17 and later a|
-____
-No
-____
+|Dynamic Export Policies
+a|1.17 and later
+a|No
 
-|Auto Worker Node Prep (beta) |1.17 and later a|
-____
-No
-____
+|Trident Operator
+a|1.17 and later
+a|No
 
-|CSI Topology |1.17 and later a|
-____
-No
-____
+|Auto Worker Node Prep (beta)
+a|1.17 and later
+a|No
+
+|CSI Topology
+a|1.17 and later
+a|No
 
 |===
 
@@ -118,26 +112,28 @@ Trident might require some changes to a storage system before a backend configur
 
 == Container images and corresponding Kubernetes versions
 
-For air-gapped installations, see the following table for what container images are needed to install Astra Trident:
+For air-gapped installations, see the following list for what container images are needed to install Astra Trident:
 
-[width="100%",cols="29%,71%",options="header",]
+[cols=2,options="header"]
 |===
-|KUBERNETES VERSION |CONTAINER IMAGE
-|v1.17.0 |netapp/trident:21.07.0
-| |netapp/trident-operator:21.07.0
-| |netapp/trident-autosupport:21.01
-| |k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1
-| |k8s.gcr.io/sig-storage/csi-attacher:v3.1.0
-| |k8s.gcr.io/sig-storage/csi-resizer:v1.1.0
-| |k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-| |k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
-|v1.18.0 |netapp/trident:21.07.0
-| |netapp/trident-operator:21.07.0
-| |netapp/trident-autosupport:21.01
-| |k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1
-| |k8s.gcr.io/sig-storage/csi-attacher:v3.1.0
-| |k8s.gcr.io/sig-storage/csi-resizer:v1.1.0
-| |
+|Kubernetes version
+|Container image
+
+|v1.17.0
+a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0, k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3, k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
+
+|v1.18.0
+a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0
+
+|v1.19.0
+a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0, k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3, k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
+
+|v1.20.0
+a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0, k8s.gcr.io/sig-storage/csi-snapshotter:v4.1.1, k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
+
+|v1.21.0
+a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0, k8s.gcr.io/sig-storage/csi-snapshotter:v4.1.1, k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
+
 |===
 
 NOTE: On Kubernetes version 1.20 and later, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v4.x` image if only `v1` version is serving `volumesnapshots.snapshot.storage.k8s.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v3.x` image.

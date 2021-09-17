@@ -16,7 +16,7 @@ TIP: If you have not already familiarized yourself with the link:../trident-conc
 
 .What you'll need
 
-To deploy Trident by using the operator, the following prerequisites should be met:
+To deploy Astra Trident, the following prerequisites should be met:
 
 * You have full privileges to a supported Kubernetes cluster running Kubernetes 1.14 and above.
 * You have access to a supported NetApp storage system.
@@ -44,7 +44,7 @@ In addition to the prerequisites listed above, to deploy Trident Operator by usi
 . Download the installer bundle from the https://github.com/netapp/trident/releases[Trident GitHub] page. The installer bundle includes the Helm chart in the `/helm` directory.
 . Use the `helm install` command and specify a name for your deployment.
 See the following example:
-
++
 ----
 $ helm install <name> trident-operator-21.07.1.tgz
 ----
@@ -71,7 +71,7 @@ Perform the steps listed to manually deploy the Trident operator.
 
 === Step 1: Qualify your Kubernetes cluster
 
-The first thing you need to do is log in to the Linux host and verify that it is managing a _working_, supported Kubernetes cluster that you have the necessary privileges to.
+The first thing you need to do is log in to the Linux host and verify that it is managing a _working_, link:requirements.html[supported Kubernetes cluster^] that you have the necessary privileges to.
 
 NOTE: With OpenShift, use `oc` instead of `kubectl` in all of the examples that follow, and log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
@@ -106,6 +106,8 @@ cd trident-installer
 . Use the appropriate CRD manifest to create the `TridentOrchestrator` CRD. You then create a `TridentOrchestrator` Custom Resource later on to instantiate an installation by the operator.
 +
 Run the following command:
++
+----
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
 
@@ -135,7 +137,7 @@ Run the following command to create the resources and deploy the operator:
 kubectl create -f deploy/bundle.yaml
 ----
 
-To verify the status of the operator after you have deployed, do the following:
+. To verify the status of the operator after you have deployed, do the following:
 +
 ----
 $ kubectl get deployment -n <operator-namespace>
@@ -226,7 +228,7 @@ exists.
 During the installation, the status of `TridentOrchestrator` changes from `Installing` to `Installed`. If you observe the `Failed` status and the operator is unable to recover by itself, you should  check the logs of the operator. See the link:../troubleshooting.html[Troubleshooting^] section.
 
 You can confirm if the Trident installation completed by taking a look at the pods that have been created:
-
++
 ----
 $ kubectl get pod -n trident
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -246,6 +248,7 @@ $ ./tridentctl -n trident version
 | 21.04.0        | 21.04.0        |
 +----------------+----------------+
 ----
+  
 Now you can go ahead and create a backend. See link:kubernetes-postdeployment.html[post-deployment tasks^].
 
-TIP: For troubleshooting issues during deployment, see link:troubleshooting.html[here^].
+TIP: For troubleshooting issues during deployment, see the link:..troubleshooting.html[Troubleshooting^] section.

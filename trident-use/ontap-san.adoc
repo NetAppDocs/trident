@@ -1,0 +1,22 @@
+---
+sidebar: sidebar
+permalink: trident-use/ontap-san.html
+keywords: trident backend, ontap san, ontap-san, ontap-san-economy
+summary: Learn about configuring an ONTAP backend with ONTAP SAN drivers.
+---
+
+= Configure a backend with ONTAP SAN drivers
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Learn about configuring an ONTAP backend with ONTAP SAN drivers.
+
+* link:ontap-san-prep.html[Preparation^]
+* link:ontap-san-config[Configuration and examples^]
+
+== User permissions
+
+Astra Trident expects to be run as either an ONTAP or SVM administrator, typically using the `admin` cluster user or a `vsadmin` SVM user, or a user with a different name that has the same role. For Amazon FSx for NetApp ONTAP deployments, Astra Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the cluster admin user.
+
+NOTE: If you use the `limitAggregateUsage` parameter, cluster admin permissions are required. When using Amazon FSx for NetApp ONTAP with Astra Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.

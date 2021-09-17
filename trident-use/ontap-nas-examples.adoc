@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
-permalink: trident-use/ontap-san-examples.html
-keywords: map backends, storage classes, trident backend, ontap san, ontap san economy, options, storageclasses
-summary: Learn about how to create and use ONTAP SAN drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
+permalink: trident-use/ontap-nas-examples.html
+keywords: map backends, storage classes, trident backend, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, options, storageclasses
+summary: Learn about how to create and use ONTAP NAS drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
 ---
 
 = Configuration options and examples
@@ -29,27 +29,21 @@ See the following table for the backend configuration options:
 
 |`dataLIF` |IP address of protocol LIF. Use square brackets for IPv6. Cannot be updated after you set it |Derived by the SVM unless specified
 
-|`useCHAP` |Use CHAP to authenticate iSCSI for ONTAP SAN drivers [Boolean] |false
+|`autoExportPolicy`	|Enable automatic export policy creation and updating [Boolean] |false
 
-|`chapInitiatorSecret` |CHAP initiator secret. Required if `useCHAP=true` |“”
+|`autoExportCIDRs` |List of CIDRs to filter Kubernetes’ node IPs against when `autoExportPolicy` is enabled	|[“0.0.0.0/0”, “::/0”]`
 
 |`labels` |Set of arbitrary JSON-formatted labels to apply on volumes |“”
 
-|`chapTargetInitiatorSecret` |CHAP target initiator secret. Required if `useCHAP=true` |“”
+|`clientCertificate`	|Base64-encoded value of client certificate. Used for certificate-based auth |“”
 
-|`chapUsername` |Inbound username. Required if `useCHAP=true` |“”
-
-|`chapTargetUsername` |Target username. Required if `useCHAP=true` |“”
-
-|`clientCertificate` |Base64-encoded value of client certificate. Used for certificate-based auth |“”
-
-|`clientPrivateKey` |Base64-encoded value of client private key. Used for certificate-based auth |“”
+|`clientPrivateKey`	|Base64-encoded value of client private key. Used for certificate-based auth	|“”
 
 |`trustedCACertificate` |Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth |“”
 
-|`username` |Username to connect to the cluster/SVM. Used for credential-based auth |“”
+|`username` |Username to connect to the cluster/SVM. Used for credential-based auth |
 
-|`password` |Password to connect to the cluster/SVM. Used for credential-based auth |“”
+|`password` |Password to connect to the cluster/SVM. Used for credential-based auth |
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 
@@ -65,8 +59,18 @@ See the following table for the backend configuration options:
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} |null
 
-|===
+|`nfsMountOptions`	|Comma-separated list of NFS mount options	|“”
 
+|`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|“200”
+
+|`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview*	|false
+
+|===
+----
+
+Start with useREST note
+
+----
 To communicate with the ONTAP cluster, you should provide the authentication parameters. This could be the username/password to a security login or an installed certificate.
 
 WARNING: If you are using an Amazon FSx for NetApp ONTAP backend, do not specify the `limitAggregateUsage` parameter. The `fsxadmin` and `vsadmin` roles provided by Amazon FSx for NetApp ONTAP do not contain the required access permissions to retrieve aggregate usage and limit it through Astra Trident.

@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
-permalink: trident-use/ontap-san.html
+permalink: trident-use/ontap-san-prep.html
 keywords: trident backend, ontap san, ontap-san, ontap-san-economy
-summary: Learn about configuring an ONTAP backend with ONTAP SAN drivers.
+summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers.
 ---
 
 = Preparation
@@ -10,7 +10,7 @@ summary: Learn about configuring an ONTAP backend with ONTAP SAN drivers.
 :icons: font
 :imagesdir: ../media/
 
-For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers. For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 
@@ -20,7 +20,7 @@ All of your Kubernetes worker nodes must have the appropriate iSCSI tools instal
 
 Trident offers two modes of authenticating an ONTAP backend.
 
-* Credential-based: The username and password to an ONTAP user with the required permissions. It is recommended to use a pre-defined security login role, such as admin or vsadmin to ensure maximum compatibility with ONTAP versions.
+* Credential-based: The username and password to an ONTAP user with the required permissions. It is recommended to use a pre-defined security login role, such as `admin` or `vsadmin` to ensure maximum compatibility with ONTAP versions.
 * Certificate-based: Astra Trident can also communicate with an ONTAP cluster using a certificate installed on the backend. Here, the backend definition must contain Base64-encoded values of the client certificate, key, and the trusted CA certificate if used (recommended).
 
 Users can also choose to update existing backends, opting to move from credential-based to certificate-based, and vice-versa. If *both credentials and certificates are provided*, Astra Trident will default to using certificates while issuing a warning to remove the credentials from the backend definition.

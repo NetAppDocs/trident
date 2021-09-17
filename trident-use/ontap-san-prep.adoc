@@ -30,7 +30,6 @@ Users can also choose to update existing backends, opting to move from credentia
 Astra Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Astra Trident releases. A custom security login role can be created and used with Astra Trident, but is not recommended.
 
 A sample backend definition will look like this:
-+
 ----
 {
   "version": 1,
@@ -121,7 +120,7 @@ $ tridentctl create backend -f cert-backend.json -n trident
 == Update authentication methods or rotate credentials
 
 You can update an existing backend to make use of a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, use an updated `backend.json` file containing the required parameters to execute `tridentctl backend update`.
-+
+
 ----
 $ cat cert-backend-updated.json
 {
@@ -168,7 +167,7 @@ If Trident does not run as a CSI Provisioner, the igroup must be manually update
 
 Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM’s default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections.
 See the following sample configuration:
-+
+
 ----
 {
     "version": 1,
@@ -208,7 +207,7 @@ After the backend is created, Astra Trident creates a corresponding `tridentback
 You can update the CHAP credentials by updating the CHAP parameters in the `backend.json` file. This will require updating the CHAP secrets and using the `tridentctl update` command to reflect these changes.
 
 WARNING: When updating the CHAP secrets for a backend, you must use `tridentctl` to update the backend. Do not update the credentials on the storage cluster through the CLI/ONTAP UI as Astra Trident will not be able to pick up these changes.
-+
+
 ----
 $ cat backend-san.json
 {

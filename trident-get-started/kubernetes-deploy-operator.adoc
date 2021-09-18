@@ -24,7 +24,7 @@ To deploy Astra Trident, the following prerequisites should be met:
 * You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
 * You have set the `KUBECONFIG` environment variable to point to your Kubernetes cluster configuration.
 * You have enabled the link:requirements.html[feature gates required by Astra Trident^].
-* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access].
+* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
 
 Got all that? Great! Let's get started.
 
@@ -54,8 +54,7 @@ There are two ways to pass configuration data during the install:
 * `--values` (or `-f`): Specify a YAML file with overrides. This can be specified multiple times and the rightmost file will take precedence.
 * `--set`: Specify overrides on the command line.
 
-For example, to change the default value of `debug`, run the following
-`--set` command:
+For example, to change the default value of `debug`, run the following `--set` command:
 
 ----
 $ helm install <name> trident-operator-21.07.1.tgz --set tridentDebug=true
@@ -93,7 +92,7 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 
 === Step 2: Download and set up the operator
 
-NOTE: Beginning with 21.01, the Trident Operator is cluster scoped. Using the Trident operator to install Trident requires creating the `TridentOrchestrator` Custom Resource Definition (CRD) and defining other resources. You should perform these steps to set up the operator before you can install Trident.
+NOTE: Beginning with 21.01, the Trident Operator is cluster scoped. Using the Trident operator to install Trident requires creating the `TridentOrchestrator` Custom Resource Definition (CRD) and defining other resources. You should perform these steps to set up the operator before you can install Astra Trident.
 
 . Download the latest version of the https://github.com/NetApp/trident/releases/latest[Trident installer bundle] from the _Downloads_ section and extract it.
 +
@@ -125,7 +124,7 @@ $ kubectl apply -f deploy/namespace.yaml
 
 . To deploy the operator in a namespace other than the default `trident` namespace, you should update the `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` manifests and generate your `bundle.yaml`.
 +
-Run the following command to update the YAML manifests and generate your bundle.yaml using the `kustomization.yaml`:
+Run the following command to update the YAML manifests and generate your `bundle.yaml` using the `kustomization.yaml`:
 +
 ----
 kubectl kustomize deploy/ > deploy/bundle.yaml
@@ -199,11 +198,10 @@ Events:
 The Trident operator enables you to customize the manner in which Astra Trident is installed by using the attributes in the `TridentOrchestrator` spec. See link:kubernetes-customize-deploy.html[Customize your Trident deployment^].
 
 The Status of `TridentOrchestrator` indicates if the installation was successful and displays the version of Trident installed.
-[width="100%",cols="20%,80%",options="header",]
+[cols=2,options="header"]
 |===
 |Status |Description
-|Installing |The operator is installing Astra Trident using this
-`TridentOrchestrator` CR.
+|Installing |The operator is installing Astra Trident using this `TridentOrchestrator` CR.
 
 |Installed |Astra Trident has successfully installed.
 
@@ -213,11 +211,7 @@ The Status of `TridentOrchestrator` indicates if the installation was successful
 |Uninstalled |Astra Trident is uninstalled.
 
 |Failed |The operator could not install, patch, update or uninstall
-Astra Trident; the
-
-| |operator will automatically try to recover from this state. If this
-
-| |state persists you will require troubleshooting.
+Astra Trident; the operator will automatically try to recover from this state. If this state persists you will require troubleshooting.
 
 |Updating |The operator is updating an existing installation.
 
@@ -225,10 +219,9 @@ Astra Trident; the
 exists.
 |===
 
-During the installation, the status of `TridentOrchestrator` changes from `Installing` to `Installed`. If you observe the `Failed` status and the operator is unable to recover by itself, you should  check the logs of the operator. See the link:../troubleshooting.html[Troubleshooting^] section.
+During the installation, the status of `TridentOrchestrator` changes from `Installing` to `Installed`. If you observe the `Failed` status and the operator is unable to recover by itself, you should  check the logs of the operator. See the link:../troubleshooting.html[troubleshooting^] section.
 
-You can confirm if the Trident installation completed by taking a look at the pods that have been created:
-+
+You can confirm if the Astra Trident installation completed by taking a look at the pods that have been created:
 ----
 $ kubectl get pod -n trident
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -248,7 +241,7 @@ $ ./tridentctl -n trident version
 | 21.04.0        | 21.04.0        |
 +----------------+----------------+
 ----
-  
+
 Now you can go ahead and create a backend. See link:kubernetes-postdeployment.html[post-deployment tasks^].
 
-TIP: For troubleshooting issues during deployment, see the link:..troubleshooting.html[Troubleshooting^] section.
+TIP: For troubleshooting issues during deployment, see the link:../troubleshooting.html[troubleshooting^] section.

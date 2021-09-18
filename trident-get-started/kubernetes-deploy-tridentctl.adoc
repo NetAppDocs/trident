@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy-tridentctl.html
-keywords: deploy, trident, methods, tridentctl
-summary: You can deploy Trident by using `tridentctl`.
+keywords: deploy, astra trident, methods, tridentctl
+summary: You can deploy Astra Trident by using `tridentctl`.
 ---
 
 = Deploy with `tridentctl`
@@ -10,9 +10,11 @@ summary: You can deploy Trident by using `tridentctl`.
 :icons: font
 :imagesdir: ../media/
 
-You can deploy Trident by using `tridentctl`.
+You can deploy Astra Trident by using `tridentctl`.
 
-TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^]>, now is a great time to do that.
+TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
+
+TIP: To customize your deployment, see link:kubernetes-customize-deploy.html[here^.]
 
 .What you'll need
 
@@ -24,7 +26,7 @@ To deploy Astra Trident, the following prerequisites should be met:
 * You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
 * You have set the `KUBECONFIG` environment variable to point to your Kubernetes cluster configuration.
 * You have enabled the link:requirements.html[feature gates required by Astra Trident^].
-* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access].
+* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
 
 Got all that? Great! Let's get started.
 
@@ -36,7 +38,7 @@ The first thing you need to do is log into the Linux host and verify that it is 
 
 NOTE: With OpenShift, you use `oc` instead of `kubectl` in all of the examples that follow, and you should log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
-To see if your Kubernetes version is later than 1.14, run the following command:
+To check your Kubernetes version, run the following command:
 ----
 kubectl version
 ----
@@ -61,8 +63,6 @@ NOTE: The Trident installer creates a Trident pod, configures the CRD objects th
 You can download the latest version of the https://github.com/NetApp/trident/releases/latest[Trident installer bundle^] from the _Downloads_ section, and extract it.
 
 For example, if the latest version is 21.07.1:
-
-[source,console]
 ----
 wget https://github.com/NetApp/trident/releases/download/v21.07.1/trident-installer-21.07.1.tar.gz
 tar -xf trident-installer-21.07.1.tar.gz
@@ -72,7 +72,6 @@ cd trident-installer
 == Step 3: Install Astra Trident
 
 Install Astra Trident in the desired namespace by executing the `tridentctl install` command.
-+
 ----
 $ ./tridentctl install -n trident
 ....
@@ -93,7 +92,6 @@ INFO Trident installation succeeded.
 ....
 ----
 It will look like this when the installer is complete. Depending on the number of nodes in your Kubernetes cluster, you might observe more pods:
-+
 ----
 $ kubectl get pod -n trident
 NAME                           READY   STATUS    RESTARTS   AGE
@@ -112,4 +110,4 @@ If you see output similar to the above example, you’ve completed this step, bu
 
 However, if the installer does not complete successfully or you don’t see a *Running* `trident-csi-<generated id>`, the platform was not installed.
 
-TIP: For troubleshooting issues during deployment, see link:..troubleshooting.html[the Troubleshooting^] section.
+TIP: For troubleshooting issues during deployment, see the link:../troubleshooting.html[troubleshooting^] section.

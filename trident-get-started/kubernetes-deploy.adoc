@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy.html
-keywords: deploy, trident, methods, operator, tridentctl, helm
+keywords: deploy, astra trident, methods, operator, tridentctl, helm
 summary: You can deploy Astra Trident using the Trident operator or with `tridentctl`.
 ---
 
@@ -18,7 +18,7 @@ To determine which deployment method to use, consider the following:
 
 === Why should I use the Trident operator?
 
-The Trident operator is a great way to dynamically manage Trident resources and automate the setup phase. There are some prerequisites that must be satisfied. See link:requirements.html [the requirements^].
+The link:kubernetes-deploy-operator.html[Trident operator^] is a great way to dynamically manage Astra Trident resources and automate the setup phase. There are some prerequisites that must be satisfied. See link:requirements.html[the requirements^].
 
 The Trident operator provides several benefits as outlined below.
 
@@ -50,7 +50,7 @@ If you have other applications that you are managing using Helm, starting with A
 
 === When should I use `tridenctl`?
 
-If you have an existing deployment that must be upgraded to or if you are looking to highly customize your deployment, you should take a look at using `tridentctl`. This is the conventional method of deploying Astra Trident.
+If you have an existing deployment that must be upgraded to or if you are looking to highly customize your deployment, you should take a look at using link:kubernetes-deploy-tridentctl.html[tridentctl^]. This is the conventional method of deploying Astra Trident.
 
 == Considerations for moving between deployment methods
 
@@ -86,8 +86,8 @@ To customize your deployment, you can use `tridentctl` to generate the manifests
 
 See these links for more information about customizing your deployment:
 
-* link:kubernetes-customize-deploy.html[Customize your deployment by using the operator^]
-* link:kubernetes-customize-deploy-tridentctl.html[Customize your deployment by using `tridentctl`^]
+* link:kubernetes-customize-deploy.html[Customize your operator-based deployment^]
+* link:kubernetes-customize-deploy-tridentctl.html[Customize your `tridentctl`-based deployment^]
 
 IMPORTANT: If you are using a private image repository, you should add `/k8scsi` for Kubernetes versions earlier than 1.17 or `/sig-storage` for Kubernetes versions later than 1.17 to the end of the private registry URL. When using a private registry for `tridentctl` deployment, you should use `--trident-image` and `--autosupport-image` in conjunction with `--image-registry`. If you are deploying Astra Trident by using the Trident operator, ensure that the orchestrator CR includes `tridentImage` and `autosupportImage` in the installation parameters.
 
@@ -95,25 +95,7 @@ IMPORTANT: If you are using a private image repository, you should add `/k8scsi`
 
 Here is a high-level overview of the remote deployment process:
 
-* Deploy the appropriate version of `kubectl` on the remote machine from where you want to deploy Trident.
+* Deploy the appropriate version of `kubectl` on the remote machine from where you want to deploy Astra Trident.
 * Copy the configuration files from the Kubernetes cluster and set the `KUBECONFIG` environment variable on the remote machine.
 * Initiate a `kubectl get nodes` command to verify that you can connect to the required Kubernetes cluster.
 * Complete the deployment from the remote machine by using the standard installation steps.
-
-== Supported Kubernetes cluster architectures
-
-Trident is supported with the following Kubernetes architectures:
-
-[cols=3*,options="header"]
-|===
-|Kubernetes cluster architectures
-|Supported
-|Default install
-|Single master, compute |Yes a| Yes
-|Multiple master, compute |Yes a|
-Yes
-|Master, `etcd`, compute |Yes a|
-Yes
-|Master, infrastructure, compute |Yes a|
-Yes
-|===

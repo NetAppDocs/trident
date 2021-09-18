@@ -33,12 +33,11 @@ vi backend.json
 ----
 
 If the creation fails, something was wrong with the backend configuration. You can view the logs to determine the cause by running the following command:
-+
 ----
 ./tridentctl -n trident logs
 ----
 
-After you address the problem, simply go back to the beginning of this step and try again. For more troubleshooting tips, see the link:..troubleshooting.html[Troubleshooting^] section.
+After you address the problem, simply go back to the beginning of this step and try again. For more troubleshooting tips, see the link:../troubleshooting.html[the troubleshooting^] section.
 
 == Step 2: Create a storage class
 
@@ -47,7 +46,6 @@ Kubernetes users provision volumes by using persistent volume claims (PVCs) that
 Create a storage class Kubernetes users will specify when they want a volume. The configuration of the class needs to model the backend that you created in the previous step, so that Astra Trident will use it to provision new volumes.
 
 The simplest storage class to start with is one based on the `sample-input/storage-class-csi.yaml.templ` file that comes with the installer, replacing `__BACKEND_TYPE__` with the storage driver name.
-+
 ----
 ./tridentctl -n trident get backend
 +-------------+----------------+--------------------------------------+--------+---------+
@@ -63,13 +61,11 @@ vi sample-input/storage-class-basic-csi.yaml
 ----
 
 This is a Kubernetes object, so you use `kubectl` to create it in Kubernetes.
-+
 ----
 kubectl create -f sample-input/storage-class-basic-csi.yaml
 ----
 
-You should now see a *basic-csi* storage class in both Kubernetes and Trident, and Trident should have discovered the pools on the backend.
-+
+You should now see a *basic-csi* storage class in both Kubernetes and Astra Trident, and Astra Trident should have discovered the pools on the backend.
 ----
 kubectl get sc basic-csi
 NAME         PROVISIONER             AGE
@@ -108,7 +104,6 @@ Now you are ready to dynamically provision your first volume. This is done by cr
 Create a persistent volume claim (PVC) for a volume that uses the storage class that you just created.
 
 See `sample-input/pvc-basic-csi.yaml` for an example. Make sure the storage class name matches the one that you created.
-+
 ----
 kubectl create -f sample-input/pvc-basic-csi.yaml
 
@@ -122,7 +117,6 @@ basic     Bound     pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   1Gi        RWO   
 == Step 4: Mount the volumes in a pod
 
 Now let us mount the volume. We will launch an nginx pod that mounts the PV under `/usr/share/nginx/html`.
-+
 ----
 cat << EOF > task-pv-pod.yaml
 kind: Pod
@@ -146,16 +140,12 @@ spec:
 EOF
 kubectl create -f task-pv-pod.yaml
 ----
-+
 ----
 # Wait for the pod to start
 kubectl get pod --watch
 
 # Verify that the volume is mounted on /usr/share/nginx/html
 kubectl exec -it task-pv-pod -- df -h /usr/share/nginx/html
-Filesystem                                                          Size  Used Avail Use% Mounted on
-10.xx.xx.xx:/trident_pvc_3acb0d1c_b1ae_11e9_8d9f_5254004dfdb7       1.0G  256K  1.0G   1% /usr/share/nginx/html
-
 
 # Delete the pod
 kubectl delete pod task-pv-pod
@@ -164,7 +154,6 @@ kubectl delete pod task-pv-pod
 At this point, the pod (application) no longer exists but the volume is still there. You can use it from another pod if you want to.
 
 To delete the volume, delete the claim:
-+
 ----
 kubectl delete pvc basic
 ----
@@ -172,5 +161,4 @@ kubectl delete pvc basic
 You can now do additional tasks, such as the following:
 
 * link:../trident-use/backends.html[Configure additional backends.^]
-* link:../trident-use/manage-stor-class[Create additional storage classes.^]
-* Review considerations for moving this into production. 
+* link:../trident-use/manage-stor-class.html[Create additional storage classes.^]

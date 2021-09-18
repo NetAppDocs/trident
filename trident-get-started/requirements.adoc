@@ -12,6 +12,7 @@ summary: Get started by reviewing the supported frontends, backends, and host co
 
 Get started by reviewing the supported frontends, backends, and host configuration.
 
+NOTE: To learn about the ports that Astra Trident uses, see link:../trident-reference/ports.html[here^].
 == Supported frontends (orchestrators)
 
 Astra Trident supports multiple container engines and orchestrators, including the following:
@@ -120,7 +121,15 @@ For air-gapped installations, see the following list for what container images a
 |Container image
 
 |v1.17.0
-a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0, k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3, k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
+a|
+* netapp/trident:21.07.0
+* netapp/trident-operator:21.07.0
+* netapp/trident-autosupport:21.01
+* k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1
+* k8s.gcr.io/sig-storage/csi-attacher:v3.1.0
+* k8s.gcr.io/sig-storage/csi-resizer:v1.1.0
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.1.0
 
 |v1.18.0
 a|netapp/trident:21.07.0, netapp/trident-operator:21.07.0, netapp/trident-autosupport:21.01, k8s.gcr.io/sig-storage/csi-provisioner:v2.1.1, k8s.gcr.io/sig-storage/csi-attacher:v3.1.0, k8s.gcr.io/sig-storage/csi-resizer:v1.1.0

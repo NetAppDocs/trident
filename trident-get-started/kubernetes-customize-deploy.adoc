@@ -13,50 +13,51 @@ summary: The Trident operator enables you to customize the manner in which Astra
 The Trident operator provides enables you to customize the manner in which Astra Trident is installed by using the attributes in the `TridentOrchestrator` spec.
 
 See the following table for the list of attributes:
-[cols=",,",options="header",]
+[cols=3,options="header"]
 |===
 |Parameter |Description |Default
-|namespace |Namespace to install Astra Trident in |"default"
+|`namespace` |Namespace to install Astra Trident in |"default"
 
-|debug |Enable debugging for Astra Trident |'false'
+|`debug` |Enable debugging for Astra Trident |false
 
-|useIPv6 |Install Astra Trident over IPv6 |'false'
+|`useIPv6` |Install Astra Trident over IPv6 |false
 
-|k8sTimeout |Timeout for Kubernetes operations |30sec
+|`k8sTimeout` |Timeout for Kubernetes operations |30sec
 
-|silenceAutosupport |Don't send autosupport bundles to NetApp
-automatically |'false'
+|`silenceAutosupport` |Don't send autosupport bundles to NetApp
+automatically |false
 
-|enableNodePrep |Manage worker node dependencies automatically (*BETA*)
-|'false'
+|`enableNodePrep` |Manage worker node dependencies automatically (*BETA*)
+|false
 
-|autosupportImage |The container image for Autosupport Telemetry
+|`autosupportImage` |The container image for Autosupport Telemetry
 |"netapp/trident-autosupport:21.04.0"
 
-|autosupportProxy |The address/port of a proxy for sending Autosupport
+|`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |"http://proxy.example.com:8888"
 
-|uninstall |A flag used to uninstall Astra Trident |'false'
+|`uninstall` |A flag used to uninstall Astra Trident |false
 
-|logFormat |Astra Trident logging format to be used [text,json] |"text"
+|`logFormat` |Astra Trident logging format to be used [text,json] |"text"
 
-|tridentImage |Astra Trident image to install |"netapp/trident:21.04"
+|`tridentImage` |Astra Trident image to install |"netapp/trident:21.04"
 
-|imageRegistry |Path to internal registry, of the format
+|`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |"k8s.gcr.io/sig-storage (k8s 1.17+)
 or quay.io/k8scsi"
 
-|kubeletDir wipeout imagePullSecrets |Path to the kubelet directory on
-the host A list of resources to delete to perform a complete removal of
-Trident Secrets to pull images from an internal registry
-|"/var/lib/kubelet"
+|`kubeletDir` |Path to the kubelet directory on the host |“/var/lib/kubelet”
+
+|`wipeout` |A list of resources to delete to perform a complete removal of
+Astra Trident |
+
+|`imagePullSecrets` |Secrets to pull images from an internal registry |
 |===
 IMPORTANT: `spec.namespace` is specified in `TridentOrchestrator` to signify which namespace Astra Trident is installed in. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the status of `TridentOrchestrator` to change to `Failed`. Astra Trident is not meant to be migrated across namespaces.
 
 NOTE: Automatic worker node prep is a *beta feature* meant to be used in non-production environments only.
 
-You can use the attributes mentioned above when defining `TridentOrchestrator` to customize your Trident installation. Here's an example:
-+
+You can use the attributes mentioned above when defining `TridentOrchestrator` to customize your installation. Here's an example:
 ----
 $ cat deploy/crds/tridentorchestrator_cr_imagepullsecrets.yaml
 apiVersion: trident.netapp.io/v1
@@ -71,4 +72,4 @@ spec:
   - thisisasecret
 ----
 
-If you are looking to customize Astra Trident's installation beyond what TridentOrchestrator's arguments allow, you should consider using `tridentctl` to generate custom YAML manifests that you can modify as needed.
+If you are looking to customize the installation beyond what `TridentOrchestrator`'s arguments allow, you should consider using `tridentctl` to generate custom YAML manifests that you can modify as needed.

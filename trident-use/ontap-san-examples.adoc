@@ -132,7 +132,6 @@ You can control how each volume is provisioned by default using these options in
 NOTE: Using QoS policy groups with Astra Trident requires ONTAP 9.8 or later. It is recommended to use a non-shared QoS policy group and ensure the policy group is applied to each constituent individually. A shared QoS policy group will enforce the ceiling for the total throughput of all workloads.
 
 Here’s an example with defaults defined:
-+
 ----
 {
  "version": 1,
@@ -159,7 +158,6 @@ Here’s an example with defaults defined:
 NOTE: For all volumes created using the `ontap-san` driver, Astra Trident adds an extra 10 percent capacity to the FlexVol to accommodate the LUN metadata. The LUN will be provisioned with the exact size that the user requests in the PVC. Astra Trident adds 10 percent to the FlexVol (shows as Available size in ONTAP). Users will now get the amount of usable capacity they requested. This change also prevents LUNs from becoming read-only unless the available space is fully utilized. This does not apply to ontap-san-economy.
 
 For backends that define `snapshotReserve`, Astra Trident calculates the size of volumes as follows:
-+
 ----
 Total volume size = [(PVC requested size) / (1 - (snapshotReserve percentage) / 100)] * 1.1
 ----
@@ -179,7 +177,6 @@ NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, the recommendati
 === `ontap-san` driver with certificate-based authentication
 
 This is a minimal backend configuration example. `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
-+
 ----
 {
     "version": 1,
@@ -203,7 +200,6 @@ This is a minimal backend configuration example. `clientCertificate`, `clientPri
 === `ontap-san` driver with bidirectional CHAP
 
 This is a minimal backend configuration example. This basic configuration creates an `ontap-san` backend with `useCHAP` set to `true`.
-+
 ----
 {
     "version": 1,
@@ -245,7 +241,6 @@ This is a minimal backend configuration example. This basic configuration create
 In the sample backend definition file shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual storage pools are defined in the storage section.
 
 In this example, some of the storage pool sets their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values set above.
-+
 ----
 {
     "version": 1,
@@ -301,7 +296,6 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
 ----
 
 Here is an iSCSI example for the `ontap-san-economy` driver:
-+
 ----
 {
     "version": 1,
@@ -363,7 +357,6 @@ The following StorageClass definitions refer to the above virtual storage pools.
 * The fifth StorageClass (`creditpoints-5k`) will map to the second virtual storage pool in `ontap-nas-economy` backend and the third virtual storage pool in `ontap-san` backend. These are the only pool offerings at 5000 creditpoints.
 
 Astra Trident will decide which virtual storage pool is selected and will ensure the storage requirement is met.
-+
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

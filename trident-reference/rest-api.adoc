@@ -13,25 +13,25 @@ summary: You can use the REST endpoint directly if you prefer to interact with A
 [.lead]
 While link:trident-reference/tridentctl.html[tridentctl commands and options^] is the easiest way to interact with Astra Trident's REST API, you can use the REST endpoint directly if you prefer.
 
-This is useful for advanced installations that use Trident as a standalone binary in non-Kubernetes deployments.
+This is useful for advanced installations that use Astra Trident as a standalone binary in non-Kubernetes deployments.
 
-For better security, Trident's `REST API` is restricted to localhost by default when running inside a pod. To change this behavior, you need to set Astra Trident's `-address` argument in its pod configuration.
+For better security, Astra Trident's `REST API` is restricted to localhost by default when running inside a pod. To change this behavior, you need to set Astra Trident's `-address` argument in its pod configuration.
 
 The API works as follows:
 
-== GET
+== `GET`
 * `GET <trident-address>/trident/v1/<object-type>`: Lists all objects of that type.
 * `GET <trident-address>/trident/v1/<object-type>/<object-name>`: Gets the details of the named object.
 
-== POST
+== `POST`
 `POST <trident-address>/trident/v1/<object-type>`: Creates an object of the specified type.
 
-* Requires a JSON configuration for the object to be created. For the specification of each object type, see link:trident-reference/tridentctl.html[`tridentctl` commands and options].
+* Requires a JSON configuration for the object to be created. For the specification of each object type, see link:tridentctl.html[`tridentctl` commands and options].
 * If the object already exists, behavior varies: backends update the existing object, while all other object types will fail the operation.
 
-== DELETE
+== `DELETE`
 `DELETE <trident-address>/trident/v1/<object-type>/<object-name>`: Deletes the named resource.
 
-NOTE: Volumes associated with backends or storage classes will continue to exist; these must be deleted separately. For more information, see link:trident-reference/tridentctl.html[`tridentctl` commands and options].
+NOTE: Volumes associated with backends or storage classes will continue to exist; these must be deleted separately. For more information, see link:tridentctl.html[`tridentctl` commands and options].
 
-For examples of how these APIs are called, pass the debug (`-d`) flag. For more information, see link:trident-reference/tridentctl.html[`tridentctl` commands and options].
+For examples of how these APIs are called, pass the debug (`-d`) flag. For more information, see link:tridentctl.html[`tridentctl` commands and options].

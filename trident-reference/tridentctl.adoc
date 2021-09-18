@@ -11,7 +11,7 @@ summary: Learn more about tridentctl, a command-line utility that provides simpl
 :imagesdir: ../media/
 
 [.lead]
-The https://github.com/NetApp/trident/releases[Astra Trident installer bundle^] includes a command-line utility, `tridentctl`, that provides simple access to Trident. Kubernetes users with sufficient privileges can use it to install Trident as well as to interact with it directly to manage the namespace that contains the Trident pod.
+The https://github.com/NetApp/trident/releases[Trident installer bundle^] includes a command-line utility, `tridentctl`, that provides simple access to Astra Trident. Kubernetes users with sufficient privileges can use it to install Astra Trident as well as to interact with it directly to manage the namespace that contains the Astra Trident pod.
 
 For usage information, run `tridentctl --help`.
 
@@ -33,8 +33,8 @@ Available commands:
 * `logs`: Print the logs from Astra Trident.
 * `send`: Send a resource from Astra Trident.
 * `uninstall`: Uninstall Astra Trident.
-* `update`: Modify a resource in Trident.
-* `upgrade`:Upgrade a resource in Astra Trident.
+* `update`: Modify a resource in Astra Trident.
+* `upgrade`: Upgrade a resource in Astra Trident.
 * `version`: Print the version of Astra Trident.
 
 Flags:
@@ -47,8 +47,6 @@ Flags:
 == `create`
 
 You can use run the `create` command to add a resource to Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl create [option]
@@ -59,8 +57,6 @@ Available option:
 == `delete`
 
 You can run the `delete` command to remove one or more resources from Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl delete [option]
@@ -75,8 +71,6 @@ Available options:
 == `get`
 
 You can run the `get` command to get one or more resources from Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl get [option]
@@ -90,8 +84,6 @@ Available options:
 == `images`
 
 You can run the `images` flag to print a table of the container images Astra Trident needs.
-
-[source,console]
 ----
 Usage:
   tridentctl images [flags]
@@ -103,8 +95,6 @@ Flags:
 == `import volume`
 
 You can run the `import volume` command to import an existing volume to Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl import volume <backendName> <volumeName> [flags]
@@ -120,8 +110,6 @@ Flags:
 == `install`
 
 You can run the `install` flags to install Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl install [flags]
@@ -148,8 +136,6 @@ Flags:
 == `logs`
 
 You can run the `logs` flags to print the logs from Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl logs [flags]
@@ -165,8 +151,6 @@ Flags:
 == `send`
 
 You can run the `send` command to send a resource from Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl send [option]
@@ -177,8 +161,6 @@ Available option:
 == `uninstall`
 
 You can run the `uninstall` flags to uninstall Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl uninstall [flags]
@@ -190,8 +172,6 @@ Flags:
 == `update`
 
 You can run the `update` commands to modify a resource in Astra Trident.
-
-[source,console]
 ----
 Usage:
   tridentctl update [option]
@@ -202,8 +182,6 @@ Available options:
 == `upgrade`
 
 You can run the `upgrade` commands to upgrade a resource in Astra Trident.
-
-[source,console]
 ----
 Usage:
 tridentctl upgrade [option]
@@ -214,8 +192,6 @@ Available option:
 == `version`
 
 You can run the `version` flags to print the version of `tridentctl` and the running Trident service.
-
-[source,console]
 ----
 Usage:
   tridentctl version [flags]

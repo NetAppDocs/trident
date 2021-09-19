@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-managing-k8s/upgrade-operator.html
 keywords: upgrade, trident, methods, operator, tridentctl, helm
-summary: You can easily upgrade an existing Trident installation by using the operator.
+summary: You can easily upgrade an existing Astra Trident installation by using the operator.
 ---
 
 = Upgrade with the operator
@@ -10,24 +10,24 @@ summary: You can easily upgrade an existing Trident installation by using the op
 :icons: font
 :imagesdir: ../media/
 
-You can easily upgrade an existing Trident installation by using the operator.
+You can easily upgrade an existing Astra Trident installation by using the operator.
 
 .What you'll need
 
-To upgrade by using the Trident operator, the following conditions should be met:
+To upgrade by using the operator, the following conditions should be met:
 
-* You should have a CSI-based Trident installation. To check if you are running CSI Trident, examine the pods in your Trident namespace. If they follow the `trident-csi-*` naming pattenr, you are running CSI Trident.
-* You should have a CRD-based Trident installation. This represents all Trident releases from 19.07 and later. If you have a CSI-based installation, you most likely have a CRD-based installation.
+* You should have a CSI-based Astra Trident installation. To check if you are running CSI Trident, examine the pods in your Trident namespace. If they follow the `trident-csi-*` naming pattern, you are running CSI Trident.
+* You should have a CRD-based Trident installation. This represents all releases from 19.07 and later. If you have a CSI-based installation, you most likely have a CRD-based installation.
 * If you have uninstalled CSI Trident and the metadata from the installation persists, you can upgrade by using the operator.
-* Only one Trident installation should exist across all the namespaces in a given Kubernetes cluster.
-* You should be using a Kubernetes cluster that runs version 1.14 and later.
+* Only one Astra Trident installation should exist across all the namespaces in a given Kubernetes cluster.
+* You should be using a Kubernetes cluster that runs  link:requirements.html[version 1.17 and later^].
 * If alpha snapshot CRDs are present, you should remove them with `tridentctl obliviate alpha-snapshot-crd`. This deletes the CRDs for the alpha snapshot spec. For existing snapshots that should be deleted/migrated, see https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^].
 
 WARNING: When upgrading Trident by using the operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
 
-== Upgrade by using the cluster-scoped operator
+== Upgrade a cluster-scoped operator installation
 
-Starting with Trident 21.01, the operator is cluster scoped as opposed to namespace scoped. You can upgrade from Trident installed by using the namespace-scoped operator (versions 20.04 through 20.10) to a newer version that makes use of the cluster-scoped operator (versions 21.01 and later).
+To upgrade from *Trident 21.01 and later*, here is the set of steps to be followed.
 
 .Steps
 . Verify the status of the existing Trident installation. To do this, check the *Status* of  `TridentProvisioner`. The status should be `Installed`.
@@ -151,21 +151,21 @@ Version:                v21.04.0
 Perform the following steps to upgrade a Helm-based operator installation.
 
 .Steps
-. Download the latest Trident release.
+. Download the latest Astra Trident release.
 . Use the `helm upgrade` command. See the following example:
 +
 ----
-$ helm upgrade <name> trident-operator-21.04.0.tgz
+$ helm upgrade <name> trident-operator-21.07.1.tgz
 ----
 +
-where `trident-operator-21.04.0.tgz` reflects the version that you want to upgrade to.
+where `trident-operator-21.07.1.tgz` reflects the version that you want to upgrade to.
 . Run `helm list` to verify that the chart and app version have both been upgraded.
 
 NOTE: To pass configuration data during the upgrade, use `--set`.
 
 For example, to change the default value of `tridentDebug`, run the following command:
 ----
-$ helm upgrade <name> trident-operator-21.04.0-custom.tgz --set tridentDebug=true
+$ helm upgrade <name> trident-operator-21.07.1-custom.tgz --set tridentDebug=true
 ----
 
 If you run `$ tridentctl logs`, you can see the debug messages.
@@ -180,21 +180,17 @@ If you have a CSI Trident instance that meets the prerequisites listed above, yo
 . Download the latest Trident release.
 +
 ----
-# Download the release required [21.01]
-$ mkdir 21.04.0
-$ cd 21.04.0
-$ wget https://github.com/NetApp/trident/releases/download/v21.04.0/trident-installer-21.04.0.tar.gz
-$ tar -xf trident-installer-21.04.0.tar.gz
+# Download the release required [21.07.1]
+$ mkdir 21.07.1
+$ cd 21.07.1
+$ wget https://github.com/NetApp/trident/releases/download/v21.07.1/trident-installer-21.07.1.tar.gz
+$ tar -xf trident-installer-21.07.1.tar.gz
 $ cd trident-installer
 ----
 
 . Create the `tridentorchestrator` CRD from the manifest.
 +
 ----
-# Is your Kubernetes version < 1.16?
-$ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_pre1.16.yaml
-
-# If not, your Kubernetes version must be 1.16 and above
 $ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
 
@@ -216,7 +212,7 @@ trident-csi-xrst8                   2/2     Running   0          150d
 trident-operator-5574dbbc68-nthjv   1/1     Running   0          1m30s
 ----
 
-. Create a `TridentOrchestrator` CR for installing Trident.
+. Create a `TridentOrchestrator` CR for installing Astra Trident.
 +
 ----
 #Create a tridentOrchestrator to initate a Trident install
@@ -242,9 +238,7 @@ $ kubectl describe torc trident | grep Message -A 3
 Message:                Trident installed
 Namespace:              trident
 Status:                 Installed
-Version:                v21.04.0
+Version:                v21.07.1
 ----
 
 The existing backends and PVCs are automatically available.
-
-For more detailed steps, see link:../trident-kubernetes/kubernetes-deploy-operator.html[here^].

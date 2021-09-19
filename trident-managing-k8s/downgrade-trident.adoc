@@ -90,12 +90,11 @@ If you installed Astra Trident by using `tridentctl`, the downgrade process invo
 NOTE: Before beginning the downgrade, you should take a snapshot of your Kubernetes cluster’s `etcd`. This enables you to back up the current state of Astra Trident’s CRDs.
 
 .Steps
-. Make sure that Trident is installed by using `tridentctl`. If you are unsure about how Trident is installed, run this simple test:
+. Make sure that Trident is installed by using `tridentctl`. If you are unsure about how Astra Trident is installed, run this simple test:
 .. List the pods present in the Trident namespace.
-.. Identify the version of Trident running in your cluster. You can either use tridentctl or take a look at the image used in the Trident
-pods.
-.. If you *do not see* a `tridentOrchestrator`, (or) a `tridentprovisioner`, (or) a pod named `trident-operator-xxxxxxxxxx-xxxxx`, Trident *is installed* with `tridentctl`.
-. Uninstall Trident with the existing `tridentctl` binary.  In this case, you will uninstall with the 21.07 binary.
+.. Identify the version of Astra Trident running in your cluster. You can either use `tridentctl` or take a look at the image used in the Trident pods.
+.. If you *do not see* a `tridentOrchestrator`, (or) a `tridentprovisioner`, (or) a pod named `trident-operator-xxxxxxxxxx-xxxxx`, Astra Trident *is installed* with `tridentctl`.
+. Uninstall Astra Trident with the existing `tridentctl` binary.  In this case, you will uninstall with the 21.07 binary.
 +
 ----
 $ tridentctl version -n trident

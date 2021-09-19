@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/vol-snapshots.html
 keywords: volumes, on-demand volume snapshots, create snapshots, backends, kubernetes, create PVCs, PVCs
-summary: Beginning with the 20.01 release of Trident, you can create snapshots of PVs at the Kubernetes layer. You can use these snapshots to maintain point-in-time copies of volumes that have been created by Trident and schedule the creation of additional volumes (clones).
+summary: Beginning with the 20.01 release of Astra Trident, you can create snapshots of Persistent Volumes (PVs) at the Kubernetes layer. You can use these snapshots to maintain point-in-time copies of volumes that have been created by Astra Trident and schedule the creation of additional volumes (clones).
 ---
 
 = Work with snapshots
@@ -10,13 +10,15 @@ summary: Beginning with the 20.01 release of Trident, you can create snapshots o
 :icons: font
 :imagesdir: ../media/
 
-Beginning with the 20.01 release of Trident, you can create snapshots of PVs at the Kubernetes layer. You can use these snapshots to maintain point-in-time copies of volumes that have been created by Trident and schedule the creation of additional volumes (clones). Volume snapshot is supported by the `ontap-nas`, `ontap-san`, `ontap-san-economy`, `solidfire-san`, `aws-cvs`, `gcp-cvs`, and `azure-netapp-files` drivers.
+Beginning with the 20.01 release of Astra Trident, you can create snapshots of PVs at the Kubernetes layer. You can use these snapshots to maintain point-in-time copies of volumes that have been created by Astra Trident and schedule the creation of additional volumes (clones). Volume snapshot is supported by the `ontap-nas`, `ontap-san`, `ontap-san-economy`, `solidfire-san`, `aws-cvs`, `gcp-cvs`, and `azure-netapp-files` drivers.
 
-NOTE: This feature is available from Kubernetes 1.17 (beta) and is GA from 1.20. To understand the changes involved in moving from beta to GA, see https://kubernetes.io/blog/2020/12/10/kubernetes-1.20-volume-snapshot-moves-to-ga/[the release blog^]. With the graduation to GA, the v1 API version is introduced and is backward compatible with v1beta1 snapshots.
+NOTE: This feature is available from Kubernetes 1.17 (beta) and is GA from 1.20. To understand the changes involved in moving from beta to GA, see https://kubernetes.io/blog/2020/12/10/kubernetes-1.20-volume-snapshot-moves-to-ga/[the release blog^]. With the graduation to GA, the `v1` API version is introduced and is backward compatible with `v1beta1` snapshots.
 
 .What you'll need
 
-* Creating volume snapshots requires an external snapshot controller to be created, as well as some Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator that is being used (for example: Kubeadm, GKE, OpenShift). Check with your Kubernetes orchestrator to confirm these requirements are met. You can create an external snapshot-controller and snapshot CRDs as follows:
+* Creating volume snapshots requires an external snapshot controller to be created, as well as some Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator that is being used (for example: Kubeadm, GKE, OpenShift). Check with your Kubernetes orchestrator to confirm these requirements are met.
+
+You can create an external snapshot-controller and snapshot CRDs as follows:
 +
 . Create volume snapshot CRDs:
 +
@@ -39,7 +41,7 @@ TIP: CSI Snapshotter provides a https://github.com/kubernetes-csi/external-snaps
 
 The example detailed below explains the constructs required for working with snapshots and shows how snapshots can be created and used.
 
-== Set up a `VolumeSnapshotClass`
+== Step 1: Set up a `VolumeSnapshotClass`
 
 Before creating a volume snapshot, set up a link:../trident-reference/objects.html[`VolumeSnapshotClass`^].
 
@@ -54,7 +56,7 @@ driver: csi.trident.netapp.io
 deletionPolicy: Delete
 ----
 
-The driver points to Trident’s CSI driver. `deletionPolicy` can be Delete or Retain. When set to Retain, the underlying physical snapshot on the storage cluster is retained even when the VolumeSnapshot object is deleted.
+The `driver` points to Astra Trident’s CSI driver. `deletionPolicy` can be `Delete` or `Retain`. When set to `Retain`, the underlying physical snapshot on the storage cluster is retained even when the `VolumeSnapshot` object is deleted.
 
 == Create a snapshot of an existing PVC
 
@@ -81,9 +83,9 @@ $ kubectl get volumesnapshots
 NAME                   AGE
 pvc1-snap              50s
 ----
-This created a VolumeSnapshot object. A VolumeSnapshot is analogous to a PVC and is associated with a VolumeSnapshotContent object that represents the actual snapshot.
+This created a `VolumeSnapshot` object. A VolumeSnapshot is analogous to a PVC and is associated with a `VolumeSnapshotContent` object that represents the actual snapshot.
 
-It is possible to identify the VolumeSnapshotContent object for the `pvc1-snap` VolumeSnapshot by describing it.
+It is possible to identify the `VolumeSnapshotContent` object for the `pvc1-snap` VolumeSnapshot by describing it.
 
 ----
 $ kubectl describe volumesnapshots pvc1-snap
@@ -132,14 +134,11 @@ spec:
     apiGroup: snapshot.storage.k8s.io
 ----
 
-`dataSource` shows that the PVC must be created using a VolumeSnapshot named `pvc1-snap` as the source of the data. This instructs Trident to create a PVC from the snapshot. After the PVC is created, it can be attached to a pod and used just like any other PVC.
+`dataSource` shows that the PVC must be created using a VolumeSnapshot named `pvc1-snap` as the source of the data. This instructs Astra Trident to create a PVC from the snapshot. After the PVC is created, it can be attached to a pod and used just like any other PVC.
 
-NOTE: When deleting a Persistent Volume with associated snapshots, the corresponding Trident volume is updated to a “Deleting state”. For the Trident volume to be deleted, the snapshots of the volume should be removed.
+NOTE: When deleting a Persistent Volume with associated snapshots, the corresponding Trident volume is updated to a “Deleting state”. For the Astra Trident volume to be deleted, the snapshots of the volume should be removed.
 
 == Find more information
 
-* https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Manage resources for containers^]
-* https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector[nodeSelector^]
-* https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity[Affinity and anti-affinity^]
-* https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[Taints and Tolerations^]
-* link:../trident-reference/objects.html[Kubernetes and Trident objects^]
+* link:../trident-concepts/snapshots.html[Volume snapshots^]
+* link:../trident-reference/objects.html[`VolumeSnapshotClass`^]

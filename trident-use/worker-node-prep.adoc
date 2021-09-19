@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/worker-node-prep.html
-keywords: storage class, manage storage class, storage classes, kubernetes storage classes
+keywords: storage class, manage storage class, storage classes, kubernetes storage classes, worker node, nfs, iscsi, kubernetes clusters
 summary: All of the worker nodes in the Kubernetes cluster need to be able to mount the volumes that you have provisioned for your pods. If you are using the ontap-nas, ontap-nas-economy, ontap-nas-flexgroup driver for one of your backends, your worker nodes need the NFS tools. Otherwise they require the iSCSI tools.
 ---
 
@@ -10,7 +10,7 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 :icons: font
 :imagesdir: ../media/
 
-All of the worker nodes in the Kubernetes cluster need to be able to mount the volumes that you have provisioned for your pods. If you are using the ontap-nas, ontap-nas-economy, ontap-nas-flexgroup driver for one of your backends, your worker nodes need the NFS tools. Otherwise they require the iSCSI tools.
+All of the worker nodes in the Kubernetes cluster need to be able to mount the volumes that you have provisioned for your pods. If you are using the `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` driver for one of your backends, your worker nodes need the NFS tools. Otherwise they require the iSCSI tools.
 
 Recent versions of RedHat CoreOS have both NFS and iSCSI installed by default.
 
@@ -104,4 +104,7 @@ sudo service multipath-tools restart`
 `sudo systemctl status open-iscsi`
 
 |===
+
+NOTE: For Ubuntu 18.04, you must discover target ports with `iscsiadm` before starting `open-iscsi` for the iSCSI daemon to start. You can alternatively modify the `iscsi` service to start `iscsid` automatically.
+
 NOTE: If you want to learn more about automatic worker node preparation, which is a beta feature, see link:automatic-workernode.html[here^].

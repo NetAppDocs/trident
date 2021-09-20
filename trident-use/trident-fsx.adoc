@@ -1,0 +1,110 @@
+---
+sidebar: sidebar
+permalink: trident-use/trident-fsx.html
+keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident
+summary: By using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+---
+
+= Use Astra Trident with Amazon FSx for NetApp ONTAP
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP^], is a fully managed AWS service that enables customers to launch and run file systems powered by NetApp’s ONTAP storage operating system. Amazon FSx for NetApp ONTAP enables you to leverage NetApp features, performance, and administrative capabilities you are familiar with, while taking advantage of the simplicity, agility, security, and scalability of storing data on AWS. FSx supports many of ONTAP’s file system features and administration APIs.
+
+A file system is the primary resource in Amazon FSx, analogous to an ONTAP cluster on premises. Within each SVM you can create one or multiple volumes, which are data containers that store the files and folders in your file system. With Amazon FSx for NetApp ONTAP, Data ONTAP will be provided as a managed file system in the cloud. The new file system type is called *NetApp ONTAP*.
+
+By using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that their Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+
+== Learn about Astra Trident
+
+If you are new to Astra Trident, familiarize yourself by using the links provided below:
+
+* link:../faq.html[FAQs^]
+* link:../trident-get-started/requirements.html[Requirements for using Astra Trident^]
+* link:../trident-get-started/kubernetes-deploy.html[Deploy Astra Trident^]
+* link:../trident-reco/storage-config-best-practices.html[Best practices for configuring ONTAP, Cloud Volumes ONTAP, and Amazon FSx for NetApp ONTAP^]
+* link:../trident-reco/integrate-trident.html#ontap[Integrate Astra Trident^]
+* link:ontap-san.html[ONTAP SAN backend configuration^]
+* link:ontap-nas.html[ONTAP NAS backend configuration^]
+
+Learn more about driver capabilities link:../trident-concepts/ontap-drivers.html[here^].
+
+Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-5A78F93F-7539-4840-AB0B-4A6E3252CF84.html[FabricPool^] to manage storage tiers. It enables you to store data in a tier, based on whether the data is frequently accessed.
+
+Astra Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the `admin` cluster user. Astra Trident typically uses the `admin` cluster user for non-Amazon FSx for ONTAP deployments.
+
+=== Drivers
+
+You can integrate Astra Trident with Amazon FSx for NetApp ONTAP by using the following drivers:
+
+* `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume.
+* `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
+
+=== Authentication
+
+Astra Trident offers two modes of authentication:
+
+* Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. We recommend using the `vsadmin` user to configure your backend. Astra Trident will communicate with the FSx file system using this username and password.
+* Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
+
+To learn more about authentication, see these links:
+
+* link:ontap-nas-prep.html[ONTAP NAS^]
+* link:ontap-san-prep.html[ONTAP SAN^]
+
+== Deploy and configure Astra Trident on EKS with Amazon FSx for NetApp ONTAP
+
+.What you'll need
+
+* An existing Amazon EKS cluster or self-managed Kubernetes cluster with `kubectl` installed.
+* An existing Amazon FSx for NetApp ONTAP file system and storage virtual machine (SVM) that is reachable from your cluster’s worker nodes.
+* Worker nodes that are prepared for link:worker-node-prep.html[NFS and/or iSCSI^].
++
+NOTE: Ensure that you follow the node preparation steps required for Amazon Linux and Ubuntu https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html[Amazon Machine Images^] (AMIs) depending on your EKS AMI type.
+
+For other Astra Trident requirements, see link:../trident-get-started/requirements.html[here^].
+
+.Steps
+
+. Deploy Astra Trident using one of the ../trident-get-started/kubernetes-deploy.html[deployment methods^].
+. Configure Astra Trident as follows:
+.. Collect your SVM’s management LIF DNS name. For example, by using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
++
+----
+aws fsx describe-storage-virtual-machines --region <file system region>
+----
+. Create and install certificates for authentication. If you are using an `ontap-san` backend, see link:ontap-san.html[here^]. If you are using an `ontap-nas` backend, see link:ontap-nas.html[here^].
++
+NOTE: You can log in to your file system (for example to install certificates) using SSH from anywhere that can reach your file system. Use the `fsxadmin` user, the password you configured when you created your file system, and the management DNS name from `aws fsx describe-file-systems`.
+. Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
++
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-san",
+  "backendName": "customBackendName",
+  "managementLIF": "svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal",
+  "dataLIF": "iscsi.svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal",
+  "svm": "svm01",
+  "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
+  "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
+  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz",
+ }
+----
+
+For information about creating backends, see these links:
+
+* link:ontap-nas.html[Configure a backend with ONTAP NAS drivers^]
+* link:ontap-san.html[Configure a backend with ONTAP SAN drivers^]
+
+WARNING: When using Amazon FSx for NetApp ONTAP with Astra Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
+
+After deployment, perform the steps to create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].
+
+== Find more information
+* https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP documentation^]
+* https://www.netapp.com/blog/amazon-fsx-for-netapp-ontap/[Blog post on Amazon FSx for NetApp ONTAP^]

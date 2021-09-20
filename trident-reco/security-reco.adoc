@@ -1,0 +1,37 @@
+---
+sidebar: sidebar
+permalink: trident-reco/security-reco.html
+keywords: security, chap, trident, namespace
+summary: Use the recommendations listed here to ensure that your Astra Trident installation is secure.
+---
+
+= Security
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Use the recommendations listed here to ensure that your Astra Trident installation is secure.
+
+== Run Astra Trident in its own namespace
+
+It is important to prevent applications, application administrators, users, and management applications from accessing Astra Trident object definitions or the pods to ensure reliable storage and block potential malicious activity.
+
+To separate the other applications and users from Astra Trident, always install Astra Trident in its own Kubernetes namespace (`trident`). Putting Astra Trident in its own namespace assures that only the Kubernetes administrative personnel have access to the Astra Trident pod and the artifacts (such as backend and CHAP secrets if applicable) stored in the namespaced CRD objects.
+You should ensure that you allow only administrators access to the Astra Trident namespace and thus access to the `tridentctl` application.
+
+== Use CHAP authentication with ONTAP SAN backends
+
+Astra Trident supports CHAP-based authentication for ONTAP SAN workloads (using the `ontap-san` and `ontap-san-economy` drivers). NetApp recommends using bidirectional CHAP with Astra Trident for authentication between a host and the storage backend.
+
+For ONTAP backends that use the SAN storage drivers, Astra Trident can set up bidirectional CHAP and manage CHAP usernames and secrets through `tridentctl`.
+See link:../trident-use/ontap-san-prep.html[here^] to understand how Astra Trident configures CHAP on ONTAP backends.
+
+NOTE: CHAP support for ONTAP backends is available with Trident 20.04 and later.
+
+== Use CHAP authentication with NetApp HCI and SolidFire backends
+
+NetApp recommends deploying bidirectional CHAP to ensure authentication between a host and the NetApp HCI and SolidFire backends. Astra Trident uses a secret object that includes two CHAP passwords per tenant. When Trident is installed as a CSI provisioner, it manages the CHAP secrets and stores them in a `tridentvolume` CR object for the respective PV. When you create a PV, CSI Astra Trident uses the CHAP secrets to initiate an iSCSI session and communicate with the NetApp HCI and SolidFire system over CHAP.
+
+NOTE: The volumes that are created by CSI Trident are not associated with any Volume Access Group.
+
+In the non-CSI frontend, the attachment of volumes as devices on the worker nodes is handled by Kubernetes. After volume creation, Astra Trident makes an API call to the NetApp HCI/SolidFire system to retrieve the secrets if the secret for that tenant does not already exist. Astra Trident then passes the secrets on to Kubernetes. The kubelet located on each node accesses the secrets via the Kubernetes API and uses them to run/enable CHAP between each node accessing the volume and the NetApp HCI/SolidFire system where the volumes are located.

@@ -1,0 +1,237 @@
+---
+sidebar: sidebar
+permalink: trident-use/ontap-san-prep.html
+keywords: trident backend, ontap san, ontap-san, ontap-san-economy
+summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers.
+---
+
+= Preparation
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers. For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+
+Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
+
+All of your Kubernetes worker nodes must have the appropriate iSCSI tools installed. See link:worker-node-prep.html[here^] for more details.
+
+== Authentication
+
+Astra Trident offers two modes of authenticating an ONTAP backend.
+
+* Credential-based: The username and password to an ONTAP user with the required permissions. It is recommended to use a pre-defined security login role, such as `admin` or `vsadmin` to ensure maximum compatibility with ONTAP versions.
+* Certificate-based: Astra Trident can also communicate with an ONTAP cluster using a certificate installed on the backend. Here, the backend definition must contain Base64-encoded values of the client certificate, key, and the trusted CA certificate if used (recommended).
+
+Users can also choose to update existing backends, opting to move from credential-based to certificate-based, and vice-versa. If *both credentials and certificates are provided*, Astra Trident will default to using certificates while issuing a warning to remove the credentials from the backend definition.
+
+=== Credential-based authentication
+
+Astra Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Astra Trident releases. A custom security login role can be created and used with Astra Trident, but is not recommended.
+
+A sample backend definition will look like this:
+----
+{
+  "version": 1,
+  "backendName": "ExampleBackend",
+  "storageDriverName": "ontap-san",
+  "managementLIF": "10.0.0.1",
+  "dataLIF": "10.0.0.2",
+  "svm": "svm_nfs",
+  "username": "vsadmin",
+  "password": "secret",
+}
+----
+
+Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation/updation of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
+
+=== Certificate-based Authentication
+
+New and existing backends can use a certificate and communicate with the ONTAP backend. Three parameters are required in the backend definition.
+
+* clientCertificate: Base64-encoded value of client certificate.
+* clientPrivateKey: Base64-encoded value of associated private key.
+* trustedCACertificate: Base64-encoded value of trusted CA certificate. If using a trusted CA, this parameter must be provided. This can be ignored if no trusted CA is used.
+
+A typical workflow involves the following steps.
+
+.Steps
+
+. Generate a client certificate and key. When generating, set Common Name (CN) to the ONTAP user to authenticate as.
++
+----
+openssl req -x509 -nodes -days 1095 -newkey rsa:2048 -keyout k8senv.key -out k8senv.pem -subj "/C=US/ST=NC/L=RTP/O=NetApp/CN=admin"
+----
+. Add trusted CA certificate to the ONTAP cluster. This might be already handled by the storage administrator. Ignore if no trusted CA is used.
++
+----
+security certificate install -type server -cert-name <trusted-ca-cert-name> -vserver <vserver-name>
+ssl modify -vserver <vserver-name> -server-enabled true -client-enabled true -common-name <common-name> -serial <SN-from-trusted-CA-cert> -ca <cert-authority>
+----
+. Install the client certificate and key (from step 1) on the ONTAP cluster.
++
+----
+security certificate install -type client-ca -cert-name <certificate-name> -vserver <vserver-name>
+security ssl modify -vserver <vserver-name> -client-enabled true
+----
+. Confirm the ONTAP security login role supports `cert` authentication method.
++
+----
+security login create -user-or-group-name admin -application ontapi -authentication-method cert
+security login create -user-or-group-name admin -application http -authentication-method cert
+----
+. Test authentication using certificate generated. Replace <ONTAP Management LIF> and <vserver name> with Management LIF IP and SVM name.
++
+----
+curl -X POST -Lk https://<ONTAP-Management-LIF>/servlets/netapp.servlets.admin.XMLrequest_filer --key k8senv.key --cert ~/k8senv.pem -d '<?xml version="1.0" encoding="UTF-8"?><netapp xmlns="http://www.netapp.com/filer/admin" version="1.21" vfiler="<vserver-name>"><vserver-get></vserver-get></netapp>'
+----
+. Encode certificate, key and trusted CA certificate with Base64.
++
+----
+base64 -w 0 k8senv.pem >> cert_base64
+base64 -w 0 k8senv.key >> key_base64
+base64 -w 0 trustedca.pem >> trustedca_base64
+----
+. Create backend using the values obtained from the previous step.
++
+----
+$ cat cert-backend.json
+{
+"version": 1,
+"storageDriverName": "ontap-san",
+"backendName": "SanBackend",
+"managementLIF": "1.2.3.4",
+"dataLIF": "1.2.3.8",
+"svm": "vserver_test",
+"clientCertificate": "Faaaakkkkeeee...Vaaalllluuuueeee",
+"clientPrivateKey": "LS0tFaKE...0VaLuES0tLS0K",
+"trustedCACertificate": "QNFinfO...SiqOyN",
+"storagePrefix": "myPrefix_"
+}
+
+$ tridentctl create backend -f cert-backend.json -n trident
++------------+----------------+--------------------------------------+--------+---------+
+|    NAME    | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
++------------+----------------+--------------------------------------+--------+---------+
+| SanBackend | ontap-san      | 586b1cd5-8cf8-428d-a76c-2872713612c1 | online |       0 |
++------------+----------------+--------------------------------------+--------+---------+
+----
+
+== Update authentication methods or rotate credentials
+
+You can update an existing backend to make use of a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, use an updated `backend.json` file containing the required parameters to execute `tridentctl backend update`.
+
+----
+$ cat cert-backend-updated.json
+{
+"version": 1,
+"storageDriverName": "ontap-san",
+"backendName": "SanBackend",
+"managementLIF": "1.2.3.4",
+"dataLIF": "1.2.3.8",
+"svm": "vserver_test",
+"username": "vsadmin",
+"password": "secret",
+"storagePrefix": "myPrefix_"
+}
+
+#Update backend with tridentctl
+$ tridentctl update backend SanBackend -f cert-backend-updated.json -n trident
++------------+----------------+--------------------------------------+--------+---------+
+|    NAME    | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
++------------+----------------+--------------------------------------+--------+---------+
+| SanBackend | ontap-san      | 586b1cd5-8cf8-428d-a76c-2872713612c1 | online |       9 |
++------------+----------------+--------------------------------------+--------+---------+
+----
+
+NOTE: When rotating passwords, the storage administrator must first update the password for the user on ONTAP. This is followed by a backend update. When rotating certificates, multiple certificates can be added to the user. The backend is then updated to use the new certificate, following which the old certificate can be deleted from the ONTAP cluster.
+
+Updating a backend does not disrupt access to volumes that have already been created, nor impact volume connections made after. A successful backend update indicates that Astra Trident can communicate with the ONTAP backend and handle future volume operations.
+
+== Specify igroups
+
+Astra Trident uses igroups to control access to the volumes (LUNs) that it provisions. Administrators have two options when it comes to specifying igroups for backends:
+
+* Astra Trident can automatically create and manage an igroup per backend. If `igroupName` is not included in the backend definition, Astra Trident creates an igroup named `trident-<backend-UUID>` on the SVM. This will ensure each backend has a dedicated igroup and handle the automated addition/deletion of Kubernetes node IQNs.
+* Alternatively, pre-created igroups can also be provided in a backend definition. This can be done using the `igroupName` config parameter. Astra Trident will add/delete Kubernetes node IQNs to the pre-existing igroup.
+
+For backends that have `igroupName` defined, the `igroupName` can be deleted with a `tridentctl backend update` to have Astra Trident auto-handle igroups. This will not disrupt access to volumes that are already attached to workloads. Future connections will be handled using the igroup Astra Trident created.
+
+IMPORTANT: Dedicating an igroup for each unique instance of Astra Trident is a best practice that is beneficial for the Kubernetes admin as well as the storage admin. CSI Trident automates the addition and removal of cluster node IQNs to the igroup, greatly simplifying its management. When using the same SVM across Kubernetes environments (and Astra Trident installations), using a dedicated igroup ensures that changes made to one Kubernetes cluster don’t influence igroups associated with another. In addition, it is also important to ensure each node in the Kubernetes cluster has a unique IQN. As mentioned above, Astra Trident automatically handles the addition and removal of IQNs. Reusing IQNs across hosts can lead to undesirable scenarios where hosts get mistaken for one another and access to LUNs is denied.
+
+If Astra Trident is configured to function as a CSI Provisioner, Kubernetes node IQNs are automatically added to/removed from the igroup. When nodes are added to a Kubernetes cluster, `trident-csi` DaemonSet deploys a pod (`trident-csi-xxxxx`) on the newly added nodes and registers the new nodes it can attach volumes to. Node IQNs are also added to the backend’s igroup. A similar set of steps handle the removal of IQNs when node(s) are cordoned, drained, and deleted from Kubernetes.
+
+If Astra Trident does not run as a CSI Provisioner, the igroup must be manually updated to contain the iSCSI IQNs from every worker node in the Kubernetes cluster. IQNs of nodes that join the Kubernetes cluster will need to be added to the igroup. Similarly, IQNs of nodes that are removed from the Kubernetes cluster must be removed from the igroup.
+
+== Authenticate connections with bidirectional CHAP
+
+Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM’s default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections.
+See the following sample configuration:
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-san",
+    "backendName": "ontap_san_chap",
+    "managementLIF": "192.168.0.135",
+    "svm": "ontap_iscsi_svm",
+    "useCHAP": true,
+    "username": "vsadmin",
+    "password": "FaKePaSsWoRd",
+    "igroupName": "trident",
+    "chapInitiatorSecret": "cl9qxIm36DKyawxy",
+    "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
+    "chapTargetUsername": "iJF4heBRT0TCwxyz",
+    "chapUsername": "uh2aNCLSd6cNwxyz",
+}
+----
+
+WARNING: The `useCHAP` parameter is a Boolean option that can be configured only once. It is set to false by default. After you set it to true, you cannot set it to false.
+
+In addition to `useCHAP=true`, the `chapInitiatorSecret`, `chapTargetInitiatorSecret`, `chapTargetUsername`, and `chapUsername` fields must be included in the backend definition. The secrets can be changed after a backend is created by running `tridentctl update`.
+
+=== How it works
+
+By setting `useCHAP` to true, the storage administrator instructs Astra Trident to configure CHAP on the storage backend. This includes the following:
+
+* Setting up CHAP on the SVM:
+** If the SVM’s default initiator security type is none (set by default) *and* there are no pre-existing LUNs already present in the volume, Astra Trident will set the default security type to `CHAP` and proceed to configuring the CHAP initiator and target username and secrets.
+** If the SVM contains LUNs, Astra Trident will not enable CHAP on the SVM. This ensures that access to LUNs that are already present on the SVM isn’t restricted.
+* Configuring the CHAP initiator and target username and secrets; these options must be specified in the backend configuration (as shown above).
+* Managing the addition of inititators to the `igroupName` given in the backend. If unspecified, this defaults to `trident`.
+
+After the backend is created, Astra Trident creates a corresponding `tridentbackend` CRD and stores the CHAP secrets and usernames as Kubernetes secrets. All PVs that are created by Astra Trident on this backend will be mounted and attached over CHAP.
+
+=== Rotate credentials and update backends
+
+You can update the CHAP credentials by updating the CHAP parameters in the `backend.json` file. This will require updating the CHAP secrets and using the `tridentctl update` command to reflect these changes.
+
+WARNING: When updating the CHAP secrets for a backend, you must use `tridentctl` to update the backend. Do not update the credentials on the storage cluster through the CLI/ONTAP UI as Astra Trident will not be able to pick up these changes.
+
+----
+$ cat backend-san.json
+{
+    "version": 1,
+    "storageDriverName": "ontap-san",
+    "backendName": "ontap_san_chap",
+    "managementLIF": "192.168.0.135",
+    "svm": "ontap_iscsi_svm",
+    "useCHAP": true,
+    "username": "vsadmin",
+    "password": "FaKePaSsWoRd",
+    "igroupName": "trident",
+    "chapInitiatorSecret": "cl9qxUpDaTeD",
+    "chapTargetInitiatorSecret": "rqxigXgkeUpDaTeD",
+    "chapTargetUsername": "iJF4heBRT0TCwxyz",
+    "chapUsername": "uh2aNCLSd6cNwxyz",
+}
+
+$ ./tridentctl update backend ontap_san_chap -f backend-san.json -n trident
++----------------+----------------+--------------------------------------+--------+---------+
+|   NAME         | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
++----------------+----------------+--------------------------------------+--------+---------+
+| ontap_san_chap | ontap-san      | aa458f3b-ad2d-4378-8a33-1a472ffbeb5c | online |       7 |
++----------------+----------------+--------------------------------------+--------+---------+
+----
+
+Existing connections will remain unaffected; they will continue to remain active if the credentials are updated by Astra Trident on the SVM. New connections will use the updated credentials and existing connections continue to remain active. Disconnecting and reconnecting old PVs will result in them using the updated credentials.

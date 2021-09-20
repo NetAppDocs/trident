@@ -1,0 +1,56 @@
+---
+sidebar: sidebar
+permalink: trident-use/backend_ops_kubectl.html
+keywords: backends, storage system, anf, cvs for aws, cvs for gcp, element, hci, solidfire, ontap, aff, fas, ontap select, configure backends, kubectl, create backends, delete backends, update backends, view backends
+summary: Learn about how to perform backend management operations by using `kubectl`.
+---
+
+= Perform backend management with `kubectl`
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Learn about how to perform backend management operations by using `kubectl`.
+
+== Delete a backend
+
+By deleting a `TridentBackendConfig`, you instruct Astra Trident to delete/retain backends (based on `deletionPolicy`). To delete a backend, ensure that `deletionPolicy` is set to delete. To delete just the `TridentBackendConfig`, ensure that `deletionPolicy` is set to retain. This will ensure the backend is still present and can be managed by using `tridentctl`.
+
+Run the following command:
+----
+$ kubectl delete tbc <tbc-name> -n trident
+----
+
+Astra Trident does not delete the Kubernetes Secrets that were in use by `TridentBackendConfig`. The Kubernetes user is responsible for cleaning up secrets. Care must be taken when deleting secrets. You should delete secrets only if they are not in use by the backends.
+
+== View the existing backends
+
+Run the following command:
+----
+$ kubectl get tbc -n trident
+----
+
+You can also run `tridentctl get backend -n trident` or `tridentctl get backend -o yaml -n trident` to obtain a list of all backends that exist. This list will also include backends that were created with `tridentctl`.
+
+== Update a backend
+
+There can be multiple reasons to update a backend:
+
+* Credentials to the storage system have changed. To update credentials, the Kubernetes Secret that is used in the `TridentBackendConfig` object must be updated. Astra Trident will automatically update the backend with the latest credentials provided. Run the following command to update the Kubernetes Secret:
+----
+$ kubectl apply -f <updated-secret-file.yaml> -n trident
+----
+* Parameters (such as the name of the ONTAP SVM being used) need to be updated.
+In this case, `TridentBackendConfig` objects can be updated directly through Kubernetes.
+----
+$ kubectl apply -f <updated-backend-file.yaml>
+----
+
+Alternatively, make changes to the existing `TridentBackendConfig` CR by running the following command:
+----
+$ kubectl edit tbc <tbc-name> -n trident
+----
+
+If a backend update fails, the backend continues to remain in its last known configuration. You can view the logs to determine the cause by running `kubectl get tbc <tbc-name> -o yaml -n trident` or `kubectl describe tbc <tbc-name> -n trident`.
+
+After you identify and correct the problem with the configuration file, you can re-run the update command.

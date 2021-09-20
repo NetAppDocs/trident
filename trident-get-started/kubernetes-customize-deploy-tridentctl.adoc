@@ -1,0 +1,35 @@
+---
+sidebar: sidebar
+permalink: trident-get-started/kubernetes-customize-deploy-tridentctl.html
+keywords: deploy, astra trident, methods, operator, tridentctl, helm, attributes, customize, tridentorchestrator
+summary: Trident’s installer enables you to customize attributes.
+---
+
+= Customize `tridentctl` deployment
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Trident installer enables you to customize attributes. For example, if you have copied the Trident image to a private repository, you can specify the image name by using `--trident-image`. If you have copied the Trident image as well as the needed CSI sidecar images to a private repository, it might be preferable to specify the location of that repository by using the `--image-registry` switch, which takes the form `<registry FQDN>[:port]`.
+
+To have Astra Trident automatically configure worker nodes for you, use `--enable-node-prep`. For more details on how it works, see link:../trident-use/automatic-workernode.html[here^].
+
+NOTE: Automatic worker node preparation is a *beta feature* meant to be used in non-production environments only.
+
+If you are using a distribution of Kubernetes, where `kubelet` keeps its data on a path other than the usual `/var/lib/kubelet`, you can specify the alternate path by using `--kubelet-dir`.
+
+If you need to customize the installation beyond what the installer's arguments allow, you can also customize the deployment files. Using the `--generate-custom-yaml` parameter creates the following YAML files in the installer's `setup` directory:
+
+* `trident-clusterrolebinding.yaml`
+* `trident-deployment.yaml`
+* `trident-crds.yaml`
+* `trident-clusterrole.yaml`
+* `trident-daemonset.yaml`
+* `trident-service.yaml`
+* `trident-namespace.yaml`
+* `trident-serviceaccount.yaml`
+
+After you have generated these files, you can modify them according to your needs and then use `--use-custom-yaml` to install your custom deployment.
+----
+./tridentctl install -n trident --use-custom-yaml
+----

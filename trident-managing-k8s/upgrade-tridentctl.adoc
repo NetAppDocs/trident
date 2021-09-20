@@ -2,57 +2,36 @@
 sidebar: sidebar
 permalink: trident-managing-k8s/upgrade-tridentctl.html
 keywords: upgrade, trident, methods, operator, tridentctl, helm
-summary: You can easily upgrade an existing Trident installation by using `tridentctl`.
+summary: You can easily upgrade an existing Astra Trident installation by using `tridentctl`.
 ---
 
-= Upgrade Trident by using `tridentctl`
+= Upgrade with `tridentctl`
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
-You can easily upgrade an existing Trident installation by using `tridentctl`.
+You can easily upgrade an existing Astra Trident installation by using `tridentctl`.
 
 .Considerations
 
-When upgrading to the latest release of Trident, consider the following:
+When upgrading to the latest release of Astra Trident, consider the following:
 
 * Starting with Trident 20.01, only the beta release of https://kubernetes.io/docs/concepts/storage/volume-snapshots/[volume snapshots^] is supported. Kubernetes administrators should take care to safely back up or convert the alpha snapshot objects to beta to retain the legacy alpha snapshots.
-* The beta release of volume snapshots introduces a modified set of CRDs and a snapshot controller, both of which should be set up before installing Trident.
+* The beta release of volume snapshots introduces a modified set of CRDs and a snapshot controller, both of which should be set up before installing Astra Trident.
 
 NOTE: https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[This blog^] discusses the steps involved in migrating alpha volume snapshots to the beta format.
 
 .About this task
 
-When you uninstall Trident, the PVC and PV used by the Trident deployment are not deleted. Uninstalling Trident and reinstalling it acts as an upgrade.
+Uninstalling and reinstalling Astra Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Astra Trident deployment are not deleted. PVs that have already been provisioned will remain available while Astra Trident is offline, and Astra Trident will provision volumes for any PVCs that are created in the interim once it is back online.
 
-Upgrading Trident from any release earlier than 19.07 by running a `tridentctl install` command does the following:
-
-* Initiates a one-time process that copies the metadata stored in the Trident PV into CRD objects.
-* Provides periodic updates throughout the upgrade with respect to the migration of Trident's metadata.
-
-PVs that have already been provisioned remain available while Trident is offline, and Trident provisions volumes for any PVCs that are created in the interim when it is back online.
-
-IMPORTANT: When upgrading Trident, do not interrupt the upgrade process. Ensure that the installer runs to completion.
-
-== Upgrade Trident on Kubernetes 1.14 and later
-
-For Kubernetes 1.14 and later, perform an uninstall followed by a reinstall to upgrade to the latest version of Trident.
-
-WARNING: If you are running Kubernetes 1.17 or later, and are looking to upgrade to Trident 20.07.1 or later, you should provide `parameter.fsType` in StorageClasses used by Trident. This is a *requirement* for enforcing https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[Security
-Contexts^] for SAN volumes. The https://github.com/NetApp/trident/tree/master/trident-installer/sample-input[sample-input^] directory contains examples, such as https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-basic.yaml.templ[storage-class-basic.yaml.templ^], and https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-bronze-default.yaml[storage-class-bronze-default.yaml^]. For more information, see the link:../trident-rn/known-issues.html[Known Issues^].
-
-== Upgrade Trident on Kubernetes 1.13
-
-On Kubernetes 1.13, you can upgrade Trident as follows:
-
-* Install Trident in the desired namespace by executing the `tridentctl install` command with the `--csi` flag. This configures Trident to function as an enhanced CSI provisioner. This requires enabling some link:../trident-get-started/requirements.html[feature gates^].
-* If you cannot enable the feature gates required by Trident, install Trident without the `--csi` flag. This configures Trident to work in its traditional format without using the CSI specification.
+IMPORTANT: When upgrading Astra Trident, do not interrupt the upgrade process. Ensure that the installer runs to completion.
 
 == Next steps after upgrade
 
 To make use of the rich set of features that are available in newer Trident releases (such as, On-Demand Volume Snapshots), you can upgrade the volumes by using the `tridentctl upgrade` command.
 
-If there are legacy volumes, you should upgrade them from a NFS/iSCSI type to the CSI type to be able to use the complete set of new features in Trident. A legacy PV that has been provisioned by Trident supports the traditional set of features.
+If there are legacy volumes, you should upgrade them from a NFS/iSCSI type to the CSI type to be able to use the complete set of new features in Astra Trident. A legacy PV that has been provisioned by Trident supports the traditional set of features.
 
 Consider the following when deciding to upgrade volumes to the CSI type:
 
@@ -60,23 +39,6 @@ Consider the following when deciding to upgrade volumes to the CSI type:
 * A PV can be mounted as part of a deployment/StatefulSet when upgrading. It is not required to bring down the deployment/StatefulSet.
 * You *cannot* attach a PV to a standalone pod when upgrading. You should shut down the pod before upgrading the volume.
 * You can upgrade only a volume that is bound to a PVC. Volumes that are not bound to PVCs should be removed and imported before upgrading.
-
-Before proceeding, you should determine if your Trident deployment is capable of upgrading legacy volumes. The version of Trident installed should be at least 19.07 and Trident should be configured as a CSI provisioner. This can be confirmed by doing a `kubectl get pods -n <trident-namespace>`. The presence of a `trident-csi-<generated-id>` indicates that it is running as a CSI provisioner and supports upgrading legacy volumes. See the following code sample:
-
-----
-$ tridentctl version
-
-+----------------+----------------+
-| SERVER VERSION | CLIENT VERSION |
-+----------------+----------------+
-| 19.10.0        | 19.10.0        |
-+----------------+----------------+
-
-$ kubectl get pods -n <trident-namespace>
-NAME                          READY   STATUS    RESTARTS   AGE
-trident-csi-426nx             2/2     Running   0          20m
-trident-csi-b5cf8fd7c-fnq24   4/4     Running   0          20m
-----
 
 === Volume upgrade example
 
@@ -94,7 +56,7 @@ default-pvc-4-a84de          1073741824   RWO            Delete           Bound 
 trident                      2Gi          RWO            Retain           Bound    trident/trident                                 19h
 ----
 +
-There are currently four PVs that have been created by Trident 19.04, using the `netapp.io/trident` provisioner.
+There are currently four PVs that have been created by Trident 20.07, using the `netapp.io/trident` provisioner.
 . Run `kubectl describe pv` to get the details of the PV.
 +
 ----
@@ -121,8 +83,8 @@ Source:
     ReadOnly:  false
 ----
 +
-The PV was created by using the `netapp.io/trident` provisioner and is of the type NFS. To support all the new features provided by Trident, this PV should be upgraded to the CSI type.
-. Run the `tridenctl upgrade volume <name-of-trident-volume>` command to upgrade a legacy Trident volume to the CSI spec.
+The PV was created by using the `netapp.io/trident` provisioner and is of the type NFS. To support all the new features provided by Astra Trident, this PV should be upgraded to the CSI type.
+. Run the `tridenctl upgrade volume <name-of-trident-volume>` command to upgrade a legacy Astra Trident volume to the CSI spec.
 +
 ----
 $ ./tridentctl get volumes -n trident
@@ -172,7 +134,4 @@ Source:
 Events:                <none>
 ----
 +
-In this manner, you can upgrade volumes of the NFS/iSCSI type that were created by Trident to the CSI type, on a per-volume basis.
-
-== Find more information
-* link:upgrade-operator.html[Upgrade by using the Trident operator^]
+In this manner, you can upgrade volumes of the NFS/iSCSI type that were created by Astra Trident to the CSI type, on a per-volume basis.

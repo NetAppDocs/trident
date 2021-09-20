@@ -1,0 +1,763 @@
+---
+sidebar: sidebar
+permalink: trident-docker/stor-config.html
+keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, aws, cvs on gcp, cvs on aws, anf, azure netapp files
+summary: See the configuration options available for your Astra Trident configurations.
+---
+
+= Storage configuration options
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+See the configuration options available for your Astra Trident configurations.
+
+== Global configuration options
+
+These configuration options apply to all Astra Trident configurations, regardless of the storage platform being used.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`version`
+a|Config file version number
+a|1
+
+|`storageDriverName`
+a|Name of storage driver
+a|`ontap-nas`, `ontap-san`, `ontap-nas-economy`,
+`ontap-nas-flexgroup`, `solidfire-san`, `azure-netapp-files`, `aws-cvs`, or `gcp-cvs`
+
+|`storagePrefix`
+a|Optional prefix for volume names. Default: “netappdvp_”.
+a|staging_
+
+|`limitVolumeSize`
+a|Optional restriction on volume sizes. Default: “” (not enforced)
+a|10g
+
+|===
+
+TIP: Do not use `storagePrefix` (including the default) for Element backends. By default, the `solidfire-san` driver will ignore this setting and not use a prefix. We recommend using either a specific tenantID for Docker volume mapping or using the attribute data which is populated with the Docker version, driver info, and raw name from Docker in cases where any name munging may have been used.
+
+Default options are available to avoid having to specify them on every volume you create. The `size` option is available for all the controller types. See the ONTAP configuration section for an example of how to set the default volume size.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`size`
+a|Optional default size for new volumes. Default: “1G”
+a|10G
+
+|===
+
+== ONTAP configuration
+
+In addition to the global configuration values above, when using ONTAP, the following top-level options are available.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`managementLIF`
+a|IP address of ONTAP management LIF. You can specify a fully-qualified domain name (FQDN).
+a|10.0.0.1
+
+|`dataLIF`
+a|IP address of protocol LIF; will be derived if not specified. For the `ontap-nas` drivers *only*, you can specify an FQDN, in which case the FQDN will be used for the NFS mount operations. For the `ontap-san` drivers, the default is to use all data LIF IPs from the SVM and to use iSCSI multipath. Specifying an IP address for `dataLIF` for the `ontap-san` drivers forces the driver to disable multipath and use only the specified address.
+a|10.0.0.2
+
+|`svm`
+a|Storage virtual machine to use (required, if management LIF is a cluster LIF)
+a|svm_nfs
+
+|`username`
+a|Username to connect to the storage device
+a|vsadmin
+
+|`password`
+a|Password to connect to the storage device
+a|secret
+
+|`aggregate`
+a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. All aggregates assigned to the SVM are used to provision a FlexGroup Volume.
+a|aggr1
+
+|`limitAggregateUsage`
+a|Optional, fail provisioning if usage is above this percentage
+a|75%
+
+|`nfsMountOptions`
+a| Fine grained control of NFS mount options; defaults to “-o nfsvers=3”. *Available only for the `ontap-nas` and `ontap-nas-economy` drivers*. https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf[See NFS host configuration information here^].
+a|-o nfsvers=4
+
+|`igroupName`
+a|The igroup used by the plugin; defaults to “netappdvp”. *Available only for the `ontap-san`driver*.
+a|myigroup
+
+|`limitVolumeSizee`
+a|Maximum requestable volume size and qtree parent volume size. *For the `ontap-nas-economy` driver, this option additionally limits the size of the FlexVols that it creates*.
+a|300g
+
+|`qtreesPerFlexvol`
+a|Maximum qtrees per FlexVol, must be in range [50, 300], default is 200.  *For the `ontap-nas-economy` driver, this option allows customizing the maximum number of qtrees per FlexVol*.
+a|300
+
+|===
+
+Default options are available to avoid having to specify them on every volume you create:
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`spaceReserve`
+a|Space reservation mode; “none” (thin provisioned) or “volume” (thick)
+a|none
+
+|`snapshotPolicy`
+a|Snapshot policy to use, default is “none”
+a|none
+
+|`snapshotReserve`
+a|Snapshot reserve percentage, default is “” to accept ONTAP’s default
+a|10
+
+|`splitOnClone`
+a|Split a clone from its parent upon creation, defaults to “false”
+a|false
+
+|`encryption`
+a|Enable NetApp Volume Encryption, defaults to “false”
+a|true
+
+|`unixPermissions`
+a|NAS option for provisioned NFS volumes, defaults to “777”
+a|777
+
+|`snapshotDir`
+a|NAS option for access to the `.snapshot` directory, defaults to “false”
+a|true
+
+|`exportPolicy`
+a|NAS option for the NFS export policy to use, defaults to “default”
+a|default
+
+|`securityStyle`
+a|NAS option for access to the provisioned NFS volume, defaults to “unix”
+a|mixed
+
+|`fileSystemType`
+a|SAN option to select the file system type, defaults to “ext4”
+a|xfs
+
+|`tieringPolicy`
+a|Tiering policy to use, default is “none”; “snapshot-only” for pre-ONTAP 9.5 SVM-DR configuration
+a|none
+
+|===
+
+=== Scaling options
+
+The `ontap-nas` and `ontap-san` drivers create an ONTAP FlexVol for each Docker volume. ONTAP supports up to 1000 FlexVols per cluster node with a cluster maximum of 12,000 FlexVols. If your Docker volume requirements fit within that limitation, the `ontap-nas` driver is the preferred NAS solution due to the additional features offered by FlexVols, such as Docker-volume-granular snapshots and cloning.
+
+If you need more Docker volumes than can be accommodated by the FlexVol limits, choose the `ontap-nas-economy` or the `ontap-san-economy` driver.
+
+The `ontap-nas-economy` driver creates Docker volumes as ONTAP Qtrees within a pool of automatically managed FlexVols. Qtrees offer far greater scaling, up to 100,000 per cluster node and 2,400,000 per cluster, at the expense of some features. The `ontap-nas-economy` driver does not support Docker-volume-granular snapshots or cloning.
+
+NOTE: The `ontap-nas-economy` driver is not currently supported in Docker Swarm, because Swarm does not orchestrate volume creation across multiple nodes.
+
+The `ontap-san-economy` driver creates Docker volumes as ONTAP LUNs within a shared pool of automatically managed FlexVols. This way, each FlexVol is not restricted to only one LUN and it offers better scalability for SAN workloads. Depending on the storage array, ONTAP supports up to 16384 LUNs per cluster. Because the volumes are LUNs underneath, this driver supports Docker-volume-granular snapshots and cloning.
+
+Choose the `ontap-nas-flexgroup` driver to increase parallelism to a single volume that can grow into the petabyte range with billions of files. Some ideal use cases for FlexGroups include AI/ML/DL, big data and analytics, software builds, streaming, file repositories, and so on. Trident uses all aggregates assigned to an SVM when provisioning a FlexGroup Volume. FlexGroup support in Trident also has the following considerations:
+
+* Requires ONTAP version 9.2 or greater.
+* As of this writing, FlexGroups only support NFS v3.
+* Recommended to enable the 64-bit NFSv3 identifiers for the SVM.
+* The minimum recommended FlexGroup size is 100GB.
+* Cloning is not supported for FlexGroup Volumes.
+
+For information about FlexGroups and workloads that are appropriate for FlexGroups see the https://www.netapp.com/pdf.html?item=/media/12385-tr4571pdf.pdf[NetApp FlexGroup Volume Best Practices and Implementation Guide^].
+
+To get advanced features and huge scale in the same environment, you can run multiple instances of the Docker Volume Plugin, with one using `ontap-nas` and another using `ontap-nas-economy`.
+
+=== Example ONTAP configuration files
+
+*NFS example for `ontap-nas` driver*
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "secret",
+    "aggregate": "aggr1",
+    "defaults": {
+      "size": "10G",
+      "spaceReserve": "none",
+      "exportPolicy": "default"
+    }
+}
+----
+
+*NFS example for `ontap-nas-flexgroup` driver*
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas-flexgroup",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "secret",
+    "defaults": {
+      "size": "100G",
+      "spaceReserve": "none",
+      "exportPolicy": "default"
+    }
+}
+----
+
+*NFS example for `ontap-nas-economy` driver*
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas-economy",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "secret",
+    "aggregate": "aggr1"
+}
+----
+
+*iSCSI example for `ontap-san` driver*
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-san",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.3",
+    "svm": "svm_iscsi",
+    "username": "vsadmin",
+    "password": "secret",
+    "aggregate": "aggr1",
+    "igroupName": "myigroup"
+}
+----
+
+*NFS example for `ontap-san-economy` driver*
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-san-economy",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.3",
+    "svm": "svm_iscsi_eco",
+    "username": "vsadmin",
+    "password": "secret",
+    "aggregate": "aggr1",
+    "igroupName": "myigroup"
+}
+----
+
+== Element software configuration
+
+In addition to the global configuration values, when using Element software (NetApp HCI/SolidFire), these options are available.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`Endpoint`
+a|https://<login>:<password>@<mvip>/json-rpc/<element-version>
+a|https://admin:admin@192.168.160.3/json-rpc/8.0
+
+|`SVIP`
+a|iSCSI IP address and port
+a|10.0.0.7:3260
+
+|`TenantName`
+a|SolidFireF Tenant to use (created if not found)
+a|“docker”
+
+|`InitiatorIFace`
+a|Specify interface when restricting iSCSI traffic to non-default interface
+a|“default”
+
+|`Types`
+a|QoS specifications
+a|See example below
+
+|`LegacyNamePrefix`
+a|Prefix for upgraded Trident installs. If you used a version of Trident prior to 1.3.2 and perform an upgrade with existing volumes, you’ll need to set this value to access your old volumes that were mapped via the volume-name method.
+a|“netappdvp-”
+
+|===
+
+The `solidfire-san` driver does not support Docker Swarm.
+
+=== Example Element software configuration file
+
+----
+{
+    "version": 1,
+    "storageDriverName": "solidfire-san",
+    "Endpoint": "https://admin:admin@192.168.160.3/json-rpc/8.0",
+    "SVIP": "10.0.0.7:3260",
+    "TenantName": "docker",
+    "InitiatorIFace": "default",
+    "Types": [
+        {
+            "Type": "Bronze",
+            "Qos": {
+                "minIOPS": 1000,
+                "maxIOPS": 2000,
+                "burstIOPS": 4000
+            }
+        },
+        {
+            "Type": "Silver",
+            "Qos": {
+                "minIOPS": 4000,
+                "maxIOPS": 6000,
+                "burstIOPS": 8000
+            }
+        },
+        {
+            "Type": "Gold",
+            "Qos": {
+                "minIOPS": 6000,
+                "maxIOPS": 8000,
+                "burstIOPS": 10000
+            }
+        }
+    ]
+}
+----
+
+== Cloud Volumes Service (CVS) on AWS configuration
+
+In addition to the global configuration values, when using CVS on AWS, these options are available. The required values are all available in the CVS web user interface.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`apiRegion`
+a|CVS account region (required). Can be found in the CVS web portal in Account settings > API access.
+a|“us-east-1”
+
+|`apiURL`
+a|CVS account API URL (required). Can be found in the CVS web portal in Account settings > API access.
+a|“https://cds-aws-bundles.netapp.com:8080/v1”
+
+|`apiKey`
+a|CVS account API key (required). Can be found in the CVS web portal in Account settings > API access.
+a|“docker”
+
+|`secretKey`
+a|CVS account secret key (required). Can be found in the CVS web portal in Account settings > API access.
+a|“default”
+
+|`proxyURL`
+a|Proxy URL if proxy server required to connect to the CVS account. The proxy server can either be an HTTP proxy or an HTTPS proxy. In case of an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. *Proxy servers with authentication enabled are not supported*.
+a|“http://proxy-server-hostname/”
+
+|`nfsMountOptions`
+a|NFS mount options; defaults to “-o nfsvers=3”
+a|“nfsvers=3,proto=tcp,timeo=600”
+
+|`serviceLevel`
+a|Performance level (standard, premium, extreme), defaults to “standard”
+a|“premium”
+
+|===
+
+NOTE: The NetApp Cloud Volumes Service for AWS does not support volumes less than 100 GB in size. To make it easier to deploy applications, Trident automatically creates 100 GB volumes if a smaller volume is requested.
+
+When using CVS on AWS, these default volume option settings are available.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`exportRule`
+a|NFS access list (addresses and/or CIDR subnets), defaults to “0.0.0.0/0”
+a|“10.0.1.0/24,10.0.2.100”
+
+|`snapshotDir`
+a|Controls visibility of the `.snapshot` directory
+a|“false”
+
+|`snapshotReserve`
+a|Snapshot reserve percentage, default is “” to accept the CVS default of 0
+a|“10”
+
+|`size`
+a|Volume size, defaults to “100GB”
+a|“500G”
+
+|===
+
+=== Example CVS on AWS configuration file
+
+----
+{
+    "version": 1,
+    "storageDriverName": "aws-cvs",
+    "apiRegion": "us-east-1",
+    "apiURL": "https://cds-aws-bundles.netapp.com:8080/v1",
+    "apiKey":    "znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE",
+    "secretKey": "rR0rUmWXfNioN1KhtHisiSAnoTherboGuskey6pU",
+    "region": "us-east-1",
+    "proxyURL": "http://proxy-server-hostname/",
+    "serviceLevel": "premium",
+    "limitVolumeSize": "200Gi",
+    "defaults": {
+        "snapshotDir": "true",
+        "snapshotReserve": "5",
+        "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
+        "size": "100Gi"
+    }
+}
+----
+
+== Cloud Volumes Service (CVS) on GCP configuration
+
+Trident now includes support for smaller volumes with the default CVS service type on https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[GCP^]. For backends created with `storageClass=software`, volumes will now have a minimum provisioning size of 300 GiB. *NetApp recommends customers consume sub-1TiB volumes for non-production workloads*. CVS currently provides this feature under Controlled Availability and does not provide technical support.
+
+NOTE: Sign up for access to sub-1TiB volumes https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[here^].
+
+WARNING: When deploying backends using the default CVS service type `storageClass=software`, you should obtain access to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creations *will fail* for PVCs that are <600 GiB. Obtain access to sub-1TiB volumes using https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form^].
+
+Volumes created by Trident for the default CVS service level will be provisioned as follows:
+
+* PVCs that are smaller than 300 GiB will result in Trident creating a 300 GiB CVS volume.
+* PVCs that are between 300 GiB to 600 GiB will result in Trident creating a CVS volume of the requested size.
+* PVCs that are between 600 GiB and 1 TiB will result in Trident creating a 1TiB CVS volume.
+* PVCs that are greater than 1 TiB will result in Trident creating a CVS volume of the requested size.
+
+In addition to the global configuration values, when using CVS on GCP, these options are available.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`apiRegion`
+a|CVS account region (required). Is the GCP region where this backend will provision volumes.
+a|“us-west2”
+
+|`projectNumber`
+a|GCP project number (required). Can be found in the GCP web portal’s Home screen.
+a|“123456789012”
+
+|`hostProjectNumber`
+a|GCP shared VPC host project number (required if using a shared VPC)
+a|“098765432109”
+
+|`apiKey`
+a|API key for GCP service account with CVS admin role (required). Is the JSON-formatted contents of a GCP service account’s private key file (copied verbatim into the backend config file). The service account must have the netappcloudvolumes.admin role.
+a|(contents of the private key file)
+
+|`secretKey`
+a|CVS account secret key (required). Can be found in the CVS web portal in Account settings > API access.
+a|“default”
+
+|`proxyURL`
+a|Proxy URL if proxy server required to connect to the CVS account. The proxy server can either be an HTTP proxy or an HTTPS proxy. In case of an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. *Proxy servers with authentication enabled are not supported*.
+a|“http://proxy-server-hostname/”
+
+|`nfsMountOptions`
+a|NFS mount options; defaults to “-o nfsvers=3”
+a|“nfsvers=3,proto=tcp,timeo=600”
+
+|`serviceLevel`
+a|Performance level (standard, premium, extreme), defaults to “standard”
+a|“premium”
+
+|`network`
+a|GCP network used for CVS volumes, defaults to “default”
+a|“default”
+
+|===
+
+NOTE: If using a shared VPC network, you should specify both `projectNumber` and `hostProjectNumber`. In that case, `projectNumber` is the service project and `hostProjectNumber` is the host project.
+
+NOTE: The NetApp Cloud Volumes Service for GCP does not support CVS-Performance volumes less than 100 GiB in size, or CVS volumes less than 300 GiB in size. To make it easier to deploy applications, Trident automatically creates volumes of the minimum size if a too-small volume is requested.
+
+When using CVS on GCP, these default volume option settings are available.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Example
+
+|`exportRule`
+a|NFS access list (addresses and/or CIDR subnets), defaults to “0.0.0.0/0”
+a|“10.0.1.0/24,10.0.2.100”
+
+|`snapshotDir`
+a|Controls visibility of the `.snapshot` directory
+a|“false”
+
+|`snapshotReserve`
+a|Snapshot reserve percentage, default is “” to accept the CVS default of 0
+a|“10”
+
+|`size`
+a|Volume size, defaults to “100GiB”
+a|“10T”
+
+|===
+
+=== Example CVS on GCP configuration file
+
+----
+{
+    "version": 1,
+    "storageDriverName": "gcp-cvs",
+    "projectNumber": "012345678901",
+    "apiRegion": "us-west2",
+    "apiKey": {
+        "type": "service_account",
+        "project_id": "my-gcp-project",
+        "private_key_id": "1234567890123456789012345678901234567890",
+        "private_key": "-----BEGIN PRIVATE KEY-----\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nznHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m\nXsYg6gyxy4zq7OlwWgLwGa==\n-----END PRIVATE KEY-----\n",
+        "client_email": "cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com",
+        "client_id": "123456789012345678901",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com"
+    },
+    "proxyURL": "http://proxy-server-hostname/"
+}
+----
+
+== Azure NetApp Files configuration
+
+To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] backend, you will need the following:
+
+* `subscriptionID` from an Azure subscription with Azure NetApp Files enabled
+* `tenantID`, `clientID`, and `clientSecret` from an https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service
+* Azure location that contains at least one https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]
+
+TIP: If you’re using Azure NetApp Files for the first time or in a new location, some initial configuration is required that the https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-quickstart-set-up-account-create-volumes?tabs=azure-portal[quickstart guide^] will walk you through.
+
+NOTE: Astra Trident 21.04.0 and earlier do not support Manual QoS capacity pools.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Default
+
+|`version`
+a|Always 1
+a|
+
+|`storageDriverName`
+a|“azure-netapp-files”
+a|
+
+|`backendName`
+a|Custom name for the storage backend
+a|Driver name + “_” + random characters
+
+|`subscriptionID`
+a|The subscription ID from your Azure subscription
+a|
+
+|`tenantID`
+a|The tenant ID from an App Registration
+a|
+
+|`clientID`
+a|The client ID from an App Registration
+a|
+
+|`clientSecret`
+a|The client secret from an App Registration
+a|
+
+|`serviceLevel`
+a|One of “Standard”, “Premium” or “Ultra”
+a|“” (random)
+
+|`location`
+a|Name of the Azure location new volumes will be created in
+a|“” (random)
+
+|`virtualNetwork`
+a|Name of a virtual network with a delegated subnet
+a|“” (random)
+
+|`subnet`
+a|Name of a subnet delegated to `Microsoft.Netapp/volumes`
+a|“” (random)
+
+|`nfsMountOptions`
+a|Fine-grained control of NFS mount options
+a|“-o nfsvers=3”
+
+|`limitVolumeSize`
+a|Fail provisioning if requested volume size is above this value
+a|“” (not enforced by default)
+
+|===
+
+NOTE: The Azure NetApp Files service does not support volumes less than 100 GB in size. To make it easier to deploy applications, Trident automatically creates 100 GB volumes if a smaller volume is requested.
+
+You can control how each volume is provisioned by default using these options in a special section of the configuration.
+
+[%header,cols=3*]
+|===
+|Option
+|Description
+|Default
+
+|`exportRule`
+a|The export rule(s) for new volumes. Must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.
+a|“0.0.0.0/0”
+
+|`snapshotDir`
+a|Controls visibility of the `.snapshot` directory
+a|“false”
+
+|`size`
+a|The default size of new volumes
+a|“100G”
+
+|===
+
+=== Example Azure NetApp Files configurations
+
+*Example 1: Minimal backend configuration for azure-netapp-files*
+
+This is the absolute minimum backend configuration. With this configuration, Trident will discover all of your NetApp accounts, capacity pools, and subnets delegated to ANF in every location worldwide, and place new volumes on one of them randomly.
+
+This configuration is useful when you’re just getting started with ANF and trying things out, but in practice you’re going to want to provide additional scoping for the volumes you provision to make sure that they have the characteristics you want and end up on a network that’s close to the compute that’s using it. See the subsequent examples for more details.
+
+----
+{
+    "version": 1,
+    "storageDriverName": "azure-netapp-files",
+    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
+    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
+    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
+    "clientSecret": "SECRET"
+}
+----
+
+*Example 2: Single location and specific service level for azure-netapp-files*
+
+This backend configuration places volumes in Azure’s “eastus” location in a “Premium” capacity pool. Trident automatically discovers all of the subnets delegated to ANF in that location and will place a new volume on one of them randomly.
+
+----
+{
+    "version": 1,
+    "storageDriverName": "azure-netapp-files",
+    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
+    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
+    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
+    "clientSecret": "SECRET",
+    "location": "eastus",
+    "serviceLevel": "Premium"
+}
+----
+
+*Example 3: Advanced configuration for azure-netapp-files*
+
+This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
+
+----
+{
+    "version": 1,
+    "storageDriverName": "azure-netapp-files",
+    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
+    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
+    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
+    "clientSecret": "SECRET",
+    "location": "eastus",
+    "serviceLevel": "Premium",
+    "virtualNetwork": "my-virtual-network",
+    "subnet": "my-subnet",
+    "nfsMountOptions": "nfsvers=3,proto=tcp,timeo=600",
+    "limitVolumeSize": "500Gi",
+    "defaults": {
+        "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
+        "size": "200Gi"
+    }
+}
+----
+
+*Example 4: Virtual storage pools with azure-netapp-files*
+
+This backend configuration defines multiple link:../trident-concepts/virtual-storage-pool.html[pools of storage^] in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those.
+
+This is just scratching the surface of the power of virtual storage pools and their labels.
+
+----
+{
+    "version": 1,
+    "storageDriverName": "azure-netapp-files",
+    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
+    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
+    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
+    "clientSecret": "SECRET",
+    "nfsMountOptions": "nfsvers=3,proto=tcp,timeo=600",
+    "labels": {
+        "cloud": "azure"
+    },
+    "location": "eastus",
+
+    "storage": [
+        {
+            "labels": {
+                "performance": "gold"
+            },
+            "serviceLevel": "Ultra"
+        },
+        {
+            "labels": {
+                "performance": "silver"
+            },
+            "serviceLevel": "Premium"
+        },
+        {
+            "labels": {
+                "performance": "bronze"
+            },
+            "serviceLevel": "Standard",
+        }
+    ]
+}
+----

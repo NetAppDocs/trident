@@ -1,28 +1,28 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/deploy-docker.html
-keywords: deploy, trident, trident for docker, docker
-summary: Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms, as well as the Cloud Volumes Service in AWS. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
+keywords: deploy, astra trident, trident for docker, docker
+summary: Astra Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms, as well as the Cloud Volumes Service in AWS. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
 ---
 
-= Deploy Trident
+= Deploy Astra Trident
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
-Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms, as well as the Cloud Volumes Service in AWS. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
+Astra Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms, as well as the Cloud Volumes Service in AWS. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
 
-Multiple instances of Trident can run concurrently on the same host. This allows simultaneous connections to multiple storage systems and storage types, with the ablity to customize the storage used for the Docker volumes.
+Multiple instances of Astra Trident can run concurrently on the same host. This allows simultaneous connections to multiple storage systems and storage types, with the ablity to customize the storage used for the Docker volumes.
 
 .What you'll need
 
-See the link:prereqs-docker.html[prerequisites for deployment^]. After you ensure the prerequisites are met, you are ready to deploy Trident.
+See the link:prereqs-docker.html[prerequisites for deployment^]. After you ensure the prerequisites are met, you are ready to deploy Astra Trident.
 
 == Docker managed plugin method (version 1.13/17.03 and later)
 
 .Before you begin
 
-NOTE: If you have used Trident pre Docker 1.13/17.03 in the traditional daemon method, ensure that you stop the Trident process and restart your Docker daemon before using the managed plugin method.
+NOTE: If you have used Astra Trident pre Docker 1.13/17.03 in the traditional daemon method, ensure that you stop the Astra Trident process and restart your Docker daemon before using the managed plugin method.
 
 . Stop all running instances:
 +
@@ -72,12 +72,12 @@ cat << EOF > /etc/netappdvp/config.json
 }
 EOF
 ----
-. Start Trident using the managed plugin system.
+. Start Astra Trident using the managed plugin system.
 +
 ----
 docker plugin install --grant-all-permissions --alias netapp netapp/trident-plugin:21.07 config=myConfigFile.json
 ----
-. Begin using Trident to consume storage from the configured system.
+. Begin using Astra Trident to consume storage from the configured system.
 +
 .. Create a volume named "firstVolume":
 +
@@ -177,7 +177,7 @@ docker volume rm trident_1
 docker volume rm trident_2
 ----
 
-== Start Trident at system startup
+== Start Astra Trident at system startup
 
 A sample unit file for systemd based systems can be found at `contrib/trident.service.example` in the Git repo. To use the file with CentOS/RHEL, do the following:
 

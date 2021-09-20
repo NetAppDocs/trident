@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/volumes-docker.html
-keywords: create volumes, trident, trident for docker, docker, docker volume
-summary: To create volumes, use the standard `docker volume` commands with the Trident driver name specified when needed.
+keywords: create volumes, astra trident, trident for docker, docker, docker volume
+summary: To create volumes, use the standard `docker volume` commands with the Astra Trident driver name specified when needed.
 ---
 
 = Work with volumes
@@ -10,58 +10,61 @@ summary: To create volumes, use the standard `docker volume` commands with the T
 :icons: font
 :imagesdir: ../media/
 
-You can easily create, clone, and remove volumes using the standard `docker volume` commands with the Trident driver name specified when needed.
+You can easily create, clone, and remove volumes using the standard `docker volume` commands with the Astra Trident driver name specified when needed.
 
 == Create a volume
 
-* Create a volume with a Trident driver using the default name:
+* Create a volume with a driver using the default name:
 +
-[source,console]
+----
 docker volume create -d netapp --name firstVolume
-
-* Create a volume with a specific Trident instance:
+----
+* Create a volume with a specific Astra Trident instance:
 +
-[source,console]
+----
 docker volume create -d ntap_bronze --name bronzeVolume
-
+----
 NOTE: If you do not specify any link:volume-driver-options.html[options^], the defaults for the driver are used.
 
-* Override the default volume size. See the following example to create a 20GiB volume with a Trident driver:
+* Override the default volume size. See the following example to create a 20GiB volume with a driver:
 +
-[source,console]
+----
 docker volume create -d netapp --name my_vol --opt size=20G
-
+----
 TIP: Volume sizes are expressed as strings containing an integer value with optional units (example: 10G, 20GB, 3TiB). If no units are specified, the default is G. Size units can be expressed either as powers of 2 (B, KiB, MiB, GiB, TiB) or powers of 10 (B, KB, MB, GB, TB). Shorthand units use powers of 2 (G = GiB, T = TiB, …).
 
 == Remove a volume
 
 * Remove the volume just like any other Docker volume:
 +
-[source,console]
+----
 docker volume rm firstVolume
+----
+IMPORTANT: When using the `solidfire-san` driver, the above example deletes and purges the volume.
 
-IMPORTANT: When using the solidfire-san driver, the above example deletes and purges the volume.
-
-Perform the steps below to upgrade Trident for Docker.
+Perform the steps below to upgrade Astra Trident for Docker.
 
 == Clone a volume
 
-When using the ontap-nas, ontap-san, solidfire-san, aws-cvs, and gcp-cvs storage drivers, Trident can clone volumes. When using the ontap-nas-flexgroup or ontap-nas-economy drivers, cloning is not supported. Creating a new volume from an existing volume will result in a new snapshot being created.
+When using the `ontap-nas`, `ontap-san`, `solidfire-san`, `aws-cvs`, and `gcp-cvs storage drivers`, Astra Trident can clone volumes. When using the `ontap-nas-flexgroup` or `ontap-nas-economy` drivers, cloning is not supported. Creating a new volume from an existing volume will result in a new snapshot being created.
 
 * Inspect the volume to enumerate snapshots:
 +
-[source,console]
+----
 docker volume inspect <volume_name>
+----
 
 * Create a new volume from an existing volume. This will result in a new snapshot being created:
 +
-[source,console]
+----
 docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_volume>
+----
 
 * Create a new volume from an existing snapshot on a volume. This will not create a new snapshot:
 +
-[source,console]
+----
 docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_volume> -o fromSnapshot=<source_snap_name>
+----
 
 === Example
 
@@ -99,4 +102,4 @@ volFromSnap
 
 == Access externally created volumes
 
-You can access externally created block devices (or their clones) by containers using Trident *only* if they have no partitions and if their filesystem is supported by Trident (for example: an `ext4`-formatted `/dev/sdc1` will not be accessible via Trident).
+You can access externally created block devices (or their clones) by containers using Trident *only* if they have no partitions and if their filesystem is supported by Astra Trident (for example: an `ext4`-formatted `/dev/sdc1` will not be accessible via Astra Trident).

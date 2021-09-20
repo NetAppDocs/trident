@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/gcp.html
 keywords: trident backend, cloud volumes service for google cloud platform, Google Cloud Platform
-summary: Learn about how to configure Cloud Volumes Service for Google Cloud as the backend for your Trident installation using the sample configurations provided.
+summary: Learn about how to configure Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
 ---
 
 = Configure a CVS for GCP backend
@@ -10,9 +10,9 @@ summary: Learn about how to configure Cloud Volumes Service for Google Cloud as 
 :icons: font
 :imagesdir: ../media/
 
-Learn about how to configure NetApp Cloud Volumes Service (CVS) for Google Cloud Platform (GCP) as the backend for your Trident installation using the sample configurations provided.
+Learn about how to configure NetApp Cloud Volumes Service (CVS) for Google Cloud Platform (GCP) as the backend for your Astra Trident installation using the sample configurations provided.
 
-NOTE: NetApp Cloud Volumes Service for Google Cloud does not support CVS-Performance volumes less than 100 GiB in size, or CVS volumes less than 1 TiB in size. Trident automatically creates volumes of the minimum size if a the volume requested is smaller than the minimum size.
+NOTE: NetApp Cloud Volumes Service for Google Cloud does not support CVS-Performance volumes less than 100 GiB in size, or CVS volumes less than 300 GiB in size. Astra Trident automatically creates volumes of the minimum size if a the volume requested is smaller than the minimum size.
 
 .What you'll need
 
@@ -22,6 +22,17 @@ To configure and use the https://cloud.netapp.com/cloud-volumes-service-for-gcp?
 * Project number of your Google Cloud account
 * Google Cloud service account with the `netappcloudvolumes.admin` role
 * API key file for your CVS service account
+
+Astra Trident now includes support for smaller volumes with the default https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-type[CVS service type on GCP^]. For backends created with `storageClass=software`, volumes will now have a minimum provisioning size of 300 GiB. CVS currently provides this feature under Controlled Availability and does not provide technical support. Users must sign up for access to sub-1TiB volumes https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[here^]. NetApp recommends customers consume sub-1TiB volumes for **non-production** workloads.
+
+NOTE: When deploying backends using the default CVS service type (`storageClass=software`), users must obtain access to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Astra Trident to provision sub-1TiB volumes. If not, volume creations will fail for PVCs that are lesser than 600 GiB. Obtain access to sub-1TiB volumes using https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form^].
+
+Volumes created by Astra Trident for the default CVS service level will be provisioned as follows:
+
+* PVCs that are smaller than 300 GiB will result in Astra Trident creating a 300 GiB CVS volume.
+* PVCs that are between 300 GiB to 600 GiB will result in Astra Trident creating a CVS volume of the requested size.
+* PVCs that are between 600 GiB and 1 TiB will result in Astra Trident creating a 1TiB CVS volume.
+* PVCs that are greater than 1 TiB will result in Astra Trident creating a CVS volume of the requested size.
 
 == Backend configuration options
 
@@ -36,7 +47,7 @@ See the following table for the backend configuration options:
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
 
-|`storageClass` |Type of storage. Choose from `hardware` (performance optimized) or `software` [scale optimized (beta)] |
+|`storageClass` |Type of storage. Choose from `hardware` (performance optimized) or `software` (CVS service type) |
 
 |`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal's Home page. |
 
@@ -44,9 +55,7 @@ See the following table for the backend configuration options:
 
 |`apiKey` |API key for the Google Cloud service account with the `netappcloudvolumes.admin` role. It includes the JSON-formatted contents of a Google Cloud service account's private key file (copied verbatim into the backend configuration file). |
 
-|`proxyURL` |Proxy URL if proxy server required to connect to CVS Account. The proxy server can either
-be an HTTP proxy or an HTTPS proxy. For an HTTPS proxy, certificate validation is skipped to allow the usage of
-self-signed certificates in the proxy server. Proxy servers with authentication enabled are not supported. |
+|`proxyURL` |Proxy URL if proxy server required to connect to CVS Account. The proxy server can either be an HTTP proxy or an HTTPS proxy. For an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. Proxy servers with authentication enabled are not supported. |
 
 |`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
 
@@ -54,12 +63,16 @@ self-signed certificates in the proxy server. Proxy servers with authentication 
 
 | `serviceLevel` |The CVS service level for new volumes. The values are "standard", "premium", and "extreme". |"standard"
 
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example: `\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
+|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
 |===
 
-NOTE: The `storageClass` is an optional parameter that you can use to select the desired https://cloud.google.com/solutions/partners/netapp-cloud-volumes/service-types?hl=en_US[CVS service type^]. You can choose from the base CVS service type (`storageClass=software`) or the CVS-Performance service type (`storageClass=hardware`), which Trident uses by default. Make sure you specify an `apiRegion` that provides the respective CVS `storageClass` in your backend definition.
+If using a shared VPC network, both `projectNumber` and `hostProjectNumber` must be specified. In that case, `projectNumber` is the service project, and `hostProjectNumber` is the host project.
 
-IMPORTANT: Trident's integration with the base CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
+The `apiRegion` represents the GCP region where Astra Trident creates CVS volumes. Astra Trident can mount and attach volumes on Kubernetes nodes that belong to the same GCP region. When creating a backend, it is important to ensure `apiRegion` matches the region Kubernetes nodes are deployed in. When creating cross-region Kubernetes clusters, CVS volumes that are created in a given `apiRegion` can only be used in workloads scheduled on nodes that are in the same GCP region.
+
+NOTE: `storageClass` is an optional parameter that you can use to select the desired https://cloud.google.com/solutions/partners/netapp-cloud-volumes/service-types?hl=en_US[CVS service type^]. You can choose from the base CVS service type (`storageClass=software`) or the CVS-Performance service type (`storageClass=hardware`), which Trident uses by default. Make sure you specify an `apiRegion` that provides the respective CVS `storageClass` in your backend definition.
+
+IMPORTANT: Astra Trident's integration with the base CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
 
 Each backend provisions volumes in a single Google Cloud region. To create volumes in other regions, you can define additional backends.
 
@@ -71,7 +84,7 @@ You can control how each volume is provisioned by default by specifying the foll
 |`exportRule` |The export rule(s) for new volumes |"0.0.0.0/0"
 |`snapshotDir` |Access to the `.snapshot` directory | "false"
 |`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept CVS default of 0)
-|`size` |The default size of new volumes |"1T"
+|`size` |The size of new volumes |"100Gi"
 |===
 
 The `exportRule` value must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.
@@ -82,7 +95,6 @@ NOTE: For all the volumes created on a CVS Google Cloud backend, Trident copies 
 
 This is the absolute minimum backend configuration.
 
-[source,console]
 ----
 {
     "version": 1,
@@ -106,9 +118,8 @@ This is the absolute minimum backend configuration.
 
 == Example 2: Base CVS service type configuration
 
-This example shows a backend definition that uses the base CVS service type, which is meant for general-purpose workloads and provides light/moderate performance, coupled with high zonal availability. This is a **beta** Trident integration that can be used in test environments.
+This example shows a backend definition that uses the base CVS service type, which is meant for general-purpose workloads and provides light/moderate performance, coupled with high zonal availability.
 
-[source,console]
 ----
 {
     "version": 1,
@@ -133,9 +144,8 @@ This example shows a backend definition that uses the base CVS service type, whi
 
 == Example 3: Single service level configuration
 
-This example shows a backend file that applies the same aspects to all Trident created storage in the Google Cloud us-west2 region. This example also shows the usage of `proxyURL` in the backend configuration file.
+This example shows a backend file that applies the same aspects to all Astra Trident-created storage in the Google Cloud us-west2 region. This example also shows the usage of `proxyURL` in the backend configuration file.
 
-[source,console]
 ----
 {
     "version": 1,
@@ -173,7 +183,6 @@ This example shows the backend definition file configured with virtual storage p
 
 In the sample backend definition file shown below, specific defaults are set for all storage pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual storage pools are defined in the `storage` section. In this example, each individual storage pool sets its own `serviceLevel`, and some pools overwrite the default values.
 
-[source,console]
 ----
 {
     "version": 1,
@@ -254,11 +263,10 @@ In the sample backend definition file shown below, specific defaults are set for
 }
 ----
 
-The following `StorageClass` definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each `StorageClass` the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+The following StorageClass definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each StorageClass the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
 
-The first `StorageClass` (`cvs-extreme-extra-protection`) maps to the first virtual storage pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. The last `StorageClass` (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Trident decides which virtual storage pool is selected and ensures that the snapshot reserve requirement is met.
+The first StorageClass (`cvs-extreme-extra-protection`) maps to the first virtual storage pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Astra Trident decides which virtual storage pool is selected and ensures that the snapshot reserve requirement is met.
 
-[source,console]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -319,14 +327,12 @@ allowVolumeExpansion: true
 
 After you create the backend configuration file, run the following command:
 
-[source,console]
 ----
 tridentctl create backend -f <backend-file>
 ----
 
 If the backend creation fails, something is wrong with the backend configuration. You can view the logs to determine the cause by running the following command:
 
-[source,console]
 ----
 tridentctl logs
 ----

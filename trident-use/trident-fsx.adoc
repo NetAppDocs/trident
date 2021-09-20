@@ -21,12 +21,12 @@ By using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that the
 If you are new to Astra Trident, familiarize yourself by using the links provided below:
 
 * link:../faq.html[FAQs^]
-* link:requirements.html[Requirements for using Astra Trident^]
-* link:kubernetes-deploy.html[Deploy Astra Trident^]
+* link:../trident-get-started/requirements.html[Requirements for using Astra Trident^]
+* link:../trident-get-started/kubernetes-deploy.html[Deploy Astra Trident^]
 * link:../trident-reco/storage-config-best-practices.html[Best practices for configuring ONTAP, Cloud Volumes ONTAP, and Amazon FSx for NetApp ONTAP^]
 * link:../trident-reco/integrate-trident.html#ontap[Integrate Astra Trident^]
-* link:../trident-use/ontap-san.html[ONTAP SAN backend configuration^]
-* link:../trident-use/ontap-nas.html[ONTAP NAS backend configuration^]
+* link:ontap-san.html[ONTAP SAN backend configuration^]
+* link:ontap-nas.html[ONTAP NAS backend configuration^]
 
 Learn more about driver capabilities link:../trident-concepts/ontap-drivers.html[here^].
 
@@ -52,8 +52,9 @@ Astra Trident offers two modes of authentication:
 * Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
 
 To learn more about authentication, see these links:
-* link:../trident-use/ontap-nas-prep.html[ONTAP NAS^]
-* link:../trident-use/ontap-san-prep.html[ONTAP SAN^]
+
+* link:ontap-nas-prep.html[ONTAP NAS^]
+* link:ontap-san-prep.html[ONTAP SAN^]
 
 == Deploy and configure Astra Trident on EKS with Amazon FSx for NetApp ONTAP
 
@@ -61,22 +62,22 @@ To learn more about authentication, see these links:
 
 * An existing Amazon EKS cluster or self-managed Kubernetes cluster with `kubectl` installed.
 * An existing Amazon FSx for NetApp ONTAP file system and storage virtual machine (SVM) that is reachable from your cluster’s worker nodes.
-* Worker nodes that are prepared for link:../trident-use/worker-node-prep.html[NFS and/or iSCSI^].
+* Worker nodes that are prepared for link:worker-node-prep.html[NFS and/or iSCSI^].
 +
 NOTE: Ensure that you follow the node preparation steps required for Amazon Linux and Ubuntu https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html[Amazon Machine Images^] (AMIs) depending on your EKS AMI type.
 
-For other Astra Trident requirements, see link:requirements.html[here^].
+For other Astra Trident requirements, see link:../trident-get-started/requirements.html[here^].
 
 .Steps
 
-. Deploy Astra Trident using one of the link:kubernetes-deploy.html[deployment methods^].
+. Deploy Astra Trident using one of the ../trident-get-started/kubernetes-deploy.html[deployment methods^].
 . Configure Astra Trident as follows:
 .. Collect your SVM’s management LIF DNS name. For example, by using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
 +
 ----
 aws fsx describe-storage-virtual-machines --region <file system region>
 ----
-. Create and install certificates for authentication. If you are using an `ontap-san` backend, see link:../trident-use/ontap-san.html[here^]. If you are using an `ontap-nas` backend, see link:../trident-use/ontap-nas.html[here^].
+. Create and install certificates for authentication. If you are using an `ontap-san` backend, see link:ontap-san.html[here^]. If you are using an `ontap-nas` backend, see link:ontap-nas.html[here^].
 +
 NOTE: You can log in to your file system (for example to install certificates) using SSH from anywhere that can reach your file system. Use the `fsxadmin` user, the password you configured when you created your file system, and the management DNS name from `aws fsx describe-file-systems`.
 . Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:

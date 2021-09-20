@@ -16,13 +16,12 @@ The https://github.com/NetApp/trident/releases[Trident installer bundle^] includ
 For usage information, run `tridentctl --help`.
 
 The available commands and global options are as follows:
-
-[source,console]
 ----
 Usage:
   tridentctl [command]
 ----
 Available commands:
+
 * `create`: Add a resource to Astra Trident.
 * `delete`: Remove one or more resources from Astra Trident.
 * `get`: Get one or more resources from Astra Trident.
@@ -38,6 +37,7 @@ Available commands:
 * `version`: Print the version of Astra Trident.
 
 Flags:
+
 * ``-d, --debug`: Debug output.
 * ``-h, --help`: Help for `tridentctl`.
 * ``-n, --namespace string`: Namespace of Astra Trident deployment.
@@ -62,6 +62,7 @@ Usage:
   tridentctl delete [option]
 ----
 Available options:
+
 * `backend`: Delete one or more storage backends from Astra Trident.
 * `node`: Delete one or more CSI nodes from Astra Trident.
 * `snapshot`: Delete one or more volume snapshots from Astra Trident.
@@ -76,6 +77,7 @@ Usage:
   tridentctl get [option]
 ----
 Available options:
+
 * `backend`: Get one or more storage backends from Astra Trident.
 * `snapshot`: Get one or more snapshots from Astra Trident.
 * `storageclass`: Get one or more storage classes from Astra Trident.
@@ -103,6 +105,7 @@ Aliases:
 `volume, v`
 
 Flags:
+
 * ``-f, --filename string`: Path to YAML or JSON PVC file.
 * ``-h, --help`: Help for volume.
 * ``--no-manage`: Create PV/PVC only. Don't assume volume lifecycle management.
@@ -115,6 +118,7 @@ Usage:
   tridentctl install [flags]
 ----
 Flags:
+
 * ``--autosupport-image string`: The container image for Autosupport Telemetry (default "netapp/trident autosupport:20.07.0").
 * ``--autosupport-proxy string`: The address/port of a proxy for sending Autosupport Telemetry.
 * ``--csi`: Install CSI Trident (override for Kubernetes 1.13 only, requires feature gates).
@@ -141,6 +145,7 @@ Usage:
   tridentctl logs [flags]
 ----
 Flags:
+
 * ``-a, --archive`: Create a support archive with all logs unless otherwise specified.
 * ``-h, --help`: Help for logs.
 * ``-l, --log string`: Astra Trident log to display. One of trident|auto|trident-operator|all (default "auto").

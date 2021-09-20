@@ -5,15 +5,17 @@ keywords: kubernetes, clusters, nodes, components, master, compute
 summary: A Kubernetes cluster typically consists of two types of nodes, each responsible for different aspects of functionality.
 ---
 
-= Integrate Trident
+= Integrate Astra Trident
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-To integrate Trident, the following design and architectural elements require integration: driver selection and deployment, storage class design, virtual storage pool design, PVC impacts on storage provisioning, volume operations, and OpenShift services deployment using Trident.
+To integrate Astra Trident, the following design and architectural elements require integration: driver selection and deployment, storage class design, virtual storage pool design, PVC impacts on storage provisioning, volume operations, and OpenShift services deployment using Astra Trident.
 
-== Trident backend design
+== Backend design
+
+Learn more about backend design.
 
 === ONTAP
 
@@ -31,14 +33,13 @@ The five drivers for ONTAP backends are listed below:
 * `ontap-san`: Each PV provisioned is a LUN within its own FlexVolume.
 * `ontap-san-economy`: Each PV provisioned is a LUN, with a configurable number of LUNs per FlexVolume (default is 100).
 
-Choosing between the three NFS drivers has some ramifications to the features which are made available to the application.
+Choosing between the three NAS drivers has some ramifications to the features which are made available to the application.
 
-Note that, in the tables below, not all of the capabilities are exposed through Trident. Some must be applied by the storage administrator after provisioning if that functionality is desired. The superscript footnotes distinguish the functionality per feature and driver.
+Note that, in the tables below, not all of the capabilities are exposed through Astra Trident. Some must be applied by the storage administrator after provisioning if that functionality is desired. The superscript footnotes distinguish the functionality per feature and driver.
 
-.ONTAP NAS driver capabilities
 [cols=8*,options="header",cols="20,10,10,10,10,10,10,10"]
 |===
-|ONTAP NFS drivers
+|ONTAP NAS drivers
 |Snapshots
 |Clones
 |Dynamic export policies
@@ -53,9 +54,8 @@ Yes | Yesfootnote:3[]| Yes | Yesfootnote:3[]
 Yesfootnote:1[]| Yes | Yesfootnote:1[]
 |===
 
-Trident offers 2 SAN drivers for ONTAP, whose capabilities are shown below.
+Astra Trident offers 2 SAN drivers for ONTAP, whose capabilities are shown below.
 
-.ONTAP SAN driver capabilities
 [cols=8*,options="header",cols="20,10,10,10,10,10,10,10"]
 |===
 |ONTAP SAN drivers
@@ -98,7 +98,6 @@ Amazon FSx for ONTAP enables customers to leverage NetApp features, performance,
 
 The `solidfire-san` driver used with the NetApp HCI/SolidFire platforms, helps the admin configure an Element backend for Trident on the basis of QoS limits. If you would like to design your backend to set the specific QoS limits on the volumes provisioned by Trident, use the `type` parameter in the backend file. The admin also can restrict the volume size that could be created on the storage using the `limitVolumeSize` parameter. Currently, Element storage features like volume resize and volume replication are not supported through the `solidfire-san` driver. These operations should be done manually through Element Software web UI.
 
-.SolidFire SAN driver capabilities
 [cols=8*,options="header",cols="20,10,10,10,10,10,10,10"]
 |===
 |SolidFire Driver
@@ -122,11 +121,10 @@ Yesfootnote:2[]: Supported for raw-block volumes
 
 == Azure NetApp Files backend driver
 
-Trident uses the `azure-netapp-files` driver to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files] service.
+Astra Trident uses the `azure-netapp-files` driver to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files] service.
 
 More information about this driver and how to configure it can be found in link:https://azure.microsoft.com/en-us/services/netapp/[Trident backend configuration for Azure NetApp Files].
 
-.Table: Azure NetApp Files driver capabilities
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
 |Azure NetApp Files Driver
@@ -146,9 +144,8 @@ Yesfootnote:1[]: Not Trident managed
 --
 == Cloud Volumes Service with AWS backend driver
 
-Trident uses the `aws-cvs` driver to link with the Cloud Volumes Service on the AWS backend. To configure the AWS backend on Trident, you are required specify `apiRegion`, `apiURL`, `apiKey`, and the `secretKey` in the backend file. These values can be found in the CVS web portal in Account settings/API access. The supported service levels are aligned with CVS and include `standard`, `premium`, and `extreme`. More information on this driver may be found in the link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/backends/cvs_aws.html#cloud-volumes-service-for-aws[Trident backend configuration for Cloud Volumes Service for AWS backend]. Currently, 100G is the minimum volume size that will be provisioned. Future releases of CVS may remove this restriction.
+Trident uses the `aws-cvs` driver to link with the Cloud Volumes Service on the AWS backend. To configure the AWS backend on Trident, you are required specify `apiRegion`, `apiURL`, `apiKey`, and the `secretKey` in the backend file. These values can be found in the CVS web portal in Account settings/API access. The supported service levels are aligned with CVS and include `standard`, `premium`, and `extreme`. Currently, 100G is the minimum volume size that will be provisioned. Future releases of CVS may remove this restriction.
 
-.Cloud Volume Service driver capabilities
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
 |CVS for AWS Driver
@@ -169,20 +166,15 @@ Yesfootnote:1[]: Not Trident managed
 
 The `aws-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
 
-For more information on the virtual storage pools feature, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/concepts/virtual_storage_pools.html#virtual-storage-pools[Virtual Storage Pools].
-
 == Cloud Volumes Service with GCP backend driver
 
 Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on the GCP backend. To configure the GCP backend on Trident, you are required specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. The project number may be found in the GCP web portal, while the API key must be taken from the service account private key file that you created while setting up API access for Cloud Volumes on GCP. Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types]:
 
 . *CVS*: The base CVS service type, which provides high zonal availability with limited/moderate performance levels.
-. *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. Choose from three unique service levels [`standard`, `premium`, and `extreme`].
-
-Fpr more information on this driver, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/backends/cvs_gcp.html#cloud-volumes-service-for-gcp[Trident backend configuration for Cloud Volumes Service for GCP documentation]. Currently, 100 GiB is the minimum CVS-Performance volume size that will be provisioned, while CVS volumes must be at least 300 GiB. Future releases of CVS may remove this restriction.
+. *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. Choose from three unique service levels [`standard`, `premium`, and `extreme`]. Currently, 100 GiB is the minimum CVS-Performance volume size that will be provisioned, while CVS volumes must be at least 300 GiB. Future releases of CVS may remove this restriction.
 
 CAUTION: When deploying backends using the default CVS service type [`storageClass=software`], users *must obtain access* to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creations *will fail* for PVCs that are <600 GiB. Use link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form] to obtain access to sub-1TiB volumes.
 
-.Table: Cloud Volume Service driver capabilities
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
 |CVS for GCP Driver
@@ -203,8 +195,6 @@ Yesfootnote:1[]: Not Trident managed
 
 The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
 
-For more information on the virtual storage pools feature, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/concepts/virtual_storage_pools.html#virtual-storage-pools[Virtual Storage Pools].
-
 == Storage Class design
 
 Individual Storage Classes need to be configured and applied to create a Kubernetes Storage Class object. This section discusses how to design a storage class for your application.
@@ -217,27 +207,19 @@ The `storagePools` parameter helps restrict storage to the set of pools that mat
 
 The `excludeStoragePools` parameter is used to specifically exclude the listed set of pools that match the attributes.
 
-To see how these paramaters are used, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/concepts/objects.html#trident-storageclass-objects[Trident StorageClass objects].
-
 === Storage Class design to emulate QoS policies
 
 If you would like to design Storage Classes to emulate Quality of Service policies, create a Storage Class with the `media` attribute as `hdd` or `ssd`. Based on the `media` attribute mentioned in the storage class, Trident will select the appropriate backend that serves `hdd` or `ssd` aggregates to match the media attribute and then direct the provisioning of the volumes on to the specific aggregate. Therefore we can create a storage class PREMIUM which would have `media` attribute set as `ssd` which could be classified as the PREMIUM QoS policy. We can create another storage class STANDARD which would have the media attribute set as `hdd' which could be classified as the STANDARD QoS policy. We could also use the ``IOPS'' attribute in the storage class to redirect provisioning to an Element appliance which can be defined as a QoS Policy.
 
-To see how these paramaters are used, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/concepts/objects.html#trident-storageclass-objects[Trident StorageClass objects].
-
 == Storage Class Design to utilize backend based on specific features
 
 Storage Classes can be designed to direct volume provisioning on a specific backend where features such as thin and thick provisioning, snapshots, clones, and encryption are enabled. To specify which storage to use, create Storage Classes that specify the appropriate backend with the required feature enabled.
-
-To see how these paramaters are used, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/concepts/objects.html#trident-storageclass-objects[Trident StorageClass objects].
 
 == Storage Class Design for Virtual Storage Pools
 
 Virtual Storage Pools are available for all Trident backends. You can define Virtual Storage Pools for any backend, using any driver that Trident provides.
 
 Virtual Storage Pools allow an administrator to create a level of abstraction over backends which can be referenced through Storage Classes, for greater flexibility and efficient placement of volumes on backends. Different backends can be defined with the same class of service. Moreover, multiple Storage Pools can be created on the same backend but with different characteristics. When a Storage Class is configured with a selector with the specific labels , Trident chooses a backend which matches all the selector labels to place the volume. If the Storage Class selector labels matches multiple Storage Pools, Trident will choose one of them to provision the volume from.
-
-For more information and applicable parameters, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/concepts/virtual_storage_pools.html#virtual-storage-pools[Virtual Storage Pools].
 
 == Virtual Storage Pool Design
 
@@ -263,7 +245,6 @@ When requesting storage via a PVC, one of the mandatory fields is the access mod
 
 Trident will attempt to match the storage protocol used with the access method specified according to the following matrix. This is independent of the underlying storage platform.
 
-.Protocols used by access modes
 [cols=4*,options="header",cols="20,30,30,30"]
 |===
 |
@@ -282,8 +263,7 @@ A request for a ReadWriteMany PVC submitted to a Trident deployment without an N
 
 Persistent volumes are, with two exceptions, immutable objects in Kubernetes. Once created, the reclaim policy and the size can be modified. However, this doesn’t prevent some aspects of the volume from being modified outside of Kubernetes. This may be desirable in order to customize the volume for specific applications, to ensure that capacity is not accidentally consumed, or simply to move the volume to a different storage controller for any reason.
 
-NOTE: Kubernetes in-tree provisioners do not support volume resize operations for NFS or iSCSI PVs at this time. Trident supports expanding both NFS and iSCSI volumes. For a list of PV types which support volume
-resizing, see link:https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims[Kubernetes documentation on Expanding Persistent Volumes Claims].
+NOTE: Kubernetes in-tree provisioners do not support volume resize operations for NFS or iSCSI PVs at this time. Trident supports expanding both NFS and iSCSI volumes.
 
 The connection details of the PV cannot be modified after creation.
 
@@ -291,13 +271,9 @@ The connection details of the PV cannot be modified after creation.
 
 Trident supports on-demand volume snapshot creation and the creation of PVCs from snapshots using the CSI framework. Snapshots provide a convenient method of maintaining point-in-time copies of the data and have a lifecycle independent of the source PV in Kubernetes. These snapshots can be used to clone PVCs.
 
-To see an example of how volume snapshots work, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/volumes/snapshots.html#create-pvcs-from-volumesnapshots[Create PVCs from VolumeSnapshots].
-
 === Creating Volumes from Snapshots with Trident’s Enhanced CSI Provisioner
 
 Trident also supports the creation of PersistentVolumes from volume snapshots. To accomplish this, just create a PersistentVolumeClaim and mention the `datasource` as the required snapshot from which the volume needs to be created. Trident will handle this PVC by creating a volume with the data present on the snapshot. With this feature, it is possible to duplicate data across regions, create test environments, replace a damaged or corrupted production volume in its entirety, or retrieve specific files and directories and transfer them to another attached volume.
-
-For more information, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/volumes/snapshots.html#create-pvcs-from-volumesnapshots[Create PVCs from VolumeSnapshots].
 
 == Volume Move Operations
 
@@ -305,11 +281,11 @@ Storage administrators have the ability to move volumes between aggregates and c
 
 However, moving volumes across backends is not supported automatically by Trident. This includes between SVMs in the same cluster, between clusters, or onto a different storage platform (even if that storage system is one which is connected to Trident).
 
-If a volume is copied to another location, the link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/volumes/import.html#importing-a-volume[volume import feature] may be used to import current volumes into Trident.
+If a volume is copied to another location, the volume import feature may be used to import current volumes into Trident.
 
 == Expanding volumes
 
-Trident supports resizing NFS and iSCSI PVs, beginning with the `18.10` and `19.10` releases respectively. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, Element/HCI and Cloud Volumes Service backends. To see examples and conditions that must be met, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/volumes/vol-expansion.html#expanding-an-nfs-volume[Expanding an NFS volume] and link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/volumes/vol-expansion.html#expanding-an-iscsi-volume[Expanding an iSCSI volume]. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will utomatically take care of resizing the volume on the storage cluster.
+Trident supports resizing NFS and iSCSI PVs, beginning with the `18.10` and `19.10` releases respectively. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, Element/HCI and Cloud Volumes Service backends. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will utomatically take care of resizing the volume on the storage cluster.
 
 == Import an existing volume into Kubernetes
 
@@ -317,14 +293,11 @@ Volume Import provides the ability to import an existing storage volume into a K
 
 When using the ONTAP and `solidfire-san` drivers, use the command `tridentctl import volume <backend-name> <volume-name> -f /path/pvc.yaml` to import an existing volume into Kubernetes to be managed by Trident. The PVC YAML or JSON file used in the import volume command points to a storage class which identifies Trident as the provisioner. When using a HCI/SolidFire backend, ensure the volume names are unique. If the volume names are duplicated, clone the volume to a unique name so the volume import feature can distinguish between them.
 
-If the `aws-cvs`, `azure-netapp-files` or `gcp-cvs` driver is used, use the command
-`tridentctl import volume <backend-name> <volume path> -f /path/pvc.yaml` to import the volume into Kubernetes to be managed by Trident. This ensures a unique volume reference.
+If the `aws-cvs`, `azure-netapp-files` or `gcp-cvs` driver is used, use the command `tridentctl import volume <backend-name> <volume path> -f /path/pvc.yaml` to import the volume into Kubernetes to be managed by Trident. This ensures a unique volume reference.
 
 When the above command is executed, Trident will find the volume on the backend and read its size. It will automatically add (and overwrite if necessary) the configured PVC’s volume size. Trident then creates the new PV and Kubernetes binds the PVC to the PV.
 
 If a container was deployed such that it required the specific imported PVC, it would remain in a pending state until the PVC/PV pair are bound via the volume import process. After the PVC/PV pair are bound, the container should come up, provided there are no other issues.
-
-For information, see link:https://netapp-trident.readthedocs.io/en/latest/kubernetes/operations/tasks/volumes/import.html#importing-a-volume[Importing a volume].
 
 == Deploying OpenShift services using Trident
 
@@ -353,7 +326,6 @@ NOTE: The tables below only contain the variables which are relevant for storage
 
 The variables in the below table will result in the Ansible playbook creating a PV and PVC for the logging service using the details provided. This method is significantly less flexible than using the component installation playbook after OpenShift installation, however, if you have existing volumes available, it is an option.
 
-.Table: Logging variables when deploying at OpenShift install time
 [cols=2*,options="header",cols="40,40"]
 |===
 |Variable
@@ -368,7 +340,6 @@ The hostname or IP address of the NFS host. This should be set to the data LIF f
 
 If your OpenShift cluster is already running, and therefore Trident has been deployed and configured, the installer can use dynamic provisioning to create the volumes. The following variables will need to be configured.
 
-.Table: Logging variables when deploying after OpenShift install
 [cols=2*,options="header",cols="40,40"]
 |===
 |Variable
@@ -397,7 +368,6 @@ Like with the logging service, and OpenShift as a whole, Ansible is used to depl
 
 NOTE: The tables below only contain the variables which are relevant for storage configuration as it relates to the metrics service. There are many other options found in the documentation which should be reviewed, configured, and used according to your deployment.
 
-.Table: Metrics variables when deploying at OpenShift install time
 [cols=2*,options="header",cols="40,40"]
 |===
 |Variable
@@ -412,7 +382,6 @@ e.g. `pv_ose_metrics`, of the PV to create.
 
 If your OpenShift cluster is already running, and therefore Trident has been deployed and configured, the installer can use dynamic provisioning to create the volumes. The following variables will need to be configured.
 
-.Table: Metrics variables when deploying after OpenShift install
 [cols=2*,options="header",cols="40,40"]
 |===
 |Variable

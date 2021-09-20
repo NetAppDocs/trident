@@ -164,7 +164,7 @@ Total volume size = [(PVC requested size) / (1 - (snapshotReserve percentage) / 
 
 The 1.1 is the extra 10 percent Astra Trident adds to the FlexVol to accommodate the LUN metadata. For `snapshotReserve` = 5%, and PVC request = 5GiB, the total volume size is 5.79GiB and the available size is 5.5GiB. The `volume show` command should show results similar to this example:
 
-image::../media/vol-show-san.png[Shows the output of the volume san command.]
+image::../media/vol-show-san.png[Shows the output of the volume show command.]
 
 Currently, resizing is the only way to use the new calculation for an existing volume.
 
@@ -172,7 +172,7 @@ Currently, resizing is the only way to use the new calculation for an existing v
 
 The following examples show basic configurations that leave most parameters to default. This is the easiest way to define a backend.
 
-NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, the recommendation is to specify DNS names for LIFs instead of IP addresses.
+NOTE: If you are using Amazon FSx on NetApp ONTAP with Astra Trident, the recommendation is to specify DNS names for LIFs instead of IP addresses.
 
 === `ontap-san` driver with certificate-based authentication
 

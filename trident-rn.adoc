@@ -14,7 +14,16 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 == What's new
 
-NetApp is continually improving and enhancing its products and services. Here are some of the latest features and functionalities available with Trident.
+NetApp is continually improving and enhancing its products and services. Here are some of the latest features and functionalities available with Astra Trident.
+
+=== Astra Trident 21.07.02
+
+* Fixed issue where clones of XFS volumes could not be mounted on the same node as the source volume.
+
+==== Enhancements
+
+* Added support for Kubernetes 1.22.
+* Enabled the Trident operator and Helm chart to work with Kubernetes 1.22.
 
 === Astra Trident 21.07.01
 
@@ -53,7 +62,7 @@ Known issues identify problems that might prevent you from using the product suc
 
 * When using Astra Trident over IPv6, you should specify `managementLIF` and `dataLIF` in the backend definition within square brackets. For example, ``[fd20:8b1e:b258:2000:f816:3eff:feec:0]``.
 
-* If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm. 
+* If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm.
 
 == Find more information
 * https://github.com/NetApp/trident[Astra Trident GitHub^]

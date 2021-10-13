@@ -16,10 +16,10 @@ NOTE: This feature is available from Kubernetes 1.17 (beta) and is GA from 1.20.
 
 .What you'll need
 
-* Creating volume snapshots requires an external snapshot controller to be created, as well as some Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator that is being used (for example: Kubeadm, GKE, OpenShift). Check with your Kubernetes orchestrator to confirm these requirements are met.
+* Creating volume snapshots requires an external snapshot controller to be created as well as some Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator that is being used (for example: Kubeadm, GKE, OpenShift).
 
 You can create an external snapshot-controller and snapshot CRDs as follows:
-+
+
 . Create volume snapshot CRDs:
 +
 ----
@@ -58,7 +58,7 @@ deletionPolicy: Delete
 
 The `driver` points to Astra Trident’s CSI driver. `deletionPolicy` can be `Delete` or `Retain`. When set to `Retain`, the underlying physical snapshot on the storage cluster is retained even when the `VolumeSnapshot` object is deleted.
 
-== Create a snapshot of an existing PVC
+== Step 2: Create a snapshot of an existing PVC
 
 ----
 $ cat snap.yaml
@@ -111,7 +111,7 @@ Status:
 
 The `Snapshot Content Name` identifies the VolumeSnapshotContent object which serves this snapshot. The `Ready To Use` parameter indicates that the Snapshot can be used to create a new PVC.
 
-== Create PVCs from VolumeSnapshots
+== Step 3: Create PVCs from VolumeSnapshots
 
 See the following example for creating a PVC using a snapshot:
 

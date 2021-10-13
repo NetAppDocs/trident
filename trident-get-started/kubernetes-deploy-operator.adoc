@@ -46,7 +46,7 @@ In addition to the prerequisites listed above, to deploy Trident Operator by usi
 See the following example:
 +
 ----
-$ helm install <name> trident-operator-21.07.1.tgz
+helm install <name> trident-operator-21.07.1.tgz --namespace <namespace you want to use for Trident>
 ----
 
 There are two ways to pass configuration data during the install:

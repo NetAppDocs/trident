@@ -27,7 +27,7 @@ Astra Trident offers two modes of authenticating an ONTAP backend.
 
 Users can also choose to update existing backends, opting to move from credential-based to certificate-based, and vice-versa. If *both credentials and certificates are provided*, Astra Trident will default to using certificates while issuing a warning to remove the credentials from the backend definition.
 
-=== Credential-based authentication
+=== Enable credential-based authentication
 
 Astra Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Astra Trident releases. A custom security login role can be created and used with Astra Trident, but is not recommended.
 
@@ -47,7 +47,7 @@ A sample backend definition will look like this:
 
 Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation/updation of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
 
-=== Certificate-based Authentication
+=== Enable certificate-based Authentication
 
 New and existing backends can use a certificate and communicate with the ONTAP backend. Three parameters are required in the backend definition.
 
@@ -119,7 +119,7 @@ $ tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 +------------+----------------+--------------------------------------+--------+---------+
 ----
 
-== Update authentication methods or rotate credentials
+=== Update authentication methods or rotate credentials
 
 You can update an existing backend to make use of a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, use an updated `backend.json` file containing the required parameters to execute `tridentctl backend update`.
 ----

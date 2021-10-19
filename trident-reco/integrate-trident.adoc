@@ -88,11 +88,11 @@ NOTE: The `solidfire-san` driver is also capable of cloning PVCs.
 
 Cloud Volumes ONTAP provides data control along with enterprise-class storage features for various use cases, including file shares and block-level storage serving NAS and SAN protocols (NFS, SMB / CIFS, and iSCSI). The compatible drivers for Cloud Volume ONTAP are `ontap-nas`, `ontap-nas-economy`, `ontap-san` and `ontap-san-economy`. These are applicable for Cloud Volume ONTAP for AWS, Cloud Volume ONTAP for Azure, Cloud Volume ONTAP for GCP.
 
-*Choosing a backend driver for Amazon FSx for ONTAP*
+=== Choose a backend driver for Amazon FSx for ONTAP
 
 Amazon FSx for ONTAP enables customers to leverage NetApp features, performance, and administrative capabilities they’re familiar with, while taking advantage of the simplicity, agility, security, and scalability of storing data on AWS. FSx for ONTAP supports many of ONTAP’s file system features and administration APIs. The compatible drivers for Cloud Volume ONTAP are `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san` and `ontap-san-economy`.
 
-== Element Software (NetApp HCI/SolidFire)
+=== Choose a backend driver for NetApp HCI/SolidFire
 
 The `solidfire-san` driver used with the NetApp HCI/SolidFire platforms, helps the admin configure an Element backend for Trident on the basis of QoS limits. If you would like to design your backend to set the specific QoS limits on the volumes provisioned by Trident, use the `type` parameter in the backend file. The admin also can restrict the volume size that could be created on the storage using the `limitVolumeSize` parameter. Currently, Element storage features like volume resize and volume replication are not supported through the `solidfire-san` driver. These operations should be done manually through Element Software web UI.
 
@@ -113,15 +113,15 @@ Yesfootnote:1[]
 [verse]
 --
 Footnote:
-Yesfootnote:1[]: Not Trident managed
+Yesfootnote:1[]: Not managed by Astra Trident
 Yesfootnote:2[]: Supported for raw-block volumes
 --
 
-== Azure NetApp Files backend driver
+=== Choose a backend driver for Azure NetApp Files
 
-Astra Trident uses the `azure-netapp-files` driver to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files] service.
+Astra Trident uses the `azure-netapp-files` driver to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] service.
 
-More information about this driver and how to configure it can be found in link:https://azure.microsoft.com/en-us/services/netapp/[Trident backend configuration for Azure NetApp Files].
+More information about this driver and how to configure it can be found in link:https://azure.microsoft.com/en-us/services/netapp/[Astra Trident backend configuration for Azure NetApp Files^].
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -138,11 +138,11 @@ More information about this driver and how to configure it can be found in link:
 [verse]
 --
 Footnote:
-Yesfootnote:1[]: Not Trident managed
+Yesfootnote:1[]: Not managed by Astra Trident
 --
-== Cloud Volumes Service with AWS backend driver
+=== Choose a backend driver for Cloud Volumes Service with AWS
 
-Trident uses the `aws-cvs` driver to link with the Cloud Volumes Service on the AWS backend. To configure the AWS backend on Trident, you are required specify `apiRegion`, `apiURL`, `apiKey`, and the `secretKey` in the backend file. These values can be found in the CVS web portal in Account settings/API access. The supported service levels are aligned with CVS and include `standard`, `premium`, and `extreme`. Currently, 100G is the minimum volume size that will be provisioned. Future releases of CVS may remove this restriction.
+Astra Trident uses the `aws-cvs` driver to link with the Cloud Volumes Service on the AWS backend. To configure the AWS backend on Trident, you are required specify `apiRegion`, `apiURL`, `apiKey`, and the `secretKey` in the backend file. These values can be found in the CVS web portal in Account settings/API access. The supported service levels are aligned with CVS and include `standard`, `premium`, and `extreme`. Currently, 100G is the minimum volume size that will be provisioned. Future releases of CVS may remove this restriction.
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -159,19 +159,19 @@ Trident uses the `aws-cvs` driver to link with the Cloud Volumes Service on the 
 [verse]
 --
 Footnote:
-Yesfootnote:1[]: Not Trident managed
+Yesfootnote:1[]: Not managed by Astra Trident
 --
 
 The `aws-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
 
-== Cloud Volumes Service with GCP backend driver
+=== Choose a backend driver for Cloud Volumes Service with GCP
 
-Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on the GCP backend. To configure the GCP backend on Trident, you are required specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. The project number may be found in the GCP web portal, while the API key must be taken from the service account private key file that you created while setting up API access for Cloud Volumes on GCP. Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types]:
+Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on the GCP backend. To configure the GCP backend on Trident, you are required specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. The project number may be found in the GCP web portal, while the API key must be taken from the service account private key file that you created while setting up API access for Cloud Volumes on GCP. Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
 . *CVS*: The base CVS service type, which provides high zonal availability with limited/moderate performance levels.
 . *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. Choose from three unique service levels [`standard`, `premium`, and `extreme`]. Currently, 100 GiB is the minimum CVS-Performance volume size that will be provisioned, while CVS volumes must be at least 300 GiB. Future releases of CVS may remove this restriction.
 
-CAUTION: When deploying backends using the default CVS service type [`storageClass=software`], users *must obtain access* to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creations *will fail* for PVCs that are <600 GiB. Use link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form] to obtain access to sub-1TiB volumes.
+CAUTION: When deploying backends using the default CVS service type [`storageClass=software`], users *must obtain access* to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creations *will fail* for PVCs that are <600 GiB. Use link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form^] to obtain access to sub-1TiB volumes.
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -188,10 +188,10 @@ CAUTION: When deploying backends using the default CVS service type [`storageCla
 [verse]
 --
 Footnote:
-Yesfootnote:1[]: Not Trident managed
+Yesfootnote:1[]: Not managed by Astra Trident
 --
 
-The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
+The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Astra Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
 
 == Storage Class design
 
@@ -201,7 +201,7 @@ Individual Storage Classes need to be configured and applied to create a Kuberne
 
 Filtering can be used within a specific storage class object to determine which storage pool or set of pools are to be used with that specific storage class. Three sets of filters can be set in the Storage Class: `storagePools`, `additionalStoragePools`, and/or `excludeStoragePools`.
 
-The `storagePools` parameter helps restrict storage to the set of pools that match any specified attributes. The `additionalStoragePools` parameter is used to extend the set of pools that Trident will use for provisioning along with the set of pools selected by the attributes and `storagePools` parameters. You can use either parameter alone or both together to make sure that the appropriate set of storage pools are selected.
+The `storagePools` parameter helps restrict storage to the set of pools that match any specified attributes. The `additionalStoragePools` parameter is used to extend the set of pools that Astra Trident will use for provisioning along with the set of pools selected by the attributes and `storagePools` parameters. You can use either parameter alone or both together to make sure that the appropriate set of storage pools are selected.
 
 The `excludeStoragePools` parameter is used to specifically exclude the listed set of pools that match the attributes.
 
@@ -215,33 +215,33 @@ Storage Classes can be designed to direct volume provisioning on a specific back
 
 == Storage Class Design for Virtual Storage Pools
 
-Virtual Storage Pools are available for all Trident backends. You can define Virtual Storage Pools for any backend, using any driver that Trident provides.
+Virtual Storage Pools are available for all Astra Trident backends. You can define Virtual Storage Pools for any backend, using any driver that Astra Trident provides.
 
-Virtual Storage Pools allow an administrator to create a level of abstraction over backends which can be referenced through Storage Classes, for greater flexibility and efficient placement of volumes on backends. Different backends can be defined with the same class of service. Moreover, multiple Storage Pools can be created on the same backend but with different characteristics. When a Storage Class is configured with a selector with the specific labels , Trident chooses a backend which matches all the selector labels to place the volume. If the Storage Class selector labels matches multiple Storage Pools, Trident will choose one of them to provision the volume from.
+Virtual Storage Pools allow an administrator to create a level of abstraction over backends which can be referenced through Storage Classes, for greater flexibility and efficient placement of volumes on backends. Different backends can be defined with the same class of service. Moreover, multiple Storage Pools can be created on the same backend but with different characteristics. When a Storage Class is configured with a selector with the specific labels, Astra Trident chooses a backend which matches all the selector labels to place the volume. If the Storage Class selector labels matches multiple Storage Pools, Astra Trident will choose one of them to provision the volume from.
 
 == Virtual Storage Pool Design
 
-While creating a backend, you can generally specify a set of parameters. It was impossible for the administrator to create another backend with the same storage credentials and with a different set of parameters. With the introduction of Virtual Storage Pools, this issue has been alleviated. Virtual Storage Pools is a level abstraction introduced between the backend and the Kubernetes Storage Class so that the administrator can define parameters along with labels which can be referenced through Kubernetes Storage Classes as a selector, in a backend-agnostic way. Virtual Storage Pools can be defined for all supported NetApp backends with Trident. That list includes SolidFire/HCI, ONTAP, Cloud Volumes Service on AWS and GCP, as well as Azure NetApp Files.
+While creating a backend, you can generally specify a set of parameters. It was impossible for the administrator to create another backend with the same storage credentials and with a different set of parameters. With the introduction of Virtual Storage Pools, this issue has been alleviated. Virtual Storage Pools is a level abstraction introduced between the backend and the Kubernetes Storage Class so that the administrator can define parameters along with labels which can be referenced through Kubernetes Storage Classes as a selector, in a backend-agnostic way. Virtual Storage Pools can be defined for all supported NetApp backends with Astra Trident. That list includes SolidFire/NetApp HCI, ONTAP, Cloud Volumes Service on AWS and GCP, as well as Azure NetApp Files.
 
 NOTE: When defining Virtual Storage Pools, it is recommended to not attempt to rearrange the order of existing virtual pools in a backend definition. It is also advisable to not edit/modify attributes for an existing virtual pool and define a new virtual pool instead.
 
-== Design Virtual Storage Pools for emulating different Service Levels/QoS
+=== Design Virtual Storage Pools for emulating different service levels/QoS
 
 It is possible to design Virtual Storage Pools for emulating service classes. Using the virtual pool implementation for Cloud Volume Service for AWS, let us examine how we can setup up different service classes. Configure the AWS-CVS backend with multiple labels, representing different performance levels. Set `servicelevel` aspect to the appropriate performance level and add other required aspects under each labels. Now create different Kubernetes Storage Classes that would map to different virtual Storage Pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) may be used to host a volume.
 
-== Design Virtual Pools for Assigning Specific Set of Aspects
+=== Design Virtual Pools for assigning specific set of aspects
 
 Multiple Virtual Storage pools with a specific set of aspects can be designed from a single storage backend. For doing so, configure the backend with multiple labels and set the required aspects under each label. Now create different Kubernetes Storage Classes using the `parameters.selector` field that would map to different Virtual Storage Pools. The volumes that get provisioned on the backend will have the aspects defined in the chosen Virtual Storage Pool.
 
 == PVC characteristics which affect storage provisioning
 
-Some parameters beyond the requested storage class may affect Trident’s provisioning decision process when creating a PVC.
+Some parameters beyond the requested storage class may affect Astra Trident’s provisioning decision process when creating a PVC.
 
 === Access mode
 
 When requesting storage via a PVC, one of the mandatory fields is the access mode. The mode desired may affect the backend selected to host the storage request.
 
-Trident will attempt to match the storage protocol used with the access method specified according to the following matrix. This is independent of the underlying storage platform.
+Astra Trident will attempt to match the storage protocol used with the access method specified according to the following matrix. This is independent of the underlying storage platform.
 
 [cols=4*,options="header",cols="20,30,30,30"]
 |===
@@ -257,53 +257,53 @@ A request for a ReadWriteMany PVC submitted to a Trident deployment without an N
 
 == Volume Operations
 
-=== Modifying persistent volumes
+=== Modify persistent volumes
 
 Persistent volumes are, with two exceptions, immutable objects in Kubernetes. Once created, the reclaim policy and the size can be modified. However, this doesn’t prevent some aspects of the volume from being modified outside of Kubernetes. This may be desirable in order to customize the volume for specific applications, to ensure that capacity is not accidentally consumed, or simply to move the volume to a different storage controller for any reason.
 
-NOTE: Kubernetes in-tree provisioners do not support volume resize operations for NFS or iSCSI PVs at this time. Trident supports expanding both NFS and iSCSI volumes.
+NOTE: Kubernetes in-tree provisioners do not support volume resize operations for NFS or iSCSI PVs at this time. Astra Trident supports expanding both NFS and iSCSI volumes.
 
 The connection details of the PV cannot be modified after creation.
 
-=== On-Demand Volume Snapshots with Trident’s Enhanced CSI Provisioner
+=== Create on-demand volume snapshots
 
-Trident supports on-demand volume snapshot creation and the creation of PVCs from snapshots using the CSI framework. Snapshots provide a convenient method of maintaining point-in-time copies of the data and have a lifecycle independent of the source PV in Kubernetes. These snapshots can be used to clone PVCs.
+Astra Trident supports on-demand volume snapshot creation and the creation of PVCs from snapshots using the CSI framework. Snapshots provide a convenient method of maintaining point-in-time copies of the data and have a lifecycle independent of the source PV in Kubernetes. These snapshots can be used to clone PVCs.
 
-=== Creating Volumes from Snapshots with Trident’s Enhanced CSI Provisioner
+=== Create volumes from snapshots
 
-Trident also supports the creation of PersistentVolumes from volume snapshots. To accomplish this, just create a PersistentVolumeClaim and mention the `datasource` as the required snapshot from which the volume needs to be created. Trident will handle this PVC by creating a volume with the data present on the snapshot. With this feature, it is possible to duplicate data across regions, create test environments, replace a damaged or corrupted production volume in its entirety, or retrieve specific files and directories and transfer them to another attached volume.
+Astra Trident also supports the creation of PersistentVolumes from volume snapshots. To accomplish this, just create a PersistentVolumeClaim and mention the `datasource` as the required snapshot from which the volume needs to be created. Astra Trident will handle this PVC by creating a volume with the data present on the snapshot. With this feature, it is possible to duplicate data across regions, create test environments, replace a damaged or corrupted production volume in its entirety, or retrieve specific files and directories and transfer them to another attached volume.
 
-== Volume Move Operations
+=== Move volumes in the cluster
 
-Storage administrators have the ability to move volumes between aggregates and controllers in the ONTAP cluster non-disruptively to the storage consumer. This operation does not affect Trident or the Kubernetes cluster, as long as the destination aggregate is one which the SVM Trident is using has access to. Importantly, if the aggregate has been newly added to the SVM, the backend will need to be `refreshed` by re-adding it to Trident. This will trigger Trident to reinventory the SVM so that the new aggregate is recognized.
+Storage administrators have the ability to move volumes between aggregates and controllers in the ONTAP cluster non-disruptively to the storage consumer. This operation does not affect Astra Trident or the Kubernetes cluster, as long as the destination aggregate is one which the SVM that Astra Trident is using has access to. Importantly, if the aggregate has been newly added to the SVM, the backend will need to be refreshed by re-adding it to Astra Trident. This will trigger Astra Trident to reinventory the SVM so that the new aggregate is recognized.
 
-However, moving volumes across backends is not supported automatically by Trident. This includes between SVMs in the same cluster, between clusters, or onto a different storage platform (even if that storage system is one which is connected to Trident).
+However, moving volumes across backends is not supported automatically by Astra Trident. This includes between SVMs in the same cluster, between clusters, or onto a different storage platform (even if that storage system is one which is connected to Astra Trident).
 
-If a volume is copied to another location, the volume import feature may be used to import current volumes into Trident.
+If a volume is copied to another location, the volume import feature may be used to import current volumes into Astra Trident.
 
-== Expanding volumes
+== Expand volumes
 
-Trident supports resizing NFS and iSCSI PVs, beginning with the `18.10` and `19.10` releases respectively. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, Element/HCI and Cloud Volumes Service backends. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will utomatically take care of resizing the volume on the storage cluster.
+Astra Trident supports resizing NFS and iSCSI PVs. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, SolidFire/NetApp HCI and Cloud Volumes Service backends. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will utomatically take care of resizing the volume on the storage cluster.
 
 == Import an existing volume into Kubernetes
 
-Volume Import provides the ability to import an existing storage volume into a Kubernetes environment. This is currently supported by the `ontap-nas`, `ontap-nas-flexgroup`, `solidfire-san`, `azure-netapp-files`, `aws-cvs`, and `gcp-cvs` drivers. This feature is useful when porting an existing application into Kubernetes or during disaster recovery scenarios.
+Volume import provides the ability to import an existing storage volume into a Kubernetes environment. This is currently supported by the `ontap-nas`, `ontap-nas-flexgroup`, `solidfire-san`, `azure-netapp-files`, `aws-cvs`, and `gcp-cvs` drivers. This feature is useful when porting an existing application into Kubernetes or during disaster recovery scenarios.
 
-When using the ONTAP and `solidfire-san` drivers, use the command `tridentctl import volume <backend-name> <volume-name> -f /path/pvc.yaml` to import an existing volume into Kubernetes to be managed by Trident. The PVC YAML or JSON file used in the import volume command points to a storage class which identifies Trident as the provisioner. When using a HCI/SolidFire backend, ensure the volume names are unique. If the volume names are duplicated, clone the volume to a unique name so the volume import feature can distinguish between them.
+When using the ONTAP and `solidfire-san` drivers, use the command `tridentctl import volume <backend-name> <volume-name> -f /path/pvc.yaml` to import an existing volume into Kubernetes to be managed by Astra Trident. The PVC YAML or JSON file used in the import volume command points to a storage class which identifies Astra Trident as the provisioner. When using a NetApp HCI/SolidFire backend, ensure the volume names are unique. If the volume names are duplicated, clone the volume to a unique name so the volume import feature can distinguish between them.
 
-If the `aws-cvs`, `azure-netapp-files` or `gcp-cvs` driver is used, use the command `tridentctl import volume <backend-name> <volume path> -f /path/pvc.yaml` to import the volume into Kubernetes to be managed by Trident. This ensures a unique volume reference.
+If the `aws-cvs`, `azure-netapp-files` or `gcp-cvs` driver is used, use the command `tridentctl import volume <backend-name> <volume path> -f /path/pvc.yaml` to import the volume into Kubernetes to be managed by Astra Trident. This ensures a unique volume reference.
 
-When the above command is executed, Trident will find the volume on the backend and read its size. It will automatically add (and overwrite if necessary) the configured PVC’s volume size. Trident then creates the new PV and Kubernetes binds the PVC to the PV.
+When the above command is executed, Astra Trident will find the volume on the backend and read its size. It will automatically add (and overwrite if necessary) the configured PVC’s volume size. Astra Trident then creates the new PV and Kubernetes binds the PVC to the PV.
 
 If a container was deployed such that it required the specific imported PVC, it would remain in a pending state until the PVC/PV pair are bound via the volume import process. After the PVC/PV pair are bound, the container should come up, provided there are no other issues.
 
-== Deploying OpenShift services using Trident
+== Deploy OpenShift services
 
 The OpenShift value-add cluster services provide important functionality to cluster administrators and the applications being hosted. The storage which these services use can be provisioned using the node-local resources, however, this often limits the capacity, performance, recoverability, and sustainability of the service. Leveraging an enterprise storage array to provide the capacity to these services can enable dramatically improved service, however, as with all applications, the OpenShift and storage administrators should work closely together to determine the best options for each. The Red Hat documentation should be leveraged heavily to determine the requirements and ensure that sizing and performance needs are met.
 
 === Registry service
 
-Deploying and managing storage for the registry has been documented on link:https://netapp.io/[netapp.io] in the blog link:https://netapp.io/2017/08/24/deploying-the-openshift-registry-using-netapp-storage/[Deploying the OpenShift Registry using NetApp Storage].
+Deploying and managing storage for the registry has been documented on link:https://netapp.io/[netapp.io^] in the link:https://netapp.io/2017/08/24/deploying-the-openshift-registry-using-netapp-storage/[blog^].
 
 === Logging service
 
@@ -314,13 +314,13 @@ CAUTION: As of Red Hat OpenShift version 3.9, the official documentation recomme
 
 If you choose to use NFS with the logging service, you will need to set the Ansible variable `openshift_enable_unsupported_configurations` to `true` to prevent the installer from failing.
 
-*Getting started*
+==== Get started
 
 The logging service can, optionally, be deployed for both applications as well as for the core operations of the OpenShift cluster itself. If you choose to deploy operations logging, by specifying the variable `openshift_logging_use_ops` as `true`, two instances of the service will be created. The variables which control the logging instance for operations contain "ops" in them, whereas the instance for applications does not.
 
 Configuring the Ansible variables according to the deployment method is important in order to ensure that the correct storage is utilized by the underlying services. Let’s look at the options for each of the deployment methods.
 
-NOTE: The tables below only contain the variables which are relevant for storage configuration as it relates to the logging service. You can find other options in link:https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging.html[RedHat OpenShift logging documentation] which should be reviewed, configured, and used according to your deployment.
+NOTE: The tables below only contain the variables which are relevant for storage configuration as it relates to the logging service. You can find other options in link:https://docs.openshift.com/container-platform/3.11/install_config/aggregate_logging.html[RedHat OpenShift logging documentation^] which should be reviewed, configured, and used according to your deployment.
 
 The variables in the below table will result in the Ansible playbook creating a PV and PVC for the logging service using the details provided. This method is significantly less flexible than using the component installation playbook after OpenShift installation, however, if you have existing volumes available, it is an option.
 
@@ -352,11 +352,11 @@ If your OpenShift cluster is already running, and therefore Trident has been dep
 |`openshift_logging_es_ops_pvc_prefix` | A prefix for the ops instance PVCs.
 |===
 
-*Deploy the logging stack*
+==== Deploy the logging stack
 
 If you are deploying logging as a part of the initial OpenShift install process, then you only need to follow the standard deployment process. Ansible will configure and deploy the needed services and OpenShift objects so that the service is available as soon as Ansible completes.
 
-However, if you are deploying after the initial installation, the component playbook will need to be used by Ansible. This process may change slightly with different versions of OpenShift, so be sure to read and follow link:https://docs.openshift.com/container-platform/3.11/welcome/index.html[RedHat OpenShift Container Platform 3.11 documentation] for your version.
+However, if you are deploying after the initial installation, the component playbook will need to be used by Ansible. This process may change slightly with different versions of OpenShift, so be sure to read and follow link:https://docs.openshift.com/container-platform/3.11/welcome/index.html[RedHat OpenShift Container Platform 3.11 documentation^] for your version.
 
 == Metrics service
 
@@ -390,8 +390,8 @@ If your OpenShift cluster is already running, and therefore Trident has been dep
 |`openshift_metrics_cassanda_pvc_storage_class_name` | The name of the storage class to use.
 |===
 
-*Deploying the metrics service*
+==== Deploy the metrics service
 
-With the appropriate Ansible variables defined in your hosts/inventory file, deploy the service using Ansible. If you are deploying at OpenShift install time, then the PV will be created and used automatically. If you’re deploying using the component playbooks, after OpenShift install, then Ansible will create any PVCs which are needed and, after Trident has provisioned storage for them, deploy the service.
+With the appropriate Ansible variables defined in your hosts/inventory file, deploy the service using Ansible. If you are deploying at OpenShift install time, then the PV will be created and used automatically. If you’re deploying using the component playbooks, after OpenShift install, then Ansible will create any PVCs which are needed and, after Astra Trident has provisioned storage for them, deploy the service.
 
-The variables above, and the process for deploying, may change with each version of OpenShift. Ensure you review and follow link:https://docs.openshift.com/container-platform/3.11/install_config/cluster_metrics.html[RedHat's OpenShift deployment guide] for your version so that it is configured for your environment.
+The variables above, and the process for deploying, may change with each version of OpenShift. Ensure you review and follow link:https://docs.openshift.com/container-platform/3.11/install_config/cluster_metrics.html[RedHat's OpenShift deployment guide^] for your version so that it is configured for your environment.

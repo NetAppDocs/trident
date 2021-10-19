@@ -10,7 +10,7 @@ summary: Learn about the different ways of managing backends in Astra Trident.
 :icons: font
 :imagesdir: ../media/
 
-Learn about the different ways of managing backends in Astra Trident. With the introduction of TridentBackendConfig, administrators now have two unique ways of managing backends. This poses the following questions:
+Learn about the different ways of managing backends in Astra Trident. With the introduction of `TridentBackendConfig`, administrators now have two unique ways of managing backends. This poses the following questions:
 
 * Can backends created using `tridentctl` be managed with `TridentBackendConfig`?
 * Can backends created using `TridentBackendConfig` be managed using `tridentctl`?
@@ -24,7 +24,7 @@ This will apply to the following scenarios:
 * Pre-existing backends, that don’t have a `TridentBackendConfig` because they were created with `tridentctl`.
 * New backends that were created with `tridentctl`, while other `TridentBackendConfig` objects exist.
 
-In both scenarios, backends will continue to be present, with Astra Trident scheduling volumes and operating on them. Administrator have one of two choices here:
+In both scenarios, backends will continue to be present, with Astra Trident scheduling volumes and operating on them. Administrators have one of two choices here:
 
 * Continue using `tridentctl` to manage backends that were created using it.
 * Bind backends created using `tridentctl` to a new `TridentBackendConfig` object. Doing so would mean the backends will be managed using `kubectl` and not `tridentctl`.

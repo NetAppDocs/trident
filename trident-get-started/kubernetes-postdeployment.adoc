@@ -37,7 +37,7 @@ If the creation fails, something was wrong with the backend configuration. You c
 ./tridentctl -n trident logs
 ----
 
-After you address the problem, simply go back to the beginning of this step and try again. For more troubleshooting tips, see the link:../troubleshooting.html[the troubleshooting^] section.
+After you address the problem, simply go back to the beginning of this step and try again. For more troubleshooting tips, see link:../troubleshooting.html[the troubleshooting^] section.
 
 == Step 2: Create a storage class
 
@@ -101,7 +101,7 @@ basic-csi    csi.trident.netapp.io   15h
 
 Now you are ready to dynamically provision your first volume. This is done by creating a Kubernetes https://kubernetes.io/docs/concepts/storage/persistent-volumes[persistent volume claim^] (PVC) object.
 
-Create a persistent volume claim (PVC) for a volume that uses the storage class that you just created.
+Create a PVC for a volume that uses the storage class that you just created.
 
 See `sample-input/pvc-basic-csi.yaml` for an example. Make sure the storage class name matches the one that you created.
 ----

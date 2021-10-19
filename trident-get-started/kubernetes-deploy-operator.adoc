@@ -34,7 +34,7 @@ Perform the steps listed to deploy the Trident operator by using Helm.
 
 .What you'll need
 
-In addition to the prerequisites listed above, to deploy Trident Operator by using Helm, you need the following:
+In addition to the prerequisites listed above, to deploy Trident operator by using Helm, you need the following:
 
 * Kubernetes 1.17 and later
 * Helm version 3
@@ -92,7 +92,7 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 
 === Step 2: Download and set up the operator
 
-NOTE: Beginning with 21.01, the Trident Operator is cluster scoped. Using the Trident operator to install Trident requires creating the `TridentOrchestrator` Custom Resource Definition (CRD) and defining other resources. You should perform these steps to set up the operator before you can install Astra Trident.
+NOTE: Beginning with 21.01, the Trident operator is cluster scoped. Using the Trident operator to install Trident requires creating the `TridentOrchestrator` Custom Resource Definition (CRD) and defining other resources. You should perform these steps to set up the operator before you can install Astra Trident.
 
 . Download the latest version of the https://github.com/NetApp/trident/releases/latest[Trident installer bundle] from the _Downloads_ section and extract it.
 +

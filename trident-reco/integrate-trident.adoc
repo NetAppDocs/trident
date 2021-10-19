@@ -193,11 +193,11 @@ Yesfootnote:1[]: Not managed by Astra Trident
 
 The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Astra Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
 
-== Storage Class design
+== Storage class design
 
-Individual Storage Classes need to be configured and applied to create a Kubernetes Storage Class object. This section discusses how to design a storage class for your application.
+Individual Storage classes need to be configured and applied to create a Kubernetes Storage Class object. This section discusses how to design a storage class for your application.
 
-=== Storage Class design for specific backend utilization
+=== Storage class design for specific backend utilization
 
 Filtering can be used within a specific storage class object to determine which storage pool or set of pools are to be used with that specific storage class. Three sets of filters can be set in the Storage Class: `storagePools`, `additionalStoragePools`, and/or `excludeStoragePools`.
 
@@ -205,15 +205,15 @@ The `storagePools` parameter helps restrict storage to the set of pools that mat
 
 The `excludeStoragePools` parameter is used to specifically exclude the listed set of pools that match the attributes.
 
-=== Storage Class design to emulate QoS policies
+=== Storage class design to emulate QoS policies
 
 If you would like to design Storage Classes to emulate Quality of Service policies, create a Storage Class with the `media` attribute as `hdd` or `ssd`. Based on the `media` attribute mentioned in the storage class, Trident will select the appropriate backend that serves `hdd` or `ssd` aggregates to match the media attribute and then direct the provisioning of the volumes on to the specific aggregate. Therefore we can create a storage class PREMIUM which would have `media` attribute set as `ssd` which could be classified as the PREMIUM QoS policy. We can create another storage class STANDARD which would have the media attribute set as `hdd' which could be classified as the STANDARD QoS policy. We could also use the ``IOPS'' attribute in the storage class to redirect provisioning to an Element appliance which can be defined as a QoS Policy.
 
-== Storage Class Design to utilize backend based on specific features
+=== Storage class design to utilize backend based on specific features
 
-Storage Classes can be designed to direct volume provisioning on a specific backend where features such as thin and thick provisioning, snapshots, clones, and encryption are enabled. To specify which storage to use, create Storage Classes that specify the appropriate backend with the required feature enabled.
+Storage classes can be designed to direct volume provisioning on a specific backend where features such as thin and thick provisioning, snapshots, clones, and encryption are enabled. To specify which storage to use, create Storage Classes that specify the appropriate backend with the required feature enabled.
 
-== Storage Class Design for Virtual Storage Pools
+=== Storage class design for Virtual Storage Pools
 
 Virtual Storage Pools are available for all Astra Trident backends. You can define Virtual Storage Pools for any backend, using any driver that Astra Trident provides.
 
@@ -233,7 +233,7 @@ It is possible to design Virtual Storage Pools for emulating service classes. Us
 
 Multiple Virtual Storage pools with a specific set of aspects can be designed from a single storage backend. For doing so, configure the backend with multiple labels and set the required aspects under each label. Now create different Kubernetes Storage Classes using the `parameters.selector` field that would map to different Virtual Storage Pools. The volumes that get provisioned on the backend will have the aspects defined in the chosen Virtual Storage Pool.
 
-== PVC characteristics which affect storage provisioning
+=== PVC characteristics which affect storage provisioning
 
 Some parameters beyond the requested storage class may affect Astra Trident’s provisioning decision process when creating a PVC.
 
@@ -255,7 +255,7 @@ Astra Trident will attempt to match the storage protocol used with the access me
 
 A request for a ReadWriteMany PVC submitted to a Trident deployment without an NFS backend configured will result in no volume being provisioned. For this reason, the requestor should use the access mode which is appropriate for their application.
 
-== Volume Operations
+== Volume operations
 
 === Modify persistent volumes
 
@@ -281,11 +281,11 @@ However, moving volumes across backends is not supported automatically by Astra 
 
 If a volume is copied to another location, the volume import feature may be used to import current volumes into Astra Trident.
 
-== Expand volumes
+=== Expand volumes
 
 Astra Trident supports resizing NFS and iSCSI PVs. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, SolidFire/NetApp HCI and Cloud Volumes Service backends. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will utomatically take care of resizing the volume on the storage cluster.
 
-== Import an existing volume into Kubernetes
+=== Import an existing volume into Kubernetes
 
 Volume import provides the ability to import an existing storage volume into a Kubernetes environment. This is currently supported by the `ontap-nas`, `ontap-nas-flexgroup`, `solidfire-san`, `azure-netapp-files`, `aws-cvs`, and `gcp-cvs` drivers. This feature is useful when porting an existing application into Kubernetes or during disaster recovery scenarios.
 
@@ -390,7 +390,7 @@ If your OpenShift cluster is already running, and therefore Trident has been dep
 |`openshift_metrics_cassanda_pvc_storage_class_name` | The name of the storage class to use.
 |===
 
-==== Deploy the metrics service
+=== Deploy the metrics service
 
 With the appropriate Ansible variables defined in your hosts/inventory file, deploy the service using Ansible. If you are deploying at OpenShift install time, then the PV will be created and used automatically. If you’re deploying using the component playbooks, after OpenShift install, then Ansible will create any PVCs which are needed and, after Astra Trident has provisioned storage for them, deploy the service.
 

@@ -28,7 +28,7 @@ NetApp is continually improving and enhancing its products and services. Here ar
 ** Return a volume's used space as the minimum restoreSize when creating snapshots with `ontap-nas` and `ontap-nas-flexgroup` drivers (GitHub issue 645).
 ** Fixed issue where `Failed to expand filesystem` error was logged after volume resize (GitHub issue 560).
 ** Fixed issue where a pod could get stuck in `Terminating` state (GitHub issue 572).
-** Fixed the case where an ONTAP-SAN-Economy FlexVol might be full of snapshot LUNs (GitHub issue 533).
+** Fixed the case where an `ontap-san-economy` FlexVol might be full of snapshot LUNs (GitHub issue 533).
 ** Fixed custom YAML installer issue with different image (GitHub issue 613).
 ** Fixed snapshot size calculation (GitHub issue 611).
 ** Fixed issue where all Astra Trident installers could identify plain Kubernetes as OpenShift (GitHub issue 639).
@@ -47,7 +47,6 @@ NetApp is continually improving and enhancing its products and services. Here ar
 
 * Added support for volume replication in the `ontap-san` driver.
 * Added *tech preview* REST support for the `ontap-nas-flexgroup`, `ontap-san`, and `ontap-nas-economy` drivers.
-
 
 == Known issues
 

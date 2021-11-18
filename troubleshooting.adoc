@@ -14,12 +14,36 @@ Use the pointers provided here for troubleshooting issues you might encounter wh
 
 NOTE: For help with Astra Trident, create a support bundle using `tridentctl logs -a -n trident` and send it to `NetApp Support <Getting Help>`.
 
-TIP: For a comprehensive list of troubleshooting articles, see the https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Trident_Kubernetes[NetApp Knowledgebase (login required)^]. You can also find information about troubleshooting issues related to Astra https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Astra[here^]. 
+TIP: For a comprehensive list of troubleshooting articles, see the https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Trident_Kubernetes[NetApp Knowledgebase (login required)^]. You can also find information about troubleshooting issues related to Astra https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Astra[here^].
 
 == General troubleshooting
 
 * If the Trident pod fails to come up properly (for example, when the Trident pod is stuck in the `ContainerCreating` phase with fewer than two ready containers), running `kubectl -n trident describe deployment trident` and `kubectl -n trident describe pod trident-********-****` can provide additional insights. Obtaining kubelet logs (for example, via `journalctl -xeu kubelet`) can also be helpful.
-* If there is not enough information in the Trident logs, you can try enabling the debug mode for Trident by passing the `-d` flag to the install parameter: `./tridentctl install -d -n trident`.
+* If there is not enough information in the Trident logs, you can try enabling the debug mode for Trident by passing the `-d` flag to the install parameter based on your installation option.
++
+Then confirm debug is set using `./tridentctl logs -n trident` and searching for `level=debug msg` in the log.
++
+Installed with Operator::
++
+----
+# kubectl patch torc -n --type=merge -p '{"spec":{"debug":true}}'
+----
++
+For Astra Trident 20.07 and 20.10 use `tprov` in place of `torc`.
++
+Installed with Helm::
++
+----
+$ helm upgrade <name> trident-operator-21.07.1-custom.tgz --set tridentDebug=true`
+----
++
+Installed with tridentctl::
++
+----
+./tridentctl uninstall -n trident
+./tridentctl install -d -n trident
+----
+
 * You can also obtain debug logs for each backend by including `debugTraceFlags` in your backend definition. For example, include `debugTraceFlags: {“api”:true, “method”:true,}` to obtain API calls and method traversals in the Trident logs. Existing backends can have `debugTraceFlags` configured with a `tridentctl backend update`.
 * When using RedHat CoreOS, ensure that `iscsid` is enabled on the worker nodes and started by default. This can be done using OpenShift MachineConfigs or by modifying the ignition templates.
 * A common problem you could encounter when using Trident with https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files] is when the tenant and client secrets come from an app registration with insufficient permissions. For a complete list of Trident requirements, see link:../trident-backend/anf.html[Azure NetApp Files] configuration.

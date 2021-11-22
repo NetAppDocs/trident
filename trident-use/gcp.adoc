@@ -83,7 +83,7 @@ The `apiRegion` represents the GCP region where Astra Trident creates CVS volume
 * `storageClass` is an optional parameter that you can use to select the desired https://cloud.google.com/solutions/partners/netapp-cloud-volumes/service-types?hl=en_US[CVS service type^]. You can choose from the base CVS service type (`storageClass=software`) or the CVS-Performance service type (`storageClass=hardware`), which Trident uses by default. Make sure you specify an `apiRegion` that provides the respective CVS `storageClass` in your backend definition.
 ====
 
-IMPORTANT: Astra Trident's integration with the base CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
+CAUTION: Astra Trident's integration with the base CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
 
 Each backend provisions volumes in a single Google Cloud region. To create volumes in other regions, you can define additional backends.
 

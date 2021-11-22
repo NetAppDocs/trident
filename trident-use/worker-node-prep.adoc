@@ -67,7 +67,10 @@ a|
 `sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf`
 . Enable multipathing:
 +
-`sudo mpathconf --enable --with_multipathd y`
+`sudo mpathconf --enable --with_multipathd y --find_multipaths n`
++
+NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+
 . Ensure that `iscsid` and `multipathd` are running:
 +
 `sudo systemctl enable --now iscsid multipathd`
@@ -92,11 +95,14 @@ a|
 `sudo tee /etc/multipath.conf <<-'EOF'
 defaults {
     user_friendly_names yes
-    find_multipaths yes
+    find_multipaths no
 }
 EOF
 sudo systemctl enable --now multipath-tools.service
 sudo service multipath-tools restart`
++
+NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+
 . Ensure that `open-iscsi` and `multipath-tools` are enabled and running:
 +
 `sudo systemctl status multipath-tools`

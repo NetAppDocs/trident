@@ -68,20 +68,9 @@ See the following table for the backend configuration options:
 
 If using a shared VPC network, both `projectNumber` and `hostProjectNumber` must be specified. In that case, `projectNumber` is the service project, and `hostProjectNumber` is the host project.
 
-The `apiRegion` represents the GCP region where Astra Trident creates CVS volumes. Astra Trident can mount and attach volumes on Kubernetes nodes that belong to the same GCP region. When creating a backend, it is important to ensure `apiRegion` matches the region Kubernetes nodes are deployed in. When creating cross-region Kubernetes clusters, CVS volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple GCP regions. Be aware that cross-region traffic incurs an additional cost.
+The `apiRegion` represents the GCP region where Astra Trident creates CVS volumes. Astra Trident can mount and attach volumes on Kubernetes nodes that belong to the same GCP region. When creating a backend, it is important to ensure `apiRegion` matches the region Kubernetes nodes are deployed in. When creating cross-region Kubernetes clusters, CVS volumes that are created in a given `apiRegion` can only be used in workloads scheduled on nodes that are in the same GCP region.
 
-[NOTE]
-====
-* To enable cross-region access, your StorageClass definition for `allowedTopologies` must include all regions. For example:
-+
-----
-- key: topology.kubernetes.io/region
-  values:
-  - us-east1
-  - europe-west1
-----
-* `storageClass` is an optional parameter that you can use to select the desired https://cloud.google.com/solutions/partners/netapp-cloud-volumes/service-types?hl=en_US[CVS service type^]. You can choose from the base CVS service type (`storageClass=software`) or the CVS-Performance service type (`storageClass=hardware`), which Trident uses by default. Make sure you specify an `apiRegion` that provides the respective CVS `storageClass` in your backend definition.
-====
+NOTE: `storageClass` is an optional parameter that you can use to select the desired https://cloud.google.com/solutions/partners/netapp-cloud-volumes/service-types?hl=en_US[CVS service type^]. You can choose from the base CVS service type (`storageClass=software`) or the CVS-Performance service type (`storageClass=hardware`), which Trident uses by default. Make sure you specify an `apiRegion` that provides the respective CVS `storageClass` in your backend definition.
 
 CAUTION: Astra Trident's integration with the base CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
 

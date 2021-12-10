@@ -26,9 +26,10 @@ Then confirm debug is set using `./tridentctl logs -n trident` and searching for
 Installed with Operator::
 +
 ----
-# kubectl patch torc -n --type=merge -p '{"spec":{"debug":true}}'
+# kubectl patch torc trident -n <namespace> --type=merge -p '{"spec":{"debug":true}}'
 ----
 +
+This will restart all Trident pods, which can take several seconds. You can check this by observing the 'AGE' column in the output of `kubectl get pod -n trident`. 
 For Astra Trident 20.07 and 20.10 use `tprov` in place of `torc`.
 +
 Installed with Helm::

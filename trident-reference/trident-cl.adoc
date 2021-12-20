@@ -33,5 +33,8 @@ Astra Trident exposes several command-line options. You can modify them in your 
 == REST
 
 * `-address <ip-or-host>`: Specifies the address on which Trident's REST server should listen. Defaults to localhost. When listening on localhost and running inside a Kubernetes pod, the REST interface isn't directly accessible from outside the pod. Use `-address ""` to make the REST interface accessible from the pod IP address.
+
+CAUTION: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
+
 * `-port <port-number>`: Specifies the port on which Trident's REST server should listen. Defaults to 8000.
 * `-rest`: Enables the REST interface. Defaults to true.

@@ -37,6 +37,7 @@ To use Astra Trident, you need one or more of the following supported backends:
 
 * Amazon FSx for NetApp ONTAP
 * Azure NetApp Files
+* Astra Data Store
 * Cloud Volumes ONTAP
 * Cloud Volumes Service for AWS
 * Cloud Volumes Service for GCP
@@ -112,7 +113,7 @@ Depending on the backend(s) in use, NFS and/or iSCSI utilities should be install
 
 == Storage system configuration
 
-Astra Trident might require some changes to a storage system before a backend configuration can use it. See the link:../trident-use/backends.html[here^] for details.
+Astra Trident might require some changes to a storage system before a backend configuration can use it. See  link:../trident-use/backends.html[here^] for details.
 
 == Container images and corresponding Kubernetes versions
 
@@ -180,7 +181,7 @@ a|
 
 |v1.22.0
 a|
-* netapp/trident:21.10.0                                  
+* netapp/trident:21.10.0
 * netapp/trident-autosupport:21.10
 * k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0
 * k8s.gcr.io/sig-storage/csi-attacher:v3.3.0

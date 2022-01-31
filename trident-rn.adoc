@@ -14,13 +14,42 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 21.10
+== What's new in 22.01.0
 
-NetApp is continually improving and enhancing its products and services. Here are some of the latest features and functionalities available with Astra Trident.
+NetApp is continually improving and enhancing its products and services. Here are some of the latest features in Astra Trident. For previous releases, see https://docs.netapp.com/us-en/trident/earlier-versions.html[Ealier versions of documentation].
 
-For previous releases, see https://docs.netapp.com/us-en/trident/earlier-versions.html[Ealier versions of documentation].
+IMPORTANT: If you are upgrading from any previous Trident release and use Azure NetApp Files, the ``location`` config parameter is now a mandatory, singleton field.
 
-=== Changes since Astra Trident 21.07
+=== Fixes
+
+Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
+
+=== Enhancements
+
+* Kubernetes enhancements:
+
+** Added support for Kubernetes 1.23.
+
+** Add scheduling options for Trident pods when installed via Trident Operator or Helm. (link:https://github.com/NetApp/trident/issues/651[GitHub issue #651^])
+
+* Allow cross-region volumes in GCP driver. (link:https://github.com/NetApp/trident/issues/633[GitHub issue #633^])
+
+* Added support for 'unixPermissions' option to ANF volumes. (link:https://github.com/NetApp/trident/issues/666[GitHub issue #666^])
+
+=== Deprecations
+
+Trident REST interface can listen and serve only at 127.0.0.1 or [::1] addresses
+
+=== Changes in Astra Trident 21.10.1
+
+WARNING: The v21.10.0 release has an issue that can put the Trident controller into a CrashLoopBackOff state when a node is removed and then added back to the Kubernetes cluster. This issue is fixed in v21.10.1 (GitHub issue 669).
+
+==== Fixes
+* Fixed potential race condition when importing a volume on a GCP CVS backend resulting in failure to import.
+* Fixed an issue that can put the Trident controller into a CrashLoopBackOff state when a node is removed and then added back to the Kubernetes cluster (GitHub issue 669).
+* Fixed issue where SVMs were no longer discovered if no SVM name was specified (GitHub issue 612).
+
+=== Changes in 21.10.0 (since Astra Trident 21.07)
 
 ==== Fixes
 

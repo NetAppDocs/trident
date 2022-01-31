@@ -53,21 +53,14 @@ Astra Trident |
 
 |`imagePullSecrets` |Secrets to pull images from an internal registry |
 
-|`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.
+|`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as pod.spec.nodeSelector. |No default; optional
 
-Follows same format as pod.spec.nodeSelector |No default; optional
+|`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional
 
-|`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin.
+|`nodePluginNodeSelector` |Additional node selectors for pods running the Trident Node CSI Plugin. Follows same format as pod.spec.nodeSelector. |No default; optional
 
-Follows the same format as pod.spec.Tolerations. |No default; optional
+|`nodePluginTolerations` |Overrides tolerations for pods running the Trident Node CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional
 
-|`nodePluginNodeSelector` |Additional node selectors for pods running the Trident Node CSI Plugin.
-
-Follows same format as pod.spec.nodeSelector. |No default; optional
-
-|`nodePluginTolerations` |Overrides tolerations for pods running the Trident Node CSI Plugin.
-
-Follows the same format as pod.spec.Tolerations. |No default; optional
 |===
 IMPORTANT: `spec.namespace` is specified in `TridentOrchestrator` to signify which namespace Astra Trident is installed in. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the status of `TridentOrchestrator` to change to `Failed`. Astra Trident is not meant to be migrated across namespaces.
 

@@ -18,7 +18,7 @@ TIP: If you have not already familiarized yourself with the link:../trident-conc
 
 To deploy Astra Trident, the following prerequisites should be met:
 
-* You have full privileges to a supported Kubernetes cluster running Kubernetes 1.17 and above.
+* You have full privileges to a supported Kubernetes cluster running Kubernetes 1.14 and above.
 * You have access to a supported NetApp storage system.
 * You have the capability to mount volumes from all of the Kubernetes worker nodes.
 * You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
@@ -48,6 +48,8 @@ See the following example:
 ----
 helm install <name> trident-operator-21.07.1.tgz --namespace <namespace you want to use for Trident>
 ----
++
+NOTE: If you did not already create a namespace for Trident, you can add the `--create-namespace` parameter to the `helm install` command. Helm will then automatically create the namespace for you.
 
 There are two ways to pass configuration data during the install:
 
@@ -74,7 +76,7 @@ The first thing you need to do is log in to the Linux host and verify that it is
 
 NOTE: With OpenShift, use `oc` instead of `kubectl` in all of the examples that follow, and log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
-To see if your Kubernetes version is later than 1.17, run the following command:
+To see if your Kubernetes version is later than 1.14, run the following command:
 ----
 kubectl version
 ----

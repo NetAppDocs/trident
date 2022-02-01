@@ -18,12 +18,14 @@ NOTE: To learn about the ports that Astra Trident uses, see link:../trident-refe
 
 Astra Trident supports multiple container engines and orchestrators, including the following:
 
-* Kubernetes 1.17 or later (latest: 1.22)
+* Anthos On-Prem (VMware) and Anthos on bare metal, 1.8, 1.9
+* Kubernetes 1.17 or later (latest: 1.23)
 * Mirantis Kubernetes Engine 3.4
-* OpenShift 4.7, 4.8, 4.9 (latest 4.9)
+* OpenShift 4.7, 4.8, 4.9 
 
 The Trident operator is supported with these releases:
 
+* Anthos On-Prem (VMware) and Anthos on bare metal, 1.8, 1.9
 * Kubernetes 1.17 or later (latest: 1.22)
 * OpenShift 4.7, 4.8, 4.9 (latest 4.9)
 
@@ -39,11 +41,10 @@ To use Astra Trident, you need one or more of the following supported backends:
 * Azure NetApp Files
 * Astra Data Store
 * Cloud Volumes ONTAP
-* Cloud Volumes Service for AWS
 * Cloud Volumes Service for GCP
 * FAS/AFF/Select 9.3 or later
 * NetApp All SAN Array (ASA)
-* NetApp HCI/Element software 8 or later
+* NetApp HCI/Element software 11 or later
 
 == Feature requirements
 
@@ -100,7 +101,7 @@ By default, Astra Trident runs in a container and will, therefore, run on any Li
 
 Though Astra Trident does not officially "support" specific operating systems, the following Linux distributions are known to work:
 
-* RedHat CoreOS 4.2 and 4.3
+* RedHat CoreOS (RHCOS) versions as supported by OpenShift Container Platform
 * RHEL or CentOS 7.4 or later
 * Ubuntu 18.04 or later
 
@@ -125,69 +126,80 @@ For air-gapped installations, see the following list for what container images a
 
 |v1.17.0
 a|
-* netapp/trident:21.10.0
-* netapp/trident-autosupport:21.10
-* k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2
-* k8s.gcr.io/sig-storage/csi-attacher:v3.3.0
-* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0
-* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
-* netapp/trident-operator:21.10.0 (optional)
+* netapp/trident:22.01.0
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
 
 |v1.18.0
 a|
-* netapp/trident:21.10.0
-* netapp/trident-autosupport:21.10
-* k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2
-* k8s.gcr.io/sig-storage/csi-attacher:v3.3.0
-* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0
-* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
-* netapp/trident-operator:21.10.0 (optional)
+* netapp/trident:22.01.0                     
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
 
-|v1.19.0
+|v1.19.0 
 a|
-* netapp/trident:21.10.0
-* netapp/trident-autosupport:21.10
-* k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2
-* k8s.gcr.io/sig-storage/csi-attacher:v3.3.0
-* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0
-* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
-* netapp/trident-operator:21.10.0 (optional)
+* netapp/trident:22.01.0                     
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v2.2.2                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
 
 |v1.20.0
 a|
-* netapp/trident:21.10.0
-* netapp/trident-autosupport:21.10
-* k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0
-* k8s.gcr.io/sig-storage/csi-attacher:v3.3.0
-* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0
-* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
-* netapp/trident-operator:21.10.0 (optional)
+* netapp/trident:22.01.0                     
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v3.1.0                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
 
 |v1.21.0
 a|
-* netapp/trident:21.10.0
-* netapp/trident-autosupport:21.10
-* k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0
-* k8s.gcr.io/sig-storage/csi-attacher:v3.3.0
-* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0
-* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
-* netapp/trident-operator:21.10.0 (optional)
+* netapp/trident:22.01.0                     
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v3.1.0                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
 
 |v1.22.0
 a|
-* netapp/trident:21.10.0
-* netapp/trident-autosupport:21.10
-* k8s.gcr.io/sig-storage/csi-provisioner:v3.0.0
-* k8s.gcr.io/sig-storage/csi-attacher:v3.3.0
-* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0
-* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3
-* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.3.0
-* netapp/trident-operator:21.10.0 (optional)
+* netapp/trident:22.01.0                     
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v3.1.0                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
+
+|v1.23.0
+a|
+* netapp/trident:22.01.0                     
+* netapp/trident-autosupport:22.01                                 
+* k8s.gcr.io/sig-storage/csi-provisioner:v3.1.0                    
+* k8s.gcr.io/sig-storage/csi-attacher:v3.4.0                       
+* k8s.gcr.io/sig-storage/csi-resizer:v1.3.0                        
+* k8s.gcr.io/sig-storage/csi-snapshotter:v3.0.3                    
+* k8s.gcr.io/sig-storage/csi-node-driver-registrar:v2.4.0          
+* netapp/trident-operator:22.01.0 (optional) 
 
 |===
 

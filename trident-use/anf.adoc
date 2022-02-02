@@ -82,6 +82,7 @@ You can control how each volume is provisioned by default by specifying the foll
 |===
 |Parameter |Description |Default
 |`exportRule` |The export rule(s) for new volumes |"0.0.0.0/0"
+|`snapshotDir` |Controls visibility of the .snapshot directory |"false"
 |`size` |The default size of new volumes |"100G"
 |===
 
@@ -145,6 +146,7 @@ This backend configuration further reduces the scope of volume placement to a si
         "limitVolumeSize": "500Gi",
         "defaults": {
             "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
+            "snapshotDir": "true",
             "size": "200Gi"
         }
     }

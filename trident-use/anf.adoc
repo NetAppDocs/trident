@@ -22,14 +22,14 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 * `tenantID`, `clientID`, and `clientSecret` from an https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use the `Owner` or `Contributor` role that is predefined by Azure.
 +
 TIP: To learn more about Azure built-in roles, see the https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[Azure documentation^].
-* The Azure `location` that contains at least one https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^].
+* The Azure `location` that contains at least one https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]. As of Trident 22.01, the `location` parameter is a required field at the top level of the backend configuration file. Location values specified in virtual pools are ignored.
 * If you are using Azure NetApp Files for the first time or in a new location, some initial configuration is required. See the https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-quickstart-set-up-account-create-volumes[quickstart guide^].
 
 .About this task
 
 Based on the backend configuration (subnet, virtual network, service level, and location), Trident creates ANF volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
 
-NOTE: Astra Trident 21.04.0 and earlier do not support Manual QoS capacity pools.
+NOTE: NOTE: Astra Trident does not support Manual QoS capacity pools.
 
 == Backend configuration options
 
@@ -48,33 +48,49 @@ See the following table for the backend configuration options:
 
 |`tenantID` |The tenant ID from an App Registration |
 
-|`clientID` |The client ID from an App
-Registration |
+|`clientID` |The client ID from an App Registration |
 
 |`clientSecret` |The client secret from an App Registration |
 
 |`serviceLevel` |One of `Standard`, `Premium`, or `Ultra` |"" (random)
 
-|`location` |Name of the Azure location where the new volumes will be created |""
-(random)
+|`location` |Name of the Azure location where the new volumes will be created |
+
+|`serviceLevel` |One of `Standard`, `Premium`, or `Ultra` |"" (random)
+
+|`resourceGroups` |List of resource groups for filtering discovered resources |"[]" (no filter)
+
+|`netappAccounts` |List of NetApp accounts for filtering discovered resources |"[]" (no filter)
+
+|`capacityPools` |List of capacity pools for filtering discovered resources |"[]" (no filter, random)
 
 |`virtualNetwork` |Name of a virtual network with a delegated subnet |""
-(random)
 
 |`subnet` |Name of a subnet delegated to `Microsoft.Netapp/volumes` |""
-(random)
 
 |`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value |"" (not enforced by default)
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api":false, "method":true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
-|===
 
-WARNING: Modifying the `capacityPools` field in an existing backend such that it reduces the number of capacity pools used for provisioning results in orphaned volumes, which are provisioned on the capacity pool/pools that are not part of the `capacityPools` list anymore. Cloning operations on these orphaned volumes will fail.
+|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api": false, "method": true, "discovery": true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
+
+|===
 
 WARNING: If you encounter a “No capacity pools found” error when attempting to create a PVC, it is likely your app registration doesn’t have the required permissions and resources (subnet, virtual network, capacity pool) associated. Astra Trident will log the Azure resources it discovered when the backend is created when debug is enabled. Be sure to check if an appropriate role is being used.
 
-NOTE: If you want to mount the volumes by using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Any mount options set in a storage class overrides the mount options set in a backend configuration file.
+NOTE: If you want to mount the volumes by using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Any mount options set in a storage class override the mount options set in a backend configuration file.
+
+The values for `resourceGroups`, `netappAccounts`, `capacityPools`, `virtualNetwork`, and `subnet` may be specified using short or fully-qualified names.  Short names may match multiple resources with the same name, so using fully-qualified names is recommended in most situations.  The `resourceGroups`, `netappAccounts`, and `capacityPools` values are filters which restrict the set of discovered resources to those available to this storage backend and may be specified in any combination.  The fully-qualified names are of the following format:
+
+[cols=2,options="header"]
+|===
+|Type |Format
+|Resource group |<resource group>
+|NetApp account |<resource group>/<netapp account>
+|Capacity pool |<resource group>/<netapp account>/<capacity pool>
+|Virtual network |<resource group>/<virtual network>
+|Subnet |<resource group>/<virtual network>/<subnet>
+|===
 
 You can control how each volume is provisioned by default by specifying the following options in a special section of the configuration file. See the configuration examples below.
 
@@ -84,6 +100,7 @@ You can control how each volume is provisioned by default by specifying the foll
 |`exportRule` |The export rule(s) for new volumes |"0.0.0.0/0"
 |`snapshotDir` |Controls visibility of the .snapshot directory |"false"
 |`size` |The default size of new volumes |"100G"
+|`unixPermissions` |The unix permissions of new volumes (4 octal digits) |"" (preview feature, requires whitelisting in subscription)
 |===
 
 The `exportRule` value must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.
@@ -92,7 +109,7 @@ NOTE: For all the volumes created on an ANF backend, Astra Trident copies all th
 
 == Example 1: Minimal configuration
 
-This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to ANF in every location worldwide, and places new volumes on one of them randomly.
+This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to ANF in the configured location, and places new volumes on one of those pools and subnets randomly.
 
 This configuration is ideal when you are just getting started with ANF and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision.
 
@@ -103,13 +120,14 @@ This configuration is ideal when you are just getting started with ANF and tryin
     "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
     "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
     "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-    "clientSecret": "SECRET"
+    "clientSecret": "SECRET",
+    "location": "eastus"
 }
 ----
 
-== Example 2: Single location and specific service level configuration
+== Example 2: Specific service level configuration with capacity pool filters
 
-This backend configuration places volumes in Azure's `eastus` location in a `Premium` capacity pool. Astra Trident
+This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident
 automatically discovers all of the subnets delegated to ANF in that location and places a new volume on one of
 them randomly.
 
@@ -122,7 +140,11 @@ them randomly.
         "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
         "clientSecret": "SECRET",
         "location": "eastus",
-        "serviceLevel": "Premium"
+        "serviceLevel": "Ultra",
+        "capacityPools": [
+            "application-group-1/account-1/ultra-1",
+            "application-group-1/account-1/ultra-2"
+],
     }
 ----
 
@@ -139,7 +161,11 @@ This backend configuration further reduces the scope of volume placement to a si
         "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
         "clientSecret": "SECRET",
         "location": "eastus",
-        "serviceLevel": "Premium",
+        "serviceLevel": "Ultra",
+        "capacityPools": [
+            "application-group-1/account-1/ultra-1",
+            "application-group-1/account-1/ultra-2"
+],
         "virtualNetwork": "my-virtual-network",
         "subnet": "my-subnet",
         "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
@@ -147,7 +173,9 @@ This backend configuration further reduces the scope of volume placement to a si
         "defaults": {
             "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
             "snapshotDir": "true",
-            "size": "200Gi"
+            "size": "200Gi",
+            "unixPermissions": "0777"
+=======
         }
     }
 ----
@@ -164,6 +192,8 @@ This backend configuration defines multiple storage pools in a single file. This
         "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
         "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
         "clientSecret": "SECRET",
+        "location": "eastus",
+        "resourceGroups": ["application-group-1"],
         "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
         "labels": {
             "cloud": "azure"
@@ -175,19 +205,22 @@ This backend configuration defines multiple storage pools in a single file. This
                 "labels": {
                     "performance": "gold"
                 },
-                "serviceLevel": "Ultra"
+                "serviceLevel": "Ultra",
+                "capacityPools": ["ultra-1", "ultra-2"]
             },
             {
                 "labels": {
                     "performance": "silver"
                 },
-                "serviceLevel": "Premium"
+                "serviceLevel": "Premium",
+                "capacityPools": ["premium-1"]
             },
             {
                 "labels": {
                     "performance": "bronze"
                 },
                 "serviceLevel": "Standard",
+                "capacityPools": ["standard-1", "standard-2"]
             }
         ]
     }

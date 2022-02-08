@@ -113,6 +113,8 @@ provisioner: csi.trident.netapp.io
 mountOptions: <Mount Options>
 parameters:
   <Trident Parameters>
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
 ----
 
 These parameters are Trident-specific and tell Trident how to provision volumes for the class.
@@ -184,7 +186,11 @@ These attributes have no impact on the selection of storage pools/backends by Tr
 Version
 |fsType |string |ext4, ext3, xfs, etc. |The file system type for block
 volumes |solidfire-san, ontap-san, ontap-san-economy, eseries-iscsi |All
+|allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.6+
+|volumeBindingMode |string |Immediate, WaitForFirstConsumer |Choose when volume binding and dynamic provisioning occurs |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.6+
 |===
+
+See link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes^] for further details on volume expansion.
 
 The Trident installer bundle provides several example storage class definitions for use with Trident in ``sample-input/storage-class-*.yaml``. Deleting a Kubernetes storage class causes the corresponding Trident storage class to be deleted as well.
 

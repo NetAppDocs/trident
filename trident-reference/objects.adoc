@@ -186,8 +186,8 @@ These attributes have no impact on the selection of storage pools/backends by Tr
 Version
 |fsType |string |ext4, ext3, xfs, etc. |The file system type for block
 volumes |solidfire-san, ontap-san, ontap-san-economy, eseries-iscsi |All
-|allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.6+
-|volumeBindingMode |string |Immediate, WaitForFirstConsumer |Choose when volume binding and dynamic provisioning occurs |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.6+
+|allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.11+
+|volumeBindingMode |string |Immediate, WaitForFirstConsumer |Choose when volume binding and dynamic provisioning occurs |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.17+
 |===
 
 See link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes^] for further details on volume expansion.

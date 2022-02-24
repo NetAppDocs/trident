@@ -104,7 +104,7 @@ NOTE: Do not specify `dataLIF` for the `ontap-san` and `ontap-san-economy` drive
 
 WARNING: When using Amazon FSx for NetApp ONTAP with Astra Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
 
-WARNING: FSx for NetApp ONTAP volumes come preconfigured with a SnapMirror. Deleting PVCs will not succeed, as Trident cannot modify or break them. Users will need to delete their PVs manually and clean them up on FSx.
+WARNING: Amazon FSx for NetApp ONTAP allows users to create backup schedules. Volumes created by Trident can be backed up daily, within a backup window that you define. If you choose to use backup policies, volumes must be cleaned up through FSx. Users will need to delete their PVs manually and then proceed to delete them on the FSx plane.
 
 After deployment, perform the steps to create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].
 

@@ -113,6 +113,8 @@ provisioner: csi.trident.netapp.io
 mountOptions: <Mount Options>
 parameters:
   <Trident Parameters>
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
 ----
 
 These parameters are Trident-specific and tell Trident how to provision volumes for the class.
@@ -183,10 +185,25 @@ These attributes have no impact on the selection of storage pools/backends by Tr
 |Attribute |Type |Values |Description |Relevant Drivers |Kubernetes
 Version
 |fsType |string |ext4, ext3, xfs, etc. |The file system type for block
-volumes |solidfire-san, ontap-san, ontap-san-economy, eseries-iscsi |All
+volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy, eseries-iscsi |All
+|allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy, solidfire-san, aws-cvs, gcp-cvs, azure-netapp-files |1.11+
+|volumeBindingMode |string |Immediate, WaitForFirstConsumer |Choose when volume binding and dynamic provisioning occurs |All |1.17+
 |===
 
-The Trident installer bundle provides several example storage class definitions for use with Trident in ``sample-input/storage-class-*.yaml``. Deleting a Kubernetes storage class causes the corresponding Trident storage class to be deleted as well.
+[TIP]
+====
+* The `fsType` parameter is used to control the desired file system type for SAN LUNs. In addition, Kubernetes also uses the presence of `fsType` in a storage class to indicate a filesystem exists. Volume ownership can be controlled using the `fsGroup` security context of a pod only if `fsType` is set. See link:https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[Kubernetes: Configure a Security Context for a Pod or Container^] for an overview on setting volume ownership using the `fsGroup` context. Kubernetes will apply the `fsGroup` value only if:
+
+** `fsType` is set in the storage class.
+** The PVC access mode is RWO.
+
++
+For NFS storage drivers, a filesystem already exists as part of the NFS export. In order to use `fsGroup` the storage class still needs to specify a `fsType`. You can set it to `nfs` or any non-null value.
+
+* See link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes^] for further details on volume expansion.
+
+* The Trident installer bundle provides several example storage class definitions for use with Trident in ``sample-input/storage-class-*.yaml``. Deleting a Kubernetes storage class causes the corresponding Trident storage class to be deleted as well.
+====
 
 == Kubernetes `VolumeSnapshotClass` objects
 

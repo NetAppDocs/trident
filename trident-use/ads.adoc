@@ -86,7 +86,7 @@ This is the absolute minimum backend configuration.
 [%collapsible]
 ====
 
-[source]
+[source, CLI]
 ----
 {
     "version": 1,
@@ -109,7 +109,7 @@ This example shows a backend file that applies the same aspects to all Astra Tri
 [%collapsible]
 ====
 
-[source]
+[source, CLI]
 ----
 {
     "version": 1,
@@ -137,7 +137,7 @@ This example shows the backend definition file configured with virtual storage p
 [%collapsible]
 ====
 
-[source]
+[source, CLI]
 ----
 {
     "version": 1,
@@ -180,6 +180,8 @@ The following StorageClass definitions refer to the storage pools above. By usin
 .Expand example
 [%collapsible]
 ====
+
+[source, CLI]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

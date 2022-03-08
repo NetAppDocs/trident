@@ -176,6 +176,10 @@ This example shows the backend definition file configured with virtual storage p
 
 The following StorageClass definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each StorageClass the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
+// Start snippet: collapsible block (open on page load)
+.Expand example
+[%collapsible]
+====
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -219,6 +223,8 @@ parameters:
   selector: performance=bronze
 allowVolumeExpansion: true
 ----
+====
+// End snippet
 
 == What's next?
 

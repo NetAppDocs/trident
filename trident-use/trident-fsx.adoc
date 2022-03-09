@@ -102,7 +102,13 @@ For information about creating backends, see these links:
 
 NOTE: Do not specify `dataLIF` for the `ontap-san` and `ontap-san-economy` drivers to allow Astra Trident to use multipath.
 
-WARNING: When using Amazon FSx for NetApp ONTAP with Astra Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
+.Amazon FSx for ONTAP
+[WARNING]
+===============================
+* The `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
+
+* Amazon FSx for NetApp ONTAP volumes come preconfigured with a SnapMirror. Deleting PVCs will not succeed, as Trident cannot modify or break them. You will need to delete  PVs manually and clean them up on FSx for ONTAP.
+===============================
 
 After deployment, perform the steps to create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].
 

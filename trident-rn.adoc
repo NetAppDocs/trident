@@ -16,13 +16,27 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 == What's new in 22.01.1
 
-NetApp is continually improving and enhancing its products and services. Here are some of the latest features in Astra Trident. For previous releases, see https://docs.netapp.com/us-en/trident/earlier-versions.html[Ealier versions of documentation].
+NetApp is continually improving and enhancing its products and services. Here are some of the latest features in Astra Trident. For previous releases, see https://docs.netapp.com/us-en/trident/earlier-versions.html[Earlier versions of documentation].
 
 IMPORTANT: If you are upgrading from any previous Trident release and use Azure NetApp Files, the ``location`` config parameter is now a mandatory, singleton field.
 
 === Fixes
 
-Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
+* Fixed issue with unpublishing volumes on deleted nodes. (link:https://github.com/NetApp/trident/issues/691[GitHub issue #691])
+* Fixed panic when accessing nil fields for aggregate space in ONTAP API responses.
+
+== Changes in 22.01.0 (since 22.10.1)
+
+=== Fixes
+
+* *Kubernetes:* Increase node registration backoff retry time for large clusters.
+* Fixed issue where azure-netapp-files driver could be confused by multiple resources with the same name.
+* ONTAP SAN IPv6 Data LIFs now work if specified with brackets.
+* Fixed issue where attempting to import an already imported volume returns EOF leaving PVC in pending state. (link:https://github.com/NetApp/trident/issues/489[GitHub issue #489])
+* Fixed issue when Astra Trident performance slows down when > 32 snapshots are created on a SolidFire volume.
+* Replaced SHA-1 with SHA-256 in SSL certificate creation.
+* Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
+* Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
 
 === Enhancements
 

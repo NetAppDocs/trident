@@ -10,7 +10,7 @@ summary: Astra Trident can selectively create and attach volumes to nodes presen
 :icons: font
 :imagesdir: ../media/
 
-Astra Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the https://kubernetes-csi.github.io/docs/topology.html[CSI Topology feature^]. Using the CSI Topology feature, access to volumes can be limited to a subset of nodes, based on regions and availability zones. Cloud providers today enable Kubernetes administrators to spawn nodes that are zone based. Nodes can be located in different regions within an availability zone, or across various availability zones. To facilitate the provisioning of volumes for workloads in a multi-zone architecture, Astra Trident uses CSI Topology.
+Astra Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the https://kubernetes-csi.github.io/docs/topology.html[CSI Topology feature^]. Using the CSI Topology feature, access to volumes can be limited to a subset of nodes, based on regions and availability zones. Cloud providers today enable Kubernetes administrators to spawn nodes that are zone based. Nodes can be located in different availability zones within a region, or across various regions. To facilitate the provisioning of volumes for workloads in a multi-zone architecture, Astra Trident uses CSI Topology.
 
 TIP: Learn more about the CSI Topology feature https://kubernetes.io/blog/2018/10/11/topology-aware-volume-provisioning-in-kubernetes/[here^].
 

@@ -14,7 +14,21 @@ https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon 
 
 A file system is the primary resource in Amazon FSx, analogous to an ONTAP cluster on premises. Within each SVM you can create one or multiple volumes, which are data containers that store the files and folders in your file system. With Amazon FSx for NetApp ONTAP, Data ONTAP will be provided as a managed file system in the cloud. The new file system type is called *NetApp ONTAP*.
 
-By using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that their Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+
+[WARNING]
+.Creating your Amazon FSx for ONTAP file system
+===============================
+Amazon FSx for NetApp ONTAP volumes come preconfigured with a SnapMirror. Trident cannot modify or break the SnapMirror. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume.
+
+To prevent this issue:
+
+* Do not use **Quick create** to create the FSx for ONTAP file system. This will enable automatic backups.
+* When using **Standard create**, disable automatic backup.
++
+image:screenshot-fsx-backup-disable.png[A screenshot of the AWS console disabling automatic backup.]
+
+===============================
 
 == Learn about Astra Trident
 
@@ -101,15 +115,9 @@ For information about creating backends, see these links:
 * link:ontap-nas.html[Configure a backend with ONTAP NAS drivers^]
 * link:ontap-san.html[Configure a backend with ONTAP SAN drivers^]
 
-NOTE: Do not specify `dataLIF` for the `ontap-san` and `ontap-san-economy` drivers to allow Astra Trident to use multipath.
+NOTE: Do not specify `dataLIF` for the `ontap-san` and `ontap-san-economy` drivers to allow Astra Trident to use multipath
 
-.Amazon FSx for ONTAP
-[WARNING]
-===============================
-* The `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
-
-* Amazon FSx for NetApp ONTAP volumes come preconfigured with a SnapMirror. Trident cannot modify or break them. To delete PVCs, you need to manually delete the PV and the FSx for NetApp ONTAP volume.
-===============================
+WARNING: The `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
 
 After deployment, perform the steps to create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].
 

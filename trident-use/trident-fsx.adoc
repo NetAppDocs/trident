@@ -19,7 +19,7 @@ Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes 
 [WARNING]
 .Creating your Amazon FSx for ONTAP file system
 ===============================
-Amazon FSx for NetApp ONTAP volumes come preconfigured with a SnapMirror. Trident cannot modify or break the SnapMirror. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume.
+Volumes created on Amazon FSx filesystems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume.
 
 To prevent this issue:
 

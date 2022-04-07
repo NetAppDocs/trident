@@ -20,7 +20,7 @@ See the following table for the list of attributes:
 
 |`debug` |Enable debugging for Astra Trident |false
 
-|`useIPv6` |Install Astra Trident over IPv6 |false
+|`IPv6` |Install Astra Trident over IPv6 |false
 
 |`k8sTimeout` |Timeout for Kubernetes operations |30sec
 
@@ -78,9 +78,23 @@ metadata:
 spec:
   debug: true
   namespace: trident
-  tridentImage: netapp/trident:21.04.0
   imagePullSecrets:
   - thisisasecret
+----
+
+Here is another example that shows how Trident can be deployed with node selectors:
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  controllerPluginNodeSelector:
+    nodetype: master
+  nodePluginNodeSelector:
+    storage: netapp
 ----
 
 If you are looking to customize the installation beyond what `TridentOrchestrator` arguments allow, you should consider using `tridentctl` to generate custom YAML manifests that you can modify as needed.

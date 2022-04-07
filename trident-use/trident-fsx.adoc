@@ -80,6 +80,7 @@ aws fsx describe-storage-virtual-machines --region <file system region>
 . Create and install certificates for authentication. If you are using an `ontap-san` backend, see link:ontap-san.html[here^]. If you are using an `ontap-nas` backend, see link:ontap-nas.html[here^].
 +
 NOTE: You can log in to your file system (for example to install certificates) using SSH from anywhere that can reach your file system. Use the `fsxadmin` user, the password you configured when you created your file system, and the management DNS name from `aws fsx describe-file-systems`.
+
 . Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
 +
 ----
@@ -102,7 +103,13 @@ For information about creating backends, see these links:
 
 NOTE: Do not specify `dataLIF` for the `ontap-san` and `ontap-san-economy` drivers to allow Astra Trident to use multipath.
 
-WARNING: When using Amazon FSx for NetApp ONTAP with Astra Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
+.Amazon FSx for ONTAP
+[WARNING]
+===============================
+* The `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
+
+* Amazon FSx for NetApp ONTAP volumes come preconfigured with a SnapMirror. Trident cannot modify or break them. To delete PVCs, you need to manually delete the PV and the FSx for NetApp ONTAP volume.
+===============================
 
 After deployment, perform the steps to create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod^].
 

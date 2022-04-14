@@ -31,7 +31,16 @@ The Trident operator is supported with these releases:
 
 NOTE: Red Hat OpenShift Container Platform users might observe their initiatorname.iscsi file to be blank if using any version below 4.6.8. This is a bug that has been identified by RedHat to be fixed with OpenShift 4.6.8. See this https://access.redhat.com/errata/RHSA-2020:5259/[bug fix announcement^]. NetApp recommends that you use Astra Trident on OpenShift 4.6.8 and later.
 
-Astra Trident also works with a host of other fully managed and self-managed Kubernetes offerings, including Google Cloud’s Google Kubernetes Engine (GKE), AWS’s Elastic Kubernetes Services (EKS), Azure’s Azure Kubernetes Service (AKS), and Rancher.
+Astra Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Cloud’s Google Kubernetes Engine (GKE), AWS’s Elastic Kubernetes Services (EKS), Azure’s Azure Kubernetes Service (AKS), Rancher, and Tanzu Kubernetes Grid (TKG).
+
+[NOTE]
+===============================
+When installing Astra Trident on TKG:
+
+* The cluster must support privileged workloads.
+* The ``--kubelet-dir` flag should be set to the location of kubelet directory. By default, this is `/var/vcap/data/kubelet`.
+
+===============================
 
 == Supported backends (storage)
 

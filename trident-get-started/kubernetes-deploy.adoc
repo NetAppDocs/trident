@@ -99,3 +99,12 @@ Here is a high-level overview of the remote deployment process:
 * Copy the configuration files from the Kubernetes cluster and set the `KUBECONFIG` environment variable on the remote machine.
 * Initiate a `kubectl get nodes` command to verify that you can connect to the required Kubernetes cluster.
 * Complete the deployment from the remote machine by using the standard installation steps.
+
+== Other known configuration options
+
+When installing Astra Trident on VMWare Tanzu Portfolio products:
+
+* The cluster must support privileged workloads.
+* The `--kubelet-dir` flag should be set to the location of kubelet directory. By default, this is `/var/vcap/data/kubelet`.
++
+Specifying the kubelet location using `--kubelet-dir` is known to work for Trident Operator, Helm, and `tridentctl` deployments.

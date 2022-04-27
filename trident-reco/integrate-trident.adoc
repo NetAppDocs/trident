@@ -202,9 +202,9 @@ While creating a backend, you can generally specify a set of parameters. It was 
 
 NOTE: When defining Virtual Storage Pools, it is recommended to not attempt to rearrange the order of existing virtual pools in a backend definition. It is also advisable to not edit/modify attributes for an existing virtual pool and define a new virtual pool instead.
 
-// === Design Virtual Storage Pools for emulating different service levels/QoS
-//
-// It is possible to design Virtual Storage Pools for emulating service classes. Using the virtual pool implementation for Cloud Volume Service for AWS, let us examine how we can setup up different service classes. Configure the AWS-CVS backend with multiple labels, representing different performance levels. Set `servicelevel` aspect to the appropriate performance level and add other required aspects under each labels. Now create different Kubernetes Storage Classes that would map to different virtual Storage Pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) may be used to host a volume.
+=== Design Virtual Storage Pools for emulating different service levels/QoS
+
+It is possible to design Virtual Storage Pools for emulating service classes. Using the virtual pool implementation for Cloud Volume Service for Azure NetApp Files, let us examine how we can setup up different service classes. Configure the ANF backend with multiple labels, representing different performance levels. Set `servicelevel` aspect to the appropriate performance level and add other required aspects under each labels. Now create different Kubernetes Storage Classes that would map to different virtual Storage Pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) may be used to host a volume.
 
 === Design Virtual Pools for assigning specific set of aspects
 

@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/volume-driver-options.html
-keywords: create volumes, astra trident, trident for docker, docker, docker volume, driver options, ontap, element volumes, cloud volumes service on aws, cvs, cloud volumes service on gcp, azure netapp files
+keywords: create volumes, astra trident, trident for docker, docker, docker volume, driver options, ontap, element volumes, cvs, cloud volumes service on gcp, azure netapp files
 summary: Each storage driver has a different set of options, which you can specify at volume creation time to customize the outcome. See below for options that apply to your configured storage system.
 ---
 
@@ -201,41 +201,6 @@ docker volume create -d solidfire --name sfGold -o type=Gold -o size=10G
 ----
 docker volume create -d solidfire --name sfBronze -o type=Bronze -o size=100G
 ----
-
-== Cloud Volumes Service (CVS) on AWS volume options
-
-Volume create options for the CVS on AWS driver include the following:
-
-[%header,cols=2*]
-|===
-|Option
-|Description
-
-|`size`
-a|The size of the volume, defaults to 100 GB.
-
-|`serviceLevel`
-a|The CVS service level of the volume, defaults to standard. Valid values are standard, premium, and extreme.
-
-|`snapshotReserve`
-a|`This will set the snapshot reserve to the desired percentage. The default is no value, meaning CVS will select the snapshot reserve (usually 0%).
-|===
-
-=== Examples
-
-* Create a 200GiB volume:
-+
-----
-docker volume create -d netapp --name demo -o size=200G
-----
-
-* Create a 500GiB premium volume:
-+
-----
-docker volume create -d netapp --name demo -o size=500G -o serviceLevel=premium
-----
-
-The minimum volume size is 100 GB.
 
 == CVS on GCP volume options
 

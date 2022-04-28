@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/backend-kubectl.html
-keywords: backends, storage system, anf, cvs for aws, cvs for gcp, element, hci, solidfire, ontap, aff, fas, ontap select, configure backends, kubectl, create backends
+keywords: backends, storage system, anf, cvs for gcp, element, hci, solidfire, ontap, aff, fas, ontap select, configure backends, kubectl, create backends
 summary: A backend defines the relationship between Astra Trident and a storage system. It tells Astra Trident how to communicate with that storage system and how Astra Trident should provision volumes from it. After Astra Trident is installed, the next step is to create a backend. The `TridentBackendConfig` Custom Resource Definition (CRD) enables you to create and manage Trident backends directly through the Kubernetes interface. You can do this by using `kubectl` or the equivalent CLI tool for your Kubernetes distribution.
 ---
 
@@ -92,14 +92,6 @@ This table summarizes the fields that must be included in the Secret for each st
 |Azure NetApp Files
 a|clientID
 a|The client ID from an app registration
-
-|Cloud Volumes Service for AWS
-a|apiKey
-a|CVS account API key
-
-|Cloud Volumes Service for AWS
-a|secretKey
-a|CVS account secret key
 
 |Cloud Volumes Service for GCP
 a|private_key_id

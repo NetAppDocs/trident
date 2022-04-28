@@ -10,7 +10,7 @@ summary: A Kubernetes cluster typically consists of two types of nodes, each res
 :icons: font
 :imagesdir: ../media/
 
-Each storage platform in NetApp's portfolio has unique capabilities that benefit applications, containerized or not. Trident works with each of the major platforms: ONTAP, Element, and E-Series. There is not one platform which is better suited for all applications and scenarios than another, however, the needs of the application and the team administering the device should be taken into account when choosing a platform.
+Each storage platform in NetApp's portfolio has unique capabilities that benefit applications, containerized or not. Trident works with ONTAP and Element. There is not one platform which is better suited for all applications and scenarios than another, however, the needs of the application and the team administering the device should be taken into account when choosing a platform.
 
 You should follow the baseline best practices for the host operating system with the protocol that you are leveraging. Optionally, you might want to consider incorporating application best practices, when available, with backend, storage class, and PVC settings to optimize storage for specific applications.
 
@@ -62,7 +62,7 @@ In addition to controlling the volume size at the storage array, you should also
 
 === Configure Trident to use bidirectional CHAP
 
-You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. Bidirectional CHAP support is available with Trident 20.04 and above. 
+You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. Bidirectional CHAP support is available with Trident 20.04 and above.
 
 === Create and use an SVM QoS policy
 
@@ -231,22 +231,6 @@ CHAP authentication (verification that the initiator is the intended volume user
 
 However, if CHAP cannot be enabled and VAGs are required, create the access group and add the host initiators and volumes to the access group. Each IQN that you add to an access group can access each volume in the group with or without CHAP authentication. If the iSCSI initiator is configured to use CHAP authentication, account-based access control is used. If the iSCSI initiator is not configured to use CHAP authentication, then Volume Access Group access control is used.
 
-== E-Series best practices
-
-Learn the best practices for configuring E-Series storage for Trident.
-
-=== E-Series disk pools and volume groups
-
-Create disk pools and volume groups based on your requirement and determine how the total storage capacity should be organized into volumes and shared among hosts. Both the disk pool and the volume group consist of a set of drives that are logically grouped to provide one or more volumes to an application host. All of the drives in a disk pool or volume group should be of the same media type.
-
-=== E-Series host groups
-
-Trident uses host groups to access the volumes (LUNs) that it provisions. By default, Trident uses the host group called `trident` unless you specify a different host group name in the configuration. Trident, by itself does not create or manage host groups. You have to create the host group before the E-Series storage backend is set up on Trident. Ensure that all the Kubernetes worker nodes iSCSI IQN names are updated in the host group.
-
-=== E-Series snapshot schedule
-
-Create a snapshot schedule and assign the volume created by Trident to a snapshot schedule so that volume backups can be taken at the required interval. Based on the snapshots taken as per the snapshot policy, rollback operations can be done on volumes by restoring a snapshot image to the base volume. You should use SANtricity System Manager to create the snapshot schedule.
-
 === Snapshot consistency groups
 
 Setting up snapshot consistency groups are also ideal for applications that span multiple volumes. The purpose of a consistency group is to take simultaneous snapshot images of multiple volumes, thus ensuring consistent copies of a collection of volumes at a particular point in time. You should use SANtricity System Manager to create consistency groups.
@@ -297,10 +281,6 @@ Some of the best practices documentation is listed below. Search the https://www
 * https://docs.netapp.com/us-en/hci/docs/hci_prereqs_overview.html[NetApp HCI deployment prerequisites^]
 * https://docs.netapp.com/us-en/hci/docs/concept_nde_access_overview.html[Access the NetApp Deployment Engine^]
 
-
-*E-Series*
-
-* https://docs.netapp.com/ess-11/topic/com.netapp.doc.ssm-exp-ic-lin/home.html[Installing and configuring for Linux^]
 
 *Application best practices information*
 

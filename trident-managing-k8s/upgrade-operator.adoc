@@ -10,7 +10,7 @@ summary: You can easily upgrade an existing Astra Trident installation by using 
 :icons: font
 :imagesdir: ../media/
 
-You can easily upgrade an existing Astra Trident installation by using the operator.
+You can easily upgrade an existing Astra Trident installation using the operator.
 
 .What you'll need
 
@@ -35,8 +35,8 @@ To upgrade from *Trident 21.01 and later*, here is the set of steps to be follow
 ----
 kubectl delete -f 21.01/trident-installer/deploy/bundle.yaml -n trident
 ----
-. (Optional) If you want to modify the installation parameters, edit the `TridentOrchestrator` object that you crated when installing Trident.
-These could be changes, such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
+. (Optional) If you want to modify the installation parameters, edit the `TridentOrchestrator` object that you created when installing Trident.
+This can include changes, such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
 . Install Astra Trident by using the `bundle.yaml` file that sets up the Trident operator for the new version. Run the following command:
 +
 ----

@@ -159,26 +159,22 @@ $ tridentctl import volume element_default element-managed -f pvc-basic-import.y
 
 NOTE: The Element driver supports duplicate volume names. If there are duplicate volume names, Trident’s volume import process returns an error. As a workaround, clone the volume and provide a unique volume name. Then import the cloned volume.
 
-== `aws-cvs` import
+== `gcp-cvs` import
 
-TIP: To import a volume backed by the NetApp Cloud Volumes Service in AWS, identify the volume by its volume path instead of its name.
+TIP: To import a volume backed by the NetApp Cloud Volumes Service in GCP, identify the volume by its volume path instead of its name.
 
-To import an `aws-cvs` volume on the backend called `awscvs_YEppr` with the volume path of `adroit-jolly-swift`, use the following command:
+To import an `gcp-cvs` volume on the backend called `gcpcvs_YEppr` with the volume path of `adroit-jolly-swift`, use the following command:
 ----
-$ tridentctl import volume awscvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -n trident
+$ tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -n trident
 
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE  | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
-| pvc-a46ccab7-44aa-4433-94b1-e47fc8c0fa55 | 93 GiB | aws-storage   | file     | e1a6e65b-299e-4568-ad05-4f0a105c888f | online | true    |
+| pvc-a46ccab7-44aa-4433-94b1-e47fc8c0fa55 | 93 GiB | gcp-storage   | file     | e1a6e65b-299e-4568-ad05-4f0a105c888f | online | true    |
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 ----
 
 NOTE: The volume path is the portion of the volume’s export path after the :/. For example, if the export path is `10.0.0.1:/adroit-jolly-swift`, the volume path is `adroit-jolly-swift`.
-
-== `gcp-cvs` import
-
-Importing a `gcp-cvs` volume works the same as importing an `aws-cvs` volume.
 
 == `azure-netapp-files` import
 

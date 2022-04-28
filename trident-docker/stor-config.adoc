@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/stor-config.html
-keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, aws, cvs on gcp, cvs on aws, anf, azure netapp files
+keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, cvs on gcp, anf, azure netapp files
 summary: See the configuration options available for your Astra Trident configurations.
 ---
 
@@ -29,7 +29,7 @@ a|1
 |`storageDriverName`
 a|Name of storage driver
 a|`ontap-nas`, `ontap-san`, `ontap-nas-economy`,
-`ontap-nas-flexgroup`, `solidfire-san`, `azure-netapp-files`, `aws-cvs`, or `gcp-cvs`
+`ontap-nas-flexgroup`, `solidfire-san`, `azure-netapp-files`, or `gcp-cvs`
 
 |`storagePrefix`
 a|Optional prefix for volume names. Default: “netappdvp_”.
@@ -353,97 +353,6 @@ The `solidfire-san` driver does not support Docker Swarm.
             }
         }
     ]
-}
-----
-
-== Cloud Volumes Service (CVS) on AWS configuration
-
-In addition to the global configuration values, when using CVS on AWS, these options are available. The required values are all available in the CVS web user interface.
-
-[%header,cols=3*]
-|===
-|Option
-|Description
-|Example
-
-|`apiRegion`
-a|CVS account region (required). Can be found in the CVS web portal in Account settings > API access.
-a|“us-east-1”
-
-|`apiURL`
-a|CVS account API URL (required). Can be found in the CVS web portal in Account settings > API access.
-a|“https://cds-aws-bundles.netapp.com:8080/v1”
-
-|`apiKey`
-a|CVS account API key (required). Can be found in the CVS web portal in Account settings > API access.
-a|“docker”
-
-|`secretKey`
-a|CVS account secret key (required). Can be found in the CVS web portal in Account settings > API access.
-a|“default”
-
-|`proxyURL`
-a|Proxy URL if proxy server required to connect to the CVS account. The proxy server can either be an HTTP proxy or an HTTPS proxy. In case of an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. *Proxy servers with authentication enabled are not supported*.
-a|“http://proxy-server-hostname/”
-
-|`nfsMountOptions`
-a|NFS mount options; defaults to “-o nfsvers=3”
-a|“nfsvers=3,proto=tcp,timeo=600”
-
-|`serviceLevel`
-a|Performance level (standard, premium, extreme), defaults to “standard”
-a|“premium”
-
-|===
-
-NOTE: The NetApp Cloud Volumes Service for AWS does not support volumes less than 100 GB in size. To make it easier to deploy applications, Trident automatically creates 100 GB volumes if a smaller volume is requested.
-
-When using CVS on AWS, these default volume option settings are available.
-
-[%header,cols=3*]
-|===
-|Option
-|Description
-|Example
-
-|`exportRule`
-a|NFS access list (addresses and/or CIDR subnets), defaults to “0.0.0.0/0”
-a|“10.0.1.0/24,10.0.2.100”
-
-|`snapshotDir`
-a|Controls visibility of the `.snapshot` directory
-a|“false”
-
-|`snapshotReserve`
-a|Snapshot reserve percentage, default is “” to accept the CVS default of 0
-a|“10”
-
-|`size`
-a|Volume size, defaults to “100GB”
-a|“500G”
-
-|===
-
-=== Example CVS on AWS configuration file
-
-----
-{
-    "version": 1,
-    "storageDriverName": "aws-cvs",
-    "apiRegion": "us-east-1",
-    "apiURL": "https://cds-aws-bundles.netapp.com:8080/v1",
-    "apiKey":    "znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE",
-    "secretKey": "rR0rUmWXfNioN1KhtHisiSAnoTherboGuskey6pU",
-    "region": "us-east-1",
-    "proxyURL": "http://proxy-server-hostname/",
-    "serviceLevel": "premium",
-    "limitVolumeSize": "200Gi",
-    "defaults": {
-        "snapshotDir": "true",
-        "snapshotReserve": "5",
-        "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
-        "size": "100Gi"
-    }
 }
 ----
 

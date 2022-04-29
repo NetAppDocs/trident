@@ -12,8 +12,6 @@ summary: You can deploy Astra Trident using the Trident operator or with `triden
 
 You can deploy Astra Trident using the Trident operator or with `tridentctl`.
 
-NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
-
 == Choose the deployment method
 
 To determine which deployment method to use, consider the following:

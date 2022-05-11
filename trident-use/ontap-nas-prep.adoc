@@ -79,7 +79,7 @@ security ssl modify -vserver <vserver-name> -client-enabled true
 . Confirm the ONTAP security login role supports `cert` authentication method.
 +
 ----
-security login create -user-or-group-name vsadmin -application ontapi -authentication-method cert -vserver <vserver-name>
+security login create -user-or-group-name vsadmin -application ontapi -authentication-method cert -vserver <vserver-name> 
 security login create -user-or-group-name vsadmin -application http -authentication-method cert -vserver <vserver-name>
 ----
 . Test authentication using certificate generated. Replace <ONTAP Management LIF> and <vserver name> with Management LIF IP and SVM name. You must ensure the LIF has its service policy set to `default-data-management`.

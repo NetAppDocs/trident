@@ -16,17 +16,17 @@ NOTE: This feature is available from Kubernetes 1.17 (beta) and is GA from 1.20.
 
 .What you'll need
 
-* Creating volume snapshots requires an external snapshot controller to be created as well as some Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator that is being used (for example: Kubeadm, GKE, OpenShift).
+* Creating volume snapshots requires creating an external snapshot controller and Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator being used (for example: Kubeadm, GKE, OpenShift).
 
-You can create an external snapshot-controller and snapshot CRDs as follows:
+If your Kubernetes distribution does not include the snapshot controller and CRDs, you can deploy them as follows.
 
 . Create volume snapshot CRDs.
 +
-For Kubernetes 1.20 and above, use v5. For Kubernetes versions 1.17-1.19 use v1beta1.
+For Kubernetes 1.20 and above, use v1 snapshot CRDs with snapshot components of v5.0 or above. For Kubernetes versions 1.17-1.19, use v1beta1 with v3.0.3 snapshot components.
 +
 [role="tabbed-block"]
 ====
-.v5 CRDs
+.v5.0 components
 --
 [source,yaml]
 ----
@@ -38,7 +38,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/release-5.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
 ----
 --
-.v1beta1 CRDs
+.v3.0.3 components
 --
 [source,yaml]
 ----
@@ -52,21 +52,21 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 --
 ====
 
-. Create the snapshot-controller in the desired namespace. Edit the YAML manifests below to modify namespace.
+. Create the snapshot controller in the desired namespace. Edit the YAML manifests below to modify namespace.
 +
-For Kubernetes 1.20 and above use v4.1.1. For Kubernetes versions 1.17-1.19 use v3.0.3
+For Kubernetes 1.20 and above use v5.0 or above. For Kubernetes versions 1.17-1.19 use v3.0.3
 +
-NOTE: Don’t create a snapshot-controller if setting up on-demand volume snapshots in a GKE environment. GKE uses a built-in, hidden snapshot-controller.
+NOTE: Don’t create a snapshot controller if setting up on-demand volume snapshots in a GKE environment. GKE uses a built-in, hidden snapshot-controller.
 
 +
 [role="tabbed-block"]
 ====
-.v4.1.1 controller
+.v5.0 controller
 --
 [source,yaml]
 ----
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v4.1.1/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v4.1.1/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/release-5.0/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/release-5.0/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
 ----
 --
 .v3.0.3 controller

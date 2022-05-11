@@ -28,6 +28,7 @@ For Kubernetes 1.20 and above, use v5. For Kubernetes versions 1.17-1.19 use v1b
 ====
 .v5 CRDs
 --
+[source,yaml]
 ----
 $ cat snapshot-setup.sh
 #!/bin/bash
@@ -39,6 +40,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 --
 .v1beta1 CRDs
 --
+[source,yaml]
 ----
 $ cat snapshot-setup.sh
 #!/bin/bash
@@ -61,6 +63,7 @@ NOTE: Don’t create a snapshot-controller if setting up on-demand volume snapsh
 ====
 .v4.1.1 controller
 --
+[source,yaml]
 ----
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v4.1.1/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v4.1.1/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
@@ -68,6 +71,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 --
 .v3.0.3 controller
 --
+[source,yaml]
 ----
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v3.0.3/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v3.0.3/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml

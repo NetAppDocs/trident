@@ -12,6 +12,8 @@ summary: You can collect logs for help with troubleshooting. The method you use 
 
 You can collect logs for help with troubleshooting. The method you use to collect the logs varies based on how you are running the Docker plugin.
 
+== Collect logs for troubleshooting
+
 .Steps
 
 . If you are running Astra Trident using the recommended managed plugin method (i.e., using `docker plugin` commands), view them as follows:
@@ -40,7 +42,7 @@ docker plugin enable <plugin>
 ----
 . If you are running the binary itself on the host, logs are available in the host’s `/var/log/netappdvp` directory. To enable debug logging, specify `-debug` when you run the plugin.
 
-=== General troubleshooting tips
+== General troubleshooting tips
 
 * The most common problem new users run into is a misconfiguration that prevents the plugin from initializing. When this happens you will likely see a message such as this when you try to install or enable the plugin:
 +

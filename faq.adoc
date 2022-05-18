@@ -283,6 +283,10 @@ To restore a volume to an ONTAP snapshot, perform the following steps:
 . Revert to the required snapshot through ONTAP CLI or OnCommand System Manager.
 . Restart the application pod.
 
+=== Can Trident provision volumes on SVMs that have a Load-Sharing Mirror configured?
+
+Load-sharing mirrors can be created for root volumes of SVMs that serve data over NFS. ONTAP automatically updates load-sharing mirrors for volumes that have been created by Trident. This may result in delays in mounting volumes. When multiple volumes are created using Trident, provisioning a volume is dependent on ONTAP updating the load-sharing mirror.
+
 === How can I separate out storage class usage for each customer/tenant?
 
 Kubernetes does not allow storage classes in namespaces. However, you can use Kubernetes to limit usage of a specific storage class per namespace by using Storage Resource Quotas, which are per namespace. To deny a specific namespace access to specific storage, set the resource quota to 0 for that storage class.

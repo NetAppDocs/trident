@@ -46,7 +46,7 @@ Learn more about driver capabilities link:../trident-concepts/ontap-drivers.html
 
 Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-5A78F93F-7539-4840-AB0B-4A6E3252CF84.html[FabricPool^] to manage storage tiers. It enables you to store data in a tier, based on whether the data is frequently accessed.
 
-Astra Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the `admin` cluster user. Astra Trident typically uses the `admin` cluster user for non-Amazon FSx for ONTAP deployments.
+Astra Trident expects to be run as a `vsadmin` SVM user or as a user with a different name that has the same role. Amazon FSx for NetApp ONTAP has an `fsxadmin` user that is a limited replacement of the ONTAP `admin` cluster user. It is not recommended to use the `fsxadmin` user, with Trident, as a `vsadmin` SVM user has access to more Astra Trident capabilities.
 
 === Drivers
 
@@ -62,8 +62,10 @@ You can integrate Astra Trident with Amazon FSx for NetApp ONTAP by using the fo
 
 Astra Trident offers two modes of authentication:
 
-* Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. We recommend using the `vsadmin` user to configure your backend. Astra Trident will communicate with the FSx file system using this username and password.
 * Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
+* Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. 
++
+WARNING: We strongly recommend using the `vsadmin` user instead of the `fsxadmin` to configure your backend. Astra Trident will communicate with the FSx file system using this username and password.
 
 To learn more about authentication, see these links:
 

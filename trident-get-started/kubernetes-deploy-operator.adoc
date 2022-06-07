@@ -10,7 +10,10 @@ summary: You can deploy Astra Trident with the Trident operator. You can deploy 
 :icons: font
 :imagesdir: ../media/
 
-You can deploy Astra Trident with the Trident operator. You can deploy the Trident operator either manually or using Helm.
+You can deploy Astra Trident using the Trident operator. You can deploy the Trident operator in one of two ways: 
+
+* Using the Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator[Helm Chart^]: The Helm Chart deploys the Trident operator and installs Trident in one step.  
+* Manually: Trident provides a link:https://github.com/NetApp/trident/blob/master/deploy/bundle.yaml[bundle.yaml^] file that can be used to install the operator and create associated objects.
 
 TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
 
@@ -28,7 +31,7 @@ To deploy Astra Trident, the following prerequisites should be met:
 
 Got all that? Great! Let's get started.
 
-== Deploy the Trident operator by using Helm
+== Deploy the Trident operator and install Astra Trident using Helm
 
 Perform the steps listed to deploy the Trident operator by using Helm.
 

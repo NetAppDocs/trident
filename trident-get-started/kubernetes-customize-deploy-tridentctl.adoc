@@ -12,10 +12,6 @@ summary: Trident’s installer enables you to customize attributes.
 
 Trident installer enables you to customize attributes. For example, if you have copied the Trident image to a private repository, you can specify the image name by using `--trident-image`. If you have copied the Trident image as well as the needed CSI sidecar images to a private repository, it might be preferable to specify the location of that repository by using the `--image-registry` switch, which takes the form `<registry FQDN>[:port]`.
 
-To have Astra Trident automatically configure worker nodes for you, use `--enable-node-prep`. For more details on how it works, see link:../trident-use/automatic-workernode.html[here^].
-
-NOTE: Automatic worker node preparation is a *beta feature* meant to be used in non-production environments only.
-
 If you are using a distribution of Kubernetes, where `kubelet` keeps its data on a path other than the usual `/var/lib/kubelet`, you can specify the alternate path by using `--kubelet-dir`.
 
 If you need to customize the installation beyond what the installer's arguments allow, you can also customize the deployment files. Using the `--generate-custom-yaml` parameter creates the following YAML files in the installer's `setup` directory:

@@ -24,7 +24,7 @@ Beginning in 22.07, Astra Trident automatically detects if the node is capable o
 kubectl get event -A --field-selector involvedObject.name=<Kubernetes node name>
 ----
 
-Trident also identifies services enabled for each node on the Trident node CR. To view the enabled services, use the command:
+Trident also identifies services enabled for each node on the Trident node CR. To view the discovered services, use the command:
 
 ----
 tridentctl get node -o wide -n <Trident namespace>

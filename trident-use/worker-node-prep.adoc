@@ -18,7 +18,7 @@ WARNING: You should always reboot your worker nodes after installing the NFS or 
 
 == Node service discovery
 
-Beginning in 22.07, Astra Trident automatically detects if the node is capable of running iSCSI or NFS services. Astra Trident creates events for the node to identify the services discovered. You can review these events using the command:
+Beginning in 22.07, Astra Trident attempts to automatically detect if the node is capable of running iSCSI or NFS services. Astra Trident creates events for the node to identify the services discovered. You can review these events using the command:
 
 ----
 kubectl get event -A --field-selector involvedObject.name=<Kubernetes node name>

@@ -16,6 +16,22 @@ Recent versions of RedHat CoreOS have both NFS and iSCSI installed by default.
 
 WARNING: You should always reboot your worker nodes after installing the NFS or iSCSI tools, or else attaching volumes to containers might fail.
 
+== Node service discovery
+
+Beginning in 22.07, Astra Trident attempts to automatically detect if the node is capable of running iSCSI or NFS services. Astra Trident creates events for the node to identify the services discovered. You can review these events using the command:
+
+----
+kubectl get event -A --field-selector involvedObject.name=<Kubernetes node name>
+----
+
+Trident also identifies services enabled for each node on the Trident node CR. To view the discovered services, use the command:
+
+----
+tridentctl get node -o wide -n <Trident namespace>
+----
+
+NOTE: Node service discovery identifies discovered services but does not guarantee services are properly configured. Conversely, the absence of a discovered service does not guarantee the volume mount will fail. 
+
 == NFS volumes
 
 [%header,cols=3*]
@@ -42,6 +58,7 @@ Consider the following when using iSCSI volumes:
 
 * Each node in the Kubernetes cluster must have a unique IQN. *This is a necessary prerequisite*.
 * If using RHCOS version 4.5 or later, or RHEL or CentOS version 8.2 or later with the `solidfire-san` driver, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`.
++
 ----
 sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf
 ----
@@ -112,5 +129,3 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 |===
 
 NOTE: For Ubuntu 18.04, you must discover target ports with `iscsiadm` before starting `open-iscsi` for the iSCSI daemon to start. You can alternatively modify the `iscsi` service to start `iscsid` automatically.
-
-NOTE: If you want to learn more about automatic worker node preparation, which is a beta feature, see link:automatic-workernode.html[here^].

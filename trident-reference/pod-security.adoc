@@ -1,0 +1,77 @@
+---
+sidebar: sidebar
+permalink: trident-reference/pod-security.html
+keywords: psp, pss, scc, pod security, pod security standards, pod security policies, security context contraints
+summary: Pod Security Standards
+---
+
+= Pod Security Standards (PSS)
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Kubernetes Pod Security Standards (PSS) define permission levels and restrict the behavior of pods. To provide this customization, Astra Trident enables certain permissions during installation. 
+
+NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21 and will be removed in v1.25. For more information, see link:https://kubernetes.io/docs/concepts/security/[Kubernetes: Security].
+
+== Minimum Astra Trident permissions
+Astra Trident enables the following permissions by default. 
+
+[cols=",,,",options="header",]
+|===
+|Labels 
+|Description 
+|Required 
+|Default
+
+//row 1
+|`pod-security.kubernetes.io/enforce: privileged`
+
+ `pod-security.kubernetes.io/enforce-version: <max-version>` 
+
+|Allows the Trident Controller and nodes to be admitted into the install namespace. Do not change the namespace label. 
+
+| Yes
+
+|`enforce: privileged`
+`enforce-version: <version of the current cluster or highest version of PSS tested.>``
+
+//row 2
+|
+
+|Linux placeholder 
+
+| 
+
+|
+
+//row 3
+|
+
+|SELinux placeholder
+
+| 
+
+|
+
+//row 4
+|
+
+|DAC placeholder
+
+|
+
+|
+
+//row 5
+|
+
+|Trident controller and daemonset placeholder
+
+|
+
+|
+
+|===
+
+WARNING: Changing the namespace labels can result in pods not being scheduled, an "Error creating: ..." or, "Warning: trident-csi-...". If this happens, check if the namespace label for `privileged` was changed. If so, reinstall Trident.

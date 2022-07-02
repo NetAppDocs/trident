@@ -200,7 +200,7 @@ volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap
 +
 For NFS storage drivers, a filesystem already exists as part of the NFS export. In order to use `fsGroup` the storage class still needs to specify a `fsType`. You can set it to `nfs` or any non-null value.
 
-* See link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes^] for further details on volume expansion.
+* See link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes] for further details on volume expansion.
 
 * The Trident installer bundle provides several example storage class definitions for use with Trident in ``sample-input/storage-class-*.yaml``. Deleting a Kubernetes storage class causes the corresponding Trident storage class to be deleted as well.
 ====
@@ -256,7 +256,7 @@ Here are a few points to keep in mind about Trident's CRDs:
 
 * When Trident is installed, a set of CRDs are created and can be used like any other resource type.
 * When upgrading from a previous version of Trident (one that used `etcd` to maintain state), the Trident installer migrates data from the `etcd` key-value data store and creates corresponding CRD objects.
-* When uninstalling Trident by using the `tridentctl uninstall` command, Trident pods are deleted but the created CRDs are not cleaned up. See link:../trident-managing-k8s/uninstall-trident.html[Uninstall Trident^] to understand how Trident can be completely removed and reconfigured from scratch.
+* When uninstalling Trident by using the `tridentctl uninstall` command, Trident pods are deleted but the created CRDs are not cleaned up. See link:../trident-managing-k8s/uninstall-trident.html[Uninstall Trident] to understand how Trident can be completely removed and reconfigured from scratch.
 
 == Trident `StorageClass` objects
 
@@ -274,7 +274,7 @@ Backends represent the storage providers on top of which Trident provisions volu
 
 NOTE: This is one of the two object types that you create and manage yourself. The other is the Kubernetes `StorageClass` object.
 
-For more information about how to construct these objects, see Backend configuration.
+For more information about how to construct these objects, see link:../trident-use/backends.html[configuring backends].
 
 == Trident `StoragePool` objects
 
@@ -372,7 +372,7 @@ To accomplish this, Astra Trident employs a `ResourceQuota` object to ensure a "
 
 If you need more control over the default Resource Quota and Priority Class, you can generate a `custom.yaml` or configure the `ResourceQuota` object using Helm chart.
 
-A `ResourceQuota`object prioritizing the Trident daemonset looks like this:
+The following is an example of a `ResourceQuota`object prioritizing the Trident daemonset. 
 
 [source,yaml]
 ----

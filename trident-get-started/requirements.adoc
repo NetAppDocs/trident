@@ -19,15 +19,15 @@ NOTE: To learn about the ports that Astra Trident uses, see link:../trident-refe
 Astra Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.9, 1.10, 1.11
-* Kubernetes 1.18 or later (latest: 1.23)
+* Kubernetes 1.19 or later (latest: 1.24)
 * Mirantis Kubernetes Engine 3.4
-* OpenShift 4.7, 4.8, 4.9, 4.10
+* OpenShift 4.7 (support ends August 24, 2022), 4.8, 4.9, 4.10
 
 The Trident operator is supported with these releases:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.9, 1.10, 1.11
-* Kubernetes 1.18 or later (latest: 1.23)
-* OpenShift 4.7, 4.8, 4.9, 4.10
+* Kubernetes 1.19 or later (latest: 1.24)
+* OpenShift 4.7 (support ends August 24, 2022), 4.8, 4.9, 4.10
 
 NOTE: Red Hat OpenShift Container Platform users might observe their initiatorname.iscsi file to be blank if using any version below 4.6.8. This is a bug that has been identified by RedHat to be fixed with OpenShift 4.6.8. See this https://access.redhat.com/errata/RHSA-2020:5259/[bug fix announcement^]. NetApp recommends that you use Astra Trident on OpenShift 4.6.8 and later.
 
@@ -102,8 +102,8 @@ By default, Astra Trident runs in a container and will, therefore, run on any Li
 Though Astra Trident does not officially "support" specific operating systems, the following Linux distributions are known to work:
 
 * RedHat CoreOS (RHCOS) versions as supported by OpenShift Container Platform
-* RHEL or CentOS 7.4 or later
-* Ubuntu 18.04 or later
+* RHEL or CentOS 7.9 or later (latest 9.10)
+* Ubuntu 18.04 or later (latest 22.04)
 
 The `tridentctl` utility also runs on any of these distributions of Linux.
 

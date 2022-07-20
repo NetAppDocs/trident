@@ -22,7 +22,7 @@ If your Kubernetes distribution does not include the snapshot controller and CRD
 
 . Create volume snapshot CRDs.
 +
-For Kubernetes 1.20 and above, use v1 snapshot CRDs with snapshot components of v5.0 or above. For Kubernetes versions 1.17-1.19, use v1beta1 with v3.0.3 snapshot components.
+For Kubernetes 1.20 and above, use v1 snapshot CRDs with snapshot components of v5.0 or above. For Kubernetes versions 1.18-1.19, use v1beta1 with v3.0.3 snapshot components.
 +
 [role="tabbed-block"]
 ====
@@ -54,7 +54,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 
 . Create the snapshot controller in the desired namespace. Edit the YAML manifests below to modify namespace.
 +
-For Kubernetes 1.20 and above use v5.0 or above. For Kubernetes versions 1.17-1.19 use v3.0.3
+For Kubernetes 1.20 and above use v5.0 or above. For Kubernetes versions 1.18-1.19 use v3.0.3
 +
 NOTE: Don’t create a snapshot controller if setting up on-demand volume snapshots in a GKE environment. GKE uses a built-in, hidden snapshot-controller.
 
@@ -89,7 +89,7 @@ Before creating a volume snapshot, set up a link:../trident-reference/objects.ht
 
 ----
 $ cat snap-sc.yaml
-#Use apiVersion v1 for Kubernetes 1.20 and above. For Kubernetes 1.17 - 1.19, use apiVersion v1beta1.
+#Use apiVersion v1 for Kubernetes 1.20 and above. For Kubernetes 1.18 - 1.19, use apiVersion v1beta1.
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshotClass
 metadata:
@@ -104,7 +104,7 @@ The `driver` points to Astra Trident’s CSI driver. `deletionPolicy` can be `De
 
 ----
 $ cat snap.yaml
-#Use apiVersion v1 for Kubernetes 1.20 and above. For Kubernetes 1.17 - 1.19, use apiVersion v1beta1.
+#Use apiVersion v1 for Kubernetes 1.20 and above. For Kubernetes 1.18 - 1.19, use apiVersion v1beta1.
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshot
 metadata:

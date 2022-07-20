@@ -19,17 +19,17 @@ NOTE: To learn about the ports that Astra Trident uses, see link:../trident-refe
 Astra Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.9, 1.10, 1.11
-* Kubernetes 1.18 - 1.23 
+* Kubernetes 1.18 and above 
 * Mirantis Kubernetes Engine 3.4
 * OpenShift 4.7, 4.8, 4.9, 4.10
 
 The Trident operator is supported with these releases:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.9, 1.10, 1.11
-* Kubernetes 1.18  - 1.23
+* Kubernetes 1.18 and above
 * OpenShift 4.7, 4.8, 4.9, 4.10
 
-NOTE: Red Hat OpenShift Container Platform users might observe their initiatorname.iscsi file to be blank if using any version below 4.6.8. This is a bug that has been identified by RedHat to be fixed with OpenShift 4.6.8. See this https://access.redhat.com/errata/RHSA-2020:5259/[bug fix announcement^]. NetApp recommends that you use Astra Trident on OpenShift 4.6.8 and later.
+NOTE: Red Hat OpenShift Container Platform users might observe their initiatorname.iscsi file to be blank if using any version below 4.6.8. This is a bug that has been identified by RedHat to be fixed with OpenShift 4.6.8. See this https://access.redhat.com/errata/RHSA-2020:5259/[bug fix announcement^]. NetApp recommends that you use Astra Trident on OpenShift 4.6.8 and above.
 
 Astra Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Rancher, and VMWare Tanzu Portfolio.
 
@@ -58,39 +58,39 @@ Astra Trident and the versions of Kubernetes it supports.
 |Feature gates required?
 
 |CSI Trident
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |Volume Snapshots
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |PVC from Volume Snapshots
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |iSCSI PV resize
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |ONTAP Bidirectional CHAP
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |Dynamic Export Policies
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |Trident Operator
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |Auto Worker Node Prep (beta)
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |CSI Topology
-a|1.18 and later
+a|1.18 and above
 a|No
 
 |===
@@ -192,4 +192,4 @@ a|
 
 |===
 
-NOTE: On Kubernetes version 1.20 and later, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v4.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v3.x` image.
+NOTE: On Kubernetes version 1.20 and above, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v4.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v3.x` image.

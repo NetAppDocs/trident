@@ -39,7 +39,7 @@ Perform the steps listed to deploy the Trident operator by using Helm.
 
 In addition to the prerequisites listed above, to deploy Trident operator by using Helm, you need the following:
 
-* Kubernetes 1.19 and later
+* Kubernetes 1.19 and above
 * Helm version 3
 
 .Steps
@@ -83,7 +83,7 @@ The first thing you need to do is log in to the Linux host and verify that it is
 
 NOTE: With OpenShift, use `oc` instead of `kubectl` in all of the examples that follow, and log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
-To see if your Kubernetes version is later than 1.19, run the following command:
+To verify your Kubernetes version, run the following command:
 ----
 kubectl version
 ----

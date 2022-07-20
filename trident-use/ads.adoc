@@ -16,7 +16,7 @@ Learn how to configure an Astra Data Store (ADS) backend for your Astra Trident 
 
 To configure and use the https://cloud.netapp.com/astra-data-store[Astra Data Store^] backend, you need the following:
 
-* A supported ADS storage system. See link:https://docs.netapp.com/us-en/astra-data-store/index.html[Astra Data Store preview documentation^] for details.
+* Astra Data Store 22.05 or later. See link:https://docs.netapp.com/us-en/astra-data-store/index.html[Astra Data Store documentation^] for details.
 * Credentials for the Kubernetes cluster hosting ADS. The Kubernetes cluster hosting ADS must have a namespace dedicated to the volume, snapshot, and export policy resources that this Astra Trident backend will create and manage. A `kubeconfig` must be available for the Kubernetes cluster hosting ADS that supports:
 ** Reading all the objects in the `astrads-system` namespace
 ** Reading/writing objects in the namespace created for this Astra Trident backend's use

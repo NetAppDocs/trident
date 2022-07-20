@@ -39,7 +39,7 @@ To use Astra Trident, you need one or more of the following supported backends:
 
 * Amazon FSx for NetApp ONTAP
 * Azure NetApp Files
-* Astra Data Store
+* Astra Data Store 22.05 or later
 * Cloud Volumes ONTAP
 * Cloud Volumes Service for GCP
 * FAS/AFF/Select 9.3 or later
@@ -192,4 +192,4 @@ a|
 
 |===
 
-NOTE: On Kubernetes version 1.20 and later, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v4.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `k8s.gcr.io/sig-storage/csi-snapshotter:v3.x` image.
+NOTE: On Kubernetes version 1.20 and later, use the validated `registry.k8s.io/sig-storage/csi-snapshotter:v4.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `registry.k8s.io/sig-storage/csi-snapshotter:v3.x` image.

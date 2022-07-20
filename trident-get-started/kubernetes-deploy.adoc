@@ -95,7 +95,7 @@ See these links for more information about customizing your deployment:
 * link:kubernetes-customize-deploy.html[Customize your operator-based deployment^]
 * link:kubernetes-customize-deploy-tridentctl.html[Customize your `tridentctl`-based deployment^]
 
-IMPORTANT: If you are using a private image repository, you should add `/k8scsi` for Kubernetes versions earlier than 1.17 or `/sig-storage` for Kubernetes versions later than 1.17 to the end of the private registry URL. When using a private registry for `tridentctl` deployment, you should use `--trident-image` and `--autosupport-image` in conjunction with `--image-registry`. If you are deploying Astra Trident by using the Trident operator, ensure that the orchestrator CR includes `tridentImage` and `autosupportImage` in the installation parameters.
+IMPORTANT: If you are using a private image repository, you should add `/sig-storage` to the end of the private registry URL. When using a private registry for `tridentctl` deployment, you should use `--trident-image` and `--autosupport-image` in conjunction with `--image-registry`. If you are deploying Astra Trident by using the Trident operator, ensure that the orchestrator CR includes `tridentImage` and `autosupportImage` in the installation parameters.
 
 === Remote deployment
 

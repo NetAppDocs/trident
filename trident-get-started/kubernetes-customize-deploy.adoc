@@ -43,7 +43,7 @@ Telemetry |"http://proxy.example.com:8888"
 |`tridentImage` |Astra Trident image to install |"netapp/trident:21.04"
 
 |`imageRegistry` |Path to internal registry, of the format
-`<registry FQDN>[:port][/subpath]` |"k8s.gcr.io/sig-storage (k8s 1.18+)
+`<registry FQDN>[:port][/subpath]` |"k8s.gcr.io/sig-storage (k8s 1.19+)
 or quay.io/k8scsi"
 
 |`kubeletDir` |Path to the kubelet directory on the host |“/var/lib/kubelet”
@@ -63,8 +63,6 @@ Astra Trident |
 
 |===
 IMPORTANT: `spec.namespace` is specified in `TridentOrchestrator` to signify which namespace Astra Trident is installed in. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the status of `TridentOrchestrator` to change to `Failed`. Astra Trident is not meant to be migrated across namespaces.
-
-NOTE: Automatic worker node prep is a *beta feature* meant to be used in non-production environments only.
 
 TIP: For more information on formatting pod parameters, see link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
 

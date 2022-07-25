@@ -21,7 +21,7 @@ TIP: If you have not already familiarized yourself with the link:../trident-conc
 
 To deploy Astra Trident, the following prerequisites should be met:
 
-* You have full privileges to a supported Kubernetes cluster running Kubernetes 1.18 - 1.24.
+* You have full privileges to a supported Kubernetes cluster running Kubernetes 1.19 - 1.24.
 * You have access to a supported NetApp storage system.
 * You have the capability to mount volumes from all of the Kubernetes worker nodes.
 * You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
@@ -39,7 +39,8 @@ Perform the steps listed to deploy the Trident operator by using Helm.
 
 In addition to the prerequisites listed above, to deploy Trident operator by using Helm, you need the following:
 
-* Kubernetes 1.18 - 1.24 
+* Kubernetes 1.19 - 1.24
+
 * Helm version 3
 
 .Steps
@@ -187,7 +188,6 @@ Status:
     Autosupport Proxy:
     Autosupport Serial Number:
     Debug:                     true
-    Enable Node Prep:          false
     Image Pull Secrets:
     Image Registry:
     k8sTimeout:           30

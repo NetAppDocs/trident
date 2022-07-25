@@ -40,6 +40,7 @@ Perform the steps listed to deploy the Trident operator by using Helm.
 In addition to the prerequisites listed above, to deploy Trident operator by using Helm, you need the following:
 
 * Kubernetes 1.19 - 1.24
+
 * Helm version 3
 
 .Steps
@@ -53,7 +54,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 See the following example:
 +
 ----
-helm install <release-name> netapp-trident/trident-operator --version 22.1.0 --namespace <trident-namespace>
+helm install <release-name> netapp-trident/trident-operator --version 22.7.0 --namespace <trident-namespace>
 ----
 +
 NOTE: If you did not already create a namespace for Trident, you can add the `--create-namespace` parameter to the `helm install` command. Helm will then automatically create the namespace for you.
@@ -66,7 +67,7 @@ There are two ways to pass configuration data during the install:
 For example, to change the default value of `debug`, run the following `--set` command:
 
 ----
-$ helm install <name> netapp-trident/trident-operator --version 22.1.0 --set tridentDebug=true
+$ helm install <name> netapp-trident/trident-operator --version 22.7.0 --set tridentDebug=true
 ----
 
 The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.

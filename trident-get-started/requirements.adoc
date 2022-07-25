@@ -56,6 +56,7 @@ Astra Trident and the versions of Kubernetes it supports.
 |Feature gates required?
 
 |CSI Trident
+
 a|1.19 - 1.24
 a|No
 
@@ -89,6 +90,7 @@ a|No
 
 |CSI Topology
 a|1.19 - 1.24
+
 a|No
 
 |===
@@ -191,3 +193,4 @@ a|
 |===
 
 NOTE: On Kubernetes version 1.20 and above, use the validated `registry.k8s.io/sig-storage/csi-snapshotter:v4.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `registry.k8s.io/sig-storage/csi-snapshotter:v3.x` image.
+

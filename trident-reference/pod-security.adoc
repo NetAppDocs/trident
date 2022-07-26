@@ -16,12 +16,10 @@ Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define p
 
 PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21 and will be removed in v1.25. For more information, see link:https://kubernetes.io/docs/concepts/security/[Kubernetes: Security].
 
-.PSS permissions
-[cols=",,,",options="header",]
+[cols=",,",options="header",]
 |===
 |Labels 
 |Description 
-|Required 
 |Default
 
 //row 
@@ -29,9 +27,9 @@ PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21
 
  `pod-security.kubernetes.io/enforce-version: <max-version>` 
 
-|Allows the Trident Controller and nodes to be admitted into the install namespace. Do not change the namespace label. 
+|Allows the Trident Controller and nodes to be admitted into the install namespace. 
 
-| Yes
+Do not change the namespace label. 
 
 |`enforce: privileged`
 
@@ -42,7 +40,6 @@ PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21
 == Pod Security Standards (PSS)
 Because bidirectional mounts are allowed only on privileged containers, the node pod must run as a privileged container. For more information, see link:https://kubernetes.io/docs/concepts/storage/volumes/#mount-propagation[Kubernetes: Mount proagation]. 
 
-.PSP permissions
 [cols=",",options="header",]
 |===
 |Permission 
@@ -51,43 +48,41 @@ Because bidirectional mounts are allowed only on privileged containers, the node
 //row 
 |Host networking
 
-|Required for the iSCSI daemon. 
+|Required for the iSCSI daemon. `iscsiadm` manages iSCSI mounts and uses host networking to communicate with the iSCSI daemon.
 
 //row
 |Host IPC
 
-|NFS uses interprocess communication (IPC) to communicate with the NSFD. 
+|NFS uses interprocess communication (IPC) to communicate with the NFSD. 
 
 //row 
 |Host PID
 
-|Required to start `rpc-statd` for NFS. 
+|Required to start `rpc-statd` for NFS. Astra Trident queries host processes to determine if `rpc-statd` is running before mounting NFS volumes
 
 //row 
 |Capabilities
 
-|`CAP_SYS_ADMIN` is required to mount volumes. 
-
-The default capabilities for the privileged container are:
+|The `SYS_ADMIN` capability is provided as part of the default capabilities for privileged containers. For example, Docker sets these capabilities for privileged containers:
 `CapPrm: 0000003fffffffff`
 `CapEff: 0000003fffffffff`
 
 //row 
 |`seccomp`
 
-|`seccomp` cannot be enabled in privileged containers; therefore, it can't be enabled in Astra Trident.
+|`seccomp` profile is always "Unconfined" in privileged containers; therefore, it cannot be enabled in Astra Trident
 
 //row 
 |SELinux
 
-|On OpenShift, SELinux privileged containers are granted Super Privileged Container (`spc_t`) status. On RHEL with `containerd`, SELinux is disabled and grants all containers `spc_t` status. 
+|On OpenShift, privileged containers are run in the `spc_t` ("Super Privileged Container") domain, and unprivileged containers are run in the `container_t` domain. On `containerd`, with `container-selinux` installed, all containers are run in the `spc_t` domain, which effectively disables SELinux.
 
 Astra Trident does not add `seLinuxOptions` to containers. 
 
 //row 
 |DAC
 
-|Privileged containers must be run as root. 
+|Privileged containers must be run as root. Non-privileged containers can be run as the default user.
 
 |===
 

@@ -75,9 +75,7 @@ Because bidirectional mounts are allowed only on privileged containers, the node
 //row 
 |SELinux
 
-|On OpenShift, privileged containers are run in the `spc_t` ("Super Privileged Container") domain, and unprivileged containers are run in the `container_t` domain. On `containerd`, with `container-selinux` installed, all containers are run in the `spc_t` domain, which effectively disables SELinux.
-
-Astra Trident does not add `seLinuxOptions` to containers. 
+|On OpenShift, privileged containers are run in the `spc_t` ("Super Privileged Container") domain, and unprivileged containers are run in the `container_t` domain. On `containerd`, with `container-selinux` installed, all containers are run in the `spc_t` domain, which effectively disables SELinux. Therefore, Astra Trident does not add `seLinuxOptions` to containers. 
 
 //row 
 |DAC

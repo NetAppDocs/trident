@@ -18,7 +18,12 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 === Fixes
 
-Fixed issue to handle boolean and number values for node selector when configuring Trident with Helm or the Trident Operator. (link:https://github.com/NetApp/trident/issues/700[GitHub issue #700^])
+**Kubernetes**
+
+* Fixed issue to handle boolean and number values for node selector when configuring Trident with Helm or the Trident Operator. (link:https://github.com/NetApp/trident/issues/700[GitHub issue #700^])
+
+* Fixed issue in handling errors from non-CHAP path, so that kubelet will retry if it fails. link:https://github.com/NetApp/trident/issues/736[GitHub issue #736^])
+
 
 === Enhancements
 
@@ -37,9 +42,21 @@ Fixed issue to handle boolean and number values for node selector when configuri
 * **Kubernetes:** Updated minimum supported Kubernetes to 1.19.
 
 * Astra Data Store (ADS) driver updated to v1beta1 CRDs, so this version of Trident requires ADS 22.5.0 or later.
-Removals
+
+* Backend config no longer allows multiple authentication types in single config.
+
+=== Removals 
 
 * AWS CVS driver (deprecated since 22.04) has been removed.
+
+* Kubernetes 
+
+** Removed unnecessary SYS_ADMIN capability from node pods.
+
+** Reduces nodeprep down to simple host info and active service discovery to do a best-effort
+confirmation that NFS/iSCSI services are available on worker nodes.
+
+
 
 === Documentation
 

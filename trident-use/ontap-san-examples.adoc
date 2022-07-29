@@ -25,7 +25,9 @@ See the following table for the backend configuration options:
 
 |`backendName`  |Custom name or the storage backend |Driver name + “_” + dataLIF
 
-|`managementLIF` |IP address of a cluster or SVM management LIF |“10.0.0.1”, “[2001:1234:abcd::fefe]”
+|`managementLIF` |IP address of a cluster or SVM management LIF
+
+For seamless MetroCluster switchover, you must specify an SVM management LIF. This feature is **tech preview**. |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
 |`dataLIF` |IP address of protocol LIF. Use square brackets for IPv6. Cannot be updated after you set it |Derived by the SVM unless specified
 
@@ -65,11 +67,18 @@ See the following table for the backend configuration options:
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} |null
 
-|`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview*	|false
+|`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview*	
+
+Not supported with MetroCluster. |false
 
 |===
 
-NOTE: `useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.9 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
+[WARNING]
+.`useREST` considerations
+===============================
+* `useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.10 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
+* `useREST` is not supported with MetroCluster.
+===============================
 
 To communicate with the ONTAP cluster, you should provide the authentication parameters. This could be the username/password to a security login or an installed certificate.
 

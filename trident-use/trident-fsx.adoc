@@ -67,6 +67,10 @@ Astra Trident offers two modes of authentication:
 +
 WARNING: We strongly recommend using the `vsadmin` user instead of the `fsxadmin` to configure your backend. Astra Trident will communicate with the FSx file system using this username and password.
 
+You can update existing backends to move between credential-based and certificate-based methods. However, only one authentication method is supported at a time. To switch to a different authentication method, you must remove the existing method from the backend configuration.
+
+WARNING: If you attempt to provide *both credentials and certificates*, backend creation will fail with an error that more than one authentication method was provided in the configuration file.
+
 To learn more about authentication, see these links:
 
 * link:ontap-nas-prep.html[ONTAP NAS^]

@@ -49,9 +49,9 @@ NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes
 `CapEff: 0000003fffffffff`
 
 //row 
-|`seccomp`
+|Seccomp
 
-|`seccomp` profile is always "Unconfined" in privileged containers; therefore, it cannot be enabled in Astra Trident.
+|Seccomp profile is always "Unconfined" in privileged containers; therefore, it cannot be enabled in Astra Trident.
 
 //row 
 |SELinux
@@ -61,7 +61,7 @@ NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes
 //row 
 |DAC
 
-|Privileged containers must be run as root. Non-privileged containers can be run as the default user.
+|Privileged containers must be run as root. Non-privileged containers run as root to access unix sockets required by CSI. 
 
 |===
 

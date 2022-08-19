@@ -41,11 +41,11 @@ NOTE: Node service discovery identifies discovered services but does not guarant
 |Commands
 
 |NFS
-a|RHEL/CentOS
+a|RHEL/CentOS 7
 a|`sudo yum install -y nfs-utils`
 
 |NFS
-a|Ubuntu/Debian
+a|Ubuntu
 a|`sudo apt-get install -y nfs-common`
 
 |===
@@ -57,7 +57,7 @@ NOTE: You should ensure that the NFS service is started up during boot time.
 Consider the following when using iSCSI volumes:
 
 * Each node in the Kubernetes cluster must have a unique IQN. *This is a necessary prerequisite*.
-* If using RHCOS version 4.5 or later, or RHEL or CentOS version 8.2 or later with the `solidfire-san` driver, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`.
+* If using RHCOS version 4.5 or later, or other RHEL-compatible Linux distribution, with the `solidfire-san` driver, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`.
 +
 ----
 sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf
@@ -96,7 +96,7 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 `sudo systemctl enable --now iscsi`
 
 |iSCSI
-a|Ubuntu/Debian
+a|Ubuntu
 a|
 . Install the following system packages:
 +

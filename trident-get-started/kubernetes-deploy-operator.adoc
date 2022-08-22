@@ -46,17 +46,19 @@ In addition to the prerequisites listed above, to deploy Trident operator by usi
 
 . Add Trident's Helm repository:
 +
+[source,cli]
 ----
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 . Use the `helm install` command and specify a name for your deployment.
 See the following example:
 +
+[source,cli]
 ----
-helm install <release-name> netapp-trident/trident-operator --version 22.4.0 --namespace <trident-namespace>
+helm install <release-name> netapp-trident/trident-operator --version 22.4.0 --create-namespace <trident-namespace>
 ----
 +
-NOTE: If you did not already create a namespace for Trident, you can add the `--create-namespace` parameter to the `helm install` command. Helm will then automatically create the namespace for you.
+NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
 
 There are two ways to pass configuration data during the install:
 
@@ -64,7 +66,7 @@ There are two ways to pass configuration data during the install:
 * `--set`: Specify overrides on the command line.
 
 For example, to change the default value of `debug`, run the following `--set` command:
-
+[source,cli]
 ----
 $ helm install <name> netapp-trident/trident-operator --version 22.4.0 --set tridentDebug=true
 ----
@@ -84,16 +86,21 @@ The first thing you need to do is log in to the Linux host and verify that it is
 NOTE: With OpenShift, use `oc` instead of `kubectl` in all of the examples that follow, and log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
 To verify your Kubernetes version, run the following command:
+[source,cli]
 ----
 kubectl version
 ----
 
 To see if you have Kubernetes cluster administrator privileges, run the following command:
+
+[source,cli]
 ----
 kubectl auth can-i '*' '*' --all-namespaces
 ----
 
 To verify if you can launch a pod that uses an image from Docker Hub and reach your storage system over the pod network, run the following command:
+
+[source,cli]
 ----
 kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
   ping <management IP>
@@ -105,6 +112,7 @@ NOTE: Beginning with 21.01, the Trident operator is cluster scoped. Using the Tr
 
 . Download the latest version of the https://github.com/NetApp/trident/releases/latest[Trident installer bundle] from the _Downloads_ section and extract it.
 +
+[source,cli]
 ----
 wget https://github.com/NetApp/trident/releases/download/v22.04.0/trident-installer-22.04.0.tar.gz
 tar -xf trident-installer-22.04.0.tar.gz
@@ -115,6 +123,7 @@ cd trident-installer
 +
 Run the following command:
 +
+[source,cli]
 ----
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
@@ -127,6 +136,7 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.1
 +
 The Trident installer contains manifests for defining these resources. By default, the operator is deployed in the `trident` namespace. If the `trident` namespace does not exist, use the following manifest to create one.
 +
+[source,cli]
 ----
 $ kubectl apply -f deploy/namespace.yaml
 ----
@@ -135,18 +145,21 @@ $ kubectl apply -f deploy/namespace.yaml
 +
 Run the following command to update the YAML manifests and generate your `bundle.yaml` using the `kustomization.yaml`:
 +
+[source,cli]
 ----
 kubectl kustomize deploy/ > deploy/bundle.yaml
 ----
 +
 Run the following command to create the resources and deploy the operator:
 +
+[source,cli]
 ----
 kubectl create -f deploy/bundle.yaml
 ----
 
 . To verify the status of the operator after you have deployed, do the following:
 +
+[source,cli]
 ----
 $ kubectl get deployment -n <operator-namespace>
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
@@ -164,6 +177,7 @@ IMPORTANT: There should only be *one instance* of the operator in a Kubernetes c
 === Step 3: Create `TridentOrchestrator` and install Trident
 
 You are now ready to install Astra Trident using the operator! This will require creating `TridentOrchestrator`. The Trident installer comes with example definitions for creating `TridentOrchestrator`. This kicks off an installation in the `trident` namespace.
+[source,cli]
 ----
 $ kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
 tridentorchestrator.trident.netapp.io/trident created
@@ -231,6 +245,7 @@ exists.
 During the installation, the status of `TridentOrchestrator` changes from `Installing` to `Installed`. If you observe the `Failed` status and the operator is unable to recover by itself, you should  check the logs of the operator. See the link:../troubleshooting.html[troubleshooting^] section.
 
 You can confirm if the Astra Trident installation completed by taking a look at the pods that have been created:
+[source,cli]
 ----
 $ kubectl get pod -n trident
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -241,7 +256,7 @@ trident-csi-zh2jt                   2/2     Running   0           1m
 trident-operator-766f7b8658-ldzsv   1/1     Running   0           3m
 ----
 You can also use `tridentctl` to check the version of Astra Trident installed.
-
+[source,cli]
 ----
 $ ./tridentctl -n trident version
 +----------------+----------------+

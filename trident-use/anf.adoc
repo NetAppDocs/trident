@@ -10,6 +10,7 @@ summary: Learn about how to configure Azure NetApp Files as the backend for your
 :icons: font
 :imagesdir: ../media/
 
+
 Learn about how to configure Azure NetApp Files (ANF) as the backend for your Astra Trident installation using the sample configurations provided.
 
 NOTE: The Azure NetApp Files service does not support volumes less than 100 GB. Astra Trident automatically creates 100-GB volumes if a smaller volume is requested.
@@ -66,6 +67,8 @@ See the following table for the backend configuration options:
 
 |`subnet` |Name of a subnet delegated to `Microsoft.Netapp/volumes` |""
 
+|`networkFeatures` |Set of VNet features for a volume, may be `Basic` or `Standard` |""
+
 |`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value |"" (not enforced by default)
@@ -77,6 +80,8 @@ See the following table for the backend configuration options:
 WARNING: If you encounter a “No capacity pools found” error when attempting to create a PVC, it is likely your app registration doesn’t have the required permissions and resources (subnet, virtual network, capacity pool) associated. Astra Trident will log the Azure resources it discovered when the backend is created when debug is enabled. Be sure to check if an appropriate role is being used.
 
 NOTE: If you want to mount the volumes by using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Any mount options set in a storage class override the mount options set in a backend configuration file.
+
+NOTE: The https://docs.microsoft.com/en-us/azure/azure-netapp-files/configure-network-features[Network Features^] functionality is not generally available in all regions and may have to be enabled in a subscription.  Specifying the `networkFeatures` config option when the functionality is not enabled will cause volume provisioning in Trident to fail.
 
 The values for `resourceGroups`, `netappAccounts`, `capacityPools`, `virtualNetwork`, and `subnet` may be specified using short or fully-qualified names.  Short names may match multiple resources with the same name, so using fully-qualified names is recommended in most situations.  The `resourceGroups`, `netappAccounts`, and `capacityPools` values are filters which restrict the set of discovered resources to those available to this storage backend and may be specified in any combination.  The fully-qualified names are of the following format:
 
@@ -166,6 +171,7 @@ This backend configuration further reduces the scope of volume placement to a si
 ],
         "virtualNetwork": "my-virtual-network",
         "subnet": "my-subnet",
+        "networkFeatures": "Standard",
         "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
         "limitVolumeSize": "500Gi",
         "defaults": {
@@ -173,7 +179,6 @@ This backend configuration further reduces the scope of volume placement to a si
             "snapshotDir": "true",
             "size": "200Gi",
             "unixPermissions": "0777"
-=======
         }
     }
 ----
@@ -192,6 +197,7 @@ This backend configuration defines multiple storage pools in a single file. This
         "clientSecret": "SECRET",
         "location": "eastus",
         "resourceGroups": ["application-group-1"],
+        "networkFeatures": "Basic",
         "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
         "labels": {
             "cloud": "azure"
@@ -204,7 +210,8 @@ This backend configuration defines multiple storage pools in a single file. This
                     "performance": "gold"
                 },
                 "serviceLevel": "Ultra",
-                "capacityPools": ["ultra-1", "ultra-2"]
+                "capacityPools": ["ultra-1", "ultra-2"],
+                "networkFeatures": "Standard"
             },
             {
                 "labels": {

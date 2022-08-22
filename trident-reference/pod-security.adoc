@@ -1,0 +1,376 @@
+---
+sidebar: sidebar
+permalink: trident-reference/pod-security.html
+keywords: psp, pss, scc, pod security, pod security standards, pod security policies, security context contraints
+summary: Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Astra Trident enables certain permissions during installation. 
+---
+
+= Pod Security Standards (PSS) and Security Context Constraints (SCC)
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Astra Trident enables certain permissions during installation. The following sections detail the permissions set by Astra Trident. 
+
+NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21 and will be removed in v1.25. For more information, see link:https://kubernetes.io/docs/concepts/security/[Kubernetes: Security].
+
+== Required Kubernetes Security Context and Related Fields
+
+[cols=",",options="header",]
+|===
+|Permission 
+|Description 
+
+//row
+|Privileged
+
+|CSI requires mount points to be Bidirectional, which means the Trident node pod must run a privileged container. For more information, see link:https://kubernetes.io/docs/concepts/storage/volumes/#mount-propagation[Kubernetes: Mount propagation].
+
+//row 
+|Host networking
+
+|Required for the iSCSI daemon. `iscsiadm` manages iSCSI mounts and uses host networking to communicate with the iSCSI daemon.
+
+//row
+|Host IPC
+
+|NFS uses interprocess communication (IPC) to communicate with the NFSD. 
+
+//row 
+|Host PID
+
+|Required to start `rpc-statd` for NFS. Astra Trident queries host processes to determine if `rpc-statd` is running before mounting NFS volumes.
+
+//row 
+|Capabilities
+
+|The `SYS_ADMIN` capability is provided as part of the default capabilities for privileged containers. For example, Docker sets these capabilities for privileged containers:
+`CapPrm: 0000003fffffffff`
+`CapEff: 0000003fffffffff`
+
+//row 
+|Seccomp
+
+|Seccomp profile is always "Unconfined" in privileged containers; therefore, it cannot be enabled in Astra Trident.
+
+//row 
+|SELinux
+
+|On OpenShift, privileged containers are run in the `spc_t` ("Super Privileged Container") domain, and unprivileged containers are run in the `container_t` domain. On `containerd`, with `container-selinux` installed, all containers are run in the `spc_t` domain, which effectively disables SELinux. Therefore, Astra Trident does not add `seLinuxOptions` to containers. 
+
+//row 
+|DAC
+
+|Privileged containers must be run as root. Non-privileged containers run as root to access unix sockets required by CSI. 
+
+|===
+
+== Pod Security Standards (PSS)
+
+[cols=",,",options="header",]
+|===
+|Label 
+|Description 
+|Default
+
+//row 
+|`pod-security.kubernetes.io/enforce`
+
+ `pod-security.kubernetes.io/enforce-version` 
+
+|Allows the Trident Controller and nodes to be admitted into the install namespace. 
+
+Do not change the namespace label.
+
+|`enforce: privileged`
+
+`enforce-version: <version of the current cluster or highest version of PSS tested.>`
+
+|===
+
+WARNING:  Changing the namespace labels can result in pods not being scheduled, an "Error creating: ..." or, "Warning: trident-csi-...". If this happens, check if the namespace label for `privileged` was changed. If so, reinstall Trident.
+
+== Pod Security Policies (PSP)
+
+[cols=",,",options="header",]
+|===
+|Field 
+|Description 
+|Default
+
+//row 
+| `allowPrivilegeEscalation`
+
+| Privileged containers must allow privilege escalation.
+
+| `true`
+//row 
+| `allowedCSIDrivers`
+
+|Trident does not use inline CSI ephemeral volumes.
+
+|Empty
+//row 
+| `allowedCapabilities`
+
+| Non-privileged Trident containers do not require more capabilities than the default set and privileged containers are granted all possible capabilities.
+
+| Empty
+//row 
+|`allowedFlexVolumes`
+
+|Trident does not make use of a link:https://github.com/kubernetes/community/blob/master/contributors/devel/sig-storage/flexvolume.md[FlexVolume driver^], therefore they are not included in the list of allowed volumes.
+
+|Empty
+//row 
+|`allowedHostPaths`
+
+| The Trident node pod mounts the node's root filesystem, therefore there is no benefit to setting this list.
+
+| Empty
+//row 
+| `allowedProcMountTypes`
+
+|Trident does not use any `ProcMountTypes`.
+
+|Empty
+//row 
+|`allowedUnsageSysctls`
+
+|Trident does not require any unsafe `sysctls`.
+
+| Empty
+//row 
+|`defaultAddCapabilities`
+
+|No capabilities are required to be added to privileged containers.
+
+| Empty
+
+//row 
+| `defaultAllowPrivilegeEscalation`
+
+| Allowing privilege escalation is handled in each Trident pod.
+
+| `false`
+//row 
+| `forbiddenSysctls`
+
+| No `sysctls` are allowed.
+
+| Empty
+//row 
+| `fsGroup`
+
+| Trident containers run as root.
+
+| `RunAsAny`
+//row 
+| `hostIPC`
+
+| Mounting NFS volumes requires host IPC to communicate with `nfsd`
+
+| `true`
+//row 
+| `hostNetwork`
+
+| iscsiadm requires the host network to communicate with the iSCSI daemon.
+
+| `true`
+//row 
+| `hostPID`
+
+|Host PID is required to check if `rpc-statd` is running on the node.
+
+| `true`
+//row 
+| `hostPorts`
+
+| Trident does not use any host ports.
+
+| Empty
+//row 
+| `privileged`
+
+| Trident node pods must run a privileged container in order to mount volumes.
+
+| `true`
+//row 
+| `readOnlyRootFilesystem`
+
+| Trident node pods must write to the node filesystem.
+
+| `false`
+//row 
+| `requiredDropCapabilities`
+
+| Trident node pods run a privileged container and cannot drop capabilities.
+
+| `none`
+//row 
+| `runAsGroup`
+
+| Trident containers run as root.
+
+| `RunAsAny`
+//row 
+| `runAsUser`
+
+| Trident containers run as root.
+
+| `runAsAny`
+//row 
+| `runtimeClass`
+
+| Trident does not use `RuntimeClasses`.
+
+| Empty
+//row 
+| `seLinux`
+
+| Trident does not set `seLinuxOptions` because there are currently differences in how container runtimes and Kubernetes distributions handle SELinux.
+
+| Empty
+//row 
+| `supplementalGroups`
+
+| Trident containers run as root.
+
+| `RunAsAny`
+//row 
+| `volumes`
+
+| Trident pods require these volume plugins.
+
+| `hostPath, projected, emptyDir`
+
+|===
+
+== Security Context Constraints (SCC)
+
+[cols=",,",options="header",]
+|===
+|Labels 
+|Description 
+|Default
+
+//row 
+| `allowHostDirVolumePlugin`
+
+| Trident node pods mount the node's root filesystem.
+
+| `true`
+//row
+| `allowHostIPC`
+
+| Mounting NFS volumes requires host IPC to communicate with `nfsd`.
+
+| `true`
+//row
+| `allowHostNetwork`
+
+| iscsiadm requires the host network to communicate with the iSCSI daemon.
+
+| `true`
+//row
+| `allowHostPID`
+
+| Host PID is required to check if `rpc-statd` is running on the node.
+
+| `true`
+//row
+| `allowHostPorts`
+
+| Trident does not use any host ports.
+
+| `false`
+//row
+| `allowPrivilegeEscalation`
+
+| Privileged containers must allow privilege escalation.
+
+| `true`
+//row
+| `allowPrivilegedContainer`
+
+| Trident node pods must run a privileged container in order to mount volumes.
+
+| `true`
+//row
+| `allowedUnsafeSysctls`
+
+| Trident does not require any unsafe `sysctls`.
+
+| `none` 
+//row
+| `allowedCapabilities`
+
+| Non-privileged Trident containers do not require more capabilities than the default set and privileged containers are granted all possible capabilities.
+
+| Empty
+//row
+| `defaultAddCapabilities`
+
+| No capabilities are required to be added to privileged containers.
+
+| Empty
+//row
+| `fsGroup`
+
+| Trident containers run as root. 
+
+| `RunAsAny`
+//row
+| `groups`
+
+| This SCC is specific to Trident and is bound to its user. 
+
+| Empty
+//row
+| `readOnlyRootFilesystem`
+
+| Trident node pods must write to the node filesystem.
+
+| `false`
+//row
+| `requiredDropCapabilities`
+
+| Trident node pods run a privileged container and cannot drop capabilities.
+
+| `none`
+//row
+| `runAsUser`
+
+| Trident containers run as root.
+
+| `RunAsAny`
+//row
+| `seLinuxContext`
+
+| Trident does not set `seLinuxOptions` because there are currently differences in how container runtimes and Kubernetes distributions handle SELinux.
+
+| Empty
+//row
+| `seccompProfiles`
+
+| Privileged containers always run "Unconfined".
+
+| Empty
+//row
+| `supplementalGroups`
+
+| Trident containers run as root.
+
+| `RunAsAny`
+//row
+| `users`
+
+| One entry is provided to bind this SCC to the Trident user in the Trident namespace. 
+
+| n/a
+//row
+| `volumes`
+
+| Trident pods require these volume plugins.
+
+| `hostPath, downwardAPI, projected, emptyDir`

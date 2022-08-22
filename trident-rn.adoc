@@ -14,28 +14,76 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 22.04
+== What's new in 22.07
+
+=== Fixes
+
+**Kubernetes**
+
+* Fixed issue to handle boolean and number values for node selector when configuring Trident with Helm or the Trident Operator. (link:https://github.com/NetApp/trident/issues/700[GitHub issue #700^])
+
+* Fixed issue in handling errors from non-CHAP path, so that kubelet will retry if it fails. link:https://github.com/NetApp/trident/issues/736[GitHub issue #736^])
+
+
+=== Enhancements
+
+* Transition from k8s.gcr.io to registry.k8s.io as default registry for CSI images
+
+* ONTAP-SAN volumes will now use per-node igroups and only map LUNs to igroups while actively published to those nodes to improve our security posture. Existing volumes will be opportunistically switched to the new igroup scheme when Trident determines it is safe to do so without impacting active workloads.
+
+* Included a ResourceQuota with Trident installations to ensure Trident DaemonSet is scheduled when PriorityClass consumption is limited by default.
+
+* Added support for Network Features to ANF driver. (link:https://github.com/NetApp/trident/issues/717[GitHub issue #717^])
+
+* Added tech preview automatic MetroCluster switchover detection to ONTAP drivers. (link:https://github.com/NetApp/trident/issues/228[GitHub issue #228^])
+
+=== Deprecations
+
+* **Kubernetes:** Updated minimum supported Kubernetes to 1.19.
+
+* Astra Data Store (ADS) driver updated to v1beta1 CRDs, so this version of Trident requires ADS 22.5.0 or later.
+
+* Backend config no longer allows multiple authentication types in single config.
+
+=== Removals 
+
+* AWS CVS driver (deprecated since 22.04) has been removed.
+
+* Kubernetes 
+
+** Removed unnecessary SYS_ADMIN capability from node pods.
+
+** Reduces nodeprep down to simple host info and active service discovery to do a best-effort
+confirmation that NFS/iSCSI services are available on worker nodes.
+
+
+
+=== Documentation
+
+A new link:https://docs.netapp.com/us-en/trident/trident-reference/pod-security.html[Pod Security Standards] (PSS) section has been added detailing permissions enabled by Astra Trident on installation. 
+
+== Changes in 22.04
 NetApp is continually improving and enhancing its products and services. Here are some of the latest features in Astra Trident. For previous releases, see https://docs.netapp.com/us-en/trident/earlier-versions.html[Earlier versions of documentation].
 
 IMPORTANT: If you are upgrading from any previous Trident release and use Azure NetApp Files, the ``location`` config parameter is now a mandatory, singleton field.
 
 === Fixes
 
-* Improved parsing of iSCSI initiator names. (Issue [#681](https://github.com/NetApp/trident/issues/681))
-* Fixed issue where CSI storage class parameters weren't allowed. (Issue [#598](https://github.com/NetApp/trident/issues/598))
-* Fixed duplicate key declaration in Trident CRD. (Issue [#671](https://github.com/NetApp/trident/issues/671))
-* Fixed inaccurate CSI Snapshot logs. (Issue [#629](https://github.com/NetApp/trident/issues/629))
-* Fixed issue with unpublishing volumes on deleted nodes. (Issue [#691](https://github.com/NetApp/trident/issues/691))
-* Added handling of filesystem inconsistencies on block devices. (Issue [#656](https://github.com/NetApp/trident/issues/656))
-* Fixed issue pulling auto-support images when setting the `imageRegistry` flag during installation. (Issue [#715](https://github.com/NetApp/trident/issues/715))
+* Improved parsing of iSCSI initiator names. (link:https://github.com/NetApp/trident/issues/681[GitHub issue #681^])
+* Fixed issue where CSI storage class parameters weren't allowed. (link:https://github.com/NetApp/trident/issues/598[GitHub issue #598^])
+* Fixed duplicate key declaration in Trident CRD. (link:https://github.com/NetApp/trident/issues/671[GitHub issue #671^])
+* Fixed inaccurate CSI Snapshot logs. (link:https://github.com/NetApp/trident/issues/629[GitHub issue #629^]))
+* Fixed issue with unpublishing volumes on deleted nodes. (link:https://github.com/NetApp/trident/issues/691[GitHub issue #691^])
+* Added handling of filesystem inconsistencies on block devices. (link:https://github.com/NetApp/trident/issues/656[GitHub issue #656^])
+* Fixed issue pulling auto-support images when setting the `imageRegistry` flag during installation. (link:https://github.com/NetApp/trident/issues/715[GitHub issue #715^])
 * Fixed issue where ANF driver failed to clone a volume with multiple export rules.
 
 === Enhancements
 
-* Inbound connections to Trident's secure endpoints now require a minimum of TLS 1.3. (Issue [#698](https://github.com/NetApp/trident/issues/698))
+* Inbound connections to Trident's secure endpoints now require a minimum of TLS 1.3. (link:https://github.com/NetApp/trident/issues/698[GitHub issue #698^])
 * Trident now adds HSTS headers to responses from its secure endpoints.
 * Trident now attempts to enable the Azure NetApp Files unix permissions feature automatically.
-* *Kubernetes*: Trident daemonset now runs at system-node-critical priority class. (Issue [#694](https://github.com/NetApp/trident/issues/694))
+* *Kubernetes*: Trident daemonset now runs at system-node-critical priority class. (link:https://github.com/NetApp/trident/issues/694[GitHub issue #694^])
 
 === Removals
 

@@ -14,7 +14,7 @@ Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 
-All of your Kubernetes worker nodes must have the appropriate iSCSI tools installed. See link:worker-node-prep.html[here^] for more details.
+All your Kubernetes worker nodes must have the appropriate iSCSI tools installed. See link:worker-node-prep.html[here] for more details.
 
 == Authentication
 
@@ -23,7 +23,9 @@ Astra Trident offers two modes of authenticating an ONTAP backend.
 * Credential-based: The username and password to an ONTAP user with the required permissions. It is recommended to use a pre-defined security login role, such as `admin` or `vsadmin` to ensure maximum compatibility with ONTAP versions.
 * Certificate-based: Astra Trident can also communicate with an ONTAP cluster using a certificate installed on the backend. Here, the backend definition must contain Base64-encoded values of the client certificate, key, and the trusted CA certificate if used (recommended).
 
-Users can also choose to update existing backends, opting to move from credential-based to certificate-based, and vice-versa. If *both credentials and certificates are provided*, Astra Trident will default to using certificates while issuing a warning to remove the credentials from the backend definition.
+You can update existing backends to move between credential-based and certificate-based methods. However, only one authentication method is supported at a time. To switch to a different authentication method, you must remove the existing method from the backend configuration.
+
+WARNING: If you attempt to provide *both credentials and certificates*, backend creation will fail with an error that more than one authentication method was provided in the configuration file. 
 
 === Enable credential-based authentication
 
@@ -119,7 +121,7 @@ $ tridentctl create backend -f cert-backend.json -n trident
 
 === Update authentication methods or rotate credentials
 
-You can update an existing backend to make use of a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, use an updated `backend.json` file containing the required parameters to execute `tridentctl backend update`.
+You can update an existing backend to use a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, you must remove the existing authentication method and add the new authentication method. Then use the updated backend.json file containing the required parameters to execute `tridentctl backend update`.
 
 ----
 $ cat cert-backend-updated.json

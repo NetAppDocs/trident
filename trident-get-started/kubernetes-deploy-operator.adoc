@@ -21,7 +21,7 @@ TIP: If you have not already familiarized yourself with the link:../trident-conc
 
 To deploy Astra Trident, the following prerequisites should be met:
 
-* You have full privileges to a supported Kubernetes cluster running Kubernetes 1.18 - 1.24.
+* You have full privileges to a supported Kubernetes cluster running Kubernetes 1.19 - 1.24.
 * You have access to a supported NetApp storage system.
 * You have the capability to mount volumes from all of the Kubernetes worker nodes.
 * You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
@@ -39,7 +39,8 @@ Perform the steps listed to deploy the Trident operator by using Helm.
 
 In addition to the prerequisites listed above, to deploy Trident operator by using Helm, you need the following:
 
-* Kubernetes 1.18 - 1.24 
+* Kubernetes 1.19 - 1.24
+
 * Helm version 3
 
 .Steps
@@ -68,7 +69,7 @@ There are two ways to pass configuration data during the install:
 For example, to change the default value of `debug`, run the following `--set` command:
 [source,cli]
 ----
-$ helm install <name> netapp-trident/trident-operator --version 22.4.0 --set tridentDebug=true
+$ helm install <name> netapp-trident/trident-operator --version 22.7.0 --set tridentDebug=true
 ----
 
 The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.
@@ -110,7 +111,7 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 
 NOTE: Beginning with 21.01, the Trident operator is cluster scoped. Using the Trident operator to install Trident requires creating the `TridentOrchestrator` Custom Resource Definition (CRD) and defining other resources. You should perform these steps to set up the operator before you can install Astra Trident.
 
-. Download the latest version of the https://github.com/NetApp/trident/releases/latest[Trident installer bundle] from the _Downloads_ section and extract it.
+. Download and extract the latest version of the Trident installer bundle from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^].
 +
 [source,cli]
 ----
@@ -201,7 +202,6 @@ Status:
     Autosupport Proxy:
     Autosupport Serial Number:
     Debug:                     true
-    Enable Node Prep:          false
     Image Pull Secrets:
     Image Registry:
     k8sTimeout:           30

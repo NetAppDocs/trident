@@ -40,24 +40,22 @@ In the non-CSI frontend, the attachment of volumes as devices on the worker node
 
 NetApp ONTAP backends provide Federal Information Processing Standard (FIPS) 140-2–compliant data-at-rest encryption to protect sensitive data in the event a disk is stolen, returned, or repurposed. 
 
-By default, ONTAP 9 and later include three encryption solutions using external key management or the link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-onboard-key-management-96-later-nse-task.html^[onboard key manager] (OKM):
+Beginning with ONTAP 9, ONTAP includes three encryption solutions using external key management or the link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-onboard-key-management-96-later-nse-task.html^[onboard key manager] (OKM):
 
 * link:https://www.netapp.com/cyber-resilience/data-protection/storage-encryption/[NetApp Storage Encryption^] is a hardware solution using self-encrypting drives. 
 * link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html^[NetApp Volume Encryption (NVE)] is a software solution that enables encryption of any data volume on any drive type. NVE is enabled using a unique key for each volume.
 * link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-aggregate-level-encryption-nve-license-task.html^[NetApp Aggregate Encryption (NAE)] is a software solution enabling encryption of any data volume on any drive type. NAE is enabled using a unique key for each aggregate.
 
-You can manually enable or disable NAE and NVE in Astra Trident.
-
 NOTE: NAE and NVE do not affect ONTAP storage efficiency features; however, NVE volumes are excluded from aggregate deduplication.  
 
-=== Enable NAE and NVE
+=== Enable NVE and NAE
 In ONTAP 9.7 and later, NVE and NAE are enabled by default on  new volumes or aggregates. For ONTAP versions earlier than 9.7, you can manually enable or disable NAE. 
 
 [role="tabbed-block"]
 ====
 .Enable or disable NVE
 --
-To enable or disable NVE when creating the volume, use te `encrypt` flag with value `true` for enable or `false` for disable. The following example enables NVE on a volume:
+To enable or disable NVE when creating the volume, use the `encrypt` flag with value `true` for enable or `false` for disable. The following example enables NVE on a volume:
 [source,cli]
 ----
 volume create -volume abc -aggregate aggr_encryp -size 10M encrypt true

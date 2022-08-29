@@ -36,40 +36,52 @@ NOTE: The volumes that are created by CSI Trident are not associated with any Vo
 
 In the non-CSI frontend, the attachment of volumes as devices on the worker nodes is handled by Kubernetes. After volume creation, Astra Trident makes an API call to the NetApp HCI/SolidFire system to retrieve the secrets if the secret for that tenant does not already exist. Astra Trident then passes the secrets on to Kubernetes. The kubelet located on each node accesses the secrets via the Kubernetes API and uses them to run/enable CHAP between each node accessing the volume and the NetApp HCI/SolidFire system where the volumes are located.
 
-== Use NVE and NAE with ONTAP backends
+== Create NAE-enabled volumes in Astra Trident 
 
-NetApp ONTAP backends provide Federal Information Processing Standard (FIPS) 140-2–compliant data-at-rest encryption to protect sensitive data in the event a disk is stolen, returned, or repurposed. 
+NetApp ONTAP provides data-at-rest encryption to protect sensitive data in the event a disk is stolen, returned, or repurposed. For details, refer to link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html[Configure NetApp Volume Encryption overview^].
 
-Beginning with ONTAP 9, ONTAP includes three encryption solutions using external key management or the link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-onboard-key-management-96-later-nse-task.html^[onboard key manager] (OKM):
 
-* link:https://www.netapp.com/cyber-resilience/data-protection/storage-encryption/[NetApp Storage Encryption^] is a hardware solution using self-encrypting drives. 
-* link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html^[NetApp Volume Encryption (NVE)] is a software solution that enables encryption of any data volume on any drive type. NVE is enabled using a unique key for each volume.
-* link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-aggregate-level-encryption-nve-license-task.html^[NetApp Aggregate Encryption (NAE)] is a software solution enabling encryption of any data volume on any drive type. NAE is enabled using a unique key for each aggregate.
+To create NAE-encrypted volumes using Trident, use the NAE-enabled aggregate as the backend and don’t set encryption flags on the backend or the storage class.
 
-NOTE: NAE and NVE do not affect ONTAP storage efficiency features; however, NVE volumes are excluded from aggregate deduplication.  
-
-=== Enable NVE and NAE
-In ONTAP 9.7 and later, NVE and NAE are enabled by default on  new volumes or aggregates. For ONTAP versions earlier than 9.7, you can manually enable or disable NAE. 
-
-[role="tabbed-block"]
+[NOTE]
 ====
-.Enable or disable NVE
---
-To enable or disable NVE when creating the volume, use the `encrypt` flag with value `true` for enable or `false` for disable. The following example enables NVE on a volume:
-[source,cli]
-----
-volume create -volume abc -aggregate aggr_encryp -size 10M encrypt true
-----
---
-.Enable or disable NAE
---
-To enable or disable NAE when creating the aggregate, use the `encrypt-with-aggr-key` flag with value `true` for enable or `false` for disable. The following example disables NAE on an aggregate:
-[source,cli]
-----
-storage aggregate create -aggregate OnPrem_HQ_01_SSD_1 -diskcount 23 -node OnPrem-HQ-01 -raidtype raid_dp -encrypt-with-aggr-key false
-----
---
+
+* NVE-encrypted volumes are created by default on the non-NAE enabled aggregates unless you set the encryption flag to `false` on the backend or storage class. You can manually create an NVE-encrypted volume by explicitly setting the encryption flag as `true`.
+
+* Volumes created on an NAE-enabled aggregate must be NVE or NAE encrypted. Because of that, sending an encryption flag as `false` is not valid.
 ====
+
+// Beginning with ONTAP 9, ONTAP includes three encryption solutions using external key management or the link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-onboard-key-management-96-later-nse-task.html^[onboard key manager] (OKM):
+
+// * link:https://www.netapp.com/cyber-resilience/data-protection/storage-encryption/[NetApp Storage Encryption^] is a hardware solution using self-encrypting drives. 
+// * link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html^[NetApp Volume Encryption (NVE)] is a software solution that enables encryption of any data volume on any drive type. NVE is enabled using a unique key for each volume.
+// * link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/enable-aggregate-level-encryption-nve-license-task.html^[NetApp Aggregate Encryption (NAE)] is a software solution enabling encryption of any data volume on any drive type. NAE is enabled using a unique key for each aggregate.
+
+// NOTE: NAE and NVE do not affect ONTAP storage efficiency features; however, NVE volumes are excluded from aggregate deduplication.  
+
+ 
+
+// [role="tabbed-block"]
+// ====
+// .Enable or disable NVE
+// --
+// To enable or disable NVE when creating the volume, use the `encrypt` flag with value `true` for enable or `false` for disable. The following example enables NVE on a volume:
+// [source,cli]
+// ----
+// volume create -volume abc -aggregate aggr_encryp -size 10M encrypt true
+// ----
+// --
+// .Enable or disable NAE
+// --
+// To enable or disable NAE when creating the aggregate, use the `encrypt-with-aggr-key` flag with value `true` for enable or `false` for disable. The following example disables NAE on an aggregate:
+// [source,cli]
+// ----
+// storage aggregate create -aggregate OnPrem_HQ_01_SSD_1 -diskcount 23 -node OnPrem-HQ-01 -raidtype raid_dp -encrypt-with-aggr-key false
+// ----
+// --
+// ====
+
+
 
 
 

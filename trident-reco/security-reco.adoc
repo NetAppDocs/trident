@@ -42,15 +42,15 @@ NetApp ONTAP provides data-at-rest encryption to protect sensitive data in the e
 
 * If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE-enabled. 
 
-* If NAE is not enabled on the backend, any volume provisioned in Astra Trident will be NVE-enabled unless you set the NVE encryption flag as `false` in the backend configuration. 
+* If NAE is not enabled on the backend, any volume provisioned in Astra Trident will be NVE-enabled unless you set the NVE encryption flag to `false` in the backend configuration. 
 
 [NOTE]
 ====
 Volumes created in Astra Trident on an NAE-enabled backend must be NVE or NAE encrypted.  
 
-* You can set the NVE encryption flag to `true` in the Trident backend configuration to override NAE encryption. 
+* You can set the NVE encryption flag to `true` in the Trident backend configuration to override the NAE encryption and use a specific encryption key on a per volume basis.
 
-* Setting the NVE encryption flag to `false` on an NAE-enabled backend will create an NAE-enabled volume.
+* Setting the NVE encryption flag to `false` on an NAE-enabled backend will create an NAE-enabled volume. You cannot disable NAE encryption by setting the NVE encryption flag to `false`.
 
 ====
 

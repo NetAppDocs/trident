@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-reco/security-reco.html
-keywords: security, chap, trident, namespace
+keywords: security, chap, trident, namespace, nve, nae, encryption, volume encryption, aggregate encryption
 summary: Use the recommendations listed here to ensure that your Astra Trident installation is secure.
 ---
 
@@ -24,7 +24,7 @@ You should ensure that you allow only administrators access to the Astra Trident
 Astra Trident supports CHAP-based authentication for ONTAP SAN workloads (using the `ontap-san` and `ontap-san-economy` drivers). NetApp recommends using bidirectional CHAP with Astra Trident for authentication between a host and the storage backend.
 
 For ONTAP backends that use the SAN storage drivers, Astra Trident can set up bidirectional CHAP and manage CHAP usernames and secrets through `tridentctl`.
-See link:../trident-use/ontap-san-prep.html[here^] to understand how Astra Trident configures CHAP on ONTAP backends.
+See link:../trident-use/ontap-san-prep.html[here] to understand how Astra Trident configures CHAP on ONTAP backends.
 
 NOTE: CHAP support for ONTAP backends is available with Trident 20.04 and later.
 
@@ -35,3 +35,31 @@ NetApp recommends deploying bidirectional CHAP to ensure authentication between 
 NOTE: The volumes that are created by CSI Trident are not associated with any Volume Access Group.
 
 In the non-CSI frontend, the attachment of volumes as devices on the worker nodes is handled by Kubernetes. After volume creation, Astra Trident makes an API call to the NetApp HCI/SolidFire system to retrieve the secrets if the secret for that tenant does not already exist. Astra Trident then passes the secrets on to Kubernetes. The kubelet located on each node accesses the secrets via the Kubernetes API and uses them to run/enable CHAP between each node accessing the volume and the NetApp HCI/SolidFire system where the volumes are located.
+
+== How Astra Trident works with NVE and NAE
+
+NetApp ONTAP provides data-at-rest encryption to protect sensitive data in the event a disk is stolen, returned, or repurposed. For details, refer to link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html[Configure NetApp Volume Encryption overview^].
+
+* If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE-enabled. 
+
+* If NAE is not enabled on the backend, any volume provisioned in Astra Trident will be NVE-enabled unless you set the NVE encryption flag to `false` in the backend configuration. 
+
+[NOTE]
+====
+Volumes created in Astra Trident on an NAE-enabled backend must be NVE or NAE encrypted.  
+
+* You can set the NVE encryption flag to `true` in the Trident backend configuration to override the NAE encryption and use a specific encryption key on a per volume basis.
+
+* Setting the NVE encryption flag to `false` on an NAE-enabled backend will create an NAE-enabled volume. You cannot disable NAE encryption by setting the NVE encryption flag to `false`.
+
+====
+
+* You can manually create an NVE volume in Astra Trident by explicitly setting the NVE encryption flag to `true`.
+
+For more information on backend configuration options, refer to: 
+
+* link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
+
+* link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS confiruation options]
+
+

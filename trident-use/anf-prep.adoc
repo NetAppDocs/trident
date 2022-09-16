@@ -1,0 +1,37 @@
+---
+sidebar: sidebar
+permalink: trident-use/anf-prep.html
+keywords: trident backend, azure netapp files, smb volumes, smb, windows
+summary: Before you can configure your ANF backend, you need to ensure the following requirements are met. 
+---
+
+= Prepare to configure an Azure NetApp Files backend
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+
+Before you can configure your ANF backend, you need to ensure the following requirements are met. 
+
+If you are using Azure NetApp Files for the first time or in a new location, some initial configuration is required. 
+
+* To set up Azure NetApp files and create an NFS volume, refer to https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-quickstart-set-up-account-create-volumes[Azure: Set up Azure NetApp Files and create an NFS volume^].
+
+* To configure Azure NetApp Files and add an SMB volume, refer to: https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-create-volumes-smb[Azure: Create an SMB volume for Azure NetApp Files]. 
+
+
+== Requirements 
+
+To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] backend, you need the following:
+
+* `subscriptionID` from an Azure subscription with Azure NetApp Files enabled.
+* `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use the `Owner` or `Contributor` role predefined by Azure.
++
+TIP: To learn more about Azure built-in roles, see the link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[Azure documentation^].
+
+* The Azure `location` that contains at least one link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]. As of Trident 22.01, the `location` parameter is a required field at the top level of the backend configuration file. Location values specified in virtual pools are ignored.
+
+* For SMB volumes, you need your Active Directory credentials so ANF can  authenticate to Active Directory. For more information, refer to link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/create-active-directory-connections[Azure: Create and manage Active Directory connections for Azure NetApp Files^]
+
+
+

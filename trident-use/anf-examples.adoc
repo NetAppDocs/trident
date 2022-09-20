@@ -51,12 +51,17 @@ ANF backends provide these configuration options.
 
 |`subnet` |Name of a subnet delegated to `Microsoft.Netapp/volumes` |""
 
-|`networkFeatures` footnote:[Network Features is not available in all regions and might have to be enabled in a subscription. Specifying `networkFeatures` when the functionality is not enabled will cause Astra Trident volume provisioning to fail.] |Set of VNet features for a volume, may be `Basic` or `Standard` |""
+|`networkFeatures` |Set of VNet features for a volume, may be `Basic` or `Standard`. 
 
-|`nfsMountOptions` footnote:[To mount volumes using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Mount options set in a storage class definition override mount options set in backend configuration.] |Fine-grained control of NFS mount options. 
+Network Features is not available in all regions and might have to be enabled in a subscription. Specifying  `networkFeatures`  when the functionality is not enabled causes volume provisioning to fail. |""
 
-For SMB volumes, set to null. Any `nfsvers` value will be ignored in SMB configuration.|"nfsvers=3" 
+|`nfsMountOptions` |Fine-grained control of NFS mount options. 
 
+Ignored for SMB volumes. 
+
+To mount volumes using NFS version 4.1, include  `nfsvers=4`  in the comma-delimited mount options list to choose NFS v4.1.
+
+Mount options set in a storage class definition override mount options set in backend configuration. |"nfsvers=3" 
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value |"" (not enforced by default)
 
@@ -64,7 +69,7 @@ For SMB volumes, set to null. Any `nfsvers` value will be ignored in SMB configu
 
 | `nasType` | Configure NFS or SMB volumes creation. 
 
-Options are `nfs`, `smb` or null. Setting to null configures NFS. | `nfs` 
+Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
 
 |===
 
@@ -95,10 +100,19 @@ You can control default volume provisioning by specifying the following options 
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`exportRule` footnote:[The `exportRule` value must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.] |The export rule(s) for new volumes |"0.0.0.0/0"
+|`exportRule` |Export rules for new volumes. 
+
+`exportRule` must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.
+
+Ignored for SMB volumes. |"0.0.0.0/0"
+
 |`snapshotDir` |Controls visibility of the .snapshot directory |"false"
+
 |`size` |The default size of new volumes |"100G"
-|`unixPermissions` |The unix permissions of new volumes (4 octal digits) |"" (preview feature, requires whitelisting in subscription)
+
+|`unixPermissions` |The unix permissions of new volumes (4 octal digits). 
+
+Ignored for SMB volumes.  |"" (preview feature, requires whitelisting in subscription)
 |===
 
 NOTE: For all volumes created on an ANF backend, Astra Trident copies the labels present on a storage pool to the storage volume at the time it is provisioned. Storage administrators can define labels per storage pool and group all volumes created in a storage pool. This is a convenient way to differentiate volumes based on a set of customizable labels that are provided in the backend configuration.
@@ -275,8 +289,13 @@ parameters:
 allowVolumeExpansion: true
 ----
 
-=== Example definition for SMB volumes
+=== Example definitions for SMB volumes
 Using `nasType`, `node-stage-secret-name`, and  `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. 
+
+.Example 1: Basic configuration on default namespace 
+[%collapsible%open]
+====
+
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -290,14 +309,44 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: "default"
 
 ----
+====
+
+.Example 2: Using different secrets per namespace
+[%collapsible%open]
+====
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: anf-sc-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "azure-netapp-files"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+----
+====
+
+.Example 3: Using different secrets per volumes
+[%collapsible%open]
+====
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: anf-sc-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "azure-netapp-files"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: ${pvc.name}
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+----
+====
+
 [NOTE]
-====
-* `nasType: "smb"` filters for pools which support SMB volumes. `nasType: "nfs" or `nasType: "null"` filters for NFS pools.
-
-* `smbcreds` is the Secret name containing your Active Directory username and password.
-
-* `default` is the namespace where the Astra Trident secret is located.
-====
+`nasType: "smb"` filters for pools which support SMB volumes. `nasType: "nfs"`` or `nasType: "null"` filters for NFS pools.
 
 == Create the backend
 

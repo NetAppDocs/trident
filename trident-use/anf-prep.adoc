@@ -33,11 +33,9 @@ TIP: To learn more about Azure built-in roles, refer to the link:https://docs.mi
 
 == Additional requirements for SMB volumes
 
-* Windows Server 2019
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. 
 
-* A Kubernetes cluster with a Linux controller node and at least one Windows worker node created using `kubeadm`. Refer to link:https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/[Kubernetes: Creating a cluster with kubeadm^] for details. 
-
-* An Astra Trident secret (`smbcred`) containing your Active Directory credentials so ANF can authenticate to Active Directory. To generate `smbcred`:
+* At least one Astra Trident secret containing your Active Directory credentials so ANF can authenticate to Active Directory. To generate secret `smbcreds`:
 +
 [source, cli]
 ----

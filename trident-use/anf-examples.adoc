@@ -51,24 +51,26 @@ ANF backends provide these configuration options.
 
 |`subnet` |Name of a subnet delegated to `Microsoft.Netapp/volumes` |""
 
-|`networkFeatures` footnote:1[] |Set of VNet features for a volume, may be `Basic` or `Standard` |""
+|`networkFeatures` footnote:[Network Features is not available in all regions and might have to be enabled in a subscription. Specifying `networkFeatures` when the functionality is not enabled will cause Astra Trident volume provisioning to fail.] |Set of VNet features for a volume, may be `Basic` or `Standard` |""
 
-|`nfsMountOptions` footnote:2[] |Fine-grained control of NFS mount options. |"nfsvers=3"
+|`nfsMountOptions` footnote:[To mount volumes using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Mount options set in a storage class definition override mount options set in backend configuration.] |Fine-grained control of NFS mount options. 
+
+For SMB volumes, set to null. Any `nfsvers` value will be ignored in SMB configuration.|"nfsvers=3" 
+
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value |"" (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api": false, "method": true, "discovery": true}`. Do not use this unless you are troubleshooting and require a detailed log dump. |null
 
-| `nasType` | `nfs` or `smb` | `nfs` (null configures NFS)
+| `nasType` | Configure NFS or SMB volumes creation. 
+
+Options are `nfs`, `smb` or null. Setting to null configures NFS. | `nfs` 
 
 |===
 
-[verse]
---
-Footnotes:
-footnote:1[]: https://docs.microsoft.com/en-us/azure/azure-netapp-files/configure-network-features[Network Features^] is not available in all regions and might have to be enabled in a subscription.  Specifying `networkFeatures` when the functionality is not enabled will cause Astra Trident volume provisioning to fail.
-footnote:2[]: To mount volumes using NFS version 4.1, you can include ``nfsvers=4`` in the comma-delimited mount options list to choose NFS v4.1. Mount options set in a storage class definition override mount options set in backend configuration.
---
+[NOTE]
+For more information on Network Features, refer to link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/configure-network-features[Configure network features for an Azure NetApp Files volume^].
+
 === Required permissions and resources
 
 If you receive a “No capacity pools found” error when creating a PVC, it is likely your app registration doesn’t have the required permissions and resources (subnet, virtual network, capacity pool) associated. If debug is enabled, Astra Trident will log the Azure resources discovered when the backend is created. Verify an appropriate role is being used.
@@ -93,17 +95,11 @@ You can control default volume provisioning by specifying the following options 
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`exportRule` footnote:1[] |The export rule(s) for new volumes |"0.0.0.0/0"
+|`exportRule` footnote:[The `exportRule` value must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.] |The export rule(s) for new volumes |"0.0.0.0/0"
 |`snapshotDir` |Controls visibility of the .snapshot directory |"false"
 |`size` |The default size of new volumes |"100G"
 |`unixPermissions` |The unix permissions of new volumes (4 octal digits) |"" (preview feature, requires whitelisting in subscription)
 |===
-
-[verse]
---
-Footnote:
-footnote:1[]: The `exportRule` value must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation.
---
 
 NOTE: For all volumes created on an ANF backend, Astra Trident copies the labels present on a storage pool to the storage volume at the time it is provisioned. Storage administrators can define labels per storage pool and group all volumes created in a storage pool. This is a convenient way to differentiate volumes based on a set of customizable labels that are provided in the backend configuration.
 
@@ -113,9 +109,9 @@ NOTE: For all volumes created on an ANF backend, Astra Trident copies the labels
 .Example 1: Minimal configuration
 [%collapsible%open]
 ====
-This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to ANF in the configured location, and places new volumes on one of those pools and subnets randomly.
+This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to ANF in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
 
-This configuration is ideal when you are just getting started with ANF and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision.
+This configuration is ideal when you are just getting started with ANF and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
 
 ----
 {
@@ -296,9 +292,11 @@ parameters:
 ----
 [NOTE]
 ====
-* `nasType: "smb"` filters for pools which support SMB volumes. `nfs` or null filters NFS pools.
+* `nasType: "smb"` filters for pools which support SMB volumes. `nasType: "nfs" or `nasType: "null"` filters for NFS pools.
 
 * `smbcreds` is the Secret name containing your Active Directory username and password.
+
+* `default` is the namespace where the Astra Trident secret is located.
 ====
 
 == Create the backend

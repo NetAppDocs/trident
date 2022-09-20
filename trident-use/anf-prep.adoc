@@ -27,11 +27,77 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 * `subscriptionID` from an Azure subscription with Azure NetApp Files enabled.
 * `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use the `Owner` or `Contributor` role predefined by Azure.
 +
-TIP: To learn more about Azure built-in roles, see the link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[Azure documentation^].
+TIP: To learn more about Azure built-in roles, refer to the link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[Azure documentation^].
 
 * The Azure `location` that contains at least one link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]. As of Trident 22.01, the `location` parameter is a required field at the top level of the backend configuration file. Location values specified in virtual pools are ignored.
 
-* For SMB volumes, you need your Active Directory credentials so ANF can  authenticate to Active Directory. For more information, refer to link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/create-active-directory-connections[Azure: Create and manage Active Directory connections for Azure NetApp Files^]
+== Additional requirements for SMB volumes
 
+* Windows Server 2019
+
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node created using `kubeadm`. Refer to link:https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/[Kubernetes: Creating a cluster with kubeadm^] for details. 
+
+* An Astra Trident secret (`smbcred`) containing your Active Directory credentials so ANF can authenticate to Active Directory. To generate `smbcred`:
++
+[source, cli]
+----
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'
+----
+
+* A CSI proxy configured as a Windows service. To configure `csi-proxy`:
+
+. On Linux, clone the CSI proxy repo: 
++
+[source, cli]
+----
+git clone https://github.com/kubernetes-csi/csi-proxy 
+----
+
+. On Linux, build the binary: 
++
+[source, cli]
+----
+make build
+----
+
+. On Windows, create the directories `C:\etc\kubernetes\logs` and `C:\etc\kubernetes\node\bin`
+
+. Copy the binary to `C:\etc\kubernetes\node\bin` on the Windows worker node:
++
+[source, cli]
+----
+scp csi-proxy.exe <username>@<ip>:C:\\etc\\kubernetes\\node\\bin\\
+----
+
+. On Windows, run the following commands from `cmd` as an administrator:
++
+[source, cli]
+----
+sc.exe create csiproxy start= "auto" binPath="C:\etc\kubernetes\node\bin\csi-proxy.exe-windows-service-log_file=C:\etc\kubernetes\logs\csi-proxy.log -logtostderr=false"
+
+sc.exe failure csiproxy reset= 0 actions= restart/10000
+
+sc.exe start csiproxy
+----
+
+. Confirm the `csi-proxy` service is running:
++
+[source, cli]
+----
+PS C:\> sc.exe query csiproxy
+----
++
+The output should be similar to the following: 
++
+----
+SERVICE_NAME: csiproxy
+TYPE : 10 WIN32_OWN_PROCESS
+STATE : 4 RUNNING
+(STOPPABLE, NOT_PAUSABLE, ACCEPTS_SHUTDOWN)
+WIN32_EXIT_CODE : 0 (0x0)
+SERVICE_EXIT_CODE : 0 (0x0)
+CHECKPOINT : 0x0
+WAIT_HINT : 0x0
+----
 
 

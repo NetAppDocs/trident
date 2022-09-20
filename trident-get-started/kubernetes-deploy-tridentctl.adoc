@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy-tridentctl.html
-keywords: deploy, astra trident, methods, tridentctl
+keywords: deploy, astra trident, methods, tridentctl, smb
 summary: You can deploy Astra Trident by using `tridentctl`.
 ---
 
@@ -91,6 +91,11 @@ INFO Trident REST interface is up.                 version=21.07.1
 INFO Trident installation succeeded.
 ....
 ----
+
+[NOTE]
+To install Trident for SMB volumes, add the `-windows` flag to the install command: `$ ./tridentctl install –windows -n trident`.
+
+
 It will look like this when the installer is complete. Depending on the number of nodes in your Kubernetes cluster, you might observe more pods:
 ----
 $ kubectl get pod -n trident

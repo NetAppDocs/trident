@@ -27,7 +27,7 @@ This table details `TridentOrchestrator` attributes:
 
 |`debug` |Enable debugging for Astra Trident |false
 
-|`windows` | Setting to `true` enables installation for SMB volumes. | false
+|`windows` | Setting to `true` enables installation on Windows worker nodes. | false
 
 |`IPv6` |Install Astra Trident over IPv6 |false
 
@@ -77,8 +77,6 @@ For more information on formatting pod parameters, see link:https://kubernetes.i
 == Sample configurations
 You can use the attributes mentioned above when defining `TridentOrchestrator` to customize your installation. 
 
-
-// Start snippet: collapsible block (open on page load)
 .Example 1: Basic custom configuration
 [%collapsible%open]
 ====
@@ -98,14 +96,12 @@ spec:
 ----
 
 ====
-// End snippet
 
-// Start snippet: collapsible block (open on page load)
 .Example 2: Deploy with node selectors
 [%collapsible%open]
 ====
 
-Here is another example that shows how Trident can be deployed with node selectors:
+This example illustrates how Trident can be deployed with node selectors:
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -119,8 +115,23 @@ spec:
   nodePluginNodeSelector:
     storage: netapp
 ----
+====
+
+.Example 3: Deploy on Windows worker nodes
+[%collapsible%open]
+====
+This example illustrates deployment on a Windows worker node.
+
+----
+$ cat deploy/crds/tridentorchestrator_cr.yaml
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  windows: true
+----
 
 ====
-// End snippet
-
-

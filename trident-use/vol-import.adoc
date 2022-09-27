@@ -67,7 +67,7 @@ spec:
 
 The `tridentctl` client is used to import an existing storage volume. Trident imports the volume by persisting volume metadata and creating the PVC and PV.
 ----
-$ tridentctl import volume <backendName> <volumeName> -f <path-to-pvc-file>
+tridentctl import volume <backendName> <volumeName> -f <path-to-pvc-file>
 ----
 
 To import a storage volume, specify the name of the Astra Trident backend containing the volume, as well as the name that uniquely identifies the volume on the storage (for example: ONTAP FlexVol, Element Volume, CVS Volume path). The storage volume must allow read/write access and be accessible by the specified Astra Trident backend. The `-f` string argument is required and specifies the path to the YAML or JSON PVC file.
@@ -90,7 +90,7 @@ IMPORTANT: The `ontap-nas` driver cannot import and manage qtrees. The `ontap-na
 
 For example, to import a volume named `managed_volume` on a backend named `ontap_nas`, use the following command:
 ----
-$ tridentctl import volume ontap_nas managed_volume -f <path-to-pvc-file>
+tridentctl import volume ontap_nas managed_volume -f <path-to-pvc-file>
 
 +------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
@@ -101,7 +101,7 @@ $ tridentctl import volume ontap_nas managed_volume -f <path-to-pvc-file>
 
 To import a volume named `unmanaged_volume` (on the `ontap_nas backend`), which Trident will not manage, use the following command:
 ----
-$ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-manage
+tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-manage
 
 +------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
@@ -133,7 +133,7 @@ TIP: It is recommended to import volumes that do not have existing active connec
 
 To import the `ontap-san-managed` FlexVol that is present on the `ontap_san_default` backend, run the `tridentctl import` command as:
 ----
-$ tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-import.yaml -n trident -d
+tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-import.yaml -n trident -d
 
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE  | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
@@ -148,7 +148,7 @@ IMPORTANT: An ONTAP volume must be of type rw to be imported by Astra Trident. I
 
 You can import NetApp Element software/NetApp HCI volumes to your Kubernetes cluster with Trident. You need the name of your Astra Trident backend, and the unique name of the volume and the PVC file as the arguments for the `tridentctl import` command.
 ----
-$ tridentctl import volume element_default element-managed -f pvc-basic-import.yaml -n trident -d
+tridentctl import volume element_default element-managed -f pvc-basic-import.yaml -n trident -d
 
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE  | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
@@ -165,7 +165,7 @@ TIP: To import a volume backed by the NetApp Cloud Volumes Service in GCP, ident
 
 To import an `gcp-cvs` volume on the backend called `gcpcvs_YEppr` with the volume path of `adroit-jolly-swift`, use the following command:
 ----
-$ tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -n trident
+tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -n trident
 
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE  | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
@@ -180,7 +180,7 @@ NOTE: The volume path is the portion of the volume’s export path after the :/.
 
 To import an `azure-netapp-files` volume on the backend called `azurenetappfiles_40517` with the volume path `importvol1`, run the following command:
 ----
-$ tridentctl import volume azurenetappfiles_40517 importvol1 -f <path-to-pvc-file> -n trident
+tridentctl import volume azurenetappfiles_40517 importvol1 -f <path-to-pvc-file> -n trident
 
 +------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 |                   NAME                   |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |

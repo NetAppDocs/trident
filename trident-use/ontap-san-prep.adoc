@@ -97,7 +97,7 @@ base64 -w 0 trustedca.pem >> trustedca_base64
 . Create backend using the values obtained from the previous step.
 +
 ----
-$ cat cert-backend.json
+cat cert-backend.json
 {
 "version": 1,
 "storageDriverName": "ontap-san",
@@ -111,7 +111,7 @@ $ cat cert-backend.json
 "storagePrefix": "myPrefix_"
 }
 
-$ tridentctl create backend -f cert-backend.json -n trident
+tridentctl create backend -f cert-backend.json -n trident
 +------------+----------------+--------------------------------------+--------+---------+
 |    NAME    | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
 +------------+----------------+--------------------------------------+--------+---------+
@@ -124,7 +124,7 @@ $ tridentctl create backend -f cert-backend.json -n trident
 You can update an existing backend to use a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, you must remove the existing authentication method and add the new authentication method. Then use the updated backend.json file containing the required parameters to execute `tridentctl backend update`.
 
 ----
-$ cat cert-backend-updated.json
+cat cert-backend-updated.json
 {
 "version": 1,
 "storageDriverName": "ontap-san",
@@ -138,7 +138,7 @@ $ cat cert-backend-updated.json
 }
 
 #Update backend with tridentctl
-$ tridentctl update backend SanBackend -f cert-backend-updated.json -n trident
+tridentctl update backend SanBackend -f cert-backend-updated.json -n trident
 +------------+----------------+--------------------------------------+--------+---------+
 |    NAME    | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
 +------------+----------------+--------------------------------------+--------+---------+
@@ -211,7 +211,7 @@ You can update the CHAP credentials by updating the CHAP parameters in the `back
 WARNING: When updating the CHAP secrets for a backend, you must use `tridentctl` to update the backend. Do not update the credentials on the storage cluster through the CLI/ONTAP UI as Astra Trident will not be able to pick up these changes.
 
 ----
-$ cat backend-san.json
+cat backend-san.json
 {
     "version": 1,
     "storageDriverName": "ontap-san",
@@ -228,7 +228,7 @@ $ cat backend-san.json
     "chapUsername": "uh2aNCLSd6cNwxyz",
 }
 
-$ ./tridentctl update backend ontap_san_chap -f backend-san.json -n trident
+./tridentctl update backend ontap_san_chap -f backend-san.json -n trident
 +----------------+----------------+--------------------------------------+--------+---------+
 |   NAME         | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
 +----------------+----------------+--------------------------------------+--------+---------+

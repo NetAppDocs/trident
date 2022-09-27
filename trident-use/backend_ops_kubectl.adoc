@@ -18,7 +18,7 @@ By deleting a `TridentBackendConfig`, you instruct Astra Trident to delete/retai
 
 Run the following command:
 ----
-$ kubectl delete tbc <tbc-name> -n trident
+kubectl delete tbc <tbc-name> -n trident
 ----
 
 Astra Trident does not delete the Kubernetes Secrets that were in use by `TridentBackendConfig`. The Kubernetes user is responsible for cleaning up secrets. Care must be taken when deleting secrets. You should delete secrets only if they are not in use by the backends.
@@ -27,7 +27,7 @@ Astra Trident does not delete the Kubernetes Secrets that were in use by `Triden
 
 Run the following command:
 ----
-$ kubectl get tbc -n trident
+kubectl get tbc -n trident
 ----
 
 You can also run `tridentctl get backend -n trident` or `tridentctl get backend -o yaml -n trident` to obtain a list of all backends that exist. This list will also include backends that were created with `tridentctl`.
@@ -38,17 +38,17 @@ There can be multiple reasons to update a backend:
 
 * Credentials to the storage system have changed. To update credentials, the Kubernetes Secret that is used in the `TridentBackendConfig` object must be updated. Astra Trident will automatically update the backend with the latest credentials provided. Run the following command to update the Kubernetes Secret:
 ----
-$ kubectl apply -f <updated-secret-file.yaml> -n trident
+kubectl apply -f <updated-secret-file.yaml> -n trident
 ----
 * Parameters (such as the name of the ONTAP SVM being used) need to be updated.
 In this case, `TridentBackendConfig` objects can be updated directly through Kubernetes.
 ----
-$ kubectl apply -f <updated-backend-file.yaml>
+kubectl apply -f <updated-backend-file.yaml>
 ----
 
 Alternatively, make changes to the existing `TridentBackendConfig` CR by running the following command:
 ----
-$ kubectl edit tbc <tbc-name> -n trident
+kubectl edit tbc <tbc-name> -n trident
 ----
 
 If a backend update fails, the backend continues to remain in its last known configuration. You can view the logs to determine the cause by running `kubectl get tbc <tbc-name> -o yaml -n trident` or `kubectl describe tbc <tbc-name> -n trident`.

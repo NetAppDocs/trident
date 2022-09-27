@@ -70,7 +70,7 @@ After you create a backend, you can observe its status by using `kubectl get tbc
 
 Create a Secret that contains the access credentials for the backend. This is unique to each storage service/platform. Here’s an example:
 ----
-$ kubectl -n trident create -f backend-tbc-ontap-san-secret.yaml
+kubectl -n trident create -f backend-tbc-ontap-san-secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -142,7 +142,7 @@ The Secret created in this step will be referenced in the `spec.credentials` fie
 You are now ready to create your `TridentBackendConfig` CR. In this example, a backend that uses the `ontap-san` driver is created by using the `TridentBackendConfig` object shown below:
 
 ----
-$ kubectl -n trident create -f backend-tbc-ontap-san.yaml
+kubectl -n trident create -f backend-tbc-ontap-san.yaml
 ----
 
 ----
@@ -166,7 +166,7 @@ spec:
 Now that you created the `TridentBackendConfig` CR, you can verify the status. See the following example:
 
 ----
-$ kubectl -n trident get tbc backend-tbc-ontap-san
+kubectl -n trident get tbc backend-tbc-ontap-san
 NAME                    BACKEND NAME          BACKEND UUID                           PHASE   STATUS
 backend-tbc-ontap-san   ontap-san-backend     8d24fce7-6f60-4d4a-8ef6-bab2699e6ab8   Bound   Success
 ----
@@ -199,7 +199,7 @@ backend-tbc-ontap-san   ontap-san-backend   8d24fce7-6f60-4d4a-8ef6-bab2699e6ab8
 
 In addition, you can also obtain a YAML/JSON dump of `TridentBackendConfig`.
 ----
-$ kubectl -n trident get tbc backend-tbc-ontap-san -o yaml
+kubectl -n trident get tbc backend-tbc-ontap-san -o yaml
 ----
 
 ----

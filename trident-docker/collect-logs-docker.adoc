@@ -19,10 +19,10 @@ You can collect logs for help with troubleshooting. The method you use to collec
 . If you are running Astra Trident using the recommended managed plugin method (i.e., using `docker plugin` commands), view them as follows:
 +
 ----
-# docker plugin ls
+docker plugin ls
 ID                  NAME                DESCRIPTION                          ENABLED
 4fb97d2b956b        netapp:latest       nDVP - NetApp Docker Volume Plugin   false
-# journalctl -u docker | grep 4fb97d2b956b
+journalctl -u docker | grep 4fb97d2b956b
 ----
 +
 The standard logging level should allow you to diagnose most issues. If you find that’s not enough, you can enable debug logging.

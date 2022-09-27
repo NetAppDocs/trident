@@ -73,7 +73,7 @@ cd trident-installer
 
 Install Astra Trident in the desired namespace by executing the `tridentctl install` command.
 ----
-$ ./tridentctl install -n trident
+./tridentctl install -n trident
 ....
 INFO Starting Trident installation.                namespace=trident
 INFO Created service account.
@@ -93,12 +93,12 @@ INFO Trident installation succeeded.
 ----
 It will look like this when the installer is complete. Depending on the number of nodes in your Kubernetes cluster, you might observe more pods:
 ----
-$ kubectl get pod -n trident
+kubectl get pod -n trident
 NAME                           READY   STATUS    RESTARTS   AGE
 trident-csi-679648bd45-cv2mx   4/4     Running   0          5m29s
 trident-csi-vgc8n              2/2     Running   0          5m29s
 
-$ ./tridentctl -n trident version
+./tridentctl -n trident version
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+

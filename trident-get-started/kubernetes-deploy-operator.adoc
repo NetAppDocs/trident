@@ -71,7 +71,7 @@ There are two ways to pass configuration data during the install:
 For example, to change the default value of `debug`, run the following `--set` command:
 [source,cli]
 ----
-$ helm install <name> netapp-trident/trident-operator --version 22.7.0 --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 22.7.0 --set tridentDebug=true
 ----
 
 The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.
@@ -141,7 +141,7 @@ The Trident installer contains manifests for defining these resources. By defaul
 +
 [source,cli]
 ----
-$ kubectl apply -f deploy/namespace.yaml
+kubectl apply -f deploy/namespace.yaml
 ----
 
 . To deploy the operator in a namespace other than the default `trident` namespace, you should update the `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` manifests and generate your `bundle.yaml`.
@@ -164,11 +164,11 @@ kubectl create -f deploy/bundle.yaml
 +
 [source,cli]
 ----
-$ kubectl get deployment -n <operator-namespace>
+kubectl get deployment -n <operator-namespace>
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
 trident-operator   1/1     1            1           3m
 
-$ kubectl get pods -n <operator-namespace>
+kubectl get pods -n <operator-namespace>
 NAME                              READY   STATUS             RESTARTS   AGE
 trident-operator-54cb664d-lnjxh   1/1     Running            0          3m
 ----
@@ -182,10 +182,10 @@ IMPORTANT: There should only be *one instance* of the operator in a Kubernetes c
 You are now ready to install Astra Trident using the operator! This will require creating `TridentOrchestrator`. The Trident installer comes with example definitions for creating `TridentOrchestrator`. This kicks off an installation in the `trident` namespace.
 [source,cli]
 ----
-$ kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
+kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
 tridentorchestrator.trident.netapp.io/trident created
 
-$ kubectl describe torc trident
+kubectl describe torc trident
 Name:        trident
 Namespace:
 Labels:      <none>
@@ -249,7 +249,7 @@ During the installation, the status of `TridentOrchestrator` changes from `Insta
 You can confirm if the Astra Trident installation completed by taking a look at the pods that have been created:
 [source,cli]
 ----
-$ kubectl get pod -n trident
+kubectl get pod -n trident
 NAME                                READY   STATUS    RESTARTS   AGE
 trident-csi-7d466bf5c7-v4cpw        5/5     Running   0           1m
 trident-csi-mr6zc                   2/2     Running   0           1m
@@ -260,7 +260,7 @@ trident-operator-766f7b8658-ldzsv   1/1     Running   0           3m
 You can also use `tridentctl` to check the version of Astra Trident installed.
 [source,cli]
 ----
-$ ./tridentctl -n trident version
+./tridentctl -n trident version
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+

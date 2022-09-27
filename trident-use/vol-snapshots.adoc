@@ -30,7 +30,7 @@ For Kubernetes 1.20 and above, use v1 snapshot CRDs with snapshot components of 
 --
 [source,yaml]
 ----
-$ cat snapshot-setup.sh
+cat snapshot-setup.sh
 #!/bin/bash
 # Create volume snapshot CRDs
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/release-5.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
@@ -42,7 +42,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 --
 [source,yaml]
 ----
-$ cat snapshot-setup.sh
+cat snapshot-setup.sh
 #!/bin/bash
 # Create volume snapshot CRDs
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v3.0.3/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
@@ -88,7 +88,7 @@ The example detailed below explains the constructs required for working with sna
 Before creating a volume snapshot, set up a link:../trident-reference/objects.html[`VolumeSnapshotClass`^].
 
 ----
-$ cat snap-sc.yaml
+cat snap-sc.yaml
 #Use apiVersion v1 for Kubernetes 1.20 and above. For Kubernetes 1.19, use apiVersion v1beta1.
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshotClass
@@ -103,7 +103,7 @@ The `driver` points to Astra Trident’s CSI driver. `deletionPolicy` can be `De
 == Step 2: Create a snapshot of an existing PVC
 
 ----
-$ cat snap.yaml
+cat snap.yaml
 #Use apiVersion v1 for Kubernetes 1.20 and above. For Kubernetes 1.19, use apiVersion v1beta1.
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshot
@@ -118,10 +118,10 @@ spec:
 The snapshot is being created for a PVC named `pvc1`, and the name of the snapshot is set to `pvc1-snap`.
 
 ----
-$ kubectl create -f snap.yaml
+kubectl create -f snap.yaml
 volumesnapshot.snapshot.storage.k8s.io/pvc1-snap created
 
-$ kubectl get volumesnapshots
+kubectl get volumesnapshots
 NAME                   AGE
 pvc1-snap              50s
 ----
@@ -130,7 +130,7 @@ This created a `VolumeSnapshot` object. A VolumeSnapshot is analogous to a PVC a
 It is possible to identify the `VolumeSnapshotContent` object for the `pvc1-snap` VolumeSnapshot by describing it.
 
 ----
-$ kubectl describe volumesnapshots pvc1-snap
+kubectl describe volumesnapshots pvc1-snap
 Name:         pvc1-snap
 Namespace:    default
 .
@@ -158,7 +158,7 @@ The `Snapshot Content Name` identifies the VolumeSnapshotContent object which se
 See the following example for creating a PVC using a snapshot:
 
 ----
-$ cat pvc-from-snap.yaml
+cat pvc-from-snap.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

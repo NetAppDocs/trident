@@ -231,7 +231,7 @@ This backend configuration defines multiple storage pools in a single file. This
     }
 ----
 
-The following `StorageClass` definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each `StorageClass` the visrtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+The following `StorageClass` definitions refer to the storage pools above. By using the `parameters.selector` field, you can specify for each `StorageClass` the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
 
 ----
 apiVersion: storage.k8s.io/v1

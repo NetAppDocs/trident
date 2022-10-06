@@ -47,7 +47,7 @@ Here is an example that shows how a volume upgrade is performed.
 . Run `kubectl get pv` to list the PVs.
 +
 ----
-$ kubectl get pv
+kubectl get pv
 NAME                         CAPACITY     ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                  STORAGECLASS    REASON   AGE
 default-pvc-1-a8475          1073741824   RWO            Delete           Bound    default/pvc-1          standard                 19h
 default-pvc-2-a8486          1073741824   RWO            Delete           Bound    default/pvc-2          standard                 19h
@@ -60,7 +60,7 @@ There are currently four PVs that have been created by Trident 20.07, using the 
 . Run `kubectl describe pv` to get the details of the PV.
 +
 ----
-$ kubectl describe pv default-pvc-2-a8486
+kubectl describe pv default-pvc-2-a8486
 
 Name:            default-pvc-2-a8486
 Labels:          <none>
@@ -87,7 +87,7 @@ The PV was created by using the `netapp.io/trident` provisioner and is of the ty
 . Run the `tridenctl upgrade volume <name-of-trident-volume>` command to upgrade a legacy Astra Trident volume to the CSI spec.
 +
 ----
-$ ./tridentctl get volumes -n trident
+./tridentctl get volumes -n trident
 +---------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 |            NAME     |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
 +---------------------+---------+---------------+----------+--------------------------------------+--------+---------+
@@ -97,7 +97,7 @@ $ ./tridentctl get volumes -n trident
 | default-pvc-4-a84de | 1.0 GiB | standard      | file     | c5a6f6a4-b052-423b-80d4-8fb491a14a22 | online | true    |
 +---------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 
-$ ./tridentctl upgrade volume default-pvc-2-a8486 -n trident
+./tridentctl upgrade volume default-pvc-2-a8486 -n trident
 +---------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 |            NAME     |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
 +---------------------+---------+---------------+----------+--------------------------------------+--------+---------+
@@ -107,7 +107,7 @@ $ ./tridentctl upgrade volume default-pvc-2-a8486 -n trident
 . Run a `kubectl describe pv` to verify that the volume is a CSI volume.
 +
 ----
-$ kubectl describe pv default-pvc-2-a8486
+kubectl describe pv default-pvc-2-a8486
 Name:            default-pvc-2-a8486
 Labels:          <none>
 Annotations:     pv.kubernetes.io/provisioned-by: csi.trident.netapp.io

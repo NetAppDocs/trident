@@ -69,7 +69,7 @@ docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_v
 === Example
 
 ----
-[me@host ~]$ docker volume inspect firstVolume
+docker volume inspect firstVolume
 
 [
     {
@@ -90,14 +90,14 @@ docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_v
     }
 ]
 
-[me@host ~]$ docker volume create -d ontap-nas --name clonedVolume -o from=firstVolume
+docker volume create -d ontap-nas --name clonedVolume -o from=firstVolume
 clonedVolume
 
-[me@host ~]$ docker volume rm clonedVolume
-[me@host ~]$ docker volume create -d ontap-nas --name volFromSnap -o from=firstVolume -o fromSnapshot=hourly.2017-02-10_1505
+docker volume rm clonedVolume
+docker volume create -d ontap-nas --name volFromSnap -o from=firstVolume -o fromSnapshot=hourly.2017-02-10_1505
 volFromSnap
 
-[me@host ~]$ docker volume rm volFromSnap
+docker volume rm volFromSnap
 ----
 
 == Access externally created volumes

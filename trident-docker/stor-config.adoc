@@ -358,18 +358,19 @@ The `solidfire-san` driver does not support Docker Swarm.
 
 == Cloud Volumes Service (CVS) on GCP configuration
 
-Astra Trident supports volumes with the default CVS service type on https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[GCP^]. For backends created with `storageClass=software`, volumes have a minimum provisioning size of 100 GiB. *NetApp recommends customers consume sub-1TiB volumes for non-production workloads*. CVS currently provides this feature under Controlled Availability and does not provide technical support.
+Astra Trident supports volumes with the default CVS service type on https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[GCP^]. Astra Trident does not support CVS volumes less than 100 GiB regardless of the minimum allowed by the CVS service type. Therefore, Trident automatically creates a 100 GiB volume if the requested volume is smaller than the minimum size.  
 
-NOTE: Sign up for access to sub-1TiB volumes https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[here^].
+[NOTE]
+====
+* NetApp recommends customers consume sub-1TiB volumes for non-production workloads.
 
-WARNING: When deploying backends using the default CVS service type `storageClass=software`, you should obtain access to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creations *will fail* for PVCs that are <600 GiB. Obtain access to sub-1TiB volumes using https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form^].
+* When deploying backends using the default CVS service type `storageClass=software`, sign up for access to the sub-1TiB volumes feature on GCP for the relevant Project Number and Project ID. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creation *will fail* for PVCs less than 600 GiB. 
 
-Volumes created by Trident for the default CVS service level will be provisioned as follows:
+* link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[Sign up for access to sub-1TiB volumes.]  
+ 
+====
 
-* PVCs that are smaller than 100 GiB will result in Trident creating a 100 GiB CVS volume.
-* PVCs that are between 100 GiB to 600 GiB will result in Trident creating a CVS volume of the requested size.
-* PVCs that are between 600 GiB and 1 TiB will result in Trident creating a 1TiB CVS volume.
-* PVCs that are greater than 1 TiB will result in Trident creating a CVS volume of the requested size.
+
 
 In addition to the global configuration values, when using CVS on GCP, these options are available.
 
@@ -418,8 +419,6 @@ a|“default”
 |===
 
 NOTE: If using a shared VPC network, you should specify both `projectNumber` and `hostProjectNumber`. In that case, `projectNumber` is the service project and `hostProjectNumber` is the host project.
-
-NOTE: NetApp Cloud Volumes Service for GCP does not support CVS-Performance or CVS volumes less than 100 GiB in size. To make it easier to deploy applications, Trident automatically creates volumes of the minimum size if a too-small volume is requested.
 
 When using CVS on GCP, these default volume option settings are available.
 

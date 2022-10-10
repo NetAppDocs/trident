@@ -65,7 +65,7 @@ Astra Trident offers 2 SAN drivers for ONTAP, whose capabilities are shown below
 | `ontap-san` | Yes | Yes | Yesfootnote:4[]| Yes | Yesfootnote:1[] | Yes |
 Yesfootnote:1[]
 |`ontap-san-economy` | Yes | Yes | Yesfootnote:4[]| Yes | Yesfootnote:3[]|
-Yesfootnote:1[] | Yesfootnote:3[]|
+Yes | Yesfootnote:3[]|
 |===
 
 [verse]
@@ -260,7 +260,7 @@ If a volume is copied to another location, the volume import feature may be used
 
 === Expand volumes
 
-Astra Trident supports resizing NFS and iSCSI PVs. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, SolidFire/NetApp HCI and Cloud Volumes Service backends. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will utomatically take care of resizing the volume on the storage cluster.
+Astra Trident supports resizing NFS and iSCSI PVs. This enables users to resize their volumes directly through the Kubernetes layer. Volume expansion is possible for all major NetApp storage platforms, including ONTAP, SolidFire/NetApp HCI and Cloud Volumes Service backends. To allow possible expansion later, set `allowVolumeExpansion` to `true` in your StorageClass associated with the volume. Whenever the Persistent Volume needs to be resized, edit the `spec.resources.requests.storage` annotation in the Persistent Volume Claim to the required volume size. Trident will automatically take care of resizing the volume on the storage cluster.
 
 === Import an existing volume into Kubernetes
 
@@ -337,7 +337,7 @@ However, if you are deploying after the initial installation, the component play
 
 == Metrics service
 
-The metrics service provides valuable information to the administrator regarding the status, resource utilization, and availability of the OpenShift cluster. It is also necessary for pod autoscale functionality and many organizations use data from the metrics service for their charge back and/or show back applications.
+The metrics service provides valuable information to the administrator regarding the status, resource utilization, and availability of the OpenShift cluster. It is also necessary for pod auto-scale functionality and many organizations use data from the metrics service for their charge back and/or show back applications.
 
 Like with the logging service, and OpenShift as a whole, Ansible is used to deploy the metrics service. Also, like the logging service, the metrics service can be deployed during an initial setup of the cluster or after it’s operational using the component installation method. The following tables contain the variables which are important when configuring persistent storage for the metrics service.
 

@@ -5,7 +5,7 @@ keywords: trident backend, ontap nas, ontap-nas, ontap-nas-economy, ontap-nas-fl
 summary: Learn about how to prepare to configure an ONTAP backend with ONTAP NAS drivers.
 ---
 
-= Preparation
+= Prepare to configure a backend with ONTAP NAS drivers
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -99,7 +99,7 @@ base64 -w 0 trustedca.pem >> trustedca_base64
 . Create backend using the values obtained from the previous step.
 +
 ----
-$ cat cert-backend-updated.json
+cat cert-backend-updated.json
 {
 "version": 1,
 "storageDriverName": "ontap-nas",
@@ -113,7 +113,7 @@ $ cat cert-backend-updated.json
 }
 
 #Update backend with tridentctl
-$ tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
+tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 +------------+----------------+--------------------------------------+--------+---------+
 |    NAME    | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
 +------------+----------------+--------------------------------------+--------+---------+
@@ -126,7 +126,7 @@ $ tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 You can update an existing backend to use a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, you must remove the existing authentication method and add the new authentication method. Then use the updated backend.json file containing the required parameters to execute `tridentctl backend update`.
 
 ----
-$ cat cert-backend-updated.json
+cat cert-backend-updated.json
 {
 "version": 1,
 "storageDriverName": "ontap-nas",
@@ -140,7 +140,7 @@ $ cat cert-backend-updated.json
 }
 
 #Update backend with tridentctl
-$ tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
+tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 +------------+----------------+--------------------------------------+--------+---------+
 |    NAME    | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
 +------------+----------------+--------------------------------------+--------+---------+
@@ -197,7 +197,7 @@ You can update `autoExportPolicy` and `autoExportCIDRs` for backends after you c
 
 After Astra Trident creates or updates a backend, you can check the backend using `tridentctl` or the corresponding `tridentbackend` CRD:
 ----
-$ ./tridentctl get backends ontap_nas_auto_export -n trident -o yaml
+./tridentctl get backends ontap_nas_auto_export -n trident -o yaml
 items:
 - backendUUID: 403b5326-8482-40db-96d0-d83fb3f4daec
   config:

@@ -138,7 +138,11 @@ a|Split a clone from its parent upon creation, defaults to “false”
 a|false
 
 |`encryption`
-a|Enable NetApp Volume Encryption, defaults to “false”
+a|Enables NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
+
+If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
+
+For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE].
 a|true
 
 |`unixPermissions`

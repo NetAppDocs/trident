@@ -5,7 +5,7 @@ keywords: map backends, storage classes, trident backend, ontap san, ontap san e
 summary: Learn about how to create and use ONTAP SAN drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
 ---
 
-= Configuration options and examples
+= ONTAP SAN configuration options and examples
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -134,7 +134,11 @@ You can control how each volume is provisioned by default using these options in
 
 |`splitOnClone` |Split a clone from its parent upon creation |“false”
 
-|`encryption` |Enable NetApp volume encryption |“false”
+|`encryption` |Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
+
+If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
+
+For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |“false”
 
 |`securityStyle` |Security style for new volumes |“unix”
 

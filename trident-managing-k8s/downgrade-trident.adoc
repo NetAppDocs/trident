@@ -54,12 +54,12 @@ Make sure the `tridentorchestrator` is deleted.
 +
 ----
 #Check to see if there are any tridentorchestrators present
-$ kubectl get torc
+kubectl get torc
 NAME        AGE
 trident     20h
 
 #Looks like there is a tridentorchestrator that needs deleting
-$ kubectl delete torc trident
+kubectl delete torc trident
 tridentorchestrator.trident.netapp.io "trident" deleted
 ----
 . Delete the cluster-scoped operator. To do this, you will need the manifest used to deploy the operator. You can obtain it here from the https://github.com/NetApp/trident/blob/stable/v21.07/deploy/bundle.yaml[Trident GitHub repo^]. Make sure you switch to the required branch.
@@ -67,10 +67,14 @@ tridentorchestrator.trident.netapp.io "trident" deleted
 +
 ----
 #Check to see if ``tridentorchestrators.trident.netapp.io`` CRD is present and delete it.
-$ kubectl get crd tridentorchestrators.trident.netapp.io
+
+kubectl get crd tridentorchestrators.trident.netapp.io
+
 NAME                                     CREATED AT
 tridentorchestrators.trident.netapp.io   2021-01-21T21:11:37Z
-$ kubectl delete crd tridentorchestrators.trident.netapp.io
+
+kubectl delete crd tridentorchestrators.trident.netapp.io
+
 customresourcedefinition.apiextensions.k8s.io "tridentorchestrators.trident.netapp.io" deleted
 ----
 Astra Trident has been uninstalled.
@@ -80,7 +84,7 @@ Astra Trident has been uninstalled.
 
 To downgrade, use the `helm rollback` command. See the following example:
 ----
-$ helm rollback trident [revision #]
+helm rollback trident [revision #]
 ----
 
 == Downgrade process when Astra Trident is installed by using `tridentctl`
@@ -97,14 +101,14 @@ NOTE: Before beginning the downgrade, you should take a snapshot of your Kuberne
 . Uninstall Astra Trident with the existing `tridentctl` binary.  In this case, you will uninstall with the 21.07 binary.
 +
 ----
-$ tridentctl version -n trident
+tridentctl version -n trident
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
 | 21.07.0        | 21.07.0        |
 +----------------+----------------+
 
-$ tridentctl uninstall -n trident
+tridentctl uninstall -n trident
 INFO Deleted Trident deployment.
 INFO Deleted Trident daemonset.
 INFO Deleted Trident service.
@@ -119,8 +123,8 @@ INFO Trident uninstallation succeeded.
 . After this is complete, obtain the Trident binary for the desired version (in this example, 20.07), and use it to install Astra Trident. You can generate custom YAMLs for a link:../trident-get-started/kubernetes-customize-deploy-tridentctl.html[customized installation^] if needed.
 +
 ----
-$ cd 20.07/trident-installer/
-$ ./tridentctl install -n trident-ns
+cd 20.07/trident-installer/
+./tridentctl install -n trident-ns
 INFO Created installer service account.            serviceaccount=trident-installer
 INFO Created installer cluster role.               clusterrole=trident-installer
 INFO Created installer cluster role binding.       clusterrolebinding=trident-installer

@@ -115,7 +115,6 @@ NOTE: Beginning with 21.01, the Trident operator is cluster scoped. Using the Tr
 
 . Download and extract the latest version of the Trident installer bundle from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^].
 +
-[source,cli]
 ----
 wget https://github.com/NetApp/trident/releases/download/v22.04.0/trident-installer-22.04.0.tar.gz
 tar -xf trident-installer-22.04.0.tar.gz
@@ -162,13 +161,16 @@ kubectl create -f deploy/bundle.yaml
 
 . To verify the status of the operator after you have deployed, do the following:
 +
-[source,cli]
 ----
 kubectl get deployment -n <operator-namespace>
+
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
 trident-operator   1/1     1            1           3m
-
+----
++
+----
 kubectl get pods -n <operator-namespace>
+
 NAME                              READY   STATUS             RESTARTS   AGE
 trident-operator-54cb664d-lnjxh   1/1     Running            0          3m
 ----
@@ -180,7 +182,7 @@ IMPORTANT: There should only be *one instance* of the operator in a Kubernetes c
 === Step 3: Create `TridentOrchestrator` and install Trident
 
 You are now ready to install Astra Trident using the operator! This will require creating `TridentOrchestrator`. The Trident installer comes with example definitions for creating `TridentOrchestrator`. This kicks off an installation in the `trident` namespace.
-[source,cli]
+
 ----
 kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
 tridentorchestrator.trident.netapp.io/trident created
@@ -247,9 +249,10 @@ exists.
 During the installation, the status of `TridentOrchestrator` changes from `Installing` to `Installed`. If you observe the `Failed` status and the operator is unable to recover by itself, you should  check the logs of the operator. See the link:../troubleshooting.html[troubleshooting^] section.
 
 You can confirm if the Astra Trident installation completed by taking a look at the pods that have been created:
-[source,cli]
+
 ----
 kubectl get pod -n trident
+
 NAME                                READY   STATUS    RESTARTS   AGE
 trident-csi-7d466bf5c7-v4cpw        5/5     Running   0           1m
 trident-csi-mr6zc                   2/2     Running   0           1m
@@ -258,9 +261,10 @@ trident-csi-zh2jt                   2/2     Running   0           1m
 trident-operator-766f7b8658-ldzsv   1/1     Running   0           3m
 ----
 You can also use `tridentctl` to check the version of Astra Trident installed.
-[source,cli]
+
 ----
 ./tridentctl -n trident version
+
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+

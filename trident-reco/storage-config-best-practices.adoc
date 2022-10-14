@@ -70,7 +70,6 @@ Leveraging an ONTAP QoS policy, applied to the SVM, limits the number of IOPS co
 
 You can create a QoS policy for the SVM in a few steps. See the documentation for your version of ONTAP for the most accurate information.  The example below creates a QoS policy that limits the total IOPS available to the SVM to 5000.
 
-[source,console]
 ----
 # create the policy group for the SVM
 qos policy-group create -policy-group <policy_name> -vserver <svm_name> -max-throughput 5000iops
@@ -102,7 +101,6 @@ Consider the following when you create QoS policy groups:
 
 * You should set the `qosPolicy` key in the `defaults` block of the backend configuration. See the following backend configuration example:
 
-[source,console]
 ----
   {
     "version": 1,

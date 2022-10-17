@@ -5,12 +5,12 @@ keywords: volref, volume reference, share, pvc, pv, nfs, namespace
 summary: 
 ---
 
-= Share data between namespaces
+= Share an NFS volume across namespaces
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
-The Astra TridentVolumeReference CRD allows you to securely share ReadWriteMany (RWX) NFS volumes across one more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
+The Astra TridentVolumeReference CRD allows you to securely share ReadWriteMany (RWX) NFS volumes across one or more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
 
 * Multiple levels of access control to ensure security 
 * Works with all Trident NFS volume drivers
@@ -29,20 +29,23 @@ You can set up NFS volume sharing in just a few steps.
 [role="quick-margin-para"]
 The source namespace owner grants permission to access the data in the namespace PVC. 
 
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png[Two] Grant permission to create TridentVolumeReference in the destination namespace
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png[Two] Grant permission to create CRD in the destination namespace
 
 [role="quick-margin-para"]
 The cluster administrator grants permission to the owner of the destination namespace to create the TridentVolumeReference.
 
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png[Three] Create the TridentVolumeReference CRD in the destination namespace
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png[Three] Create TridentVolumeReference in the destination namespace
 
 [role="quick-margin-para"]
 The owner of the destination namespace creates the TridentVolumeReference CRD to refer to the source PVC.
 
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png[Four] Create the PVC in the destination namespace
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create the PVC in the destination namespace
 
 [role="quick-margin-para"]
 The owner of the destination namespace creates the PVC to use the data source from the source PVC.
+
+== Configure the source and destination namespaces 
+To ensure security, cross namespace sharing requires collaboration and action by the source namespace owner, cluster administrator, and destination namespace owner. The user role is designated in each step.
 
 .Steps
 

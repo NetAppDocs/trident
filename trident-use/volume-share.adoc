@@ -10,7 +10,7 @@ summary:
 :icons: font
 :imagesdir: ../media/
 
-The Astra TridentVolumeReference CRD allows you to securely share ReadWriteMany (RWX) NFS volumes across one or more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
+The Astra TridentVolumeReference CR allows you to securely share ReadWriteMany (RWX) NFS volumes across one or more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
 
 * Multiple levels of access control to ensure security 
 * Works with all Trident NFS volume drivers
@@ -29,15 +29,15 @@ You can set up NFS volume sharing in just a few steps.
 [role="quick-margin-para"]
 The source namespace owner grants permission to access the data in the source PVC. 
 
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png[Two] Grant permission to create CRD in the destination namespace
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png[Two] Grant permission to create a CR in the destination namespace
 
 [role="quick-margin-para"]
-The cluster administrator grants permission to the owner of the destination namespace to create the TridentVolumeReference.
+The cluster administrator grants permission to the owner of the destination namespace to create the TridentVolumeReference CR.
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png[Three] Create TridentVolumeReference in the destination namespace
 
 [role="quick-margin-para"]
-The owner of the destination namespace creates the TridentVolumeReference CRD to refer to the source PVC.
+The owner of the destination namespace creates the TridentVolumeReference CR to refer to the source PVC.
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create the subordinate PVC in the destination namespace
 
@@ -79,9 +79,9 @@ Astra Trident creates the PV and its backend NFS storage volume.
 * You can update the PVC to include the `shareToNamespace` annotation at any time. 
 ====
 
-. *Cluster admin:* Create the custom role and kubeconfig to grant permission to the destination namespace owner to create the TridentVolumeReference CRD in the destination namespace. 
+. *Cluster admin:* Create the custom role and kubeconfig to grant permission to the destination namespace owner to create the TridentVolumeReference CR in the destination namespace. 
 
-. *Destination namespace owner:* Create a TridentVolumeReference CRD in the destination namespace that refers to the source namespace `pvc1`.
+. *Destination namespace owner:* Create a TridentVolumeReference CR in the destination namespace that refers to the source namespace `pvc1`.
 +
 ----
 apiVersion: trident.netapp.io/v1
@@ -138,5 +138,8 @@ Flags:
 == Limitations
 
 * Astra Trident cannot prevent destination namespaces from writing to the shared volume. You should use file locking or other processes to prevent overwriting shared volume data.
+
+* You cannot revoke access to the source PVC by removing the `shareToNamespace` or `shareFromNamepace` annotations or deleting the `TridentVolumeReference` CR. To revoke access, you must delete the subordinate PVC.
+
 * Snapshots, clones, and mirroring are not possible on subordinate volumes. 
 

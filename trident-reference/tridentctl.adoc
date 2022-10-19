@@ -86,6 +86,11 @@ Available options:
 * `storageclass`: Get one or more storage classes from Astra Trident.
 * `volume`: Get one or more volumes from Astra Trident.
 
+`volume` flags:
+* ``-h, --help`: Help for volumes.
+* `--parentOfSubordinate string`: Limit query to subordinate source volume. 
+* `--subordinateOf string`: Limit query to subordinates of volume. 
+
 == `images`
 
 You can run the `images` flag to print a table of the container images Astra Trident needs.

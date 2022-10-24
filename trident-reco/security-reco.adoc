@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-reco/security-reco.html
-keywords: security, chap, trident, namespace, nve, nae, encryption, volume encryption, aggregate encryption
+keywords: security, chap, trident, namespace, nve, nae, encryption, volume encryption, aggregate encryption, luks, linux unified key setup, encryption
 summary: Use the recommendations listed here to ensure that your Astra Trident installation is secure.
 ---
 
@@ -10,7 +10,7 @@ summary: Use the recommendations listed here to ensure that your Astra Trident i
 :icons: font
 :imagesdir: ../media/
 
-Use the recommendations listed here to ensure that your Astra Trident installation is secure.
+Use the recommendations listed here to ensure your Astra Trident installation is secure.
 
 == Run Astra Trident in its own namespace
 
@@ -36,7 +36,7 @@ NOTE: The volumes that are created by CSI Trident are not associated with any Vo
 
 In the non-CSI frontend, the attachment of volumes as devices on the worker nodes is handled by Kubernetes. After volume creation, Astra Trident makes an API call to the NetApp HCI/SolidFire system to retrieve the secrets if the secret for that tenant does not already exist. Astra Trident then passes the secrets on to Kubernetes. The kubelet located on each node accesses the secrets via the Kubernetes API and uses them to run/enable CHAP between each node accessing the volume and the NetApp HCI/SolidFire system where the volumes are located.
 
-== How Astra Trident works with NVE and NAE
+== Use Astra Trident with NVE and NAE
 
 NetApp ONTAP provides data-at-rest encryption to protect sensitive data in the event a disk is stolen, returned, or repurposed. For details, refer to link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html[Configure NetApp Volume Encryption overview^].
 
@@ -60,6 +60,79 @@ For more information on backend configuration options, refer to:
 
 * link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
 
-* link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS confiruation options]
+* link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options]
 
+== Use Linux Unified Key Setup (LUKS)
 
+You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP-SAN and ONTAP-SAN-ECONOMY volumes on Astra Trident. In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST].
+
+For more information on backend configuration options for ONTAP-SAN and ONTAP-SAN-ECONOMY, refer to link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
+
+.Before you begin
+
+* Worker nodes must have cryptsetup 2.1 or higher installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup].
+
+* Worker nodes must support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
++
+----
+grep "aes" /proc/cpuinfo
+----
++
+If nothing is returned, your processor does not support AES-NI. For more information on AES-NI, visit: link:https://www.intel.com/content/www/us/en/developer/articles/technical/advanced-encryption-standard-instructions-aes-ni.html[Intel: Advanced Encryption Standard Instructions (AES-NI)].
+
+.Steps
+
+. Define LUKS encryption attributes on the backend.
++
+----
+"storage": [
+    {
+        "labels":{"luks": "true"},
+        "zone":"us_east_1a",
+        "defaults": {
+            "luksEncryption": true
+        }
+    },
+    {
+        "labels":{"luks": "false"},
+        "zone":"us_east_1a",
+        "defaults": {
+            "luksEncryption": false
+        }
+    },
+]
+----
+
+. Use `parameters.selector` to define the storage pools using LUKS encryption. For example:
++
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: luks
+provisioner: netapp.io/trident
+parameters:
+  selector: "luks=true"
+  csi.storage.k8s.io/node-stage-secret-name: luks-\${pvc.name}
+  csi.storage.k8s.io/node-stage-secret-namespace: \${pvc.namespace}
+----
+
+. Create a Secret that contains the LUKS passphrase. For example:
++
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: luks-pvc1
+stringData:
+  luks-passphrase-name: B
+  luks-passphrase: secretB
+  previous-luks-passphrase-name: A
+  previous-luks-passphrase: secretA
+----
+
+=== Limitations
+
+* ONTAP storage efficiency and deduplication are not available on LUKS-encrypted volumes. 
+
+* LUKS passphrase rotation is not not supported at this time. To change passphrases, manually copy the data from one PVC to another. 

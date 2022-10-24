@@ -63,6 +63,8 @@ For seamless MetroCluster switchover, you must specify an SVM management LIF. Th
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |“”  (not enforced by default)
 
+|`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-reco.html#Use-Linux-Unified-Key-Setup-(LUKS)[Use Linux Unified Key Setup (LUKS)]. | ""
+
 |`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |“100”
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} |null

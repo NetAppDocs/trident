@@ -25,9 +25,58 @@ If you are using Azure NetApp Files for the first time or in a new location, som
 To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] backend, you need the following:
 
 * `subscriptionID` from an Azure subscription with Azure NetApp Files enabled.
-* `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use the `Owner` or `Contributor` role predefined by Azure.
+* `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use either: 
+
+**  The Owner or Contributor role link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[predefined by Azure^] 
+
+** A link:https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles-portal[custom Contributor role] at the subscription level (`assignableScope`) with the following permissions that are limited to only what Astra Trident requires. After creating the custom role, link:https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal[assign the role using the Azure portal^].
 +
-TIP: To learn more about Azure built-in roles, refer to the link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[Azure documentation^].
+[source,JSON]
+----
+{
+    "id": "/subscriptions/xxxxxxxx/providers/Microsoft.Authorization/roleDefinitions/yyyyyyyy",
+    "properties": {
+        "roleName": "custom-role-with-limited-perms",
+        "description": "custom role providing limited permissions",
+        "assignableScopes": [
+            "/subscriptions/abcbabcbabcabc"
+        ],
+        "permissions": [
+            {
+                "actions": [
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/delete",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots/delete",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/subvolumes/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/subvolumes/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/subvolumes/delete",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/subvolumes/GetMetadata/action",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/MountTargets/read",
+                    "Microsoft.Network/virtualNetworks/read",
+                    "Microsoft.Network/virtualNetworks/subnets/read",
+                    "Microsoft.Features/featureProviders/subscriptionFeatureRegistrations/read",
+                    "Microsoft.Features/featureProviders/subscriptionFeatureRegistrations/write",
+                    "Microsoft.Features/featureProviders/subscriptionFeatureRegistrations/delete",
+                    "Microsoft.Features/features/read",
+                    "Microsoft.Features/operations/read",
+                    "Microsoft.Features/providers/features/read",
+                    "Microsoft.Features/providers/features/register/action",
+                    "Microsoft.Features/providers/features/unregister/action",
+                    "Microsoft.Features/subscriptionFeatureRegistrations/read"
+                ],
+                "notActions": [],
+                "dataActions": [],
+                "notDataActions": []
+            }
+        ]
+    }
+}
+----
 
 * The Azure `location` that contains at least one link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]. As of Trident 22.01, the `location` parameter is a required field at the top level of the backend configuration file. Location values specified in virtual pools are ignored.
 

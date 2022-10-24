@@ -37,7 +37,6 @@ TIP: To learn more about Azure built-in roles, refer to the link:https://docs.mi
 
 * At least one Astra Trident secret containing your Active Directory credentials so ANF can authenticate to Active Directory. To generate secret `smbcreds`:
 +
-[source, cli]
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'
 ----

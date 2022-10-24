@@ -64,13 +64,13 @@ For more information on backend configuration options, refer to:
 
 == Use Linux Unified Key Setup (LUKS)
 
-You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP-SAN and ONTAP-SAN-ECONOMY volumes on Astra Trident. In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST].
+You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
-For more information on backend configuration options for ONTAP-SAN and ONTAP-SAN-ECONOMY, refer to link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
+For more information on backend configuration options for ONTAP SAN, refer to link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
 
 .Before you begin
 
-* Worker nodes must have cryptsetup 2.1 or higher installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup].
+* Worker nodes must have cryptsetup 2.1 or higher installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup^].
 
 * Worker nodes must support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
 +
@@ -78,7 +78,7 @@ For more information on backend configuration options for ONTAP-SAN and ONTAP-SA
 grep "aes" /proc/cpuinfo
 ----
 +
-If nothing is returned, your processor does not support AES-NI. For more information on AES-NI, visit: link:https://www.intel.com/content/www/us/en/developer/articles/technical/advanced-encryption-standard-instructions-aes-ni.html[Intel: Advanced Encryption Standard Instructions (AES-NI)].
+If nothing is returned, your processor does not support AES-NI. For more information on AES-NI, visit: link:https://www.intel.com/content/www/us/en/developer/articles/technical/advanced-encryption-standard-instructions-aes-ni.html[Intel: Advanced Encryption Standard Instructions (AES-NI)^].
 
 .Steps
 

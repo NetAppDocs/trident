@@ -62,7 +62,7 @@ For more information on backend configuration options, refer to:
 
 * link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options]
 
-== Use Linux Unified Key Setup (LUKS)
+== Enable per-volume, host-side encryption using Linux Unified Key Setup (LUKS)
 
 You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
@@ -82,7 +82,7 @@ If nothing is returned, your processor does not support AES-NI. For more informa
 
 .Steps
 
-. Define LUKS encryption attributes on the backend.
+. Define LUKS encryption attributes in the backend configuration.
 +
 ----
 "storage": [
@@ -133,6 +133,6 @@ stringData:
 
 === Limitations
 
-* ONTAP storage efficiency and deduplication are not available on LUKS-encrypted volumes. 
+* LUKS encrypted volumes will not be able to take advantage of ONTAP deduplication, compression, and thin provisioning capabilities. 
 
 * LUKS passphrase rotation is not not supported at this time. To change passphrases, manually copy the data from one PVC to another. 

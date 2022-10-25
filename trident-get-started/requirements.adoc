@@ -49,50 +49,49 @@ The table below summarizes the features available with this release of
 Astra Trident and the versions of Kubernetes it supports.
 
 [cols=3,options="header"]
-===
-Feature
-Kubernetes version
-Feature gates required?
+|===
+|Feature
+|Kubernetes version
+|Feature gates required?
 
-CSI Trident
+|CSI Trident
 
-a1.20 - 1.25
-aNo
+a|1.20 - 1.25
+a|No
 
-Volume Snapshots
-a1.20 - 1.25
-aNo
+|Volume Snapshots
+a|1.20 - 1.25
+a|No
 
-PVC from Volume Snapshots
-a1.20 - 1.25
-aNo
+|PVC from Volume Snapshots
+a|1.20 - 1.25
+a|No
 
-iSCSI PV resize
-a1.20 - 1.25
-aNo
+|iSCSI PV resize
+a|1.20 - 1.25
+a|No
 
-ONTAP Bidirectional CHAP
-a1.20 - 1.25
-aNo
+|ONTAP Bidirectional CHAP
+a|1.20 - 1.25
+a|No
 
-Dynamic Export Policies
-a1.20 - 1.25
-aNo
+|Dynamic Export Policies
+a|1.20 - 1.25
+a|No
 
-Trident Operator
-a1.20 - 1.25
-aNo
+|Trident Operator
+a|1.20 - 1.25
+a|No
 
-Auto Worker Node Prep (beta)
-a1.20 - 1.25
-aNo
+|Auto Worker Node Prep (beta)
+a|1.20 - 1.25
+a|No
 
-CSI Topology
-a1.20 - 1.25
+|CSI Topology
+a|1.20 - 1.25
+a|No
 
-aNo
-
-===
+|===
 
 == Tested host operating systems
 
@@ -119,12 +118,12 @@ Astra Trident might require some changes to a storage system before a backend co
 For air-gapped installations, the following list is a reference of container images needed to install Astra Trident. Use the `tridentctl images` command to verify the list of needed container images.
 
 [cols=2,options="header"]
-===
-Kubernetes version
-Container image
+|===
+|Kubernetes version
+|Container image
 
-v1.20.0
-a
+|v1.20.0
+a|
 * netapp/trident:22.10.0-custom                      
 * netapp/trident-autosupport:22.10                   
 * k8s.io/sig-storage/csi-provisioner:v3.3.0           
@@ -135,8 +134,8 @@ a
 * netapp/trident-operator:22.10.0-custom (optional)  
 
 
-v1.21.0
-a
+|v1.21.0
+a|
 * netapp/trident:22.10.0-custom                      
 * netapp/trident-autosupport:22.10                   
 * k8s.io/sig-storage/csi-provisioner:v3.3.0           
@@ -146,8 +145,8 @@ a
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
 * netapp/trident-operator:22.10.0-custom (optional)  
 
-v1.22.0
-a
+|v1.22.0
+a|
 * netapp/trident:22.10.0-custom                      
 * netapp/trident-autosupport:22.10                   
 * k8s.io/sig-storage/csi-provisioner:v3.3.0           
@@ -157,8 +156,8 @@ a
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
 * netapp/trident-operator:22.10.0-custom (optional)  
 
-v1.23.0
-a
+|v1.23.0
+a|
 * netapp/trident:22.10.0-custom                      
 * netapp/trident-autosupport:22.10                   
 * k8s.io/sig-storage/csi-provisioner:v3.3.0           
@@ -168,8 +167,8 @@ a
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
 * netapp/trident-operator:22.10.0-custom (optional)  
 
-v1.24.0
-a
+|v1.24.0
+a|
 * netapp/trident:22.10.0-custom                      
 * netapp/trident-autosupport:22.10                   
 * k8s.io/sig-storage/csi-provisioner:v3.3.0           
@@ -179,8 +178,8 @@ a
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
 * netapp/trident-operator:22.10.0-custom (optional)  
 
-v1.25.0
-a
+|v1.25.0
+a|
 * netapp/trident:22.10.0-custom                      
 * netapp/trident-autosupport:22.10                   
 * k8s.io/sig-storage/csi-provisioner:v3.3.0           
@@ -190,7 +189,7 @@ a
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
 * netapp/trident-operator:22.10.0-custom (optional)  
 
-===
+|===
 
 NOTE: On Kubernetes version 1.20 and above, use the validated `registry.k8s.gcr.io/sig-storage/csi-snapshotter:v6.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.gcr.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `registry.k8s.gcr.io/sig-storage/csi-snapshotter:v3.x` image.
 

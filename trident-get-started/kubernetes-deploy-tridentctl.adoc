@@ -62,10 +62,10 @@ NOTE: The Trident installer creates a Trident pod, configures the CRD objects th
 
 You can download and extract the latest version of the Trident installer bundle from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^].
 
-For example, if the latest version is 21.07.1:
+For example, if the latest version is 22.10.0:
 ----
-wget https://github.com/NetApp/trident/releases/download/v21.07.1/trident-installer-21.07.1.tar.gz
-tar -xf trident-installer-21.07.1.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
+tar -xf trident-installer-22.10.0.tar.gz
 cd trident-installer
 ----
 
@@ -87,7 +87,7 @@ INFO Created Trident daemonset.
 INFO Waiting for Trident pod to start.
 INFO Trident pod started.                          namespace=trident pod=trident-csi-679648bd45-cv2mx
 INFO Waiting for Trident REST interface.
-INFO Trident REST interface is up.                 version=21.07.1
+INFO Trident REST interface is up.                 version=22.10.0
 INFO Trident installation succeeded.
 ....
 ----
@@ -106,7 +106,7 @@ trident-csi-vgc8n              2/2     Running   0          5m29s
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 21.07.1        | 21.07.1        |
+| 22.10.0        | 22.10.0        |
 +----------------+----------------+
 ----
 

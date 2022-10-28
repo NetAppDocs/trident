@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy-tridentctl.html
-keywords: deploy, astra trident, methods, tridentctl
+keywords: deploy, astra trident, methods, tridentctl, windows
 summary: You can deploy Astra Trident by using `tridentctl`.
 ---
 
@@ -10,11 +10,14 @@ summary: You can deploy Astra Trident by using `tridentctl`.
 :icons: font
 :imagesdir: ../media/
 
-You can deploy Astra Trident by using `tridentctl`.
+You can deploy Astra Trident using `tridentctl`.
 
-TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
+[NOTE] 
+====
+* If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts], now is a great time to do that.
 
-TIP: To customize your deployment, see link:kubernetes-customize-deploy-tridentctl.html[here^].
+* To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
+====
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information before upgrading to Astra Trident 22.10.*
@@ -32,21 +35,18 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 To deploy Astra Trident, the following prerequisites should be met:
 
-* You have full privileges to a supported Kubernetes cluster.
-* You have access to a supported NetApp storage system.
-* You have the capability to mount volumes from all of the Kubernetes worker nodes.
-* You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
-* You have set the `KUBECONFIG` environment variable to point to your Kubernetes cluster configuration.
-* You have enabled the link:requirements.html[feature gates required by Astra Trident^].
+* Full privileges to a supported Kubernetes cluster.
+* Access to a supported NetApp storage system.
+* Capability to mount volumes from all of the Kubernetes worker nodes.
+* A Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
+* The `KUBECONFIG` environment variable points to your Kubernetes cluster configuration.
+* The link:requirements.html[feature gates required by Astra Trident] are enabled.
 * If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
 
-Got all that? Great! Let's get started.
-
-TIP: For information about customizing your deployment, see link:kubernetes-customize-deploy-tridentctl.html[here^].
 
 == Step 1: Qualify your Kubernetes cluster
 
-The first thing you need to do is log into the Linux host and verify that it is managing a _working_, link:requirements.html[supported Kubernetes cluster^] that you have the necessary privileges to.
+Log into the Linux host and verify it is managing a working, link:requirements.html[supported Kubernetes cluster^] and you have the necessary privileges.
 
 NOTE: With OpenShift, you use `oc` instead of `kubectl` in all of the examples that follow, and you should log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
@@ -55,7 +55,7 @@ To check your Kubernetes version, run the following command:
 kubectl version
 ----
 
-To see if you have Kubernetes cluster administrator privileges, run the following command:
+To verify Kubernetes cluster administrator privileges, run the following command:
 ----
 kubectl auth can-i '*' '*' --all-namespaces
 ----
@@ -103,7 +103,11 @@ INFO Trident REST interface is up.                 version=22.10.0
 INFO Trident installation succeeded.
 ....
 ----
-It will look like this when the installer is complete. Depending on the number of nodes in your Kubernetes cluster, you might observe more pods:
+
+[NOTE]
+To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
+
+Output similar to the following displays when the installer is complete. Depending on the number of nodes in your Kubernetes cluster, there might be more pods present:
 ----
 kubectl get pod -n trident
 NAME                           READY   STATUS    RESTARTS   AGE
@@ -118,8 +122,8 @@ trident-csi-vgc8n              2/2     Running   0          5m29s
 +----------------+----------------+
 ----
 
-If you see output similar to the above example, you’ve completed this step, but Astra Trident is not yet fully configured. Go ahead and continue to the next step. See link:kubernetes-postdeployment.html[post-deployment tasks^].
+To complete Astra Trident configuration, continue to link:kubernetes-postdeployment.html[post-deployment tasks].
 
-However, if the installer does not complete successfully or you don’t see a *Running* `trident-csi-<generated id>`, the platform was not installed.
+If the installer does not complete successfully or `trident-csi-<generated id>` does not have a *Running* status, the platform was not installed.
 
-TIP: For troubleshooting issues during deployment, see the link:../troubleshooting.html[troubleshooting^] section.
+NOTE: For troubleshooting issues during deployment, refer to  link:../troubleshooting.html[troubleshooting].

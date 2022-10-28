@@ -72,7 +72,7 @@ For more information on backend configuration options for ONTAP SAN, refer to li
 
 * Worker nodes must have cryptsetup 2.1 or higher installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup^].
 
-* Worker nodes must support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
+* For performance reasons, we recommend that worker nodes support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
 +
 ----
 grep "aes" /proc/cpuinfo
@@ -133,6 +133,6 @@ stringData:
 
 === Limitations
 
-* LUKS encrypted volumes will not be able to take advantage of ONTAP deduplication, compression, and thin provisioning capabilities. 
+* LUKS encrypted volumes will not be able to take advantage of ONTAP deduplication and compression. 
 
 * LUKS passphrase rotation is not not supported at this time. To change passphrases, manually copy the data from one PVC to another. 

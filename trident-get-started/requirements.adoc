@@ -14,6 +14,18 @@ Get started by reviewing the supported frontends, backends, and host configurati
 
 NOTE: To learn about the ports that Astra Trident uses, see link:../trident-reference/trident-ports.html[here].
 
+== Critical information about Astra Trident 22.10
+*You must read the following critical information before upgrading to Astra Trident 22.10.*
+
+[WARNING]
+.*Critical information about Astra Trident 22.10*
+====
+* Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
+* Astra Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
++
+Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
+====
+
 == Supported frontends (orchestrators)
 
 Astra Trident supports multiple container engines and orchestrators, including the following:
@@ -131,7 +143,7 @@ a|
 * k8s.io/sig-storage/csi-resizer:v1.6.0               
 * k8s.io/sig-storage/csi-snapshotter:v3.0.3           
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
-* netapp/trident-operator:22.10.0-custom (optional)  
+* netapp/trident-operator:22.10.0 (optional)  
 
 
 |v1.21.0
@@ -143,7 +155,7 @@ a|
 * k8s.io/sig-storage/csi-resizer:v1.6.0               
 * k8s.io/sig-storage/csi-snapshotter:v3.0.3           
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
-* netapp/trident-operator:22.10.0-custom (optional)  
+* netapp/trident-operator:22.10.0 (optional)  
 
 |v1.22.0
 a|
@@ -154,7 +166,7 @@ a|
 * k8s.io/sig-storage/csi-resizer:v1.6.0               
 * k8s.io/sig-storage/csi-snapshotter:v3.0.3           
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
-* netapp/trident-operator:22.10.0-custom (optional)  
+* netapp/trident-operator:22.10.0 (optional)  
 
 |v1.23.0
 a|
@@ -165,7 +177,7 @@ a|
 * k8s.io/sig-storage/csi-resizer:v1.6.0               
 * k8s.io/sig-storage/csi-snapshotter:v3.0.3           
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
-* netapp/trident-operator:22.10.0-custom (optional)  
+* netapp/trident-operator:22.10.0 (optional)  
 
 |v1.24.0
 a|
@@ -176,7 +188,7 @@ a|
 * k8s.io/sig-storage/csi-resizer:v1.6.0               
 * k8s.io/sig-storage/csi-snapshotter:v3.0.3           
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
-* netapp/trident-operator:22.10.0-custom (optional)  
+* netapp/trident-operator:22.10.0 (optional)  
 
 |v1.25.0
 a|
@@ -187,7 +199,7 @@ a|
 * k8s.io/sig-storage/csi-resizer:v1.6.0               
 * k8s.io/sig-storage/csi-snapshotter:v3.0.3           
 * k8s.io/sig-storage/csi-node-driver-registrar:v2.5.1 
-* netapp/trident-operator:22.10.0-custom (optional)  
+* netapp/trident-operator:22.10.0 (optional)  
 
 |===
 

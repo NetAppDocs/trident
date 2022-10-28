@@ -15,15 +15,16 @@ Release Notes provide information about new features, enhancements, and bug fixe
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
 == What's new in 22.10
+*You must read the following critical information before upgrading to Astra Trident 22.10.*
 
 [WARNING]
-.Important notes for 22.10
-===============================
-* Kubernetes 1.25 is now supported in Trident. You should upgrade Astra Trident prior to upgrading Kubernetes.
-* Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+.*Critical information about Astra Trident 22.10*
+====
+* Kubernetes 1.25 is now supported in Trident. You must upgrade Astra Trident to 22.10 prior to upgrading to Kubernetes 1.25.
+* Astra Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
-Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Astra Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
-===============================
+Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
+====
 
 === Fixes
 

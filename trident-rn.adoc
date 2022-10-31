@@ -38,19 +38,19 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 === Enhancements
 
 * Kubernetes:
-** Added support for Kubernetes 1.25.
+** Added support for Kubernetes 1.25. You must upgrade Astra Trident to 22.10 prior to upgrading to Kubernetes 1.25.
 ** Added a separate ServiceAccount, ClusterRole, and ClusterRoleBinding for the Trident Deployment and DaemonSet to allow future permissions enhancements.
-** Added support for link:../trident-use/volume-share.html[cross-namespace volume sharing].
+** Added support for link:https://docs.netapp.com/us-en/trident/trident-use/volume-share.html[cross-namespace volume sharing].
 
 * All Trident `ontap-*` storage drivers now work with the ONTAP REST API.
 
 * Added new operator yaml (`bundle_post_1_25.yaml`) without a `PodSecurityPolicy` to support Kubernetes 1.25.
 
-* Added link:../trident-reco/security-reco.html#use-linux-unified-key-setup-luks[support for LUKS-encrypted volumes] for `ontap-san` and `ontap-san-economy` storage drivers.
+* Added link:https://docs.netapp.com/us-en/trident/trident-reco/security-reco.html#enable-per-volume-host-side-encryption-using-linux-unified-key-setup-luks[support for LUKS-encrypted volumes] for `ontap-san` and `ontap-san-economy` storage drivers.
 
 * Added support for Windows Server 2019 nodes.
 
-* Added link:../trident-use/anf.html[support for SMB volumes on Windows nodes] through the `azure-netapp-files` storage driver.
+* Added link:https://docs.netapp.com/us-en/trident/trident-use/anf.html[support for SMB volumes on Windows nodes] through the `azure-netapp-files` storage driver.
 
 === Deprecations
 

@@ -17,6 +17,18 @@ You can deploy Astra Trident using the Trident operator. You can deploy the Trid
 
 TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
 
+== Critical information about Astra Trident 22.10
+*You must read the following critical information before upgrading to Astra Trident 22.10.*
+
+[WARNING]
+.*Critical information about Astra Trident 22.10*
+====
+* Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
+* Astra Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
++
+Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
+====
+
 .What you'll need
 
 To deploy Astra Trident, the following prerequisites should be met:
@@ -114,8 +126,8 @@ NOTE: Beginning with 21.01, the Trident operator is cluster scoped. Using the Tr
 . Download and extract the latest version of the Trident installer bundle from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^].
 +
 ----
-wget https://github.com/NetApp/trident/releases/download/v22.04.0/trident-installer-22.04.0.tar.gz
-tar -xf trident-installer-22.04.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
+tar -xf trident-installer-22.10.0.tar.gz
 cd trident-installer
 ----
 
@@ -197,7 +209,7 @@ Status:
   Current Installation Params:
     IPv6:                      false
     Autosupport Hostname:
-    Autosupport Image:         netapp/trident-autosupport:21.04
+    Autosupport Image:         netapp/trident-autosupport:22.10
     Autosupport Proxy:
     Autosupport Serial Number:
     Debug:                     true

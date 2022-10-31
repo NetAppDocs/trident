@@ -63,11 +63,11 @@ NOTE:  If status shows `Updating`, ensure you resolve it before proceeding. For 
 . Create the `TridentOrchestrator` CRD by using the manifest provided with the Trident installer.
 +
 ----
-# Download the release required [21.01]
-mkdir 21.07.1
-cd 21.07.1
-wget https://github.com/NetApp/trident/releases/download/v21.07.1/trident-installer-21.07.1.tar.gz
-tar -xf trident-installer-21.07.1.tar.gz
+# Download the release required [22.10.0]
+mkdir 22.10.0
+cd 22.10.0
+wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
+tar -xf trident-installer-22.10.0.tar.gz
 cd trident-installer
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
@@ -118,14 +118,14 @@ kubectl patch tprov <trident-provisioner-name> -n <trident-namespace> --type=mer
 ----
 . Install the cluster-scoped operator.
 +
-NOTE: Installing the cluster-scoped operator initiates the migration of `TridentProvisioner` objects to `TridentOrchestrator` objects, deletes `TridentProvisioner` objects and the `tridentprovisioner` CRD, and upgrades Astra Trident to the version of the cluster-scoped operator being used. In the example that follows, Trident is upgraded to 21.07.1.
+NOTE: Installing the cluster-scoped operator initiates the migration of `TridentProvisioner` objects to `TridentOrchestrator` objects, deletes `TridentProvisioner` objects and the `tridentprovisioner` CRD, and upgrades Astra Trident to the version of the cluster-scoped operator being used. In the example that follows, Trident is upgraded to 22.10.0.
 +
 IMPORTANT: Upgrading Astra Trident by using the cluster-scoped operator results in the migration of `tridentProvisioner` to a `tridentOrchestrator` object with the same name. This is automatically handled by the operator. The upgrade will also have Astra Trident installed in the same namespace as before.
 +
 ----
 #Ensure you are in the correct directory
 pwd
-/root/21.07.1/trident-installer
+/root/22.10.0/trident-installer
 
 #Install the cluster-scoped operator in the **same namespace**
 kubectl create -f deploy/bundle.yaml
@@ -156,7 +156,7 @@ kubectl describe torc trident | grep Message -A 3
 Message:                Trident installed
 Namespace:              trident
 Status:                 Installed
-Version:                v21.07.1
+Version:                v22.10.0
 ----
 
 == Upgrade a Helm-based operator installation
@@ -168,17 +168,17 @@ Perform the following steps to upgrade a Helm-based operator installation.
 . Use the `helm upgrade` command. See the following example:
 +
 ----
-helm upgrade <name> trident-operator-21.07.1.tgz
+helm upgrade <name> trident-operator-22.10.0.tgz
 ----
 +
-where `trident-operator-21.07.1.tgz` reflects the version that you want to upgrade to.
+where `trident-operator-22.10.0.tgz` reflects the version that you want to upgrade to.
 . Run `helm list` to verify that the chart and app version have both been upgraded.
 
 NOTE: To pass configuration data during the upgrade, use `--set`.
 
 For example, to change the default value of `tridentDebug`, run the following command:
 ----
-helm upgrade <name> trident-operator-21.07.1-custom.tgz --set tridentDebug=true
+helm upgrade <name> trident-operator-22.10.0-custom.tgz --set tridentDebug=true
 ----
 
 If you run `tridentctl logs`, you can see the debug messages.
@@ -193,11 +193,11 @@ If you have a CSI Trident instance that meets the prerequisites listed above, yo
 . Download the latest Astra Trident release.
 +
 ----
-# Download the release required [21.07.1]
-mkdir 21.07.1
-cd 21.07.1
-wget https://github.com/NetApp/trident/releases/download/v21.07.1/trident-installer-21.07.1.tar.gz
-tar -xf trident-installer-21.07.1.tar.gz
+# Download the release required [22.10.0]
+mkdir 22.10.0
+cd 22.10.0
+wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
+tar -xf trident-installer-22.10.0.tar.gz
 cd trident-installer
 ----
 
@@ -251,7 +251,7 @@ kubectl describe torc trident | grep Message -A 3
 Message:                Trident installed
 Namespace:              trident
 Status:                 Installed
-Version:                v21.07.1
+Version:                v22.10.0
 ----
 
 The existing backends and PVCs are automatically available.

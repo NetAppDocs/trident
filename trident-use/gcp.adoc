@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/gcp.html
 keywords: trident backend, cloud volumes service for google cloud platform, Google Cloud Platform
-summary: Learn about how to configure Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
+summary: Learn how to configure Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
 ---
 
 = Configure a CVS for GCP backend
@@ -10,9 +10,20 @@ summary: Learn about how to configure Cloud Volumes Service for Google Cloud as 
 :icons: font
 :imagesdir: ../media/
 
-Learn about how to configure NetApp Cloud Volumes Service (CVS) for Google Cloud Platform (GCP) as the backend for your Astra Trident installation using the sample configurations provided.
+Learn how to configure NetApp Cloud Volumes Service (CVS) for Google Cloud Platform (GCP) as the backend for your Astra Trident installation using the sample configurations provided.
 
-NOTE: NetApp Cloud Volumes Service for Google Cloud does not support CVS-Performance volumes less than 100 GiB in size, or CVS volumes less than 300 GiB in size. Astra Trident automatically creates volumes of the minimum size if a the volume requested is smaller than the minimum size.
+Astra Trident supports volumes with the default CVS service type on https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[GCP^]. Astra Trident does not support CVS volumes less than 100 GiB regardless of the minimum allowed by the CVS service type. Therefore, Trident automatically creates a 100 GiB volume if the requested volume is smaller than the minimum size. 
+
+[NOTE]
+====
+* NetApp recommends customers consume sub-1TiB volumes for non-production workloads.
+
+* When deploying backends using the default CVS service type `storageClass=software`, sign up for access to the sub-1TiB volumes feature on GCP for the relevant Project Number and Project ID. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creation *will fail* for PVCs less than 600 GiB. 
+
+* link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[Sign up for access to sub-1TiB volumes.]  
+ 
+====
+
 
 .What you'll need
 
@@ -22,17 +33,6 @@ To configure and use the https://cloud.netapp.com/cloud-volumes-service-for-gcp?
 * Project number of your Google Cloud account
 * Google Cloud service account with the `netappcloudvolumes.admin` role
 * API key file for your CVS service account
-
-Astra Trident now includes support for smaller volumes with the default https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-type[CVS service type on GCP^]. For backends created with `storageClass=software`, volumes will now have a minimum provisioning size of 300 GiB. CVS currently provides this feature under Controlled Availability and does not provide technical support. Users must sign up for access to sub-1TiB volumes https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[here^]. NetApp recommends customers consume sub-1TiB volumes for **non-production** workloads.
-
-NOTE: When deploying backends using the default CVS service type (`storageClass=software`), users must obtain access to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Astra Trident to provision sub-1TiB volumes. If not, volume creations will fail for PVCs that are lesser than 600 GiB. Obtain access to sub-1TiB volumes using https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form^].
-
-Volumes created by Astra Trident for the default CVS service level will be provisioned as follows:
-
-* PVCs that are smaller than 300 GiB will result in Astra Trident creating a 300 GiB CVS volume.
-* PVCs that are between 300 GiB to 600 GiB will result in Astra Trident creating a CVS volume of the requested size.
-* PVCs that are between 600 GiB and 1 TiB will result in Astra Trident creating a 1TiB CVS volume.
-* PVCs that are greater than 1 TiB will result in Astra Trident creating a CVS volume of the requested size.
 
 == Backend configuration options
 

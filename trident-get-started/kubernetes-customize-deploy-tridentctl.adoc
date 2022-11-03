@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-customize-deploy-tridentctl.html
 keywords: deploy, astra trident, methods, operator, tridentctl, helm, attributes, customize, tridentorchestrator
-summary: Trident’s installer enables you to customize attributes.
+summary: You can use the Astra Trident installer to customize deployment. 
 ---
 
 = Customize `tridentctl` deployment
@@ -10,7 +10,11 @@ summary: Trident’s installer enables you to customize attributes.
 :icons: font
 :imagesdir: ../media/
 
-Trident installer enables you to customize attributes. For example, if you have copied the Trident image to a private repository, you can specify the image name by using `--trident-image`. If you have copied the Trident image as well as the needed CSI sidecar images to a private repository, it might be preferable to specify the location of that repository by using the `--image-registry` switch, which takes the form `<registry FQDN>[:port]`.
+[.lead]
+You can use the Astra Trident installer to customize deployment. 
+
+== Learn about the installer
+The Astra Trident installer enables you to customize attributes. For example, if you have copied the Trident image to a private repository, you can specify the image name by using `--trident-image`. If you have copied the Trident image as well as the needed CSI sidecar images to a private repository, it might be preferable to specify the location of that repository by using the `--image-registry` switch, which takes the form `<registry FQDN>[:port]`.
 
 If you are using a distribution of Kubernetes, where `kubelet` keeps its data on a path other than the usual `/var/lib/kubelet`, you can specify the alternate path by using `--kubelet-dir`.
 

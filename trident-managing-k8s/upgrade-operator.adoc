@@ -10,6 +10,7 @@ summary: You can easily upgrade an existing Astra Trident installation by using 
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 You can easily upgrade an existing Astra Trident installation using the operator.
 
 .What you'll need
@@ -20,7 +21,7 @@ To upgrade by using the operator, the following conditions should be met:
 * You should have a CRD-based Trident installation. This represents all releases from 19.07 and later. If you have a CSI-based installation, you most likely have a CRD-based installation.
 * If you have uninstalled CSI Trident and the metadata from the installation persists, you can upgrade by using the operator.
 * Only one Astra Trident installation should exist across all the namespaces in a given Kubernetes cluster.
-* You should be using a Kubernetes cluster that runs  link:requirements.html[version 1.19 -1.24^].
+* You should be using a Kubernetes cluster that runs link:../trident-get-started/requirements.html[a supported Kubernetes version].
 * If alpha snapshot CRDs are present, you should remove them with `tridentctl obliviate alpha-snapshot-crd`. This deletes the CRDs for the alpha snapshot spec. For existing snapshots that should be deleted/migrated, see https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^].
 
 WARNING: When upgrading Trident by using the operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].

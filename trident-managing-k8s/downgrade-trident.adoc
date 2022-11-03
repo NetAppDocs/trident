@@ -10,7 +10,10 @@ summary: Learn about the steps involved in downgrading to an earlier version of 
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Learn about the steps involved in downgrading to an earlier version of Astra Trident.
+
+== When to downgrade
 
 You might consider downgrading for various reasons, such as the following:
 
@@ -18,9 +21,9 @@ You might consider downgrading for various reasons, such as the following:
 * Immediate fix for bugs observed as a result of an upgrade
 * Dependency issues, unsuccessful and incomplete upgrades
 
-== When to downgrade
+You should consider a downgrade when moving to a Astra Trident release that uses CRDs. Because Astra Trident uses CRDs for maintaining state, all storage entities created (backends, storage classes, PV, and volume snapshots) have associated CRD objects instead of data written into the `trident` PV (used by the earlier installed version of Astra Trident). Newly created PVs, backends, and storage classes are all maintained as CRD objects. 
 
-You should consider a downgrade when moving to a Astra Trident release that uses CRDs. Because Astra Trident now uses CRDs for maintaining state, all storage entities created (backends, storage classes, PV, and volume snapshots) have associated CRD objects instead of data written into the `trident` PV (used by the earlier installed version of Astra Trident). Newly created PVs, backends, and storage classes are all maintained as CRD objects. If you need to downgrade, this should only be attempted for a version of Astra Trident that runs using CRDs (19.07 and later). This is to ensure that all the operations performed on the current Astra Trident release are visible after the downgrade occurs.
+Only attempt downgrade for a version of Astra Trident that runs using CRDs (19.07 and later). This ensures operations performed on the current Astra Trident release are visible after the downgrade occurs.
 
 == When not to downgrade
 

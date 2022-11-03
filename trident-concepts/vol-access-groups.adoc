@@ -10,10 +10,12 @@ summary: Learn more about how Astra Trident uses volume access groups.
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Learn more about how Astra Trident uses https://docs.netapp.com/us-en/element-software/concepts/concept_solidfire_concepts_volume_access_groups.html[volume access groups^].
 
 NOTE: Ignore this section if you are using CHAP, which is recommended to simplify management and avoid the scaling limit described below. In addition, if you are using Astra Trident in CSI mode, you can ignore this section. Astra Trident uses CHAP when installed as an enhanced CSI provisioner.
 
+== Learn about volume access groups
 Astra Trident can use volume access groups to control access to the volumes that it provisions. If CHAP is disabled, it expects to find an access group called `trident` unless you specify one or more access group IDs in the configuration.
 
 While Astra Trident associates new volumes with the configured access group(s), it does not create or otherwise manage access groups themselves. The access group(s) must exist before the storage backend is added to Astra Trident, and they need to contain the iSCSI IQNs from every node in the Kubernetes cluster that could potentially mount the volumes provisioned by that backend. In most installations, that includes every worker node in the cluster.

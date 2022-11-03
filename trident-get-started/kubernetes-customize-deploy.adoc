@@ -10,12 +10,12 @@ summary: The Trident operator enables you to customize the manner in which Astra
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 The Trident operator allows you to customize Astra Trident installation using the attributes in the `TridentOrchestrator` spec.
 
 If you want to customize the installation beyond what `TridentOrchestrator` arguments allow, you should consider using `tridentctl` to generate custom YAML manifests that you can modify as needed.
 
-[WARNING] 
-`spec.namespace` is specified in `TridentOrchestrator` to signify which namespace where Astra Trident is installed. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Astra Trident is not intended to be migrated across namespaces.
+WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify which namespace where Astra Trident is installed. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Astra Trident is not intended to be migrated across namespaces.
 
 == Configuration options
 

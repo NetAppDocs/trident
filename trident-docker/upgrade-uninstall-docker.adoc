@@ -10,6 +10,7 @@ summary: You can safely upgrade Astra Trident for Docker without any impact to v
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 You can safely upgrade Astra Trident for Docker without any impact to volumes that are in use. During the upgrade process there will be a brief period where `docker volume` commands directed at the plugin will not succeed, and applications will be unable to mount volumes until the plugin is running again. Under most circumstances, this is a matter of seconds.
 
 == Upgrade

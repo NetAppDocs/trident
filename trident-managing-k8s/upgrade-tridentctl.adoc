@@ -10,20 +10,16 @@ summary: You can easily upgrade an existing Astra Trident installation by using 
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 You can easily upgrade an existing Astra Trident installation by using `tridentctl`.
 
-.Considerations
+== Considerations before upgrading
 
 When upgrading to the latest release of Astra Trident, consider the following:
 
 * Starting with Trident 20.01, only the beta release of https://kubernetes.io/docs/concepts/storage/volume-snapshots/[volume snapshots^] is supported. Kubernetes administrators should take care to safely back up or convert the alpha snapshot objects to beta to retain the legacy alpha snapshots.
-* The beta release of volume snapshots introduces a modified set of CRDs and a snapshot controller, both of which should be set up before installing Astra Trident.
-
-NOTE: https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[This blog^] discusses the steps involved in migrating alpha volume snapshots to the beta format.
-
-.About this task
-
-Uninstalling and reinstalling Astra Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Astra Trident deployment are not deleted. PVs that have already been provisioned will remain available while Astra Trident is offline, and Astra Trident will provision volumes for any PVCs that are created in the interim once it is back online.
+* The beta release of volume snapshots introduces a modified set of CRDs and a snapshot controller, both of which should be set up before installing Astra Trident. https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[This blog^] discusses the steps involved in migrating alpha volume snapshots to the beta format.
+* Uninstalling and reinstalling Astra Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Astra Trident deployment are not deleted. PVs that have already been provisioned will remain available while Astra Trident is offline, and Astra Trident will provision volumes for any PVCs that are created in the interim once it is back online.
 
 IMPORTANT: When upgrading Astra Trident, do not interrupt the upgrade process. Ensure that the installer runs to completion.
 

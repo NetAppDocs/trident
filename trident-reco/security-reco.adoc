@@ -10,6 +10,7 @@ summary: Use the recommendations listed here to ensure that your Astra Trident i
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Use the recommendations listed here to ensure your Astra Trident installation is secure.
 
 == Run Astra Trident in its own namespace
@@ -58,15 +59,15 @@ Volumes created in Astra Trident on an NAE-enabled backend must be NVE or NAE en
 
 For more information on backend configuration options, refer to: 
 
-* link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
+* link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
 
-* link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options]
+* link:../trident-use/ontap-nas-examples.html[ONTAP NAS configuration options]
 
 == Enable per-volume, host-side encryption using Linux Unified Key Setup (LUKS)
 
 You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
-For more information on backend configuration options for ONTAP SAN, refer to link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
+For more information on backend configuration options for ONTAP SAN, refer to link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
 
 .Before you begin
 

@@ -10,14 +10,8 @@ summary: You can deploy Astra Trident by using `tridentctl`.
 :icons: font
 :imagesdir: ../media/
 
-You can deploy Astra Trident using `tridentctl`.
-
-[NOTE] 
-====
-* If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts], now is a great time to do that.
-
-* To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
-====
+[.lead]
+You can deploy Astra Trident using `tridentctl`. It's a good idea to familiarize yourself with the link:../trident-concepts/intro.html[basic concepts]. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information before upgrading to Astra Trident 22.10.*
@@ -31,8 +25,7 @@ You can deploy Astra Trident using `tridentctl`.
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
 
-.What you'll need
-
+== Verify prerequisites 
 To deploy Astra Trident, the following prerequisites should be met:
 
 * Full privileges to a supported Kubernetes cluster.

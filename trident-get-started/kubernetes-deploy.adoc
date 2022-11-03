@@ -10,6 +10,7 @@ summary: You can deploy Astra Trident using the Trident operator or with `triden
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 You can deploy Astra Trident using the Trident operator or with `tridentctl`.
 
 NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
@@ -26,12 +27,11 @@ NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated e
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
 
-
 == Choose the deployment method
 
 To determine which deployment method to use, consider the following:
 
-=== Why should I use the Trident operator?
+=== When to use the Trident operator
 
 The link:kubernetes-deploy-operator.html[Trident operator^] is a great way to dynamically manage Astra Trident resources and automate the setup phase. There are some prerequisites that must be satisfied. See link:requirements.html[the requirements^].
 
@@ -63,13 +63,13 @@ NOTE: If the cluster is upgraded to an unsupported version, the operator prevent
  
 With link:https://docs.netapp.com/us-en/cloud-manager-kubernetes/concept-kubernetes.html[Astra Trident using BlueXP^], you can upgrade to the latest version of Astra Trident, add and manage storage classes and connect them to Working Environments, and back up persistent volumes using Cloud Backup Service. BlueXP supports Astra Trident deployment using the Trident operator, either manually or using Helm. 
 
-=== Why should I use Helm?
+=== When to use Helm
 
 If you have other applications that you are managing using Helm, starting with Astra Trident 21.01, you can manage your deployment also using Helm.
 
-=== When should I use `tridenctl`?
+=== When to use `tridenctl`
 
-If you have an existing deployment that must be upgraded to or if you are looking to highly customize your deployment, you should take a look at using link:kubernetes-deploy-tridentctl.html[tridentctl^]. This is the conventional method of deploying Astra Trident.
+If you have an existing deployment that must be upgraded to or if you are looking to highly customize your deployment, you should consider using link:kubernetes-deploy-tridentctl.html[tridentctl^]. This is the conventional method of deploying Astra Trident.
 
 == Considerations for moving between deployment methods
 

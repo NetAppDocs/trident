@@ -70,7 +70,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 See the following example:
 +
 ----
-helm install netapp-trident/trident-operator --version 22.10.0 --create-namespace --namespace
+helm install <name> netapp-trident/trident-operator --version 22.10.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -83,7 +83,7 @@ There are two ways to pass configuration data during the install:
 For example, to change the default value of `debug`, run the following `--set` command:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 22.10.0 --set tridentDebug=true
+helm install netapp-trident/trident-operator --version 22.10.0 --namespace --set tridentDebug=true
 ----
 
 The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.

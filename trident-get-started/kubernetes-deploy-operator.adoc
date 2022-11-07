@@ -83,7 +83,7 @@ There are two ways to pass configuration data during the install:
 For example, to change the default value of `debug`, run the following `--set` command:
 
 ----
-helm install netapp-trident/trident-operator --version 22.10.0 --namespace --set tridentDebug=true
+helm install netapp-trident/trident-operator --version 22.10.0 --create-namespace --namespace --set tridentDebug=true
 ----
 
 The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.

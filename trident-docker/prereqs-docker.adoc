@@ -43,23 +43,24 @@ a|
 . Install the following system packages:
 +
 `sudo yum install -y lsscsi iscsi-initiator-utils sg3_utils device-mapper-multipath`
-. Start the multipathing daemon:
+. Check that iscsi-initiator-utils version is 6.2.0.874-2.el7 or later:
 +
-`sudo mpathconf --enable --with_multipathd y`
-. Ensure that `iscsid` and `multipathd` are enabled and running:
+`rpm -q iscsi-initiator-utils`
+. Set scanning to manual:
 +
-`sudo systemctl enable iscsid multipathd`
-`sudo systemctl start iscsid multipathd`
-. Discover the iSCSI targets:
+`sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf`
+. Enable multipathing:
 +
-`sudo iscsiadm -m discoverydb -t st -p <DATA_LIF_IP> --discover`
-. Log in to the discovered iSCSI targets:
+`sudo mpathconf --enable --with_multipathd y --find_multipaths n`
 +
-`sudo iscsiadm -m node -p <DATA_LIF_IP> --login`
+NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+
+. Ensure that `iscsid` and `multipathd` are running:
++
+`sudo systemctl enable --now iscsid multipathd`
 . Enable and start `iscsi`:
 +
-`sudo systemctl enable iscsi`
-`sudo systemctl start iscsi`
+`sudo systemctl enable --now iscsi`
 
 |iSCSI
 a|Ubuntu
@@ -67,23 +68,28 @@ a|
 . Install the following system packages:
 +
 `sudo apt-get install -y open-iscsi lsscsi sg3-utils multipath-tools scsitools`
+. Check that open-iscsi version is 2.0.874-5ubuntu2.10 or later (for bionic) or 2.0.874-7.1ubuntu6.1 or later (for focal):
++
+`dpkg -l open-iscsi`
+. Set scanning to manual:
++
+`sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf`
 . Enable multipathing:
 +
 `sudo tee /etc/multipath.conf <<-'EOF'
 defaults {
     user_friendly_names yes
-    find_multipaths yes
+    find_multipaths no
 }
 EOF
+sudo systemctl enable --now multipath-tools.service
 sudo service multipath-tools restart`
-. Ensure that `iscsid` and `multipathd` are running:
 +
-`sudo service open-iscsi start
-sudo service multipath-tools start`
-. Discover the iSCSI targets:
+NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+
+. Ensure that `open-iscsi` and `multipath-tools` are enabled and running:
 +
-`sudo iscsiadm -m discoverydb -t st -p <DATA_LIF_IP> --discover`
-. Log in to the discovered iSCSI targets:
-+
-`sudo iscsiadm -m node -p <DATA_LIF_IP> --login`
+`sudo systemctl status multipath-tools`
+`sudo systemctl enable --now open-iscsi.service`
+`sudo systemctl status open-iscsi`
 |===

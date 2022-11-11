@@ -19,52 +19,55 @@ Astra Trident provides five unique ONTAP storage drivers for communicating with 
 |===
 |Driver
 |Protocol
-|VolumeMode
+|volumeMode
 |Access modes supported
 |File systems supported
 
 |`ontap-nas`
 a|NFS
 a|Filesystem
-a|RWO,RWX,ROX
+a|RWO,ROX,RWX
 a|"", nfs
 
 |`ontap-nas-economy`
 a|NFS
 a|Filesystem
-a|RWO,RWX,ROX
+a|RWO,ROX,RWX
 a|"", nfs
 
 |`ontap-nas-flexgroup`
 a|NFS
 a|Filesystem
-a|RWO,RWX,ROX
+a|RWO,ROX,RWX
 a|"", nfs
 
 |`ontap-san`
 a|iSCSI
 a|Block
 a|RWO,ROX,RWX
-a|No Filesystem. Raw block device
+a|No filesystem; raw block device
 
 |`ontap-san`
 a|iSCSI
 a|Filesystem
 a|RWO,ROX
+
+RWX is not available in Filesystem volume mode.
 a|`xfs`, `ext3`, `ext4`
 
 |`ontap-san-economy`
 a|iSCSI
 a|Block
 a|RWO,ROX,RWX
-a|No Filesystem. Raw block device
+a|No filesystem; raw block device
 
 |`ontap-san-economy`
 a|iSCSI
 a|Filesystem
 a|RWO,ROX
-a|`xfs`, `ext3`, `ext4`
 
+RWX is not available in Filesystem volume mode.
+a|`xfs`, `ext3`, `ext4`
 |===
 
-NOTE: ONTAP backends can be authenticated by using login credentials for a security role (username/password) or using the private key and the certificate that is installed on the ONTAP cluster. You can update existing backends to move from one authentication mode to the other with `tridentctl update backend`.
+NOTE: ONTAP backends can be authenticated using login credentials for a security role (username/password) or using the private key and the certificate that is installed on the ONTAP cluster. You can update existing backends to move from one authentication mode to the other with `tridentctl update backend`.

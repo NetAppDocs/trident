@@ -1,14 +1,19 @@
 ---
 sidebar: sidebar
 permalink: trident-use/volume-share.html
-keywords: volref, volume reference, share, pvc, pv, nfs, namespace
-summary: 
+keywords: volref, volume reference, share, pvc, pv, nfs, namespace, cvna, cross-namespace, sharing
+summary: Using Astra Trident, you can create a volume in a primary namespace and share it in one or more secondary namespaces.
 ---
 
 = Share an NFS volume across namespaces
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
+
+[.lead]
+Using Astra Trident, you can create a volume in a primary namespace and share it in one or more secondary namespaces.
+
+== Features
 
 The Astra TridentVolumeReference CR allows you to securely share ReadWriteMany (RWX) NFS volumes across one or more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
 
@@ -142,4 +147,10 @@ Flags:
 * You cannot revoke access to the source PVC by removing the `shareToNamespace` or `shareFromNamepace` annotations or deleting the `TridentVolumeReference` CR. To revoke access, you must delete the subordinate PVC.
 
 * Snapshots, clones, and mirroring are not possible on subordinate volumes. 
+
+== For more information
+To learn more about cross-namespace volume access:
+
+* Visit link:https://cloud.netapp.com/blog/astra-blg-sharing-volumes-between-namespaces-say-hello-to-cross-namespace-volume-access[Sharing volumes between namespaces: Say hello to cross-namespace volume access^].
+* Watch the demo on link:http://netapp.tv/cloud/details/29594?playlist_id=81&mcid=63262890210074608700682715883688763007[NetAppTV^].
 

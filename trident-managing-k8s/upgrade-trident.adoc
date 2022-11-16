@@ -36,15 +36,9 @@ You can upgrade by using one of the following paths:
 
 WARNING: CSI Volume Snapshots is now a feature that is GA, beginning with Kubernetes 1.20. When upgrading Astra Trident, all previous alpha snapshot CRs and CRDs (Volume Snapshot Classes, Volume Snapshots and Volume Snapshot Contents) must be removed before the upgrade is performed. Refer to https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^] to understand the steps involved in migrating alpha snapshots to the beta/GA spec.
 
-You can use the Trident operator to upgrade if the following conditions are met:
+You can use the Trident operator to upgrade if you are **not** performing a customized install (using custom YAMLs).
 
-* You are running CSI Trident (19.07 and later).
-* You have a CRD-based Trident release (19.07 and later).
-* You are **not** performing a customized install (using custom YAMLs).
-
-WARNING: Do not use the operator to upgrade Trident if you are using an `etcd`-based Trident release (19.04 or earlier).
-
-If you do not want to use the operator or you have a customized install that cannot be supported by the operator, you can upgrade by using `tridentctl`. This is the preferred method of upgrades for Trident releases 19.04 and earlier.
+If you do not want to use the operator or you have a customized install that cannot be supported by the operator, you can upgrade by using `tridentctl`. 
 
 == Changes to the operator
 

@@ -17,9 +17,6 @@ You can easily upgrade an existing Astra Trident installation using the operator
 
 To upgrade by using the operator, the following conditions should be met:
 
-* You should have a CSI-based Astra Trident installation. To check if you are running CSI Trident, examine the pods in your Trident namespace. If they follow the `trident-csi-*` naming pattern, you are running CSI Trident.
-* You should have a CRD-based Trident installation. This represents all releases from 19.07 and later. If you have a CSI-based installation, you most likely have a CRD-based installation.
-* If you have uninstalled CSI Trident and the metadata from the installation persists, you can upgrade by using the operator.
 * Only one Astra Trident installation should exist across all the namespaces in a given Kubernetes cluster.
 * You should be using a Kubernetes cluster that runs link:../trident-get-started/requirements.html[a supported Kubernetes version].
 * If alpha snapshot CRDs are present, you should remove them with `tridentctl obliviate alpha-snapshot-crd`. This deletes the CRDs for the alpha snapshot spec. For existing snapshots that should be deleted/migrated, see https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^].
@@ -188,7 +185,7 @@ NOTE: If you set any non-default options during the initial installation, ensure
 
 == Upgrade from a non-operator installation
 
-If you have a CSI Trident instance that meets the prerequisites listed above, you can upgrade to the latest release of the Trident operator.
+If you have an Astra Trident instance that meets the prerequisites listed above, you can upgrade to the latest release of the Trident operator.
 
 .Steps
 . Download the latest Astra Trident release.

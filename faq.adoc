@@ -148,7 +148,7 @@ Yes. Beginning with 20.04, Astra Trident supports bidirectional CHAP for ONTAP b
 
 === How do I manage export policies with Astra Trident?
 
-Astra Trident can dynamically create and manage export policies from version 20.04 onwards. This enables the storage administrator to provide one or more CIDR blocks in their backend configuration and have Trident add node IPs that fall within these ranges to an export policy it creates. In this manner, Astra Trident automatically manages the addition and deletion of rules for nodes with IPs within the given CIDRs. 
+Astra Trident can dynamically create and manage export policies from version 20.04 onwards. This enables the storage administrator to provide one or more CIDR blocks in their backend configuration and have Trident add node IPs that fall within these ranges to an export policy it creates. In this manner, Astra Trident automatically manages the addition and deletion of rules for nodes with IPs within the given CIDRs. This feature requires CSI Trident.
 
 === Can we specify a port in the DataLIF?
 

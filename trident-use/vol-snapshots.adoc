@@ -16,9 +16,8 @@ NOTE: This feature is available from Kubernetes 1.17 (beta) and is GA from 1.20.
 
 .What you'll need
 
-Creating volume snapshots requires creating an external snapshot controller and Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator being used (for example: Kubeadm, GKE, OpenShift).
+* Creating volume snapshots requires creating an external snapshot controller and Custom Resource Definitions (CRDs). This is the responsibility of the Kubernetes orchestrator being used (for example: Kubeadm, GKE, OpenShift).
 
-== Deploying the volume snapshot controller
 If your Kubernetes distribution does not include the snapshot controller and CRDs, you can deploy them as follows.
 
 . Create volume snapshot CRDs.

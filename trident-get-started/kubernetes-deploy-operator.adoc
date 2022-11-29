@@ -29,7 +29,9 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 You can deploy the Trident operator in one of two ways: 
 
 * Using the Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator[Helm Chart^]: The Helm Chart deploys the Trident operator and installs Trident in one step.  
-* Manually: Trident provides a link:https://github.com/NetApp/trident/blob/master/deploy/bundle.yaml[bundle.yaml^] file that can be used to install the operator and create associated objects.
+* Manually: Trident provides a file that can be used to install the operator and create associated objects. 
+** For clusters running Kubernetes 1.24 or lower, use link:https://github.com/NetApp/trident/blob/master/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
+** For clusters running Kubernetes 1.25 or higher, use link:https://github.com/NetApp/trident/blob/master/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
 
 TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
 

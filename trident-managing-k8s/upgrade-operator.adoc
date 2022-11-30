@@ -37,13 +37,13 @@ Follow these steps to upgrade from *Trident 21.01 and later*.
 kubectl delete -f 22.01/trident-installer/deploy/bundle.yaml -n trident
 ----
 . Optionally, you can edit the `TridentOrchestrator` object that you created when installing Trident to modify the installation parameters. This can include changes such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
-. Install Astra Trident by using the correct bundle YAML file for your environment and Astra Trident version from the https://github.com/NetApp/trident/tree/master/deploy[Trident GitHub repository^]. 
+. Install Astra Trident by using the correct bundle YAML file for your environment and Astra Trident version from `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name. 
 +
 [NOTE]
 =====
 
-* For clusters running Kubernetes 1.24 or lower, use link:https://github.com/NetApp/trident/blob/master/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
-* For clusters running Kubernetes 1.25 or higher, use link:https://github.com/NetApp/trident/blob/master/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
+* For clusters running Kubernetes 1.24 or lower, use link:https://github.com/NetApp/trident/tree/stable/v22.10/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
+* For clusters running Kubernetes 1.25 or higher, use link:https://github.com/NetApp/trident/tree/stable/v22.10/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
 =====
 +
 For example, if you are installing Astra Trident 22.10 for Kubernetes 1.25, run the following command:
@@ -80,7 +80,7 @@ tar -xf trident-installer-22.10.0.tar.gz
 cd trident-installer
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
-. Delete the namespace-scoped operator by using its manifest. To complete this step, you need the bundle YAML file used to deploy the namespace-scoped operator from the https://github.com/NetApp/trident/tree/master/deploy[Trident GitHub repository^]. Make sure to select the appropriate release branch.
+. Delete the namespace-scoped operator by using its manifest. To complete this step, you need the bundle YAML file used to deploy the namespace-scoped operator from `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name.
 +
 NOTE: You should make the necessary changes to the Trident install parameters (for example, changing the values for `tridentImage`, `autosupportImage`, private image repository, and providing `imagePullSecrets`) after deleting the namespace-scoped operator and before installing the cluster-scoped operator. For a complete list of parameters that can be updated, refer to the link:https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-customize-deploy.html#configuration-options[configuration options].
 +

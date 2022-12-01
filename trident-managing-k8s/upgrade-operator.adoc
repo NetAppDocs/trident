@@ -28,22 +28,30 @@ WARNING: When upgrading Trident by using the operator on OpenShift Container Pla
 
 == Upgrade a cluster-scoped operator installation
 
-To upgrade from *Trident 21.01 and later*, here is the set of steps to be followed.
+Follow these steps to upgrade from *Trident 21.01 and later*.
 
 .Steps
 . Delete the Trident operator that was used to install the current Astra Trident instance. For example, if you are upgrading from 21.01, run the following command:
 +
 ----
-kubectl delete -f 22.01/trident-installer/deploy/bundle.yaml -n trident
+kubectl delete -f 22.01/trident-installer/deploy/BUNDLE.YAML -n trident
 ----
-. (Optional) If you want to modify the installation parameters, edit the `TridentOrchestrator` object that you created when installing Trident.
-This can include changes, such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
-. Install Astra Trident by using the `bundle.yaml` file that sets up the Trident operator for the new version. Run the following command:
+. Optionally, you can edit the `TridentOrchestrator` object that you created when installing Trident to modify the installation parameters. This can include changes such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
+. Install Astra Trident by using the correct bundle YAML file for your environment and Astra Trident version from `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_BUNDLE.YAML_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_BUNDLE.YAML_` is the bundle YAML file name. 
++
+[NOTE]
+=====
+
+* For clusters running Kubernetes 1.24 or lower, use link:https://github.com/NetApp/trident/tree/stable/v22.10/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
+* For clusters running Kubernetes 1.25 or higher, use link:https://github.com/NetApp/trident/tree/stable/v22.10/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
+=====
++
+For example, if you are installing Astra Trident 22.10 for Kubernetes 1.25, run the following command:
 +
 ----
-kubectl create -f 22.10.0/trident-installer/deploy/bundle.yaml -n trident
+kubectl create -f 22.10.0/trident-installer/deploy/bundle_post_1_25.yaml -n trident
 ----
-
++
 As part of this step, the Trident operator will identify an existing Astra Trident installation and upgrade it to the same version as the operator.
 
 == Upgrade a namespace-scoped operator installation
@@ -72,7 +80,7 @@ tar -xf trident-installer-22.10.0.tar.gz
 cd trident-installer
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
-. Delete the namespace-scoped operator by using its manifest. To complete this step, you require the `bundle.yaml` file used to deploy the namespace-scoped operator. You can obtain `bundle.yaml` from the https://github.com/NetApp/trident/blob/stable/v20.10/deploy/bundle.yaml[Trident repository^]. Make sure to use the appropriate branch.
+. Delete the namespace-scoped operator by using its manifest. To complete this step, you need the bundle YAML file used to deploy the namespace-scoped operator from `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_BUNDLE.YAML_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_BUNDLE.YAML_` is the bundle YAML file name.
 +
 NOTE: You should make the necessary changes to the Trident install parameters (for example, changing the values for `tridentImage`, `autosupportImage`, private image repository, and providing `imagePullSecrets`) after deleting the namespace-scoped operator and before installing the cluster-scoped operator. For a complete list of parameters that can be updated, refer to the link:https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-customize-deploy.html#configuration-options[configuration options].
 +
@@ -82,7 +90,7 @@ pwd
 /root/20.10.1/trident-installer
 
 #Delete the namespace-scoped operator
-kubectl delete -f deploy/bundle.yaml
+kubectl delete -f deploy/<BUNDLE.YAML>
 serviceaccount "trident-operator" deleted
 clusterrole.rbac.authorization.k8s.io "trident-operator" deleted
 clusterrolebinding.rbac.authorization.k8s.io "trident-operator" deleted
@@ -129,7 +137,7 @@ pwd
 /root/22.10.0/trident-installer
 
 #Install the cluster-scoped operator in the **same namespace**
-kubectl create -f deploy/bundle.yaml
+kubectl create -f deploy/<BUNDLE.YAML>
 serviceaccount/trident-operator created
 clusterrole.rbac.authorization.k8s.io/trident-operator created
 clusterrolebinding.rbac.authorization.k8s.io/trident-operator created
@@ -212,7 +220,7 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.1
 +
 ----
 #Install the cluster-scoped operator in the **same namespace**
-kubectl create -f deploy/bundle.yaml
+kubectl create -f deploy/<BUNDLE.YAML>
 serviceaccount/trident-operator created
 clusterrole.rbac.authorization.k8s.io/trident-operator created
 clusterrolebinding.rbac.authorization.k8s.io/trident-operator created

@@ -43,8 +43,8 @@ For installations done using the Trident operator, Astra Trident can be downgrad
 To downgrade Astra Trident to a release that uses the cluster-scoped operator, follow the steps mentioned below.
 
 .Steps
-. link:uninstall-trident.html[Uninstall Astra Trident^]. **Do not wipeout the CRDs unless you want to completely remove an existing installation.**
-. Delete the cluster-scoped operator. To do this, you will need the manifest used to deploy the operator. You can obtain it from the https://github.com/NetApp/trident/blob/stable/v21.07/deploy/bundle.yaml[Trident GitHub repo^]. Make sure you switch to the required branch.
+. link:uninstall-trident.html[Uninstall Astra Trident^]. **Do not delete the CRDs unless you want to completely remove an existing installation.**
+. The Trident operator can be deleted by using the operator manifest associated with your version of Trident. For example, `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name.
 . Continue downgrading by installing the desired version of Astra Trident. Follow the documentation for the desired release.
 
 === Downgrade to namespace-scoped operator
@@ -65,7 +65,7 @@ trident     20h
 kubectl delete torc trident
 tridentorchestrator.trident.netapp.io "trident" deleted
 ----
-. Delete the cluster-scoped operator. To do this, you will need the manifest used to deploy the operator. You can obtain it here from the https://github.com/NetApp/trident/blob/stable/v21.07/deploy/bundle.yaml[Trident GitHub repo^]. Make sure you switch to the required branch.
+. The Trident operator can be deleted by using the operator manifest associated with your version of Trident. For example, `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name.
 . Delete the `tridentorchestrator` CRD.
 +
 ----

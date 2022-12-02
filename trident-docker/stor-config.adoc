@@ -365,18 +365,6 @@ The `solidfire-san` driver does not support Docker Swarm.
 
 Astra Trident supports volumes with the default CVS service type on https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[GCP^]. Astra Trident does not support CVS volumes less than 100 GiB regardless of the minimum allowed by the CVS service type. Therefore, Trident automatically creates a 100 GiB volume if the requested volume is smaller than the minimum size.  
 
-[NOTE]
-====
-* NetApp recommends customers consume sub-1TiB volumes for non-production workloads.
-
-* When deploying backends using the default CVS service type `storageClass=software`, sign up for access to the sub-1TiB volumes feature on GCP for the relevant Project Number and Project ID. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creation *will fail* for PVCs less than 600 GiB. 
-
-* link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[Sign up for access to sub-1TiB volumes.]  
- 
-====
-
-
-
 In addition to the global configuration values, when using CVS on GCP, these options are available.
 
 [%header,cols=3*]

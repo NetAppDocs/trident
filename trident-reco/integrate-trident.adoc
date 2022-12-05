@@ -22,7 +22,7 @@ ONTAP backend drivers are differentiated by the protocol used and how the volume
 
 At a higher level, if your application has components which need shared storage (multiple pods accessing the same PVC), NAS-based drivers would be the default choice, while the block-based iSCSI drivers meet the needs of non-shared storage. Choose the protocol based on the requirements of the application and the comfort level of the storage and infrastructure teams. Generally speaking, there is little difference between them for most applications, so often the decision is based upon whether or not shared storage (where more than one pod will need simultaneous access) is needed.
 
-The five drivers for ONTAP backends are listed below:
+The available ONTAP backend drivers are:
 
 * `ontap-nas`: Each PV provisioned is a full ONTAP FlexVolume.
 * `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per FlexVolume (default is 200).

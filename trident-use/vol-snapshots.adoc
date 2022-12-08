@@ -36,7 +36,7 @@ deletionPolicy: Delete
 
 The `driver` points to Astra Trident’s CSI driver. `deletionPolicy` can be `Delete` or `Retain`. When set to `Retain`, the underlying physical snapshot on the storage cluster is retained even when the `VolumeSnapshot` object is deleted.
 
-For more information, refer to link:../trident-reference/objects.html#kubernetes-volumesnapshotclass-objects[`VolumeSnapshotClass`^].
+For more information, refer to link:../trident-reference/objects.html#kubernetes-volumesnapshotclass-objects[`VolumeSnapshotClass`].
 
 == Step 2: Create a snapshot of an existing PVC
 
@@ -145,5 +145,5 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 
 == Related links
 
-* link:../trident-concepts/snapshots.html[Volume snapshots^]
-* link:../trident-reference/objects.html[`VolumeSnapshotClass`^]
+* link:../trident-concepts/snapshots.html[Volume snapshots]
+* link:../trident-reference/objects.html[`VolumeSnapshotClass`]

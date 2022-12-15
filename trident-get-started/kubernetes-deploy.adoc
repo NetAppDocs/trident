@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy.html
-keywords: deploy, astra trident, methods, operator, tridentctl, helm
-summary: You can deploy Astra Trident using the Trident operator or with `tridentctl`.
+keywords: deploy, astra trident, methods, operator, tridentctl, helm, tanzu, vmware
+summary: You can deploy Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`.
 ---
 
 = Deployment overview
@@ -11,9 +11,7 @@ summary: You can deploy Astra Trident using the Trident operator or with `triden
 :imagesdir: ../media/
 
 [.lead]
-You can deploy Astra Trident using the Trident operator or with `tridentctl`.
-
-NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
+You can deploy Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`.
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information before upgrading to Astra Trident 22.10.*
@@ -22,27 +20,62 @@ NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated e
 .*Critical information about Astra Trident 22.10*
 ====
 * Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
-* Astra Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
 
-== Choose the deployment method
+== Learn about Astra Trident deployment
 
-To determine which deployment method to use, consider the following:
+You can deploy Astra Trident using the following methods and modes. Review the details for each to decide which method and mode is right for you. 
 
-=== When to use the Trident operator
+[cols=2,options="header"]
+|===
+|Method
+|Available modes
 
-The link:kubernetes-deploy-operator.html[Trident operator^] is a great way to dynamically manage Astra Trident resources and automate the setup phase. There are some prerequisites that must be satisfied. See link:requirements.html[the requirements^].
+|Trident operator (manually or using Helm)
+a|Standard and remote
 
-The Trident operator provides several benefits as outlined below.
+|`tridentctl`
+a|Standard, offline, and remote
 
-==== Self-healing capability
+|===
 
+== Before you deploy
+
+Before you begin any Astra Trident deployment, ensure you have: 
+
+* Full privileges to a supported Kubernetes cluster running a supported version of Kubernetes. Review the link:requirements.html[requirements].
+* Access to a supported NetApp storage system.
+* Capability to mount volumes from all of the Kubernetes worker nodes.
+* A Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
+* The `KUBECONFIG` environment variable set to point to your Kubernetes cluster configuration.
+* link:requirements.html#feature-requirements[Feature requirements required by Astra Trident] enabled.
+* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
+
+TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
+
+== Choose the right deployment method
+Select the deployment method that's right for you.
+
+=== Using the Trident operator
+
+The link:kubernetes-deploy-operator.html[Trident operator] is a great way to dynamically manage Astra Trident resources and automate the setup phase. There are some prerequisites that must be satisfied. See link:requirements.html[the requirements].
+
+If you manage other applications using Helm Chart, you can manage your Astra Trident deployment using Helm.
+
+Benefits of using the Trident operator include:
+
+.*Self-healing capability*
+[%collapsible%close]
+====
 You can monitor an Astra Trident installation and actively take measures to address issues, such as when the deployment is deleted or if it is modified accidentally. When the operator is set up as a deployment, a `trident-operator-<generated-id>` pod is created. This pod associates a `TridentOrchestrator` CR with an Astra Trident installation and always ensures there is only one active `TridentOrchestrator`. In other words, the operator ensures that there is only one instance of Astra Trident in the cluster and controls its setup, making sure the installation is idempotent. When changes are made to the installation (such as, deleting the deployment or node daemonset), the operator identifies them and fixes them individually.
+====
 
-==== Easy updates to existing installations
-
+.*Easy updates to existing installations*
+[%collapsible%close]
+====
 You can easily update an existing deployment with the operator. You only need to edit the `TridentOrchestrator` CR to make updates to an installation.
 For example, consider a scenario where you need to enable Astra Trident to generate debug logs.
 
@@ -52,50 +85,48 @@ kubectl patch torc <trident-orchestrator-name> -n trident --type=merge -p '{"spe
 ----
 
 After `TridentOrchestrator` is updated, the operator processes the updates and patches the existing installation. This might triggers the creation of new pods to modify the installation accordingly.
+====
 
-==== Automatically handles Kubernetes upgrades
-
+.*Automatic Kubernetes upgrade handling*
+[%collapsible%close]
+====
 When the Kubernetes version of the cluster is upgraded to a supported version, the operator updates an existing Astra Trident installation automatically and changes it to ensure that it meets the requirements of the Kubernetes version.
 
 NOTE: If the cluster is upgraded to an unsupported version, the operator prevents installing Astra Trident. If Astra Trident has already been installed with the operator, a warning is displayed to indicate that Astra Trident is installed on an unsupported Kubernetes version.
+====
 
-==== Manage your Kubernetes clusters using BlueXP (formerly Cloud Manager)
- 
+.*Kubernetes cluster management using BlueXP (formerly Cloud Manager)*
+[%collapsible%close]
+====
 With link:https://docs.netapp.com/us-en/cloud-manager-kubernetes/concept-kubernetes.html[Astra Trident using BlueXP^], you can upgrade to the latest version of Astra Trident, add and manage storage classes and connect them to Working Environments, and back up persistent volumes using Cloud Backup Service. BlueXP supports Astra Trident deployment using the Trident operator, either manually or using Helm. 
+====
 
-=== When to use Helm
-
-If you have other applications that you are managing using Helm, starting with Astra Trident 21.01, you can manage your deployment also using Helm.
-
-=== When to use `tridenctl`
+=== Using `tridenctl`
 
 If you have an existing deployment that must be upgraded to or if you are looking to highly customize your deployment, you should consider using link:kubernetes-deploy-tridentctl.html[tridentctl^]. This is the conventional method of deploying Astra Trident.
 
-== Considerations for moving between deployment methods
+NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
 
-It is not hard to imagine a scenario where moving between deployment methods is desired. You should consider the following before attempting to move from a `tridentctl` deployment to an operator-based deployment, or vice-versa:
+== Move between deployment methods
+
+Before moving between deployment methods, consider the following:
 
 * Always use the same method for uninstalling Astra Trident. If you have deployed with `tridentctl`, you should use the appropriate version of the `tridentctl` binary to uninstall Astra Trident. Similarly, if you are deploying with the operator, you should edit the `TridentOrchestrator` CR and set `spec.uninstall=true` to uninstall Astra Trident.
 * If you have an operator-based deployment that you want to remove and use `tridentctl` to deploy Astra Trident, you should first edit `TridentOrchestrator` and set `spec.uninstall=true` to uninstall Astra Trident. Then delete `TridentOrchestrator` and the operator deployment. You can then install using `tridentctl`.
 * If you have a manual operator-based deployment, and you want to use Helm-based Trident operator deployment, you should manually uninstall the operator first, and then do the Helm install. This enables Helm to deploy the Trident operator with the required labels and annotations. If you do not do this, your Helm-based Trident operator deployment will fail with label validation error and annotation validation error. If you have a `tridentctl`-based deployment, you can use Helm-based deployment without running into issues.
 
-== Understand the deployment modes
+== Learn about the deployment modes
 
-There are three ways to deploy Astra Trident.
+There are three modes to deploy Astra Trident.
 
 === Standard deployment
 
-Deploying Trident on a Kubernetes cluster results in the Astra Trident installer doing two things:
+You can deploy Astra Trident using standard mode for Trident operator and `tridentctl` methods. This is the easiest way to install Astra Trident and works for most environments that do not impose network restrictions. 
 
-* Fetching the container images over the Internet
-* Creating a deployment and/or node daemonset, which spins up Astra Trident pods on all the eligible nodes in the Kubernetes cluster.
+When you use standard mode, the Astra Trident installer: 
 
-A standard deployment such as this can be performed in two different ways:
-
-* Using `tridentctl install`
-* Using the Trident operator. You can deploy Trident operator either manually or by using Helm.
-
-This mode of installing is the easiest way to install Astra Trident and works for most environments that do not impose network restrictions.
+* Fetches the container images over the Internet
+* Creates a deployment and/or node daemonset, which spins up Astra Trident pods on all the eligible nodes in the Kubernetes cluster
 
 === Offline deployment
 

@@ -35,31 +35,13 @@ You can deploy the Trident operator in one of two ways:
 
 TIP: If you have not already familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
 
-== Verify prerequisites 
-
-To deploy Astra Trident, the following prerequisites should be met:
-
-* You have full privileges to a supported Kubernetes cluster running a supported version of Kubernetes. Review the link:requirements.html[requirements].
-* You have access to a supported NetApp storage system.
-* You have the capability to mount volumes from all of the Kubernetes worker nodes.
-* You have a Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
-* You have set the `KUBECONFIG` environment variable to point to your Kubernetes cluster configuration.
-* You have enabled the link:requirements.html[feature gates required by Astra Trident^].
-* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
-
-Got all that? Great! Let's get started.
-
 == Deploy the Trident operator and install Astra Trident using Helm
 
 Perform the steps listed to deploy the Trident operator by using Helm.
 
 .What you'll need
 
-In addition to the prerequisites listed above, to deploy Trident operator by using Helm, you need the following:
-
-* A link:requirements.html[supported Kubernetes version]
-
-* Helm version 3
+In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you-deploy[deployment prerequisites] you need link:https://v3.helm.sh/[Helm version 3^].
 
 .Steps
 

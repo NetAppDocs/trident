@@ -14,14 +14,15 @@ summary: A Kubernetes cluster typically consists of two types of nodes, each res
 To integrate Astra Trident, the following design and architectural elements require integration: driver selection and deployment, storage class design, virtual storage pool design, Persistent Volume Claim (PVC) impacts on storage provisioning, volume operations, and OpenShift services deployment using Astra Trident.
 
 == Driver selection and deployment
+Select and deploy a backend driver for your storage system. 
 
-=== Choose a backend driver for ONTAP
+=== ONTAP backend drivers
 
-Four different backend drivers are available for ONTAP systems. These drivers are differentiated by the protocol being used and how the volumes are provisioned on the storage system. Therefore, give careful consideration regarding which driver to deploy.
+ONTAP backend drivers are differentiated by the protocol used and how the volumes are provisioned on the storage system. Therefore, give careful consideration when deciding which driver to deploy.
 
 At a higher level, if your application has components which need shared storage (multiple pods accessing the same PVC), NAS-based drivers would be the default choice, while the block-based iSCSI drivers meet the needs of non-shared storage. Choose the protocol based on the requirements of the application and the comfort level of the storage and infrastructure teams. Generally speaking, there is little difference between them for most applications, so often the decision is based upon whether or not shared storage (where more than one pod will need simultaneous access) is needed.
 
-The five drivers for ONTAP backends are listed below:
+The available ONTAP backend drivers are:
 
 * `ontap-nas`: Each PV provisioned is a full ONTAP FlexVolume.
 * `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per FlexVolume (default is 200).
@@ -84,15 +85,15 @@ As we can see in the above tables, much of the functionality between the `ontap-
 
 NOTE: The `solidfire-san` driver is also capable of cloning PVCs.
 
-=== Choose a backend driver for Cloud Volumes ONTAP
+=== Cloud Volumes ONTAP backend drivers
 
 Cloud Volumes ONTAP provides data control along with enterprise-class storage features for various use cases, including file shares and block-level storage serving NAS and SAN protocols (NFS, SMB / CIFS, and iSCSI). The compatible drivers for Cloud Volume ONTAP are `ontap-nas`, `ontap-nas-economy`, `ontap-san` and `ontap-san-economy`. These are applicable for Cloud Volume ONTAP for Azure, Cloud Volume ONTAP for GCP.
 
-=== Choose a backend driver for Amazon FSx for ONTAP
+=== Amazon FSx for ONTAP backend drivers
 
 Amazon FSx for ONTAP enables customers to leverage NetApp features, performance, and administrative capabilities they’re familiar with, while taking advantage of the simplicity, agility, security, and scalability of storing data on AWS. FSx for ONTAP supports many of ONTAP’s file system features and administration APIs. The compatible drivers for Cloud Volume ONTAP are `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san` and `ontap-san-economy`.
 
-=== Choose a backend driver for NetApp HCI/SolidFire
+=== NetApp HCI/SolidFire backend drivers
 
 The `solidfire-san` driver used with the NetApp HCI/SolidFire platforms, helps the admin configure an Element backend for Trident on the basis of QoS limits. If you would like to design your backend to set the specific QoS limits on the volumes provisioned by Trident, use the `type` parameter in the backend file. The admin also can restrict the volume size that could be created on the storage using the `limitVolumeSize` parameter. Currently, Element storage features like volume resize and volume replication are not supported through the `solidfire-san` driver. These operations should be done manually through Element Software web UI.
 
@@ -117,7 +118,7 @@ Yesfootnote:1[]: Not managed by Astra Trident
 Yesfootnote:2[]: Supported for raw-block volumes
 --
 
-=== Choose a backend driver for Azure NetApp Files
+=== Azure NetApp Files backend drivers
 
 Astra Trident uses the `azure-netapp-files` driver to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] service.
 
@@ -141,7 +142,7 @@ Footnote:
 Yesfootnote:1[]: Not managed by Astra Trident
 --
 
-=== Choose a backend driver for Cloud Volumes Service with GCP
+=== Cloud Volumes Service with GCP backend drivers
 
 Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on the GCP backend. To configure the GCP backend on Trident, you are required specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. The project number may be found in the GCP web portal, while the API key must be taken from the service account private key file that you created while setting up API access for Cloud Volumes on GCP. Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
@@ -149,8 +150,6 @@ Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service o
 . *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. Choose from three unique service levels [`standard`, `premium`, and `extreme`]. 
 
 The minimum CVS and CVS-Performance volume size is 100 GiB. 
-
-CAUTION: When deploying backends using the default CVS service type [`storageClass=software`], users *must obtain access* to the sub-1TiB volumes feature on GCP for the Project Number(s) and Project ID(s) in question. This is necessary for Trident to provision sub-1TiB volumes. If not, volume creations *will fail* for PVCs that are <600 GiB. Use link:https://docs.google.com/forms/d/e/1FAIpQLSc7_euiPtlV8bhsKWvwBl3gm9KUL4kOhD7lnbHC3LlQ7m02Dw/viewform[this form^] to obtain access to sub-1TiB volumes.
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -176,7 +175,7 @@ The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract 
 
 Individual Storage classes need to be configured and applied to create a Kubernetes Storage Class object. This section discusses how to design a storage class for your application.
 
-=== Storage class design for specific backend utilization
+=== Specific backend utilization
 
 Filtering can be used within a specific storage class object to determine which storage pool or set of pools are to be used with that specific storage class. Three sets of filters can be set in the Storage Class: `storagePools`, `additionalStoragePools`, and/or `excludeStoragePools`.
 
@@ -184,31 +183,31 @@ The `storagePools` parameter helps restrict storage to the set of pools that mat
 
 The `excludeStoragePools` parameter is used to specifically exclude the listed set of pools that match the attributes.
 
-=== Storage class design to emulate QoS policies
+=== Emulate QoS policies
 
 If you would like to design Storage Classes to emulate Quality of Service policies, create a Storage Class with the `media` attribute as `hdd` or `ssd`. Based on the `media` attribute mentioned in the storage class, Trident will select the appropriate backend that serves `hdd` or `ssd` aggregates to match the media attribute and then direct the provisioning of the volumes on to the specific aggregate. Therefore we can create a storage class PREMIUM which would have `media` attribute set as `ssd` which could be classified as the PREMIUM QoS policy. We can create another storage class STANDARD which would have the media attribute set as `hdd' which could be classified as the STANDARD QoS policy. We could also use the ``IOPS'' attribute in the storage class to redirect provisioning to an Element appliance which can be defined as a QoS Policy.
 
-=== Storage class design to utilize backend based on specific features
+=== Utilize backend based on specific features
 
 Storage classes can be designed to direct volume provisioning on a specific backend where features such as thin and thick provisioning, snapshots, clones, and encryption are enabled. To specify which storage to use, create Storage Classes that specify the appropriate backend with the required feature enabled.
 
-=== Storage class design for Virtual Storage Pools
+=== Virtual Storage Pools
 
 Virtual Storage Pools are available for all Astra Trident backends. You can define Virtual Storage Pools for any backend, using any driver that Astra Trident provides.
 
 Virtual Storage Pools allow an administrator to create a level of abstraction over backends which can be referenced through Storage Classes, for greater flexibility and efficient placement of volumes on backends. Different backends can be defined with the same class of service. Moreover, multiple Storage Pools can be created on the same backend but with different characteristics. When a Storage Class is configured with a selector with the specific labels, Astra Trident chooses a backend which matches all the selector labels to place the volume. If the Storage Class selector labels matches multiple Storage Pools, Astra Trident will choose one of them to provision the volume from.
 
-== Virtual Storage Pool Design
+== Virtual Storage Pool design
 
 While creating a backend, you can generally specify a set of parameters. It was impossible for the administrator to create another backend with the same storage credentials and with a different set of parameters. With the introduction of Virtual Storage Pools, this issue has been alleviated. Virtual Storage Pools is a level abstraction introduced between the backend and the Kubernetes Storage Class so that the administrator can define parameters along with labels which can be referenced through Kubernetes Storage Classes as a selector, in a backend-agnostic way. Virtual Storage Pools can be defined for all supported NetApp backends with Astra Trident. That list includes SolidFire/NetApp HCI, ONTAP, Cloud Volumes Service on GCP, as well as Azure NetApp Files.
 
 NOTE: When defining Virtual Storage Pools, it is recommended to not attempt to rearrange the order of existing virtual pools in a backend definition. It is also advisable to not edit/modify attributes for an existing virtual pool and define a new virtual pool instead.
 
-=== Design Virtual Storage Pools for emulating different service levels/QoS
+=== Emulating different service levels/QoS
 
 It is possible to design Virtual Storage Pools for emulating service classes. Using the virtual pool implementation for Cloud Volume Service for Azure NetApp Files, let us examine how we can setup up different service classes. Configure the ANF backend with multiple labels, representing different performance levels. Set `servicelevel` aspect to the appropriate performance level and add other required aspects under each labels. Now create different Kubernetes Storage Classes that would map to different virtual Storage Pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) may be used to host a volume.
 
-=== Design Virtual Pools for assigning specific set of aspects
+=== Assigning specific set of aspects
 
 Multiple Virtual Storage pools with a specific set of aspects can be designed from a single storage backend. For doing so, configure the backend with multiple labels and set the required aspects under each label. Now create different Kubernetes Storage Classes using the `parameters.selector` field that would map to different Virtual Storage Pools. The volumes that get provisioned on the backend will have the aspects defined in the chosen Virtual Storage Pool.
 

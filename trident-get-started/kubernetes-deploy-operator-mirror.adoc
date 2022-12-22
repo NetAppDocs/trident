@@ -1,17 +1,17 @@
 ---
 sidebar: sidebar
-permalink: trident-get-started/kubernetes-deploy-operator.html
-keywords: deploy, astra trident, methods, operator, tridentctl, registry, registries
-summary: You can manually deploy the Trident operator to install Astra Trident. This process applies to installations where Trident and CSI images are located in `docker.io` and `registry.k8s.io`.
+permalink: trident-get-started/kubernetes-deploy-operator-mirror.html
+keywords: deploy, astra trident, methods, operator, tridentctl, mirrored, registry, registries
+summary: You can manually deploy the Trident operator to install Astra Trident. This process applies to installations where Trident and CSI images are located in a private, mirrored registry. 
 ---
 
-= Manually deploy the Trident operator (docker.io and registry.k8s.io)
+= Manually deploy the Trident operator (mirrored registry)
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-You can manually deploy the Trident operator to install Astra Trident. This process applies to installations where Trident and CSI images are located in `docker.io` and `registry.k8s.io`. If your images are located in a private, mirrored registry, use the link:kubernetes-deploy-operator-mirror.html[process for mirrored registries].
+You can manually deploy the Trident operator to install Astra Trident. This process applies to installations where Trident and CSI images are located in a private, mirrored registry. If your images are located in a `docker.io` and `registry.k8s.io`, use the link:kubernetes-deploy-operator.html[process for `docker.io` and `registry.k8s.io`].
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information before upgrading to Astra Trident 22.10.*

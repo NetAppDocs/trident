@@ -32,7 +32,7 @@ To upgrade using the operator, the following conditions should be met:
 . Delete the Trident operator that was used to install the current Astra Trident instance. For example, if you are upgrading from 22.01, run the following command:
 +
 ----
-kubectl delete -f 22.01/trident-installer/deploy/BUNDLE.YAML -n trident
+kubectl delete -f 22.01/trident-installer/deploy/bundle.yaml -n trident
 ----
 . Optionally, you can edit the `TridentOrchestrator` object that you created when installing Trident to modify the installation parameters. This can include changes such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
 . Install Astra Trident by using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 22.10 for Kubernetes 1.25, run the following command:

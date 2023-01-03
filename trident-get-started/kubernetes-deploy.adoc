@@ -14,16 +14,19 @@ summary: You can install Astra Trident using the Trident operator (manually or u
 You can install Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
 
 == Critical information about Astra Trident 22.10
-*You must read the following critical information before upgrading to Astra Trident 22.10.*
+*You must read the following critical information about Astra Trident 22.10.*
 
-[WARNING]
+// Start snippet: collapsible block (open on page load)
 .*Critical information about Astra Trident 22.10*
+[%collapsible%open]
 ====
 * Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
 * Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
+// End snippet
+
 
 == Before you begin
 
@@ -107,19 +110,29 @@ Select the installation method that's right for you. You should also review the 
 
 === Using the Trident operator
 
-Whether deploying manually or using Helm, the Trident operator is a great way to dynamically manage Astra Trident resources and automate setup. You can even link:../trident-get-started/kubernetes-customize-deploy.html[customize your Trident operator deployment] using the attributes in the `TridentOrchestrator`. 
+Whether deploying manually or using Helm, the Trident operator is a great way to simplify installation and dynamically manage Astra Trident resources. You can even link:../trident-get-started/kubernetes-customize-deploy.html[customize your Trident operator deployment] using the attributes in the `TridentOrchestrator`. 
 
 ==== Benefits of using the Trident operator
 The benefits of using the Trident operator include:
 
+.*Astra Trident object creation*
+[%collapsible]
+====
+The Trident operator automatically creates the following objects for your Kubernetes version. 
+* ServiceAccount for the operator
+* ClusterRole and ClusterRoleBinding to the ServiceAccount
+* Dedicated PodSecurityPolicy
+* The operator itself
+====
+
 .*Self-healing capability*
-[%collapsible%close]
+[%collapsible]
 ====
 You can monitor an Astra Trident installation and actively take measures to address issues, such as when the deployment is deleted or if it is modified accidentally. When the operator is set up as a deployment, a `trident-operator-<generated-id>` pod is created. This pod associates a `TridentOrchestrator` CR with an Astra Trident installation and always ensures there is only one active `TridentOrchestrator`. In other words, the operator ensures there is only one instance of Astra Trident in the cluster and controls its setup, making sure the installation is idempotent. When changes are made to the installation (such as, deleting the deployment or node daemonset), the operator identifies them and fixes them individually.
 ====
 
 .*Easy updates to existing installations*
-[%collapsible%close]
+[%collapsible]
 ====
 You can easily update an existing deployment with the operator. You only need to edit the `TridentOrchestrator` CR to make updates to an installation.
 For example, consider a scenario where you need to enable Astra Trident to generate debug logs.
@@ -133,7 +146,7 @@ After `TridentOrchestrator` is updated, the operator processes the updates and p
 ====
 
 .*Automatic Kubernetes upgrade handling*
-[%collapsible%close]
+[%collapsible]
 ====
 When the Kubernetes version of the cluster is upgraded to a supported version, the operator updates an existing Astra Trident installation automatically and changes it to ensure that it meets the requirements of the Kubernetes version.
 
@@ -141,7 +154,7 @@ NOTE: If the cluster is upgraded to an unsupported version, the operator prevent
 ====
 
 .*Kubernetes cluster management using BlueXP (formerly Cloud Manager)*
-[%collapsible%close]
+[%collapsible]
 ====
 With link:https://docs.netapp.com/us-en/cloud-manager-kubernetes/concept-kubernetes.html[Astra Trident using BlueXP^], you can upgrade to the latest version of Astra Trident, add and manage storage classes and connect them to Working Environments, and back up persistent volumes using Cloud Backup Service. BlueXP supports Astra Trident deployment using the Trident operator, either manually or using Helm. 
 ====

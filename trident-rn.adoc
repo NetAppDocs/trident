@@ -231,7 +231,7 @@ Known issues identify problems that might prevent you from using the product suc
 
 * When using Astra Trident over IPv6, you should specify `managementLIF` and `dataLIF` in the backend definition within square brackets. For example, ``[fd20:8b1e:b258:2000:f816:3eff:feec:0]``.
 
-* If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm.
+* If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm. Secure FIPS-compliant CHAP algorithms SHA1, SHA-256, and SHA3-256 are available with Element 12.7.
 
 == Find more information
 * https://github.com/NetApp/trident[Astra Trident GitHub^]

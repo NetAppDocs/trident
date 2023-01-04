@@ -11,7 +11,7 @@ summary: You can install Astra Trident using the Trident operator (manually or u
 :imagesdir: ../media/
 
 [.lead]
-You can install Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
+To ensure Astra Trident can be installed in a wide variety of environments and organizations, NetApp offers multiple installation options. You can install Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information about Astra Trident 22.10.*
@@ -41,78 +41,13 @@ Regardless of your installation path, you must have:
 
 TIP: If you have not familiarized yourself with the link:../trident-concepts/intro.html[basic concepts^], now is a great time to do that.
 
-== Learn about Astra Trident installation options
-To ensure Astra Trident can be installed in a wide variety of environments and organizations, NetApp offers multiple installation options. Before you get started, you need to make some decisions. 
-
-* Select the appropriate installation _method_. Review <<Choose the right installation method>> to help make your decision. 
-* Determine your deployment process based on the _installation mode_ required by your organization. 
-+
-// start tabbed area
-
-[role="tabbed-block"]
-====
-
-.Standard installation
---
-This is the easiest way to install Astra Trident and works for most environments that do not impose network restrictions. Standard installation mode uses default registries to store required Trident (`docker.io`) and CSI (`registry.k8s.io`) images. 
-
-When you use standard mode, the Astra Trident installer: 
-
-* Fetches the container images over the Internet
-* Creates a deployment or node daemonset, which spins up Astra Trident pods on all the eligible nodes in the Kubernetes cluster
---
-
-.Offline installation
---
-Offline installation mode might be required in an air-gapped or secure location. In this scenario, you can create a single private, mirrored registry or two mirrored registries to store required Trident and CSI images.
-
-NOTE: Regardless of your registry configuration, CSI images must reside in one registry. 
---
-
-.Remote installation
---
-Here is a high-level overview of the remote installation process:
-
-* Deploy the appropriate version of `kubectl` on the remote machine from where you want to deploy Astra Trident.
-* Copy the configuration files from the Kubernetes cluster and set the `KUBECONFIG` environment variable on the remote machine.
-* Initiate a `kubectl get nodes` command to verify that you can connect to the required Kubernetes cluster.
-* Complete the deployment from the remote machine by using the standard installation steps.
---
-====
-
-After you've made your decisions, select the appropriate process. 
-
-[cols=2,options="header"]
-|===
-|Method
-|Installation mode
-
-|Trident operator (manually)
-a|link:kubernetes-deploy-operator.html[Standard installation]
-
-link:kubernetes-deploy-operator-mirror.html[Offline installation]
-
-|Trident operator (Helm)
-a|link:kubernetes-deploy-helm.html[Standard installation]
-
-link:kubernetes-deploy-helm-mirror.html[Offline installation]
-
-
-|`tridentctl`
-a|link:kubernetes-customize-deploy-tridentctl.html[Standard installation]
-
-link:kubernetes-customize-deploy-tridentctl-mirror.html[Offline installation]
-
-|===
-
-== Choose the right installation method
+== Choose your installation method
 Select the installation method that's right for you. You should also review the considerations for link:kubernetes-deploy.html#move-between-installation-methods[moving between methods] before making your decision. 
 
 === Using the Trident operator
 
 Whether deploying manually or using Helm, the Trident operator is a great way to simplify installation and dynamically manage Astra Trident resources. You can even link:../trident-get-started/kubernetes-customize-deploy.html[customize your Trident operator deployment] using the attributes in the `TridentOrchestrator`. 
 
-==== Benefits of using the Trident operator
 The benefits of using the Trident operator include:
 
 .*Astra Trident object creation*
@@ -166,6 +101,70 @@ If you have an existing deployment that must be upgraded or if you are looking t
 You can link:kubernetes-customize-deploy-tridentctl.html[customize your `tridentctl` installation] to generate the manifests for Trident resources. This includes the deployment, daemonset, service account, and the cluster role that Astra Trident creates as part of its installation.
 
 NOTE: Beginning with the 22.04, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
+ Select the appropriate installation _method_.   
+
+== Choose your installation mode
+Determine your deployment process based on the _installation mode_ (Standard, Offline, or Remote) required by your organization.
+
+// start tabbed area
+
+[role="tabbed-block"]
+====
+
+.Standard installation
+--
+This is the easiest way to install Astra Trident and works for most environments that do not impose network restrictions. Standard installation mode uses default registries to store required Trident (`docker.io`) and CSI (`registry.k8s.io`) images. 
+
+When you use standard mode, the Astra Trident installer: 
+
+* Fetches the container images over the Internet
+* Creates a deployment or node daemonset, which spins up Astra Trident pods on all the eligible nodes in the Kubernetes cluster
+--
+
+.Offline installation
+--
+Offline installation mode might be required in an air-gapped or secure location. In this scenario, you can create a single private, mirrored registry or two mirrored registries to store required Trident and CSI images.
+
+NOTE: Regardless of your registry configuration, CSI images must reside in one registry. 
+--
+
+.Remote installation
+--
+Here is a high-level overview of the remote installation process:
+
+* Deploy the appropriate version of `kubectl` on the remote machine from where you want to deploy Astra Trident.
+* Copy the configuration files from the Kubernetes cluster and set the `KUBECONFIG` environment variable on the remote machine.
+* Initiate a `kubectl get nodes` command to verify that you can connect to the required Kubernetes cluster.
+* Complete the deployment from the remote machine by using the standard installation steps.
+--
+====
+
+== Select the process based on your method and mode
+
+After you've made your decisions, select the appropriate process. 
+
+[cols=2,options="header"]
+|===
+|Method
+|Installation mode
+
+|Trident operator (manually)
+a|link:kubernetes-deploy-operator.html[Standard installation]
+
+link:kubernetes-deploy-operator-mirror.html[Offline installation]
+
+|Trident operator (Helm)
+a|link:kubernetes-deploy-helm.html[Standard installation]
+
+link:kubernetes-deploy-helm-mirror.html[Offline installation]
+
+
+|`tridentctl`
+a|link:kubernetes-customize-deploy-tridentctl.html[Standard installation]
+
+link:kubernetes-customize-deploy-tridentctl-mirror.html[Offline installation]
+
+|===
 
 == Moving between installation methods
 

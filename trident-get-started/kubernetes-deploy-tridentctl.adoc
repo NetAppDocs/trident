@@ -55,7 +55,7 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 ----
 ====
 
-=== Step 1: Download the Trident installer package 
+== Step 1: Download the Trident installer package 
 
 The Astra Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
 
@@ -68,6 +68,8 @@ cd trident-installer
 == Step 2: Install Astra Trident
 
 Install Astra Trident in the desired namespace by executing the `tridentctl install` command. You can add additional arguments to specify image registry location. 
+
+NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
 
 [role="tabbed-block"]
 ====
@@ -115,9 +117,6 @@ INFO Trident REST interface is up.                 version=23.01.0
 INFO Trident installation succeeded.
 ....
 ----
-
-[NOTE]
-To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
 
 == Verify the installation
 

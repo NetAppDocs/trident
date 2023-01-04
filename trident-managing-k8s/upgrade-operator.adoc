@@ -21,7 +21,7 @@ To upgrade using the operator, the following conditions should be met:
 // * You should have a CRD-based Trident installation. This represents all releases from 19.07 and later. If you have a CSI-based installation, you most likely have a CRD-based installation.
 // * If you have uninstalled CSI Trident and the metadata from the installation persists, you can upgrade by using the operator.
 * Only one Astra Trident installation should exist across all the namespaces in a given Kubernetes cluster.
-* You should be using a Kubernetes cluster that runs link:../trident-get-started/requirements.html[a supported Kubernetes version].
+* You should be using a Kubernetes cluster running link:../trident-get-started/requirements.html[a supported Kubernetes version].
 // * If alpha snapshot CRDs are present, you should remove them with `tridentctl obliviate alpha-snapshot-crd`. This deletes the CRDs for the alpha snapshot spec. For existing snapshots that should be deleted/migrated, see https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^].
 
 // WARNING: When upgrading Trident by using the operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
@@ -34,8 +34,8 @@ To upgrade using the operator, the following conditions should be met:
 ----
 kubectl delete -f 22.01/trident-installer/deploy/bundle.yaml -n trident
 ----
-. Optionally, you can edit the `TridentOrchestrator` object that you created when installing Trident to modify the installation parameters. This can include changes such as modifying the custom Trident image, private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
-. Install Astra Trident by using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 22.10 for Kubernetes 1.25, run the following command:
+. If you customized your initial installation using `TridentOrchestrator` attributes, you can edit the `TridentOrchestrator` object to modify the installation parameters. This might include changes made to specify mirrored Trident and CSI image registries for offline mode, enable debug logs, or specify image pull secrets.
+. Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 22.10 for Kubernetes 1.25, run the following command:
 +
 ----
 kubectl create -f 22.10.0/trident-installer/deploy/bundle_post_1_25.yaml -n trident
@@ -184,9 +184,9 @@ helm upgrade <name> trident-operator-22.10.0.tgz
 +
 [NOTE]
 ====
-If you set any non-default options during the initial installation, ensure that the options are included in the upgrade command, or else, the values will be reset to their defaults. 
+If you set any non-default options during the initial installation (such as specifying private, mirrored registries for Trident and CSI images), use `--set` to ensure those options are included in the upgrade command, otherwise the values will reset to default. 
 
-To pass configuration data during the upgrade, use `--set`. For example, to change the default value of `tridentDebug`, run the following command:
+For example, to change the default value of `tridentDebug`, run the following command:
 ----
 helm upgrade <name> trident-operator-22.10.0-custom.tgz --set tridentDebug=true
 ----

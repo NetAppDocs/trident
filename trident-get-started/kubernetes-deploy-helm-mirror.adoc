@@ -43,11 +43,27 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `XX.XX.X` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment and image registry location or locations as in the following examples. In the examples, `XX.XX.X` is the version of Astra Trident you are installing. 
 +
+[role="tabbed-block"]
+====
+
+.Trident and CSI images in one registry
+--
 ----
-helm install <name> netapp-trident/trident-operator --version <XX.XX.X> --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version <XX.XX.X> --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
 ----
+--
+
+.Trident and CSI images in different registries
+--
+You must append `sig-storage` to the `imageRegistry` to use different registry locations.
+----
+helm install <name> netapp-trident/trident-operator --version <XX.XX.X> --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:23.01.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:23.01 --set tridentImage=<your-registry>/netapp/trident:23.01.0 --create-namespace --namespace <trident-namespace>
+----
+--
+====
+// end tabbed area
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
 

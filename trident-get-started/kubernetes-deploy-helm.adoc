@@ -44,10 +44,10 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `XX.XX.X` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `23.01.0` is the version of Astra Trident you are installing. 
 +
 ----
-helm install <name> netapp-trident/trident-operator --version <XX.XX.X> --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 23.01.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -72,10 +72,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `XX.XX.X` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `23.01.0` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version <XX.XX.X>  --create-namespace --namespace --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 23.01.0  --create-namespace --namespace --set tridentDebug=true
 ----
 
 NOTE: The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.

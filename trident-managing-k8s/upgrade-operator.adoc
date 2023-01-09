@@ -56,119 +56,119 @@ Trident provides a bundle file that can be used to install the operator and crea
 .Results 
 The Trident operator will identify an existing Astra Trident installation and upgrade it to the same version as the operator.
 
-// == Upgrade a namespace-scoped operator installation
+== Upgrade a namespace-scoped operator installation
 
-// To upgrade from an instance of Astra Trident installed using the namespace-scoped operator (versions 20.07 through 20.10), here is the set of steps to be followed:
+To upgrade from an instance of Astra Trident installed using the namespace-scoped operator (versions 20.07 through 20.10), here is the set of steps to be followed:
 
-// .Steps
-// . Verify the status of the existing Trident installation. To do this, check the *Status* of  `TridentProvisioner`. The status should be `Installed`.
-// +
-// ----
-// kubectl describe tprov trident -n trident | grep Message: -A 3
-// Message:  Trident installed
-// Status:   Installed
-// Version:  v20.10.1
-// ----
-// +
-// NOTE:  If status shows `Updating`, ensure you resolve it before proceeding. For a list of possible status values, see https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-deploy-operator.html[here^].
-// . Create the `TridentOrchestrator` CRD by using the manifest provided with the Trident installer.
-// +
-// ----
-// # Download the release required [22.10.0]
-// mkdir 22.10.0
-// cd 22.10.0
-// wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
-// tar -xf trident-installer-22.10.0.tar.gz
-// cd trident-installer
-// kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
-// ----
-// . Delete the namespace-scoped operator by using its manifest. To complete this step, you need the bundle YAML file used to deploy the namespace-scoped operator from `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_BUNDLE.YAML_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_BUNDLE.YAML_` is the bundle YAML file name.
-// +
-// NOTE: You should make the necessary changes to the Trident install parameters (for example, changing the values for `tridentImage`, `autosupportImage`, private image repository, and providing `imagePullSecrets`) after deleting the namespace-scoped operator and before installing the cluster-scoped operator. For a complete list of parameters that can be updated, refer to the link:https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-customize-deploy.html#configuration-options[configuration options].
-// +
-// ----
-// #Ensure you are in the right directory
-// pwd
-// /root/20.10.1/trident-installer
+.Steps
+. Verify the status of the existing Trident installation. To do this, check the *Status* of  `TridentProvisioner`. The status should be `Installed`.
++
+----
+kubectl describe tprov trident -n trident | grep Message: -A 3
+Message:  Trident installed
+Status:   Installed
+Version:  v20.10.1
+----
++
+NOTE:  If status shows `Updating`, ensure you resolve it before proceeding. For a list of possible status values, see https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-deploy-operator.html[here^].
+. Create the `TridentOrchestrator` CRD by using the manifest provided with the Trident installer.
++
+----
+# Download the release required [22.10.0]
+mkdir 22.10.0
+cd 22.10.0
+wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
+tar -xf trident-installer-22.10.0.tar.gz
+cd trident-installer
+kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
+----
+. Delete the namespace-scoped operator by using its manifest. To complete this step, you need the bundle YAML file used to deploy the namespace-scoped operator from `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_BUNDLE.YAML_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_BUNDLE.YAML_` is the bundle YAML file name.
++
+NOTE: You should make the necessary changes to the Trident install parameters (for example, changing the values for `tridentImage`, `autosupportImage`, private image repository, and providing `imagePullSecrets`) after deleting the namespace-scoped operator and before installing the cluster-scoped operator. For a complete list of parameters that can be updated, refer to the link:https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-customize-deploy.html#configuration-options[configuration options].
++
+----
+#Ensure you are in the right directory
+pwd
+/root/20.10.1/trident-installer
 
-// #Delete the namespace-scoped operator
-// kubectl delete -f deploy/<BUNDLE.YAML>
-// serviceaccount "trident-operator" deleted
-// clusterrole.rbac.authorization.k8s.io "trident-operator" deleted
-// clusterrolebinding.rbac.authorization.k8s.io "trident-operator" deleted
-// deployment.apps "trident-operator" deleted
-// podsecuritypolicy.policy "tridentoperatorpods" deleted
+#Delete the namespace-scoped operator
+kubectl delete -f deploy/<BUNDLE.YAML>
+serviceaccount "trident-operator" deleted
+clusterrole.rbac.authorization.k8s.io "trident-operator" deleted
+clusterrolebinding.rbac.authorization.k8s.io "trident-operator" deleted
+deployment.apps "trident-operator" deleted
+podsecuritypolicy.policy "tridentoperatorpods" deleted
 
-// #Confirm the Trident operator was removed
-// kubectl get all -n trident
-// NAME                               READY   STATUS    RESTARTS   AGE
-// pod/trident-csi-68d979fb85-dsrmn   6/6     Running   12         99d
-// pod/trident-csi-8jfhf              2/2     Running   6          105d
-// pod/trident-csi-jtnjz              2/2     Running   6          105d
-// pod/trident-csi-lcxvh              2/2     Running   8          105d
+#Confirm the Trident operator was removed
+kubectl get all -n trident
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/trident-csi-68d979fb85-dsrmn   6/6     Running   12         99d
+pod/trident-csi-8jfhf              2/2     Running   6          105d
+pod/trident-csi-jtnjz              2/2     Running   6          105d
+pod/trident-csi-lcxvh              2/2     Running   8          105d
 
-// NAME                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)              AGE
-// service/trident-csi   ClusterIP   10.108.174.125   <none>        34571/TCP,9220/TCP   105d
+NAME                  TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)              AGE
+service/trident-csi   ClusterIP   10.108.174.125   <none>        34571/TCP,9220/TCP   105d
 
-// NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR                                     AGE
-// daemonset.apps/trident-csi   3         3         3       3            3           kubernetes.io/arch=amd64,kubernetes.io/os=linux   105d
+NAME                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR                                     AGE
+daemonset.apps/trident-csi   3         3         3       3            3           kubernetes.io/arch=amd64,kubernetes.io/os=linux   105d
 
-// NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
-// deployment.apps/trident-csi   1/1     1            1           105d
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/trident-csi   1/1     1            1           105d
 
-// NAME                                     DESIRED   CURRENT   READY   AGE
-// replicaset.apps/trident-csi-68d979fb85   1         1         1       105d
-// ----
-// +
-// At this stage, the `trident-operator-xxxxxxxxxx-xxxxx` pod is deleted.
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/trident-csi-68d979fb85   1         1         1       105d
+----
++
+At this stage, the `trident-operator-xxxxxxxxxx-xxxxx` pod is deleted.
 
-// . (Optional) If the install parameters need to be modified, update the `TridentProvisioner` spec. These could be changes such as modifying the private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
-// +
-// ----
-// kubectl patch tprov <trident-provisioner-name> -n <trident-namespace> --type=merge -p '{"spec":{"debug":true}}'
-// ----
-// . Install the cluster-scoped operator.
-// +
-// NOTE: Installing the cluster-scoped operator initiates the migration of `TridentProvisioner` objects to `TridentOrchestrator` objects, deletes `TridentProvisioner` objects and the `tridentprovisioner` CRD, and upgrades Astra Trident to the version of the cluster-scoped operator being used. In the example that follows, Trident is upgraded to 22.10.0.
-// +
-// IMPORTANT: Upgrading Astra Trident by using the cluster-scoped operator results in the migration of `tridentProvisioner` to a `tridentOrchestrator` object with the same name. This is automatically handled by the operator. The upgrade will also have Astra Trident installed in the same namespace as before.
-// +
-// ----
-// #Ensure you are in the correct directory
-// pwd
-// /root/22.10.0/trident-installer
+. (Optional) If the install parameters need to be modified, update the `TridentProvisioner` spec. These could be changes such as modifying the private image registry to pull container images from, enabling debug logs, or specifying image pull secrets.
++
+----
+kubectl patch tprov <trident-provisioner-name> -n <trident-namespace> --type=merge -p '{"spec":{"debug":true}}'
+----
+. Install the cluster-scoped operator.
++
+NOTE: Installing the cluster-scoped operator initiates the migration of `TridentProvisioner` objects to `TridentOrchestrator` objects, deletes `TridentProvisioner` objects and the `tridentprovisioner` CRD, and upgrades Astra Trident to the version of the cluster-scoped operator being used. In the example that follows, Trident is upgraded to 22.10.0.
++
+IMPORTANT: Upgrading Astra Trident by using the cluster-scoped operator results in the migration of `tridentProvisioner` to a `tridentOrchestrator` object with the same name. This is automatically handled by the operator. The upgrade will also have Astra Trident installed in the same namespace as before.
++
+----
+#Ensure you are in the correct directory
+pwd
+/root/22.10.0/trident-installer
 
-// #Install the cluster-scoped operator in the **same namespace**
-// kubectl create -f deploy/<BUNDLE.YAML>
-// serviceaccount/trident-operator created
-// clusterrole.rbac.authorization.k8s.io/trident-operator created
-// clusterrolebinding.rbac.authorization.k8s.io/trident-operator created
-// deployment.apps/trident-operator created
-// podsecuritypolicy.policy/tridentoperatorpods created
+#Install the cluster-scoped operator in the **same namespace**
+kubectl create -f deploy/<BUNDLE.YAML>
+serviceaccount/trident-operator created
+clusterrole.rbac.authorization.k8s.io/trident-operator created
+clusterrolebinding.rbac.authorization.k8s.io/trident-operator created
+deployment.apps/trident-operator created
+podsecuritypolicy.policy/tridentoperatorpods created
 
-// #All tridentProvisioners will be removed, including the CRD itself
-// kubectl get tprov -n trident
-// Error from server (NotFound): Unable to list "trident.netapp.io/v1, Resource=tridentprovisioners": the server could not find the requested resource (get tridentprovisioners.trident.netapp.io)
+#All tridentProvisioners will be removed, including the CRD itself
+kubectl get tprov -n trident
+Error from server (NotFound): Unable to list "trident.netapp.io/v1, Resource=tridentprovisioners": the server could not find the requested resource (get tridentprovisioners.trident.netapp.io)
 
-// #tridentProvisioners are replaced by tridentOrchestrator
-// kubectl get torc
-// NAME      AGE
-// trident   13s
+#tridentProvisioners are replaced by tridentOrchestrator
+kubectl get torc
+NAME      AGE
+trident   13s
 
-// #Examine Trident pods in the namespace
-// kubectl get pods -n trident
-// NAME                                READY   STATUS    RESTARTS   AGE
-// trident-csi-79df798bdc-m79dc        6/6     Running   0          1m41s
-// trident-csi-xrst8                   2/2     Running   0          1m41s
-// trident-operator-5574dbbc68-nthjv   1/1     Running   0          1m52s
+#Examine Trident pods in the namespace
+kubectl get pods -n trident
+NAME                                READY   STATUS    RESTARTS   AGE
+trident-csi-79df798bdc-m79dc        6/6     Running   0          1m41s
+trident-csi-xrst8                   2/2     Running   0          1m41s
+trident-operator-5574dbbc68-nthjv   1/1     Running   0          1m52s
 
-// #Confirm Trident has been updated to the desired version
-// kubectl describe torc trident | grep Message -A 3
-// Message:                Trident installed
-// Namespace:              trident
-// Status:                 Installed
-// Version:                v22.10.0
-// ----
+#Confirm Trident has been updated to the desired version
+kubectl describe torc trident | grep Message -A 3
+Message:                Trident installed
+Namespace:              trident
+Status:                 Installed
+Version:                v22.10.0
+----
 
 == Upgrade a Helm-based operator installation
 
@@ -197,73 +197,73 @@ helm upgrade <name> trident-operator-22.10.0-custom.tgz --set tridentDebug=true
 .Results 
 The Trident operator will identify an existing Astra Trident installation and upgrade it to the same version as the operator.
 
-// == Upgrade from a non-operator installation
+== Upgrade from a non-operator installation
 
-// If you have a CSI Trident instance that meets the prerequisites listed above, you can upgrade to the latest release of the Trident operator.
+If you have a CSI Trident instance that meets the prerequisites listed above, you can upgrade to the latest release of the Trident operator.
 
-// .Steps
-// . Download the latest Astra Trident release.
-// +
-// ----
-// # Download the release required [22.10.0]
-// mkdir 22.10.0
-// cd 22.10.0
-// wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
-// tar -xf trident-installer-22.10.0.tar.gz
-// cd trident-installer
-// ----
+.Steps
+. Download the latest Astra Trident release.
++
+----
+# Download the release required [22.10.0]
+mkdir 22.10.0
+cd 22.10.0
+wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
+tar -xf trident-installer-22.10.0.tar.gz
+cd trident-installer
+----
 
-// . Create the `tridentorchestrator` CRD from the manifest.
-// +
-// ----
-// kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
-// ----
+. Create the `tridentorchestrator` CRD from the manifest.
++
+----
+kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
+----
 
-// . Deploy the operator.
-// +
-// ----
-// #Install the cluster-scoped operator in the **same namespace**
-// kubectl create -f deploy/<BUNDLE.YAML>
-// serviceaccount/trident-operator created
-// clusterrole.rbac.authorization.k8s.io/trident-operator created
-// clusterrolebinding.rbac.authorization.k8s.io/trident-operator created
-// deployment.apps/trident-operator created
-// podsecuritypolicy.policy/tridentoperatorpods created
+. Deploy the operator.
++
+----
+#Install the cluster-scoped operator in the **same namespace**
+kubectl create -f deploy/<BUNDLE.YAML>
+serviceaccount/trident-operator created
+clusterrole.rbac.authorization.k8s.io/trident-operator created
+clusterrolebinding.rbac.authorization.k8s.io/trident-operator created
+deployment.apps/trident-operator created
+podsecuritypolicy.policy/tridentoperatorpods created
 
-// #Examine the pods in the Trident namespace
-// NAME                                READY   STATUS    RESTARTS   AGE
-// trident-csi-79df798bdc-m79dc        6/6     Running   0          150d
-// trident-csi-xrst8                   2/2     Running   0          150d
-// trident-operator-5574dbbc68-nthjv   1/1     Running   0          1m30s
-// ----
+#Examine the pods in the Trident namespace
+NAME                                READY   STATUS    RESTARTS   AGE
+trident-csi-79df798bdc-m79dc        6/6     Running   0          150d
+trident-csi-xrst8                   2/2     Running   0          150d
+trident-operator-5574dbbc68-nthjv   1/1     Running   0          1m30s
+----
 
-// . Create a `TridentOrchestrator` CR for installing Astra Trident.
-// +
-// ----
-// #Create a tridentOrchestrator to initate a Trident install
-// cat deploy/crds/tridentorchestrator_cr.yaml
-// apiVersion: trident.netapp.io/v1
-// kind: TridentOrchestrator
-// metadata:
-//   name: trident
-// spec:
-//   debug: true
-//   namespace: trident
+. Create a `TridentOrchestrator` CR for installing Astra Trident.
++
+----
+#Create a tridentOrchestrator to initate a Trident install
+cat deploy/crds/tridentorchestrator_cr.yaml
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
 
-// kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
+kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
 
-// #Examine the pods in the Trident namespace
-// NAME                                READY   STATUS    RESTARTS   AGE
-// trident-csi-79df798bdc-m79dc        6/6     Running   0          1m
-// trident-csi-xrst8                   2/2     Running   0          1m
-// trident-operator-5574dbbc68-nthjv   1/1     Running   0          5m41s
+#Examine the pods in the Trident namespace
+NAME                                READY   STATUS    RESTARTS   AGE
+trident-csi-79df798bdc-m79dc        6/6     Running   0          1m
+trident-csi-xrst8                   2/2     Running   0          1m
+trident-operator-5574dbbc68-nthjv   1/1     Running   0          5m41s
 
-// #Confirm Trident was upgraded to the desired version
-// kubectl describe torc trident | grep Message -A 3
-// Message:                Trident installed
-// Namespace:              trident
-// Status:                 Installed
-// Version:                v22.10.0
-// ----
+#Confirm Trident was upgraded to the desired version
+kubectl describe torc trident | grep Message -A 3
+Message:                Trident installed
+Namespace:              trident
+Status:                 Installed
+Version:                v22.10.0
+----
 
-// The existing backends and PVCs are automatically available.
+The existing backends and PVCs are automatically available.

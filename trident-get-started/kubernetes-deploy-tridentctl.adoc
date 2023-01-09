@@ -63,8 +63,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Astra Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v22.10.0/<trident-installer-XX.XX.X.tar.gz>
-tar -xf <trident-installer-XX.XX.X.tar.gz>
+wget https://github.com/NetApp/trident/releases/download/v23.01.0/trident-installer-23.01.0.tar.gz
+tar -xf trident-installer-23.01.0.tar.gz
 cd trident-installer
 ----
 
@@ -95,7 +95,7 @@ NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag 
 --
 You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----
-./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:22.10 --trident-image <your-registry>/netapp/trident:23.01.0
+./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:23.01 --trident-image <your-registry>/netapp/trident:23.01.0
 ----
 --
 
@@ -133,7 +133,7 @@ You can confirm if the Astra Trident installation completed by reviewing the sta
 kubectl get pods -n trident
 
 NAME                           READY   STATUS    RESTARTS   AGE
-trident-csi-679648bd45-cv2mx   4/4     Running   0          5m29s
+trident-csi-679648bd45-cv2mx   6/6     Running   0          5m29s
 trident-csi-vgc8n              2/2     Running   0          5m29s
 ----
 

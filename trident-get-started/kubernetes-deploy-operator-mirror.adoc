@@ -61,11 +61,11 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 
 === Step 1: Download the Trident installer package 
 
-The Astra Trident installer package contains everything you need to deploy the Trident operator and install Astra Trident. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
+The Astra Trident installer package contains everything you need to deploy the Trident operator and install Astra Trident. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v22.10.0/<trident-installer-XX.XX.X.tar.gz>
-tar -xf <trident-installer-XX.XX.X.tar.gz>
+wget https://github.com/NetApp/trident/releases/download/v23.01.0/trident-installer-23.01.0.tar.gz
+tar -xf trident-installer-23.01.0.tar.gz
 cd trident-installer
 ----
 
@@ -78,7 +78,7 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_<VERSIO
 
 === Step 3: Update the registry location in the operator
 
-In `operator.yaml`, update `image: docker.io/netapp/trident-operator:XX.XX.X` to reflect the location of your image registry. For example:.
+In `operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.0` to reflect the location of your image registry. For example:.
 
 * `image: <your-registry>/trident-operator:23.01.0` if your images are all located in one registry.
 * `image: <your-registry>/netapp/trident-operator:23.01.0` if your Trident and CSI images are located in different registries. 
@@ -226,7 +226,7 @@ You can confirm if the Astra Trident installation completed by reviewing the sta
 kubectl get pods -n trident
 
 NAME                                READY   STATUS    RESTARTS   AGE
-trident-csi-7d466bf5c7-v4cpw        5/5     Running   0           1m
+trident-csi-7d466bf5c7-v4cpw        6/6     Running   0           1m
 trident-csi-mr6zc                   2/2     Running   0           1m
 trident-csi-xrp7w                   2/2     Running   0           1m
 trident-csi-zh2jt                   2/2     Running   0           1m

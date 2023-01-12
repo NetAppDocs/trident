@@ -144,12 +144,12 @@ Yesfootnote:1[]: Not managed by Astra Trident
 
 === Cloud Volumes Service with GCP backend drivers
 
-Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on the GCP backend. To configure the GCP backend on Trident, you are required specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. The project number may be found in the GCP web portal, while the API key must be taken from the service account private key file that you created while setting up API access for Cloud Volumes on GCP. Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
+Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on the GCP backend. To configure the GCP backend on Trident, you are required specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. The project number may be found in the GCP web portal, while the API key must be taken from the service account private key file that you created while setting up API access for Cloud Volumes on GCP. 
 
-. *CVS*: The base CVS service type, which provides high zonal availability with limited/moderate performance levels.
-. *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. Choose from three unique service levels [`standard`, `premium`, and `extreme`]. 
+Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
-The minimum CVS and CVS-Performance volume size is 100 GiB. 
+* *CVS*: The base CVS service type providing high zonal availability with limited to moderate performance levels. The CVS service type uses storage pools to support volumes as small as 1 GiB without performance impact. A storage pool can serve as a container for up to 50 volumes where all volumes share the capacity and performance of the pool.
+* *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. The CVS-Performance service type can support small volumes with possible performance impacts. You can choose from link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three unique service levels^]: `standard`, `premium`, and `extreme`.
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -160,16 +160,10 @@ The minimum CVS and CVS-Performance volume size is 100 GiB.
 |QoS
 |Expand
 |Replication
-| `gcp-cvs` | Yes | Yes | Yes | Yes | Yes | Yesfootnote:1[] |
+| `gcp-cvs` | Yes | Yes | Yes | Yes | Yes | Yes; Not managed by Astra Trident |
 |===
 
-[verse]
---
-Footnote:
-Yesfootnote:1[]: Not managed by Astra Trident
---
-
-The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Astra Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json file(s). Storage classes identify the virtual storage pools with the use of labels.
+The `gcp-cvs` driver uses virtual storage pools. Virtual storage pools abstract the backend, letting Astra Trident decide volume placement. The administrator defines the virtual storage pools in the backend.json files. Storage classes identify the virtual storage pools with the use of labels.
 
 == Storage class design
 

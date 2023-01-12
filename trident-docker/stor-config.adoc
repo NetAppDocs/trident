@@ -363,7 +363,10 @@ The `solidfire-san` driver does not support Docker Swarm.
 
 == Cloud Volumes Service (CVS) on GCP configuration
 
-Astra Trident supports volumes with the default CVS service type on https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[GCP^]. Astra Trident does not support CVS volumes less than 100 GiB regardless of the minimum allowed by the CVS service type. Therefore, Trident automatically creates a 100 GiB volume if the requested volume is smaller than the minimum size.  
+Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
+
+* *CVS*: The base CVS service type providing high zonal availability with limited to moderate performance levels. The CVS service type uses storage pools to support volumes as small as 1 GiB without performance impact. A storage pool can serve as a container for up to 50 volumes where all volumes share the capacity and performance of the pool.
+* *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. The CVS-Performance service type can support small volumes with possible performance impacts. You can choose from link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three unique service levels^]: `standard`, `premium`, and `extreme`.
 
 In addition to the global configuration values, when using CVS on GCP, these options are available.
 

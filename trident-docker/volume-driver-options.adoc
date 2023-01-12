@@ -215,7 +215,7 @@ Volume create options for the CVS on GCP driver include the following:
 |Description
 
 |`size`
-a|The size of the volume, defaults to 100 GiB.
+a|The size of the volume, defaults to 1 GiB minimum.
 
 |`serviceLevel`
 a|The CVS service level of the volume, defaults to standard. Valid values are standard, premium, and extreme.
@@ -237,8 +237,6 @@ docker volume create -d netapp --name demo -o size=2T
 ----
 docker volume create -d netapp --name demo -o size=5T -o serviceLevel=premium
 ----
-
-The minimum volume size is 100 GiB.
 
 == Azure NetApp Files volume options
 

@@ -205,9 +205,9 @@ docker volume create -d solidfire --name sfGold -o type=Gold -o size=10G
 docker volume create -d solidfire --name sfBronze -o type=Bronze -o size=100G
 ----
 
-== CVS on GCP volume options
+== Cloud Volumes Service on Google Cloud volume options
 
-Volume create options for the CVS on GCP driver include the following:
+You can control default volume provisioning using the following options. 
 
 [%header,cols=2*]
 |===
@@ -215,10 +215,17 @@ Volume create options for the CVS on GCP driver include the following:
 |Description
 
 |`size`
-a|The size of the volume, defaults to 1 GiB minimum.
+a|The size of the volume. 
 
-|`serviceLevel`
-a|The CVS service level of the volume, defaults to standard. Valid values are standard, premium, and extreme.
+CVS-Performance service type defaults to 100 GiB minimum. 
+
+CVS service type defaults to 1 GiB minimum. 
+
+| `serviceLevel` |The CVS-Performance or CVS service level for new volumes. 
+
+CVS-Performance values are `standard`, `premium`, or `extreme`. Default is "standard".
+
+CVS values are `standardsw` or `zoneredundantstandardsw`. Default is "standardsw".
 
 |`snapshotReserve`
 a|This will set the snapshot reserve to the desired percentage. The default is no value, meaning CVS will select the snapshot reserve (usually 0%).
@@ -226,13 +233,13 @@ a|This will set the snapshot reserve to the desired percentage. The default is n
 
 === Examples
 
-* Create a 2TiB volume:
+* Create a 2 TiB volume:
 +
 ----
 docker volume create -d netapp --name demo -o size=2T
 ----
 
-* Create a 5TiB premium volume:
+* Create a 5 TiB premium volume:
 +
 ----
 docker volume create -d netapp --name demo -o size=5T -o serviceLevel=premium

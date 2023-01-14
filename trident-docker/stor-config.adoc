@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/stor-config.html
-keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, cvs on gcp, anf, azure netapp files
+keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, cvs on gcp, anf, azure netapp files, google cloud platform, storage pool labels, storage pool, cvs, cvs-performance, service type, service level, cloud volumes service, cloud volumes
 summary: See the configuration options available for your Astra Trident configurations.
 ---
 
@@ -361,14 +361,25 @@ The `solidfire-san` driver does not support Docker Swarm.
 }
 ----
 
-== Cloud Volumes Service (CVS) on GCP configuration
+== Cloud Volumes Service on Google Cloud Platform configuration
 
-Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
+Astra Trident can create Cloud Volumes Service volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
-* *CVS*: The base CVS service type providing high zonal availability with limited to moderate performance levels. The CVS service type uses storage pools to support volumes as small as 1 GiB without performance impact. A storage pool can serve as a container for up to 50 volumes where all volumes share the capacity and performance of the pool.
-* *CVS-Performance*: Performance-optimized service type best suited for production workloads that value performance. The CVS-Performance service type can support small volumes with possible performance impacts. You can choose from link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three unique service levels^]: `standard`, `premium`, and `extreme`.
+* *CVS-Performance*: The default Astra Trident service type. This performance-optimized service type is best suited for production workloads that value performance. The CVS-Performance service type is a hardware option supporting volumes with a minimum 100 GiB size. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three  service levels^]: 
 
-In addition to the global configuration values, when using CVS on GCP, these options are available.
+** `standard`
+** `premium`
+** `extreme`
+
+* *CVS*: The CVS service type provides high zonal availability with limited to moderate performance levels. The CVS service type is a software option that uses storage pools to support volumes as small as 1 GiB. The storage pool can contain up to 50 volumes where all volumes share the capacity and performance of the pool. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs_service_type[two service levels^]: 
+
+** `standardsw`
+** `zoneredundantsw`
+
+CAUTION: Astra Trident integration with the CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
+
+=== Backend configuration options
+Each backend provisions volumes in a single Google Cloud region. To create volumes in other regions, you can define additional backends. 
 
 [%header,cols=3*]
 |===
@@ -377,72 +388,79 @@ In addition to the global configuration values, when using CVS on GCP, these opt
 |Example
 
 |`apiRegion`
-a|CVS account region (required). Is the GCP region where this backend will provision volumes.
-a|“us-west2”
+|The Google Cloud region where Astra Trident creates Cloud Volumes Service volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
+
+Cross-region traffic incurs an additional cost.
+|“us-west2”
 
 |`projectNumber`
-a|GCP project number (required). Can be found in the GCP web portal’s Home screen.
-a|“123456789012”
+|Google Cloud account project number. The value is found on the Google Cloud portal home page. 
+|“123456789012”
 
 |`hostProjectNumber`
-a|GCP shared VPC host project number (required if using a shared VPC)
-a|“098765432109”
+|Required if using a shared VPC network. In this scenario, `projectNumber` is the service project, and `hostProjectNumber` is the host project.
+|“098765432109”
 
 |`apiKey`
-a|API key for GCP service account with CVS admin role (required). Is the JSON-formatted contents of a GCP service account’s private key file (copied verbatim into the backend config file). The service account must have the netappcloudvolumes.admin role.
-a|(contents of the private key file)
+|API key for the Google Cloud service account with the `netappcloudvolumes.admin` role. 
+
+It includes the JSON-formatted contents of a Google Cloud service account's private key file (copied verbatim into the backend configuration file). 
+|(contents of the private key file)
+
+|`apiRegion` |The Google Cloud region where Astra Trident creates Cloud Volumes Service volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
+
+Cross-region traffic incurs an additional cost.|
 
 |`secretKey`
-a|CVS account secret key (required). Can be found in the CVS web portal in Account settings > API access.
-a|“default”
+|CVS account secret key (required). Can be found in the CVS web portal in Account settings > API access.
+|“default”
 
 |`proxyURL`
-a|Proxy URL if proxy server required to connect to the CVS account. The proxy server can either be an HTTP proxy or an HTTPS proxy. In case of an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. *Proxy servers with authentication enabled are not supported*.
-a|“http://proxy-server-hostname/”
+|Proxy URL if proxy server required to connect to CVS account. The proxy server can either be an HTTP proxy or an HTTPS proxy. 
+
+For an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. 
+
+Proxy servers with authentication enabled are not supported. 
+|“http://proxy-server-hostname/”
 
 |`nfsMountOptions`
-a|NFS mount options; defaults to “-o nfsvers=3”
-a|“nfsvers=3,proto=tcp,timeo=600”
+|NFS mount options; defaults to “-o nfsvers=3”
+|“nfsvers=3,proto=tcp,timeo=600”
 
-|`serviceLevel`
-a|Performance level (standard, premium, extreme), defaults to “standard”
-a|“premium”
+| `serviceLevel` 
+|The CVS or CVS-Performance service level for new volumes. 
+
+CVS values are `standardsw` or `zoneredundantstandardsw`. 
+
+CVS-Performance values are `standard`, `premium`, or `extreme`. 
+| CVS default is "standardsw". 
+
+CVS-Performance default is "standard".
 
 |`network`
-a|GCP network used for CVS volumes, defaults to “default”
-a|“default”
+|Google Cloud network used for Cloud Volumes Service volumes.
+|“default”
 
 |===
 
-NOTE: If using a shared VPC network, you should specify both `projectNumber` and `hostProjectNumber`. In that case, `projectNumber` is the service project and `hostProjectNumber` is the host project.
+=== Volume provisioning options
 
-When using CVS on GCP, these default volume option settings are available.
+You can control default volume provisioning in the `defaults` section of the configuration file. 
 
-[%header,cols=3*]
+[cols=",,",options="header",]
 |===
-|Option
-|Description
-|Example
+|Parameter |Description |Default
+|`exportRule` |The export rules for new volumes. Must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation. |"0.0.0.0/0"
+|`snapshotDir` |Access to the `.snapshot` directory | "false"
+|`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept CVS default of 0)
+|`size` |The size of new volumes. 
 
-|`exportRule`
-a|NFS access list (addresses and/or CIDR subnets), defaults to “0.0.0.0/0”
-a|“10.0.1.0/24,10.0.2.100”
+The minimum volume size for CVS service type is 1 GiB. 
 
-|`snapshotDir`
-a|Controls visibility of the `.snapshot` directory
-a|“false”
-
-|`snapshotReserve`
-a|Snapshot reserve percentage, default is “” to accept the CVS default of 0
-a|“10”
-
-|`size`
-a|Volume size, defaults to “100GiB”
-a|“10T”
-
+The minimum size for CVS-Performance service type is 100 GiB. |"100GiB"
 |===
 
-=== Example CVS on GCP configuration file
+=== Example Cloud Volumes Service on Google Cloud configuration
 
 ----
 {

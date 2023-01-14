@@ -132,7 +132,9 @@ CVS defaults to "1GiB".
 == CVS-Performance service type examples 
 The following examples provide sample configurations for the CVS-Performance service type.
 
-== Example 1: Minimum configuration
+.Example 1: Minimal configuration
+[%collapsible%]
+====
 
 This is the minimum backend configuration using default CVS-Performance service type with the default "standard" service level. 
 
@@ -156,10 +158,13 @@ This is the minimum backend configuration using default CVS-Performance service 
     }
 }
 ----
+====
 
-== Example 2: Service level and proxy URL configuration
+.Example 2: Service level configuration
+[%collapsible%]
+====
 
-This sample illustrates backend configuration options and volume defaults.
+This sample illustrates backend configuration options, including service level, and volume defaults.
 
 ----
 {
@@ -191,9 +196,11 @@ This sample illustrates backend configuration options and volume defaults.
     }
 }
 ----
+====
 
-== Example 3: Virtual storage pool configuration
-
+.Example 3: Virtual storage pool configuration
+[%collapsible%]
+====
 This sample uses `storage` to configure virtual storage pools and the `StorageClasses` that refer back to them. Refer to <<Storage class definition details>> to see how the storage classes were defined.
 
 Here, specific defaults are set for all storage pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual storage pools are defined in the `storage` section. Each individual storage pool defines its own `serviceLevel`, and some pools overwrite the default values.
@@ -277,13 +284,13 @@ Here, specific defaults are set for all storage pools, which set the `snapshotRe
     ]
 }
 ----
+====
+=== Storage class definitions
+The following StorageClass definitions apply to the virtual storage pool configuration example. Using `parameters.selector`, you can specify for each StorageClass the virtual pool used to host a volume. The volume will have the aspects defined in the chosen pool.
 
-=== Storage class definition details
-The following StorageClass definitions refer to the storage pools above. Using `parameters.selector`, you can specify for each StorageClass the virtual pool used to host a volume. The volume will have the aspects defined in the chosen pool.
-
-* The first StorageClass (`cvs-extreme-extra-protection`) maps to the first virtual storage pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. 
-* The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Astra Trident decides which virtual storage pool is selected and ensures that the snapshot reserve requirement is met.
-
+.Storage class example
+[%collapsible%]
+====
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -339,11 +346,17 @@ parameters:
   selector: "protection=extra"
 allowVolumeExpansion: true
 ----
+====
+
+* The first StorageClass (`cvs-extreme-extra-protection`) maps to the first virtual storage pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. 
+* The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Astra Trident decides which virtual storage pool is selected and ensures that the snapshot reserve requirement is met.
 
 == CVS service type examples 
 The following examples provide sample configurations for the CVS service type.
 
-=== Example 1: Minimum configuration
+.Example 1: Minimum configuration
+[%collapsible%]
+====
 This is the minimum backend configuration using `storageClass` to specify the CVS service type and default `standardsw` service level. 
 
 ----
@@ -368,8 +381,11 @@ This is the minimum backend configuration using `storageClass` to specify the CV
 “serviceLevel”: “standardsw”
 }
 ----
+====
 
-=== Example 2: Storage pools configuration
+.Example 2: Storage pool configuration
+[%collapsible%]
+====
 This sample backend configuration uses `storagePools` to configure a storage pool.  
 
 ----
@@ -398,7 +414,7 @@ This sample backend configuration uses `storagePools` to configure a storage poo
   "serviceLevel": "Standardsw"
 }
 ----
-
+====
 == What's next?
 
 After you create the backend configuration file, run the following command:

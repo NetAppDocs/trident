@@ -5,16 +5,16 @@ keywords: trident backend, cloud volumes service for google cloud platform, goog
 summary: Learn how to configure Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
 ---
 
-= Configure a CVS for GCP backend
+= Configure a Cloud Volumes Service for Google Cloud backend
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Learn how to configure NetApp Cloud Volumes Service (CVS) for Google Cloud Platform (GCP) as the backend for your Astra Trident installation using the sample configurations provided.
+Learn how to configure NetApp Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
 
-== Learn about Astra Trident support for CVS for GCP
-Astra Trident can create CVS volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
+== Learn about Astra Trident support for Cloud Volumes Service for Google Cloud
+Astra Trident can create Cloud Volumes Service volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
 * *CVS-Performance*: The default Astra Trident service type. This performance-optimized service type is best suited for production workloads that value performance. The CVS-Performance service type is a hardware option supporting volumes with a minimum 100 GiB size. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three  service levels^]: 
 
@@ -36,10 +36,10 @@ Storage administrators can define storage pool labels in the backend configurati
 
 To configure and use the https://cloud.netapp.com/cloud-volumes-service-for-gcp?utm_source=NetAppTrident_ReadTheDocs&utm_campaign=Trident[Cloud Volumes Service for Google Cloud^] backend, you need the following:
 
-* A Google Cloud account configured with NetApp CVS
+* A Google Cloud account configured with NetApp Cloud Volumes Service
 * Project number of your Google Cloud account
 * Google Cloud service account with the `netappcloudvolumes.admin` role
-* API key file for your CVS service account
+* API key file for your Cloud Volumes Service account
 
 == Backend configuration options
 

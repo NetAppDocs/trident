@@ -16,13 +16,11 @@ Astra Trident follows a quarterly release cadence, delivering four major release
 == Select a version
 Astra Trident versions follow a `YY.MM` naming convention. Dot releases follow a `YY.MM.X` convention. You will select the version to upgrade to based on the version you are upgrading from. 
 
-Upgrading from a release that is five or more releases behind the target release requires you to first upgrade to a release within a one year release window. 
+* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can upgrade to 23.01 from 22.01 (including any dot releases, such as 22.01.1) directly.
+* You can perform an upgrade from a release that is five or more releases behind the target release. However, we recommend performing a multi-step upgrade. The following releases require an interim upgrade step: 
 
-* You can perform a direct upgrade to 23.01 from 22.01 (including any dot releases, such as 22.01.1). The target release is within a four-release window of your installed version.
-* You cannot perform a direct upgrade to 23.01 from 21.10. In this case, your installed version is five releases behind the target release. You will need to first upgrade to the most recent release that fits your four-release window. For example: 
-
-. Upgrade from 21.10 to 22.01. 
-. Upgrade from 22.01 to 23.01.
+. Releases earlier than ??? to ??? and above
+. Releases earlier than ??? to ??? and above
 
 // IMPORTANT: All upgrades for versions 19.04 and earlier require the migration of Astra Trident's metadata from it's own `etcd` to CRD objects. Ensure that you check the documentation of the release to understand how the upgrade works.
 
@@ -47,12 +45,12 @@ WARNING: CSI Volume Snapshots is now a feature that is GA, beginning with Kubern
 
 // If you do not want to use the operator or you have a customized install that cannot be supported by the operator, you can upgrade by using `tridentctl`. This is the preferred method of upgrades for Trident releases 19.04 and earlier.
 
-// == Changes to the operator
+== Changes to the operator
 
-// The 21.01 release of Astra Trident introduces some key architectural changes to the operator, namely the following:
+The 21.01 release of Astra Trident introduces some key architectural changes to the operator, namely the following:
 
-// * The operator is now *cluster-scoped*. Previous instances of the Trident operator (versions 20.04 through 20.10) were *namespace-scoped*. An operator that is cluster-scoped is advantageous for the following reasons:
-// ** Resource accountability: The operator now manages resources associated with an Astra Trident installation at the cluster level. As part of installing Astra Trident, the operator creates and maintains several resources by using `ownerReferences`. Maintaining `ownerReferences` on cluster-scoped resources can throw up errors on certain Kubernetes distributors such as OpenShift. This is mitigated with a cluster-scoped operator. For auto-healing and patching Trident resources, this is an essential requirement.
-// ** Cleaning up during uninstallation: A complete removal of Astra Trident would require all associated resources to be deleted. A namespace-scoped operator might experience issues with the removal of cluster-scoped resources (such as the clusterRole, ClusterRoleBinding and PodSecurityPolicy) and lead to an incomplete clean-up. A cluster-scoped operator eliminates this issue. Users can completely uninstall Astra Trident and install afresh if needed.
-// * `TridentProvisioner` is now replaced with `TridentOrchestrator` as the Custom Resource used to install and manage Astra Trident. In addition, a new field is introduced to the `TridentOrchestrator` spec. Users can specify that the namespace Trident must be installed/upgraded from using the `spec.namespace` field. You can take a look at an example https://github.com/NetApp/trident/blob/stable/v21.01/deploy/crds/tridentorchestrator_cr.yaml[here^].
+* The operator is now *cluster-scoped*. Previous instances of the Trident operator (versions 20.04 through 20.10) were *namespace-scoped*. An operator that is cluster-scoped is advantageous for the following reasons:
+** Resource accountability: The operator now manages resources associated with an Astra Trident installation at the cluster level. As part of installing Astra Trident, the operator creates and maintains several resources by using `ownerReferences`. Maintaining `ownerReferences` on cluster-scoped resources can throw up errors on certain Kubernetes distributors such as OpenShift. This is mitigated with a cluster-scoped operator. For auto-healing and patching Trident resources, this is an essential requirement.
+** Cleaning up during uninstallation: A complete removal of Astra Trident would require all associated resources to be deleted. A namespace-scoped operator might experience issues with the removal of cluster-scoped resources (such as the clusterRole, ClusterRoleBinding and PodSecurityPolicy) and lead to an incomplete clean-up. A cluster-scoped operator eliminates this issue. Users can completely uninstall Astra Trident and install afresh if needed.
+* `TridentProvisioner` is now replaced with `TridentOrchestrator` as the Custom Resource used to install and manage Astra Trident. In addition, a new field is introduced to the `TridentOrchestrator` spec. Users can specify that the namespace Trident must be installed/upgraded from using the `spec.namespace` field. You can take a look at an example https://github.com/NetApp/trident/blob/stable/v21.01/deploy/crds/tridentorchestrator_cr.yaml[here^].
 

@@ -225,12 +225,12 @@ You can confirm if the Astra Trident installation completed by reviewing the sta
 ----
 kubectl get pods -n trident
 
-NAME                                READY   STATUS    RESTARTS   AGE
-trident-csi-7d466bf5c7-v4cpw        6/6     Running   0           1m
-trident-csi-mr6zc                   2/2     Running   0           1m
-trident-csi-xrp7w                   2/2     Running   0           1m
-trident-csi-zh2jt                   2/2     Running   0           1m
-trident-operator-766f7b8658-ldzsv   1/1     Running   0           3m
+NAME                                       READY   STATUS    RESTARTS   AGE
+trident-controller-7d466bf5c7-v4cpw        6/6     Running   0           1m
+trident-node-linux-mr6zc                   2/2     Running   0           1m
+trident-node-linux-xrp7w                   2/2     Running   0           1m
+trident-node-linux-zh2jt                   2/2     Running   0           1m
+trident-operator-766f7b8658-ldzsv          1/1     Running   0           3m
 ----
 
 === Using `tridentctl`

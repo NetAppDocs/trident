@@ -11,7 +11,7 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 :imagesdir: ../media/
 
 [.lead]
-All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. If you are using the `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` driver for one of your backends, your worker nodes require NFS tools. Otherwise they require iSCSI tools.
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. If you are using the `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` driver, your worker nodes require NFS tools. Otherwise they require iSCSI tools.
 
 Recent versions of RedHat CoreOS have NFS and iSCSI installed by default.
 

@@ -60,7 +60,7 @@ NOTE: Ensure the NFS service is started up during boot time.
 Astra Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod.
 
 === iSCSI self-healing capabilities
-Astra Trident runs iSCSI self-healing every five minutes to:
+For ONTAP systems, Astra Trident runs iSCSI self-healing every five minutes to:
 
 . *Identify* the desired iSCSI session state and the current iSCSI session state. 
 . *Compare* the desired state to the current state to identify needed repairs. Astra Trident determines repair priorities and when to preempt repairs. 
@@ -68,7 +68,8 @@ Astra Trident runs iSCSI self-healing every five minutes to:
 
 Astra Trident iSCSI self-healing capabilities can help prevent:
 
-* Stale or missing iSCSI sessions
+* Stale or unhealthy iSCSI sessions such as might occur due to a network connectivity issue. For example, rotating CHAP secrets on the storage controller can cause the iSCSI sessions to lose connectivity and require restart. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
+* Missing iSCSI sessions
 * Missing LUNs
 * A false sense of healthy pods
 * Failures during node volume expansion

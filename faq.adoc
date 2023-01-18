@@ -140,7 +140,10 @@ There are a number of factors to be evaluated if you want to downgrade. See link
 
 === Do I need to define both Management and Data LIFs in an ONTAP backend definition file?
 
-NetApp recommends having both in the backend definition file. However, the Management LIF is the only one that is mandatory.
+The management LIF is mandatory. Data LIF varies:
+
+* ONTAP SAN: Astra Trident discovers all available iSCSI LIFs and uses them to establish the multipath session. A warning is generated if LIFs are specified. Refer to link:trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples] for details. 
+* ONTAP NAS: If dataLIF is not provided, Astra Trident will fetch the IPv6 data LIFs from the SVM. link:trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples] for details
 
 === Can Astra Trident configure CHAP for ONTAP backends?
 
@@ -156,7 +159,12 @@ Astra Trident 19.01 and later support specifying a port in the DataLIF. Configur
 
 === Can IPv6 addresses be used for the Management and Data LIFs?
 
-Yes. Astra Trident 20.01 supports defining IPv6 addresses for the managementLIF and dataLIF parameters for ONTAP backends. You should ensure that the address follows IPv6 semantics and the managementLIF is defined within square brackets, (for example, ``[ec0d:6504:a9c1:ae67:53d1:4bdf:ab32:e233]``). You should also ensure that Astra Trident is installed using the ``--use-ipv6` flag for it to function over IPv6.
+Astra Trident supports defining IPv6 addresses for:
+
+ * `managementLIF` and `dataLIF` for ONTAP NAS backends. 
+ * `managementLIF` for ONTAP SAN backends. You cannot specify `dataLIF` on an ONTAP SAN backend. 
+
+Astra Trident must be installed using the ``--use-ipv6` flag for it to function over IPv6.
 
 === Is it possible to update the Management LIF on the backend?
 
@@ -164,7 +172,7 @@ Yes, it is possible to update the backend Management LIF using the `tridentctl u
 
 === Is it possible to update the Data LIF on the backend?
 
-No, it is not possible to update the Data LIF on the backend.
+You can update the Data LIF on and ONTAP NAS backend only. You cannot specify or update `dataLIF` on an ONTAP SAN backend. 
 
 === Can I create multiple backends in Astra Trident for Kubernetes?
 

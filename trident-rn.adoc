@@ -229,7 +229,9 @@ Known issues identify problems that might prevent you from using the product suc
 
 * ONTAP cannot concurrently provision more than one FlexGroup at a time unless the set of aggregates are unique to each provisioning request.
 
-* When using Astra Trident over IPv6, you should specify `managementLIF` and `dataLIF` in the backend definition within square brackets. For example, ``[fd20:8b1e:b258:2000:f816:3eff:feec:0]``.
+* When using Astra Trident over IPv6, you should specify `managementLIF` and `dataLIF` in the backend definition within square brackets. For example, ``[fd20:8b1e:b258:2000:f816:3eff:feec:0]``. 
++
+NOTE: You cannot specify `dataLIF` on an ONTAP SAN backend. Astra Trident discovers all available iSCSI LIFs and uses them to establish the multipath session. 
 
 * If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm.
 

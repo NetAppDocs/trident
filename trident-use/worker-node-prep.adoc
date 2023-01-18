@@ -11,11 +11,17 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 :imagesdir: ../media/
 
 [.lead]
-All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. If you are using the `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` driver, your worker nodes require NFS tools. Otherwise they require iSCSI tools.
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install either NFS or iSCSI tools based on your driver selection. 
 
-Recent versions of RedHat CoreOS have NFS and iSCSI installed by default.
+== Selecting the right tools 
 
-WARNING: Reboot your worker nodes after installing the NFS or iSCSI tools to prevent failure when attaching volumes to containers.
+.NFS tools
+Install the NFS tools if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`. 
+
+.iSCSI tools
+Install the iSCSI tools if you are using: `ontap-san`, `ontap-san-economy`, `solidfire-san`
+
+NOTE: Recent versions of RedHat CoreOS have NFS and iSCSI installed by default.
 
 == Node service discovery
 
@@ -23,14 +29,14 @@ Astra Trident attempts to automatically detect if the node can run iSCSI or NFS 
 
 NOTE: Node service discovery identifies discovered services but does not guarantee services are properly configured. Conversely, the absence of a discovered service does not guarantee the volume mount will fail.
 
-=== Review events
+.Review events
 Astra Trident creates events for the node to identify the discovered services. To review these events, run:
 
 ----
 kubectl get event -A --field-selector involvedObject.name=<Kubernetes node name>
 ----
 
-=== Review discovered services
+.Review discovered services
 Astra Trident identifies services enabled for each node on the Trident node CR. To view the discovered services, run: 
 
 ----
@@ -38,7 +44,7 @@ tridentctl get node -o wide -n <Trident namespace>
 ----
 
 == NFS volumes
-Install the NFS tools if you are using the `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` driver for one of your backends. Use the commands for your operating system to install the tools. 
+Install the NFS tools using the commands for your operating system. Ensure the NFS service is started up during boot time.
 
 [role="tabbed-block"]
 ====
@@ -54,7 +60,7 @@ sudo yum install -y nfs-utils
 sudo apt-get install -y nfs-common
 ----
 ====
-NOTE: Ensure the NFS service is started up during boot time.
+WARNING: Reboot your worker nodes after installing the NFS tools to prevent failure when attaching volumes to containers.
 
 == iSCSI volumes
 Astra Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod.
@@ -74,8 +80,10 @@ Astra Trident iSCSI self-healing capabilities can help prevent:
 * A false sense of healthy pods
 * Failures during node volume expansion
 
-=== Considerations when using iSCSI volumes
+=== Install the iSCSI tools
+Install the iSCSI tools using the commands for your operating system.  
 
+.Before you begin
 * Each node in the Kubernetes cluster must have a unique IQN. *This is a necessary prerequisite*.
 * If using RHCOS version 4.5 or later, or other RHEL-compatible Linux distribution, with the `solidfire-san` driver, set the CHAP authentication algorithm to MD5 in `/etc/iscsi/iscsid.conf`.
 +
@@ -83,10 +91,6 @@ Astra Trident iSCSI self-healing capabilities can help prevent:
 sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf
 ----
 * When using worker nodes that run RHEL/RedHat CoreOS with iSCSI PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat’s documentation^].
-
-
-=== Install the iSCSI tools
-Install the iSCSI tools using the commands for your operating system.  
 
 [role="tabbed-block"]
 ====
@@ -168,3 +172,5 @@ sudo systemctl status open-iscsi
 +
 NOTE: For Ubuntu 18.04, you must discover target ports with `iscsiadm` before starting `open-iscsi` for the iSCSI daemon to start. You can alternatively modify the `iscsi` service to start `iscsid` automatically.
 ====
+
+WARNING: Reboot your worker nodes after installing the iSCSI tools to prevent failure when attaching volumes to containers.

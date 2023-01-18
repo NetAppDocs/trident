@@ -483,7 +483,7 @@ You can change the data LIF after initial configuration by running the following
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
 
-NOTE: If PVCs are attached, you must restart the pods for the new data LIF to take effect. 
+NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 
 
 == Map backends to StorageClasses
 

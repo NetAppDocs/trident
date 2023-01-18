@@ -483,11 +483,7 @@ You can change the data LIF after initial configuration by running the following
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
 
-[NOTE] 
-====
-* If PVCs are attached to any pod, Astra Trident will bounce the pods to use the new data LIF.
-* If a PVC is attached to multiple pods, Astra Trident will bring down all pods and bring them back up using the new data LIF.
-====
+NOTE: If PVCs are attached, you must restart the pods for the new data LIF to take effect. 
 
 == Map backends to StorageClasses
 

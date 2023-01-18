@@ -167,7 +167,12 @@ For details on Cloud Volumes Service on Google Cloud service types and service l
 | `gcp-cvs` | Yes | Yes | Yes | Yes | Yes | Available on CVS-Performance service type only.|
 |===
 
-NOTE: Replication is not managed by Astra Trident.
+[NOTE]
+====
+.Replication notes
+* Replication is not managed by Astra Trident.
+* The clone will be created in the same storage pool as the source volume. 
+====
 
 == Storage class design
 

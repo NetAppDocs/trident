@@ -374,9 +374,7 @@ Astra Trident can create Cloud Volumes Service volumes in one of two link:https:
 * *CVS*: The CVS service type provides high zonal availability with limited to moderate performance levels. The CVS service type is a software option that uses storage pools to support volumes as small as 1 GiB. The storage pool can contain up to 50 volumes where all volumes share the capacity and performance of the pool. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs_service_type[two service levels^]: 
 
 ** `standardsw`
-** `zoneredundantsw`
-
-CAUTION: Astra Trident integration with the CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
+** `zoneredundantstandardsw`
 
 === Backend configuration options
 Each backend provisions volumes in a single Google Cloud region. To create volumes in other regions, you can define additional backends. 
@@ -457,7 +455,9 @@ You can control default volume provisioning in the `defaults` section of the con
 
 The minimum volume size for CVS service type is 1 GiB. 
 
-The minimum size for CVS-Performance service type is 100 GiB. |"100GiB"
+The minimum size for CVS-Performance service type is 100 GiB. |CVS-Performance service type defaults to "100GiB". 
+
+CVS service type does not set a default but requires a 1 GiB minimum.
 |===
 
 === Example Cloud Volumes Service on Google Cloud configuration

@@ -25,9 +25,7 @@ Astra Trident can create Cloud Volumes Service volumes in one of two link:https:
 * *CVS*: The CVS service type provides high zonal availability with limited to moderate performance levels. The CVS service type is a software option that uses storage pools to support volumes as small as 1 GiB. The storage pool can contain up to 50 volumes where all volumes share the capacity and performance of the pool. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs_service_type[two service levels^]: 
 
 ** `standardsw`
-** `zoneredundantsw`
-
-CAUTION: Astra Trident integration with the CVS service type on Google Cloud is a **beta feature**, not meant for production workloads. Trident is **fully supported** with the CVS-Performance service type and uses it by default.
+** `zoneredundantstandardsw`
 
 === Storage pool labels
 Storage administrators can define storage pool labels in the backend configuration. Astra Trident copies the storage pool labels to the storage volume at the time of provisioning. This is a convenient way to groups volumes based on storage pool labels. Review link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/managing-storage-pools[Create a storage pool^] for details on storage pool labels.
@@ -124,9 +122,9 @@ CVS-Performance minimum is 100 GiB.
 
 CVS minimum is 1 GiB. 
 
-|CVS-Performance defaults to "100GiB". 
+|CVS-Performance service type defaults to "100GiB". 
 
-CVS defaults to "1GiB". 
+CVS service type does not set a default but requires a 1 GiB minimum.  
 |===
 
 == CVS-Performance service type examples 

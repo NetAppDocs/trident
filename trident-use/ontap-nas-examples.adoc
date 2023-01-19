@@ -131,17 +131,15 @@ If NAE is enabled on the backend, any volume provisioned in Astra Trident will b
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |“false”
 
-|`securityStyle` |Security style for new volumes |“unix”
-
 |`tieringPolicy` |Tiering policy to use	“none” |“snapshot-only” for pre-ONTAP 9.5 SVM-DR configuration
 
-|`unixPermissions`	|Mode for new volumes	|“777”
+|`unixPermissions`	|Mode for new volumes	|“777” for NFS volumes; empty (not applicable) for SMB volumes
 
 |`snapshotDir` |Controls visibility of the `.snapshot` directory |“false”
 
 |`exportPolicy` |Export policy to use |“default”
 
-|`securityStyle` |Security style for new volumes |“unix”
+|`securityStyle` |Security style for new volumes |“unix” for NFS volumes; "ntfs" for SMB volumes
 
 |===
 

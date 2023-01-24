@@ -27,9 +27,6 @@ Astra Trident can create Cloud Volumes Service volumes in one of two link:https:
 ** `standardsw`
 ** `zoneredundantstandardsw`
 
-=== Storage pool labels
-Storage administrators can define storage pool labels in the backend configuration. Astra Trident copies the storage pool labels to the storage volume at the time of provisioning. This is a convenient way to groups volumes based on storage pool labels. Review link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/managing-storage-pools[Create a storage pool^] for details on storage pool labels.
-
 .What you'll need
 
 To configure and use the https://cloud.netapp.com/cloud-volumes-service-for-gcp?utm_source=NetAppTrident_ReadTheDocs&utm_campaign=Trident[Cloud Volumes Service for Google Cloud^] backend, you need the following:
@@ -196,12 +193,12 @@ This sample illustrates backend configuration options, including service level, 
 ----
 ====
 
-.Example 3: Virtual storage pool configuration
+.Example 3: Virtual pool configuration
 [%collapsible%]
 ====
-This sample uses `storage` to configure virtual storage pools and the `StorageClasses` that refer back to them. Refer to <<Storage class definition details>> to see how the storage classes were defined.
+This sample uses `storage` to configure virtual pools and the `StorageClasses` that refer back to them. Refer to <<Storage class definitions>> to see how the storage classes were defined. 
 
-Here, specific defaults are set for all storage pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual storage pools are defined in the `storage` section. Each individual storage pool defines its own `serviceLevel`, and some pools overwrite the default values.
+Here, specific defaults are set for all storage pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual pools are defined in the `storage` section. Each individual storage pool defines its own `serviceLevel`, and some pools overwrite the default values. Virtual pool labels were used to differentiate the pools based on `performance` and `protection`. 
 
 ----
 {
@@ -284,7 +281,7 @@ Here, specific defaults are set for all storage pools, which set the `snapshotRe
 ----
 ====
 === Storage class definitions
-The following StorageClass definitions apply to the virtual storage pool configuration example. Using `parameters.selector`, you can specify for each StorageClass the virtual pool used to host a volume. The volume will have the aspects defined in the chosen pool.
+The following StorageClass definitions apply to the virtual pool configuration example. Using `parameters.selector`, you can specify for each StorageClass the virtual pool used to host a volume. The volume will have the aspects defined in the chosen pool.
 
 .Storage class example
 [%collapsible%]
@@ -346,8 +343,8 @@ allowVolumeExpansion: true
 ----
 ====
 
-* The first StorageClass (`cvs-extreme-extra-protection`) maps to the first virtual storage pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. 
-* The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Astra Trident decides which virtual storage pool is selected and ensures that the snapshot reserve requirement is met.
+* The first StorageClass (`cvs-extreme-extra-protection`) maps to the first virtual pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. 
+* The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Astra Trident decides which virtual pool is selected and ensures that the snapshot reserve requirement is met.
 
 == CVS service type examples 
 The following examples provide sample configurations for the CVS service type.

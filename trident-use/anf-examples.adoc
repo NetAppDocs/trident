@@ -115,8 +115,6 @@ Ignored for SMB volumes. |"0.0.0.0/0"
 Ignored for SMB volumes.  |"" (preview feature, requires whitelisting in subscription)
 |===
 
-NOTE: For all volumes created on an ANF backend, Astra Trident copies the labels present on a storage pool to the storage volume at the time it is provisioned. Storage administrators can define labels per storage pool and group all volumes created in a storage pool. This is a convenient way to differentiate volumes based on a set of customizable labels that are provided in the backend configuration.
-
 == Example configurations
 
 // Start snippet: collapsible block (open on page load)
@@ -203,10 +201,10 @@ This backend configuration further reduces the scope of volume placement to a si
 // End snippet
 
 // Start snippet: collapsible block (open on page load)
-.Example 4: Virtual storage pool configuration
+.Example 4: Virtual pool configuration
 [%collapsible%open]
 ====
-This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those.
+This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels were used to differentiate the pools based on `performance`. 
 
 ----
     {

@@ -111,7 +111,7 @@ The next step is to create a `TridentBackendConfig` CR that will automatically b
 
 * The same backend name is defined in `spec.backendName`.
 * Configuration parameters are identical to the original backend.
-* Virtual Storage Pools (if present) must retain the same order as in the original backend.
+* Virtual pools (if present) must retain the same order as in the original backend.
 * Credentials are provided through a Kubernetes Secret and not in plain text.
 
 In this case, the `TridentBackendConfig` will look like this:

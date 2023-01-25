@@ -198,7 +198,7 @@ This sample illustrates backend configuration options, including service level, 
 ====
 This sample uses `storage` to configure virtual pools and the `StorageClasses` that refer back to them. Refer to <<Storage class definitions>> to see how the storage classes were defined. 
 
-Here, specific defaults are set for all storage pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual pools are defined in the `storage` section. Each individual storage pool defines its own `serviceLevel`, and some pools overwrite the default values. Virtual pool labels were used to differentiate the pools based on `performance` and `protection`. 
+Here, specific defaults are set for all virtual pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual pools are defined in the `storage` section. Each individual virtual pool defines its own `serviceLevel`, and some pools overwrite the default values. Virtual pool labels were used to differentiate the pools based on `performance` and `protection`. 
 
 ----
 {

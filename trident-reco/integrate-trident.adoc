@@ -146,10 +146,10 @@ Yesfootnote:1[]: Not managed by Astra Trident
 
 Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on Google Cloud. 
 
-The `gcp-cvs` driver uses virtual pools to abstract the backend and allow Astra Trident to determine volume placement. The administrator defines the virtual pools in the `backend.json` files. Storage classes use labels to identify the virtual pools.
+The `gcp-cvs` driver uses virtual pools to abstract the backend and allow Astra Trident to determine volume placement. The administrator defines the virtual pools in the `backend.json` files. Storage classes use selectors to identify virtual pools by label. 
 
-* If virtual pools are defined in the backend, Astra Trident will try to create a volume in one of those pools only.
-* If virtual pools are not defined in the backend, Astra Trident will select a pool from the available pools in the region.
+* If virtual pools are defined in the backend, Astra Trident will try to create a volume in the Google Cloud storage pools to which those virtual pools are limited.
+* If virtual pools are not defined in the backend, Astra Trident will select a Google Cloud storage pool from the available storage pools in the region.
 
 To configure the Google Cloud backend on Astra Trident, you must specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. You can find the project number in the Google Cloud console. The API key is taken from the service account private key file you created when setting up API access for Cloud Volumes Service on Google Cloud. 
 

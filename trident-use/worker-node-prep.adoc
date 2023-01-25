@@ -16,7 +16,7 @@ All worker nodes in the Kubernetes cluster must be able to mount the volumes you
 == Selecting the right tools 
 
 .NFS tools
-Install the NFS tools if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`. 
+Install the NFS tools if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`
 
 .iSCSI tools
 Install the iSCSI tools if you are using: `ontap-san`, `ontap-san-economy`, `solidfire-san`
@@ -74,11 +74,13 @@ For ONTAP systems, Astra Trident runs iSCSI self-healing every five minutes to:
 
 Astra Trident iSCSI self-healing capabilities can help prevent:
 
-* Stale or unhealthy iSCSI sessions such as might occur due to a network connectivity issue. For example, rotating CHAP secrets on the storage controller can cause the iSCSI sessions to lose connectivity and require restart. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
+* Stale or unhealthy iSCSI sessions such as might occur after a network connectivity issue. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
++
+NOTE: For example, if CHAP secrets were rotated on the storage controller and the network loses connectivity, the old (_stale_) CHAP secrets could persist. Self-healing can recognize this and automatically reestablish the session to apply the updated CHAP secrets. 
 * Missing iSCSI sessions
 * Missing LUNs
 * A false sense of healthy pods
-* Failures during node volume expansion
+* Some failures during node volume expansion
 
 === Install the iSCSI tools
 Install the iSCSI tools using the commands for your operating system.  

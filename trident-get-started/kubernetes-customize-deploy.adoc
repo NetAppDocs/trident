@@ -62,6 +62,14 @@ Astra Trident |
 
 |`imagePullSecrets` |Secrets to pull images from an internal registry |
 
+|`imagePullPolicy` | Sets the image pull policy for the the Trident operator. Valid values are:
+
+`Always` to always pull the image.
+
+`IfNotPresent` to pull the image only if it does not already exist on the node.
+
+`Never` to never pull the image. |`IfNotPresent`
+
 |`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as pod.spec.nodeSelector. |No default; optional
 
 |`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional

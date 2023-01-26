@@ -57,7 +57,7 @@ NOTE: You should ensure that the NFS service is started up during boot time.
 Consider the following when using iSCSI volumes:
 
 * Each node in the Kubernetes cluster must have a unique IQN. *This is a necessary prerequisite*.
-* If using RHCOS version 4.5 or later, or other RHEL-compatible Linux distribution, with the `solidfire-san` driver, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`.
+* If using RHCOS version 4.5 or later, or other RHEL-compatible Linux distribution, with the `solidfire-san` driver and Element OS 12.5 or earlier, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`. Secure FIPS-compliant CHAP algorithms SHA1, SHA-256, and SHA3-256 are available with Element 12.7.
 +
 ----
 sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf

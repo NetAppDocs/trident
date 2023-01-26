@@ -107,7 +107,9 @@ If no mount options are specified in the storage class or the configuration file
 
 You can control default provisioning using these options in the `defaults` section of the configuration. For an example, see the configuration examples below.
 
-NOTE: Astra Trident sets provisioning labels in the “Comments” field of all volumes created using `ontap-nas` and `ontap-nas-flexgroup`. Based on the driver used, the comments are set on the FlexVol (`ontap-nas`) or FlexGroup (`ontap-nas-flexgroup`). Astra Trident will copy all labels present on a storage pool to the storage volume at the time it is provisioned. Storage administrators can define labels per storage pool and group all volumes created in a storage pool. This provides a convenient way of differentiating volumes based on a set of customizable labels that are provided in the backend configuration.
+=== Backend configuration options for provisioning volumes
+
+You can control how each volume is provisioned by default using these options in a special section of the configuration. For an example, see the configuration examples below.
 
 [cols=3,options="header"]
 |===
@@ -120,7 +122,9 @@ NOTE: Astra Trident sets provisioning labels in the “Comments” field of all 
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |“”
 
-|`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. Not supported by ontap-nas-economy. |“”
+|`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
+
+Not supported by ontap-nas-economy. |“”
 
 |`snapshotReserve` |Percentage of volume reserved for snapshots	“0” |If `snapshotPolicy` is “none”, else “”
 
@@ -284,9 +288,25 @@ This example shows `managementLIF` using an IPv6 address.
 ----
 ====
 
-=== Backends with virtual storage pools
+=== `ontap-nas-economy` driver
 
-In the sample backend definition file shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual storage pools are defined in the storage section.
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas-economy",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "secret"
+}
+----
+
+== Examples of backends with virtual pools
+
+In the sample backend definition file shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
+
+Astra Trident sets provisioning labels in the “Comments” field. Comments are set on FlexVol  for `ontap-nas` or FlexGroup for `ontap-nas-flexgroup`. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
 In this example, some of the storage pool sets their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values set above.
 
@@ -486,15 +506,15 @@ NOTE: If PVCs are attached to one or multiple pods, you must bring down all corr
 
 == Map backends to StorageClasses
 
-The following StorageClass definitions refer to the above virtual storage pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
+The following StorageClass definitions refer to the above virtual pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-* The first StorageClass (`protection-gold`) will map to the first, second virtual storage pool in the `ontap-nas-flexgroup` backend and the first virtual storage pool in the `ontap-san` backend. These are the only pool offering gold level protection.
-* The second StorageClass (`protection-not-gold`) will map to the third, fourth virtual storage pool in `ontap-nas-flexgroup` backend and the second, third virtual storage pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
-* The third StorageClass (`app-mysqldb`) will map to the fourth virtual storage pool in `ontap-nas` backend and the third virtual storage pool in `ontap-san-economy` backend. These are the only pools offering storage pool configuration for mysqldb type app.
-* The fourth StorageClass (`protection-silver-creditpoints-20k`) will map to the third virtual storage pool in `ontap-nas-flexgroup` backend and the second virtual storage pool in `ontap-san` backend. These are the only pools offering gold-level protection at 20000 creditpoints.
-* The fifth StorageClass (`creditpoints-5k`) will map to the second virtual storage pool in `ontap-nas-economy` backend and the third virtual storage pool in `ontap-san` backend. These are the only pool offerings at 5000 creditpoints.
+* The first StorageClass (`protection-gold`) will map to the first, second virtual pool in the `ontap-nas-flexgroup` backend and the first virtual pool in the `ontap-san` backend. These are the only pool offering gold level protection.
+* The second StorageClass (`protection-not-gold`) will map to the third, fourth virtual pool in `ontap-nas-flexgroup` backend and the second, third virtual pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
+* The third StorageClass (`app-mysqldb`) will map to the fourth virtual pool in `ontap-nas` backend and the third virtual pool in `ontap-san-economy` backend. These are the only pools offering storage pool configuration for mysqldb type app.
+* The fourth StorageClass (`protection-silver-creditpoints-20k`) will map to the third virtual pool in `ontap-nas-flexgroup` backend and the second virtual pool in `ontap-san` backend. These are the only pools offering gold-level protection at 20000 creditpoints.
+* The fifth StorageClass (`creditpoints-5k`) will map to the second virtual pool in `ontap-nas-economy` backend and the third virtual pool in `ontap-san` backend. These are the only pool offerings at 5000 creditpoints.
 
-Astra Trident will decide which virtual storage pool is selected and will ensure the storage requirement is met.
+Astra Trident will decide which virtual pool is selected and will ensure the storage requirement is met.
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

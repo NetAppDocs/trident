@@ -38,8 +38,7 @@ In addition to the standard specification, Trident allows users to specify the f
 [cols=",,",options="header",]
 |===
 |Annotation |Volume Option |Supported Drivers
-|trident.netapp.io/fileSystem |fileSystem |ontap-san, solidfire-san,
-eseries-iscsi, ontap-san-economy
+|trident.netapp.io/fileSystem |fileSystem |ontap-san, solidfire-san,ontap-san-economy
 
 |trident.netapp.io/cloneFromPVC |cloneSourceVolume |ontap-nas,
 ontap-san, solidfire-san, azure-netapp-files, gcp-cvs,
@@ -146,9 +145,9 @@ These parameters determine which Trident-managed storage pools should be utilize
 |===
 |Attribute |Type |Values |Offer |Request |Supported by |media^1^ |string |hdd, hybrid, ssd |Pool contains media of this type; hybrid means both |Media type specified |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san
 
-|provisioningType |string |thin, thick |Pool supports this provisioning method |Provisioning method specified |thick: all ontap & eseries-iscsi; thin: all ontap & solidfire-san
+|provisioningType |string |thin, thick |Pool supports this provisioning method |Provisioning method specified |thick: all ontap; thin: all ontap & solidfire-san
 
-|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, eseries-iscsi, gcp-cvs, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
+|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, gcp-cvs, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
 
 |snapshots |bool |true, false |Pool supports volumes with snapshots |Volume with snapshots enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
 
@@ -185,7 +184,7 @@ These attributes have no impact on the selection of storage pools/backends by Tr
 |Attribute |Type |Values |Description |Relevant Drivers |Kubernetes
 Version
 |fsType |string |ext4, ext3, xfs, etc. |The file system type for block
-volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy, eseries-iscsi |All
+volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy |All
 |allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy, solidfire-san, gcp-cvs, azure-netapp-files |1.11+
 |volumeBindingMode |string |Immediate, WaitForFirstConsumer |Choose when volume binding and dynamic provisioning occurs |All |1.19 - 1.25
 |===

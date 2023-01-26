@@ -233,7 +233,7 @@ Known issues identify problems that might prevent you from using the product suc
 +
 NOTE: You cannot specify `dataLIF` on an ONTAP SAN backend. Astra Trident discovers all available iSCSI LIFs and uses them to establish the multipath session. 
 
-* If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm.
+* If using the `solidfire-san` driver with OpenShift 4.5, ensure that the underlying worker nodes use MD5 as the CHAP authentication algorithm. Secure FIPS-compliant CHAP algorithms SHA1, SHA-256, and SHA3-256 are available with Element 12.7.
 
 == Find more information
 * https://github.com/NetApp/trident[Astra Trident GitHub^]

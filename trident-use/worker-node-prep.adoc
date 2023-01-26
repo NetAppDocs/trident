@@ -76,7 +76,7 @@ NOTE: Logs of self-healing activity are located in the `trident-main` container 
 
 Astra Trident iSCSI self-healing capabilities can help prevent:
 
-* Stale or unhealthy iSCSI sessions such as might occur after a network connectivity issue. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
+* Stale or unhealthy iSCSI sessions that could occur after a network connectivity issue. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
 +
 NOTE: For example, if CHAP secrets were rotated on the storage controller and the network loses connectivity, the old (_stale_) CHAP secrets could persist. Self-healing can recognize this and automatically reestablish the session to apply the updated CHAP secrets. 
 * Missing iSCSI sessions

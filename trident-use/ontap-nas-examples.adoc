@@ -107,8 +107,6 @@ If no mount options are specified in the storage class or the configuration file
 
 You can control default provisioning using these options in the `defaults` section of the configuration. For an example, see the configuration examples below.
 
-NOTE: Astra Trident sets provisioning labels in the “Comments” field of all volumes created using `ontap-nas` and `ontap-nas-flexgroup`. Based on the driver used, the comments are set on the FlexVol (`ontap-nas`) or FlexGroup (`ontap-nas-flexgroup`). Astra Trident will copy all labels present on a storage pool to the storage volume at the time it is provisioned. Storage administrators can define labels per storage pool and group all volumes created in a storage pool. This provides a convenient way of differentiating volumes based on a set of customizable labels that are provided in the backend configuration.
-
 [cols=3,options="header"]
 |===
 |Parameter |Description |Default

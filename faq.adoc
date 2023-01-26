@@ -142,8 +142,8 @@ There are a number of factors to be evaluated if you want to downgrade. See link
 
 The management LIF is mandatory. Data LIF varies:
 
-* ONTAP SAN: Astra Trident discovers all available iSCSI LIFs and uses them to establish the multipath session. A warning is generated if LIFs are specified. Refer to link:trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples] for details. 
-* ONTAP NAS: If dataLIF is not provided, Astra Trident will fetch the data LIFs from the SVM. link:trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples] for details
+* ONTAP SAN: Do not specify for iSCSI. Astra Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined.  Refer to link:trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples] for details. 
+* ONTAP NAS: We recommend specifying `dataLIF`. If not provided, Astra Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Refer to link:trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples] for details
 
 === Can Astra Trident configure CHAP for ONTAP backends?
 

@@ -73,11 +73,11 @@ a|IP address of ONTAP management LIF. You can specify a fully-qualified domain n
 a|10.0.0.1
 
 |`dataLIF`
-a|IP address of protocol LIF; will be derived if not specified. 
+a|IP address of protocol LIF. 
 
-For the `ontap-nas` drivers *only*, you can specify an FQDN, in which case the FQDN will be used for the NFS mount operations. 
+*ONTAP NAS drivers*: We recommend specifying `dataLIF`. If not provided, Astra Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
 
-For `ontap-san` drivers, Astra Trident discovers all available iSCSI LIFs and uses them to establish the multipath session. A warning is generated if iSCSI LIFs are specified. 
+*ONTAP SAN drivers*: Do not specify for iSCSI.  Astra Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 a|10.0.0.2
 
 |`svm`

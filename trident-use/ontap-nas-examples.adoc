@@ -33,14 +33,15 @@ A fully-qualified domain name (FQDN) can be specified.
 
 Can be set to use IPv6 addresses if Astra Trident was installed using the `--use-ipv6` flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
-|`dataLIF` |IP address of protocol LIF. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+|`dataLIF` |IP address of protocol LIF. 
 
-A fully-qualified domain name (FQDN) can be specified. The FQDN will be used for the NFS mount operations to allow you to create a round-robin DNS to load-balance across multiple data LIFs.
+We recommend specifying `dataLIF`. If not provided, Astra Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
+
+Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
 Can be set to use IPv6 addresses if Astra Trident was installed using the `--use-ipv6` flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
 
-If `dataLIF` is not provided, Astra Trident will fetch the data LIFs from the SVM. 
-|Derived by the SVM unless specified
+|Specified address or derived from SVM, if not specified (not recommended)
 
 |`autoExportPolicy`	|Enable automatic export policy creation and updating [Boolean]. 
 

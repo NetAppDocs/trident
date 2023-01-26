@@ -63,7 +63,9 @@ sudo apt-get install -y nfs-common
 WARNING: Reboot your worker nodes after installing the NFS tools to prevent failure when attaching volumes to containers.
 
 == iSCSI volumes
-Astra Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod.
+Astra Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod. 
+
+NOTE: Logs of self-healing activity are located in the `trident-main` container on the respective Daemonset pod. To view logs, you must have set `debug` to "true" during Astra Trident installation. 
 
 === iSCSI self-healing capabilities
 For ONTAP systems, Astra Trident runs iSCSI self-healing every five minutes to:
@@ -79,8 +81,6 @@ Astra Trident iSCSI self-healing capabilities can help prevent:
 NOTE: For example, if CHAP secrets were rotated on the storage controller and the network loses connectivity, the old (_stale_) CHAP secrets could persist. Self-healing can recognize this and automatically reestablish the session to apply the updated CHAP secrets. 
 * Missing iSCSI sessions
 * Missing LUNs
-* A false sense of healthy pods
-* Some failures during node volume expansion
 
 === Install the iSCSI tools
 Install the iSCSI tools using the commands for your operating system.  

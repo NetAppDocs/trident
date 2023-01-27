@@ -1,0 +1,192 @@
+---
+sidebar: sidebar
+permalink: trident-reco/security-luks.html
+keywords: security, luks, linux unified key setup, encryption, key rotation, resizing, advanced encryption, rotation, key, passphrase, nist, aes-ni, aes
+summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. Astra Trident supports volume resizing and key (passphrase) rotation for LUKS-encrypted volumes.
+---
+
+= Linux Unified Key Setup (LUKS)
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. Astra Trident supports passphrase rotation and volume expansion for LUKS-encrypted volumes.
+
+In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
+
+.Before you begin
+
+* Worker nodes must have cryptsetup 2.1 or higher (but lower than 3.0) installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup^].
+
+* For performance reasons, we recommend that worker nodes support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
++
+----
+grep "aes" /proc/cpuinfo
+----
++
+If nothing is returned, your processor does not support AES-NI. For more information on AES-NI, visit: link:https://www.intel.com/content/www/us/en/developer/articles/technical/advanced-encryption-standard-instructions-aes-ni.html[Intel: Advanced Encryption Standard Instructions (AES-NI)^].
+
+== Enable LUKS encryption
+You can enable per-volume, host-side encryption using Linux Unified Key Setup (LUKS) for ONTAP SAN and ONTAP SAN ECONOMY volumes. 
+
+.Steps
+
+. Define LUKS encryption attributes in the backend configuration. For more information on backend configuration options for ONTAP SAN, refer to link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options].
++
+----
+"storage": [
+    {
+        "labels":{"luks": "true"},
+        "zone":"us_east_1a",
+        "defaults": {
+            "luksEncryption": "true"
+        }
+    },
+    {
+        "labels":{"luks": "false"},
+        "zone":"us_east_1a",
+        "defaults": {
+            "luksEncryption": "false"
+        }
+    },
+]
+----
+
+. Use `parameters.selector` to define the storage pools using LUKS encryption. For example:
++
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: luks
+provisioner: netapp.io/trident
+parameters:
+  selector: "luks=true"
+  csi.storage.k8s.io/node-stage-secret-name: luks-${pvc.name}
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+----
+
+. Create a secret that contains the LUKS passphrase. For example:
++
+----
+kubectl -n trident create -f luks-pvc1.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: luks-pvc1
+stringData:
+  luks-passphrase-name: A
+  luks-passphrase: secretA
+----
+
+=== Limitations
+
+LUKS-encrypted volumes cannot take advantage of ONTAP deduplication and compression. 
+
+== Rotate a LUKS passphrase
+You can rotate the LUKS passphrase and confirm rotation. 
+
+WARNING: Do not forget a passphrase until you have verified it is no longer referenced by any volume, snapshot, or secret. If a referenced passphrase, you might be unable to mount the volume and the data will remain encrypted and inaccessible.
+
+.About this task
+
+LUKS passphrase rotation occurs when a pod that mounts the volume is created after a new LUKS passphrase is specified. When a new pod is created, Astra Trident compares the LUKS passphrase on the volume to the active passphrase in the secret. 
+
+* If the passphrase on the volume does not match the active passphrase in the secret, rotation occurs. 
+* If the passphrase on the volume matches the active passphrase in the secret, the `previous-luks-passphrase` parameter is ignored.
+
+.Steps
+
+. Use `parameters.selector` to add the `node-publish-secret-name` and `node-publish-secret-namespace` parameters. For example:
++
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-san
+provisioner: csi.trident.netapp.io
+parameters:
+  trident.netapp.io/backendType: "ontap-san"
+  csi.storage.k8s.io/node-stage-secret-name: luks
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+  csi.storage.k8s.io/node-publish-secret-name: luks
+  csi.storage.k8s.io/node-publish-secret-namespace: ${pvc.namespace}
+----
+. Identify existing passphrases on the volume or snapshot. 
++
+.Volume
+----
+tridentctl -d get volume luks-pvc1
+GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>
+
+..."luksPassphraseNames":["A"]
+----
++
+.Snapshot
+----
+tridentctl -d get volume luks-pvc1
+GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>/<snapshotID>
+
+..."luksPassphraseNames":["A"]
+----
+
+. Update the LUKS secret for the volume to specify the new and previous passphrases. Ensure  `previous-luke-passphrase-name` and `previous-luks-passphrase` match the previous passphrase.
++
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: luks-pvc1
+stringData:
+  luks-passphrase-name: B
+  luks-passphrase: secretB
+  previous-luks-passphrase-name: A
+  previous-luks-passphrase: secretA
+----
+. Create a new pod mounting the volume. This is required to initiate the rotation. 
+
+. Verify the the passphrase was rotated.
++
+
+.Volume
+----
+tridentctl -d get volume luks-pvc1
+GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>
+----
++
+.Snapshot
+----
+tridentctl -d get volume luks-pvc1
+GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>/<snapshotID>
+----
+
+.Results
+The passphrase was rotated when only the new passphrase is returned on the volume and snapshot. For example: `"luksPassphraseNames":["B"]`. 
+
+NOTE: If two passphrases are returned, for example `luksPassphraseNames: ["B", "A"]`, the rotation is still in progress. 
+
+== Enable volume expansion
+You can enable volume expansion on a LUKS-encrypted volume. 
+
+.Steps
+. Enable the `CSINodeExpandSecret` feature gate (beta 1.25+). Refer to link:https://kubernetes.io/blog/2022/09/21/kubernetes-1-25-use-secrets-while-expanding-csi-volumes-on-node-alpha/[Kubernetes 1.25: Use Secrets for Node-Driven Expansion of CSI Volumes^] for details. 
+. Use `parameters.selector` to add the `node-expand-secret-name` and `node-expand-secret-namespace` parameters. For example:
++
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: luks
+provisioner: netapp.io/trident
+parameters:
+  selector: "luks=true"
+  csi.storage.k8s.io/node-stage-secret-name: luks-${pvc.name}
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+  csi.storage.k8s.io/node-expand-secret-name: luks-${pvc.name}
+  csi.storage.k8s.io/node-expand-secret-namespace: ${pvc.namespace}
+allowVolumeExpansion: true
+----
+
+.Results
+When you initiate online storage expansion, the kubelet passes the appropriate credentials to the driver. 

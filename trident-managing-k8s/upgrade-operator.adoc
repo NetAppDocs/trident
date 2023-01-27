@@ -17,7 +17,7 @@ You can easily upgrade an existing Astra Trident installation using the operator
 
 To upgrade using the operator, the following conditions should be met:
 
-* You must have a CSI-based Astra Trident installation. All releases from 19.04 on are CSI-based. You can examine the pods in your Trident namespace to verify. 
+* You must have a CSI-based Astra Trident installation. All releases from 19.07 on are CSI-based. You can examine the pods in your Trident namespace to verify. 
 ** Pod naming in versions earlier than 23.01 follows a `trident-csi-*` convention. 
 ** Pod naming in 23.01 and later uses: `trident-controller-<generated id>` for the controller pod; `trident-node-<operating system>-<generated id>` for the node pods; `trident-operator-<generated id>` for the operator pod.
 * If you have uninstalled CSI Trident and the metadata from the installation persists, you can upgrade by using the operator.
@@ -25,7 +25,12 @@ To upgrade using the operator, the following conditions should be met:
 * You should be using a Kubernetes cluster running link:../trident-get-started/requirements.html[a supported Kubernetes version].
 * If alpha snapshot CRDs are present, you should remove them with `tridentctl obliviate alpha-snapshot-crd`. This deletes the CRDs for the alpha snapshot spec. For existing snapshots that should be deleted/migrated, see https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^].
 
-WARNING: When upgrading Trident using the operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
+[WARNING]
+====
+* When upgrading Trident using the operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
+
+* Do not use the operator to upgrade Trident if you are using an `etcd`-based Trident release (19.04 or earlier).
+====
 
 == Upgrade a cluster-scoped Trident operator installation
 Follow these steps to upgrade from Astra Trident 21.01 and later. 

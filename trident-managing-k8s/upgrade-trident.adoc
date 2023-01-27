@@ -14,7 +14,7 @@ summary: Astra Trident follows a quarterly release cadence, delivering four majo
 Astra Trident follows a quarterly release cadence, delivering four major releases every calendar year. Each new release builds on top of the previous releases, providing new features and performance enhancements as well as bug fixes and improvements. We encourage you to upgrade at least once a year to take advantage of the new features in Astra Trident.
 
 == Select a version
-Astra Trident versions follow a `YY.MM` naming convention. Dot releases follow a `YY.MM.X` convention. You will select the version to upgrade to based on the version you are upgrading from. 
+Astra Trident versions follow a date-based `YY.MM` naming convention, where "YY" is the last two digits of the year and "MM" is the month. Dot releases follow a `YY.MM.X` convention, where "X" is the patch level. You will select the version to upgrade to based on the version you are upgrading from. 
 
 * You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can upgrade to 23.01 from 22.01 (including any dot releases, such as 22.01.1) directly.
 * If you have an earlier release, you should perform a multi-step upgrade using the documentation of the respective release for specific instructions. This requires you to first upgrade to the most recent release that fits your four-release window. For example, if you are running 18.07 and want to upgrade to the 20.07 release, then follow the multi-step upgrade process as given below:
@@ -37,16 +37,6 @@ There are two options to upgrade Astra Trident. Generally, you will use the same
 * link:upgrade-tridentctl.html[Upgrade using `tridentctl`]
 
 WARNING: CSI Volume Snapshots is now a feature that is GA, beginning with Kubernetes 1.20. When upgrading Astra Trident, all previous alpha snapshot CRs and CRDs (Volume Snapshot Classes, Volume Snapshots and Volume Snapshot Contents) must be removed before the upgrade is performed. Refer to https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^] to understand the steps involved in migrating alpha snapshots to the beta/GA spec.
-
-// You can use the Trident operator to upgrade if the following conditions are met:
-
-// * You are running CSI Trident (19.07 and later).
-// * You have a CRD-based Trident release (19.07 and later).
-// * You are **not** performing a customized install (using custom YAMLs).
-
-// WARNING: Do not use the operator to upgrade Trident if you are using an `etcd`-based Trident release (19.04 or earlier).
-
-// If you do not want to use the operator or you have a customized install that cannot be supported by the operator, you can upgrade by using `tridentctl`. This is the preferred method of upgrades for Trident releases 19.04 and earlier.
 
 == Changes to the operator
 

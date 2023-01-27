@@ -56,14 +56,14 @@ The benefits of using the Trident operator include:
 The Trident operator automatically creates the following objects for your Kubernetes version. 
 * ServiceAccount for the operator
 * ClusterRole and ClusterRoleBinding to the ServiceAccount
-* Dedicated PodSecurityPolicy
+* Dedicated PodSecurityPolicy (for Kubernetes 1.25 and earlier)
 * The operator itself
 ====
 
 .*Self-healing capability*
 [%collapsible]
 ====
-You can monitor an Astra Trident installation and actively take measures to address issues, such as when the deployment is deleted or if it is modified accidentally. When the operator is set up as a deployment, a `trident-operator-<generated-id>` pod is created. This pod associates a `TridentOrchestrator` CR with an Astra Trident installation and always ensures there is only one active `TridentOrchestrator`. In other words, the operator ensures there is only one instance of Astra Trident in the cluster and controls its setup, making sure the installation is idempotent. When changes are made to the installation (such as, deleting the deployment or node daemonset), the operator identifies them and fixes them individually.
+You can monitor an Astra Trident installation and actively take measures to address issues, such as when the deployment is deleted or if it is modified accidentally. A `trident-operator-<generated-id>` pod is created that associates a `TridentOrchestrator` CR with an Astra Trident installation. This ensures there is only one instance of Astra Trident in the cluster and controls its setup, making sure the installation is idempotent. When changes are made to the installation (such as, deleting the deployment or node daemonset), the operator identifies them and fixes them individually.
 ====
 
 .*Easy updates to existing installations*

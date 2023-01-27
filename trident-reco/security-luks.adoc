@@ -87,7 +87,7 @@ LUKS-encrypted volumes cannot take advantage of ONTAP deduplication and compress
 == Rotate a LUKS passphrase
 You can rotate the LUKS passphrase and confirm rotation. 
 
-WARNING: Do not forget a passphrase until you have verified it is no longer referenced by any volume, snapshot, or secret. If a referenced passphrase, you might be unable to mount the volume and the data will remain encrypted and inaccessible.
+WARNING: Do not forget a passphrase until you have verified it is no longer referenced by any volume, snapshot, or secret. If a referenced passphrase is lost, you might be unable to mount the volume and the data will remain encrypted and inaccessible.
 
 .About this task
 
@@ -120,15 +120,15 @@ parameters:
 tridentctl -d get volume luks-pvc1
 GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>
 
-..."luksPassphraseNames":["A"]
+...luksPassphraseNames:["A"]
 ----
 +
 .Snapshot
 ----
-tridentctl -d get volume luks-pvc1
+tridentctl -d get snapshot luks-pvc1
 GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>/<snapshotID>
 
-..."luksPassphraseNames":["A"]
+...luksPassphraseNames:["A"]
 ----
 
 . Update the LUKS secret for the volume to specify the new and previous passphrases. Ensure  `previous-luke-passphrase-name` and `previous-luks-passphrase` match the previous passphrase.
@@ -153,16 +153,20 @@ stringData:
 ----
 tridentctl -d get volume luks-pvc1
 GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>
+
+...luksPassphraseNames:["B"]
 ----
 +
 .Snapshot
 ----
-tridentctl -d get volume luks-pvc1
+tridentctl -d get snapshot luks-pvc1
 GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>/<snapshotID>
+
+...luksPassphraseNames:["B"]
 ----
 
 .Results
-The passphrase was rotated when only the new passphrase is returned on the volume and snapshot. For example: `"luksPassphraseNames":["B"]`. 
+The passphrase was rotated when only the new passphrase is returned on the volume and snapshot.  
 
 NOTE: If two passphrases are returned, for example `luksPassphraseNames: ["B", "A"]`, the rotation is still in progress. 
 

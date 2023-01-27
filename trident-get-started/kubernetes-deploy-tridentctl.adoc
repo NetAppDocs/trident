@@ -5,80 +5,104 @@ keywords: deploy, astra trident, methods, tridentctl, windows
 summary: You can deploy Astra Trident by using `tridentctl`.
 ---
 
-= Deploy with `tridentctl`
+= Install using `tridentctl`
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-You can deploy Astra Trident using `tridentctl`. It's a good idea to familiarize yourself with the link:../trident-concepts/intro.html[basic concepts]. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
+You can install Astra Trident using `tridentctl`. This process applies to installations where Trident and CSI images are located in a `docker.io` and `registry.k8s.io` or a private, mirrored registry. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
 == Critical information about Astra Trident 22.10
-*You must read the following critical information before upgrading to Astra Trident 22.10.*
+*You must read the following critical information about Astra Trident 22.10.*
 
-[WARNING]
+// Start snippet: collapsible block (open on page load)
 .*Critical information about Astra Trident 22.10*
+[%collapsible%open]
 ====
 * Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
-* Astra Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
+// End snippet
 
-== Verify prerequisites 
-To deploy Astra Trident, the following prerequisites should be met:
+== Install Astra Trident using `tridentctl`
+Review link:../trident-get-started/kubernetes-deploy.html[the installation overview] to ensure you've met installation prerequisites and selected the correct installation option for your environment.
 
-* Full privileges to a supported Kubernetes cluster.
-* Access to a supported NetApp storage system.
-* Capability to mount volumes from all of the Kubernetes worker nodes.
-* A Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
-* The `KUBECONFIG` environment variable points to your Kubernetes cluster configuration.
-* The link:requirements.html[feature gates required by Astra Trident] are enabled.
-* If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
+.Before you begin 
 
+Before you begin installation, log in to the Linux host and verify it is managing a working, link:requirements.html[supported Kubernetes cluster^] and that you have the necessary privileges.
 
-== Step 1: Qualify your Kubernetes cluster
+NOTE: With OpenShift, use `oc` instead of `kubectl` in all of the examples that follow, and log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
 
-Log into the Linux host and verify it is managing a working, link:requirements.html[supported Kubernetes cluster^] and you have the necessary privileges.
-
-NOTE: With OpenShift, you use `oc` instead of `kubectl` in all of the examples that follow, and you should log in as *system:admin* first by running `oc login -u system:admin` or `oc login -u kube-admin`.
-
-To check your Kubernetes version, run the following command:
+[%collapsible%open]
+====
+. Verify your Kubernetes version:
++
 ----
 kubectl version
 ----
 
-To verify Kubernetes cluster administrator privileges, run the following command:
+. Verify cluster administrator privileges:
++
 ----
 kubectl auth can-i '*' '*' --all-namespaces
 ----
 
-To verify if you can launch a pod that uses an image from Docker Hub and reach your storage system over the pod network, run the following command:
+. Verify you can launch a pod that uses an image from Docker Hub and reach your storage system over the pod network:
++
 ----
 kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
   ping <management IP>
 ----
+====
 
-Identify your Kubernetes server version. You will use it when you install Astra Trident.
+== Step 1: Download the Trident installer package 
 
-== Step 2: Download and extract the installer
+The Astra Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
 
-NOTE: The Trident installer creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars that perform actions, such as provisioning and attaching volumes to the cluster hosts.
-
-You can download and extract the latest version of the Trident installer bundle from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^].
-
-For example, if the latest version is 22.10.0:
 ----
-wget https://github.com/NetApp/trident/releases/download/v22.10.0/trident-installer-22.10.0.tar.gz
-tar -xf trident-installer-22.10.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.01.0/trident-installer-23.01.0.tar.gz
+tar -xf trident-installer-23.01.0.tar.gz
 cd trident-installer
 ----
 
-== Step 3: Install Astra Trident
+== Step 2: Install Astra Trident
 
-Install Astra Trident in the desired namespace by executing the `tridentctl install` command.
+Install Astra Trident in the desired namespace by executing the `tridentctl install` command. You can add additional arguments to specify image registry location. 
+
+NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
+
+[role="tabbed-block"]
+====
+
+.Standard mode 
+--
 ----
 ./tridentctl install -n trident
+----
+--
+
+.Trident and CSI images in one mirrored registry
+--
+----
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:23.01 --trident-image <your-registry>/trident:23.01.0
+----
+--
+
+.Trident and CSI images in different mirrored registries
+--
+You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
+----
+./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:23.01 --trident-image <your-registry>/netapp/trident:23.01.0
+----
+--
+
+====
+
+Your installation status should look something like this. 
+----
 ....
 INFO Starting Trident installation.                namespace=trident
 INFO Created service account.
@@ -90,33 +114,45 @@ INFO Created Trident secret.
 INFO Created Trident deployment.
 INFO Created Trident daemonset.
 INFO Waiting for Trident pod to start.
-INFO Trident pod started.                          namespace=trident pod=trident-csi-679648bd45-cv2mx
+INFO Trident pod started.                          namespace=trident pod=trident-controller-679648bd45-cv2mx
 INFO Waiting for Trident REST interface.
-INFO Trident REST interface is up.                 version=22.10.0
+INFO Trident REST interface is up.                 version=23.01.0
 INFO Trident installation succeeded.
 ....
 ----
 
-[NOTE]
-To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
+== Verify the installation
 
-Output similar to the following displays when the installer is complete. Depending on the number of nodes in your Kubernetes cluster, there might be more pods present:
+You can verify your installation using pod creation status or `tridentctl`. 
+
+=== Using pod creation status
+
+You can confirm if the Astra Trident installation completed by reviewing the status of the created pods:
+
 ----
-kubectl get pod -n trident
-NAME                           READY   STATUS    RESTARTS   AGE
-trident-csi-679648bd45-cv2mx   4/4     Running   0          5m29s
-trident-csi-vgc8n              2/2     Running   0          5m29s
+kubectl get pods -n trident
 
+NAME                                  READY   STATUS    RESTARTS   AGE
+trident-controller-679648bd45-cv2mx   6/6     Running   0          5m29s
+trident-node-linux-vgc8n              2/2     Running   0          5m29s
+----
+
+NOTE: If the installer does not complete successfully or `trident-controller-<generated id>` (`trident-csi-<generated id>` in versions prior to 23.01) does not have a *Running* status, the platform was not installed. Use `-d` to  link:../troubleshooting.html#troubleshooting-an-unsuccessful-trident-deployment-using-tridentctl[turn on debug mode] and troubleshoot the issue. 
+
+=== Using `tridentctl`
+
+You can use `tridentctl` to check the version of Astra Trident installed.
+
+----
 ./tridentctl -n trident version
+
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 22.10.0        | 22.10.0        |
+| 23.01.0        | 23.01.0        |
 +----------------+----------------+
 ----
 
-To complete Astra Trident configuration, continue to link:kubernetes-postdeployment.html[post-deployment tasks].
+== What's next
 
-If the installer does not complete successfully or `trident-csi-<generated id>` does not have a *Running* status, the platform was not installed.
-
-NOTE: For troubleshooting issues during deployment, refer to  link:../troubleshooting.html[troubleshooting].
+Now you can link:kubernetes-postdeployment.html[create create a backend and storage class, provision a volume, and mount the volume in a pod].

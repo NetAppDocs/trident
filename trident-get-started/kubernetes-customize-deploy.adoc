@@ -5,7 +5,7 @@ keywords: deploy, trident, methods, operator, tridentctl, helm, attributes, cust
 summary: The Trident operator enables you to customize the manner in which Astra Trident is installed by using the attributes in the `TridentOrchestrator` spec.
 ---
 
-= Customize Trident operator deployment
+= Customize Trident operator installation
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -40,7 +40,7 @@ automatically |false
 |false
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|"netapp/trident-autosupport:22.10.0"
+|"netapp/trident-autosupport:23.01.0"
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |"http://proxy.example.com:8888"
@@ -131,7 +131,7 @@ spec:
 This example illustrates deployment on a Windows worker node.
 
 ----
-$ cat deploy/crds/tridentorchestrator_cr.yaml
+cat deploy/crds/tridentorchestrator_cr.yaml
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
 metadata:

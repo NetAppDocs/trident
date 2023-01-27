@@ -53,26 +53,27 @@ The benefits of using the Trident operator include:
 .*Astra Trident object creation*
 [%collapsible]
 ====
-The Trident operator automatically creates the following objects for your Kubernetes version. 
+The Trident operator automatically creates the following objects for your Kubernetes version.
+
 * ServiceAccount for the operator
 * ClusterRole and ClusterRoleBinding to the ServiceAccount
 * Dedicated PodSecurityPolicy (for Kubernetes 1.25 and earlier)
 * The operator itself
+
 ====
 
 .*Self-healing capability*
 [%collapsible]
 ====
-You can monitor an Astra Trident installation and actively take measures to address issues, such as when the deployment is deleted or if it is modified accidentally. A `trident-operator-<generated-id>` pod is created that associates a `TridentOrchestrator` CR with an Astra Trident installation. This ensures there is only one instance of Astra Trident in the cluster and controls its setup, making sure the installation is idempotent. When changes are made to the installation (such as, deleting the deployment or node daemonset), the operator identifies them and fixes them individually.
+The operator monitors Astra Trident installation and actively takes measures to address issues, such as when the deployment is deleted or if it is accidentally modified. A `trident-operator-<generated-id>` pod is created that associates a `TridentOrchestrator` CR with an Astra Trident installation. This ensures there is only one instance of Astra Trident in the cluster and controls its setup, making sure the installation is idempotent. When changes are made to the installation (such as, deleting the deployment or node daemonset), the operator identifies them and fixes them individually.
 ====
 
 .*Easy updates to existing installations*
 [%collapsible]
 ====
-You can easily update an existing deployment with the operator. You only need to edit the `TridentOrchestrator` CR to make updates to an installation.
-For example, consider a scenario where you need to enable Astra Trident to generate debug logs.
+You can easily update an existing deployment with the operator. You only need to edit the `TridentOrchestrator` CR to make updates to an installation. 
 
-To do this, patch your `TridentOrchestrator` to set `spec.debug` to `true`:
+For example, consider a scenario where you need to enable Astra Trident to generate debug logs. To do this, patch your `TridentOrchestrator` to set `spec.debug` to `true`:
 ----
 kubectl patch torc <trident-orchestrator-name> -n trident --type=merge -p '{"spec":{"debug":true}}'
 ----

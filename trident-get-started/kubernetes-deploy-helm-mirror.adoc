@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy-helm-mirror.html
 keywords: deploy, astra trident, operator, helm, helm chart, configuration, values, offline, air gap, gap, registry
-summary: You can deploy Astra Trident with the Trident operator using the Trident Helm Chart. 
+summary: You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are stored in a private registry.   
 ---
 
 = Deploy Trident operator using Helm (Offline mode)
@@ -11,7 +11,7 @@ summary: You can deploy Astra Trident with the Trident operator using the Triden
 :imagesdir: ../media/
 
 [.lead]
-You can deploy the Trident operator and install Astra Trident using Trident Helm. This process applies to installations where Trident and CSI images are located in a private, mirrored registry. If your images are located in a `docker.io` and `registry.k8s.io`, use the link:kubernetes-deploy-helm.html[process for standard deployment].
+You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-helm.html[process for standard deployment].
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information about Astra Trident 22.10.*

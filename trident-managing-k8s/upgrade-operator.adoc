@@ -33,7 +33,7 @@ To upgrade using the operator, the following conditions should be met:
 ====
 
 == Upgrade a cluster-scoped Trident operator installation
-Follow these steps to upgrade from Astra Trident 21.01 and later. 
+Follow these steps to upgrade a cluster-scoped Trident operator installation. All Astra Trident versions 21.01 and above use a cluster-scoped operator.
 
 .Steps
 . Delete the Trident operator that was used to install the current Astra Trident instance. For example, if you are upgrading from 22.01, run the following command:
@@ -42,7 +42,7 @@ Follow these steps to upgrade from Astra Trident 21.01 and later.
 kubectl delete -f 22.01/trident-installer/deploy/bundle.yaml -n trident
 ----
 . If you customized your initial installation using `TridentOrchestrator` attributes, you can edit the `TridentOrchestrator` object to modify the installation parameters. This might include changes made to specify mirrored Trident and CSI image registries for offline mode, enable debug logs, or specify image pull secrets.
-. Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 22.10 for Kubernetes 1.25, run the following command:
+. Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 23.01 for Kubernetes 1.25, run the following command:
 +
 ----
 kubectl create -f 23.01.0/trident-installer/deploy/bundle_post_1_25.yaml -n trident

@@ -45,7 +45,7 @@ A sample backend definition will look like this:
 }
 ----
 
-Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation/updation of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
+Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation or update of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
 
 === Enable certificate-based Authentication
 
@@ -200,7 +200,7 @@ By setting `useCHAP` to true, the storage administrator instructs Astra Trident 
 ** If the SVM’s default initiator security type is none (set by default) *and* there are no pre-existing LUNs already present in the volume, Astra Trident will set the default security type to `CHAP` and proceed to configuring the CHAP initiator and target username and secrets.
 ** If the SVM contains LUNs, Astra Trident will not enable CHAP on the SVM. This ensures that access to LUNs that are already present on the SVM isn’t restricted.
 * Configuring the CHAP initiator and target username and secrets; these options must be specified in the backend configuration (as shown above).
-* Managing the addition of inititators to the `igroupName` given in the backend. If unspecified, this defaults to `trident`.
+* Managing the addition of initiators to the `igroupName` given in the backend. If unspecified, this defaults to `trident`.
 
 After the backend is created, Astra Trident creates a corresponding `tridentbackend` CRD and stores the CHAP secrets and usernames as Kubernetes secrets. All PVs that are created by Astra Trident on this backend will be mounted and attached over CHAP.
 

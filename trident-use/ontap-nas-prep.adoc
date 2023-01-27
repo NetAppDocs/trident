@@ -163,7 +163,7 @@ Astra Trident provides two options when working with export policies:
 
 === Dynamically manage export policies
 
-The 20.04 release of CSI Trident provides the ability to dynamically manage export policies for ONTAP backends. This provides the storage administrator the ability to specify a permissible address space for worker node IPs, rather than defining explicit rules manually. It greatly simplifies export policy management; modifications to the export policy no longer require manual intervention on the storage cluster. Moreover, this helps restrict access to the storage cluster only to worker nodes that have IPs in the range specified, supporting a finegrained and automated managment.
+The 20.04 release of CSI Trident provides the ability to dynamically manage export policies for ONTAP backends. This provides the storage administrator the ability to specify a permissible address space for worker node IPs, rather than defining explicit rules manually. It greatly simplifies export policy management; modifications to the export policy no longer require manual intervention on the storage cluster. Moreover, this helps restrict access to the storage cluster only to worker nodes that have IPs in the range specified, supporting a fine-grained and automated management.
 
 NOTE: The dynamic management of export policies is only available for CSI Trident. It is important to ensure that the worker nodes are not being NATed.
 
@@ -184,7 +184,7 @@ There are two configuration options that must be used. Here’s an example backe
 }
 ----
 
-NOTE: When using this feature, you must ensure that the root junction in your SVM has a precreated export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp’s recommended best practice of dedicating a SVM for Astra Trident.
+NOTE: When using this feature, you must ensure that the root junction in your SVM has a previously created export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp’s recommended best practice of dedicating a SVM for Astra Trident.
 
 Here is an explanation of how this feature works using the example above:
 

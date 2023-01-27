@@ -15,7 +15,20 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 22.10
+== What's new in 23.01
+
+=== Enhancements
+
+* Added support for storage pools for GCP volumes with CVS service level.
+* Improved performance for ontap-nas-economy storage drivers managing multiple FlexVols.
+* Enabled dataLIF updates for all ONTAP NAS storage drivers.
+* Added options to exclude pod security policy creation during trident installation through helm.
+
+=== Deprecations
+
+* Kubernetes: Updated minimum supported Kubernetes to 1.21.
+
+== Changes in 22.10
 *You must read the following critical information before upgrading to Astra Trident 22.10.*
 
 [WARNING]

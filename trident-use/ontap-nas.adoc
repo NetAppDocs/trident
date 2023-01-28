@@ -12,8 +12,10 @@ summary: Learn about configuring an ONTAP backend with ONTAP NAS drivers.
 
 Learn about configuring an ONTAP backend with ONTAP and Cloud Volumes ONTAP NAS drivers.
 
-* link:ontap-nas-prep.html[Preparation^]
-* link:ontap-nas-examples.html[Configuration and examples^]
+* link:ontap-nas-prep.html[Preparation]
+* link:ontap-nas-examples.html[Configuration and examples]
+
+WARNING: Customers must use the `ontap-nas` driver for production workloads that require data protection, disaster recovery, and mobility. Astra Control provides seamless protection, disaster recovery, and mobility for volumes created with the `ontap-nas` driver. The `ontap-nas-economy` driver should be used only in  limited use cases where anticipated volume usage is expected to be much higher than what ONTAP supports, with no anticipated data protection, disaster recovery, or mobility (moving volumes between Kubernetes clusters) requirements.
 
 == User permissions
 

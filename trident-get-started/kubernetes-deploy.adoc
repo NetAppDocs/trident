@@ -101,7 +101,7 @@ If you have an existing deployment that must be upgraded or if you are looking t
 
 You can link:kubernetes-customize-deploy-tridentctl.html[customize your `tridentctl` installation] to generate the manifests for Trident resources. This includes the deployment, daemonset, service account, and the cluster role that Astra Trident creates as part of its installation.
 
-NOTE: Beginning with the 22.04, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
+NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
  Select the appropriate installation _method_.   
 
 == Choose your installation mode

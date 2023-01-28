@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/requirements.html
-keywords: trident requirements, supported front ends, supported backends, kubernetes cluster, cluster requirements, version requirements, supported versions, host configuration, host os, system configuration, host operating system, fsx
-summary: Get started by reviewing the supported frontends, backends, and host configuration.
+keywords: trident requirements, supported front ends, supported backends, kubernetes cluster, cluster requirements, version requirements, supported versions, host configuration, host os, system configuration, host operating system, fsx, ports, csi, images, orchestrators, storage systems, feature, kubernetes
+summary: Before installing Astra Trident you should review these general system requirements. Specific backends might have additional requirements. 
 ---
 
 = Requirements
@@ -11,9 +11,7 @@ summary: Get started by reviewing the supported frontends, backends, and host co
 :imagesdir: ../media/
 
 [.lead]
-Get started by reviewing the supported frontends, backends, and host configuration.
-
-NOTE: To learn about the ports that Astra Trident uses, see link:../trident-reference/ports.html[here].
+Before installing Astra Trident you should review these general system requirements. Specific backends might have additional requirements. 
 
 == Critical information about Astra Trident 22.10
 *You must read the following critical information before upgrading to Astra Trident 22.10.*
@@ -32,15 +30,15 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 Astra Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.9, 1.10, 1.11
-* Kubernetes 1.20 - 1.25
+* Kubernetes 1.20 - 1.26
 * Mirantis Kubernetes Engine 3.5
-* OpenShift 4.8, 4.9, 4.10, 4.11
+* OpenShift 4.8, 4.9, 4.10, 4.11, 4.12
 
 The Trident operator is supported with these releases:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.9, 1.10, 1.11
-* Kubernetes 1.20 - 1.25
-* OpenShift 4.8, 4.9, 4.10, 4.11
+* Kubernetes 1.20 - 1.26
+* OpenShift 4.8, 4.9, 4.10, 4.11, 4.12
 
 Astra Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Rancher, and VMWare Tanzu Portfolio.
 
@@ -58,8 +56,7 @@ To use Astra Trident, you need one or more of the following supported backends:
 
 == Feature requirements
 
-The table below summarizes the features available with this release of
-Astra Trident and the versions of Kubernetes it supports.
+The table below summarizes the features available with this release of Astra Trident and the versions of Kubernetes it supports.
 
 [cols=3,options="header"]
 |===
@@ -69,46 +66,46 @@ Astra Trident and the versions of Kubernetes it supports.
 
 |CSI Trident
 
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |Volume Snapshots
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |PVC from Volume Snapshots
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |iSCSI PV resize
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |ONTAP Bidirectional CHAP
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |Dynamic Export Policies
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |Trident Operator
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |Auto Worker Node Prep (beta)
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |CSI Topology
-a|1.20 - 1.25
+a|1.20 - 1.26
 a|No
 
 |===
 
 == Tested host operating systems
 
-Though Astra Trident does not officially "support" specific operating systems, the following are known to work:
+Though Astra Trident does not officially support specific operating systems, the following are known to work:
 
 * RedHat CoreOS (RHCOS) versions as supported by OpenShift Container Platform
 * RHEL or CentOS 7
@@ -121,11 +118,21 @@ The `tridentctl` utility also runs on any of these distributions of Linux.
 
 == Host configuration
 
-Depending on the backend(s) in use, NFS and/or iSCSI utilities should be installed on all of the workers in the cluster. See link:../trident-use/worker-node-prep.html[here^] for more information.
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install NFS or iSCSI tools based on your driver selection. 
+
+link:../trident-use/worker-node-prep.html[Prepare the worker node]
 
 == Storage system configuration
 
-Astra Trident might require some changes to a storage system before a backend configuration can use it. See  link:../trident-use/backends.html[here^] for details.
+Astra Trident might require changes to a storage system before a backend configuration can use it. 
+
+link:../trident-use/backends.html[Configure backends]
+
+== Astra Trident ports
+
+Astra Trident requires access to specific ports for communication. 
+
+link:../trident-reference/ports.html[Astra Trident ports]
 
 == Container images and corresponding Kubernetes versions
 

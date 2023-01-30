@@ -98,7 +98,7 @@ LUKS passphrase rotation occurs when a pod that mounts the volume is created aft
 
 .Steps
 
-. Use `parameters.selector` to add the `node-publish-secret-name` and `node-publish-secret-namespace` parameters. For example:
+. Add the `node-publish-secret-name` and `node-publish-secret-namespace` StorageClass parameters. For example:
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -168,14 +168,14 @@ GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>/<snapshotID>
 .Results
 The passphrase was rotated when only the new passphrase is returned on the volume and snapshot.  
 
-NOTE: If two passphrases are returned, for example `luksPassphraseNames: ["B", "A"]`, the rotation is still in progress. 
+NOTE: If two passphrases are returned, for example `luksPassphraseNames: ["B", "A"]`, the rotation is incomplete. You can trigger a new pod to attempt to complete the rotation. 
 
 == Enable volume expansion
 You can enable volume expansion on a LUKS-encrypted volume. 
 
 .Steps
 . Enable the `CSINodeExpandSecret` feature gate (beta 1.25+). Refer to link:https://kubernetes.io/blog/2022/09/21/kubernetes-1-25-use-secrets-while-expanding-csi-volumes-on-node-alpha/[Kubernetes 1.25: Use Secrets for Node-Driven Expansion of CSI Volumes^] for details. 
-. Use `parameters.selector` to add the `node-expand-secret-name` and `node-expand-secret-namespace` parameters. For example:
+. Add the `node-expand-secret-name` and `node-expand-secret-namespace` StorageClass parameters. For example:
 +
 ----
 apiVersion: storage.k8s.io/v1

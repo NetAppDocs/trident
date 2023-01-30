@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-reco/security-reco.html
-keywords: security, chap, trident, namespace, nve, nae, encryption, volume encryption, aggregate encryption, luks, linux unified key setup, encryption
+keywords: security, chap, trident, namespace, nve, nae, encryption, volume encryption, aggregate encryption
 summary: Use the recommendations listed here to ensure that your Astra Trident installation is secure.
 ---
 
@@ -62,78 +62,3 @@ For more information on backend configuration options, refer to:
 * link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
 
 * link:../trident-use/ontap-nas-examples.html[ONTAP NAS configuration options]
-
-== Enable per-volume, host-side encryption using Linux Unified Key Setup (LUKS)
-
-You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
-
-For more information on backend configuration options for ONTAP SAN, refer to link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options]
-
-.Before you begin
-
-* Worker nodes must have cryptsetup 2.1 or higher installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup^].
-
-* For performance reasons, we recommend that worker nodes support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
-+
-----
-grep "aes" /proc/cpuinfo
-----
-+
-If nothing is returned, your processor does not support AES-NI. For more information on AES-NI, visit: link:https://www.intel.com/content/www/us/en/developer/articles/technical/advanced-encryption-standard-instructions-aes-ni.html[Intel: Advanced Encryption Standard Instructions (AES-NI)^].
-
-.Steps
-
-. Define LUKS encryption attributes in the backend configuration.
-+
-----
-"storage": [
-    {
-        "labels":{"luks": "true"},
-        "zone":"us_east_1a",
-        "defaults": {
-            "luksEncryption": "true"
-        }
-    },
-    {
-        "labels":{"luks": "false"},
-        "zone":"us_east_1a",
-        "defaults": {
-            "luksEncryption": "false"
-        }
-    },
-]
-----
-
-. Use `parameters.selector` to define the storage pools using LUKS encryption. For example:
-+
-----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: luks
-provisioner: netapp.io/trident
-parameters:
-  selector: "luks=true"
-  csi.storage.k8s.io/node-stage-secret-name: luks-${pvc.name}
-  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
-----
-
-. Create a Secret that contains the LUKS passphrase. For example:
-+
-----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: luks-pvc1
-stringData:
-  luks-passphrase-name: B
-  luks-passphrase: secretB
-  previous-luks-passphrase-name: A
-  previous-luks-passphrase: secretA
-----
-
-=== Limitations
-
-* LUKS encrypted volumes will not be able to take advantage of ONTAP deduplication and compression. 
-
-* LUKS passphrase rotation is not not supported at this time. To change passphrases, manually copy the data from one PVC to another. 

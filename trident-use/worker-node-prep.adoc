@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/worker-node-prep.html
-keywords: storage class, manage storage class, storage classes, kubernetes storage classes, worker node, nfs, iscsi, kubernetes clusters
+keywords: storage class, manage storage class, storage classes, kubernetes storage classes, worker node, nfs, iscsi, kubernetes clusters, self-healing, healing
 summary: All of the worker nodes in the Kubernetes cluster need to be able to mount the volumes that you have provisioned for your pods. If you are using the ontap-nas, ontap-nas-economy, ontap-nas-flexgroup driver for one of your backends, your worker nodes need the NFS tools. Otherwise they require the iSCSI tools.
 ---
 
@@ -10,122 +10,170 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 :icons: font
 :imagesdir: ../media/
 
-All of the worker nodes in the Kubernetes cluster need to be able to mount the volumes that you have provisioned for your pods. If you are using the `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` driver for one of your backends, your worker nodes need the NFS tools. Otherwise they require the iSCSI tools.
+[.lead]
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install NFS or iSCSI tools based on your driver selection. 
 
-Recent versions of RedHat CoreOS have both NFS and iSCSI installed by default.
+== Selecting the right tools 
+If you are using a combination of drivers, you should install NFS and iSCSI tools. 
 
-WARNING: You should always reboot your worker nodes after installing the NFS or iSCSI tools, or else attaching volumes to containers might fail.
+.NFS tools
+Install the NFS tools if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`
+
+.iSCSI tools
+Install the iSCSI tools if you are using: `ontap-san`, `ontap-san-economy`, `solidfire-san`
+
+NOTE: Recent versions of RedHat CoreOS have NFS and iSCSI installed by default.
 
 == Node service discovery
 
-Beginning in 22.07, Astra Trident attempts to automatically detect if the node is capable of running iSCSI or NFS services. Astra Trident creates events for the node to identify the services discovered. You can review these events using the command:
+Astra Trident attempts to automatically detect if the node can run iSCSI or NFS services. 
+
+NOTE: Node service discovery identifies discovered services but does not guarantee services are properly configured. Conversely, the absence of a discovered service does not guarantee the volume mount will fail.
+
+.Review events
+Astra Trident creates events for the node to identify the discovered services. To review these events, run:
 
 ----
 kubectl get event -A --field-selector involvedObject.name=<Kubernetes node name>
 ----
 
-Trident also identifies services enabled for each node on the Trident node CR. To view the discovered services, use the command:
+.Review discovered services
+Astra Trident identifies services enabled for each node on the Trident node CR. To view the discovered services, run: 
 
 ----
 tridentctl get node -o wide -n <Trident namespace>
 ----
 
-NOTE: Node service discovery identifies discovered services but does not guarantee services are properly configured. Conversely, the absence of a discovered service does not guarantee the volume mount will fail. 
-
 == NFS volumes
+Install the NFS tools using the commands for your operating system. Ensure the NFS service is started up during boot time.
 
-[%header,cols=3*]
-|===
-|Protocol
-|Operating system
-|Commands
-
-|NFS
-a|RHEL/CentOS 7
-a|`sudo yum install -y nfs-utils`
-
-|NFS
-a|Ubuntu
-a|`sudo apt-get install -y nfs-common`
-
-|===
-
-NOTE: You should ensure that the NFS service is started up during boot time.
+[role="tabbed-block"]
+====
+.RHEL 8+
+--
+----
+sudo yum install -y nfs-utils
+----
+--
+.Ubuntu
+--
+----
+sudo apt-get install -y nfs-common
+----
+====
+WARNING: Reboot your worker nodes after installing the NFS tools to prevent failure when attaching volumes to containers.
 
 == iSCSI volumes
+Astra Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod. 
 
-Consider the following when using iSCSI volumes:
+=== iSCSI self-healing capabilities
+For ONTAP systems, Astra Trident runs iSCSI self-healing every five minutes to:
 
+. *Identify* the desired iSCSI session state and the current iSCSI session state. 
+. *Compare* the desired state to the current state to identify needed repairs. Astra Trident determines repair priorities and when to preempt repairs. 
+. *Perform repairs* required to return the current iSCSI session state to the desired iSCSI session state. 
+
+NOTE: Logs of self-healing activity are located in the `trident-main` container on the respective Daemonset pod. To view logs, you must have set `debug` to "true" during Astra Trident installation.
+
+Astra Trident iSCSI self-healing capabilities can help prevent:
+
+* Stale or unhealthy iSCSI sessions that could occur after a network connectivity issue. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
++
+NOTE: For example, if CHAP secrets were rotated on the storage controller and the network loses connectivity, the old (_stale_) CHAP secrets could persist. Self-healing can recognize this and automatically reestablish the session to apply the updated CHAP secrets. 
+* Missing iSCSI sessions
+* Missing LUNs
+
+=== Install the iSCSI tools
+Install the iSCSI tools using the commands for your operating system.  
+
+.Before you begin
 * Each node in the Kubernetes cluster must have a unique IQN. *This is a necessary prerequisite*.
 * If using RHCOS version 4.5 or later, or other RHEL-compatible Linux distribution, with the `solidfire-san` driver and Element OS 12.5 or earlier, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`. Secure FIPS-compliant CHAP algorithms SHA1, SHA-256, and SHA3-256 are available with Element 12.7.
 +
 ----
 sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf
 ----
-* When using worker nodes that run RHEL/RedHat CoreOS with iSCSI PVs, make sure to specify the `discard` mountOption in the StorageClass to perform inline space reclamation. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat’s documentation^].
+* When using worker nodes that run RHEL/RedHat CoreOS with iSCSI PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat’s documentation^].
 
-[%header,cols=3*]
-|===
-|Protocol
-|Operating system
-|Commands
-
-|iSCSI
-a|RHEL/CentOS
-a|
+[role="tabbed-block"]
+====
+.RHEL 8+
+--
 . Install the following system packages:
 +
-`sudo yum install -y lsscsi iscsi-initiator-utils sg3_utils device-mapper-multipath`
+----
+sudo yum install -y lsscsi iscsi-initiator-utils sg3_utils device-mapper-multipath
+----
 . Check that iscsi-initiator-utils version is 6.2.0.874-2.el7 or later:
 +
-`rpm -q iscsi-initiator-utils`
+----
+rpm -q iscsi-initiator-utils
+----
 . Set scanning to manual:
 +
-`sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf`
+----
+sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf
+----
 . Enable multipathing:
 +
-`sudo mpathconf --enable --with_multipathd y --find_multipaths n`
+----
+sudo mpathconf --enable --with_multipathd y --find_multipaths n
+----
 +
 NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
 
 . Ensure that `iscsid` and `multipathd` are running:
 +
-`sudo systemctl enable --now iscsid multipathd`
+----
+sudo systemctl enable --now iscsid multipathd
+----
 . Enable and start `iscsi`:
 +
-`sudo systemctl enable --now iscsi`
-
-|iSCSI
-a|Ubuntu
-a|
+----
+sudo systemctl enable --now iscsi
+----
+--
+.Ubuntu
+--
 . Install the following system packages:
 +
-`sudo apt-get install -y open-iscsi lsscsi sg3-utils multipath-tools scsitools`
+----
+sudo apt-get install -y open-iscsi lsscsi sg3-utils multipath-tools scsitools
+----
 . Check that open-iscsi version is 2.0.874-5ubuntu2.10 or later (for bionic) or 2.0.874-7.1ubuntu6.1 or later (for focal):
 +
-`dpkg -l open-iscsi`
+----
+dpkg -l open-iscsi
+----
 . Set scanning to manual:
 +
-`sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf`
+----
+sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf
+----
 . Enable multipathing:
 +
-`sudo tee /etc/multipath.conf <<-'EOF'
+----
+sudo tee /etc/multipath.conf <<-'EOF
 defaults {
     user_friendly_names yes
     find_multipaths no
 }
 EOF
 sudo systemctl enable --now multipath-tools.service
-sudo service multipath-tools restart`
+sudo service multipath-tools restart
+----
 +
 NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
 
 . Ensure that `open-iscsi` and `multipath-tools` are enabled and running:
 +
-`sudo systemctl status multipath-tools`
-`sudo systemctl enable --now open-iscsi.service`
-`sudo systemctl status open-iscsi`
-
-|===
-
+----
+sudo systemctl status multipath-tools
+sudo systemctl enable --now open-iscsi.service
+sudo systemctl status open-iscsi
+----
++
 NOTE: For Ubuntu 18.04, you must discover target ports with `iscsiadm` before starting `open-iscsi` for the iSCSI daemon to start. You can alternatively modify the `iscsi` service to start `iscsid` automatically.
+====
+
+WARNING: Reboot your worker nodes after installing the iSCSI tools to prevent failure when attaching volumes to containers.

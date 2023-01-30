@@ -5,7 +5,7 @@ keywords: deploy, trident, methods, operator, tridentctl, helm, attributes, cust
 summary: The Trident operator enables you to customize the manner in which Astra Trident is installed by using the attributes in the `TridentOrchestrator` spec.
 ---
 
-= Customize Trident operator deployment
+= Customize Trident operator installation
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -40,7 +40,7 @@ automatically |false
 |false
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|"netapp/trident-autosupport:22.10.0"
+|"netapp/trident-autosupport:23.01.0"
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |"http://proxy.example.com:8888"
@@ -61,6 +61,14 @@ or quay.io/k8scsi"
 Astra Trident |
 
 |`imagePullSecrets` |Secrets to pull images from an internal registry |
+
+|`imagePullPolicy` | Sets the image pull policy for the the Trident operator. Valid values are:
+
+`Always` to always pull the image.
+
+`IfNotPresent` to pull the image only if it does not already exist on the node.
+
+`Never` to never pull the image. |`IfNotPresent`
 
 |`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as pod.spec.nodeSelector. |No default; optional
 
@@ -123,7 +131,7 @@ spec:
 This example illustrates deployment on a Windows worker node.
 
 ----
-$ cat deploy/crds/tridentorchestrator_cr.yaml
+cat deploy/crds/tridentorchestrator_cr.yaml
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
 metadata:

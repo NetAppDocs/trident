@@ -13,17 +13,19 @@ summary: Before installing Astra Trident you should review these general system 
 [.lead]
 Before installing Astra Trident you should review these general system requirements. Specific backends might have additional requirements. 
 
-== Critical information about Astra Trident 22.10
-*You must read the following critical information before upgrading to Astra Trident 22.10.*
+== Critical information about Astra Trident 23.01
+*You must read the following critical information about Astra Trident.*
 
-[WARNING]
-.*Critical information about Astra Trident 22.10*
+// Start snippet: collapsible block (open on page load)
+.*Critical information about Astra Trident*
+[%collapsible%open]
 ====
-* Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
-* Astra Trident now strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+* Kubernetes 1.26 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
+// End snippet
 
 == Supported frontends (orchestrators)
 

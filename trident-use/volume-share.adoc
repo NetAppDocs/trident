@@ -144,7 +144,7 @@ Flags:
 
 * Astra Trident cannot prevent destination namespaces from writing to the shared volume. You should use file locking or other processes to prevent overwriting shared volume data.
 
-* You cannot revoke access to the source PVC by removing the `shareToNamespace` or `shareFromNamepace` annotations or deleting the `TridentVolumeReference` CR. To revoke access, you must delete the subordinate PVC.
+* You cannot revoke access to the source PVC by removing the `shareToNamespace` or `shareFromNamespace` annotations or deleting the `TridentVolumeReference` CR. To revoke access, you must delete the subordinate PVC.
 
 * Snapshots, clones, and mirroring are not possible on subordinate volumes. 
 

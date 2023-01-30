@@ -135,7 +135,7 @@ The following steps describe how to recover a single master Kubernetes cluster w
 . Copy all the required certificates pertaining to the Kubernetes cluster under `/etc/kubernetes/pki` and the etcd `member` files under `/var/lib/etcd`.
 . Create a Kubernetes cluster by running the `kubeadm init` command with the `--ignore-preflight-errors=DirAvailable--var-lib-etcd` flag. The hostnames should be the same as the source Kubernetes cluster.
 . Run the `kubectl get crd` command to verify if all the Trident custom resources have come up and retrieve Trident objects to make sure that all the data is available.
-. Clean up the previous backends and create new backends on Trident. Specify the new management and data LIF, new SVM name, and password of the destination SVM.
+. Clean up the previous backends and create new backends on Trident. Specify the new management LIF, new SVM name, and password of the destination SVM.
 
 ==== Disaster recovery workflow for application persistent volumes
 

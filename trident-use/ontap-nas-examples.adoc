@@ -49,15 +49,13 @@ For seamless MetroCluster switchover, you must specify an SVM management LIF. |�
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 
-|`igroupName` |Name of the igroup for SAN volumes to use |“trident-<backend-UUID>”
-
 |`storagePrefix` |Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it |“trident”
 
-|`limitAggregateUsage` |Fail provisioning if usage is above this percentage. *Does not apply to Amazon FSx for ONTAP* |“” (not enforced by default)
+|`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
+
+*Does not apply to Amazon FSx for ONTAP* |“” (not enforced by default)
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |“”  (not enforced by default)
-
-|`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |“100”
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} |null
 
@@ -68,10 +66,6 @@ For seamless MetroCluster switchover, you must specify an SVM management LIF. |�
 |`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
 
 Not supported with MetroCluster.|false
-
-| `nasType` | Configure NFS or SMB volumes creation. 
-
-Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
 
 |===
 
@@ -269,6 +263,24 @@ This example shows you how you can instruct Astra Trident to use dynamic export 
     "svm": "svm_nfs",
     "username": "vsadmin",
     "password": "secret"
+}
+----
+
+=== `ontap-nas` driver for Amazon FSx for ONTAP using SMB volumes
+
+----
+{
+  "version": 1,
+  "backendName": "SMBBackend",
+  "storageDriverName": "ontap-nas",
+  "managementLIF": "example.mgmt.fqdn.aws.com",
+  “nasType”: “smb”,
+  "dataLIF": "10.0.0.15",
+  "svm": "nfs_svm",
+  "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
+  "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
+  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz",
+  "storagePrefix": "myPrefix_"
 }
 ----
 

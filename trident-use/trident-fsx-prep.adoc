@@ -35,10 +35,11 @@ kubectl create secret generic smbcreds --from-literal username=user --from-liter
 
 == ONTAP SAN and NAS driver integration
 
+WARNING: If you are configuring for SMB volumes, you must read <<Prepare to provision SMB volumes>> before creating the backend.
+
 .Steps
 . Deploy Astra Trident using one of the link:../trident-get-started/kubernetes-deploy.html[deployment methods].
-. Configure Astra Trident as follows:
-.. Collect your SVM’s management LIF DNS name. For example, by using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
+. Collect your SVM management LIF DNS name. For example, using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
 +
 ----
 aws fsx describe-storage-virtual-machines --region <file system region>
@@ -70,5 +71,51 @@ For information about creating backends, see these links:
 .Results
 After deployment, you can create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod].
 
-== Provisioning SMB volumes
+== Prepare to provision SMB volumes
+You can provision SMB volumes using the `ontap-nas` and `ontap-nas-economy` drivers. Before you complete <<ONTAP SAN and NAS driver integration>> complete the following steps. 
 
+.Steps
+
+. Create SMB shares. You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
+.. If necessary, create the directory path structure for the share.
++
+The `vserver cifs share create` command checks the path specified in the -path option during share creation. If the specified path does not exist, the command fails.
+
+.. Create an SMB share associated with the specified SVM:
++
+----
+vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
+----
+
+.. Verify that the share was created:
++
+----
+vserver cifs share show -share-name share_name
+----
++
+NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-task.html[Create an SMB share^] for full details.
+
+. When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
++
+[cols=3,options="header"]
+|===
+|Parameter |Description | Example
+
+|`smbShare`
+|Name of the SMB share created using Shared Folder Microsoft Management Console. For example "smb-share". 
+
+*Required for SMB volumes.*
+| "smb-share" 
+
+|`nasType`
+| *Must set to `smb`.* If null, defaults to `nfs`.
+|"smb"
+
+|`securityStyle` 
+|Security style for new volumes. *Must be set to "ntfs" for SMB volumes.*
+|"ntfs"
+
+|`unixPermissions`
+|Mode for new volumes. *Must be left empty for SMB volumes.*
+|""
+|===

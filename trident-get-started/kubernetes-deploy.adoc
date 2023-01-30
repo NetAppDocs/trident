@@ -13,14 +13,14 @@ summary: You can install Astra Trident using the Trident operator (manually or u
 [.lead]
 To ensure Astra Trident can be installed in a wide variety of environments and organizations, NetApp offers multiple installation options. You can install Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
 
-== Critical information about Astra Trident 22.10
-*You must read the following critical information about Astra Trident 22.10.*
+== Critical information about Astra Trident 23.01
+*You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
-.*Critical information about Astra Trident 22.10*
+.*Critical information about Astra Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.25 is now supported in Trident. You must upgrade to Astra Trident 22.10 prior to upgrading to Kubernetes 1.25.
+* Kubernetes 1.26 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -101,7 +101,7 @@ If you have an existing deployment that must be upgraded or if you are looking t
 
 You can link:kubernetes-customize-deploy-tridentctl.html[customize your `tridentctl` installation] to generate the manifests for Trident resources. This includes the deployment, daemonset, service account, and the cluster role that Astra Trident creates as part of its installation.
 
-NOTE: Beginning with the 22.04, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
+NOTE: Beginning with the 22.04 release, AES keys will no longer be regenerated every time Astra Trident is installed. With this release, Astra Trident will install a new secret object that persists across installations. This means, `tridentctl` in 22.04 can uninstall previous versions of Trident, but earlier versions cannot uninstall 22.04 installations.
  Select the appropriate installation _method_.   
 
 == Choose your installation mode

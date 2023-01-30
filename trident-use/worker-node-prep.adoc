@@ -11,9 +11,10 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 :imagesdir: ../media/
 
 [.lead]
-All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install either NFS or iSCSI tools based on your driver selection. 
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install NFS or iSCSI tools based on your driver selection. 
 
 == Selecting the right tools 
+If you are using a combination of drivers, you should install NFS and iSCSI tools. 
 
 .NFS tools
 Install the NFS tools if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`
@@ -48,7 +49,7 @@ Install the NFS tools using the commands for your operating system. Ensure the N
 
 [role="tabbed-block"]
 ====
-.RHEL/CentOS 7
+.RHEL 8+
 --
 ----
 sudo yum install -y nfs-utils
@@ -96,7 +97,7 @@ sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.c
 
 [role="tabbed-block"]
 ====
-.RHEL/CentOS
+.RHEL 8+
 --
 . Install the following system packages:
 +

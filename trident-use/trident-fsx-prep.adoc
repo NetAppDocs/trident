@@ -1,0 +1,121 @@
+---
+sidebar: sidebar
+permalink: trident-use/trident-fsx-prep.html
+keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident
+summary: You can integrate your Amazon FSx for NetApp ONTAP file system with Astra Trident to ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+---
+
+= Integrate Amazon FSx for NetApp ONTAP
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+You can integrate your Amazon FSx for NetApp ONTAP file system with Astra Trident to ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+
+.Before you begin
+In addition to link:../trident-get-started/requirements.html[Astra Trident requirements], to integrate FSx for ONTAP with Astra Trident, you need:
+
+* An existing Amazon EKS cluster or self-managed Kubernetes cluster with `kubectl` installed.
+* An existing Amazon FSx for NetApp ONTAP file system and storage virtual machine (SVM) that is reachable from your cluster’s worker nodes.
+* Worker nodes that are prepared for link:worker-node-prep.html[NFS or iSCSI].
++
+NOTE: Ensure you follow the node preparation steps required for Amazon Linux and Ubuntu https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html[Amazon Machine Images^] (AMIs) depending on your EKS AMI type.
+
+.Additional requirements for SMB volumes
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+
+* At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
++
+----
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'
+----
+
+* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows. 
+
+== ONTAP SAN and NAS driver integration
+
+WARNING: If you are configuring for SMB volumes, you must read <<Prepare to provision SMB volumes>> before creating the backend.
+
+.Steps
+. Deploy Astra Trident using one of the link:../trident-get-started/kubernetes-deploy.html[deployment methods].
+. Collect your SVM management LIF DNS name. For example, using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
++
+----
+aws fsx describe-storage-virtual-machines --region <file system region>
+----
+. Create and install certificates for link:ontap-nas-prep.html[NAS backend authentication] or link:ontap-san-prep.html[SAN backend authentication].
++
+NOTE: You can log in to your file system (for example to install certificates) using SSH from anywhere that can reach your file system. Use the `fsxadmin` user, the password you configured when you created your file system, and the management DNS name from `aws fsx describe-file-systems`.
+
+. Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
++
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-san",
+  "backendName": "customBackendName",
+  "managementLIF": "svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal",
+  "svm": "svm01",
+  "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
+  "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
+  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz",
+ }
+----
++
+For information about creating backends, see these links:
++
+* link:ontap-nas.html[Configure a backend with ONTAP NAS drivers]
+* link:ontap-san.html[Configure a backend with ONTAP SAN drivers]
+
+.Results
+After deployment, you can create a link:../trident-get-started/kubernetes-postdeployment.html[storage class, provision a volume, and mount the volume in a pod].
+
+== Prepare to provision SMB volumes
+You can provision SMB volumes using the `ontap-nas` driver. Before you complete <<ONTAP SAN and NAS driver integration>> complete the following steps. 
+
+.Steps
+
+. Create SMB shares. You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
+.. If necessary, create the directory path structure for the share.
++
+The `vserver cifs share create` command checks the path specified in the -path option during share creation. If the specified path does not exist, the command fails.
+
+.. Create an SMB share associated with the specified SVM:
++
+----
+vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
+----
+
+.. Verify that the share was created:
++
+----
+vserver cifs share show -share-name share_name
+----
++
+NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-task.html[Create an SMB share^] for full details.
+
+. When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
++
+[cols=3,options="header"]
+|===
+|Parameter |Description | Example
+
+|`smbShare`
+|Name of the SMB share created using Shared Folder Microsoft Management Console. For example "smb-share". 
+
+*Required for SMB volumes.*
+| "smb-share" 
+
+|`nasType`
+| *Must set to `smb`.* If null, defaults to `nfs`.
+|"smb"
+
+|`securityStyle` 
+|Security style for new volumes. *Must be set to "ntfs" for SMB volumes.*
+|"ntfs"
+
+|`unixPermissions`
+|Mode for new volumes. *Must be left empty for SMB volumes.*
+|""
+|===

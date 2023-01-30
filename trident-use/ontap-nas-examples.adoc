@@ -65,15 +65,13 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 
-|`igroupName` |Name of the igroup for SAN volumes to use |“trident-<backend-UUID>”
-
-|`storagePrefix` |Prefix used when provisioning new volumes in the SVM. 
-
-Cannot be modified after creation. To update this parameter, you will need to create a new backend.|“trident”
+|`storagePrefix` |Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it |“trident”
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
-If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Astra Trident.
+*Does not apply to Amazon FSx for ONTAP* |“” (not enforced by default)
+
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |“”  (not enforced by default)
 
 |“” (not enforced by default)
 
@@ -301,6 +299,24 @@ This example shows `managementLIF` using an IPv6 address.
     "svm": "svm_nfs",
     "username": "vsadmin",
     "password": "secret"
+}
+----
+
+=== `ontap-nas` driver for Amazon FSx for ONTAP using SMB volumes
+
+----
+{
+  "version": 1,
+  "backendName": "SMBBackend",
+  "storageDriverName": "ontap-nas",
+  "managementLIF": "example.mgmt.fqdn.aws.com",
+  “nasType”: “smb”,
+  "dataLIF": "10.0.0.15",
+  "svm": "nfs_svm",
+  "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
+  "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
+  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz",
+  "storagePrefix": "myPrefix_"
 }
 ----
 

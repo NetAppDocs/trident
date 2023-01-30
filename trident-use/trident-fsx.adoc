@@ -20,8 +20,10 @@ Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes 
 Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-5A78F93F-7539-4840-AB0B-4A6E3252CF84.html[FabricPool^] to manage storage tiers. It enables you to store data in a tier, based on whether the data is frequently accessed.
 
 == Considerations
-* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
-* Astra Trident does not support Windows ARM architecture.
+* SMB volumes: 
+** SMB volumes are supported using the `ontap-nas` driver only. 
+** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+** Astra Trident does not support Windows ARM architecture.
 * Volumes created on Amazon FSx file systems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume. To prevent this issue:
 
 ** Do not use **Quick create** to create the FSx for ONTAP file system. The quick create workflow enables automatic backups and does not provide an opt-out option.

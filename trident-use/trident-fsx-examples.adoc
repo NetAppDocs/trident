@@ -242,7 +242,7 @@ SAN only.
 |===
 
 == Example
-Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials.
+Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

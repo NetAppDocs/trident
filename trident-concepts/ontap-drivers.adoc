@@ -15,7 +15,17 @@ Astra Trident provides five unique ONTAP storage drivers for communicating with 
 
 == Learn about ONTAP storage drivers
 
-WARNING: Customers must use the `ontap-nas` driver for production workloads that require data protection, disaster recovery, and mobility. Astra Control provides seamless protection, disaster recovery, and mobility for volumes created with the `ontap-nas` driver. The `ontap-nas-economy` driver should be used only in  limited use cases where anticipated volume usage is expected to be much higher than what ONTAP supports, with no anticipated data protection, disaster recovery, or mobility (moving volumes between Kubernetes clusters) requirements.
+[WARNING]
+====
+Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas` and the `ontap-san-economy` driver. 
+
+* Use `ontap-san-economy` when anticipated volume usage is expected to be much higher than what ONTAP supports. 
+* You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 
+* Use `ontap-nas-economy` only where anticipated volume usage is expected to be much higher than what ONTAP supports, and the `ontap-san-economy` driver cannot be used. 
+* Do not use use `ontap-nas-economy` if you anticipate the need for data protection, disaster recovery, or mobility.
+====
+
+Astra Control provides seamless protection, disaster recovery, and mobility for volumes created with the `ontap-nas` driver. The `ontap-nas-economy` driver should be used only in  limited use cases where anticipated volume usage is expected to be much higher than what ONTAP supports, with no anticipated data protection, disaster recovery, or mobility (moving volumes between Kubernetes clusters) requirements.
 
 [cols=5,options="header"]
 |===

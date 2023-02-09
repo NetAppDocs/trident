@@ -18,7 +18,7 @@ Learn about configuring an ONTAP backend with ONTAP and Cloud Volumes ONTAP NAS 
 
 [WARNING]
 ====
-Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas` and the `ontap-san-economy` driver. 
+Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san-economy` drivers. See link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details. 
 
 * You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 
 * Use `ontap-san-economy` when anticipated volume usage is expected to be much higher than what ONTAP supports. 

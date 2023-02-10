@@ -112,8 +112,12 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |"smb"
 
 |`securityStyle` 
-|Security style for new volumes. *Must be set to "ntfs" for SMB volumes.*
-|"ntfs"
+|Security style for new volumes. 
+
+*Must be set to `ntfs` or `mixed` for SMB volumes.*
+|`unix` for NFS volumes
+
+`ntfs` or `mixed` for SMB volumes
 
 |`unixPermissions`
 |Mode for new volumes. *Must be left empty for SMB volumes.*

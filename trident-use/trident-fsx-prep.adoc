@@ -105,15 +105,17 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Name of the SMB share created using Shared Folder Microsoft Management Console. For example "smb-share". 
 
 *Required for SMB volumes.*
-| "smb-share" 
+| `smb-share` 
 
 |`nasType`
 | *Must set to `smb`.* If null, defaults to `nfs`.
-|"smb"
+|`smb`
 
 |`securityStyle` 
-|Security style for new volumes. *Must be set to "ntfs" for SMB volumes.*
-|"ntfs"
+|Security style for new volumes. 
+
+*Must be set to `ntfs` or `mixed` for SMB volumes.*
+|`ntfs` or `mixed` for SMB volumes
 
 |`unixPermissions`
 |Mode for new volumes. *Must be left empty for SMB volumes.*

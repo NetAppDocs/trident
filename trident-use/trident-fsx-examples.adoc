@@ -237,7 +237,15 @@ SAN only.
 *Leave empty for SMB volumes.*	
 |“"
 
-|`securityStyle` |Security style for new volumes. |`unix`` for NFS volumes, `ntfs` or `mixed` for SMB volumes
+|`securityStyle` |Security style for new volumes. 
+
+NFS supports `mixed` and `unix` security styles. 
+
+SMB supports `mixed` and `ntfs` security styles. 
+
+|NFS default is `unix`.
+
+SMB default is `ntfs`.
 
 |===
 

@@ -183,9 +183,11 @@ NOTE: The `trident-controller` and pod names reflect the naming convention intro
 
 Perform the following steps to upgrade a Helm-based operator installation.
 
+WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Astra Trident installed, you must update values.yaml to set `excludePodSecurityPolicy` to `true` or add `--set excludePodSecurityPolicy=true` to the `helm upgrade` command before you can upgrade the cluster.
+
 .Steps
 . Download the latest Astra Trident release.
-. Use the `helm upgrade` command where `trident-operator-23.01.0.tgz` reflects the version that you want to upgrade to:
+. Use the `helm upgrade` command where `trident-operator-23.01.0.tgz` reflects the version that you want to upgrade to.
 +
 ----
 helm upgrade <name> trident-operator-23.01.0.tgz

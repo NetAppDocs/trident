@@ -87,7 +87,11 @@ Do not use `debugTraceFlags` unless you are troubleshooting and require a detail
 
 The mount options for Kubernetes-persistent volumes are normally specified in storage classes, but if no mount options are specified in a storage class, Astra Trident will fall back to using the mount options specified in the storage backend's configuration file. 
 
-If no mount options are specified in the storage class or the configuration file, Astra Trident will not set any mount options on an associated persistent volume.	|“”
+If no mount options are specified in the storage class or the configuration file, Astra Trident will not set any mount options on an associated persistent volume.	
+
+There are driver-specific and Kubernetes-specific options for `nfsMountOptions`. Refer to the documentation for your driver type for detailed settings.
+
+|“”
 
 |`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|“200”
 

@@ -73,7 +73,11 @@ For an HTTPS proxy, certificate validation is skipped to allow the usage of self
 
 Proxy servers with authentication enabled are not supported. |
 
-|`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
+|`nfsMountOptions` |Fine-grained control of NFS mount options. 
+
+*The `ro` mount option is strongly discouraged. If you specify `ro`, CSI operations will fail.*
+
+|"nfsvers=3"
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value. |"" (not enforced by default)
 

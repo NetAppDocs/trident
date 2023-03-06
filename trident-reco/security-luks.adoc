@@ -52,6 +52,8 @@ You can enable per-volume, host-side encryption using Linux Unified Key Setup (L
     },
 ]
 ----
++
+NOTE: To import a LUKS volume, you must set `luksEncryption` to `true`. The `luksEncryption` option tells Astra Trident if the volume is LUKS (`true`) or not LUKS (`false`).  
 
 . Use `parameters.selector` to define the storage pools using LUKS encryption. For example:
 +

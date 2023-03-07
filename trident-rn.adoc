@@ -111,7 +111,7 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 * Included a ResourceQuota with Trident installations to ensure Trident DaemonSet is scheduled when PriorityClass consumption is limited by default.
 
-* Added support for Network Features to ANF driver. (link:https://github.com/NetApp/trident/issues/717[GitHub issue #717^])
+* Added support for Network Features to Azure NetApp Files driver. (link:https://github.com/NetApp/trident/issues/717[GitHub issue #717^])
 
 * Added tech preview automatic MetroCluster switchover detection to ONTAP drivers. (link:https://github.com/NetApp/trident/issues/228[GitHub issue #228^])
 
@@ -152,7 +152,7 @@ IMPORTANT: If you are upgrading from any previous Trident release and use Azure 
 * Fixed issue with unpublishing volumes on deleted nodes. (link:https://github.com/NetApp/trident/issues/691[GitHub issue #691^])
 * Added handling of filesystem inconsistencies on block devices. (link:https://github.com/NetApp/trident/issues/656[GitHub issue #656^])
 * Fixed issue pulling auto-support images when setting the `imageRegistry` flag during installation. (link:https://github.com/NetApp/trident/issues/715[GitHub issue #715^])
-* Fixed issue where ANF driver failed to clone a volume with multiple export rules.
+* Fixed issue where Azure NetApp Files driver failed to clone a volume with multiple export rules.
 
 === Enhancements
 
@@ -182,8 +182,8 @@ E-Series driver (disabled since 20.07) has been removed.
 * Fixed issue where attempting to import an already imported volume returns EOF leaving PVC in pending state. (link:https://github.com/NetApp/trident/issues/489[GitHub issue #489])
 * Fixed issue when Astra Trident performance slows down when > 32 snapshots are created on a SolidFire volume.
 * Replaced SHA-1 with SHA-256 in SSL certificate creation.
-* Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
-* Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
+* Fixed Azure NetApp Files driver to allow duplicate resource names and limit operations to a single location.
+* Fixed Azure NetApp Files driver to allow duplicate resource names and limit operations to a single location.
 
 === Enhancements
 
@@ -195,7 +195,7 @@ E-Series driver (disabled since 20.07) has been removed.
 
 * Allow cross-region volumes in GCP driver. (link:https://github.com/NetApp/trident/issues/633[GitHub issue #633^])
 
-* Added support for 'unixPermissions' option to ANF volumes. (link:https://github.com/NetApp/trident/issues/666[GitHub issue #666^])
+* Added support for 'unixPermissions' option to Azure NetApp Files volumes. (link:https://github.com/NetApp/trident/issues/666[GitHub issue #666^])
 
 === Deprecations
 

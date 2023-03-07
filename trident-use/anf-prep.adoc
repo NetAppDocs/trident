@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/anf-prep.html
 keywords: trident backend, azure netapp files, smb volumes, smb, windows, active directory, csi proxy
-summary: Before you can configure your ANF backend, you need to ensure the following requirements are met. 
+summary: Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met. 
 ---
 
 = Prepare to configure an Azure NetApp Files backend
@@ -84,7 +84,7 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 
 * A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
-* At least one Astra Trident secret containing your Active Directory credentials so ANF can authenticate to Active Directory. To generate secret `smbcreds`:
+* At least one Astra Trident secret containing your Active Directory credentials so Azure NetApp Files can authenticate to Active Directory. To generate secret `smbcreds`:
 +
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'

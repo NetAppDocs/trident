@@ -85,7 +85,7 @@ stringData:
 LUKS-encrypted volumes cannot take advantage of ONTAP deduplication and compression. 
 
 == Backend configuration for importing LUKS volumes
-To import a LUKS volume, you must set `luksEncryption` to `true` on the backend. The `luksEncryption` option tells Astra Trident if the volume is LUKS (`true`) or not LUKS (`false`) as shown in the following example. 
+To import a LUKS volume, you must set `luksEncryption` to `true` on the backend. The `luksEncryption` option tells Astra Trident if the volume is LUKS-compliant (`true`) or not LUKS-compliant (`false`) as shown in the following example. 
 
 ----
 version: 1

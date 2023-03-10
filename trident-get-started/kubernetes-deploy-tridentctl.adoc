@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy-tridentctl.html
 keywords: deploy, astra trident, methods, tridentctl, windows
-summary: You can deploy Astra Trident by using `tridentctl`.
+summary: You can install Astra Trident using `tridentctl`. This process applies to installations where the container images required by Astra Trident are stored either in a private registry or not.
 ---
 
 = Install using `tridentctl`
@@ -11,7 +11,7 @@ summary: You can deploy Astra Trident by using `tridentctl`.
 :imagesdir: ../media/
 
 [.lead]
-You can install Astra Trident using `tridentctl`. This process applies to installations where Trident and CSI images are located in a `docker.io` and `registry.k8s.io` or a private, mirrored registry. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
+You can install Astra Trident using `tridentctl`. This process applies to installations where the container images required by Astra Trident are stored either in a private registry or not. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
 == Critical information about Astra Trident 23.01
 *You must read the following critical information about Astra Trident.*
@@ -84,14 +84,14 @@ NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag 
 ----
 --
 
-.Trident and CSI images in one mirrored registry
+.Images in one registry
 --
 ----
 ./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:23.01 --trident-image <your-registry>/trident:23.01.0
 ----
 --
 
-.Trident and CSI images in different mirrored registries
+.Images in different registries
 --
 You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----

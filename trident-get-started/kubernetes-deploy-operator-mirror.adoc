@@ -78,10 +78,10 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_<VERSIO
 
 === Step 3: Update the registry location in the operator
 
-In `operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.0` to reflect the location of your image registry. For example:.
+In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.0` to reflect the location of your image registry. For example:.
 
 * `image: <your-registry>/trident-operator:23.01.0` if your images are all located in one registry.
-* `image: <your-registry>/netapp/trident-operator:23.01.0` if your Trident and CSI images are located in different registries. 
+* `image: <your-registry>/netapp/trident-operator:23.01.0` if your Trident image is located in a different registry from your CSI images. 
 
 === Step 4: Deploy the Trident operator
 The Trident installer deploys the operator in the `trident` namespace. If the `trident` namespace does not exist, use `kubectl apply -f deploy/namespace.yaml` to create it.

@@ -78,7 +78,7 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_<VERSIO
 
 === Step 3: Update the registry location in the operator
 
-In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.0` to reflect the location of your image registry. For example:.
+In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.0` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
 
 * `image: <your-registry>/trident-operator:23.01.0` if your images are all located in one registry.
 * `image: <your-registry>/netapp/trident-operator:23.01.0` if your Trident image is located in a different registry from your CSI images. 
@@ -115,7 +115,7 @@ trident-operator   1/1     1            1           3m
 IMPORTANT: There should only be *one instance* of the operator in a Kubernetes cluster. Do not create multiple deployments of the Trident operator.
 
 === Step 5: Update the image registry location in the `TridentOrchestrator`
-Your Trident and CSI images can be located in one registry or different registries, but all CSI images must be located in the same registry. Update `deploy/crds/tridentorchestrator_cr.yaml` to add the additional location specs based on your registry configuration. 
+Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. Update `deploy/crds/tridentorchestrator_cr.yaml` to add the additional location specs based on your registry configuration. 
 
 [role="tabbed-block"]
 ====

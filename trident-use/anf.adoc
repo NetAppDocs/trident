@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/anf.html
-keywords: trident backend, azure netapp files, smbvolumes, smb, windows
+keywords: trident backend, azure netapp files, smbvolumes, smb, windows, sub volumes
 summary: You can configure Azure NetApp Files as the backend for Astra Trident. You can attach NAS and SMB volumes using an Azure NetApp Files backend.
 ---
 
@@ -15,7 +15,7 @@ You can configure Azure NetApp Files as the backend for Astra Trident. You can a
 Trident offers two storage drivers for Azure NetApp Files:
 
 The `azure-netapp-files` driver creates an Azure Netapp Files volume for each PVC provisioned.
-The `azure-netapp-files-subvolume` driver creates an Azure NetApp Files subvolume for each PVC provisioned. A subvolume is a storage volume contained within a parent Azure NetApp Files volume.
+The `azure-netapp-files-subvolume` driver creates an Azure NetApp Files sub volume for each PVC provisioned. A sub volume is a storage volume contained within a parent Azure NetApp Files volume.
 
 `azure-netapp-files` is suited for high performance workloads that require large volumes.
 `azure-netapp-files` is best suited for bursty workloads, since throughput is independent of volume size. Faster volume creation times and smaller volumes characterize this driver.

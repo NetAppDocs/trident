@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/anf-examples.html
-keywords: trident backend, azure netapp files, smbvolumes, smb, windows
+keywords: trident backend, azure netapp files, smbvolumes, smb, windows, sub volume
 summary: Learn about NFS and SMB backend configuration options for Azure NetApp Files and review configuration examples.
 ---
 
@@ -65,7 +65,7 @@ To mount volumes using NFS version 4.1, include  `nfsvers=4`  in the comma-delim
 
 Mount options set in a storage class definition override mount options set in backend configuration.
 
-*The `ro` mount option is not supported for the Azure NetApp Files subvolume driver or any other driver. If you specify `ro` for the Azure NetApp Files subvolume driver, backend creation will fail. If you specify `ro` mount option for any other driver, CSI operations will fail.*
+*The `ro` mount option is not supported for the Azure NetApp Files sub volume driver or any other driver. If you specify `ro` for the Azure NetApp Files sub volume driver, backend creation will fail. If you specify `ro` mount option for any other driver, CSI operations will fail.*
 
 |"nfsvers=3"
 
@@ -146,10 +146,10 @@ This configuration is ideal when you are just getting started with Azure NetApp 
 // End snippet
 
 // Start snippet: collapsible block (open on page load)
-.Example 2: Minimal configuration for Azure NetApp Files Subvolume
+.Example 2: Minimal configuration for Azure NetApp Files Sub volumes
 [%collapsible%open]
 ====
-This is a basic Azure NetApp Files Subvolume backend. It uses two pre-created parent volumes named "parent-volume-1" and "parent-volume-2".
+This is a basic Azure NetApp Files Sub volumes backend. It uses two pre-created parent volumes named "parent-volume-1" and "parent-volume-2".
 
 ----
 {

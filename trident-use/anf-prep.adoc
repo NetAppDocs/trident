@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/anf-prep.html
-keywords: trident backend, azure netapp files, smbvolumes, smb, windows, active directory, csi proxy
+keywords: trident backend, azure netapp files, smbvolumes, smb, windows, active directory, csi proxy, sub volume
 summary: Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met.
 ---
 
@@ -92,7 +92,7 @@ kubectl create secret generic smbcreds --from-literal username=user --from-liter
 
 * A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
 
-== Additional requirements for NFS Subvolumes
+== Additional requirements for NFS Sub volumes
 
 * A parent Azure NetApp Files volume. This volume is created in the desired subscription, VNet, and Azure location.
 
@@ -141,4 +141,4 @@ curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json
 }'
 ----
 
-`filePoolVolumes` is set to the name of the parent volume in a subvolume backend's definition.
+`filePoolVolumes` is set to the name of the parent volume in a sub volume backend's definition.

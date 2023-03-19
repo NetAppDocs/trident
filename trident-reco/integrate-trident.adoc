@@ -63,21 +63,35 @@ Astra Trident offers 2 SAN drivers for ONTAP, whose capabilities are shown below
 |QoS
 |Resize
 |Replication
-| `ontap-san` | Yes | Yes | Yesfootnote:4[]| Yes | Yesfootnote:1[] | Yes |
-Yesfootnote:1[]
-|`ontap-san-economy` | Yes | Yes | Yesfootnote:4[]| Yes | Yesfootnote:3[]|
-Yes | Yesfootnote:3[]|
-|===
+| `ontap-san` 
+| Yes 
+| Yes 
+| Yes
 
-[verse]
---
-Footnote for the above tables:
-Yesfootnote:1[]: Not managed by Astra Trident
-Yesfootnote:2[]: Managed by Astra Trident, but not PV granular
-Yesfootnote:3[]: Not managed by Astra Trident and not PV granular
-Yesfootnote:4[]: Supported for raw-block volumes
-Yesfootnote:5[]: Supported by CSI Trident
---
+Supported for raw-block volumes.
+| Yes 
+| Yes
+
+Not managed by Astra Trident.
+| Yes 
+|Yes
+
+Not managed by Astra Trident
+|`ontap-san-economy` 
+| Yes 
+| Yes 
+| Yes
+
+Supported for raw-block volumes.
+| Yes 
+| Yes
+
+Not managed by Astra Trident and not PV granular.
+|Yes 
+| Yes
+
+Not managed by Astra Trident and not PV granular.|
+|===
 
 The features that are not PV granular are applied to the entire FlexVolume and all of the PVs (that is, qtrees or LUNs in shared FlexVols) will share a common schedule.
 
@@ -107,28 +121,33 @@ The `solidfire-san` driver used with the NetApp HCI/SolidFire platforms, helps t
 |QoS
 |Resize
 |Replication
-|`solidfire-san` | Yes | Yes | Yesfootnote:2[]| Yes | Yes | Yes |
-Yesfootnote:1[]
-|===
+|`solidfire-san` 
+| Yes 
+| Yes 
+| Yes
 
-[verse]
---
-Footnote:
-Yesfootnote:1[]: Not managed by Astra Trident
-Yesfootnote:2[]: Supported for raw-block volumes
---
+Supported for raw-block volumes.
+| Yes 
+| Yes 
+| Yes 
+|Yes
+
+Not managed by Astra Trident.
+|===
 
 === Azure NetApp Files backend drivers
 
-Astra Trident provides two drivers to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] service: `azure-netapp-files` and `azure-netapp-files-subvolume`.
+Astra Trident provides two drivers to manage Azure NetApp Files: 
 
-The `azure-netapp-files` driver creates an Azure Netapp Files volume for each PVC provisioned.
-The `azure-netapp-files-subvolume` driver creates an Azure NetApp Files sub volume for each PVC provisioned. A sub volume is a storage volume contained within a parent Azure NetApp Files volume.
+`azure-netapp-files`::
+Creates an Azure Netapp Files volume for each PVC provisioned. This driver is best suited for high-performance workloads that require large volumes.
 
-`azure-netapp-files` is suited for high performance workloads that require large volumes.
-`azure-netapp-files` is best suited for bursty workloads, since throughput is independent of volume size. Faster volume creation times and smaller volumes characterize this driver.
+`azure-netapp-files-subvolume`::
+Creates an Azure NetApp Files _sub volume_ for each PVC provisioned. A sub volume is a storage volume contained within a parent Azure NetApp Files volume. 
++
+This driver is best suited for bursty workloads, since throughput is independent of volume size. Faster volume creation times and smaller volumes characterize this driver.
 
-More information about the drivers and their configuration can be found in link:https://azure.microsoft.com/en-us/services/netapp/[Astra Trident backend configuration for Azure NetApp Files^].
+Learn more about the drivers and their configuration in link:https://azure.microsoft.com/en-us/services/netapp/[Astra Trident backend configuration for Azure NetApp Files^].
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -139,15 +158,23 @@ More information about the drivers and their configuration can be found in link:
 |QoS
 |Expand
 |Replication
-| `azure-netapp-files`           | Yes | Yes | Yes | Yes | Yes | Yesfootnote:1[] |
-| `azure-netapp-files-subvolume` | Yes | Yes | No  | No  | Yes | No              |
-|===
+| `azure-netapp-files`           
+| Yes 
+| Yes 
+| Yes 
+| Yes 
+| Yes 
+| Yes 
 
-[verse]
---
-Footnote:
-Yesfootnote:1[]: Not managed by Astra Trident
---
+Not managed by Astra Trident.
+| `azure-netapp-files-subvolume` 
+| Yes 
+| Yes 
+| No  
+| No  
+| Yes 
+| No              |
+|===
 
 === Cloud Volumes Service on Google Cloud backend driver
 

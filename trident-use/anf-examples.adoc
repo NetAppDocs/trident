@@ -10,6 +10,7 @@ summary: Learn about NFS and SMB backend configuration options for Azure NetApp 
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Learn about NFS and SMB backend configuration options for Azure NetApp Files and review configuration examples.
 
 Astra Trident uses your backend configuration (subnet, virtual network, service level, and location), to create Azure NetApp Files volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
@@ -47,7 +48,9 @@ Azure NetApp Files backends provide these configuration options.
 
 |`capacityPools` |List of capacity pools for filtering discovered resources |"[]" (no filter, random)
 
-|`filePoolVolumes` |List of parent volumes. Applicable for `azure-netapp-files-subvolume` backends only |"[]"
+|`filePoolVolumes` |List of parent volumes. 
+
+Applicable for `azure-netapp-files-subvolume` backends only |"[]"
 
 |`virtualNetwork` |Name of a virtual network with a delegated subnet |""
 
@@ -55,7 +58,11 @@ Azure NetApp Files backends provide these configuration options.
 
 |`networkFeatures` |Set of VNet features for a volume, may be `Basic` or `Standard`.
 
-Network Features is not available in all regions and might have to be enabled in a subscription. Specifying  `networkFeatures`  when the functionality is not enabled causes volume provisioning to fail. |""
+Not applicable for `azure-netapp-files-subvolume`.
+
+Network Features is not available in all regions and might have to be enabled in a subscription. Specifying  `networkFeatures`  when the functionality is not enabled causes volume provisioning to fail. 
+
+|""
 
 |`nfsMountOptions` |Fine-grained control of NFS mount options.
 
@@ -75,7 +82,10 @@ Mount options set in a storage class definition override mount options set in ba
 
 | `nasType` | Configure NFS or SMB volumes creation.
 
-Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs`
+Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. 
+
+Not applicable for `azure-netapp-files-subvolume`.
+| `nfs`
 
 |===
 
@@ -146,21 +156,17 @@ This configuration is ideal when you are just getting started with Azure NetApp 
 // End snippet
 
 // Start snippet: collapsible block (open on page load)
-.Example 2: Minimal configuration for Azure NetApp Files Sub volumes
+.Example 2: Minimal configuration for Azure NetApp Files sub volumes
 [%collapsible%open]
 ====
-This is a basic Azure NetApp Files Sub volumes backend. It uses two pre-created parent volumes named "parent-volume-1" and "parent-volume-2".
+This is a basic Azure NetApp Files sub volumes backend. 
 
 ----
 {
     "version": 1,
     "storageDriverName": "azure-netapp-files-subvolume",
     "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-    "capacityPools": ["anf-resourcegroup/anf-account/ultra-pool"],
-    "filePoolVolumes": [
-        "/anf-resourcegroup/anf-account/ultra-pool/parent-volume-1",
-        "/anf-resourcegroup/anf-account/ultra-pool/parent-volume-2"
-        ],
+    "filePoolVolumes": ["/anf-resourcegroup/anf-account/ultra-pool/parent-volume-1"],
     "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
     "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
     "clientSecret": "SECRET",
@@ -174,7 +180,7 @@ This is a basic Azure NetApp Files Sub volumes backend. It uses two pre-created 
 .Example 3: Specific service level configuration with capacity pool filters
 [%collapsible%open]
 ====
-This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
+This backend configuration places volumes in the Azure `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
 
 ----
     {

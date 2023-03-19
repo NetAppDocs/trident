@@ -11,8 +11,7 @@ summary: Before you can configure your Azure NetApp Files backend, you need to e
 :imagesdir: ../media/
 
 
-Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met.
-
+[.lead]
 If you are using Azure NetApp Files for the first time or in a new location, some initial configuration is required.
 
 * To set up Azure NetApp files and create an NFS volume, refer to https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-quickstart-set-up-account-create-volumes[Azure: Set up Azure NetApp Files and create an NFS volume^].
@@ -92,11 +91,11 @@ kubectl create secret generic smbcreds --from-literal username=user --from-liter
 
 * A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
 
-== Additional requirements for NFS Sub volumes
+== Additional requirements for NFS sub volumes
 
-* A parent Azure NetApp Files volume. This volume is created in the desired subscription, VNet, and Azure location.
+You need a parent Azure NetApp Files volume created in the desired subscription, VNet, and Azure location. 
 
-A parent volume can be created using the ANF volume create API, as shown below.
+A parent volume can be created using the Azure NetApp Files volume create API, as shown below.
 
 [source,SHELL]
 ----
@@ -141,4 +140,4 @@ curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json
 }'
 ----
 
-`filePoolVolumes` is set to the name of the parent volume in a sub volume backend's definition.
+NOTE: `filePoolVolumes` is set to the name of the parent volume in a sub volume backend's definition.

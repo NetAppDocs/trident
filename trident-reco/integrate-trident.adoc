@@ -14,7 +14,7 @@ summary: A Kubernetes cluster typically consists of two types of nodes, each res
 To integrate Astra Trident, the following design and architectural elements require integration: driver selection and deployment, storage class design, virtual pool design, Persistent Volume Claim (PVC) impacts on storage provisioning, volume operations, and OpenShift services deployment using Astra Trident.
 
 == Driver selection and deployment
-Select and deploy a backend driver for your storage system. 
+Select and deploy a backend driver for your storage system.
 
 === ONTAP backend drivers
 
@@ -120,9 +120,15 @@ Yesfootnote:2[]: Supported for raw-block volumes
 
 === Azure NetApp Files backend drivers
 
-Astra Trident uses the `azure-netapp-files` driver to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] service.
+Astra Trident provides two drivers to manage the link:https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] service: `azure-netapp-files` and `azure-netapp-files-subvolume`.
 
-More information about this driver and how to configure it can be found in link:https://azure.microsoft.com/en-us/services/netapp/[Astra Trident backend configuration for Azure NetApp Files^].
+The `azure-netapp-files` driver creates an Azure Netapp Files volume for each PVC provisioned.
+The `azure-netapp-files-subvolume` driver creates an Azure NetApp Files sub volume for each PVC provisioned. A sub volume is a storage volume contained within a parent Azure NetApp Files volume.
+
+`azure-netapp-files` is suited for high performance workloads that require large volumes.
+`azure-netapp-files` is best suited for bursty workloads, since throughput is independent of volume size. Faster volume creation times and smaller volumes characterize this driver.
+
+More information about the drivers and their configuration can be found in link:https://azure.microsoft.com/en-us/services/netapp/[Astra Trident backend configuration for Azure NetApp Files^].
 
 [cols=7*,options="header",cols="20,10,10,10,10,10,10"]
 |===
@@ -133,7 +139,8 @@ More information about this driver and how to configure it can be found in link:
 |QoS
 |Expand
 |Replication
-| `azure-netapp-files` | Yes | Yes | Yes | Yes | Yes | Yesfootnote:1[] |
+| `azure-netapp-files`           | Yes | Yes | Yes | Yes | Yes | Yesfootnote:1[] |
+| `azure-netapp-files-subvolume` | Yes | Yes | No  | No  | Yes | No              |
 |===
 
 [verse]
@@ -144,14 +151,14 @@ Yesfootnote:1[]: Not managed by Astra Trident
 
 === Cloud Volumes Service on Google Cloud backend driver
 
-Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on Google Cloud. 
+Astra Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on Google Cloud.
 
-The `gcp-cvs` driver uses virtual pools to abstract the backend and allow Astra Trident to determine volume placement. The administrator defines the virtual pools in the `backend.json` files. Storage classes use selectors to identify virtual pools by label. 
+The `gcp-cvs` driver uses virtual pools to abstract the backend and allow Astra Trident to determine volume placement. The administrator defines the virtual pools in the `backend.json` files. Storage classes use selectors to identify virtual pools by label.
 
 * If virtual pools are defined in the backend, Astra Trident will try to create a volume in the Google Cloud storage pools to which those virtual pools are limited.
 * If virtual pools are not defined in the backend, Astra Trident will select a Google Cloud storage pool from the available storage pools in the region.
 
-To configure the Google Cloud backend on Astra Trident, you must specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. You can find the project number in the Google Cloud console. The API key is taken from the service account private key file you created when setting up API access for Cloud Volumes Service on Google Cloud. 
+To configure the Google Cloud backend on Astra Trident, you must specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. You can find the project number in the Google Cloud console. The API key is taken from the service account private key file you created when setting up API access for Cloud Volumes Service on Google Cloud.
 
 For details on Cloud Volumes Service on Google Cloud service types and service levels, see link:../trident-use/gcp.html[Learn about Astra Trident support for CVS for GCP].
 
@@ -171,7 +178,7 @@ For details on Cloud Volumes Service on Google Cloud service types and service l
 ====
 .Replication notes
 * Replication is not managed by Astra Trident.
-* The clone will be created in the same storage pool as the source volume. 
+* The clone will be created in the same storage pool as the source volume.
 ====
 
 == Storage class design

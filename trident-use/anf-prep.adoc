@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-use/anf-prep.html
-keywords: trident backend, azure netapp files, smb volumes, smb, windows, active directory, csi proxy
-summary: Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met. 
+keywords: trident backend, azure netapp files, smbvolumes, smb, windows, active directory, csi proxy, sub volume
+summary: Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met.
 ---
 
 = Prepare to configure an Azure NetApp Files backend
@@ -11,23 +11,23 @@ summary: Before you can configure your Azure NetApp Files backend, you need to e
 :imagesdir: ../media/
 
 
-Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met. 
+Before you can configure your Azure NetApp Files backend, you need to ensure the following requirements are met.
 
-If you are using Azure NetApp Files for the first time or in a new location, some initial configuration is required. 
+If you are using Azure NetApp Files for the first time or in a new location, some initial configuration is required.
 
 * To set up Azure NetApp files and create an NFS volume, refer to https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-quickstart-set-up-account-create-volumes[Azure: Set up Azure NetApp Files and create an NFS volume^].
 
-* To configure Azure NetApp Files and add an SMB volume, refer to: https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-create-volumes-smb[Azure: Create an SMB volume for Azure NetApp Files^]. 
+* To configure Azure NetApp Files and add an SMB volume, refer to: https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-create-volumes-smb[Azure: Create an SMB volume for Azure NetApp Files^].
 
 
-== Requirements 
+== Requirements
 
 To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] backend, you need the following:
 
 * `subscriptionID` from an Azure subscription with Azure NetApp Files enabled.
-* `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use either: 
+* `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use either:
 
-**  The Owner or Contributor role link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[predefined by Azure^] 
+**  The Owner or Contributor role link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[predefined by Azure^]
 
 ** A link:https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles-portal[custom Contributor role] at the subscription level (`assignableScopes`) with the following permissions that are limited to only what Astra Trident requires. After creating the custom role, link:https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal[assign the role using the Azure portal^].
 +
@@ -90,4 +90,55 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'
 ----
 
-* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows. 
+* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
+
+== Additional requirements for NFS Sub volumes
+
+* A parent Azure NetApp Files volume. This volume is created in the desired subscription, VNet, and Azure location.
+
+A parent volume can be created using the ANF volume create API, as shown below.
+
+[source,SHELL]
+----
+#Login to your azure account from the CLI and generate token
+az login
+BEARER=$(az account get-access-token)
+TOKEN=$(echo $BEARER | jq ".accessToken" -r)
+#Replace {vars}
+curl -X PUT -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/capacityPools/{poolName}/volumes/{volumeName}?api-version=2021-10-01 -d '{
+    "location": "{location}",
+    "properties": {
+        "serviceLevel": "Ultra",
+        "creationToken": "{volumeName}",
+        "usageThreshold": 107374182400,
+        "exportPolicy": {
+                    "rules": [
+                        {
+                            "ruleIndex": 1,
+                            "unixReadOnly": false,
+                            "unixReadWrite": true,
+                            "cifs": false,
+                            "nfsv3": true,
+                            "nfsv41": false,
+                            "allowedClients": "0.0.0.0/0",
+                            "kerberos5ReadOnly": false,
+                            "kerberos5ReadWrite": false,
+                            "kerberos5iReadOnly": false,
+                            "kerberos5iReadWrite": false,
+                            "kerberos5pReadOnly": false,
+                            "kerberos5pReadWrite": false,
+                            "hasRootAccess": true,
+                            "chownMode": "Restricted"
+                        }
+                    ]
+                },
+        "protocolTypes": [
+                    "NFSv3"
+                ],
+        "subnetId": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/<vNetName>/subnets/<subnetName>",
+        "enableSubvolumes": "Enabled"
+    }
+}'
+----
+
+`filePoolVolumes` is set to the name of the parent volume in a sub volume backend's definition.

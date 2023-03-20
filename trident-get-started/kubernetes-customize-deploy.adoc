@@ -23,64 +23,59 @@ This table details `TridentOrchestrator` attributes:
 [cols=3,options="header"]
 |===
 |Parameter |Description |Default
-|`namespace` |Namespace to install Astra Trident in |"default"
+|`autosupportImage` |The container image for Autosupport Telemetry |"netapp/trident-autosupport:23.01.0"
+|`autosupportProxy` |The address/port of a proxy for sending Autosupport Telemetry |"http://proxy.example.com:8888"
+|`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as `pod.spec.nodeSelector`. |No default; optional
+|`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin. Follows the same format as `pod.spec.Tolerations`. |No default; optional
+|`debug` |Enable debugging for Astra Trident |`false`
+|`enableForceDetach` |Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
 
-|`debug` |Enable debugging for Astra Trident |false
+*This is an experimental feature in 23.04.* Refer to <<Details about Force Detach>> for important details.  |`false`
+|`enableNodePrep` |Manage worker node dependencies automatically (*BETA*) |`false`
+|`imagePullPolicy` | Sets the image pull policy for the the Trident operator. Valid values are: 
 
-|`windows` | Setting to `true` enables installation on Windows worker nodes. | false
+`Always` to always pull the image. 
 
-|`IPv6` |Install Astra Trident over IPv6 |false
-
-|`k8sTimeout` |Timeout for Kubernetes operations |30sec
-
-|`silenceAutosupport` |Don't send autosupport bundles to NetApp
-automatically |false
-
-|`enableNodePrep` |Manage worker node dependencies automatically (*BETA*)
-|false
-
-|`autosupportImage` |The container image for Autosupport Telemetry
-|"netapp/trident-autosupport:23.01.0"
-
-|`autosupportProxy` |The address/port of a proxy for sending Autosupport
-Telemetry |"http://proxy.example.com:8888"
-
-|`uninstall` |A flag used to uninstall Astra Trident |false
-
-|`logFormat` |Astra Trident logging format to be used [text,json] |"text"
-
-|`tridentImage` |Astra Trident image to install |"netapp/trident:21.04"
-
-|`imageRegistry` |Path to internal registry, of the format
-`<registry FQDN>[:port][/subpath]` |"k8s.gcr.io/sig-storage (k8s 1.19+)
-or quay.io/k8scsi"
-
-|`kubeletDir` |Path to the kubelet directory on the host |“/var/lib/kubelet”
-
-|`wipeout` |A list of resources to delete to perform a complete removal of
-Astra Trident |
-
-|`imagePullSecrets` |Secrets to pull images from an internal registry |
-
-|`imagePullPolicy` | Sets the image pull policy for the the Trident operator. Valid values are:
-
-`Always` to always pull the image.
-
-`IfNotPresent` to pull the image only if it does not already exist on the node.
+`IfNotPresent` to pull the image only if it does not already exist on the node. 
 
 `Never` to never pull the image. |`IfNotPresent`
-
-|`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as pod.spec.nodeSelector. |No default; optional
-
-|`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional
-
-|`nodePluginNodeSelector` |Additional node selectors for pods running the Trident Node CSI Plugin. Follows same format as pod.spec.nodeSelector. |No default; optional
-
-|`nodePluginTolerations` |Overrides tolerations for pods running the Trident Node CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional
-
+|`imagePullSecrets` |Secrets to pull images from an internal registry |
+|`imageRegistry` |Path to internal registry, of the format `<registry FQDN>[:port][/subpath]` |"k8s.gcr.io/sig-storage (k8s 1.19+) or quay.io/k8scsi"
+|`IPv6` |Install Astra Trident over IPv6. |`false`
+|`k8sTimeout` |Timeout for Kubernetes operations. |30sec
+|`kubeletDir` |Path to the kubelet directory on the host. |“/var/lib/kubelet”
+|`logFormat` |Astra Trident logging format to be used [text,json] |"text"
+|`namespace` |Namespace in which you are installing install Astra Trident. |"default"
+|`nodePluginNodeSelector` |Additional node selectors for pods running the Trident Node CSI Plugin. Follows same format as `pod.spec.nodeSelector`. |No default; optional
+|`nodePluginTolerations` |Overrides tolerations for pods running the Trident Node CSI Plugin. Follows the same format as `pod.spec.Tolerations`. |No default; optional
+|`silenceAutosupport` |Don't send autosupport bundles to NetApp automatically. |`false`
+|`tridentImage` |Astra Trident version image you are installing. |"netapp/trident:21.04"
+|`uninstall` |A flag used to uninstall Astra Trident. |`false`
+|`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
+|`wipeout` |A list of resources to delete to perform a complete removal of Astra Trident. |
 |===
 [NOTE] 
 For more information on formatting pod parameters, see link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
+
+=== Details about force detach
+Before enabling force detach, you must meet the following conditions: 
+
+* Non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. For more information, refer to link:https://kubernetes.io/docs/concepts/architecture/nodes/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
+* RWO volume???
+
+WARNING: Because Astra Trident relies on Kubernetes NGNS, do not remove `out-of-service` taints from an unhealthy node until all non-tolerable workloads are rescheduled. Recklessly applying or removing the taint can jeopardize backend data protection.  
+
+When the Kubernetes cluster administrator has applied the `node.kubernetes.io/out-of-service=nodeshutdown:NoExecute` taint to the node and `enableForceDetach` is set to `true`, Astra Trident will determine the node status and:
+
+. Cease input and output for that node on the backend. 
+. Mark the Astra Trident node object as `notSafeToPublish`.
+
+When node health is restored and the taint is removed, Astra Trident will:
+
+. Identify and clean dirty publication paths
+. Post the cleaned paths back to .... ?????
+. Update the node to `safeToPublish`.
+
 
 == Sample configurations
 You can use the attributes mentioned above when defining `TridentOrchestrator` to customize your installation. 

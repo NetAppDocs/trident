@@ -64,8 +64,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Astra Trident installer package contains everything you need to deploy the Trident operator and install Astra Trident. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v23.01.0/trident-installer-23.01.0.tar.gz
-tar -xf trident-installer-23.01.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.01.1/trident-installer-23.01.1.tar.gz
+tar -xf trident-installer-23.01.1.tar.gz
 cd trident-installer
 ----
 
@@ -78,10 +78,10 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_<VERSIO
 
 === Step 3: Update the registry location in the operator
 
-In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.0` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
+In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.01.1` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
 
-* `image: <your-registry>/trident-operator:23.01.0` if your images are all located in one registry.
-* `image: <your-registry>/netapp/trident-operator:23.01.0` if your Trident image is located in a different registry from your CSI images. 
+* `image: <your-registry>/trident-operator:23.01.1` if your images are all located in one registry.
+* `image: <your-registry>/netapp/trident-operator:23.01.1` if your Trident image is located in a different registry from your CSI images. 
 
 === Step 4: Deploy the Trident operator
 The Trident installer deploys the operator in the `trident` namespace. If the `trident` namespace does not exist, use `kubectl apply -f deploy/namespace.yaml` to create it.
@@ -125,7 +125,7 @@ Your link:../trident-get-started/requirements.html#container-images-and-correspo
 ----
 imageRegistry: "<your-registry>"
 autosupportImage: "<your-registry>/trident-autosupport:23.01"
-tridentImage: "<your-registry>/trident:23.01.0"
+tridentImage: "<your-registry>/trident:23.01.1"
 ----
 --
 
@@ -135,7 +135,7 @@ You must append `sig-storage` to the `imageRegistry` to use different registry l
 ----
 imageRegistry: "<your-registry>/sig-storage"
 autosupportImage: "<your-registry>/netapp/trident-autosupport:23.01"
-tridentImage: "<your-registry>/netapp/trident:23.01.0"
+tridentImage: "<your-registry>/netapp/trident:23.01.1"
 ----
 --
 ====
@@ -162,7 +162,7 @@ Spec:
   Debug:              true
   Image Registry:     <your-registry>/sig-storage
   Namespace:          trident
-  Trident Image:      <your-registry>/netapp/trident:23.01.0
+  Trident Image:      <your-registry>/netapp/trident:23.01.1
 Status:
   Current Installation Params:
     IPv6:                       false
@@ -179,11 +179,11 @@ Status:
     Log Format:           text
     Probe Port:           17546
     Silence Autosupport:  false
-    Trident Image:        <your-registry>/netapp/trident:23.01.0
+    Trident Image:        <your-registry>/netapp/trident:23.01.1
   Message:                Trident installed
   Namespace:              trident
   Status:                 Installed
-  Version:                v23.01.0
+  Version:                v23.01.1
 Events:
     Type Reason Age From Message ---- ------ ---- ---- -------Normal
     Installing 74s trident-operator.netapp.io Installing Trident Normal
@@ -243,7 +243,7 @@ You can use `tridentctl` to check the version of Astra Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 23.01.0        | 23.01.0        |
+| 23.01.1        | 23.01.1      |
 +----------------+----------------+
 ----
 

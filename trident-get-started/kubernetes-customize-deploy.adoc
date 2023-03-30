@@ -11,15 +11,21 @@ summary: The Trident operator enables you to customize the manner in which Astra
 :imagesdir: ../media/
 
 [.lead]
-The Trident operator allows you to customize Astra Trident installation using the attributes in the `TridentOrchestrator` spec.
+The Trident operator allows you to customize Astra Trident installation using the attributes in the `TridentOrchestrator` spec. If you want to customize the installation beyond what `TridentOrchestrator` arguments allow, consider using `tridentctl` to generate custom YAML manifests to modify as needed.
 
-If you want to customize the installation beyond what `TridentOrchestrator` arguments allow, you should consider using `tridentctl` to generate custom YAML manifests that you can modify as needed.
+== Understanding controller pods and node pods
+Astra Trident runs as a single controller pod and one or more node pods that must be present on any host where you want to potentially mount an Astra Trident volume. 
 
-WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify which namespace where Astra Trident is installed. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Astra Trident is not intended to be migrated across namespaces.
+Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. Using the`ControllerPlugin` and `NodePlugin`, you can specify constraints and overrides.
+
+* The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
+* The node plugin handles attaching the storage to the node.
 
 == Configuration options
 
-This table details `TridentOrchestrator` attributes:
+WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify which namespace where Astra Trident is installed. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Astra Trident is not intended to be migrated across namespaces.
+
+This table details `TridentOrchestrator` attributes.
 [cols=3,options="header"]
 |===
 |Parameter |Description |Default
@@ -70,13 +76,13 @@ Astra Trident |
 
 `Never` to never pull the image. |`IfNotPresent`
 
-|`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as pod.spec.nodeSelector. |No default; optional
+|`controllerPluginNodeSelector` |Additional node selectors for pods.	Follows same format as pod.spec.nodeSelector. |No default; optional
 
-|`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional
+|`controllerPluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as pod.spec.Tolerations. |No default; optional
 
-|`nodePluginNodeSelector` |Additional node selectors for pods running the Trident Node CSI Plugin. Follows same format as pod.spec.nodeSelector. |No default; optional
+|`nodePluginNodeSelector` |Additional node selectors for pods. Follows same format as pod.spec.nodeSelector. |No default; optional
 
-|`nodePluginTolerations` |Overrides tolerations for pods running the Trident Node CSI Plugin. Follows the same format as pod.spec.Tolerations. |No default; optional
+|`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as pod.spec.Tolerations. |No default; optional
 
 |===
 [NOTE] 

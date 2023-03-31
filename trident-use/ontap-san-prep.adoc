@@ -41,7 +41,7 @@ A sample backend definition will look like this:
   "dataLIF": "10.0.0.2",
   "svm": "svm_nfs",
   "username": "vsadmin",
-  "password": "secret",
+  "password": "password",
 }
 ----
 
@@ -133,7 +133,7 @@ cat cert-backend-updated.json
 "dataLIF": "1.2.3.8",
 "svm": "vserver_test",
 "username": "vsadmin",
-"password": "secret",
+"password": "password",
 "storagePrefix": "myPrefix_"
 }
 
@@ -179,7 +179,7 @@ See the following sample configuration:
     "svm": "ontap_iscsi_svm",
     "useCHAP": true,
     "username": "vsadmin",
-    "password": "FaKePaSsWoRd",
+    "password": "password",
     "igroupName": "trident",
     "chapInitiatorSecret": "cl9qxIm36DKyawxy",
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
@@ -220,7 +220,7 @@ cat backend-san.json
     "svm": "ontap_iscsi_svm",
     "useCHAP": true,
     "username": "vsadmin",
-    "password": "FaKePaSsWoRd",
+    "password": "password",
     "igroupName": "trident",
     "chapInitiatorSecret": "cl9qxUpDaTeD",
     "chapTargetInitiatorSecret": "rqxigXgkeUpDaTeD",

@@ -87,7 +87,7 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 * At least one Astra Trident secret containing your Active Directory credentials so ANF can authenticate to Active Directory. To generate secret `smbcreds`:
 +
 ----
-kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
 ----
 
 * A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows. 

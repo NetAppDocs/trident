@@ -72,8 +72,6 @@ cd trident-installer
 
 Install Astra Trident in the desired namespace by executing the `tridentctl install` command. You can add additional arguments to specify image registry location. 
 
-NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
-
 [role="tabbed-block"]
 ====
 
@@ -152,6 +150,26 @@ You can use `tridentctl` to check the version of Astra Trident installed.
 | 23.01.1        | 23.01.1        |
 +----------------+----------------+
 ----
+== Sample configurations
+
+.Example 1: Enable Astra Trident to run on Windows nodes
+[%collapsible%open]
+====
+To enable Astra Trident to run on Windows nodes:
+----
+tridentctl install --windows -n trident
+----
+====
+
+.Example 2: Enable force detach
+[%collapsible%open]
+====
+For more information about force detach, refer to link:..trident-get-started/kubernetes-customize-deploy.html[Customize Trident operator installation].
+----
+tridentctl install --enable-force-detach=true -n trident
+----
+====
+
 
 == What's next
 

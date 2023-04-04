@@ -214,7 +214,7 @@ NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, the recommendati
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret"
+    "password": "password"
 }
 ----
 ====
@@ -255,7 +255,7 @@ These examples show you how you can instruct Astra Trident to use dynamic export
     "autoExportPolicy": true,
     "autoExportCIDRs": ["10.0.0.0/24"],
     "username": "admin",
-    "password": "secret",
+    "password": "password",
     "nfsMountOptions": "nfsvers=4",
 }
 ----
@@ -270,7 +270,7 @@ These examples show you how you can instruct Astra Trident to use dynamic export
     "labels": {"k8scluster": "test-cluster-east-1b", "backend": "test1-ontap-cluster"},
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
 }
 ----
 ====
@@ -287,7 +287,7 @@ This example shows `managementLIF` using an IPv6 address.
  "labels": {"k8scluster": "test-cluster-east-1a", "backend": "test1-ontap-ipv6"},
  "svm": "nas_ipv6_svm",
  "username": "vsadmin",
- "password": "netapp123"
+ "password": "password"
 }
 ----
 ====
@@ -302,7 +302,7 @@ This example shows `managementLIF` using an IPv6 address.
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret"
+    "password": "password"
 }
 ----
 
@@ -344,7 +344,7 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "admin",
-    "password": "secret",
+    "password": "password",
     "nfsMountOptions": "nfsvers=4",
 
     "defaults": {
@@ -407,7 +407,7 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
 
     "defaults": {
           "spaceReserve": "none",
@@ -467,7 +467,7 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
 
     "defaults": {
           "spaceReserve": "none",

@@ -80,7 +80,7 @@ Source:
 ----
 +
 The PV was created by using the `netapp.io/trident` provisioner and is of the type NFS. To support all the new features provided by Astra Trident, this PV should be upgraded to the CSI type.
-. Run the `tridenctl upgrade volume <name-of-trident-volume>` command to upgrade a legacy Astra Trident volume to the CSI spec.
+. Run the `tridentctl upgrade volume <name-of-trident-volume>` command to upgrade a legacy Astra Trident volume to the CSI spec.
 +
 ----
 ./tridentctl get volumes -n trident

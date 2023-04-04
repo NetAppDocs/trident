@@ -36,6 +36,11 @@ To upgrade using the operator, the following conditions should be met:
 Follow these steps to upgrade a cluster-scoped Trident operator installation. All Astra Trident versions 21.01 and above use a cluster-scoped operator.
 
 .Steps
+. Verify your Kubernetes version:
++
+----
+kubectl version
+----
 . Delete the Trident operator that was used to install the current Astra Trident instance. For example, if you are upgrading from 22.01, run the following command:
 +
 ----

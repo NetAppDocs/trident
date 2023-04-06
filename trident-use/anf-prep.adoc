@@ -20,6 +20,8 @@ NOTE: If you are using Azure NetApp Files for the first time or in a new locatio
 
 To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] backend, you need the following:
 
+* A capacity pool. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-set-up-capacity-pool[Microsoft: Create a capacity pool for Azure NetApp Files^].
+* A subnet delegated to Azure NetApp Files. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[Microsoft: Delegate a subnet to Azure NetApp Files^].
 * `subscriptionID` from an Azure subscription with Azure NetApp Files enabled.
 * `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use either: 
 
@@ -78,10 +80,6 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 
 == Additional requirements for SMB volumes
 To create an SMB volume, you must have:
-
-* A capacity pool. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-set-up-capacity-pool[Microsoft: Create a capacity pool for Azure NetApp Files^].
-
-* A subnet delegated to Azure NetApp Files. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[Microsoft: Delegate a subnet to Azure NetApp Files^].
 
 * Active Directory configured and connected to Azure NetApp Files. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/create-active-directory-connections[Microsoft: Create and manage Active Directory connections for Azure NetApp Files^].
 

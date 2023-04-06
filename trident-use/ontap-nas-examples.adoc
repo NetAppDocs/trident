@@ -91,6 +91,13 @@ If no mount options are specified in the storage class or the configuration file
 
 |`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|“200”
 
+|`smbShare` 
+|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
+
+Alternatively, you can leave the parameter blank to prevent share access.
+
+|`smb-share`
+
 |`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
 
 `useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.

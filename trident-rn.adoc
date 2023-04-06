@@ -15,9 +15,18 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 23.01
+== What's new in 23.01.1
 
-IMPORTANT: Kubernetes 1.26 is now supported in Trident. Please upgrade Trident prior to upgrading Kubernetes.
+=== Fixes
+* Fixed Trident Operator to use IPv6 localhost for installation when specified in spec.
+* Fixed Trident Operator cluster role permissions to be in sync with the bundle permissions link:https://github.com/NetApp/trident/issues/799[Issue #799^].
+* Added a fix to allow external processes to run to completion.
+* Fixed issue with attaching raw block volume on multiple nodes in RWX mode.
+* Fixed FlexGroup cloning support and volume import for SMB volumes.
+
+== Changes in 23.01
+
+IMPORTANT: Kubernetes 1.26 is now supported in Trident. Please upgrade Astra Trident prior to upgrading Kubernetes.
 
 === Fixes
 

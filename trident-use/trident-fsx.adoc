@@ -23,7 +23,6 @@ Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netap
 * SMB volumes: 
 ** SMB volumes are supported using the `ontap-nas` driver only. 
 ** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
-** Astra Trident does not support Windows ARM architecture.
 * Volumes created on Amazon FSx file systems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume. To prevent this issue:
 
 ** Do not use **Quick create** to create the FSx for ONTAP file system. The quick create workflow enables automatic backups and does not provide an opt-out option.

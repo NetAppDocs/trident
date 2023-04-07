@@ -105,8 +105,12 @@ a| Fine grained control of NFS mount options; defaults to “-o nfsvers=3”. *A
 a|-o nfsvers=4
 
 |`igroupName`
-a|The igroup used by the plugin; defaults to “netappdvp”. *Available only for the `ontap-san` driver*.
-a|myigroup
+a|Astra Trident creates and manages per-node `igroups` as `netappdvp`. 
+
+This value cannot be changed or omitted.
+
+*Available only for the `ontap-san` driver*.
+a|`netappdvp`
 
 |`limitVolumeSize`
 a|Maximum requestable volume size and qtree parent volume size. *For the `ontap-nas-economy` driver, this option additionally limits the size of the FlexVols that it creates*.
@@ -271,7 +275,7 @@ To get advanced features and huge scale in the same environment, you can run mul
     "username": "vsadmin",
     "password": "password",
     "aggregate": "aggr1",
-    "igroupName": "myigroup"
+    "igroupName": "netappdvp"
 }
 ----
 
@@ -287,7 +291,7 @@ To get advanced features and huge scale in the same environment, you can run mul
     "username": "vsadmin",
     "password": "password",
     "aggregate": "aggr1",
-    "igroupName": "myigroup"
+    "igroupName": "netappdvp"
 }
 ----
 

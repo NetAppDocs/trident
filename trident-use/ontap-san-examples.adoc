@@ -21,7 +21,7 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |“ontap-nas”, “ontap-nas-economy”, “ontap-nas-flexgroup”, “ontap-san”, “ontap-san-economy”
+|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`
 
 |`backendName`  |Custom name or the storage backend |Driver name + “_” + dataLIF
 
@@ -43,7 +43,7 @@ Can be set to use IPv6 addresses if Astra Trident was installed using the `--use
 
 Set to `true` for Astra Trident to configure and use bidirectional CHAP as the default authentication for the SVM given in the backend. Refer to link:ontap-san-prep.html[Prepare to configure backend with ONTAP SAN drivers] for details.
 
-|false
+|`false`
 
 |`chapInitiatorSecret` |CHAP initiator secret. Required if `useCHAP=true` |“”
 
@@ -67,11 +67,13 @@ Set to `true` for Astra Trident to configure and use bidirectional CHAP as the d
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 
-|`igroupName` |Name of the igroup for SAN volumes to use. Refer to <<Details about `igroupName`>> for more information. |“trident-<backend-UUID>”
+|`igroupName` |Astra Trident creates and manages per-node `igroups` as `<nodeName>-<tridentUUID>`. 
+
+This value cannot be changed or omitted. |`<nodeName>-<tridentUUID>`
 
 |`storagePrefix` |Prefix used when provisioning new volumes in the SVM. 
 
-Cannot be modified later. To update this parameter, you will need to create a new backend.|“trident”
+Cannot be modified later. To update this parameter, you will need to create a new backend.|`trident`
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
@@ -82,27 +84,19 @@ If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitA
 Also restricts the maximum size of the volumes it manages for qtrees and LUNs.
 |“”  (not enforced by default)
 
-|`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |“100”
+|`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |`100`
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} 
 
-Do not use unless you are troubleshooting and require a detailed log dump.|null
+Do not use unless you are troubleshooting and require a detailed log dump.|`null`
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
 
 `useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
 
-`useREST` is not supported with MetroCluster.|false
+`useREST` is not supported with MetroCluster.|`false`
 
 |===
-
-=== Details about `igroupName`
-`igroupName` can be set to an igroup that is already created on the ONTAP cluster. We recommend using one igroup per Kubernetes cluster, if the SVM is to be shared between environments. This is necessary for Astra Trident to automatically maintain IQN additions and deletions.
-
-The `igroupName` can be updated to point to a new igroup that is created and managed on the SVM outside of Astra Trident.
-* `igroupName` can be omitted. In this case, Astra Trident will create and manage an igroup named `trident-<backend-UUID>`  automatically.
-
-In both cases, volume attachments will continue to be accessible. Future volume attachments will use the updated igroup. This update does not disrupt access to volumes present on the backend.
 
 == Backend configuration options for provisioning volumes
 
@@ -156,7 +150,7 @@ Here’s an example with defaults defined:
  "password": "password",
  "labels": {"k8scluster": "dev2", "backend": "dev2-sanbackend"},
  "storagePrefix": "alternate-trident",
- "igroupName": "custom",
+ "igroupName": "<nodeName>-<tridentUUID>",
  "debugTraceFlags": {"api":false, "method":true},
  "defaults": {
      "spaceReserve": "volume",
@@ -203,7 +197,7 @@ This is a minimal backend configuration example. `clientCertificate`, `clientPri
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "trident",
+    "igroupName": "<nodeName>-<tridentUUID>",
     "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
     "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
     "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz"
@@ -226,7 +220,7 @@ This is a minimal backend configuration example. This basic configuration create
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "trident",
+    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password"
 }
@@ -245,7 +239,7 @@ This is a minimal backend configuration example. This basic configuration create
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "trident",
+    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password"
 }
@@ -270,7 +264,7 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "trident",
+    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password",
 
@@ -324,7 +318,7 @@ Here is an iSCSI example for the `ontap-san-economy` driver:
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "trident",
+    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password",
 

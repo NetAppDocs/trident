@@ -83,6 +83,10 @@ Also restricts the maximum size of the volumes it manages for qtrees and LUNs, a
 
 Do not use `debugTraceFlags` unless you are troubleshooting and require a detailed log dump.|null
 
+| `nasType` | Configure NFS or SMB volumes creation. 
+
+Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
+
 |`nfsMountOptions`	|Comma-separated list of NFS mount options. 
 
 The mount options for Kubernetes-persistent volumes are normally specified in storage classes, but if no mount options are specified in a storage class, Astra Trident will fall back to using the mount options specified in the storage backend's configuration file. 

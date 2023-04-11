@@ -29,4 +29,4 @@ NOTE: If you use the `limitAggregateUsage` parameter, cluster admin permissions 
 While it is possible to create a more restrictive role within ONTAP that a Trident driver can use, we don’t recommend it. Most new releases of Trident will call additional APIs that would have to be accounted for, making upgrades difficult and error-prone.
 
 == Known limitations
-You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup` volume. Failure to configure both will cause volume creation to fail.
+You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` volume for ONTAP on-premises. Failure to configure both will cause volume creation to fail.

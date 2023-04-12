@@ -67,7 +67,7 @@ Set to `true` for Astra Trident to configure and use bidirectional CHAP as the d
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 
-|`igroupName` |Astra Trident creates and manages per-node `igroups` as `<nodeName>-<tridentUUID>`. 
+|`igroupName` |Astra Trident creates and manages per-node `igroups` as `<nodeName>-<tridentUUID>`. Per-backend `igroups` have been deprecated.
 
 Due to ONTAP `igroup` naming constraints, Astra Trident may share `igroups` between multiple cluster hosts if cluster host names are too long. Refer to link:https://docs.netapp.com/us-en/ontap-cli-96/lun-igroup-create.html[lun igroup create^] for details about `igroup` naming.
 

@@ -68,7 +68,7 @@ When the Kubernetes cluster administrator has applied the `node.kubernetes.io/ou
 . Cease backend I/O access for volumes mounted to that node.
 . Mark the Astra Trident node object as `dirty` (not safe for new publications).
 +
-NOTE: The Trident controller will reject new publish volume requests until the node is re-qualified (being marked as `dirty`) by the Trident node pod. Any workloads scheduled with a mounted PVC (even after the cluster node is healthy and ready) will be not be accepted until Astra Trident can verify the node `clean` (safe for new publications).
+NOTE: The Trident controller will reject new publish volume requests until the node is re-qualified (after having been marked as `dirty`) by the Trident node pod. Any workloads scheduled with a mounted PVC (even after the cluster node is healthy and ready) will be not be accepted until Astra Trident can verify the node `clean` (safe for new publications).
 
 When node health is restored and the taint is removed, Astra Trident will:
 

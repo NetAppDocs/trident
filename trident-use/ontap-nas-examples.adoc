@@ -83,6 +83,10 @@ Also restricts the maximum size of the volumes it manages for qtrees and LUNs, a
 
 Do not use `debugTraceFlags` unless you are troubleshooting and require a detailed log dump.|null
 
+| `nasType` | Configure NFS or SMB volumes creation. 
+
+Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
+
 |`nfsMountOptions`	|Comma-separated list of NFS mount options. 
 
 The mount options for Kubernetes-persistent volumes are normally specified in storage classes, but if no mount options are specified in a storage class, Astra Trident will fall back to using the mount options specified in the storage backend's configuration file. 
@@ -90,6 +94,13 @@ The mount options for Kubernetes-persistent volumes are normally specified in st
 If no mount options are specified in the storage class or the configuration file, Astra Trident will not set any mount options on an associated persistent volume.	|“”
 
 |`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|“200”
+
+|`smbShare` 
+|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
+
+Alternatively, you can leave the parameter blank to prevent common share access to volumes.
+
+|`smb-share`
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
 

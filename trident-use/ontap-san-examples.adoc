@@ -67,14 +67,6 @@ Set to `true` for Astra Trident to configure and use bidirectional CHAP as the d
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 
-|`igroupName` |Astra Trident creates and manages per-node `igroups` as `<nodeName>-<tridentUUID>`. Per-backend `igroups` have been deprecated.
-
-Due to ONTAP `igroup` naming constraints, Astra Trident may share `igroups` between multiple cluster hosts if cluster host names are too long. Refer to link:https://docs.netapp.com/us-en/ontap-cli-96/lun-igroup-create.html[lun igroup create^] for details about `igroup` naming.
-
-|`<nodeName>-<tridentUUID>`
-
-This value cannot be changed or omitted. 
-
 |`storagePrefix` |Prefix used when provisioning new volumes in the SVM. 
 
 Cannot be modified later. To update this parameter, you will need to create a new backend.|`trident`
@@ -154,7 +146,6 @@ Here’s an example with defaults defined:
  "password": "password",
  "labels": {"k8scluster": "dev2", "backend": "dev2-sanbackend"},
  "storagePrefix": "alternate-trident",
- "igroupName": "<nodeName>-<tridentUUID>",
  "debugTraceFlags": {"api":false, "method":true},
  "defaults": {
      "spaceReserve": "volume",
@@ -201,7 +192,6 @@ This is a minimal backend configuration example. `clientCertificate`, `clientPri
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "<nodeName>-<tridentUUID>",
     "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
     "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
     "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz"
@@ -224,7 +214,6 @@ This is a minimal backend configuration example. This basic configuration create
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password"
 }
@@ -243,7 +232,6 @@ This is a minimal backend configuration example. This basic configuration create
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password"
 }
@@ -268,7 +256,6 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password",
 
@@ -322,7 +309,6 @@ Here is an iSCSI example for the `ontap-san-economy` driver:
     "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
     "chapTargetUsername": "iJF4heBRT0TCwxyz",
     "chapUsername": "uh2aNCLSd6cNwxyz",
-    "igroupName": "<nodeName>-<tridentUUID>",
     "username": "vsadmin",
     "password": "password",
 

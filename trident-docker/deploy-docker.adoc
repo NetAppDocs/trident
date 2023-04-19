@@ -68,7 +68,7 @@ cat << EOF > /etc/netappdvp/config.json
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "aggregate": "aggr1"
 }
 EOF
@@ -121,8 +121,8 @@ Or, https://docs.docker.com/engine/install/[follow the instructions for your dis
 .. Download and unpack the application:
 +
 ----
-wget https://github.com/NetApp/trident/releases/download/v23.01.0/trident-installer-23.01.0.tar.gz
-tar zxf trident-installer-23.01.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.01.1/trident-installer-23.01.1.tar.gz
+tar zxf trident-installer-23.01.1.tar.gz
 ----
 .. Move to a location in the bin path:
 +
@@ -147,7 +147,7 @@ cat << EOF > /etc/netappdvp/ontap-nas.json
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "aggregate": "aggr1"
 }
 EOF

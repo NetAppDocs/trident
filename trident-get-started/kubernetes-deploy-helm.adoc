@@ -44,10 +44,10 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `23.01.0` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `23.01.1` is the version of Astra Trident you are installing. 
 +
 ----
-helm install <name> netapp-trident/trident-operator --version 23.01.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 23.01.1 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -72,13 +72,170 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `23.01.0` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `23.01.1` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 23.01.0  --create-namespace --namespace --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 23.01.1  --create-namespace --namespace --set tridentDebug=true
 ----
 
-NOTE: The `values.yaml` file, which is part of the Helm chart provides the list of keys and their default values.
+== Configuration options
+This table and the `values.yaml` file, which is part of the Helm chart, provide the list of keys and their default values. 
+
+[cols=3,options="header"]
+|===
+|Option
+|Description
+|Default
+
+|`nodeSelector` 
+|Node labels for pod assignment
+|
+
+|`podAnnotations`
+|Pod annotations
+|
+
+|`deploymentAnnotations`
+|Deployment annotations
+|
+
+|`tolerations`
+|Tolerations for pod assignment
+|
+
+|`affinity`
+|Affinity for pod assignment
+|
+
+|`tridentControllerPluginNodeSelector`
+|Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|
+
+|`tridentControllerPluginTolerations`
+|Overrides Kubernetes tolerations for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|
+
+|`tridentNodePluginNodeSelector`
+|Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|
+
+|`tridentNodePluginTolerations`
+|Overrides Kubernetes tolerations for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|
+
+|`imageRegistry`
+|Identifies the registry for the `trident-operator`, `trident`, and other images.  Leave empty to accept the default.
+|""
+
+|`imagePullPolicy`
+|Sets the image pull policy for the `trident-operator`.
+|`IfNotPresent`
+
+|`imagePullSecrets`
+|Sets the image pull secrets for the `trident-operator`, `trident`, and other images.
+|
+
+|`kubeletDir`
+|Allows overriding the host location of kubelet's internal state.
+|'"/var/lib/kubelet"`
+
+|`operatorLogLevel`
+|Allows the log level of the Trident operator to be set to: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
+|`"info"`
+
+|`operatorDebug`
+| Allows the log level of the Trident operator to be set to debug.
+|`true`
+
+|`operatorImage`
+|Allows the complete override of the image for `trident-operator`.
+|""
+
+|`operatorImageTag`
+|Allows overriding the tag of the `trident-operator` image.
+|""
+
+|`tridentIPv6`
+|Allows enabling Astra Trident to work in IPv6 clusters.
+|`false`
+
+|`tridentK8sTimeout`
+|Overrides the default 30-second timeout for most Kubernetes API operations (if non-zero, in seconds).
+|`0`
+
+|`tridentHttpRequestTimeout`
+|Overrides the default 90-second timeout for the HTTP requests, with `0s` being an infinite duration for the timeout. Negative values are not allowed.
+|`"90s"`
+
+|`tridentSilenceAutosupport`
+|Allows disabling Astra Trident periodic AutoSupport reporting.
+|`false`
+
+|`tridentAutosupportImageTag`
+|Allows overriding the tag of the image for Astra Trident AutoSupport container.
+|`<version>`
+
+|`tridentAutosupportProxy`
+|Allows Astra Trident AutoSupport container to phone home via an HTTP proxy.
+|""
+
+|`tridentLogFormat`
+|Sets the Astra Trident logging format (`text` or `json`).
+|`"text"`
+
+|`tridentDisableAuditLog`
+|Disables Astra Trident audit logger.
+|`true`
+
+|`tridentLogLevel`
+|Allows the log level of Astra Trident to be set to: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
+|`"info"`
+
+|`tridentDebug`
+|Allows the log level of Astra Trident to be set to `debug`.
+|`false`
+
+|`tridentLogWorkflows`
+|Allows specific Astra Trident workflows to be enabled for trace logging or log suppression.
+|""
+
+|`tridentLogLayers`
+|Allows specific Astra Trident layers to be enabled for trace logging or log suppression.
+|""
+
+|`tridentImage`
+|Allows the complete override of the image for Astra Trident.
+|""
+
+|`tridentImageTag`
+|Allows overriding the tag of the image for Astra Trident.
+|""
+
+|`tridentProbePort`
+|Allows overriding the default port used for Kubernetes liveness/readiness probes.
+|""
+
+|`windows`
+|Allows Astra Trident to be installed on Windows worker node.
+|`false`
+
+|`enableForceDetach`
+|Allows enabling the force detach feature.
+|`false`
+
+|`excludePodSecurityPolicy`
+|Excludes the operator pod security policy from creation.
+|`false`
+
+|===
+
+=== Understanding controller pods and node pods
+Astra Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Astra Trident volume. 
+
+Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. Using the`ControllerPlugin` and `NodePlugin`, you can specify constraints and overrides.
+
+* The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
+* The node plugin handles attaching the storage to the node.
 
 == What's next
 

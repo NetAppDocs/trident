@@ -122,27 +122,22 @@ that is installed alongside Astra Trident. You can obtain the container image at
 An example payload sent by Astra Trident looks like this:
 
 ----
-{
-  "items": [
-    {
-      "backendUUID": "ff3852e1-18a5-4df4-b2d3-f59f829627ed",
-      "protocol": "file",
-      "config": {
-        "version": 1,
-        "storageDriverName": "ontap-nas",
-        "debug": false,
-        "debugTraceFlags": null,
-        "disableDelete": false,
-        "serialNumbers": [
-          "nwkvzfanek_SN"
-        ],
-        "limitVolumeSize": ""
-      },
-      "state": "online",
-      "online": true
-    }
-  ]
-}
+---
+items:
+- backendUUID: ff3852e1-18a5-4df4-b2d3-f59f829627ed
+  protocol: file
+  config:
+    version: 1
+    storageDriverName: ontap-nas
+    debug: false
+    debugTraceFlags:
+    disableDelete: false
+    serialNumbers:
+    - nwkvzfanek_SN
+    limitVolumeSize: ''
+  state: online
+  online: true
+
 ----
 
 * The AutoSupport messages are sent to NetApp's AutoSupport endpoint. If you are using a private registry to store container images, you can use the `--image-registry` flag.

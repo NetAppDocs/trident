@@ -208,100 +208,87 @@ To get advanced features and huge scale in the same environment, you can run mul
 *NFS example for `ontap-nas` driver*
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: ontap-nas
-spec:
- version: 1
- storageDriverName: ontap-nas
- managementLIF: 10.0.0.1
- dataLIF: 10.0.0.2
- svm: svm_nfs
- username: vsadmin
- password: secret
- aggregate: aggr1
- defaults:
-   size: 10G
-   spaceReserve: none
-   exportPolicy: default
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "password",
+    "aggregate": "aggr1",
+    "defaults": {
+      "size": "10G",
+      "spaceReserve": "none",
+      "exportPolicy": "default"
+    }
+}
 ----
 
 *NFS example for `ontap-nas-flexgroup` driver*
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: ontap-nas-flexgroup
-spec:
-  version: 1
-  storageDriverName: ontap-nas-flexgroup
-  managementLIF: 10.0.0.1
-  dataLIF: 10.0.0.2
-  svm: svm_nfs
-  username: vsadmin
-  password: secret
-  defaults:
-    size: 100G
-    spaceReserve: none
-    exportPolicy: default
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas-flexgroup",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "password",
+    "defaults": {
+      "size": "100G",
+      "spaceReserve": "none",
+      "exportPolicy": "default"
+    }
+}
 ----
 
 *NFS example for `ontap-nas-economy` driver*
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: ontap-nas-economy
-spec:
-  version: 1
-  storageDriverName: ontap-nas-economy
-  managementLIF: 10.0.0.1
-  dataLIF: 10.0.0.2
-  svm: svm_nfs
-  username: vsadmin
-  password: secret
-  aggregate: aggr1
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas-economy",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.2",
+    "svm": "svm_nfs",
+    "username": "vsadmin",
+    "password": "password",
+    "aggregate": "aggr1"
+}
 ----
 
 *iSCSI example for `ontap-san` driver*
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: ontap-san
-spec:
-  version: 1
-  storageDriverName: ontap-san
-  managementLIF: 10.0.0.1
-  dataLIF: 10.0.0.3
-  svm: svm_iscsi
-  username: vsadmin
-  password: secret
-  aggregate: aggr1
-  igroupName: myigroup
+{
+    "version": 1,
+    "storageDriverName": "ontap-san",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.3",
+    "svm": "svm_iscsi",
+    "username": "vsadmin",
+    "password": "password",
+    "aggregate": "aggr1",
+    "igroupName": "myigroup"
+}
 ----
 
 *NFS example for `ontap-san-economy` driver*
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: ontap-san-economy
-spec:
-  version: 1
-  storageDriverName: ontap-san-economy
-  managementLIF: 10.0.0.1
-  dataLIF: 10.0.0.3
-  svm: svm_iscsi_eco
-  username: vsadmin
-  password: secret
-  aggregate: aggr1
-  igroupName: myigroup
+{
+    "version": 1,
+    "storageDriverName": "ontap-san-economy",
+    "managementLIF": "10.0.0.1",
+    "dataLIF": "10.0.0.3",
+    "svm": "svm_iscsi_eco",
+    "username": "vsadmin",
+    "password": "password",
+    "aggregate": "aggr1",
+    "igroupName": "myigroup"
+}
 ----
 
 == Element software configuration
@@ -345,31 +332,38 @@ The `solidfire-san` driver does not support Docker Swarm.
 === Example Element software configuration file
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: solidfire-san
-spec: 
-  version: 1
-  storageDriverName: solidfire-san
-  Endpoint: https://admin:admin@192.168.160.3/json-rpc/8.0
-  SVIP: 10.0.0.7:3260
-  TenantName: docker
-  InitiatorIFace: default
-  Types:
-  - Type: Bronze
-    Qos:
-      minIOPS: 1000
-      maxIOPS: 2000
-      burstIOPS: 4000
-  - Type: Silver
-    Qos:
-      minIOPS: 4000
-      maxIOPS: 6000
-      burstIOPS: 8000
-  - Type: Gold
-    Qos:
-      minIOPS: 6000
-      maxIOPS: 8000
-      burstIOPS: 10000
+{
+    "version": 1,
+    "storageDriverName": "solidfire-san",
+    "Endpoint": "https://admin:admin@192.168.160.3/json-rpc/8.0",
+    "SVIP": "10.0.0.7:3260",
+    "TenantName": "docker",
+    "InitiatorIFace": "default",
+    "Types": [
+        {
+            "Type": "Bronze",
+            "Qos": {
+                "minIOPS": 1000,
+                "maxIOPS": 2000,
+                "burstIOPS": 4000
+            }
+        },
+        {
+            "Type": "Silver",
+            "Qos": {
+                "minIOPS": 4000,
+                "maxIOPS": 6000,
+                "burstIOPS": 8000
+            }
+        },
+        {
+            "Type": "Gold",
+            "Qos": {
+                "minIOPS": 6000,
+                "maxIOPS": 8000,
+                "burstIOPS": 10000
+            }
+        }
+    ]
+}
 ----

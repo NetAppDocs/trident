@@ -199,17 +199,17 @@ NOTE: The dynamic management of export policies is only available for CSI Triden
 
 There are two configuration options that must be used. Here’s an example backend definition:
 ----
-{
-    "version": 1,
-    "storageDriverName": "ontap-nas",
-    "backendName": "ontap_nas_auto_export,
-    "managementLIF": "192.168.0.135",
-    "svm": "svm1",
-    "username": "vsadmin",
-    "password": "password",
-    "autoExportCIDRs": ["192.168.0.0/24"],
-    "autoExportPolicy": true
-}
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: ontap_nas_auto_export
+managementLIF: 192.168.0.135
+svm: svm1
+username: vsadmin
+password: password
+autoExportCIDRs:
+- 192.168.0.0/24
+autoExportPolicy: true
 ----
 
 NOTE: When using this feature, you must ensure that the root junction in your SVM has a previously created export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp’s recommended best practice of dedicating a SVM for Astra Trident.

@@ -72,7 +72,7 @@ To mount volumes using NFS version 4.1, include  `nfsvers=4`  in the comma-delim
 
 Mount options set in a storage class definition override mount options set in backend configuration.
 
-*The `ro` mount option is not supported for the Azure NetApp Files sub volume driver or any other driver. If you specify `ro` for the Azure NetApp Files sub volume driver, backend creation will fail. If you specify `ro` mount option for any other driver, CSI operations will fail.*
+*The `ro` mount option is not supported for the Azure NetApp Files sub volume driver. If you specify `ro` for the Azure NetApp Files sub volume driver, backend creation will fail.*
 
 |"nfsvers=3"
 

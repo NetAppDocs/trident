@@ -94,10 +94,6 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 |Storage virtual machine to use 
 |Derived if an SVM managementLIF is specified.
 
-|`igroupName` 
-|Name of the igroup for SAN volumes to use. Refer to <<Details about `igroupName`>>. 
-|`trident-<backend-UUID>`
-
 |`storagePrefix` 
 |Prefix used when provisioning new volumes in the SVM. 
 
@@ -164,16 +160,6 @@ This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role 
 |`false`
 
 |===
-
-=== Details about `igroupName`
-`igroupName` can be set to an igroup that is already created on the ONTAP cluster. If unspecified, Astra Trident automatically creates an igroup named `trident-<backend-UUID>`. 
-
-If providing a pre-defined igroupName, we recommend using one igroup per Kubernetes cluster, if the SVM is to be shared between environments. This is necessary for Astra Trident to automatically maintain IQN additions and deletions.
-
-* `igroupName` can be updated to point to a new igroup that is created and managed on the SVM outside of Astra Trident.
-* `igroupName` can be omitted. In this case, Astra Trident will create and manage an igroup named `trident-<backend-UUID>`  automatically.
-
-In both cases, volume attachments will continue to be accessible. Future volume attachments will use the updated igroup. This update does not disrupt access to volumes present on the backend.
 
 === Update `dataLIF` after initial configuration
 You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.

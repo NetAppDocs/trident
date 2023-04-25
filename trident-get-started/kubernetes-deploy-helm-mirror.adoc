@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Astra Trident using Hel
 [.lead]
 You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-helm.html[process for standard deployment].
 
-== Critical information about Astra Trident 23.01
+== Critical information about Astra Trident 23.04
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -45,7 +45,7 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `23.01.1` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `23.04.0` is the version of Astra Trident you are installing. 
 +
 [role="tabbed-block"]
 ====
@@ -53,7 +53,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 .Images in one registry
 --
 ----
-helm install <name> netapp-trident/trident-operator --version 23.01.1 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 23.04.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
 ----
 --
 
@@ -61,7 +61,7 @@ helm install <name> netapp-trident/trident-operator --version 23.01.1 --set imag
 --
 You must append `sig-storage` to the `imageRegistry` to use different registry locations.
 ----
-helm install <name> netapp-trident/trident-operator --version 23.01.1 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:23.01.1 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:23.01 --set tridentImage=<your-registry>/netapp/trident:23.01.1 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 23.04.0 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:23.04.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:23.04 --set tridentImage=<your-registry>/netapp/trident:23.04.0 --create-namespace --namespace <trident-namespace>
 ----
 --
 ====
@@ -89,10 +89,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `23.01.1` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `23.04.0` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 23.01.1  --create-namespace --namespace --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 23.04.0  --create-namespace --namespace --set tridentDebug=true
 ----
 
 == Configuration options

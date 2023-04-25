@@ -50,6 +50,27 @@ NOTE: You can log in to your file system (for example to install certificates) u
 
 . Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
 +
+
+[role="tabbed-block"]
+====
+
+.YAML
+--
+----
+---
+version: 1
+storageDriverName: ontap-san
+backendName: customBackendName
+managementLIF: svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal
+svm: svm01
+clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
+clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
+trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
+----
+--
+
+.JSON
+--
 ----
 {
   "version": 1,
@@ -59,9 +80,13 @@ NOTE: You can log in to your file system (for example to install certificates) u
   "svm": "svm01",
   "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
   "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
-  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz",
+  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz"
  }
+
 ----
+--
+
+====
 +
 For information about creating backends, see these links:
 +

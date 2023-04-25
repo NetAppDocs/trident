@@ -32,18 +32,44 @@ WARNING: If you attempt to provide *both credentials and certificates*, backend 
 Astra Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Astra Trident releases. A custom security login role can be created and used with Astra Trident, but is not recommended.
 
 A sample backend definition will look like this:
+
+// start tabbed area
+
+[role="tabbed-block"]
+====
+
+.YAML
+--
+---
+version: 1
+backendName: ExampleBackend
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_nfs
+username: vsadmin
+password: password
+--
+
+.JSON
+--
 ----
 {
   "version": 1,
   "backendName": "ExampleBackend",
   "storageDriverName": "ontap-san",
   "managementLIF": "10.0.0.1",
-  "dataLIF": "10.0.0.2",
   "svm": "svm_nfs",
   "username": "vsadmin",
-  "password": "password",
+  "password": "password"
 }
+
 ----
+--
+
+====
+
+// end tabbed area
+
 
 Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation or update of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
 
@@ -103,7 +129,6 @@ cat cert-backend.json
 "storageDriverName": "ontap-san",
 "backendName": "SanBackend",
 "managementLIF": "1.2.3.4",
-"dataLIF": "1.2.3.8",
 "svm": "vserver_test",
 "clientCertificate": "Faaaakkkkeeee...Vaaalllluuuueeee",
 "clientPrivateKey": "LS0tFaKE...0VaLuES0tLS0K",
@@ -130,7 +155,6 @@ cat cert-backend-updated.json
 "storageDriverName": "ontap-san",
 "backendName": "SanBackend",
 "managementLIF": "1.2.3.4",
-"dataLIF": "1.2.3.8",
 "svm": "vserver_test",
 "username": "vsadmin",
 "password": "password",
@@ -152,24 +176,23 @@ Updating a backend does not disrupt access to volumes that have already been cre
 
 == Authenticate connections with bidirectional CHAP
 
-Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM’s default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections.
-See the following sample configuration:
+Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM’s default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections. See the following sample configuration:
 
 ----
-{
-    "version": 1,
-    "storageDriverName": "ontap-san",
-    "backendName": "ontap_san_chap",
-    "managementLIF": "192.168.0.135",
-    "svm": "ontap_iscsi_svm",
-    "useCHAP": true,
-    "username": "vsadmin",
-    "password": "password",
-    "chapInitiatorSecret": "cl9qxIm36DKyawxy",
-    "chapTargetInitiatorSecret": "rqxigXgkesIpwxyz",
-    "chapTargetUsername": "iJF4heBRT0TCwxyz",
-    "chapUsername": "uh2aNCLSd6cNwxyz",
-}
+---
+version: 1
+storageDriverName: ontap-san
+backendName: ontap_san_chap
+managementLIF: 192.168.0.135
+svm: ontap_iscsi_svm
+useCHAP: true
+username: vsadmin
+password: password
+igroupName: trident
+chapInitiatorSecret: cl9qxIm36DKyawxy
+chapTargetInitiatorSecret: rqxigXgkesIpwxyz
+chapTargetUsername: iJF4heBRT0TCwxyz
+chapUsername: uh2aNCLSd6cNwxyz
 ----
 
 WARNING: The `useCHAP` parameter is a Boolean option that can be configured only once. It is set to false by default. After you set it to true, you cannot set it to false.

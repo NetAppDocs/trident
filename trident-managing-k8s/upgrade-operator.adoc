@@ -47,7 +47,7 @@ Follow these steps to upgrade a cluster-scoped Trident operator installation. Al
 kubectl delete -f 22.01/trident-installer/deploy/bundle.yaml -n trident
 ----
 . If you customized your initial installation using `TridentOrchestrator` attributes, you can edit the `TridentOrchestrator` object to modify the installation parameters. This might include changes made to specify mirrored Trident and CSI image registries for offline mode, enable debug logs, or specify image pull secrets.
-. Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 23.01 for Kubernetes 1.26, run the following command:
+. Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 23.01 for Kubernetes 1.27, run the following command:
 +
 ----
 kubectl create -f 23.01.1/trident-installer/deploy/bundle_post_1_25.yaml -n trident

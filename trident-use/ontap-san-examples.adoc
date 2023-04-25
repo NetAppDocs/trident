@@ -150,7 +150,6 @@ Here’s an example with defaults defined:
 version: 1
 storageDriverName: ontap-san
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
 svm: trident_svm
 username: admin
 password: password
@@ -199,7 +198,6 @@ version: 1
 storageDriverName: ontap-san
 backendName: DefaultSANBackend
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.3
 svm: svm_iscsi
 useCHAP: true
 chapInitiatorSecret: cl9qxIm36DKyawxy
@@ -220,7 +218,6 @@ This is a minimal backend configuration example. This basic configuration create
 version: 1
 storageDriverName: ontap-san
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.3
 svm: svm_iscsi
 labels:
   k8scluster: test-cluster-1
@@ -265,7 +262,6 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
 version: 1
 storageDriverName: ontap-san
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.3
 svm: svm_iscsi
 useCHAP: true
 chapInitiatorSecret: cl9qxIm36DKyawxy

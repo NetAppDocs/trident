@@ -10,11 +10,15 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN
 :icons: font
 :imagesdir: ../media/
 
-Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers. For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+[.lead]
+Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers. 
+
+== Overview
+For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 
-All your Kubernetes worker nodes must have the appropriate iSCSI tools installed. See link:worker-node-prep.html[here] for more details.
+All your Kubernetes worker nodes must have the appropriate iSCSI tools installed. Refer to link:worker-node-prep.html[Prepare the worker node] for details.
 
 == Authentication
 

@@ -5,7 +5,7 @@ keywords: what's new, new features, enhancements, known issues, resolved issues,
 summary: NetApp is continually improving and enhancing its products and services. Here are some of the latest features, enhancements, and bug fixes in the latest version of Astra Trident.
 ---
 
-= Release Notes
+= What's new
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -15,7 +15,42 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 23.01.1
+== What's new in 23.04
+IMPORTANT: Force volume detach for ONTAP-SAN-* volumes is supported only with Kubernetes versions with the Non-Graceful Node Shutdown feature gate enabled. Force detach must be enabled at install time using the `--enable-force-detach` Trident installer flag.
+
+=== Fixes
+
+* Fixed Trident Operator to use IPv6 localhost for installation when specified in spec.
+* Fixed Trident Operator cluster role permissions to be in sync with the bundle permissions (link:https://github.com/NetApp/trident/issues/799[Issue #799^]).
+* Fixed issue with attaching raw block volume on multiple nodes in RWX mode.
+* Fixed FlexGroup cloning support and volume import for SMB volumes.
+* Fixed issue where Trident controller could not shut down immediately (link:https://github.com/NetApp/trident/issues/811[Issue #811]).
+* Added fix to list all igroup names associated with a specified LUN provisioned with ontap-san-* drivers.
+* Added a fix to allow external processes to run to completion.
+* Fixed compilation error for s390 architecture (link:https://github.com/NetApp/trident/issues/537[Issue #537]).
+* Fixed incorrect logging level during volume mount operations (link:https://github.com/NetApp/trident/issues/781[Issue #781]).
+* Fixed potential type assertion error (link:https://github.com/NetApp/trident/issues/802[Issue #802]).
+
+=== Enhancements
+
+* Kubernetes:
+** Added support for Kubernetes 1.27.
+** Added support for importing LUKS volumes.
+** Added support for ReadWriteOncePod PVC access mode.
+** Added support for force detach for ONTAP-SAN-* volumes during Non-Graceful Node Shutdown scenarios.
+** All ONTAP-SAN-* volumes will now use per-node igroups. LUNs will only be mapped to igroups while actively published to those nodes to improve our security posture. Existing volumes will be opportunistically switched to the new igroup scheme when Trident determines it is safe to do so without impacting active workloads (link:https://github.com/NetApp/trident/issues/758[Issue #758]).
+** Improved Trident security by cleaning up unused Trident-managed igroups from ONTAP-SAN-* backends.
+* Added support for SMB volumes with Amazon FSx to the ontap-nas-economy and ontap-nas-flexgroup storage drivers.
+* Added support for SMB shares with the ontap-nas, ontap-nas-economy and ontap-nas-flexgroup storage drivers.
+* Added support for arm64 nodes (link:https://github.com/NetApp/trident/issues/732[Issue #732]).
+* Improved Trident shutdown procedure by deactivating API servers first (link:https://github.com/NetApp/trident/issues/811[Issue #811]).
+* Added cross-platform build support for Windows and arm64 hosts to Makefile; see BUILD.md.
+
+=== Deprecations
+
+**Kubernetes:** Backend-scoped igroups will no longer be created when configuring ontap-san and ontap-san-economy drivers (link:https://github.com/NetApp/trident/issues/758[Issue #758]).
+
+== Changes in 23.01.1
 
 === Fixes
 * Fixed Trident Operator to use IPv6 localhost for installation when specified in spec.
@@ -26,7 +61,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 == Changes in 23.01
 
-IMPORTANT: Kubernetes 1.26 is now supported in Trident. Please upgrade Astra Trident prior to upgrading Kubernetes.
+IMPORTANT: Kubernetes 1.27 is now supported in Trident. Please upgrade Astra Trident prior to upgrading Kubernetes.
 
 === Fixes
 
@@ -116,7 +151,7 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 * Transition from k8s.gcr.io to registry.k8s.io as default registry for CSI images
 
-* ONTAP-SAN volumes will now use per-node igroups and only map LUNs to igroups while actively published to those nodes to improve our security posture. Existing volumes will be opportunistically switched to the new igroup scheme when Trident determines it is safe to do so without impacting active workloads.
+* ONTAP-SAN volumes will now use per-node igroups and only map LUNs to igroups while actively published to those nodes to improve our security posture. Existing volumes will be opportunistically switched to the new igroup scheme when Astra Trident determines it is safe to do so without impacting active workloads.
 
 * Included a ResourceQuota with Trident installations to ensure Trident DaemonSet is scheduled when PriorityClass consumption is limited by default.
 

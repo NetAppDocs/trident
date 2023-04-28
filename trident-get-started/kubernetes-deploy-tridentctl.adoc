@@ -13,14 +13,14 @@ summary: You can install Astra Trident using `tridentctl`. This process applies 
 [.lead]
 You can install Astra Trident using `tridentctl`. This process applies to installations where the container images required by Astra Trident are stored either in a private registry or not. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
-== Critical information about Astra Trident 23.01
+== Critical information about Astra Trident 23.04
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
 .*Critical information about Astra Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.26 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.27 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -63,16 +63,14 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Astra Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v23.01.1/trident-installer-23.01.1.tar.gz
-tar -xf trident-installer-23.01.1.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.04.0/trident-installer-23.04.0.tar.gz
+tar -xf trident-installer-23.04.0.tar.gz
 cd trident-installer
 ----
 
 == Step 2: Install Astra Trident
 
 Install Astra Trident in the desired namespace by executing the `tridentctl install` command. You can add additional arguments to specify image registry location. 
-
-NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag to the install command: `$ ./tridentctl install --windows -n trident`.
 
 [role="tabbed-block"]
 ====
@@ -87,7 +85,7 @@ NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag 
 .Images in one registry
 --
 ----
-./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:23.01 --trident-image <your-registry>/trident:23.01.1
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:23.04 --trident-image <your-registry>/trident:23.04.0
 ----
 --
 
@@ -95,7 +93,7 @@ NOTE: To enable Astra Trident to run on Windows nodes, add the `--windows` flag 
 --
 You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----
-./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:23.01 --trident-image <your-registry>/netapp/trident:23.01.1
+./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:23.04 --trident-image <your-registry>/netapp/trident:23.04.0
 ----
 --
 
@@ -116,7 +114,7 @@ INFO Created Trident daemonset.
 INFO Waiting for Trident pod to start.
 INFO Trident pod started.                          namespace=trident pod=trident-controller-679648bd45-cv2mx
 INFO Waiting for Trident REST interface.
-INFO Trident REST interface is up.                 version=23.01.1
+INFO Trident REST interface is up.                 version=23.04.0
 INFO Trident installation succeeded.
 ....
 ----
@@ -149,9 +147,29 @@ You can use `tridentctl` to check the version of Astra Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 23.01.1        | 23.01.1        |
+| 23.04.0        | 23.04.0        |
 +----------------+----------------+
 ----
+== Sample configurations
+
+.Example 1: Enable Astra Trident to run on Windows nodes
+[%collapsible%open]
+====
+To enable Astra Trident to run on Windows nodes:
+----
+tridentctl install --windows -n trident
+----
+====
+
+.Example 2: Enable force detach
+[%collapsible%open]
+====
+For more information about force detach, refer to link:..trident-get-started/kubernetes-customize-deploy.html[Customize Trident operator installation].
+----
+tridentctl install --enable-force-detach=true -n trident
+----
+====
+
 
 == What's next
 

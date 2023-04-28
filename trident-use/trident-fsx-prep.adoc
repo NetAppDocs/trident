@@ -127,9 +127,10 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Parameter |Description | Example
 
 |`smbShare`
-|Name of the SMB share created using Shared Folder Microsoft Management Console. For example "smb-share". 
+|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
 
-*Required for SMB volumes.*
+Alternatively, you can leave the parameter blank to prevent common share access to volumes.
+
 | `smb-share` 
 
 |`nasType`

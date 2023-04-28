@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-reco/security-luks.html
-keywords: security, luks, linux unified key setup, encryption, key rotation, resizing, advanced encryption, rotation, key, passphrase, nist, aes-ni, aes
+keywords: security, luks, linux unified key setup, encryption, key rotation, resizing, advanced encryption, rotation, key, import
 summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. Astra Trident supports volume resizing and key (passphrase) rotation for LUKS-encrypted volumes.
 ---
 
@@ -83,6 +83,24 @@ stringData:
 === Limitations
 
 LUKS-encrypted volumes cannot take advantage of ONTAP deduplication and compression. 
+
+== Backend configuration for importing LUKS volumes
+To import a LUKS volume, you must set `luksEncryption` to `true` on the backend. The `luksEncryption` option tells Astra Trident if the volume is LUKS-compliant (`true`) or not LUKS-compliant (`false`) as shown in the following example. 
+
+----
+version: 1
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+dataLIF: 10.0.0.2
+svm: trident_svm
+username: admin
+password: password
+defaults:
+  luksEncryption: 'true'
+  spaceAllocation: 'false'
+  snapshotPolicy: default
+  snapshotReserve: '10'
+----
 
 == Rotate a LUKS passphrase
 You can rotate the LUKS passphrase and confirm rotation. 

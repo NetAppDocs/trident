@@ -13,12 +13,11 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP NAS
 [.lead]
 Learn about how to prepare to configure an ONTAP backend with ONTAP NAS drivers. 
 
-== Overview
-For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
-
-Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
-
-All your Kubernetes worker nodes must have the appropriate NFS tools installed. See link:worker-node-prep.html[here] for more details.
+== Considerations
+* For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+* You can run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
+* All your Kubernetes worker nodes must have the appropriate NFS tools installed. See link:worker-node-prep.html[here] for more details.
+* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
 == Authentication
 

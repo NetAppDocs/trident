@@ -36,11 +36,17 @@ There are two options to upgrade Astra Trident. Generally, you will use the same
 * link:upgrade-operator.html[Upgrade using the Trident operator]
 * link:upgrade-tridentctl.html[Upgrade using `tridentctl`]
 
-WARNING: CSI Volume Snapshots is now a feature that is GA, beginning with Kubernetes 1.20. When upgrading Astra Trident, all previous alpha snapshot CRs and CRDs (Volume Snapshot Classes, Volume Snapshots and Volume Snapshot Contents) must be removed before the upgrade is performed. Refer to https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^] to understand the steps involved in migrating alpha snapshots to the beta/GA spec.
+WARNING: 
+
+== Known issues
+Review the following before upgrading Astra Trident. 
+
+* If you created Cloud Volumes Service for Google Cloud in the link:../trident-use/gcp.html#learn-about-astra-trident-support-for-cloud-volumes-service-for-google-cloud[CVS service type], you must update the backend configuration to use the `standardsw` or `zoneredundantstandardsw` service level when upgrading from Astra Trident 23.01. Failure to update the `serviceLevel` in the backend could cause volumes to fail. Refer to link:../trident-use/gcp.html#cvs-service-type-examples[CVS service type samples] for details. 
+* CSI Volume Snapshots is available beginning with Kubernetes 1.20. When upgrading Astra Trident, all previous alpha snapshot CRs and CRDs (Volume Snapshot Classes, Volume Snapshots and Volume Snapshot Contents) must be removed before the upgrade is performed. Refer to https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[this blog^] to understand the steps involved in migrating alpha snapshots to the beta/GA spec.
 
 == Changes to the operator
 
-The 21.01 release of Astra Trident introduces some key architectural changes to the operator, namely the following:
+The 21.01 release of Astra Trident introduced key architectural changes to the operator:
 
 * The operator is now *cluster-scoped*. Previous instances of the Trident operator (versions 20.04 through 20.10) were *namespace-scoped*. An operator that is cluster-scoped is advantageous for the following reasons:
 ** Resource accountability: The operator now manages resources associated with an Astra Trident installation at the cluster level. As part of installing Astra Trident, the operator creates and maintains several resources by using `ownerReferences`. Maintaining `ownerReferences` on cluster-scoped resources can throw up errors on certain Kubernetes distributors such as OpenShift. This is mitigated with a cluster-scoped operator. For auto-healing and patching Trident resources, this is an essential requirement.

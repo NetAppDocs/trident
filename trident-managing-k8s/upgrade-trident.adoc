@@ -16,7 +16,7 @@ Astra Trident follows a quarterly release cadence, delivering four major release
 == Select a version
 Astra Trident versions follow a date-based `YY.MM` naming convention, where "YY" is the last two digits of the year and "MM" is the month. Dot releases follow a `YY.MM.X` convention, where "X" is the patch level. You will select the version to upgrade to based on the version you are upgrading from. 
 
-* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can upgrade to 23.01 from 22.01 (including any dot releases, such as 22.01.1) directly.
+* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can upgrade to 23.04 from 22.04 (including any dot releases, such as 22.04.1) directly.
 * If you have an earlier release, you should perform a multi-step upgrade using the documentation of the respective release for specific instructions. This requires you to first upgrade to the most recent release that fits your four-release window. For example, if you are running 18.07 and want to upgrade to the 20.07 release, then follow the multi-step upgrade process as given below:
 
 . First upgrade from 18.07 to 19.07.  
@@ -26,7 +26,7 @@ Astra Trident versions follow a date-based `YY.MM` naming convention, where "YY"
 [WARNING]
 ====
 * All upgrades for versions 19.04 and earlier require the migration of Astra Trident metadata from it own `etcd` to CRD objects. Ensure you check the documentation of the release to understand how the upgrade works.
-* When upgrading, it is important you provide `parameter.fsType` in `StorageClasses` used by Astra Trident. You can delete and re-create `StorageClasses` without disrupting pre-existing volumes. This is a **requirement** for enforcing https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[security contexts^] for SAN volumes. The https://github.com/NetApp/trident/tree/master/trident-installer/sample-input[sample input^] directory contains examples, such as https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-basic.yaml.templ[`storage-class-basic.yaml.templ`^] and https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-bronze-default.yaml[`storage-class-bronze-default.yaml`^]. For more information, see link:../trident-rn.html[Known Issues].
+* When upgrading, it is important you provide `parameter.fsType` in `StorageClasses` used by Astra Trident. You can delete and re-create `StorageClasses` without disrupting pre-existing volumes. This is a **requirement** for enforcing https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[security contexts^] for SAN volumes. The https://github.com/NetApp/trident/tree/master/trident-installer/sample-input[sample input^] directory contains examples, such as https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-samples/storage-class-basic.yaml.templ[`storage-class-basic.yaml.templ`^] and link:https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-samples/storage-class-bronze-default.yaml[`storage-class-bronze-default.yaml`^]. For more information, see link:../trident-rn.html[Known Issues].
 ====
 
 == Select an upgrade option

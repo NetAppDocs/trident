@@ -13,14 +13,14 @@ summary: You can install Astra Trident using the Trident operator (manually or u
 [.lead]
 To ensure Astra Trident can be installed in a wide variety of environments and organizations, NetApp offers multiple installation options. You can install Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
 
-== Critical information about Astra Trident 23.01
+== Critical information about Astra Trident 23.04
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
 .*Critical information about Astra Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.26 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.27 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.

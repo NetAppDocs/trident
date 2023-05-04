@@ -10,13 +10,14 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP NAS
 :icons: font
 :imagesdir: ../media/
 
-Learn about how to prepare to configure an ONTAP backend with ONTAP NAS drivers. For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+[.lead]
+Learn about how to prepare to configure an ONTAP backend with ONTAP NAS drivers. 
 
-For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
-
-Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
-
-All your Kubernetes worker nodes must have the appropriate NFS tools installed. See link:worker-node-prep.html[here] for more details.
+== Considerations
+* For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+* You can run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
+* All your Kubernetes worker nodes must have the appropriate NFS tools installed. See link:worker-node-prep.html[here] for more details.
+* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
 == Authentication
 
@@ -34,6 +35,29 @@ WARNING: If you attempt to provide *both credentials and certificates*, backend 
 Astra Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Astra Trident releases. A custom security login role can be created and used with Astra Trident, but is not recommended.
 
 A sample backend definition will look like this:
+
+// start tabbed area
+
+[role="tabbed-block"]
+====
+
+.YAML
+--
+----
+---
+version: 1
+backendName: ExampleBackend
+storageDriverName: ontap-nas
+managementLIF: 10.0.0.1
+dataLIF: 10.0.0.2
+svm: svm_nfs
+username: vsadmin
+password: password
+----
+--
+
+.JSON
+--
 ----
 {
   "version": 1,
@@ -43,9 +67,14 @@ A sample backend definition will look like this:
   "dataLIF": "10.0.0.2",
   "svm": "svm_nfs",
   "username": "vsadmin",
-  "password": "secret"
+  "password": "password"
 }
 ----
+--
+====
+
+// end tabbed area
+
 
 Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation/updation of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
 
@@ -123,7 +152,7 @@ tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 
 === Update authentication methods or rotate credentials
 
-You can update an existing backend to use a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, you must remove the existing authentication method and add the new authentication method. Then use the updated backend.json file containing the required parameters to execute `tridentctl backend update`.
+You can update an existing backend to use a different authentication method or to rotate their credentials. This works both ways: backends that make use of username/password can be updated to use certificates; backends that utilize certificates can be updated to username/password based. To do this, you must remove the existing authentication method and add the new authentication method. Then use the updated backend.json file containing the required parameters to execute `tridentctl update backend`.
 
 ----
 cat cert-backend-updated.json
@@ -135,7 +164,7 @@ cat cert-backend-updated.json
 "dataLIF": "1.2.3.8",
 "svm": "vserver_test",
 "username": "vsadmin",
-"password": "secret",
+"password": "password",
 "storagePrefix": "myPrefix_"
 }
 
@@ -171,17 +200,17 @@ NOTE: The dynamic management of export policies is only available for CSI Triden
 
 There are two configuration options that must be used. Here’s an example backend definition:
 ----
-{
-    "version": 1,
-    "storageDriverName": "ontap-nas",
-    "backendName": "ontap_nas_auto_export,
-    "managementLIF": "192.168.0.135",
-    "svm": "svm1",
-    "username": "vsadmin",
-    "password": "FaKePaSsWoRd",
-    "autoExportCIDRs": ["192.168.0.0/24"],
-    "autoExportPolicy": true
-}
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: ontap_nas_auto_export
+managementLIF: 192.168.0.135
+svm: svm1
+username: vsadmin
+password: password
+autoExportCIDRs:
+- 192.168.0.0/24
+autoExportPolicy: true
 ----
 
 NOTE: When using this feature, you must ensure that the root junction in your SVM has a previously created export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp’s recommended best practice of dedicating a SVM for Astra Trident.

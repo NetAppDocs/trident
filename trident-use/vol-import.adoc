@@ -10,6 +10,7 @@ summary: You can import existing storage volumes as a Kubernetes PV using `tride
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 You can import existing storage volumes as a Kubernetes PV using `tridentctl import`.
 
 == Drivers that support volume import
@@ -122,8 +123,6 @@ Astra Trident can also import ONTAP SAN FlexVols that contain a single LUN. This
 * Provide the name of the FlexVol that needs to be imported. Remember, this FlexVol contains only one LUN that must be imported.
 * Provide the path of the PVC definition that must be used with the `-f` flag.
 * Choose between having the PVC managed or unmanaged. By default, Trident will manage the PVC and rename the FlexVol and LUN on the backend. To import as an unmanaged volume, pass the `--no-manage` flag.
-
-TIP: When importing an unmanaged `ontap-san` volume, you should make sure that the LUN in the FlexVol is named `lun0` and is mapped to an igroup with the desired initiators. Astra Trident automatically handles this for a managed import.
 
 Astra Trident will then import the FlexVol and associate it with the PVC definition. Astra Trident also renames the FlexVol to the `pvc-<uuid>` format and the LUN within the FlexVol to `lun0`.
 

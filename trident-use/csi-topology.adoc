@@ -10,7 +10,11 @@ summary: Astra Trident can selectively create and attach volumes to nodes presen
 :icons: font
 :imagesdir: ../media/
 
-Astra Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the https://kubernetes-csi.github.io/docs/topology.html[CSI Topology feature^]. Using the CSI Topology feature, access to volumes can be limited to a subset of nodes, based on regions and availability zones. Cloud providers today enable Kubernetes administrators to spawn nodes that are zone based. Nodes can be located in different availability zones within a region, or across various regions. To facilitate the provisioning of volumes for workloads in a multi-zone architecture, Astra Trident uses CSI Topology.
+[.lead]
+Astra Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the https://kubernetes-csi.github.io/docs/topology.html[CSI Topology feature^]. 
+
+== Overview 
+Using the CSI Topology feature, access to volumes can be limited to a subset of nodes, based on regions and availability zones. Cloud providers today enable Kubernetes administrators to spawn nodes that are zone based. Nodes can be located in different availability zones within a region, or across various regions. To facilitate the provisioning of volumes for workloads in a multi-zone architecture, Astra Trident uses CSI Topology.
 
 TIP: Learn more about the CSI Topology feature https://kubernetes.io/blog/2018/10/11/topology-aware-volume-provisioning-in-kubernetes/[here^].
 
@@ -25,7 +29,7 @@ NOTE: The `WaitForFirstConsumer` binding mode does not require topology labels. 
 
 To make use of CSI Topology, you need the following:
 
-* A Kubernetes cluster running a link:requirements.html[supported Kubernetes version]
+* A Kubernetes cluster running a link:../trident-get-started/requirements.html[supported Kubernetes version]
 +
 ----
 kubectl version
@@ -45,7 +49,33 @@ kubectl get nodes -o=jsonpath='{range .items[*]}[{.metadata.name}, {.metadata.la
 
 Astra Trident storage backends can be designed to selectively provision volumes based on availability zones. Each backend can carry an optional `supportedTopologies` block that represents a list of zones and regions that must be supported. For StorageClasses that make use of such a backend, a volume would only be created if requested by an application that is scheduled in a supported region/zone.
 
-Here is what an example backend definition looks like:
+Here is an example backend definition:
+// start tabbed area
+
+[role="tabbed-block"]
+====
+
+.YAML
+--
+----
+---
+version: 1
+storageDriverName: ontap-san
+backendName: san-backend-us-east1
+managementLIF: 192.168.27.5
+svm: iscsi_svm
+username: admin
+password: password
+supportedTopologies:
+- topology.kubernetes.io/region: us-east1
+  topology.kubernetes.io/zone: us-east1-a
+- topology.kubernetes.io/region: us-east1
+  topology.kubernetes.io/zone: us-east1-b
+----
+--
+
+.JSON
+--
 ----
 {
  "version": 1,
@@ -54,48 +84,51 @@ Here is what an example backend definition looks like:
  "managementLIF": "192.168.27.5",
  "svm": "iscsi_svm",
  "username": "admin",
- "password": "xxxxxxxxxxxx",
+ "password": "password",
  "supportedTopologies": [
 {"topology.kubernetes.io/region": "us-east1", "topology.kubernetes.io/zone": "us-east1-a"},
 {"topology.kubernetes.io/region": "us-east1", "topology.kubernetes.io/zone": "us-east1-b"}
 ]
 }
 ----
+--
+====
+
+// end tabbed area
+
 
 NOTE: `supportedTopologies` is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a StorageClass. For StorageClasses that contain a subset of the regions and zones provided in a backend, Astra Trident will create a volume on the backend.
 
 You can define `supportedTopologies` per storage pool as well. See the following example:
 ----
-{"version": 1,
-"storageDriverName": "ontap-nas",
-"backendName": "nas-backend-us-central1",
-"managementLIF": "172.16.238.5",
-"svm": "nfs_svm",
-"username": "admin",
-"password": "Netapp123",
-"supportedTopologies": [
-      {"topology.kubernetes.io/region": "us-central1", "topology.kubernetes.io/zone": "us-central1-a"},
-      {"topology.kubernetes.io/region": "us-central1", "topology.kubernetes.io/zone": "us-central1-b"}
-    ]
-"storage": [
-   {
-       "labels": {"workload":"production"},
-        "region": "Iowa-DC",
-        "zone": "Iowa-DC-A",
-        "supportedTopologies": [
-            {"topology.kubernetes.io/region": "us-central1", "topology.kubernetes.io/zone": "us-central1-a"}
-        ]
-    },
-    {
-        "labels": {"workload":"dev"},
-         "region": "Iowa-DC",
-         "zone": "Iowa-DC-B",
-         "supportedTopologies": [
-             {"topology.kubernetes.io/region": "us-central1", "topology.kubernetes.io/zone": "us-central1-b"}
-         ]
-     }
-]
-}
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: nas-backend-us-central1
+managementLIF: 172.16.238.5
+svm: nfs_svm
+username: admin
+password: password
+supportedTopologies:
+- topology.kubernetes.io/region: us-central1
+  topology.kubernetes.io/zone: us-central1-a
+- topology.kubernetes.io/region: us-central1
+  topology.kubernetes.io/zone: us-central1-b
+storage:
+- labels:
+    workload: production
+  region: Iowa-DC
+  zone: Iowa-DC-A
+  supportedTopologies:
+  - topology.kubernetes.io/region: us-central1
+    topology.kubernetes.io/zone: us-central1-a
+- labels:
+    workload: dev
+  region: Iowa-DC
+  zone: Iowa-DC-B
+  supportedTopologies:
+  - topology.kubernetes.io/region: us-central1
+    topology.kubernetes.io/zone: us-central1-b
 ----
 In this example, the `region` and `zone` labels stand for the location of the storage pool. `topology.kubernetes.io/region` and `topology.kubernetes.io/zone` dictate where the storage pools can be consumed from.
 

@@ -10,13 +10,13 @@ summary: Learn about NFS and SMB backend configuration options for ANF and revie
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Learn about NFS and SMB backend configuration options for ANF and review configuration examples. 
 
+== Backend configuration options
 Astra Trident uses your backend configuration (subnet, virtual network, service level, and location), to create ANF volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
 
 NOTE: Astra Trident does not support Manual QoS capacity pools.
-
-== Backend configuration options
 
 ANF backends provide these configuration options. 
 
@@ -126,15 +126,14 @@ This is the absolute minimum backend configuration. With this configuration, Ast
 This configuration is ideal when you are just getting started with ANF and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
 
 ----
-{
-    "version": 1,
-    "storageDriverName": "azure-netapp-files",
-    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-    "clientSecret": "SECRET",
-    "location": "eastus"
-}
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
 ----
 ====
 // End snippet
@@ -146,20 +145,18 @@ This configuration is ideal when you are just getting started with ANF and tryin
 This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to ANF in that location and places a new volume on one of them randomly.
 
 ----
-    {
-        "version": 1,
-        "storageDriverName": "azure-netapp-files",
-        "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-        "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-        "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-        "clientSecret": "SECRET",
-        "location": "eastus",
-        "serviceLevel": "Ultra",
-        "capacityPools": [
-            "application-group-1/account-1/ultra-1",
-            "application-group-1/account-1/ultra-2"
-],
-    }
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+serviceLevel: Ultra
+capacityPools:
+- application-group-1/account-1/ultra-1
+- application-group-1/account-1/ultra-2
 ----
 ====
 // End snippet
@@ -171,31 +168,29 @@ This backend configuration places volumes in Azure's `eastus` location in an `Ul
 This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
 
 ----
-    {
-        "version": 1,
-        "storageDriverName": "azure-netapp-files",
-        "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-        "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-        "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-        "clientSecret": "SECRET",
-        "location": "eastus",
-        "serviceLevel": "Ultra",
-        "capacityPools": [
-            "application-group-1/account-1/ultra-1",
-            "application-group-1/account-1/ultra-2"
-],
-        "virtualNetwork": "my-virtual-network",
-        "subnet": "my-subnet",
-        "networkFeatures": "Standard",
-        "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
-        "limitVolumeSize": "500Gi",
-        "defaults": {
-            "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
-            "snapshotDir": "true",
-            "size": "200Gi",
-            "unixPermissions": "0777"
-        }
-    }
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+serviceLevel: Ultra
+capacityPools:
+- application-group-1/account-1/ultra-1
+- application-group-1/account-1/ultra-2
+virtualNetwork: my-virtual-network
+subnet: my-subnet
+networkFeatures: Standard
+nfsMountOptions: vers=3,proto=tcp,timeo=600
+limitVolumeSize: 500Gi
+defaults:
+  exportRule: 10.0.0.0/24,10.0.1.0/24,10.0.2.100
+  snapshotDir: 'true'
+  size: 200Gi
+  unixPermissions: '0777'
+
 ----
 ====
 // End snippet
@@ -207,47 +202,40 @@ This backend configuration further reduces the scope of volume placement to a si
 This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels were used to differentiate the pools based on `performance`. 
 
 ----
-    {
-        "version": 1,
-        "storageDriverName": "azure-netapp-files",
-        "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-        "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-        "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-        "clientSecret": "SECRET",
-        "location": "eastus",
-        "resourceGroups": ["application-group-1"],
-        "networkFeatures": "Basic",
-        "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
-        "labels": {
-            "cloud": "azure"
-        },
-        "location": "eastus",
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+resourceGroups:
+- application-group-1
+networkFeatures: Basic
+nfsMountOptions: vers=3,proto=tcp,timeo=600
+labels:
+  cloud: azure
+storage:
+- labels:
+    performance: gold
+  serviceLevel: Ultra
+  capacityPools:
+  - ultra-1
+  - ultra-2
+  networkFeatures: Standard
+- labels:
+    performance: silver
+  serviceLevel: Premium
+  capacityPools:
+  - premium-1
+- labels:
+    performance: bronze
+  serviceLevel: Standard
+  capacityPools:
+  - standard-1
+  - standard-2
 
-        "storage": [
-            {
-                "labels": {
-                    "performance": "gold"
-                },
-                "serviceLevel": "Ultra",
-                "capacityPools": ["ultra-1", "ultra-2"],
-                "networkFeatures": "Standard"
-            },
-            {
-                "labels": {
-                    "performance": "silver"
-                },
-                "serviceLevel": "Premium",
-                "capacityPools": ["premium-1"]
-            },
-            {
-                "labels": {
-                    "performance": "bronze"
-                },
-                "serviceLevel": "Standard",
-                "capacityPools": ["standard-1", "standard-2"]
-            }
-        ]
-    }
 ----
 ====
 // End snippet

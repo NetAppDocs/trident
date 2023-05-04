@@ -10,7 +10,11 @@ summary: Learn about the different ways of managing backends in Astra Trident.
 :icons: font
 :imagesdir: ../media/
 
-Learn about the different ways of managing backends in Astra Trident. With the introduction of `TridentBackendConfig`, administrators now have two unique ways of managing backends. This poses the following questions:
+[.lead]
+Learn about the different ways of managing backends in Astra Trident. 
+
+== Options for managing backends
+With the introduction of `TridentBackendConfig`, administrators now have two unique ways of managing backends. This poses the following questions:
 
 * Can backends created using `tridentctl` be managed with `TridentBackendConfig`?
 * Can backends created using `TridentBackendConfig` be managed using `tridentctl`?
@@ -36,7 +40,7 @@ To manage a pre-existing backend using `kubectl`, you will need to create a `Tri
 
 === Step 0: Identify the backend
 
-To create a `TridentBackendConfig` that binds to an existing backend, you will need to obtain the backend’s configuration. In this example, let us assume a backend was created using the following JSON definition:
+To create a `TridentBackendConfig` that binds to an existing backend, you will need to obtain the backend configuration. In this example, let us assume a backend was created using the following JSON definition:
 ----
 tridentctl get backend ontap-nas-backend -n trident
 +---------------------+----------------+--------------------------------------+--------+---------+
@@ -99,7 +103,7 @@ metadata:
 type: Opaque
 stringData:
   username: cluster-admin
-  passWord: admin-password
+  password: admin-password
 
 kubectl create -f tbc-ontap-nas-backend-secret.yaml -n trident
 secret/backend-tbc-ontap-san-secret created

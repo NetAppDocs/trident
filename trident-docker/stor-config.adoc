@@ -25,7 +25,7 @@ These configuration options apply to all Astra Trident configurations, regardles
 
 |`version`
 a|Config file version number
-a|1
+a|`1`
 
 |`storageDriverName`
 a|Name of storage driver
@@ -33,12 +33,12 @@ a|`ontap-nas`, `ontap-san`, `ontap-nas-economy`,
 `ontap-nas-flexgroup`, `solidfire-san`
 
 |`storagePrefix`
-a|Optional prefix for volume names. Default: “netappdvp_”.
-a|staging_
+a|Optional prefix for volume names. Default: `netappdvp_`.
+a|`staging_`
 
 |`limitVolumeSize`
 a|Optional restriction on volume sizes. Default: “” (not enforced)
-a|10g
+a|`10g`
 
 |===
 
@@ -53,8 +53,8 @@ Default options are available to avoid having to specify them on every volume yo
 |Example
 
 |`size`
-a|Optional default size for new volumes. Default: “1G”
-a|10G
+a|Optional default size for new volumes. Default: `1G`
+a|`10G`
 
 |===
 
@@ -70,7 +70,7 @@ In addition to the global configuration values above, when using ONTAP, the foll
 
 |`managementLIF`
 a|IP address of ONTAP management LIF. You can specify a fully-qualified domain name (FQDN).
-a|10.0.0.1
+a|`10.0.0.1`
 
 |`dataLIF`
 a|IP address of protocol LIF. 
@@ -78,43 +78,47 @@ a|IP address of protocol LIF.
 *ONTAP NAS drivers*: We recommend specifying `dataLIF`. If not provided, Astra Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
 
 *ONTAP SAN drivers*: Do not specify for iSCSI.  Astra Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
-a|10.0.0.2
+a|`10.0.0.2`
 
 |`svm`
 a|Storage virtual machine to use (required, if management LIF is a cluster LIF)
-a|svm_nfs
+a|`svm_nfs`
 
 |`username`
 a|Username to connect to the storage device
-a|vsadmin
+a|`vsadmin`
 
 |`password`
 a|Password to connect to the storage device
-a|secret
+a|`secret`
 
 |`aggregate`
 a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. All aggregates assigned to the SVM are used to provision a FlexGroup Volume.
-a|aggr1
+a|`aggr1`
 
 |`limitAggregateUsage`
 a|Optional, fail provisioning if usage is above this percentage
-a|75%
+a|`75%`
 
 |`nfsMountOptions`
 a| Fine grained control of NFS mount options; defaults to “-o nfsvers=3”. *Available only for the `ontap-nas` and `ontap-nas-economy` drivers*. https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf[See NFS host configuration information here^].
-a|-o nfsvers=4
+a|`-o nfsvers=4`
 
 |`igroupName`
-a|The igroup used by the plugin; defaults to “netappdvp”. *Available only for the `ontap-san`driver*.
-a|myigroup
+a|Astra Trident creates and manages per-node `igroups` as `netappdvp`. 
+
+This value cannot be changed or omitted.
+
+*Available only for the `ontap-san` driver*.
+a|`netappdvp`
 
 |`limitVolumeSize`
 a|Maximum requestable volume size and qtree parent volume size. *For the `ontap-nas-economy` driver, this option additionally limits the size of the FlexVols that it creates*.
-a|300g
+a|`300g`
 
 |`qtreesPerFlexvol`
 a|Maximum qtrees per FlexVol, must be in range [50, 300], default is 200.  *For the `ontap-nas-economy` driver, this option allows customizing the maximum number of qtrees per FlexVol*.
-a|300
+a|`300`
 
 |===
 
@@ -127,20 +131,20 @@ Default options are available to avoid having to specify them on every volume yo
 |Example
 
 |`spaceReserve`
-a|Space reservation mode; “none” (thin provisioned) or “volume” (thick)
-a|none
+a|Space reservation mode; `none` (thin provisioned) or `volume` (thick)
+a|`none`
 
 |`snapshotPolicy`
-a|Snapshot policy to use, default is “none”
-a|none
+a|Snapshot policy to use, default is `none`
+a|`none`
 
 |`snapshotReserve`
-a|Snapshot reserve percentage, default is “” to accept ONTAP’s default
-a|10
+a|Snapshot reserve percentage, default is “” to accept the ONTAP default
+a|`10`
 
 |`splitOnClone`
-a|Split a clone from its parent upon creation, defaults to “false”
-a|false
+a|Split a clone from its parent upon creation, defaults to `false`
+a|`false`
 
 |`encryption`
 a|Enables NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
@@ -151,16 +155,16 @@ For more information, refer to: link:../trident-reco/security-reco.html[How Astr
 a|true
 
 |`unixPermissions`
-a|NAS option for provisioned NFS volumes, defaults to “777”
-a|777
+a|NAS option for provisioned NFS volumes, defaults to `777`
+a|`777`
 
 |`snapshotDir`
-a|NAS option for access to the `.snapshot` directory, defaults to “false”
-a|true
+a|NAS option for access to the `.snapshot` directory, defaults to `false`
+a|`true`
 
 |`exportPolicy`
-a|NAS option for the NFS export policy to use, defaults to “default”
-a|default
+a|NAS option for the NFS export policy to use, defaults to `default`
+a|`default`
 
 |`securityStyle`
 a|NAS option for access to the provisioned NFS volume. 
@@ -170,12 +174,12 @@ NFS supports `mixed` and `unix` security styles. The default is `unix`.
 a|`unix`
 
 |`fileSystemType`
-a|SAN option to select the file system type, defaults to “ext4”
-a|xfs
+a|SAN option to select the file system type, defaults to `ext4`
+a|`xfs`
 
 |`tieringPolicy`
-a|Tiering policy to use, default is “none”; “snapshot-only” for pre-ONTAP 9.5 SVM-DR configuration
-a|none
+a|Tiering policy to use, default is `none`; `snapshot-only` for pre-ONTAP 9.5 SVM-DR configuration
+a|`none`
 
 |===
 
@@ -215,7 +219,7 @@ To get advanced features and huge scale in the same environment, you can run mul
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "aggregate": "aggr1",
     "defaults": {
       "size": "10G",
@@ -235,7 +239,7 @@ To get advanced features and huge scale in the same environment, you can run mul
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "defaults": {
       "size": "100G",
       "spaceReserve": "none",
@@ -254,7 +258,7 @@ To get advanced features and huge scale in the same environment, you can run mul
     "dataLIF": "10.0.0.2",
     "svm": "svm_nfs",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "aggregate": "aggr1"
 }
 ----
@@ -269,9 +273,9 @@ To get advanced features and huge scale in the same environment, you can run mul
     "dataLIF": "10.0.0.3",
     "svm": "svm_iscsi",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "aggregate": "aggr1",
-    "igroupName": "myigroup"
+    "igroupName": "netappdvp"
 }
 ----
 
@@ -285,9 +289,9 @@ To get advanced features and huge scale in the same environment, you can run mul
     "dataLIF": "10.0.0.3",
     "svm": "svm_iscsi_eco",
     "username": "vsadmin",
-    "password": "secret",
+    "password": "password",
     "aggregate": "aggr1",
-    "igroupName": "myigroup"
+    "igroupName": "netappdvp"
 }
 ----
 
@@ -311,11 +315,11 @@ a|10.0.0.7:3260
 
 |`TenantName`
 a|SolidFireF Tenant to use (created if not found)
-a|“docker”
+a|`docker`
 
 |`InitiatorIFace`
 a|Specify interface when restricting iSCSI traffic to non-default interface
-a|“default”
+a|`default`
 
 |`Types`
 a|QoS specifications
@@ -323,7 +327,7 @@ a|See example below
 
 |`LegacyNamePrefix`
 a|Prefix for upgraded Trident installs. If you used a version of Trident prior to 1.3.2 and perform an upgrade with existing volumes, you’ll need to set this value to access your old volumes that were mapped via the volume-name method.
-a|“netappdvp-”
+a|`netappdvp-`
 
 |===
 

@@ -28,7 +28,7 @@ NOTE: Ensure you follow the node preparation steps required for Amazon Linux and
 * At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
 +
 ----
-kubectl create secret generic smbcreds --from-literal username=user --from-literal password='pw'
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
 ----
 
 * A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows. 
@@ -50,6 +50,27 @@ NOTE: You can log in to your file system (for example to install certificates) u
 
 . Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
 +
+
+[role="tabbed-block"]
+====
+
+.YAML
+--
+----
+---
+version: 1
+storageDriverName: ontap-san
+backendName: customBackendName
+managementLIF: svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal
+svm: svm01
+clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
+clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
+trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
+----
+--
+
+.JSON
+--
 ----
 {
   "version": 1,
@@ -59,9 +80,13 @@ NOTE: You can log in to your file system (for example to install certificates) u
   "svm": "svm01",
   "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
   "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
-  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz",
+  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz"
  }
+
 ----
+--
+
+====
 +
 For information about creating backends, see these links:
 +
@@ -102,9 +127,10 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Parameter |Description | Example
 
 |`smbShare`
-|Name of the SMB share created using Shared Folder Microsoft Management Console. For example "smb-share". 
+|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
 
-*Required for SMB volumes.*
+Alternatively, you can leave the parameter blank to prevent common share access to volumes.
+
 | `smb-share` 
 
 |`nasType`

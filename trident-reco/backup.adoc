@@ -140,10 +140,11 @@ The following steps describe how to recover a single master Kubernetes cluster w
 . Create a Kubernetes cluster by running the `kubeadm init` command with the `--ignore-preflight-errors=DirAvailable--var-lib-etcd` flag. The hostnames should be the same as the source Kubernetes cluster.
 . Run the `kubectl get crd` command to verify if all the Trident custom resources have come up and retrieve Trident objects to make sure that all the data is available.
 . Clean up the previous backends and create new backends on Trident. Specify the new management LIF, new SVM name, and password of the destination SVM.
-
-= AND/OR
-
++
+**DO WE NEED STEP 6 & 7?** 
 . Update all the required backends to reflect the new destination SVM name by running the `./tridentctl update backend <backend-name> -f <backend-json-file> -n <namespace>` command.
++
+NOTE: For application persistent volumes, when the destination SVM is activated, all the volumes provisioned by Trident start serving data. After the Kubernetes cluster is set up on the destination side by using the steps outlined above, all the deployments and pods are started and the containerized applications should run without any issues.
 
 **QUESTION ===> For use case where SVM-DR is created using either -identity-preserve false, and/or -discard-configs network;
 (ie. the SVM-DR is a different IP/subnet):

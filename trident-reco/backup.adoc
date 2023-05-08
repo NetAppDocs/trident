@@ -89,7 +89,7 @@ Astra Trident does not automatically detect SVM failures. Therefore, the adminis
 
 SnapMirror volume replication enables failover to destination storage from primary storage on a volume level. SnapMirror creates a volume replica, or _mirror_, of the primary storage on the secondary storage by syncing snapshots.
 
-=== Volume replication
+=== SnapMirror volume replication
 
 .Steps 
 
@@ -128,7 +128,7 @@ SnapMirror destination volumes can be made available for containerized workloads
 NOTE: Import is not supported on `ontap-nas-economy` or `ontap-san-economy` drivers.
 . Redeploy the application deployments with the newly created PVCs.
 
-== Recover volume data using ONTAP Snapshots
+== Recover volume data using snapshots
 
 Astra Trident snapshots are supported using `ontap-nas`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`, `solidfire-san`, `gcp-cvs`, and `azure-netapp-files` drivers. Refer to link:trident-use/vol-snapshots.adoc[Work with snapshots] for details.
 

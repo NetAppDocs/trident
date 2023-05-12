@@ -19,7 +19,7 @@ You can create a backup to restore Astra Trident in the event of a disaster.
 === Astra Trident replication
 Astra Trident uses Kubernetes CRDs to store and manage its own state and the Kubernetes cluster etcd to store its metadata. 
 
-NOTE: For details on backing up the Kubernetes cluster, refer to link:https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster[Kubernetes: Backing up an etcd cluster^].
+NOTE: For details on backing up the Kubernetes cluster etcd, refer to link:https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster[Kubernetes: Backing up an etcd cluster^].
 
 // As an example, assume the Kubernetes etcd data files and the certificates are stored on NetApp FlexVolume created outside of Astra Trident. This FlexVolume resides in a storage virtual machine (SVM), which has a SnapMirror SVM disaster recovery (DR) relationship with a destination SVM at the secondary site.
 
@@ -27,7 +27,7 @@ NOTE: For details on backing up the Kubernetes cluster, refer to link:https://ku
 Using Kubernetes CRDs and the Kubernetes cluster etcd snapshot, you can recover Astra Trident.
 
 .Steps
-. From the destination SVM, mount the volume which contains the Kubernetes etcd data files and certificates on to the host which will be setup as a master node.
+. From the destination SVM, mount the volume which contains the Kubernetes etcd data files and certificates on to the host which will be set up as a master node.
 
 . Copy all required certificates pertaining to the Kubernetes cluster under `/etc/kubernetes/pki` and the etcd member files under `/var/lib/etcd`.
 
@@ -35,10 +35,10 @@ Using Kubernetes CRDs and the Kubernetes cluster etcd snapshot, you can recover 
 
 . Run `kubectl get crd` to verify all Trident custom resources have come up and retrieve the Trident objects to verify all data is available.
 
-NOTE: After the Kubernetes cluster is set up on the destination side, all the pods are started and the containerized applications should run without issue.
+After the Kubernetes cluster is set up on the destination side, the pods are started and the containerized applications should run without issue.
 
 == SVM replication and recovery
-Astra Trident cannot configure replication relationships, so the storage administrator can use https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-concepts/GUID-8B187484-883D-4BB4-A1BC-35AC278BF4DC.html[SnapMirror^] to replicate a complete SVM, which can include its configuration settings and volumes. In the event of a disaster, you can activate the SnapMirror destination SVM to start serving data. You can switch back to the primary when systems are restored.
+Astra Trident cannot configure replication relationships, so the storage administrator can use https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-concepts/GUID-8B187484-883D-4BB4-A1BC-35AC278BF4DC.html[NetApp SnapMirror^] to replicate an SVM. In the event of a disaster, you can activate the SnapMirror destination SVM to start serving data. You can switch back to the primary when systems are restored.
 
 .About this task
 Consider the following when using the SnapMirror SVM Replication feature:
@@ -82,7 +82,11 @@ Astra Trident does not automatically detect SVM failures. Therefore, the adminis
 .Steps
 
 . Cancel all scheduled and ongoing SnapMirror transfers, break the replication relationship, stop the source SVM, and then activate the SnapMirror destination SVM.
-. If you specified `-identity-preserve false` or `-discard-config network` when creating your SVM replication,  update the `managementLIF` and `dataLIF` in the backend JSON file. 
+. If you specified `-identity-preserve false` or `-discard-config network` when configuring your SVM replication,  update the `managementLIF` and `dataLIF` in the backend JSON file. 
+. Confirm `storagePrefix` is present in the backend JSON file. This parameter is required and cannot be changed. Omitting `storagePrefix` will cause the backend update will fail.  
++
+*NEED TO DISCUSS: David suggested this addition. This parameter is required for NAS & SAN but optional for Docker--and should not be used for `solidfire-san` (Element). Is this correct?*
+
 . Update all the required backends to reflect the new destination SVM name using:
 +
 ----
@@ -129,7 +133,13 @@ NOTE: Import is not supported on `ontap-nas-economy` or `ontap-san-economy` driv
 . Redeploy the the application pods to mount the newly created PVCs.
 
 == Recover volume data using snapshots
-
 Astra Trident snapshots are supported using `ontap-nas`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`, `solidfire-san`, `gcp-cvs`, and `azure-netapp-files` drivers. Refer to link:trident-use/vol-snapshots.adoc[Work with snapshots] for details.
 
-Refer to link:https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-concepts/GUID-A9A2F347-3E05-4F80-9E9C-CEF8F0A2F8E1.html[ONTAP: Snapshot copies^] for more information on ONTAP Snapshots.
+Refer to link:https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-concepts/GUID-A9A2F347-3E05-4F80-9E9C-CEF8F0A2F8E1.html[ONTAP: Snapshot copies^] for information on ONTAP Snapshots.
+
+== Application replication using Astra Control Center
+Using Astra Control, you can build business continuity for your applications using asynchronous replication capabilities of SnapMirror. This enables your applications to replicate data and application changes from one cluster to another.
+
+Refer to link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html[Astra Control: Replicate apps to a remote system using SnapMirror technology^] for details. 
+
+

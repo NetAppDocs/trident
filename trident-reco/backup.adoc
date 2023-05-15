@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-reco/backup.html
 keywords: data protection, replication, dr, disaster recovery, snapmirror, back up, snapshot, element, volume replication
-summary: Learn about data protection and recovery options that NetApp storage platforms provide. Astra Trident can provision volumes that can take advantage of some of these features. You should have a data protection and recovery strategy for each application with a persistence requirement.
+summary: Learn about protection and recovery options for Astra Trident and Astra Trident provisioned volumes. You should have a data protection and recovery strategy for each application with a persistence requirement.
 ---
 
 = Data protection and disaster recovery
@@ -11,17 +11,20 @@ summary: Learn about data protection and recovery options that NetApp storage pl
 :imagesdir: ../media/
 
 [.lead]
-Learn about data protection and recovery options that NetApp storage platforms provide. Astra Trident can provision volumes that can take advantage of some of these features. You should have a data protection and recovery strategy for each application with a persistence requirement.
+Learn about protection and recovery options for Astra Trident and volumes provisioned using Astra Trident. You should have a data protection and recovery strategy for each application with a persistence requirement.
 
 == Astra Trident replication and recovery
-You can create a backup to restore Astra Trident in the event of a disaster. 
+You can create a backup to restore Astra Trident in the event of a disaster.
 
 === Astra Trident replication
 Astra Trident uses Kubernetes CRDs to store and manage its own state and the Kubernetes cluster etcd to store its metadata. 
 
-NOTE: For details on backing up the Kubernetes cluster etcd, refer to link:https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster[Kubernetes: Backing up an etcd cluster^].
+.Steps
 
-// As an example, assume the Kubernetes etcd data files and the certificates are stored on NetApp FlexVolume created outside of Astra Trident. This FlexVolume resides in a storage virtual machine (SVM), which has a SnapMirror SVM disaster recovery (DR) relationship with a destination SVM at the secondary site.
+. Back up the Kubernetes cluster etcd using  link:https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster[Kubernetes: Backing up an etcd cluster^].
+. Place the backup artifacts on a FlexVol. 
++
+NOTE: We recommend you protect the SVM where the FlexVol resides with a SnapMirror relationship to another SVM.
 
 === Astra Trident recovery
 Using Kubernetes CRDs and the Kubernetes cluster etcd snapshot, you can recover Astra Trident.
@@ -31,14 +34,12 @@ Using Kubernetes CRDs and the Kubernetes cluster etcd snapshot, you can recover 
 
 . Copy all required certificates pertaining to the Kubernetes cluster under `/etc/kubernetes/pki` and the etcd member files under `/var/lib/etcd`.
 
-. Create a Kubernetes cluster using `kubeadm init` with the `--ignore-preflight-errors=DirAvailable—​var-lib-etcd` flag. The hostnames used for the Kubernetes nodes should be the same as the source Kubernetes cluster.
+. Restore the Kubernetes cluster from the etcd backup using link:https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#restoring-an-etcd-cluster[Kubernetes: Restoring an etcd cluster^].
 
 . Run `kubectl get crd` to verify all Trident custom resources have come up and retrieve the Trident objects to verify all data is available.
 
-After the Kubernetes cluster is set up on the destination side, the pods are started and the containerized applications should run without issue.
-
 == SVM replication and recovery
-Astra Trident cannot configure replication relationships, so the storage administrator can use https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-concepts/GUID-8B187484-883D-4BB4-A1BC-35AC278BF4DC.html[NetApp SnapMirror^] to replicate an SVM. In the event of a disaster, you can activate the SnapMirror destination SVM to start serving data. You can switch back to the primary when systems are restored.
+Astra Trident cannot configure replication relationships, so the storage administrator can use https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm-replication-concept.html[NetApp SnapMirror^] to replicate an SVM. In the event of a disaster, you can activate the SnapMirror destination SVM to start serving data. You can switch back to the primary when systems are restored.
 
 .About this task
 Consider the following when using the SnapMirror SVM Replication feature:
@@ -74,7 +75,7 @@ Refer to link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm
 
 // . From the destination SVM, initialize the SnapMirror SVM replication relationship.
 
-image::SVMDR1.PNG[Shows the steps involved in setting up SVM.]
+//image::SVMDR1.PNG[Shows the steps involved in setting up SVM.]
 
 === SVM recovery using Astra Trident
 Astra Trident does not automatically detect SVM failures. Therefore, the administrator should run `tridentctl update backend` to initiate Trident failover to the new backend in the event of a failure.
@@ -82,8 +83,8 @@ Astra Trident does not automatically detect SVM failures. Therefore, the adminis
 .Steps
 
 . Cancel all scheduled and ongoing SnapMirror transfers, break the replication relationship, stop the source SVM, and then activate the SnapMirror destination SVM.
-. If you specified `-identity-preserve false` or `-discard-config network` when configuring your SVM replication,  update the `managementLIF` and `dataLIF` in the backend JSON file. 
-. Confirm `storagePrefix` is present in the backend JSON file. This parameter is required and cannot be changed. Omitting `storagePrefix` will cause the backend update will fail.  
+. If you specified `-identity-preserve false` or `-discard-config network` when configuring your SVM replication,  update the `managementLIF` and `dataLIF` in the Trident backend definition file. 
+. Confirm `storagePrefix` is present in the Trident backend definition file. This parameter is required and cannot be changed. Omitting `storagePrefix` will cause the backend update to fail.  
 +
 *NEED TO DISCUSS: David suggested this addition. This parameter is required for NAS & SAN but optional for Docker--and should not be used for `solidfire-san` (Element). Is this correct?*
 
@@ -92,10 +93,9 @@ Astra Trident does not automatically detect SVM failures. Therefore, the adminis
 ----
 ./tridentctl update backend <backend-name> -f <backend-json-file> -n <namespace>
 ----
-. For application persistent volumes, if you specified `-identify-preserve false`, you must bounce all application pods. 
+. If you specified `-identity-preserve false` or `discard-config network`, you must bounce all application pods.  
 +
-NOTE: If you specified `-identify-preserve true`, all volumes provisioned by Astra Trident start serving data when the destination SVM is activated.
-. If data LIFs were changed, ensure the worker nodes can access and mount volumes using the new data LIF IPs. 
+NOTE: If you specified `-identity-preserve true`, all volumes provisioned by Astra Trident start serving data when the destination SVM is activated.
 
 == Volume replication and recovery
 You can replicate volumes using SnapMirror and recover them using Astra Trident. 

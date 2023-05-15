@@ -127,7 +127,7 @@ You can recover a SnapMirror volume using Astra Trident.
 . Delete pods which were consuming PVC bound to volumes on the source SVM.
 . Import the required volumes as a PV bound to a new PVC using link:trident-use/vol-import.adoc[volume import].
 +
-NOTE: Import is not supported on `ontap-nas-economy` or `ontap-san-economy` drivers.
+NOTE: Import is not supported on `ontap-nas-economy`,  `ontap-san-economy`, or `ontap-flexgroup-economy` drivers.
 . Redeploy the application deployments with the newly created PVCs.
 . Delete old PVCs and PV from the Kubernetes cluster.
 . Redeploy the the application pods to mount the newly created PVCs.

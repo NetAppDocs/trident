@@ -79,7 +79,7 @@ Astra Trident does not automatically detect SVM failures. In the event of a disa
 NOTE: If you specified `-identity-preserve true`, all volumes provisioned by Astra Trident start serving data when the destination SVM is activated.
 
 == Volume replication and recovery
-You can replicate and recover volumes created by Astra Trident using link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-disaster-recovery-concept.html[ONTAP SnapMirror replication and recovery^].  
+Astra Trident cannot configure SnapMirror replication relationships, however, the storage administrator can use link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-disaster-recovery-concept.html[ONTAP SnapMirror replication and recovery^] to replicate volumes created by Astra Trident.  
 
 You can then import the recovered volumes into Astra Trident using link:trident-use/vol-import.adoc[tridentctl volume import].
 

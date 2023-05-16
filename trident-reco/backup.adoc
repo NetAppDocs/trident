@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-reco/backup.html
 keywords: data protection, replication, dr, disaster recovery, snapmirror, back up, snapshot, element, volume replication
-summary: Learn about protection and recovery options for Astra Trident and Astra Trident provisioned volumes. You should have a data protection and recovery strategy for each application with a persistence requirement.
+summary: Learn about protection and recovery options for Astra Trident and volumes created using Astra Trident. You should have a data protection and recovery strategy for each application with a persistence requirement.
 ---
 
 = Data protection and disaster recovery
@@ -11,7 +11,7 @@ summary: Learn about protection and recovery options for Astra Trident and Astra
 :imagesdir: ../media/
 
 [.lead]
-Learn about protection and recovery options for Astra Trident and volumes provisioned using Astra Trident. You should have a data protection and recovery strategy for each application with a persistence requirement.
+Learn about protection and recovery options for Astra Trident and volumes created using Astra Trident. You should have a data protection and recovery strategy for each application with a persistence requirement.
 
 == Astra Trident replication and recovery
 You can create a backup to restore Astra Trident in the event of a disaster.
@@ -39,55 +39,36 @@ Using Kubernetes CRDs and the Kubernetes cluster etcd snapshot, you can recover 
 . Run `kubectl get crd` to verify all Trident custom resources have come up and retrieve the Trident objects to verify all data is available.
 
 == SVM replication and recovery
-Astra Trident cannot configure replication relationships, so the storage administrator can use https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm-replication-concept.html[NetApp SnapMirror^] to replicate an SVM. In the event of a disaster, you can activate the SnapMirror destination SVM to start serving data. You can switch back to the primary when systems are restored.
+Astra Trident cannot configure replication relationships, however, the storage administrator can use https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm-replication-concept.html[ONTAP SnapMirror^] to replicate an SVM. 
+
+In the event of a disaster, you can activate the SnapMirror destination SVM to start serving data. You can switch back to the primary when systems are restored.
 
 .About this task
 Consider the following when using the SnapMirror SVM Replication feature:
 
 * You should create a distinct backend for each SVM with SVM-DR enabled.
 
-* Configure the storage classes to select the replicated backends only when needed. This is important to avoid having volumes which do not need the protection of a replication relationship to be provisioned onto the backends that support SVM-DR.
+* Configure the storage classes to select the replicated backends only when needed to avoid having volumes which do not need replication provisioned onto the backends that support SVM-DR.
 
-* Application administrators should understand the additional cost and complexity associated with replicating the data and determine a plan for recovery before leveraging data replication.
+* Application administrators should understand the additional cost and complexity associated with replication and carefully consider their recovery plan prior to beginning this process.
 
 === SVM replication 
-Using SnapMirror _policies_, _relationships_, and _relationship transfers_, you can replicate an SVM. SnapMirror allows you to set options to control what to replicate:
+You can use link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm-replication-workflow-concept.html[ONTAP: SnapMirror SVM replication^] to create the SVM replication relationship.
+
+SnapMirror allows you to set options to control what to replicate. You'll need to know which options you selected when preforming <<SVM recovery using Astra Trident>>.
 
 * link:https://docs.netapp.com/us-en/ontap/data-protection/replicate-entire-svm-config-task.html[-identity-preserve true^] replicates the entire SVM configuration. 
-* link:https://docs.netapp.com/us-en/ontap/data-protection/exclude-lifs-svm-replication-task.html[-discard-configs network^] excludes LIFs and related network settings from the SVM replication.  
+* link:https://docs.netapp.com/us-en/ontap/data-protection/exclude-lifs-svm-replication-task.html[-discard-configs network^] excludes LIFs and related network settings.  
 * link:https://docs.netapp.com/us-en/ontap/data-protection/exclude-network-name-service-svm-replication-task.html[-identity-preserve false^] replicates only the volumes and security configuration.  
 
-Refer to link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm-replication-workflow-concept.html[ONTAP: SnapMirror SVM replication workflow^] to create the SVM replication relationship.
-
-// .Steps
-
-// . Set up peering between the source and destination cluster and SVM.
-
-// . Create the destination SVM by using the `-subtype dp-destination` option.
-
-// . Create a replication job schedule to ensure that replication happens at the required intervals.
-
-// . Create a SnapMirror replication from the destination SVM to the source SVM. Refer to link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-svm-replication-workflow-concept.html[ONTAP: SnapMirror SVM replication workflow^] for full details and options. 
-
-// .. Use the `-identity-preserve false` option to replicate only the SVM volumes and RBAC configuration.  
-// .. Use the `-identity-preserve true` option to include SVM configuration in the replication. 
-// .. Use the `-discard-configs network` option to exclude LIFs and related network settings from the SVM replication. 
-
-// . From the destination SVM, initialize the SnapMirror SVM replication relationship.
-
-//image::SVMDR1.PNG[Shows the steps involved in setting up SVM.]
-
 === SVM recovery using Astra Trident
-Astra Trident does not automatically detect SVM failures. Therefore, the administrator should run `tridentctl update backend` to initiate Trident failover to the new backend in the event of a failure.
+Astra Trident does not automatically detect SVM failures. In the event of a disaster, the administrator can manually initiate Trident failover to the new SVM.
 
 .Steps
 
-. Cancel all scheduled and ongoing SnapMirror transfers, break the replication relationship, stop the source SVM, and then activate the SnapMirror destination SVM.
+. Cancel scheduled and ongoing SnapMirror transfers, break the replication relationship, stop the source SVM and then activate the SnapMirror destination SVM.
 . If you specified `-identity-preserve false` or `-discard-config network` when configuring your SVM replication,  update the `managementLIF` and `dataLIF` in the Trident backend definition file. 
-. Confirm `storagePrefix` is present in the Trident backend definition file. This parameter is required and cannot be changed. Omitting `storagePrefix` will cause the backend update to fail.  
-+
-*NEED TO DISCUSS: David suggested this addition. This parameter is required for NAS & SAN but optional for Docker--and should not be used for `solidfire-san` (Element). Is this correct?*
-
+. Confirm `storagePrefix` is present in the Trident backend definition file. This parameter cannot be changed. Omitting `storagePrefix` will cause the backend update to fail.  
 . Update all the required backends to reflect the new destination SVM name using:
 +
 ----
@@ -98,48 +79,26 @@ Astra Trident does not automatically detect SVM failures. Therefore, the adminis
 NOTE: If you specified `-identity-preserve true`, all volumes provisioned by Astra Trident start serving data when the destination SVM is activated.
 
 == Volume replication and recovery
-You can replicate volumes using SnapMirror and recover them using Astra Trident. 
+You can replicate and recover volumes created by Astra Trident using link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-disaster-recovery-concept.html[ONTAP SnapMirror replication and recovery^].  
 
-=== Volume replication using SnapMirror
-SnapMirror creates a replica, or mirror, of your working data in secondary storage from which you can continue to serve data in the event of a catastrophe at the primary site. Refer to link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-disaster-recovery-concept.html[Asynchronous SnapMirror disaster recovery basics^] for details. 
+You can then import the recovered volumes into Astra Trident using link:trident-use/vol-import.adoc[tridentctl volume import].
 
-SnapMirror offers two methods for replicating volumes: 
-
-* Beginning in ONTAP 9.5, link:https://docs.netapp.com/us-en/ontap/data-protection/create-replication-relationship-one-step-task.html[snapmirror protect^] configures a replication relationship in one step. 
-* Optionally, you can link:https://docs.netapp.com/us-en/ontap/data-protection/create-destination-volume-task.html[configure the relationship one step at a time^].
-
-// .Steps 
-// . Set up peering between the clusters in which the volumes reside and the SVMs that serve data from the volumes.
-// . Create a SnapMirror policy, which controls the behavior of the relationship and specifies the configuration attributes for that relationship.
-
-// . Create a SnapMirror relationship between the destination volume and the source volume by using the link:https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-cmpr-970/snapmirror__create.html[`snapmirror create` command^] and assign the appropriate SnapMirror policy.
-
-// . After the SnapMirror relationship is created, initialize the relationship so that a baseline transfer from the source volume to the destination volume is completed.
-// +
-// image::SM1.PNG[Shows the SnapMirror volume replication setup.]
-
-=== Volume recovery using Astra Trident
-You can recover a SnapMirror volume using Astra Trident.
-
-.Steps
-
-. Cancel all scheduled and ongoing SnapMirror transfers and break the replication relationship between the destination and source volumes so the destination volume becomes read/write. 
-. Delete pods which were consuming PVC bound to volumes on the source SVM.
-. Import the required volumes as a PV bound to a new PVC using link:trident-use/vol-import.adoc[volume import].
-+
 NOTE: Import is not supported on `ontap-nas-economy`,  `ontap-san-economy`, or `ontap-flexgroup-economy` drivers.
-. Redeploy the application deployments with the newly created PVCs.
-. Delete old PVCs and PV from the Kubernetes cluster.
-. Redeploy the the application pods to mount the newly created PVCs.
 
-== Recover volume data using snapshots
-Astra Trident snapshots are supported using `ontap-nas`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`, `solidfire-san`, `gcp-cvs`, and `azure-netapp-files` drivers. Refer to link:trident-use/vol-snapshots.adoc[Work with snapshots] for details.
+== Snapshot data protection 
+You can protect and restore data using: 
 
-Refer to link:https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-concepts/GUID-A9A2F347-3E05-4F80-9E9C-CEF8F0A2F8E1.html[ONTAP: Snapshot copies^] for information on ONTAP Snapshots.
+* An external snapshot controller and CRDs to create Kubernetes volume snapshots of Persistent Volumes (PVs). 
++
+link:trident-use/vol-snapshots.adoc[Volume snapshots]
 
-== Application replication using Astra Control Center
-Using Astra Control, you can build business continuity for your applications using asynchronous replication capabilities of SnapMirror. This enables your applications to replicate data and application changes from one cluster to another.
+* ONTAP Snapshots  to restore the entire contents of a volume or to recover individual files or LUNs. 
++
+link:https://docs.netapp.com/us-en/ontap/data-protection/manage-local-snapshot-copies-concept.html[ONTAP Snapshots^]
 
-Refer to link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html[Astra Control: Replicate apps to a remote system using SnapMirror technology^] for details. 
+== Astra Control Center application replication
+Using Astra Control, you can replicate data and application changes from one cluster to another using asynchronous replication capabilities of SnapMirror. 
+
+link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html[Astra Control: Replicate apps to a remote system using SnapMirror technology^]
 
 

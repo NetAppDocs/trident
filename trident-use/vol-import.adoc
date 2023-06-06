@@ -15,50 +15,33 @@ You can import existing storage volumes as a Kubernetes PV using `tridentctl imp
 
 == Overview
 
-You might consider importing a volume into Astra Trident: 
+You might consider importing a volume into Astra Trident to: 
 
-* Containerize an application and reusing its existing data set
+* Containerize an application and reuse its existing data set
 * Use a clone of a data set for an ephemeral application
 * Rebuild a failed Kubernetes cluster
 * Migrate application data during disaster recovery
 
 IMPORTANT: An ONTAP volume must be of type rw to be imported by Astra Trident. If a volume is of type dp, it is a SnapMirror destination volume; you should break the mirror relationship before importing the volume into Astra Trident.
 
-=== Supported drivers
+=== Considerations
+Before importing a volume, review the following considerations. 
 
-The following drivers support volume import.
+* Though `StorageClass` must be specified on a PVC, Astra Trident does not use this parameter during import. Storage classes are used during volume creation to select from available pools based on storage characteristics. Because the volume already exists, no pool selection is required during import. Therefore, the import will not fail even if the volume exists on a backend or pool that does not match the storage class specified in the PVC.
+* The existing volume size is determined and set in the PVC. After the volume is imported by the storage driver, the PV is created with a ClaimRef to the PVC. 
+** The reclaim policy is initially set to `retain` in the PV. After Kubernetes successfully binds the PVC and PV, the reclaim policy is updated to match the reclaim policy of the Storage Class. 
+** If the reclaim policy of the Storage Class is `delete`, the storage volume will be deleted when the PV is deleted.
+* By default, Astra Trident will manage the PVC and rename the FlexVol and LUN on the backend. You can pass the `--no-manage` flag to import as an unmanaged volume. If you use `--no-manage`, Astra Trident does not perform any additional operations on the PVC or PV for the lifecycle of the objects. The storage volume is not deleted when the PV is deleted and other operations such as volume clone and volume resize are also ignored. 
++
+TIP: This option is useful if you want to use Kubernetes for containerized workloads but otherwise want to manage the lifecycle of the storage volume outside of Kubernetes.
 
-[%header,cols=2*]
-|===
-|Driver
-|Release introduced
-
-|`ontap-nas`
-a|19.04
-
-|`ontap-nas-flexgroup`
-a|19.04
-
-|`solidfire-san`
-a|19.04
-
-|`azure-netapp-files`
-a|19.04
-
-|`gcp-cvs`
-a|19.04
-
-|`ontap-san`
-a|19.04
-
-|===
-
-IMPORTANT: The `ontap-nas` driver cannot import and manage qtrees. The `ontap-nas` and `ontap-nas-flexgroup` drivers do not allow duplicate volume names.
+* An annotation is added to the PVC and PV that serves a dual purpose of indicating that the volume was imported and if the PVC and PV are managed. This annotation should not be modified or removed.
 
 == Import a volume
+You can use `tridentctl import` to import a volume. 
 
 .Steps 
-. Create the Persistent Volume Claim (PVC) file (`pvc.yaml`) that will be used by the volume import process to create the PVC. The PVC file should include the name, namespace, accessModes, and storageClassName fields only. For example:
+. Create the Persistent Volume Claim (PVC) file (for example, `pvc.yaml`) that will be used by the volume import process to create the PVC. The PVC file should include `name`, `namespace`, `accessModes`, and `storageClassName`. You can optionally specify unixPermissions in your PVC definition. For example:
 +
 ----
 kind: PersistentVolumeClaim
@@ -72,50 +55,33 @@ spec:
   storageClassName: my_storage_class
 ----
 +
-WARNING: Don't include additional parameters such as PV name, volume size, or annotations. Including additional parameters can cause the import command to fail. 
+WARNING: Don't include additional parameters such as PV name or volume size. This can cause the import command to fail. 
 
-. To import a storage volume, use the `tridentctl import` command to specify the name of the Astra Trident backend containing the volume and the name that uniquely identifies the volume on the storage (for example: ONTAP FlexVol, Element Volume, CVS Volume path). 
+. Use the `tridentctl import` command to specify the name of the Astra Trident backend containing the volume and the name that uniquely identifies the volume on the storage (for example: ONTAP FlexVol, Element Volume, Cloud Volumes Service path). The `-f` argument is required to specify the path to the PVC  file.
 +
 ----
 tridentctl import volume <backendName> <volumeName> -f <path-to-pvc-file>
 ----
-+
+
+== ONTAP NAS and ONTAP NAS FlexGroup
+Astra Trident supports volume import using the `ontap-nas`, `ontap-nas-economy`, and `ontap-nas-flexgroup` drivers. 
+
 [NOTE]
 ====
-* You can choose to have the PVC managed or unmanaged. By default, Trident will manage the PVC and rename the FlexVol and LUN on the backend. To import as an unmanaged volume, pass the `--no-manage` flag. 
-* The `-f` string argument is required and specifies the path to the YAML or JSON PVC file.
+* The `ontap-nas-economy` driver cannot import and manage qtrees. 
+* The `ontap-nas` and `ontap-nas-flexgroup` drivers do not allow duplicate volume names.
 ====
 
-.Results
-After importing the volume the following occurs. 
-
-* The existing volume size is determined and set in the PVC. After the volume is imported by the storage driver, the PV is created with a ClaimRef to the PVC. The reclaim policy is initially set to `retain` in the PV. After Kubernetes successfully binds the PVC and PV, the reclaim policy is updated to match the reclaim policy of the Storage Class. 
-** If the reclaim policy of the Storage Class is `delete`, the storage volume will be deleted when the PV is deleted.
-** If a volume is imported with the `--no-manage` argument, Astra Trident does not perform any additional operations on the PVC or PV for the lifecycle of the objects. Because Trident ignores PV and PVC events for `--no-manage` objects, the storage volume is not deleted when the PV is deleted. Other operations such as volume clone and volume resize are also ignored. 
-+
-This option is useful if you want to use Kubernetes for containerized workloads but otherwise want to manage the lifecycle of the storage volume outside of Kubernetes.
-
-* An annotation is added to the PVC and PV that serves a dual purpose of indicating that the volume was imported and if the PVC and PV are managed. 
-+
-WARNING: This annotation should not be modified or removed.
-
-=== Versions earlier than Astra Trident 19.07
-Astra Trident 19.07 and later handle the attachment of PVs and mount the volume as part of importing it. For imports using earlier versions of Astra Trident, there will not be any operations in the data path and the volume import will not verify if the volume can be mounted. 
-
-If a mistake is made with volume import (for example, the StorageClass is incorrect), you can recover by changing the reclaim policy on the PV to `retain`, deleting the PVC and PV, and retrying the volume import command.
-
-== Examples
-
-=== ONTAP NAS and ONTAP NAS FlexGroup
-
 Each volume created with the `ontap-nas` driver is a FlexVol on the ONTAP cluster. Importing FlexVols with the `ontap-nas` driver works the same. A FlexVol that already exists on an ONTAP cluster can be imported as a `ontap-nas` PVC. Similarly, FlexGroup vols can be imported as `ontap-nas-flexgroup` PVCs.
+
+=== Example
 
 // start tabbed area
 
 [role="tabbed-block"]
 ====
 
-.Managed volumes
+.Managed volume
 --
 The following example imports a volume named `managed_volume` on a backend named `ontap_nas`:
 ----
@@ -133,8 +99,6 @@ tridentctl import volume ontap_nas managed_volume -f <path-to-pvc-file>
 --
 When using the `--no-manage` argument, Trident does not rename the volume or validate if the volume was mounted. The volume import operation will fail if the volume was not mounted manually.
 
-NOTE: A previously existing bug with importing volumes with custom UnixPermissions has been fixed. You can specify unixPermissions in your PVC definition or backend configuration, and instruct Astra Trident to import the volume accordingly.
-
 The following example imports `unmanaged_volume` on the `ontap_nas` backend:
 ----
 tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-manage
@@ -151,6 +115,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 // end tabbed area
 
 == ONTAP SAN
+Astra Trident supports volume import using the `ontap-san` driver. 
 
 Astra Trident can import ONTAP SAN FlexVols that contain a single LUN. This is consistent with the `ontap-san` driver, which creates a FlexVol for each PVC and a LUN within the FlexVol. 
 
@@ -158,6 +123,7 @@ Astra Trident will import the FlexVol and associate it with the PVC definition. 
 
 TIP: We suggest importing volumes that do not have existing active connections. If you are looking to import an actively used volume, clone the volume first and then do the import.
 
+=== Example 
 The following example imports the `ontap-san-managed` FlexVol that is present on the `ontap_san_default` backend:
 ----
 tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-import.yaml -n trident -d
@@ -170,8 +136,9 @@ tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-imp
 ----
 
 == Element
-You can import NetApp Element software/NetApp HCI volumes to your Kubernetes cluster with Trident. You need the name of your Astra Trident backend, and the unique name of the volume and the PVC file as the arguments for the `tridentctl import` command.
+Astra Trident supports NetApp Element software/NetApp HCI volume import using the `solidfire-san` driver. 
 
+=== Example
 ----
 tridentctl import volume element_default element-managed -f pvc-basic-import.yaml -n trident -d
 
@@ -185,8 +152,11 @@ tridentctl import volume element_default element-managed -f pvc-basic-import.yam
 NOTE: The Element driver supports duplicate volume names. If there are duplicate volume names, Trident’s volume import process returns an error. As a workaround, clone the volume and provide a unique volume name. Then import the cloned volume.
 
 == Google Cloud Platform 
-To import a volume backed by the NetApp Cloud Volumes Service in Google Cloud Platform, identify the volume by its volume path instead of its name.
+Astra Trident supports volume import using the `gcp-cvs` driver. 
 
+NOTE: To import a volume backed by the NetApp Cloud Volumes Service in Google Cloud Platform, identify the volume by its volume path instead of its name.
+
+=== Example
 The following example imports an `gcp-cvs` volume on the backend called `gcpcvs_YEppr` with the volume path of `adroit-jolly-swift`:
 ----
 tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -n trident
@@ -201,7 +171,9 @@ tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -
 NOTE: The volume path is the portion of the volume’s export path after the :/. For example, if the export path is `10.0.0.1:/adroit-jolly-swift`, the volume path is `adroit-jolly-swift`.
 
 == Azure NetApp Files
+Astra Trident supports volume import using the `azure-netapp-files` and `azure-netapp-files-subvolume` drivers.
 
+=== Example
 To import an `azure-netapp-files` volume on the backend called `azurenetappfiles_40517` with the volume path `importvol1`, run the following command:
 ----
 tridentctl import volume azurenetappfiles_40517 importvol1 -f <path-to-pvc-file> -n trident

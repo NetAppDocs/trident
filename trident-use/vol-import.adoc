@@ -119,7 +119,9 @@ Astra Trident supports volume import using the `ontap-san` driver.
 
 Astra Trident can import ONTAP SAN FlexVols that contain a single LUN. This is consistent with the `ontap-san` driver, which creates a FlexVol for each PVC and a LUN within the FlexVol. 
 
-Astra Trident will import the FlexVol and associate it with the PVC definition. Astra Trident also renames the FlexVol to the `pvc-<uuid>` format and the LUN within the FlexVol to `lun0`.
+Astra Trident imports the FlexVol and associates it with the PVC definition. 
+
+For managed volumes, Astra Trident also renames the FlexVol to the `pvc-<uuid>` format and the LUN within the FlexVol to `lun0`.
 
 TIP: We suggest importing volumes that do not have existing active connections. If you are looking to import an actively used volume, clone the volume first and then do the import.
 

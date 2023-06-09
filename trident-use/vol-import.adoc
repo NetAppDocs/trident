@@ -74,7 +74,7 @@ Astra Trident supports volume import using the `ontap-nas`, `ontap-nas-economy`,
 
 Each volume created with the `ontap-nas` driver is a FlexVol on the ONTAP cluster. Importing FlexVols with the `ontap-nas` driver works the same. A FlexVol that already exists on an ONTAP cluster can be imported as a `ontap-nas` PVC. Similarly, FlexGroup vols can be imported as `ontap-nas-flexgroup` PVCs.
 
-=== Example
+=== Examples
 
 // start tabbed area
 
@@ -117,15 +117,21 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 == ONTAP SAN
 Astra Trident supports volume import using the `ontap-san` driver. 
 
-Astra Trident can import ONTAP SAN FlexVols that contain a single LUN. This is consistent with the `ontap-san` driver, which creates a FlexVol for each PVC and a LUN within the FlexVol. 
-
-Astra Trident imports the FlexVol and associates it with the PVC definition. 
-
-For managed volumes, Astra Trident also renames the FlexVol to the `pvc-<uuid>` format and the LUN within the FlexVol to `lun0`.
+Astra Trident can import ONTAP SAN FlexVols that contain a single LUN. This is consistent with the `ontap-san` driver, which creates a FlexVol for each PVC and a LUN within the FlexVol. Astra Trident imports the FlexVol and associates it with the PVC definition. 
 
 TIP: We suggest importing volumes that do not have existing active connections. If you are looking to import an actively used volume, clone the volume first and then do the import.
 
-=== Example 
+=== Examples 
+
+// start tabbed area
+
+[role="tabbed-block"]
+====
+
+.Managed volume
+--
+For managed volumes, Astra Trident renames the FlexVol to the `pvc-<uuid>` format and the LUN within the FlexVol to `lun0`.
+
 The following example imports the `ontap-san-managed` FlexVol that is present on the `ontap_san_default` backend:
 ----
 tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-import.yaml -n trident -d
@@ -136,11 +142,36 @@ tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-imp
 | pvc-d6ee4f54-4e40-4454-92fd-d00fc228d74a | 20 MiB | basic         | block    | cd394786-ddd5-4470-adc3-10c5ce4ca757 | online | true    |
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 ----
+--
+.Unmanaged volume
+--
+The following example imports `unmanaged_example_volume` on the `ontap_san` backend:
+----
+tridentctl import volume -n trident san_blog unmanaged_example_volume -f pvc-import.yaml --no-manage
++------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
+|                   NAME                   |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
++------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
+| pvc-1fc999c9-ce8c-459c-82e4-ed4380a4b228 | 1.0 GiB | san-blog      | block    | e3275890-7d80-4af6-90cc-c7a0759f555a | online | false   |
++------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
+----
+[WARNING]
+=====
+If you have LUNS mapped to igroups that share an IQN with the cluster IQN, as shown in the following example, you will receive the error: `LUN already mapped to initiator(s) in this group`. 
+
+image:./san-import-igroup.png[Image of LUNS mapped to iqn and cluster iqn.]
+
+You will need to remove the initiator or unmap the LUN to import the volume. 
+=====
+
+--
+====
+
 
 == Element
 Astra Trident supports NetApp Element software/NetApp HCI volume import using the `solidfire-san` driver. 
 
 === Example
+The following example imports an `element-managed` volume on backend `element_default`.
 ----
 tridentctl import volume element_default element-managed -f pvc-basic-import.yaml -n trident -d
 
@@ -151,7 +182,7 @@ tridentctl import volume element_default element-managed -f pvc-basic-import.yam
 +------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
 ----
 
-NOTE: The Element driver supports duplicate volume names. If there are duplicate volume names, Trident’s volume import process returns an error. As a workaround, clone the volume and provide a unique volume name. Then import the cloned volume.
+NOTE: The Element driver supports duplicate volume names. However, Astra Trident returns an error if there are duplicate volume names. As a workaround, clone the volume, provide a unique volume name, and import the cloned volume.
 
 == Google Cloud Platform 
 Astra Trident supports volume import using the `gcp-cvs` driver. 
@@ -159,7 +190,7 @@ Astra Trident supports volume import using the `gcp-cvs` driver.
 NOTE: To import a volume backed by the NetApp Cloud Volumes Service in Google Cloud Platform, identify the volume by its volume path instead of its name.
 
 === Example
-The following example imports an `gcp-cvs` volume on the backend called `gcpcvs_YEppr` with the volume path of `adroit-jolly-swift`:
+The following example imports a `gcp-cvs` volume on backend `gcpcvs_YEppr` with the volume path of `adroit-jolly-swift`.
 ----
 tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -n trident
 
@@ -176,7 +207,7 @@ NOTE: The volume path is the portion of the volume’s export path after the :/.
 Astra Trident supports volume import using the `azure-netapp-files` and `azure-netapp-files-subvolume` drivers.
 
 === Example
-To import an `azure-netapp-files` volume on the backend called `azurenetappfiles_40517` with the volume path `importvol1`, run the following command:
+The following example imports an `azure-netapp-files` volume on backend `azurenetappfiles_40517` with the volume path `importvol1`. 
 ----
 tridentctl import volume azurenetappfiles_40517 importvol1 -f <path-to-pvc-file> -n trident
 

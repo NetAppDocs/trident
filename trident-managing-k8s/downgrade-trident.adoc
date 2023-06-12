@@ -25,9 +25,12 @@ You should consider a downgrade when moving to a Astra Trident release that uses
 
 Only attempt downgrade for a version of Astra Trident that runs using CRDs (19.07 and later). This ensures operations performed on the current Astra Trident release are visible after the downgrade occurs.
 
-== When not to downgrade
+== Considerations before downgrading
 
-You should not downgrade to a release of Trident that uses `etcd` to maintain state (19.04 and earlier). All operations performed with the current Astra Trident release are not reflected after the downgrade. Newly created PVs are not usable when moving back to an earlier version. Changes made to objects such as backends, PVs, storage classes, and volume snapshots (created/updated/deleted) are not visible to Astra Trident when moving back to an earlier version. Going back to an earlier version does not disrupt access for PVs that were already created by using the older release, unless they have been upgraded.
+* Operations performed with the current Astra Trident release are not reflected after the downgrade. 
+* Newly created PVs are not usable when moving back to an earlier version. 
+* Changes made to objects such as backends, PVs, storage classes, and volume snapshots (created/updated/deleted) are not visible to Astra Trident when moving back to an earlier version. 
+* Going back to an earlier version does not disrupt access for PVs that were already created by using the older release, unless they have been upgraded.
 
 == Downgrade process when Astra Trident is installed by using the operator
 
@@ -94,7 +97,7 @@ helm rollback trident [revision #]
 
 If you installed Astra Trident by using `tridentctl`, the downgrade process involves the following steps. This sequence walks you through the downgrade process to move from Astra Trident 21.07 to 20.07.
 
-NOTE: Before beginning the downgrade, you should take a snapshot of your Kubernetes cluster’s `etcd`. This enables you to back up the current state of Astra Trident’s CRDs.
+NOTE: Before beginning the downgrade, you should take a snapshot of your Kubernetes cluster `etcd`. This enables you to back up the current state of Astra Trident CRDs.
 
 .Steps
 . Make sure that Trident is installed by using `tridentctl`. If you are unsure about how Astra Trident is installed, run this simple test:

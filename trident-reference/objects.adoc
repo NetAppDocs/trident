@@ -70,7 +70,7 @@ If the created PV has the `Delete` reclaim policy, Trident deletes both the PV a
 
 Trident supports the creation of Volume Snapshots using the CSI specification: you can create a Volume Snapshot and use it as a Data Source to clone existing PVCs. This way, point-in-time copies of PVs can be exposed to Kubernetes in the form of snapshots. The snapshots can then be used to create new PVs. Take a look at `+On-Demand Volume Snapshots+` to see how this would work.
 
-Trident also provides the `cloneFromPVC` and `splitOnClone` annotations for creating clones. You can use these  annotations to clone a PVC without having to use the CSI implementation.
+Trident also provides the `cloneFromPVC` and `splitOnClone` annotations for creating clones. You can use these annotations to clone a PVC without having to use the CSI implementation.
 
 Here is an example: If a user already has a PVC called `mysql`, the user can create a new PVC called `mysqlclone` by using the annotation, such as `trident.netapp.io/cloneFromPVC: mysql`. With this annotation set, Trident clones the volume corresponding to the mysql PVC, instead of provisioning a volume from scratch.
 

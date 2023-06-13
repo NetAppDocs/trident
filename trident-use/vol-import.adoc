@@ -163,7 +163,7 @@ tridentctl import volume -n trident san_blog unmanaged_example_volume -f pvc-imp
 ----
 [WARNING]
 =====
-If you have LUNS mapped to igroups that share an IQN with the cluster IQN, as shown in the following example, you will receive the error: `LUN already mapped to initiator(s) in this group`. You will need to remove the initiator or unmap the LUN to import the volume. 
+If you have LUNS mapped to igroups that share an IQN with a Kubernetes node IQN, as shown in the following example, you will receive the error: `LUN already mapped to initiator(s) in this group`. You will need to remove the initiator or unmap the LUN to import the volume. 
 
 image:./san-import-igroup.png[Image of LUNS mapped to iqn and cluster iqn.]
 

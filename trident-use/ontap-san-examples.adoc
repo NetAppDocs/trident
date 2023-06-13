@@ -263,170 +263,6 @@ Astra Trident sets provisioning labels in the “Comments” field. Comments are
 
 In this example, some of the storage pool sets their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values set above.
 
-.ONTAP NAS example
-[%collapsible%open]
-====
-----
----
-version: 1
-storageDriverName: ontap-nas
-managementLIF: 10.0.0.1
-svm: svm_nfs
-username: admin
-password: <password>
-nfsMountOptions: nfsvers=4
-defaults:
-  spaceReserve: none
-  encryption: 'false'
-  qosPolicy: standard
-labels:
-  store: nas_store
-  k8scluster: prod-cluster-1
-region: us_east_1
-storage:
-- labels:
-    app: msoffice
-    cost: '100'
-  zone: us_east_1a
-  defaults:
-    spaceReserve: volume
-    encryption: 'true'
-    unixPermissions: '0755'
-    adaptiveQosPolicy: adaptive-premium
-- labels:
-    app: slack
-    cost: '75'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    app: wordpress
-    cost: '50'
-  zone: us_east_1c
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0775'
-- labels:
-    app: mysqldb
-    cost: '25'
-  zone: us_east_1d
-  defaults:
-    spaceReserve: volume
-    encryption: 'false'
-    unixPermissions: '0775'
-----
-====
-
-.ONTAP NAS FlexGroup example
-[%collapsible%open]
-====
-----
----
-version: 1
-storageDriverName: ontap-nas-flexgroup
-managementLIF: 10.0.0.1
-svm: svm_nfs
-username: vsadmin
-password: <password>
-defaults:
-  spaceReserve: none
-  encryption: 'false'
-labels:
-  store: flexgroup_store
-  k8scluster: prod-cluster-1
-region: us_east_1
-storage:
-- labels:
-    protection: gold
-    creditpoints: '50000'
-  zone: us_east_1a
-  defaults:
-    spaceReserve: volume
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    protection: gold
-    creditpoints: '30000'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    protection: silver
-    creditpoints: '20000'
-  zone: us_east_1c
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0775'
-- labels:
-    protection: bronze
-    creditpoints: '10000'
-  zone: us_east_1d
-  defaults:
-    spaceReserve: volume
-    encryption: 'false'
-    unixPermissions: '0775'
-----
-====
-
-.ONTAP NAS economy example
-[%collapsible%open]
-====
-----
----
-version: 1
-storageDriverName: ontap-nas-economy
-managementLIF: 10.0.0.1
-svm: svm_nfs
-username: vsadmin
-password: <password>
-defaults:
-  spaceReserve: none
-  encryption: 'false'
-labels:
-  store: nas_economy_store
-region: us_east_1
-storage:
-- labels:
-    department: finance
-    creditpoints: '6000'
-  zone: us_east_1a
-  defaults:
-    spaceReserve: volume
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    department: legal
-    creditpoints: '5000'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    department: engineering
-    creditpoints: '3000'
-  zone: us_east_1c
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0775'
-- labels:
-    department: humanresource
-    creditpoints: '2000'
-  zone: us_east_1d
-  defaults:
-    spaceReserve: volume
-    encryption: 'false'
-    unixPermissions: '0775'
-----
-====
-
 .ONTAP SAN example
 [%collapsible%open]
 ====
@@ -531,7 +367,7 @@ storage:
 
 The following StorageClass definitions refer to the <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-* The `protection-gold` StorageClass will map to the first and  second virtual pool in the `ontap-nas-flexgroup` backend and the first virtual pool in the `ontap-san` backend. These are the only pool offering gold level protection.
+* The `protection-gold` StorageClass will map to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold level protection.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -544,7 +380,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `protection-not-gold` StorageClass will map to the third and fourth virtual pool in `ontap-nas-flexgroup` backend and the second and third virtual pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
+* The `protection-not-gold` StorageClass will map to the second and third virtual pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -557,7 +393,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `app-mysqldb` StorageClass will map to the fourth virtual pool in `ontap-nas` backend and the third virtual pool in `ontap-san-economy` backend. These are the only pools offering storage pool configuration for mysqldb type app.
+* The `app-mysqldb` StorageClass will map to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for mysqldb type app.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -570,7 +406,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `protection-silver-creditpoints-20k` StorageClass will map to the third virtual pool in `ontap-nas-flexgroup` backend and the second virtual pool in `ontap-san` backend. These are the only pools offering gold-level protection at 20000 creditpoints.
+* The `protection-silver-creditpoints-20k` StorageClass will map to the second virtual pool in `ontap-san` backend. This is the only pool offering gold-level protection at 20000 creditpoints.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -582,7 +418,7 @@ parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
 ----
-* The `creditpoints-5k` StorageClass will map to the second virtual pool in `ontap-nas-economy` backend and the third virtual pool in `ontap-san` backend. These are the only pool offerings at 5000 creditpoints.
+* The `creditpoints-5k` StorageClass will map to the third virtual pool in `ontap-san` backend. This is the only pool offerings at 5000 creditpoints.
 +
 ----
 apiVersion: storage.k8s.io/v1

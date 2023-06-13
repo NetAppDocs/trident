@@ -25,22 +25,16 @@ You should consider a downgrade when moving to a Astra Trident release that uses
 
 Only attempt downgrade for a version of Astra Trident that runs using CRDs (19.07 and later). This ensures operations performed on the current Astra Trident release are visible after the downgrade occurs.
 
-== When not to downgrade
+== Downgrade a Trident operator installation
 
-You should not downgrade to a release of Trident that uses `etcd` to maintain state (19.04 and earlier). All operations performed with the current Astra Trident release are not reflected after the downgrade. Newly created PVs are not usable when moving back to an earlier version. Changes made to objects such as backends, PVs, storage classes, and volume snapshots (created/updated/deleted) are not visible to Astra Trident when moving back to an earlier version. Going back to an earlier version does not disrupt access for PVs that were already created by using the older release, unless they have been upgraded.
+Installations performed using the Trident operator do not require `tridentctl`. Astra Trident can be downgraded to either:
 
-== Downgrade process when Astra Trident is installed by using the operator
-
-For installations done using the Trident Operator, the downgrade process is different and does not require the use of `tridentctl`.
-
-For installations done using the Trident operator, Astra Trident can be downgraded to either of the following:
-
-* A version that is installed using the namespace-scoped operator (20.07 - 20.10).
-* A version that is installed using the cluster-scoped operator (21.01 and later).
+* A version installed using the namespace-scoped operator (20.07 - 20.10).
+* A version installed using the cluster-scoped operator (21.01 and later).
 
 === Downgrade to cluster-scoped operator
 
-To downgrade Astra Trident to a release that uses the cluster-scoped operator, follow the steps mentioned below.
+You can downgrade Astra Trident to a release that uses the cluster-scoped operator.
 
 .Steps
 . link:uninstall-trident.html[Uninstall Astra Trident^]. **Do not delete the CRDs unless you want to completely remove an existing installation.**
@@ -49,7 +43,7 @@ To downgrade Astra Trident to a release that uses the cluster-scoped operator, f
 
 === Downgrade to namespace-scoped operator
 
-This section summarizes the steps involved in downgrading to an Astra Trident release that falls in the range 20.07 through 20.10, which will be installed using the namespace-scoped operator.
+You can downgrade to an Astra Trident release between 20.07 and 20.10, which will be installed using the namespace-scoped operator.
 
 .Steps
 . link:uninstall-trident.html[Uninstall Astra Trident^]. **Do not wipeout the CRDs unless you want to completely remove an existing installation.**
@@ -83,18 +77,19 @@ customresourcedefinition.apiextensions.k8s.io "tridentorchestrators.trident.neta
 Astra Trident has been uninstalled.
 . Continue downgrading by installing the desired version. Follow the documentation for the desired release.
 
-=== Downgrade by using Helm
+=== Downgrade using Helm
 
 To downgrade, use the `helm rollback` command. See the following example:
 ----
 helm rollback trident [revision #]
 ----
 
-== Downgrade process when Astra Trident is installed by using `tridentctl`
+== Downgrade a `tridentctl` installation
 
-If you installed Astra Trident by using `tridentctl`, the downgrade process involves the following steps. This sequence walks you through the downgrade process to move from Astra Trident 21.07 to 20.07.
+You can downgrade Astra Trident that was installed using `tridentctl`.
 
-NOTE: Before beginning the downgrade, you should take a snapshot of your Kubernetes cluster’s `etcd`. This enables you to back up the current state of Astra Trident’s CRDs.
+.Before you begin
+Before beginning the downgrade, take a snapshot of your Kubernetes cluster `etcd`. This enables you to back up the current state of Astra Trident CRDs.
 
 .Steps
 . Make sure that Trident is installed by using `tridentctl`. If you are unsure about how Astra Trident is installed, run this simple test:

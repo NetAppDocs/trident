@@ -41,10 +41,6 @@ No. There are no changes as far as the user experience and functionalities are c
 
 == Install and use Astra Trident on a Kubernetes cluster
 
-=== What are the supported versions of `etcd`?
-
-Astra Trident no longer needs an `etcd`. It uses CRDs to maintain state.
-
 === Does Astra Trident support an offline install from a private registry?
 
 Yes, Astra Trident can be installed offline. See link:https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-deploy.html[here].
@@ -151,7 +147,7 @@ Yes. Beginning with 20.04, Astra Trident supports bidirectional CHAP for ONTAP b
 
 === How do I manage export policies with Astra Trident?
 
-Astra Trident can dynamically create and manage export policies from version 20.04 onwards. This enables the storage administrator to provide one or more CIDR blocks in their backend configuration and have Trident add node IPs that fall within these ranges to an export policy it creates. In this manner, Astra Trident automatically manages the addition and deletion of rules for nodes with IPs within the given CIDRs. This feature requires CSI Trident.
+Astra Trident can dynamically create and manage export policies from version 20.04 onwards. This enables the storage administrator to provide one or more CIDR blocks in their backend configuration and have Trident add node IPs that fall within these ranges to an export policy it creates. In this manner, Astra Trident automatically manages the addition and deletion of rules for nodes with IPs within the given CIDRs. 
 
 === Can we specify a port in the DataLIF?
 

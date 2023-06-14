@@ -177,7 +177,7 @@ labels:
   backend: dev1-nasbackend
 svm: trident_svm
 username: cluster-admin
-password: password
+password: <password>
 limitAggregateUsage: 80%
 limitVolumeSize: 50Gi
 nfsMountOptions: nfsvers=4
@@ -211,7 +211,7 @@ The following examples show basic configurations that leave most parameters to d
 
 NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, the recommendation is to specify DNS names for LIFs instead of IP addresses.
 
-.ONTAP NAS economy example
+.ONTAP NAS economy minimal configuration example
 [%collapsible%open]
 ====
 This is a basic configuration using the `ontap-nas-economy` driver.
@@ -223,11 +223,11 @@ managementLIF: 10.0.0.1
 dataLIF: 10.0.0.2
 svm: svm_nfs
 username: vsadmin
-password: password
+password: <password>
 ----
 ====
 
-.ONTAP NAS FlexGroup example
+.ONTAP NAS FlexGroup minimal configuration example
 [%collapsible%open]
 ====
 This is a basic configuration using the `ontap-nas-flexgroup` driver.
@@ -242,7 +242,7 @@ labels:
   backend: test1-ontap-cluster
 svm: svm_nfs
 username: vsadmin
-password: password
+password: <password>
 ----
 ====
 
@@ -283,7 +283,7 @@ autoExportPolicy: true
 autoExportCIDRs:
 - 10.0.0.0/24
 username: admin
-password: password
+password: <password>
 nfsMountOptions: nfsvers=4
 ----
 
@@ -303,7 +303,7 @@ labels:
   backend: test1-ontap-ipv6
 svm: nas_ipv6_svm
 username: vsadmin
-password: password
+password: <password>
 
 ----
 ====

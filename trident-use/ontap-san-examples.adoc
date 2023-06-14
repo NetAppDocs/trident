@@ -142,12 +142,11 @@ storageDriverName: ontap-san
 managementLIF: 10.0.0.1
 svm: trident_svm
 username: admin
-password: password
+password: <password>
 labels:
   k8scluster: dev2
   backend: dev2-sanbackend
 storagePrefix: alternate-trident
-igroupName: custom
 debugTraceFlags:
   api: false
   method: true
@@ -179,6 +178,39 @@ The following examples show basic configurations that leave most parameters to d
 
 NOTE: If you are using Amazon FSx on NetApp ONTAP with Astra Trident, we recommend you specify DNS names for LIFs instead of IP addresses.
 
+.ONTAP SAN minimal configuration example
+[%collapsible%open]
+====
+This is a basic configuration using the `ontap-san` driver.
+----
+---
+version: 1
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_iscsi
+labels:
+  k8scluster: test-cluster-1
+  backend: testcluster1-sanbackend
+username: vsadmin
+password: <password>
+----
+====
+
+.ONTAP SAN economy minimal configuration example
+[%collapsible%open]
+====
+----
+---
+version: 1
+storageDriverName: ontap-san-economy
+managementLIF: 10.0.0.1
+svm: svm_iscsi_eco
+username: vsadmin
+password: <password>
+----
+====
+
+
 .Certificate-based authentication example
 [%collapsible%open]
 ====
@@ -197,7 +229,6 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
 clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
 trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
@@ -209,7 +240,7 @@ trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 ====
 These examples create a backend with `useCHAP` set to `true`.
 
-.ONTAP SAN example
+.ONTAP SAN CHAP example
 ----
 ---
 version: 1
@@ -224,12 +255,11 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 ----
 
-.ONTAP SAN economy example
+.ONTAP SAN economy CHAP example
 ----
 ---
 version: 1
@@ -241,9 +271,8 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 ----
 ====
 
@@ -269,9 +298,8 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 defaults:
   spaceAllocation: 'false'
   encryption: 'false'
@@ -321,9 +349,8 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 defaults:
   spaceAllocation: 'false'
   encryption: 'false'

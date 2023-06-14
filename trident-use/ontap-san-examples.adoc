@@ -179,13 +179,12 @@ The following examples show basic configurations that leave most parameters to d
 
 NOTE: If you are using Amazon FSx on NetApp ONTAP with Astra Trident, we recommend you specify DNS names for LIFs instead of IP addresses.
 
-=== `ontap-san` driver with certificate-based authentication
-
-In this minimum configuration example `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
-
-.Example
+.Certificate-based authentication example
 [%collapsible%open]
 ====
+
+In this basic configuration example `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
+
 ----
 ---
 version: 1
@@ -205,13 +204,12 @@ trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 ----
 ====
 
-=== `ontap-san` driver with bidirectional CHAP
-
-This configuration creates an `ontap-san` backend with `useCHAP` set to `true`.
-
-.Example
+.Bidirectional CHAP examples
 [%collapsible%open]
 ====
+These examples create a backend with `useCHAP` set to `true`.
+
+.ONTAP SAN example
 ----
 ---
 version: 1
@@ -230,14 +228,8 @@ igroupName: trident
 username: vsadmin
 password: password
 ----
-====
 
-=== `ontap-san-economy` driver
-This configuration creates an `ontap-san-economy` backend with `useCHAP` set to `true`.
-
-.Example
-[%collapsible%open]
-====
+.ONTAP SAN economy example
 ----
 ---
 version: 1
@@ -261,7 +253,7 @@ In these sample backend definition files, specific defaults are set for all stor
 
 Astra Trident sets provisioning labels in the “Comments” field. Comments are set on the FlexVol. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
-In this example, some of the storage pool sets their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values set above.
+In these examples, some of the storage pools set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values.
 
 .ONTAP SAN example
 [%collapsible%open]

@@ -145,18 +145,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 +
 NOTE: If necessary, open `deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml` and update `namespace` to your namespace.
 
-== Recover volume data using a snapshot
-Astra Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` CR. This CR functions as an imperative action and runs at the time of initiation only. 
-
-Astra Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, and `solidfire-san` drivers. 
-
-NOTE: Snapshot restore is not supported on qtree volumes. 
-
-
-
-
-
-
 == Recover volume data using snapshots
 The snapshot directory is hidden by default to facilitate maximum compatibility of volumes provisioned using the `ontap-nas` and `ontap-nas-economy` drivers. Enable the `.snapshot` directory to recover data from snapshots directly.
 

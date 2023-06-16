@@ -19,7 +19,7 @@ You must have an external snapshot controller and Custom Resource Definitions (C
 
 If your Kubernetes distribution does not include the snapshot controller and CRDs, refer to <<Deploying a volume snapshot controller>>.
 
-NOTE: Don’t create a snapshot controller if creating on-demand volume snapshots in a GKE environment. GKE uses a built-in, hidden snapshot controller.
+NOTE: Don't create a snapshot controller if creating on-demand volume snapshots in a GKE environment. GKE uses a built-in, hidden snapshot controller.
 
 == Step 1: Create a `VolumeSnapshotClass`
 
@@ -35,7 +35,7 @@ driver: csi.trident.netapp.io
 deletionPolicy: Delete
 ----
 
-The `driver` points to Astra Trident’s CSI driver. `deletionPolicy` can be `Delete` or `Retain`. When set to `Retain`, the underlying physical snapshot on the storage cluster is retained even when the `VolumeSnapshot` object is deleted.
+The `driver` points to the Astra Trident CSI driver. `deletionPolicy` can be `Delete` or `Retain`. When set to `Retain`, the underlying physical snapshot on the storage cluster is retained even when the `VolumeSnapshot` object is deleted.
 
 For more information, refer to link:../trident-reference/objects.html#kubernetes-volumesnapshotclass-objects[`VolumeSnapshotClass`].
 
@@ -144,6 +144,18 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 ----
 +
 NOTE: If necessary, open `deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml` and update `namespace` to your namespace.
+
+== Recover volume data using a snapshot
+Astra Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` CR. This CR functions as an imperative action and runs at the time of initiation only. 
+
+Astra Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, and `solidfire-san` drivers. 
+
+NOTE: Snapshot restore is not supported on qtree volumes. 
+
+
+
+
+
 
 == Recover volume data using snapshots
 The snapshot directory is hidden by default to facilitate maximum compatibility of volumes provisioned using the `ontap-nas` and `ontap-nas-economy` drivers. Enable the `.snapshot` directory to recover data from snapshots directly.

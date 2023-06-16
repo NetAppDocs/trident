@@ -374,6 +374,14 @@ storage:
     encryption: 'true'
     unixPermissions: '0755'
 - labels:
+    department: legal
+    creditpoints: '5000'
+  zone: us_east_1b
+  defaults:
+    spaceReserve: none
+    encryption: 'true'
+    unixPermissions: '0755'
+- labels:
     app: wordpress
     cost: '50'
   zone: us_east_1c
@@ -473,7 +481,7 @@ storage:
     encryption: 'true'
     unixPermissions: '0755'
 - labels:
-    department: legal
+    protection: bronze
     creditpoints: '5000'
   zone: us_east_1b
   defaults:
@@ -501,7 +509,7 @@ storage:
 
 == Map backends to StorageClasses
 
-The following StorageClass definitions refer to <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
+The following StorageClass definitions refer to <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
 * The `protection-gold` StorageClass will map to the first and second virtual pool in the `ontap-nas-flexgroup` backend. These are the only pools offering gold level protection.
 +
@@ -515,7 +523,7 @@ parameters:
   selector: "protection=gold"
   fsType: "ext4"
 ----
-* The `protection-not-gold` StorageClass will map to the third and fourth virtual pool in `ontap-nas-flexgroup` backend. These are the only pools offering protection level other than gold.
+* The `protection-not-gold` StorageClass will map to the third and fourth virtual pool in the `ontap-nas-flexgroup` backend. These are the only pools offering protection level other than gold.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -527,7 +535,7 @@ parameters:
   selector: "protection!=gold"
   fsType: "ext4"
 ----
-* The `app-mysqldb` StorageClass will map to the fourth virtual pool in `ontap-nas` backend. This is the only pool offering storage pool configuration for mysqldb type app.
+* The `app-mysqldb` StorageClass will map to the fourth virtual pool in the `ontap-nas` backend. This is the only pool offering storage pool configuration for mysqldb type app.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -539,7 +547,7 @@ parameters:
   selector: "app=mysqldb"
   fsType: "ext4"
 ----
-* TThe `protection-silver-creditpoints-20k` StorageClass will map to the third virtual pool in `ontap-nas-flexgroup` backend. This is the only pool offering gold-level protection at 20000 creditpoints.
+* TThe `protection-silver-creditpoints-20k` StorageClass will map to the third virtual pool in the `ontap-nas-flexgroup` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -551,7 +559,7 @@ parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
 ----
-* The `creditpoints-5k` StorageClass will map to the second virtual pool in `ontap-nas-economy` backend. This is the only pool offerings at 5000 creditpoints.
+* The `creditpoints-5k` StorageClass will map to the third virtual pool in the `ontap-nas` backend and the second virtual pool in the `ontap-nas-economy` backend. These are the only pool offerings with 5000 creditpoints.
 +
 ----
 apiVersion: storage.k8s.io/v1

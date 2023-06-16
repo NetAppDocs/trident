@@ -379,6 +379,13 @@ storage:
   defaults:
     spaceAllocation: 'true'
     encryption: 'false'
+- labels:
+    department: legal
+    creditpoints: '5000'
+  zone: us_east_1c
+  defaults:
+    spaceAllocation: 'true'
+    encryption: 'false'
 ----
 ====
 
@@ -386,7 +393,7 @@ storage:
 
 The following StorageClass definitions refer to the <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-* The `protection-gold` StorageClass will map to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold level protection.
+* The `protection-gold` StorageClass will map to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold-level protection.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -399,7 +406,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `protection-not-gold` StorageClass will map to the second and third virtual pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
+* The `protection-not-gold` StorageClass will map to the second and third virtual pool in `ontap-san` backend. These are the only pools offering a protection level other than gold.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -412,7 +419,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `app-mysqldb` StorageClass will map to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for mysqldb type app.
+* The `app-mysqldb` StorageClass will map to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for the mysqldb type app.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -425,7 +432,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `protection-silver-creditpoints-20k` StorageClass will map to the second virtual pool in `ontap-san` backend. This is the only pool offering gold-level protection at 20000 creditpoints.
+* The `protection-silver-creditpoints-20k` StorageClass will map to the second virtual pool in `ontap-san` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
 +
 ----
 apiVersion: storage.k8s.io/v1
@@ -437,7 +444,7 @@ parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
 ----
-* The `creditpoints-5k` StorageClass will map to the third virtual pool in `ontap-san` backend. This is the only pool offering at 5000 creditpoints.
+* The `creditpoints-5k` StorageClass will map to the third virtual pool in `ontap-san` backend and the fourth virtual pool in the `ontap-san-economy` backend. These are the only pool offerings with 5000 creditpoints.
 +
 ----
 apiVersion: storage.k8s.io/v1

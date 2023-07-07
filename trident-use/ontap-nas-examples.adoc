@@ -237,9 +237,6 @@ version: 1
 storageDriverName: ontap-nas-flexgroup
 managementLIF: 10.0.0.1
 dataLIF: 10.0.0.2
-labels:
-  k8scluster: test-cluster-east-1b
-  backend: test1-ontap-cluster
 svm: svm_nfs
 username: vsadmin
 password: <password>
@@ -333,7 +330,7 @@ In the sample backend definition files shown below, specific defaults are set fo
 
 Astra Trident sets provisioning labels in the “Comments” field. Comments are set on FlexVol  for `ontap-nas` or FlexGroup for `ontap-nas-flexgroup`. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
-In these examples, some of the storage pool set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values.
+In these examples, some of the storage pools set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools override the default values.
 
 .ONTAP NAS example
 [%collapsible%open]

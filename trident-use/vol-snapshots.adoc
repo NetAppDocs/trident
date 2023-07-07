@@ -117,7 +117,7 @@ spec:
 
 `dataSource` shows that the PVC must be created using a VolumeSnapshot named `pvc1-snap` as the source of the data. This instructs Astra Trident to create a PVC from the snapshot. After the PVC is created, it can be attached to a pod and used just like any other PVC.
 
-WARNING: The clone must be created in the same backend as the source volume. 
+WARNING: The PVC must be created in the same namespace as its `dataSource`. 
 
 == Deleting a PV with snapshots
 When deleting a Persistent Volume with associated snapshots, the corresponding Trident volume is updated to a “Deleting state”. Remove the volume snapshots to delete the Astra Trident volume.

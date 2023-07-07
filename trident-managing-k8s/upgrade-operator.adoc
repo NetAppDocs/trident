@@ -54,9 +54,9 @@ kubectl create -f 23.04.0/trident-installer/deploy/bundle_post_1_25.yaml -n trid
 =====
 Trident provides a bundle file that can be used to install the operator and create associated objects for your Kubernetes version.
 
-* For clusters running Kubernetes 1.24 or lower, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
+* For clusters running Kubernetes 1.24 or earlier, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
 
-* For clusters running Kubernetes 1.25 or higher, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
+* For clusters running Kubernetes 1.25 or later, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
 
 =====
 +
@@ -95,7 +95,7 @@ cd trident-installer
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
 ----
 . Delete the namespace-scoped operator by using its manifest. 
-.. Esure you are in the right directory.
+.. Ensure you are in the right directory.
 +
 ----
 pwd
@@ -155,9 +155,9 @@ pwd
 =====
 Trident provides a bundle file that can be used to install the operator and create associated objects for your Kubernetes version.
 
-* For clusters running Kubernetes 1.24 or lower, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
+* For clusters running Kubernetes 1.24 or earlier, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_pre_1_25.yaml[bundle_pre_1_25.yaml^].
 
-* For clusters running Kubernetes 1.25 or higher, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
+* For clusters running Kubernetes 1.25 or later, use link:https://github.com/NetApp/trident/tree/stable/v23.04/deploy/bundle_post_1_25.yaml[bundle_post_1_25.yaml^].
 
 =====
 +

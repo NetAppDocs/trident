@@ -13,32 +13,37 @@ summary: You can easily upgrade an existing Astra Trident installation by using 
 [.lead]
 You can easily upgrade an existing Astra Trident installation using `tridentctl`.
 
-== Considerations before upgrading
+== Upgrade Astra Trident using `tridentctl`
+Uninstalling and reinstalling Astra Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Astra Trident deployment are not deleted. PVs that have already been provisioned will remain available while Astra Trident is offline, and Astra Trident will provision volumes for any PVCs that are created in the interim once it is back online.
 
-When upgrading to the latest release of Astra Trident, consider the following:
+.Before you begin
+Review link:upgrade-trident.html#select-an-upgrade-method[Select an upgrade method] before upgrading using `tridentctl`. 
 
-* Starting with Trident 20.01, only the beta release of https://kubernetes.io/docs/concepts/storage/volume-snapshots/[volume snapshots^] is supported. Kubernetes administrators should take care to safely back up or convert the alpha snapshot objects to beta to retain the legacy alpha snapshots.
-* The beta release of volume snapshots introduces a modified set of CRDs and a snapshot controller, both of which should be set up before installing Astra Trident. https://netapp.io/2020/01/30/alpha-to-beta-snapshots/[This blog^] discusses the steps involved in migrating alpha volume snapshots to the beta format.
-* Uninstalling and reinstalling Astra Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Astra Trident deployment are not deleted. PVs that have already been provisioned will remain available while Astra Trident is offline, and Astra Trident will provision volumes for any PVCs that are created in the interim once it is back online.
+.Steps
 
-IMPORTANT: When upgrading Astra Trident, do not interrupt the upgrade process. Ensure that the installer runs to completion.
+. Run the uninstall command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects.
++
+----
+./tridentctl uninstall -n <namespace>
+----
+. Reinstall Astra Trident. Refer to link:..trident-get-started/kubernetes-deploy-tridentctl.html[Install Astra Trident using tridentctl]. 
 
-== Next steps after upgrade
+IMPORTANT: Do not interrupt the upgrade process. Ensure the installer runs to completion.
 
-To make use of the rich set of features that are available in newer Trident releases (such as, On-Demand Volume Snapshots), you can upgrade the volumes by using the `tridentctl upgrade` command.
+== Upgrade volumes using `tridentctl`
+After upgrade, you can make use of the rich set of features that are available in newer Trident releases (such as, On-Demand Volume Snapshots), you can upgrade the volumes using the `tridentctl upgrade` command.
 
-If there are legacy volumes, you should upgrade them from a NFS/iSCSI type to the CSI type to be able to use the complete set of new features in Astra Trident. A legacy PV that has been provisioned by Trident supports the traditional set of features.
+If there are legacy volumes, you should upgrade them from a NFS or iSCSI type to the CSI type to use the complete set of new features in Astra Trident. A legacy PV that has been provisioned by Trident supports the traditional set of features.
 
-Consider the following when deciding to upgrade volumes to the CSI type:
+.Before you begin
+Consider the following before deciding to upgrade volumes to the CSI type:
 
 * You might not need to upgrade all the volumes. Previously created volumes will continue to be accessible and function normally.
 * A PV can be mounted as part of a deployment/StatefulSet when upgrading. It is not required to bring down the deployment/StatefulSet.
 * You *cannot* attach a PV to a standalone pod when upgrading. You should shut down the pod before upgrading the volume.
 * You can upgrade only a volume that is bound to a PVC. Volumes that are not bound to PVCs should be removed and imported before upgrading.
 
-=== Volume upgrade example
-
-Here is an example that shows how a volume upgrade is performed.
+.Steps
 
 . Run `kubectl get pv` to list the PVs.
 +
@@ -129,5 +134,4 @@ Source:
                            protocol=file
 Events:                <none>
 ----
-+
-In this manner, you can upgrade volumes of the NFS/iSCSI type that were created by Astra Trident to the CSI type, on a per-volume basis.
+

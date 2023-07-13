@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/ontap-nas-examples.html
 keywords: map backends, storage classes, trident backend, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, options, storageclasses, fsx
-summary: Learn about how to create and use ONTAP NAS drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
+summary: Learn how to create and use ONTAP NAS drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
 ---
 
 = ONTAP NAS configuration options and examples
@@ -11,7 +11,7 @@ summary: Learn about how to create and use ONTAP NAS drivers with your Astra Tri
 :imagesdir: ../media/
 
 [.lead]
-Learn about how to create and use ONTAP NAS drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
+Learn how to create and use ONTAP NAS drivers with your Astra Trident installation. This section provides backend configuration examples and details about how to map backends to StorageClasses.
 
 == Backend configuration options
 
@@ -205,9 +205,7 @@ image::../media/volume-show-nas.png[Shows the output of the volume show command.
 
 Existing backends from previous installs will provision volumes as explained above when upgrading Astra Trident. For volumes that you created before upgrading, you should resize their volumes for the change to be observed. For example, a 2GiB PVC with `snapshotReserve=50` earlier resulted in a volume that provides 1GiB of writable space. Resizing the volume to 3GiB, for example, provides the application with 3GiB of writable space on a 6 GiB volume.
 
-== Examples
-
-=== Minimal configuration examples
+== Minimal configuration examples
 
 The following examples show basic configurations that leave most parameters to default. This is the easiest way to define a backend.
 
@@ -229,6 +227,37 @@ password: password
 ----
 ====
 
+.Default options for the `ontap-nas-flexgroup` driver
+[%collapsible%open]
+====
+----
+---
+version: 1
+storageDriverName: ontap-nas-flexgroup
+managementLIF: 10.0.0.1
+dataLIF: 10.0.0.2
+svm: svm_nfs
+username: vsadmin
+password: password
+----
+====
+.Default options for SMB volumes
+[%collapsible%open]
+====
+----
+
+---
+version: 1
+backendName: ExampleBackend
+storageDriverName: ontap-nas
+managementLIF: 10.0.0.1
+nasType: smb
+dataLIF: 10.0.0.2
+svm: svm_smb
+username: vsadmin
+password: password
+----
+====
 .Certificate-based authentication
 [%collapsible%open]
 ====
@@ -250,9 +279,7 @@ storagePrefix: myPrefix_
 .Auto export policy
 [%collapsible%open]
 ====
-These examples show you how you can instruct Astra Trident to use dynamic export policies to create and manage the export policy automatically. This works the same for the `ontap-nas-economy` and `ontap-nas-flexgroup` drivers.
-
-.ontap-nas driver
+This example shows you how you can instruct Astra Trident to use dynamic export policies to create and manage the export policy automatically. This works the same for the `ontap-nas-economy` and `ontap-nas-flexgroup` drivers.
 ----
 ---
 version: 1
@@ -269,21 +296,6 @@ autoExportCIDRs:
 username: admin
 password: password
 nfsMountOptions: nfsvers=4
-----
-
-.`ontap-nas-flexgroup` driver
-----
----
-version: 1
-storageDriverName: ontap-nas-flexgroup
-managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
-labels:
-  k8scluster: test-cluster-east-1b
-  backend: test1-ontap-cluster
-svm: svm_nfs
-username: vsadmin
-password: password
 ----
 ====
 .Using IPv6 addresses
@@ -302,25 +314,11 @@ labels:
 svm: nas_ipv6_svm
 username: vsadmin
 password: password
-
 ----
 ====
-
-=== `ontap-nas-economy` driver
-
-----
----
-version: 1
-storageDriverName: ontap-nas-economy
-managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
-svm: svm_nfs
-username: vsadmin
-password: password
-----
-
-=== `ontap-nas` driver for Amazon FSx for ONTAP using SMB volumes
-
+.Amazon FSx for ONTAP using SMB volumes
+[%collapsible%open]
+====
 ----
 ---
 version: 1
@@ -335,6 +333,7 @@ clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
 trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 storagePrefix: myPrefix_
 ----
+====
 
 == Examples of backends with virtual pools
 

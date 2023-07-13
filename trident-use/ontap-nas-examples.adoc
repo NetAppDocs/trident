@@ -212,7 +212,7 @@ The following examples show basic configurations that leave most parameters to d
 NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, the recommendation is to specify DNS names for LIFs instead of IP addresses.
 
 
-.Default options on `ontap-nas-economy`
+.Minimal configuration for `ontap-nas-economy`
 [%collapsible%open]
 ====
 ----
@@ -227,7 +227,7 @@ password: password
 ----
 ====
 
-.Default options for the `ontap-nas-flexgroup` driver
+.Minimal configuration for `ontap-nas-flexgroup`
 [%collapsible%open]
 ====
 ----
@@ -241,7 +241,7 @@ username: vsadmin
 password: password
 ----
 ====
-.Default options for SMB volumes
+.Minimal configuration for SMB volumes
 [%collapsible%open]
 ====
 ----
@@ -252,8 +252,10 @@ backendName: ExampleBackend
 storageDriverName: ontap-nas
 managementLIF: 10.0.0.1
 nasType: smb
+securityStyle: mixed
+unixPermissions: ""
 dataLIF: 10.0.0.2
-svm: svm_smb
+svm: svm_nfs
 username: vsadmin
 password: password
 ----

@@ -260,10 +260,12 @@ NOTE: Deleting a backend with auto-managed export policies will delete the dynam
 If the IP address of a live node is updated, you must restart the Astra Trident pod on the node. Astra Trident will then update the export policy for backends it manages to reflect this IP change.
 
 == Prepare to provision SMB volumes
-With a little additional preparation, you can provision SMB volumes using the `ontap-nas` driver. 
+With a little additional preparation, you can provision SMB volumes using `ontap-nas` drivers. 
+
+WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises. Failure to configure either of these protocols will cause SMB volume creation to fail.
 
 .Before you begin
-Before you can provision SMB volumes using the `ontap-nas` driver, you must have the following. 
+Before you can provision SMB volumes, you must have the following. 
 
 * A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 

@@ -177,7 +177,7 @@ labels:
   backend: dev1-nasbackend
 svm: trident_svm
 username: cluster-admin
-password: password
+password: <password>
 limitAggregateUsage: 80%
 limitVolumeSize: 50Gi
 nfsMountOptions: nfsvers=4
@@ -339,13 +339,13 @@ storagePrefix: myPrefix_
 
 == Examples of backends with virtual pools
 
-In the sample backend definition file shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
+In the sample backend definition files shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
 
 Astra Trident sets provisioning labels in the “Comments” field. Comments are set on FlexVol  for `ontap-nas` or FlexGroup for `ontap-nas-flexgroup`. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
-In this example, some of the storage pool sets their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values set above.
+In these examples, some of the storage pools set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools override the default values.
 
-.`ontap-nas` driver
+.ONTAP NAS example
 [%collapsible%open]
 ====
 ----
@@ -353,10 +353,9 @@ In this example, some of the storage pool sets their own `spaceReserve`, `spaceA
 version: 1
 storageDriverName: ontap-nas
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
 svm: svm_nfs
 username: admin
-password: password
+password: <password>
 nfsMountOptions: nfsvers=4
 defaults:
   spaceReserve: none
@@ -385,6 +384,14 @@ storage:
     encryption: 'true'
     unixPermissions: '0755'
 - labels:
+    department: legal
+    creditpoints: '5000'
+  zone: us_east_1b
+  defaults:
+    spaceReserve: none
+    encryption: 'true'
+    unixPermissions: '0755'
+- labels:
     app: wordpress
     cost: '50'
   zone: us_east_1c
@@ -402,7 +409,8 @@ storage:
     unixPermissions: '0775'
 ----
 ====
-.`ontap-nas-flexgroup` driver
+
+.ONTAP NAS FlexGroup example
 [%collapsible%open]
 ====
 ----
@@ -410,10 +418,9 @@ storage:
 version: 1
 storageDriverName: ontap-nas-flexgroup
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
 svm: svm_nfs
 username: vsadmin
-password: password
+password: <password>
 defaults:
   spaceReserve: none
   encryption: 'false'
@@ -454,10 +461,10 @@ storage:
     spaceReserve: volume
     encryption: 'false'
     unixPermissions: '0775'
-
 ----
 ====
-.`ontap-nas-economy` driver
+
+.ONTAP NAS economy example
 [%collapsible%open]
 ====
 ----
@@ -465,10 +472,9 @@ storage:
 version: 1
 storageDriverName: ontap-nas-economy
 managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
 svm: svm_nfs
 username: vsadmin
-password: password
+password: <password>
 defaults:
   spaceReserve: none
   encryption: 'false'
@@ -485,7 +491,7 @@ storage:
     encryption: 'true'
     unixPermissions: '0755'
 - labels:
-    department: legal
+    protection: bronze
     creditpoints: '5000'
   zone: us_east_1b
   defaults:
@@ -508,30 +514,15 @@ storage:
     spaceReserve: volume
     encryption: 'false'
     unixPermissions: '0775'
-
 ----
 ====
 
-== Update `dataLIF` after initial configuration
-You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
-
-----
-tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
-----
-
-NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 
-
 == Map backends to StorageClasses
 
-The following StorageClass definitions refer to the above virtual pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
+The following StorageClass definitions refer to <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-* The first StorageClass (`protection-gold`) will map to the first, second virtual pool in the `ontap-nas-flexgroup` backend and the first virtual pool in the `ontap-san` backend. These are the only pool offering gold level protection.
-* The second StorageClass (`protection-not-gold`) will map to the third, fourth virtual pool in `ontap-nas-flexgroup` backend and the second, third virtual pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
-* The third StorageClass (`app-mysqldb`) will map to the fourth virtual pool in `ontap-nas` backend and the third virtual pool in `ontap-san-economy` backend. These are the only pools offering storage pool configuration for mysqldb type app.
-* The fourth StorageClass (`protection-silver-creditpoints-20k`) will map to the third virtual pool in `ontap-nas-flexgroup` backend and the second virtual pool in `ontap-san` backend. These are the only pools offering gold-level protection at 20000 creditpoints.
-* The fifth StorageClass (`creditpoints-5k`) will map to the second virtual pool in `ontap-nas-economy` backend and the third virtual pool in `ontap-san` backend. These are the only pool offerings at 5000 creditpoints.
-
-Astra Trident will decide which virtual pool is selected and will ensure the storage requirement is met.
+* The `protection-gold` StorageClass will map to the first and second virtual pool in the `ontap-nas-flexgroup` backend. These are the only pools offering gold level protection.
++
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -541,7 +532,10 @@ provisioner: netapp.io/trident
 parameters:
   selector: "protection=gold"
   fsType: "ext4"
----
+----
+* The `protection-not-gold` StorageClass will map to the third and fourth virtual pool in the `ontap-nas-flexgroup` backend. These are the only pools offering protection level other than gold.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -550,7 +544,10 @@ provisioner: netapp.io/trident
 parameters:
   selector: "protection!=gold"
   fsType: "ext4"
----
+----
+* The `app-mysqldb` StorageClass will map to the fourth virtual pool in the `ontap-nas` backend. This is the only pool offering storage pool configuration for mysqldb type app.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -559,7 +556,10 @@ provisioner: netapp.io/trident
 parameters:
   selector: "app=mysqldb"
   fsType: "ext4"
----
+----
+* TThe `protection-silver-creditpoints-20k` StorageClass will map to the third virtual pool in the `ontap-nas-flexgroup` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -568,7 +568,10 @@ provisioner: netapp.io/trident
 parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
----
+----
+* The `creditpoints-5k` StorageClass will map to the third virtual pool in the `ontap-nas` backend and the second virtual pool in the `ontap-nas-economy` backend. These are the only pool offerings with 5000 creditpoints.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -578,3 +581,14 @@ parameters:
   selector: "creditpoints=5000"
   fsType: "ext4"
 ----
+
+Astra Trident will decide which virtual pool is selected and will ensure the storage requirement is met.
+
+== Update `dataLIF` after initial configuration
+You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
+
+----
+tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
+----
+
+NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 

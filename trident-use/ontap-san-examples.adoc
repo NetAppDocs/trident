@@ -133,7 +133,8 @@ For more information, refer to: link:../trident-reco/security-reco.html[How Astr
 |===
 
 === Volume provisioning examples
-Here’s an example with defaults defined:
+Here's an example with defaults defined:
+
 ----
 ---
 version: 1
@@ -141,12 +142,11 @@ storageDriverName: ontap-san
 managementLIF: 10.0.0.1
 svm: trident_svm
 username: admin
-password: password
+password: <password>
 labels:
   k8scluster: dev2
   backend: dev2-sanbackend
 storagePrefix: alternate-trident
-igroupName: custom
 debugTraceFlags:
   api: false
   method: true
@@ -176,11 +176,47 @@ Currently, resizing is the only way to use the new calculation for an existing v
 
 The following examples show basic configurations that leave most parameters to default. This is the easiest way to define a backend.
 
-NOTE: If you are using Amazon FSx on NetApp ONTAP with Astra Trident, the recommendation is to specify DNS names for LIFs instead of IP addresses.
+NOTE: If you are using Amazon FSx on NetApp ONTAP with Astra Trident, we recommend you specify DNS names for LIFs instead of IP addresses.
 
-=== `ontap-san` driver with certificate-based authentication
+.ONTAP SAN minimal configuration example
+[%collapsible%open]
+====
+This is a basic configuration using the `ontap-san` driver.
+----
+---
+version: 1
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_iscsi
+labels:
+  k8scluster: test-cluster-1
+  backend: testcluster1-sanbackend
+username: vsadmin
+password: <password>
+----
+====
 
-This is a minimal backend configuration example. `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
+.ONTAP SAN economy minimal configuration example
+[%collapsible%open]
+====
+----
+---
+version: 1
+storageDriverName: ontap-san-economy
+managementLIF: 10.0.0.1
+svm: svm_iscsi_eco
+username: vsadmin
+password: <password>
+----
+====
+
+
+.Certificate-based authentication example
+[%collapsible%open]
+====
+
+In this basic configuration example `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
+
 ----
 ---
 version: 1
@@ -193,15 +229,18 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
 clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
 trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 ----
+====
 
-=== `ontap-san` driver with bidirectional CHAP
+.Bidirectional CHAP examples
+[%collapsible%open]
+====
+These examples create a backend with `useCHAP` set to `true`.
 
-This is a minimal backend configuration example. This basic configuration creates an `ontap-san` backend with `useCHAP` set to `true`.
+.ONTAP SAN CHAP example
 ----
 ---
 version: 1
@@ -216,13 +255,11 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 ----
 
-=== `ontap-san-economy` driver
-
+.ONTAP SAN economy CHAP example
 ----
 ---
 version: 1
@@ -234,18 +271,22 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 ----
+====
 
 == Examples of backends with virtual pools
 
-In the sample backend definition file shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
+In these sample backend definition files, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
 
 Astra Trident sets provisioning labels in the “Comments” field. Comments are set on the FlexVol. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
-In this example, some of the storage pool sets their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools overwrite the default values set above.
+In these examples, some of the storage pools set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools override the default values.
+
+.ONTAP SAN example
+[%collapsible%open]
+====
 ----
 ---
 version: 1
@@ -257,9 +298,8 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 defaults:
   spaceAllocation: 'false'
   encryption: 'false'
@@ -293,8 +333,11 @@ storage:
     spaceAllocation: 'true'
     encryption: 'false'
 ----
+====
 
-Here is an iSCSI example for the `ontap-san-economy` driver:
+.ONTAP SAN economy example
+[%collapsible%open]
+====
 ----
 ---
 version: 1
@@ -306,9 +349,8 @@ chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
-igroupName: trident
 username: vsadmin
-password: password
+password: <password>
 defaults:
   spaceAllocation: 'false'
   encryption: 'false'
@@ -337,19 +379,22 @@ storage:
   defaults:
     spaceAllocation: 'true'
     encryption: 'false'
+- labels:
+    department: legal
+    creditpoints: '5000'
+  zone: us_east_1c
+  defaults:
+    spaceAllocation: 'true'
+    encryption: 'false'
 ----
+====
 
 == Map backends to StorageClasses
 
-The following StorageClass definitions refer to the above virtual pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
+The following StorageClass definitions refer to the <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-* The first StorageClass (`protection-gold`) will map to the first, second virtual pool in the `ontap-nas-flexgroup` backend and the first virtual pool in the `ontap-san` backend. These are the only pool offering gold level protection.
-* The second StorageClass (`protection-not-gold`) will map to the third, fourth virtual pool in `ontap-nas-flexgroup` backend and the second, third virtual pool in `ontap-san` backend. These are the only pools offering protection level other than gold.
-* The third StorageClass (`app-mysqldb`) will map to the fourth virtual pool in `ontap-nas` backend and the third virtual pool in `ontap-san-economy` backend. These are the only pools offering storage pool configuration for mysqldb type app.
-* The fourth StorageClass (`protection-silver-creditpoints-20k`) will map to the third virtual pool in `ontap-nas-flexgroup` backend and the second virtual pool in `ontap-san` backend. These are the only pools offering gold-level protection at 20000 creditpoints.
-* The fifth StorageClass (`creditpoints-5k`) will map to the second virtual pool in `ontap-nas-economy` backend and the third virtual pool in `ontap-san` backend. These are the only pool offerings at 5000 creditpoints.
-
-Astra Trident will decide which virtual pool is selected and will ensure the storage requirement is met.
+* The `protection-gold` StorageClass will map to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold-level protection.
++
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -359,7 +404,11 @@ provisioner: netapp.io/trident
 parameters:
   selector: "protection=gold"
   fsType: "ext4"
----
+----
+
+* The `protection-not-gold` StorageClass will map to the second and third virtual pool in `ontap-san` backend. These are the only pools offering a protection level other than gold.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -368,7 +417,11 @@ provisioner: netapp.io/trident
 parameters:
   selector: "protection!=gold"
   fsType: "ext4"
----
+----
+
+* The `app-mysqldb` StorageClass will map to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for the mysqldb type app.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -377,7 +430,11 @@ provisioner: netapp.io/trident
 parameters:
   selector: "app=mysqldb"
   fsType: "ext4"
----
+----
+
+* The `protection-silver-creditpoints-20k` StorageClass will map to the second virtual pool in `ontap-san` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -386,7 +443,10 @@ provisioner: netapp.io/trident
 parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
----
+----
+* The `creditpoints-5k` StorageClass will map to the third virtual pool in `ontap-san` backend and the fourth virtual pool in the `ontap-san-economy` backend. These are the only pool offerings with 5000 creditpoints.
++
+----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -396,3 +456,5 @@ parameters:
   selector: "creditpoints=5000"
   fsType: "ext4"
 ----
+
+Astra Trident will decide which virtual pool is selected and will ensure the storage requirement is met.

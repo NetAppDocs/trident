@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/ontap-nas-prep.html
 keywords: trident backend, ontap nas, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups
-summary: Learn about how to prepare to configure an ONTAP backend with ONTAP NAS drivers.
+summary: Understand the requirements, authentication options, and export policies for configuring an ONTAP backend with ONTAP NAS drivers.
 ---
 
 = Prepare to configure a backend with ONTAP NAS drivers
@@ -11,15 +11,16 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP NAS
 :imagesdir: ../media/
 
 [.lead]
-Learn about how to prepare to configure an ONTAP backend with ONTAP NAS drivers. 
+Understand the requirements, authentication options, and export policies for configuring an ONTAP backend with ONTAP NAS drivers.
 
-== Considerations
+== Requirements
 * For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
 * You can run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
 * All your Kubernetes worker nodes must have the appropriate NFS tools installed. See link:worker-node-prep.html[here] for more details.
-* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details. 
 
-== Authentication
+
+== Authenticate the ONTAP backend
 
 Astra Trident offers two modes of authenticating an ONTAP backend.
 
@@ -255,3 +256,77 @@ For previously existing backends, updating the backend with `tridentctl update b
 NOTE: Deleting a backend with auto-managed export policies will delete the dynamically created export policy. If the backend is re-created, it is treated as a new backend and will result in the creation of a new export policy.
 
 If the IP address of a live node is updated, you must restart the Astra Trident pod on the node. Astra Trident will then update the export policy for backends it manages to reflect this IP change.
+
+== Prepare to provision SMB volumes
+With a little additional preparation, you can provision SMB volumes using `ontap-nas` drivers. 
+
+WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises. Failure to configure either of these protocols will cause SMB volume creation to fail.
+
+.Before you begin
+Before you can provision SMB volumes, you must have the following. 
+
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+
+* At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
++
+----
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
+----
+
+* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
+
+.Steps
+
+. For on-premises ONTAP, you can optionally create an SMB share or Astra Trident can create one for you. 
++
+NOTE: SMB shares are required for Amazon FSx for ONTAP. 
++
+You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
++
+.. If necessary, create the directory path structure for the share.
++
+The `vserver cifs share create` command checks the path specified in the -path option during share creation. If the specified path does not exist, the command fails.
+
+.. Create an SMB share associated with the specified SVM:
++
+----
+vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
+----
+
+.. Verify that the share was created:
++
+----
+vserver cifs share show -share-name share_name
+----
++
+NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-task.html[Create an SMB share^] for full details.
+
+. When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
++
+[cols=3,options="header"]
+|===
+|Parameter |Description | Example
+
+|`smbShare`
+You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
+
+This parameter is optional for on-premises ONTAP. 
+
+This parameter is required for Amazon FSx for ONTAP backends and cannot be blank.
+
+| `smb-share` 
+
+|`nasType`
+| *Must set to `smb`.* If null, defaults to `nfs`.
+|`smb`
+
+|`securityStyle` 
+|Security style for new volumes. 
+
+*Must be set to `ntfs` or `mixed` for SMB volumes.*
+|`ntfs` or `mixed` for SMB volumes
+
+|`unixPermissions`
+|Mode for new volumes. *Must be left empty for SMB volumes.*
+|""
+|===

@@ -130,9 +130,9 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Parameter |Description | Example
 
 |`smbShare`
-|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
-
-Alternatively, you can leave the parameter blank to prevent common share access to volumes.
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
+ 
+This parameter is required for Amazon FSx for ONTAP backends.
 
 | `smb-share` 
 

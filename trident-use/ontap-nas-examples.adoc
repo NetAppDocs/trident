@@ -97,9 +97,11 @@ If no mount options are specified in the storage class or the configuration file
 |`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|“200”
 
 |`smbShare` 
-|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
 
-Alternatively, you can leave the parameter blank to prevent common share access to volumes.
+This parameter is optional for on-premises ONTAP. 
+
+This parameter is required for Amazon FSx for ONTAP backends and cannot be blank. 
 
 |`smb-share`
 
@@ -252,7 +254,7 @@ backendName: ExampleBackend
 storageDriverName: ontap-nas
 managementLIF: 10.0.0.1
 nasType: smb
-securityStyle: mixed
+securityStyle: ntfs
 unixPermissions: ""
 dataLIF: 10.0.0.2
 svm: svm_nfs
@@ -321,6 +323,7 @@ password: password
 .Amazon FSx for ONTAP using SMB volumes
 [%collapsible%open]
 ====
+The `smbShare` parameter is required for FSx for ONTAP using SMB volumes.
 ----
 ---
 version: 1
@@ -330,6 +333,7 @@ managementLIF: example.mgmt.fqdn.aws.com
 nasType: smb
 dataLIF: 10.0.0.15
 svm: nfs_svm
+smbShare: smb-share
 clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
 clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
 trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz

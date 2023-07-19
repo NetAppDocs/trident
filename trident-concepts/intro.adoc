@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-concepts/intro.html
-keywords: product overview, astra trident, fsx, element, astra, google cloud, cvs
+keywords: product overview, astra trident, fsx, element, astra, google cloud, cvs, architecture, test drive, node pod, controller pod, pods, csi, sidecar
 summary: Astra Trident is a fully supported open source project maintained by NetApp as part of the Astra product family. It has been designed to help you meet your containerized applications’ persistence demands using industry-standard interfaces, such as the Container Storage Interface (CSI).
 ---
 
@@ -11,12 +11,46 @@ summary: Astra Trident is a fully supported open source project maintained by Ne
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident is a fully supported open source project maintained by NetApp as part of the link:https://docs.netapp.com/us-en/astra-family/intro-family.html[Astra product family^]. It has been designed to help you meet your containerized applications’ persistence demands using industry-standard interfaces, such as the Container Storage Interface (CSI).
+Astra Trident is a fully-supported open source project maintained by NetApp as part of the link:https://docs.netapp.com/us-en/astra-family/intro-family.html[Astra product family^]. It has been designed to help you meet your containerized applications' persistence demands using industry-standard interfaces, such as the Container Storage Interface (CSI).
 
-== Overview
-Astra Trident deploys in Kubernetes clusters as pods and provides dynamic storage orchestration services for your Kubernetes workloads. It enables your containerized applications to quickly and easily consume persistent storage from NetApp’s broad portfolio that includes ONTAP (AFF/FAS/Select/Cloud/Amazon FSx for NetApp ONTAP), Element software (NetApp HCI/SolidFire), as well as the Azure NetApp Files service, and Cloud Volumes Service on Google Cloud.
+== What is Astra?
 
-Astra Trident is also a foundational technology for NetApp’s Astra, which addresses your data protection, disaster recovery, portability, and migration use cases for Kubernetes workloads leveraging NetApp’s industry-leading data management technology for snapshots, backups, replication, and cloning.
+Astra makes it easier for enterprises to manage, protect, and move their data-rich containerized workloads running on Kubernetes within and across public clouds and on-premises. 
+
+Astra provisions and provides persistent container storage built on Astra Trident. It also offers advanced application-aware data management functionality, such as snapshot, backup and restore, activity logs, and active cloning for data protection, disaster/data recovery, data audit, and migration use-cases for Kubernetes workloads.
+
+Learn more about link:https://bluexp.netapp.com/astra[Astra or sign up for a free trial^]. 
+
+== What is Astra Trident?
+Astra Trident is a Container Storage Interface (CSI) compliant dynamic storage orchestrator that natively integrates with link:https://kubernetes.io/[Kubernetes^]. Astra Trident enables consumption and management of storage resources across all popular NetApp storage platforms, in the public cloud or on premises, including ONTAP (AFF, FAS, Select, Cloud, Amazon FSx for NetApp ONTAP), Element software (NetApp HCI, SolidFire), Azure NetApp Files service, and Cloud Volumes Service on Google Cloud. 
+
+NOTE: If this is your first time using Kubernetes, you should familiarize yourself with the link:https://kubernetes.io/docs/home/[Kubernetes concepts and tools^].
+
+== Astra Trident architecture
+Astra Trident deploys as a single <<Trident Controller Pod>> and one or more <<Trident Node Pods>> on the Kubernetes cluster and uses standard Kubernetes _CSI Sidecar Containers_ to simplify the deployment of CSI plugins. link:https://kubernetes-csi.github.io/docs/sidecar-containers.html[Kubernetes CSI Sidecar Containers^] are maintained by the Kubernetes Storage community. 
+
+.Astra Trident deployed on the Kubernetes cluster
+image::../media/trident-arch.png[Diagram of the Astra Trident  architecture on the Kubernetes cluster.]
+
+=== Trident Controller Pod
+The Trident Controller Pod is a single Pod running the CSI Controller plugin. 
+
+* Responsible for provisioning and managing volumes in NetApp storage
+* Managed by a Kubernetes DaemonSet 
+* Can run on the control-plane or worker nodes, depending on installation parameters.
+
+.Trident Controller Pod diagram
+image::../media/controller-pod.png[Diagram of the Trident Controller Pod running the CSI Controller plugin with applicable CSI sidecars.]
+
+=== Trident Node Pods
+Trident Node Pods are privileged Pods running the CSI Node plugin. 
+
+* Responsible for mounting and unmounting storage for Pods running on the host
+* Managed by a Kubernetes DaemonSet
+* Must run on any node that will mount NetApp storage
+
+.Trident Node Pod diagram
+image::../media/node-pod.png[Diagram of the Trident Node Pod running the CSI Node plugin with applicable CSI sidecar.]
 
 == Supported Kubernetes cluster architectures
 
@@ -36,11 +70,12 @@ Yes
 Yes
 |===
 
-== What is Astra?
+== Take the Astra Trident test drive
+You can request to take the "Easily Deploy and Clone Persistent Storage for Containerized Workloads" link:https://www.netapp.com/us/try-and-buy/test-drive/index.aspx[NetApp Test Drive^] using a ready-to-use lab image. The test drive provides a sandbox environment with a three-node Kubernetes cluster and Astra Trident installed and configured. This is a great way to familiarize yourself with Astra Trident and explore its features.
 
-Astra makes it easier for enterprises to manage, protect, and move their data-rich containerized workloads running on Kubernetes within and across public clouds and on-premises. Astra provisions and provides persistent container storage using Astra Trident from NetApp’s proven and expansive storage portfolio in the public cloud and on-premises. It also offers a rich set of advanced application-aware data management functionality, such as snapshot, backup and restore, activity logs, and active cloning for data protection, disaster/data recovery, data audit, and migration use-cases for Kubernetes workloads.
+Another option is to see the link:https://kubernetes.io/docs/setup/independent/install-kubeadm/[kubeadm Install Guide] provided by Kubernetes.
 
-You can sign up for a free trial on the Astra page.
+NOTE: Don't use a Kubernetes cluster that you build using these instructions in a production environment. Use the production deployment guides provided by your distribution for production-ready clusters.
 
 == For more information
 

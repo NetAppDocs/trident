@@ -279,7 +279,9 @@ kubectl create secret generic smbcreds --from-literal username=user --from-liter
 
 .Steps
 
-. Optionally, create SMB shares. If you don't create the SMB share, Astra Trident will create one for you.
+. For on-premises ONTAP, you can optionally create an SMB share or Astra Trident can create one for you. 
++
+NOTE: SMB shares are required for Amazon FSx for ONTAP. 
 +
 You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
 +
@@ -308,9 +310,11 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Parameter |Description | Example
 
 |`smbShare`
-|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
+You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
 
-Alternatively, you can leave the parameter blank to prevent common share access to volumes.
+This parameter is optional for on-premises ONTAP. 
+
+This parameter is required for Amazon FSx for ONTAP backends and cannot be blank.
 
 | `smb-share` 
 

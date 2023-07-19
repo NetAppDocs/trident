@@ -83,7 +83,24 @@ The Astra Trident installer provides a bundle file that can be used to install t
 
 * For clusters running Kubernetes 1.25 or later, use `bundle_post_1_25.yaml`.
 
-The Trident installer deploys the operator in the `trident` namespace. If the `trident` namespace does not exist, use `kubectl apply -f deploy/namespace.yaml` to create it.
+.Before you begin
+* By default, the Trident installer deploys the operator in the `trident` namespace. If the `trident` namespace does not exist, create it using: 
++
+----
+kubectl apply -f deploy/namespace.yaml
+----
+* To deploy the operator in a namespace other than the `trident` namespace, update `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` and generate your bundle file using the `kustomization.yaml`. 
+. Create the `kustomization.yaml` using the following command where _<bundle>_ is `bundle_pre_1_25` or `bundle_post_1_25` based on your Kubernetes version. 
++
+----
+cp kustomization_<bundle>.yaml kustomization.yaml
+----
+. Compile the bundle using using the following command where _<bundle>_ is `bundle_pre_1_25` or `bundle_post_1_25` based on your Kubernetes version. 
++
+----
+kubectl kustomize deploy/ > deploy/<bundle>.yaml
+----
+
 
 .Steps
 
@@ -92,23 +109,10 @@ The Trident installer deploys the operator in the `trident` namespace. If the `t
 ----
 kubectl create -f deploy/<bundle>.yaml
 ----
-+
-[NOTE]
-====
-To deploy the operator in a namespace other than the `trident` namespace, update `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` and generate your bundle file using the `kustomization.yaml`:
-
-----
-kubectl kustomize deploy/ > deploy/<bundle>.yaml
-----
-====
-
-. Verify the operator was deployed. 
+. Verify the operator, deployment, and replicasets were created. 
 +
 ----
-kubectl get deployment -n <operator-namespace>
-
-NAME               READY   UP-TO-DATE   AVAILABLE   AGE
-trident-operator   1/1     1            1           3m
+kubectl get all -n <operator-namespace>
 ----
 
 IMPORTANT: There should only be *one instance* of the operator in a Kubernetes cluster. Do not create multiple deployments of the Trident operator.

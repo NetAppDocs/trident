@@ -73,13 +73,3 @@ WARNING: Do not use the operator to upgrade Trident if you are using an `etcd`-b
 You can link:upgrade-tridentctl.html[upgrade using `tridentctl`] if you originally installed Astra Trident using `tridenctl'. 
 
 `tridentctl` is the conventional method of installing Astra Trident and provides the most options for those requiring complex customization. For more details, refer to link:..trident-get-started/kubernetes-deploy.html#choose-your-installation-method[Choose your installation method].
-
-== Changes to the operator
-
-The 21.01 release of Astra Trident introduced architectural changes to the operator:
-
-* The operator is now *cluster-scoped*. Previous instances of the Trident operator (versions 20.04 through 20.10) were *namespace-scoped*. An operator that is cluster-scoped is advantageous for the following reasons:
-** Resource accountability: The operator now manages resources associated with an Astra Trident installation at the cluster level. As part of installing Astra Trident, the operator creates and maintains several resources by using `ownerReferences`. Maintaining `ownerReferences` on cluster-scoped resources can throw up errors on certain Kubernetes distributors such as OpenShift. This is mitigated with a cluster-scoped operator. For auto-healing and patching Trident resources, this is an essential requirement.
-** Cleaning up during uninstallation: A complete removal of Astra Trident would require all associated resources to be deleted. A namespace-scoped operator might experience issues with the removal of cluster-scoped resources (such as the clusterRole, ClusterRoleBinding and PodSecurityPolicy) and lead to an incomplete clean-up. A cluster-scoped operator eliminates this issue. Users can completely uninstall Astra Trident and install afresh if needed.
-* `TridentProvisioner` is now replaced with `TridentOrchestrator` as the Custom Resource used to install and manage Astra Trident. In addition, a new field is introduced to the `TridentOrchestrator` spec. Users can specify that the namespace Trident must be installed/upgraded from using the `spec.namespace` field. You can take a look at an example https://github.com/NetApp/trident/blob/stable/v21.01/deploy/crds/tridentorchestrator_cr.yaml[here^].
-

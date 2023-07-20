@@ -1,0 +1,25 @@
+---
+sidebar: sidebar
+permalink: trident-managing-k8s/upgrade-operator-overview.html
+keywords: upgrade, trident, operator, helm, controller, daemonset, node pods
+summary: Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller and node Pods, and node DaemonSet.
+---
+
+= Understand the operator upgrade workflow
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller and node Pods, and node DaemonSet.
+
+== Changes to the operator
+
+Astra Trident 21.01 introduced architectural changes to the operator.
+
+* *A cluster-scoped operator*. A cluster-scoped operator provides the following benefits:
+** *Resource accountability:* The operator manages resources associated with an Astra Trident installation at the cluster level. This mitigates errors caused when maintaining clsuter-scoped resources using a namespace-scoped operator. This is essential for auto-healing and patching Trident resources.
+** *Clean uninstall:* Using a cluster-scoped operator enables clean removal of cluster-scoped resources. Users can completely uninstall Astra Trident and easily reinstall. 
+* *Trident Orechestrator:* `TridentOrchestrator` replaces the `TridentProvisioner` as the Custom Resource used to install and manage Astra Trident. In addition, a new field is introduced to the `TridentOrchestrator` spec. Users can specify that the namespace Trident must be installed/upgraded from using the `spec.namespace` field. You can take a look at an example https://github.com/NetApp/trident/blob/stable/v21.01/deploy/crds/tridentorchestrator_cr.yaml[here^].
+
+== 

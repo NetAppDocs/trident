@@ -11,15 +11,27 @@ summary: Before using the Trident operator to upgrade Astra Trident, you should 
 :imagesdir: ../media/
 
 [.lead]
-Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller and node Pods, and node DaemonSet.
+Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller Pod and node Pods, and node DaemonSet.
 
-== Changes to the operator
+== Trident operator upgrade handling workflow
+One of the many link:../trident-get-started/kubernetes-deploy.html[benefits of using the Trident operator] to install and upgrade Astra Trident is the automatic handling of Kubernetes objects. 
 
-Astra Trident 21.01 introduced architectural changes to the operator.
+Mention the high-level steps performed by the Trident Operator when upgrading Trident
 
-* *A cluster-scoped operator*. A cluster-scoped operator provides the following benefits:
-** *Resource accountability:* The operator manages resources associated with an Astra Trident installation at the cluster level. This mitigates errors caused when maintaining clsuter-scoped resources using a namespace-scoped operator. This is essential for auto-healing and patching Trident resources.
-** *Clean uninstall:* Using a cluster-scoped operator enables clean removal of cluster-scoped resources. Users can completely uninstall Astra Trident and easily reinstall. 
-* *Trident Orechestrator:* `TridentOrchestrator` replaces the `TridentProvisioner` as the Custom Resource used to install and manage Astra Trident. In addition, a new field is introduced to the `TridentOrchestrator` spec. Users can specify that the namespace Trident must be installed/upgraded from using the `spec.namespace` field. You can take a look at an example https://github.com/NetApp/trident/blob/stable/v21.01/deploy/crds/tridentorchestrator_cr.yaml[here^].
+Trident Controller Deployment and Node Daemonset are deleted.
+New Trident Controller Deployment and Node Daemonset are created.
+As the Controller Pod and Node Pods are terminated, new versions take their place.
+If a certain Node is not updated, it does not stop the rest from being updated
+Only Nodes with a running Trident node pod can mount volumes.
+Existing volume mounts, I/O, etc are unaffected during install/upgrade.
+Workflow:
 
-== 
+Trident Admin: Upgrade Trident Operator to version N+1
+Operator: Detects Trident version N is installed
+Operator: Updates all K8s objects such as CRDs, RBAC, Trident SVC, etc
+Operator: Deletes Trident Controller Deployment N
+Operator: Creates new Trident Controller Deployment N + 1
+Kubernetes: creates Trident controller pod N+1
+Operator: Deletes Trident Node Daemonset N (does not wait for Node pod termination)
+Operator: Creates Trident node Daemonset N+1
+Kubernetes: creates Trident node pods on nodes not running Trident Node Pod N, ensuring only a single Trident Node Pod of any version on a node

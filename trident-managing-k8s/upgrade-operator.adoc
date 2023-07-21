@@ -20,10 +20,10 @@ Generally, you should upgrade Astra Trident using the same method that was used 
 ====
 When upgrading from an instance of Astra Trident installed using the namespace-scoped operator (versions 20.07 through 20.10), the Trident operator automatically:
 
-* Migrates `tridentProvisioner` to a `tridentOrchestrator` object with the same name, 
-* Deletes `TridentProvisioner` objects and the `tridentprovisioner` CRD
-* Upgrades Astra Trident to the version of the cluster-scoped operator being used
-* Install Astra Trident same namespace where it was originally installed
+* Migrates `tridentProvisioner` to a `tridentOrchestrator` object with the same name. 
+* Deletes `TridentProvisioner` objects and the `tridentprovisioner` CRD.
+* Upgrades Astra Trident to the version of the cluster-scoped operator being used.
+* Installs Astra Trident same namespace where it was originally installed.
 ====
 
 == Upgrade a cluster-scoped Trident operator installation

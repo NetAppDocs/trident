@@ -1,0 +1,43 @@
+---
+sidebar: sidebar
+permalink: trident-get-started/intro.html
+keywords: product overview, astra trident, fsx, element, astra, google cloud, cvs, architecture, test drive, node pod, controller pod, pods, csi, sidecar
+summary: Astra Trident is a fully supported open source project maintained by NetApp as part of the Astra product family. It has been designed to help you meet your containerized applications’ persistence demands using industry-standard interfaces, such as the Container Storage Interface (CSI).
+---
+
+= Learn about Astra Trident
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Astra Trident is a fully-supported open source project maintained by NetApp as part of the link:https://docs.netapp.com/us-en/astra-family/intro-family.html[Astra product family^]. It has been designed to help you meet your containerized applications' persistence demands using industry-standard interfaces, such as the Container Storage Interface (CSI).
+
+== What is Astra?
+
+Astra makes it easier for enterprises to manage, protect, and move their data-rich containerized workloads running on Kubernetes within and across public clouds and on-premises. 
+
+Astra provisions and provides persistent container storage built on Astra Trident. It also offers advanced application-aware data management functionality, such as snapshot, backup and restore, activity logs, and active cloning for data protection, disaster/data recovery, data audit, and migration use-cases for Kubernetes workloads.
+
+Learn more about link:https://bluexp.netapp.com/astra[Astra or sign up for a free trial^]. 
+
+== What is Astra Trident?
+Astra Trident enables consumption and management of storage resources across all popular NetApp storage platforms, in the public cloud or on premises, including ONTAP (AFF, FAS, Select, Cloud, Amazon FSx for NetApp ONTAP), Element software (NetApp HCI, SolidFire), Azure NetApp Files service, and Cloud Volumes Service on Google Cloud. 
+
+Astra Trident is a Container Storage Interface (CSI) compliant dynamic storage orchestrator that natively integrates with link:https://kubernetes.io/[Kubernetes^]. Astra Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. Refer to link:../trident-get-started/architecture.html[Astra Trident architecture] for details. 
+
+NOTE: If this is your first time using Kubernetes, you should familiarize yourself with the link:https://kubernetes.io/docs/home/[Kubernetes concepts and tools^].
+
+== Take the Astra Trident test drive
+To take a test drive, tequest access to the "Easily Deploy and Clone Persistent Storage for Containerized Workloads" link:https://www.netapp.com/us/try-and-buy/test-drive/index.aspx[NetApp Test Drive^] using a ready-to-use lab image. The test drive provides a sandbox environment with a three-node Kubernetes cluster and Astra Trident installed and configured. This is a great way to familiarize yourself with Astra Trident and explore its features.
+
+Another option is the link:https://kubernetes.io/docs/setup/independent/install-kubeadm/[kubeadm Install Guide] provided by Kubernetes.
+
+NOTE: Don't use a Kubernetes cluster that you build using these instructions in a production environment. Use the production deployment guides provided by your distribution for production-ready clusters.
+
+== For more information
+
+* https://docs.netapp.com/us-en/astra-family/intro-family.html[NetApp Astra product family]
+* https://docs.netapp.com/us-en/astra/get-started/intro.html[Astra Control Service documentation^]
+* https://docs.netapp.com/us-en/astra-control-center/index.html[Astra Control Center documentation^]
+* https://docs.netapp.com/us-en/astra-automation/get-started/before_get_started.html[Astra API documentation^]

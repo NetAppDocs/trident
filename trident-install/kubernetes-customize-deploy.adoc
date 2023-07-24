@@ -25,14 +25,16 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify the namespace where Astra Trident is installed. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Astra Trident is not intended to be migrated across namespaces.
 
 This table details `TridentOrchestrator` attributes.
-[cols=3,options="header"]
+[cols="1,3,1",options="header"]
 |===
 |Parameter |Description |Default
+
 |`autosupportImage` |The container image for Autosupport Telemetry |"netapp/trident-autosupport:23.04.0"
+
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport Telemetry |"http://proxy.example.com:8888"
-|`controllerPluginNodeSelector` |Additional node selectors for pods running the Trident Controller CSI Plugin.	Follows same format as `pod.spec.nodeSelector`. |No default; optional
-|`controllerPluginTolerations` |Overrides tolerations for pods running the Trident Controller CSI Plugin. Follows the same format as `pod.spec.Tolerations`. |No default; optional
+
 |`debug` |Enable debugging for Astra Trident |`false`
+
 |`enableForceDetach` |`ontap-san` and `ontap-san-economy` only. 
 
 Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
@@ -46,13 +48,17 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 `Never` to never pull the image. |`IfNotPresent`
 
-|`controllerPluginNodeSelector` |Additional node selectors for pods.	Follows same format as pod.spec.nodeSelector. |No default; optional
+|`controllerPluginNodeSelector` |Additional node selectors for Trident Node Pods.	See link:trident-concepts/intro.html#astra-trident-architecture[Astra Trident architecture] for details. 
 
-|`controllerPluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as pod.spec.Tolerations. |No default; optional
+Follows same format as `pod.spec.nodeSelector`. |No default; optional
 
-|`nodePluginNodeSelector` |Additional node selectors for pods. Follows same format as pod.spec.nodeSelector. |No default; optional
+|`controllerPluginTolerations` |Overrides Kubernetes tolerations for Trident Controller Pods and transient Pods created by the operator. See link:trident-concepts/intro.html#astra-trident-architecture[Astra Trident architecture] for details.
 
-|`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as pod.spec.Tolerations. |No default; optional
+Follows the same format as `pod.spec.Tolerations`. |No default; optional
+
+|`nodePluginNodeSelector` |Additional node selectors for pods. Follows same format as `pod.spec.nodeSelector`. |No default; optional
+
+|`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as `pod.spec.Tolerations`. |No default; optional
 
 |===
 [NOTE] 

@@ -11,6 +11,103 @@ summary: If you are just getting started with Kubernetes, use the instructions t
 :imagesdir: ../media/
 
 [.lead]
+You can install Astra Trident and get start managing storage resources in a few steps. Before getting started, review link:requirements.html[Astra Trident requirements].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png[One] Install Astra Trident
+[role="quick-margin-para"]
+Astra Trident offers several installation methods and modes optimized for a variety of environments and organizations. 
+
+[role="quick-margin-para"]
+link:..trident-get-started/kubernetes-deploy.html[Install Astra Trident]
+
+[role="quick-margin-para"]
+NOTE: For Docker, refer to link:../trident-docker/deploy-docker.html[Astra Trident for Docker].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png[Two] Prepare the worker node
+[role="quick-margin-para"]
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. 
+
+[role="quick-margin-para"]
+link:trident-use/worker-node-prep.html[Prepare the worker node]
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png[Three] Create a backend
+[role="quick-margin-para"]
+A backend defines the relationship between Astra Trident and a storage system. It tells Astra Trident how to communicate with that storage system and how Astra Trident should provision volumes from it. 
+
+link:../trident-use/backends.html[Configure a backend] for your storage system.
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create a storage class
+[role="quick-margin-para"]
+link:https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass objects^] are specified by name in `PersistentVolumeClaims` to provision storage with a set of properties. The storage class itself identifies the provisioner to be used and defines that set of properties in terms the provisioner understands. 
+
+[role="quick-margin-para"]
+link:../trident-use/manage-stor-class.html[Create a storage class].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png[Five] Provision your first volume
+[role="quick-margin-para"]
+Now you are ready to dynamically provision your first volume. This is done by creating a Kubernetes https://kubernetes.io/docs/concepts/storage/persistent-volumes[persistent volume claim^] (PVC) object.
+
+Create a PVC for a volume that uses the storage class that you just created.
+
+See `sample-input/pvc-basic-csi.yaml` for an example. Make sure the storage class name matches the one that you created.
+----
+kubectl create -f sample-input/pvc-basic-csi.yaml
+
+kubectl get pvc --watch
+NAME      STATUS    VOLUME                                     CAPACITY   ACCESS MODES  STORAGECLASS   AGE
+basic     Pending                                                                       basic          1s
+basic     Pending   pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   0                        basic          5s
+basic     Bound     pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   1Gi        RWO           basic          7s
+----
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-6.png[Six] Mount the volumes in a pod
+[role="quick-margin-para"]
+Now let us mount the volume. We will launch an nginx pod that mounts the PV under `/usr/share/nginx/html`.
+----
+cat << EOF > task-pv-pod.yaml
+kind: Pod
+apiVersion: v1
+metadata:
+  name: task-pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+       claimName: basic
+  containers:
+    - name: task-pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: task-pv-storage
+EOF
+kubectl create -f task-pv-pod.yaml
+----
+----
+# Wait for the pod to start
+kubectl get pod --watch
+
+# Verify that the volume is mounted on /usr/share/nginx/html
+kubectl exec -it task-pv-pod -- df -h /usr/share/nginx/html
+
+# Delete the pod
+kubectl delete pod task-pv-pod
+----
+
+At this point, the pod (application) no longer exists but the volume is still there. You can use it from another pod if you want to.
+
+To delete the volume, delete the claim:
+----
+kubectl delete pvc basic
+----
+
+== What's next?
+You can now add additional backends, manage storage classes, manage backends, and perform volume operations. 
 
 
 

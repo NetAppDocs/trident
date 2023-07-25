@@ -36,36 +36,23 @@ link:../trident-use/worker-node-prep.html[Prepare the worker node]
 A backend defines the relationship between Astra Trident and a storage system. It tells Astra Trident how to communicate with that storage system and how Astra Trident should provision volumes from it. 
 
 [role="quick-margin-para"]
-link:../trident-use/backends.html[Configure a backend] for your storage system.
+link:../trident-use/backends.html[Configure a backend] for your storage system
 
 
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create a storage class
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create a Kubernetes StorageClass
 [role="quick-margin-para"]
-The link:https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] specifies Astra Trident as the provisioner and configures volume mount options. 
-
-[role="quick-margin-para"]
-link:../trident-use/create-stor-class.html[Create a storage class].
-
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png[Five] Provision your first volume
-[role="quick-margin-para"]
-Now you are ready to dynamically provision your first volume. This is done by creating a Kubernetes https://kubernetes.io/docs/concepts/storage/persistent-volumes[persistent volume claim^] (PVC) object. Make sure the storage class name matches the one that you created.
+The Kubernetes StorageClass object specifies Astra Trident as the provisioner and allows you to create a storage class to provision volumes with customizable attributes. Astra Trident creates a matching storage class for Kubernetes objects that specify the Astra Trident provisioner.  
 
 [role="quick-margin-para"]
-link:Learn
+link:../trident-use/create-stor-class.html[Create a storage class]
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png[Five] Provision a volume using a Kubernetes PersistentVolumeClaim (PVC)
+[role="quick-margin-para"]
+Create a `PersistentVolumeClaim` that uses the configured Kubernetes `StorageClass` to request a new `PersistentVolume`. 
 
 
-// Create a PVC for a volume that uses the storage class that you just created.
-
-// See `sample-input/pvc-basic-csi.yaml` for an example. Make sure the storage class name matches the one that you created.
-// ----
-// kubectl create -f sample-input/pvc-basic-csi.yaml
-
-// kubectl get pvc --watch
-// NAME      STATUS    VOLUME                                     CAPACITY   ACCESS MODES  STORAGECLASS   AGE
-// basic     Pending                                                                       basic          1s
-// basic     Pending   pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   0                        basic          5s
-// basic     Bound     pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   1Gi        RWO           basic          7s
-// ----
+[role="quick-margin-para"]
+link:../trident-use/vol-provision.html[Provision a volume]
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-6.png[Six] Mount the volumes in a pod
 [role="quick-margin-para"]

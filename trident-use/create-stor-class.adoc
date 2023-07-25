@@ -11,12 +11,28 @@ summary: You can design a Kubernetes StorageClass file and create the StorageCla
 :imagesdir: ../media/
 
 [.lead]
-You can configure a Kubernetes StorageClass object and create the storage class to instruct Astra Trident how to provision volumes. 
+Configure a Kubernetes StorageClass object and create the storage class to instruct Astra Trident how to provision volumes. 
 
 == Configure a Kubernetes StorageClass object
-Kubernetes users provision volumes by using persistent volume claims (PVCs) that specify a https://kubernetes.io/docs/concepts/storage/storage-classes/[storage class^] by name. The details are hidden from the users, but a storage class identifies the provisioner that is used for that class (in this case, Astra Trident), and what that class means to the provisioner.
+The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Astra Trident as the provisioner that is used for that class instructs Astra Trident how to provision a volume. Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
 
-Astra Trident provides link:https://github.com/NetApp/trident/tree/master/trident-installer/sample-input/storage-class-samples[simple storage class definitions for specific backends^].
+.Astra Trident StorageClass object example
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: <Name>
+provisioner: csi.trident.netapp.io
+mountOptions: <Mount Options>
+parameters:
+  <Trident Parameters>
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+----
+
+=== Storage class samples
+
+Astra Trident provides https://github.com/NetApp/trident/tree/master/trident-installer/sample-input/pvc-samples[simple storage class definitions for specific backends^].
 
 Alternatively, you can edit `sample-input/storage-class-csi.yaml.templ` file that comes with the installer and replace `__BACKEND_TYPE__` with the storage driver name.
 ----
@@ -32,8 +48,6 @@ cp sample-input/storage-class-csi.yaml.templ sample-input/storage-class-basic-cs
 # Modify __BACKEND_TYPE__ with the storage driver field above (e.g., ontap-nas)
 vi sample-input/storage-class-basic-csi.yaml
 ----
-
-NOTE: Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for more information on storage classes and how they interact with `PersistentVolumeClaim`.
 
 == Create a storage class
 After you create the StorageClass object, you can create the storage class. This is a Kubernetes object, so you use `kubectl` to create it in Kubernetes.

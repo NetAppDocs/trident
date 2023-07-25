@@ -1,0 +1,47 @@
+---
+sidebar: sidebar
+permalink: trident-use/vol-provision.html
+keywords: volumes, import volumes, drivers, tridentctl import, pv, persistent volumes, pvc, disaster recovery, dr, clone, reuse, managed volume, unmanaged volume, managed, unmanaged
+summary: You can import existing storage volumes as a Kubernetes PV using `tridentctl import`.
+---
+
+= Provision a volume
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Create a Kubernetes PersistentVolumeClaim (PVC) object that uses the configured Kubernetes `StorageClass` to request access to a storage resource. 
+
+== Create a Kubernetes PVC object
+The https://kubernetes.io/docs/concepts/storage/persistent-volumes[Kubernetes PVC^] is a request for storage (or _PersistentVolume_). The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
+
+.PersistentVolumeClaim example
+This example shows a basic PVC with RWO access that is associated with a StorageClass named `basic-csi`.
+----
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: basic
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: basic-csi
+----
+
+
+
+// Create a PVC for a volume that uses the storage class that you just created.
+
+// See `sample-input/pvc-basic-csi.yaml` for an example. Make sure the storage class name matches the one that you created.
+// ----
+// kubectl create -f sample-input/pvc-basic-csi.yaml
+
+// kubectl get pvc --watch
+// NAME      STATUS    VOLUME                                     CAPACITY   ACCESS MODES  STORAGECLASS   AGE
+// basic     Pending                                                                       basic          1s
+// basic     Pending   pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   0                        basic          5s
+// basic     Bound     pvc-3acb0d1c-b1ae-11e9-8d9f-5254004dfdb7   1Gi        RWO           basic          7s

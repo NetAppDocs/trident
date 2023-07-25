@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-use/vol-provision.html
-keywords: volumes, import volumes, drivers, tridentctl import, pv, persistent volumes, pvc, disaster recovery, dr, clone, reuse, managed volume, unmanaged volume, managed, unmanaged
-summary: You can import existing storage volumes as a Kubernetes PV using `tridentctl import`.
+keywords: volumes, pvc, pv, persistentvolume, persistentvolumeclaim, mount, pod, provision
+summary: Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod. 
 ---
 
 = Provision a volume
@@ -11,18 +11,48 @@ summary: You can import existing storage volumes as a Kubernetes PV using `tride
 :imagesdir: ../media/
 
 [.lead]
-Create a Kubernetes PersistentVolumeClaim (PVC) object that uses the configured Kubernetes `StorageClass` to request access to a storage resource. 
+Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod. 
 
-== Create a Kubernetes PVC object
-The https://kubernetes.io/docs/concepts/storage/persistent-volumes[Kubernetes PVC^] is a request for storage (or _PersistentVolume_). The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
+== Overview
+A link:https://kubernetes.io/docs/concepts/storage/persistent-volumes/[_PersistentVolume_^] (PV) is a physical storage resource provisioned by the cluster administrator on a Kubernetes cluster. The https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
 
-.PersistentVolumeClaim example
+The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. 
+
+After you create the PV and PVC, you can mount the volume in a pod.
+
+=== Sample manifests
+
+.PersistentVolume sample manifest
+[%collapsible]
+====
+This sample manifest shows a basic PV of 10Gi that is associated with StorageClass `basic-csi`.
+----
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-storage
+  labels:
+    type: local
+spec:
+  storageClassName: basic-csi
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/my/host/path"
+----
+====
+
+.PersistentVolumeClaim sample manifest
+[%collapsible]
+====
 This example shows a basic PVC with RWO access that is associated with a StorageClass named `basic-csi`.
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: basic
+  name: pvc-storage
 spec:
   accessModes:
     - ReadWriteOnce
@@ -31,6 +61,81 @@ spec:
       storage: 1Gi
   storageClassName: basic-csi
 ----
+====
+
+.Pod manifest sample
+[%collapsible]
+====
+----
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pv-pod
+spec:
+  volumes:
+    - name: pv-storage
+      persistentVolumeClaim:
+       claimName: basic
+  containers:
+    - name: pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/my/mount/path"
+          name: pv-storage
+----
+====
+
+== Create the PV and PVC
+
+
+.Steps
+. Create the PV.
++
+----
+kubectl create -f pv.yaml
+----
+. Verify the PV status.
++
+----
+kubectl get pv
+NAME        CAPACITY  ACCESS MODES  RECLAIM POLICY  STATUS    CLAIM  STORAGECLASS  REASON  AGE
+pv-storage  4Gi       RWO           Retain          Available                              7s
+----
+. Create the PVC.
++
+----
+kubectl create -f pvc.yaml
+----
+. Verify the PVC status.
++
+----
+kubectl get pvc
+NAME        STATUS VOLUME     CAPACITY ACCESS MODES STORAGECLASS AGE
+pvc-storage Bound  pv-name 2Gi      RWO                       5m
+----
+. Mount the volume in a pod.
++
+----
+kubectl create -f pv-pod.yaml
+----
++
+NOTE: You can monitor the progress using `kubectl get pod --watch`.
+. Verify that the volume is mounted on `/my/mount/path`.
++
+----
+kubectl exec -it task-pv-pod -- df -h /my/mount/path
+----
+. You can now delete the Pod. The Pod application will no longer exist, but the volume will remain. 
++
+----
+kubectl delete pod task-pv-pod
+----
+
+
+Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
 
 
 

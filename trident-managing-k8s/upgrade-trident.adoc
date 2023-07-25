@@ -39,7 +39,7 @@ NOTE: When upgrading using the Trident operator on OpenShift Container Platform,
 == Step 2: Determine the original installation method
 To determine which version you used to originally install Astra Trident: 
 
-. Use `kubectl get pods - trident` to examine the pods. 
+. Use `kubectl get pods -n trident` to examine the pods. 
 * If there is no operator pod, Astra Trident was installed using `tridentctl`.
 * If there is an operator pod, Astra Trident was installed using the Trident operator either manually or using Helm. 
 . If there is an operator pod, use `kubectl describe tproc trident` to determine if Astra Trident was installed using Helm. 

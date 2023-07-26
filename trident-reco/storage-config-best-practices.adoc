@@ -66,7 +66,7 @@ In addition to controlling the volume size at the storage array, you should also
 
 === Configure Trident to use bidirectional CHAP
 
-You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. Bidirectional CHAP support is available with Trident 20.04 and above.
+You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. 
 
 === Create and use an SVM QoS policy
 
@@ -147,7 +147,7 @@ For deployments which have dedicated infrastructure nodes (for example, OpenShif
 
 === Use a dedicated export policy
 
-You should ensure that an export policy exists for each backend that only allows access to the nodes present in the Kubernetes cluster. Trident can automatically create and manage export policies starting from the 20.04 release. This way, Trident limits access to the volumes it provisions to the nodes in the Kubernetes cluster and simplifies the addition/deletion of nodes.
+You should ensure that an export policy exists for each backend that only allows access to the nodes present in the Kubernetes cluster. Trident can automatically create and manage export policies. This way, Trident limits access to the volumes it provisions to the nodes in the Kubernetes cluster and simplifies the addition/deletion of nodes.
 
 Alternatively, you can also create an export policy manually and populate it with one or more export rules that process each node access request:
 

@@ -27,8 +27,6 @@ Astra Trident supports CHAP-based authentication for ONTAP SAN workloads (using 
 For ONTAP backends that use the SAN storage drivers, Astra Trident can set up bidirectional CHAP and manage CHAP usernames and secrets through `tridentctl`.
 See link:../trident-use/ontap-san-prep.html[here] to understand how Astra Trident configures CHAP on ONTAP backends.
 
-NOTE: CHAP support for ONTAP backends is available with Trident 20.04 and later.
-
 == Use CHAP authentication with NetApp HCI and SolidFire backends
 
 NetApp recommends deploying bidirectional CHAP to ensure authentication between a host and the NetApp HCI and SolidFire backends. Astra Trident uses a secret object that includes two CHAP passwords per tenant. When Astra Trident is installed, it manages the CHAP secrets and stores them in a `tridentvolume` CR object for the respective PV. When you create a PV, Astra Trident uses the CHAP secrets to initiate an iSCSI session and communicate with the NetApp HCI and SolidFire system over CHAP.

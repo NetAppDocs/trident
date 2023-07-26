@@ -33,7 +33,7 @@ Use the `tridentctl get` command to obtain more information about your Astra Tri
 
 === Can I obtain metrics on how storage is provisioned by Astra Trident?
 
-Yes. Trident 20.01 introduces Prometheus endpoints that can be used to gather information about Astra Trident’s operation, such as the number of backends managed, the number of volumes provisioned, bytes consumed, and so on. You can also use Cloud Insights for monitoring and analysis.
+Yes. Prometheus endpoints that can be used to gather information about Astra Trident operation, such as the number of backends managed, the number of volumes provisioned, bytes consumed, and so on. You can also use link:https://docs.netapp.com/us-en/cloudinsights/[Cloud Insights^] for monitoring and analysis.
 
 === Does the user experience change when using Astra Trident as a CSI Provisioner?
 
@@ -143,7 +143,7 @@ The management LIF is mandatory. Data LIF varies:
 
 === Can Astra Trident configure CHAP for ONTAP backends?
 
-Yes. Beginning with 20.04, Astra Trident supports bidirectional CHAP for ONTAP backends. This requires setting `useCHAP=true` in your backend configuration.
+Yes. Astra Trident supports bidirectional CHAP for ONTAP backends. This requires setting `useCHAP=true` in your backend configuration.
 
 === How do I manage export policies with Astra Trident?
 

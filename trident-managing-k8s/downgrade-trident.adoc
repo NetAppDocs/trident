@@ -58,14 +58,14 @@ You can downgrade Astra Trident that was installed using `tridentctl`.
 Before beginning the downgrade, take a snapshot of your Kubernetes cluster `etcd`. This enables you to back up the current state of Astra Trident CRDs.
 
 .Steps
-. Uninstall Astra Trident with the existing `tridentctl` binary.  In this case, you will uninstall with the 23.04 binary.
+. Uninstall Astra Trident with the existing `tridentctl` binary.  In this case, you will uninstall with the 23.07 binary.
 +
 ----
 tridentctl version -n trident
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 23.04.0        | 23.04.0        |
+| 23.07.0        | 23.07.0        |
 +----------------+----------------+
 
 tridentctl uninstall -n trident
@@ -80,10 +80,10 @@ INFO Deleted pod security policy.                  podSecurityPolicy=tridentpods
 INFO The uninstaller did not delete Trident's namespace in case it is going to be reused.
 INFO Trident uninstallation succeeded.
 ----
-. After this is complete, obtain the Trident binary for the desired version (in this example, 23.01), and use it to install Astra Trident. You can generate custom YAMLs for a link:../trident-get-started/kubernetes-customize-deploy-tridentctl.html[customized installation] if needed.
+. After this is complete, obtain the Trident binary for the desired version (in this example, 23.04), and use it to install Astra Trident. You can generate custom YAMLs for a link:../trident-get-started/kubernetes-customize-deploy-tridentctl.html[customized installation] if needed.
 +
 ----
-cd 23.01/trident-installer/
+cd 23.04/trident-installer/
 ./tridentctl install -n trident-ns
 INFO Created installer service account.            serviceaccount=trident-installer
 INFO Created installer cluster role.               clusterrole=trident-installer

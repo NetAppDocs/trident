@@ -17,6 +17,43 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 == What's new in 23.07
 
+=== Fixes
+
+==== Kubernetes
+** Fixed Trident upgrade to disregard old pods stuck in terminating state (link:https://github.com/NetApp/trident/issues/740[Issue #740^]).
+** Added toleration to "transient-trident-version-pod" definition (link:https://github.com/NetApp/trident/issues/795[Issue #795^]).
+
+==== Astra Trident
+* Fixed ONTAP ZAPI requests to ensure LUN serial numbers are queried when getting LUN attributes to identify and fix ghost iSCSI devices during Node Staging operations.
+* Fixed error handling in storage driver code (link:https://github.com/NetApp/trident/issues/816[Issue #816^]).
+* Fixed quota resize when using ONTAP drivers with use-rest=true.
+* Fixed LUN clone creation in ontap-san-economy.
+* Revert publish info field from `rawDevicePath` to `devicePath`; added logic to populate and recover (in some cases) `devicePath` field.
+
+=== Enhancements
+
+==== Kubernetes
+* Added support for importing pre-provisioned snapshots.
+* Minimized deployment and daemonset linux permissions (link:https://github.com/NetApp/trident/issues/817[Issue #817^]).
+
+==== Astra Trident
+* No longer reporting the state field for "online" volumes and snapshots.
+* Updates the backend state if the ONTAP backend is offline (link:https://github.com/NetApp/trident/issues/801[Issues #801^], link:https://github.com/NetApp/trident/issues/543[#543^]).
+* LUN Serial Number is always retrieved and published during the ControllerVolumePublish workflow.
+* Added additional logic to verify iSCSI multipath device serial number and size.
+* Additional verification for iSCSI volumes to ensure correct multipath device is unstaged.
+
+==== Documentation
+Many organizational and formatting improvements have been made. 
+
+=== Deprecations
+
+==== Kubernetes
+
+* Removed support for v1beta1 snapshots.
+* Removed support for pre-CSI volumes and storage classes.
+* Updated minimum supported Kubernetes to 1.22.
+
 
 == Changes in 23.04
 IMPORTANT: Force volume detach for ONTAP-SAN-* volumes is supported only with Kubernetes versions with the Non-Graceful Node Shutdown feature gate enabled. Force detach must be enabled at install time using the `--enable-force-detach` Trident installer flag.

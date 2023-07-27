@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-managing-k8s/uninstall-trident.html
-keywords: uninstall, astra trident, methods, operator, tridentctl, helm
-summary: Depending on how Astra Trident is installed, there are multiple options to uninstall it.
+keywords: uninstall, astra trident, methods, operator, tridentctl, helm, downgrade, obliviate, crds, wipeout
+summary: You should use the same method to uninstall Astra Trident that you used to install Astra Trident. 
 ---
 
 = Uninstall Astra Trident
@@ -46,7 +46,7 @@ install Trident again.
 kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"wipeout":["crds"],"uninstall":true}}'
 ----
 +
-WARNING: You should only consider wiping out the CRDs when performing a complete uninstallation. This cannot be undone. **Do not wipe out the CRDs unless you are looking to start over and create a fresh Astra Trident installation**.
+WARNING: This cannot be undone. Do not wipe out the CRDs unless you want a fresh Astra Trident installation. For example, if you are moving to version other than the immediately preceding version.
 
 === Uninstall Helm installation
 

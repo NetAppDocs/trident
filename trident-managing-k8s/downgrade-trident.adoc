@@ -13,6 +13,13 @@ summary: You should use the same method to downgrade Astra Trident that you used
 [.lead]
 You might consider downgrading Astra Trident for contingency planning, an immediate fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade. You should use the same method to downgrade Astra Trident that you used to install Astra Trident. 
 
+== Important considerations before downgrading
+* You should downgrade only to address issues caused by an upgrade.
+* You should downgrade to only the immediately preceding version. For example:
+** You can downgrade from 23.07 to 23.04. 
+** You should not downgrade from 23.07 to 23.01. 
+* To move to a version other than the immediately preceding version, you should completely link:../uninstall-trident.html[uninstall Astra Trident]--including all associated CRDs--and perform a new installation to the earlier version. 
+
 == Determine the original installation method
 You should use the same method to downgrade Astra Trident that you used to install it. Before downgrading, verify which version you used to originally install Astra Trident. 
 
@@ -23,62 +30,22 @@ You should use the same method to downgrade Astra Trident that you used to insta
 * If there is a Helm label, Astra Trident was installed using Helm. 
 * If there is no Helm label, Astra Trident was installed manually using the Trident operator. 
 
-// You can consider a downgrade when moving to a Astra Trident release that uses CRDs. Because Astra Trident uses CRDs for maintaining state, all storage entities created (backends, storage classes, PV, and volume snapshots) have associated CRD objects instead of data written into the `trident` PV (used by the earlier installed version of Astra Trident). Newly created PVs, backends, and storage classes are all maintained as CRD objects. 
-
-// Only attempt downgrade for a version of Astra Trident that runs using CRDs (19.07 and later). This ensures operations performed on the current Astra Trident release are visible after the downgrade occurs.
-
 == Downgrade a Trident operator installation
-You can downgrade a trident operator installation manually or using Helm. Astra Trident can be downgraded to either:
-
-* A version installed using the cluster-scoped operator (21.01 and later).
-* A version installed using the namespace-scoped operator (20.07 - 20.10). For namespace-scoped operator downgrade instructions, refer to the downgrade instructions link:../earlier-versions.html[for your installed version]. 
+You can downgrade a Trident operator installation manually or using Helm.
 
 === Downgrade a manual installation
-You can manually downgrade from any Astra Trident version that uses the cluster-scoped operator to any other cluster-scoped operator version (Astra Trident 21.01 and later).
+You can manually downgrade Astra Trident installed using the Trident operator.
 
 .Steps
-. link:uninstall-trident.html[Uninstall Astra Trident^]. **Do not delete the CRDs unless you want to completely remove an existing installation.**
-. The Trident operator can be deleted by using the operator manifest associated with your version of Trident. For example, `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name.
-. Continue downgrading by installing the desired version of Astra Trident. Follow the documentation for the desired release.
+. link:uninstall-trident.html[Uninstall Astra Trident^]. 
++
+WARNING: Do not delete the CRDs unless you want a fresh Astra Trident installation. For example, if you are moving to any version other than the immediately preceding version. This cannot be undone. 
 
-// === Downgrade to namespace-scoped operator
-
-// To downgrade to an Astra Trident release between 20.07 and 20.10, which will be installed using the namespace-scoped operator, refer to the the downgrade instructions for your version. 
-
-// .Steps
-// . link:uninstall-trident.html[Uninstall Astra Trident^]. **Do not wipeout the CRDs unless you want to completely remove an existing installation.**
-// Make sure the `tridentorchestrator` is deleted.
-// +
-// ----
-// #Check to see if there are any tridentorchestrators present
-// kubectl get torc
-// NAME        AGE
-// trident     20h
-
-// #Looks like there is a tridentorchestrator that needs deleting
-// kubectl delete torc trident
-// tridentorchestrator.trident.netapp.io "trident" deleted
-// ----
-// . The Trident operator can be deleted by using the operator manifest associated with your version of Trident. For example, `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name.
-// . Delete the `tridentorchestrator` CRD.
-// +
-// ----
-// #Check to see if ``tridentorchestrators.trident.netapp.io`` CRD is present and delete it.
-
-// kubectl get crd tridentorchestrators.trident.netapp.io
-
-// NAME                                     CREATED AT
-// tridentorchestrators.trident.netapp.io   2021-01-21T21:11:37Z
-
-// kubectl delete crd tridentorchestrators.trident.netapp.io
-
-// customresourcedefinition.apiextensions.k8s.io "tridentorchestrators.trident.netapp.io" deleted
-// ----
-// Astra Trident has been uninstalled.
-// . Continue downgrading by installing the desired version. Follow the documentation for the desired release.
+. Delete the Trident operator using the operator manifest associated with your version of Trident. For example, `\https://github.com/NetApp/trident/tree/stable/_vXX.XX_/deploy/_bundle.yaml_` where `_vXX.XX_` is the version number (for example `v22.10`) and `_bundle.yaml_` is the bundle YAML file name.
+. Install the earlier version using the link:../earlier-versions.html[documentation for that release]. 
 
 === Downgrade a Helm installation
-You can easily downgrade using Helm, with the `helm rollback` command. For example:
+You can downgrade using Helm, with the `helm rollback` command. For example:
 ----
 helm rollback trident [revision #]
 ----

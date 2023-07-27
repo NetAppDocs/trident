@@ -246,10 +246,6 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |===
 
-=== Understanding controller pods and node pods
-Astra Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Astra Trident volume. 
 
-Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. Using the`ControllerPlugin` and `NodePlugin`, you can specify constraints and overrides.
 
-* The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
-* The node plugin handles attaching the storage to the node.
+== What's next

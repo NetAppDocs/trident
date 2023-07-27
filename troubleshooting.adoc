@@ -13,10 +13,6 @@ summary: Use the pointers provided here for troubleshooting issues you might enc
 [.lead]
 Use the pointers provided here for troubleshooting issues you might encounter while installing and using Astra Trident.
 
-NOTE: For help with Astra Trident, create a support bundle using `tridentctl logs -a -n trident` and send it to `NetApp Support <Getting Help>`.
-
-TIP: For a comprehensive list of troubleshooting articles, see the https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Trident_Kubernetes[NetApp Knowledgebase (login required)^]. You can also find information about troubleshooting issues related to Astra https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Astra[here^].
-
 == General troubleshooting
 
 * If the Trident pod fails to come up properly (for example, when the Trident pod is stuck in the `ContainerCreating` phase with fewer than two ready containers), running `kubectl -n trident describe deployment trident` and `kubectl -n trident describe pod trident-********-****` can provide additional insights. Obtaining kubelet logs (for example, via `journalctl -xeu kubelet`) can also be helpful.

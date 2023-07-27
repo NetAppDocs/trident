@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/manage-stor-class.html
 keywords: storage class, manage storage class, storage classes, kubernetes storage classes
-summary: You can create a storage class, delete a storage class, and view existing storage classes.
+summary: You can view existing storage classes, set a default storage class, identify the storage class backend, and delete storage classes. 
 ---
 
 = Manage storage classes
@@ -11,31 +11,7 @@ summary: You can create a storage class, delete a storage class, and view existi
 :imagesdir: ../media/
 
 [.lead]
-You can create a storage class, delete a storage class, and view existing storage classes.
-
-== Design a storage class
-
-See link:../trident-reference/objects.html[here^] for more information on what storage classes are and how you configure them.
-
-== Create a storage class
-
-After you have a storage class file, run the following command:
-----
-kubectl create -f <storage-class-file>
-----
-`<storage-class-file>` should be replaced with your storage class file name.
-
-== Delete a storage class
-
-To delete a storage class from Kubernetes, run the following command:
-----
-kubectl delete storageclass <storage-class>
-----
-`<storage-class>` should be replaced with your storage class.
-
-Any persistent volumes that were created through this storage class will remain untouched, and Astra Trident will continue to manage them.
-
-NOTE: Astra Trident enforces a blank `fsType` for the volumes it creates. For iSCSI backends, it is recommended to enforce `parameters.fsType` in the StorageClass. You should delete existing StorageClasses and re-create them with `parameters.fsType` specified.
+You can view existing storage classes, set a default storage class, identify the storage class backend, and delete storage classes. 
 
 == View the existing storage classes
 
@@ -71,7 +47,7 @@ kubectl patch storageclass <storage-class-name> -p '{"metadata": {"annotations":
 ----
 There are also examples in the Trident installer bundle that include this annotation.
 
-NOTE: You should only have one default storage class in your cluster at any given time. Kubernetes does not technically prevent you from having more than one, but it will behave as if there is no default storage class at all.
+NOTE: There should be only one default storage class in your cluster at a time. Kubernetes does not technically prevent you from having more than one, but it will behave as if there is no default storage class at all.
 
 == Identify the backend for a storage class
 
@@ -79,3 +55,15 @@ This is an example of the kind of questions you can answer with the JSON that `t
 ----
 tridentctl get storageclass -o json | jq  '[.items[] | {storageClass: .Config.name, backends: [.storage]|unique}]'
 ----
+
+== Delete a storage class
+
+To delete a storage class from Kubernetes, run the following command:
+----
+kubectl delete storageclass <storage-class>
+----
+`<storage-class>` should be replaced with your storage class.
+
+Any persistent volumes that were created through this storage class will remain untouched, and Astra Trident will continue to manage them.
+
+NOTE: Astra Trident enforces a blank `fsType` for the volumes it creates. For iSCSI backends, it is recommended to enforce `parameters.fsType` in the StorageClass. You should delete existing StorageClasses and re-create them with `parameters.fsType` specified.

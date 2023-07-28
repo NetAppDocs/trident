@@ -13,6 +13,9 @@ summary: You should use the same method to uninstall Astra Trident that you used
 [.lead]
 You should use the same method to uninstall Astra Trident that you used to install Astra Trident. 
 
+.Before you begin
+If you are decommissioning Kubernetes clusters, you must delete all applications that use volumes created by Astra Trident prior to uninstalling. This ensures that PVCs are unpublished on Kubernetes nodes before they are deleted.
+
 == Determine the original installation method
 You should use the same method to uninstall Astra Trident that you used to install it. Before uninstalling, verify which version you used to originally install Astra Trident. 
 

@@ -29,7 +29,7 @@ image::../media/trident-arch.png[Diagram of the Astra Trident  architecture on t
 The Trident Controller Pod is a single Pod running the CSI Controller plugin. 
 
 * Responsible for provisioning and managing volumes in NetApp storage
-* Managed by a Kubernetes DaemonSet 
+* Managed by a Kubernetes Deployment 
 * Can run on the control-plane or worker nodes, depending on installation parameters.
 
 .Trident Controller Pod diagram

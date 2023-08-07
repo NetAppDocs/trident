@@ -70,9 +70,7 @@ If the created PV has the `Delete` reclaim policy, Trident deletes both the PV a
 
 Trident supports the creation of Volume Snapshots using the CSI specification: you can create a Volume Snapshot and use it as a Data Source to clone existing PVCs. This way, point-in-time copies of PVs can be exposed to Kubernetes in the form of snapshots. The snapshots can then be used to create new PVs. Take a look at `+On-Demand Volume Snapshots+` to see how this would work.
 
-Trident also provides the `cloneFromPVC` and `splitOnClone` annotations for creating clones. You can use these  annotations to clone a PVC without having to use the CSI implementation (on Kubernetes 1.13 and earlier) or if your Kubernetes release does not support beta Volume Snapshots (Kubernetes 1.16 and earlier). Keep in mind that Trident 19.10 supports the CSI workflow for cloning from a PVC.
-
-NOTE: You can use the `cloneFromPVC` and `splitOnClone` annotations with CSI Trident as well as the traditional non-CSI frontend.
+Trident also provides the `cloneFromPVC` and `splitOnClone` annotations for creating clones. You can use these annotations to clone a PVC without having to use the CSI implementation.
 
 Here is an example: If a user already has a PVC called `mysql`, the user can create a new PVC called `mysqlclone` by using the annotation, such as `trident.netapp.io/cloneFromPVC: mysql`. With this annotation set, Trident clones the volume corresponding to the mysql PVC, instead of provisioning a volume from scratch.
 
@@ -82,7 +80,7 @@ Consider the following points:
 * A PVC and its clone should be in the same Kubernetes namespace and have the same storage class.
 * With the `ontap-nas` and `ontap-san` drivers, it might be desirable to set the PVC annotation `trident.netapp.io/splitOnClone` in conjunction with `trident.netapp.io/cloneFromPVC`. With `trident.netapp.io/splitOnClone` set to `true`, Trident splits the cloned volume from the parent volume and thus, completely decoupling the life cycle of the cloned volume from its parent at the expense of losing some storage efficiency. Not setting `trident.netapp.io/splitOnClone` or setting it to `false` results in reduced space consumption on the backend at the expense of creating dependencies between the parent and clone volumes such that the parent volume cannot be deleted unless the clone is deleted first. A scenario where splitting the clone makes sense is cloning an empty database volume where it's expected for the volume and its clone to greatly diverge and not benefit from storage efficiencies offered by ONTAP.
 
-The `sample-input` directory contains examples of PVC definitions for use with Trident. See Trident Volume objects for a full description of the parameters and settings associated with Trident volumes.
+The `sample-input` directory contains examples of PVC definitions for use with Trident. Refer to <<Trident `Volume` objects>> for a full description of the parameters and settings associated with Trident volumes.
 
 == Kubernetes `PersistentVolume` objects
 
@@ -246,17 +244,16 @@ Kubernetes Custom Resources are endpoints in the Kubernetes API that are defined
 
 Custom Resource Definitions (CRDs) and their associated object metadata are stored by Kubernetes in its metadata store. This eliminates the need for a separate store for Trident.
 
-Beginning with the 19.07 release, Trident uses a number of `CustomResourceDefinition` objects to preserve the identity of Trident objects, such as Trident backends, Trident storage classes, and Trident volumes. These objects are managed by Trident. In addition, the CSI volume snapshot framework introduces some CRDs that are required to define volume snapshots.
+Astra Trident uses `CustomResourceDefinition` objects to preserve the identity of Trident objects, such as Trident backends, Trident storage classes, and Trident volumes. These objects are managed by Trident. In addition, the CSI volume snapshot framework introduces some CRDs that are required to define volume snapshots.
 
 CRDs are a Kubernetes construct. Objects of the resources defined above are created by Trident. As a simple example, when a backend is created using `tridentctl`, a corresponding `tridentbackends` CRD object is created for consumption by Kubernetes.
 
 Here are a few points to keep in mind about Trident's CRDs:
 
 * When Trident is installed, a set of CRDs are created and can be used like any other resource type.
-* When upgrading from a previous version of Trident (one that used `etcd` to maintain state), the Trident installer migrates data from the `etcd` key-value data store and creates corresponding CRD objects.
 * When uninstalling Trident by using the `tridentctl uninstall` command, Trident pods are deleted but the created CRDs are not cleaned up. See link:../trident-managing-k8s/uninstall-trident.html[Uninstall Trident] to understand how Trident can be completely removed and reconfigured from scratch.
 
-== Trident `StorageClass` objects
+== Astra Trident `StorageClass` objects
 
 Trident creates matching storage classes for Kubernetes `StorageClass` objects that specify `csi.trident.netapp.io`/`netapp.io/trident` in their provisioner field. The storage class name matches that of the Kubernetes `StorageClass` object it represents.
 
@@ -266,7 +263,7 @@ Storage classes comprise a set of requirements for volumes. Trident matches thes
 
 You can create storage class configurations to directly define storage classes by using the REST API. However, for Kubernetes deployments, we expect them to be created when registering new Kubernetes `StorageClass` objects.
 
-== Trident backend objects
+== Astra Trident backend objects
 
 Backends represent the storage providers on top of which Trident provisions volumes; a single Trident instance can manage any number of backends.
 
@@ -274,19 +271,21 @@ NOTE: This is one of the two object types that you create and manage yourself. T
 
 For more information about how to construct these objects, see link:../trident-use/backends.html[configuring backends].
 
-== Trident `StoragePool` objects
+== Astra Trident `StoragePool` objects
 
 Storage pools represent the distinct locations available for provisioning on each backend. For ONTAP, these correspond to aggregates in SVMs. For NetApp HCI/SolidFire, these correspond to administrator-specified QoS bands. For Cloud Volumes Service, these correspond to cloud provider regions. Each storage pool has a set of distinct storage attributes, which define its performance characteristics and data protection characteristics.
 
 Unlike the other objects here, storage pool candidates are always discovered and managed automatically.
 
-== Trident `Volume` objects
+== Astra Trident `Volume` objects
 
 Volumes are the basic unit of provisioning, comprising backend endpoints, such as NFS shares and iSCSI LUNs. In Kubernetes, these correspond directly to `PersistentVolumes`. When you create a volume, ensure that it has a storage class, which determines where that volume can be provisioned, along with a size.
 
-NOTE: In Kubernetes, these objects are managed automatically. You can view them to see what Trident provisioned.
-
-TIP: When deleting a PV with associated snapshots, the corresponding Trident volume is updated to a *Deleting* state. For the Trident volume to be deleted, you should remove the snapshots of the volume.
+[NOTE]
+=====
+* In Kubernetes, these objects are managed automatically. You can view them to see what Trident provisioned.
+* When deleting a PV with associated snapshots, the corresponding Trident volume is updated to a *Deleting* state. For the Trident volume to be deleted, you should remove the snapshots of the volume.
+=====
 
 A volume configuration defines the properties that a provisioned volume should have.
 
@@ -331,7 +330,7 @@ Trident generates `internalName` when creating the volume. This consists of two 
 You can use volume configurations to directly provision volumes using the REST API, but in Kubernetes deployments we expect most users to use the standard Kubernetes `PersistentVolumeClaim` method. Trident creates this volume object automatically as part of the provisioning
 process.
 
-== Trident `Snapshot` objects
+== Astra Trident `Snapshot` objects
 
 Snapshots are a point-in-time copy of volumes, which can be used to provision new volumes or restore state. In Kubernetes, these correspond directly to `VolumeSnapshotContent` objects. Each snapshot is associated with a volume, which is the source of the data for the snapshot.
 

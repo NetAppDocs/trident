@@ -1,0 +1,93 @@
+---
+sidebar: sidebar
+permalink: trident-use/create-stor-class.html
+keywords: storage class, manage storage class, storage classes, kubernetes storage classes
+summary: You can design a Kubernetes StorageClass file and create the StorageClass to instruct Astra Trident how to provision volumes. 
+---
+
+= Create a storage class
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Configure a Kubernetes StorageClass object and create the storage class to instruct Astra Trident how to provision volumes. 
+
+== Configure a Kubernetes StorageClass object
+The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Astra Trident as the provisioner that is used for that class instructs Astra Trident how to provision a volume. For example:
+
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: <Name>
+provisioner: csi.trident.netapp.io
+mountOptions: <Mount Options>
+parameters:
+  <Trident Parameters>
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+----
+
+Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
+
+== Create a storage class
+After you create the StorageClass object, you can create the storage class. <<Storage class samples>> provides some basic samples you can use or modify.  
+
+.Steps
+. This is a Kubernetes object, so use `kubectl` to create it in Kubernetes.
++
+----
+kubectl create -f sample-input/storage-class-basic-csi.yaml
+----
+
+. You should now see a *basic-csi* storage class in both Kubernetes and Astra Trident, and Astra Trident should have discovered the pools on the backend.
++
+----
+kubectl get sc basic-csi
+NAME         PROVISIONER             AGE
+basic-csi    csi.trident.netapp.io   15h
+
+./tridentctl -n trident get storageclass basic-csi -o json
+{
+  "items": [
+    {
+      "Config": {
+        "version": "1",
+        "name": "basic-csi",
+        "attributes": {
+          "backendType": "ontap-nas"
+        },
+        "storagePools": null,
+        "additionalStoragePools": null
+      },
+      "storage": {
+        "ontapnas_10.0.0.1": [
+          "aggr1",
+          "aggr2",
+          "aggr3",
+          "aggr4"
+        ]
+      }
+    }
+  ]
+}
+----
+
+=== Storage class samples
+Astra Trident provides https://github.com/NetApp/trident/tree/master/trident-installer/sample-input/pvc-samples[simple storage class definitions for specific backends^].
+
+Alternatively, you can edit `sample-input/storage-class-csi.yaml.templ` file that comes with the installer and replace `__BACKEND_TYPE__` with the storage driver name.
+----
+./tridentctl -n trident get backend
++-------------+----------------+--------------------------------------+--------+---------+
+|    NAME     | STORAGE DRIVER |                 UUID                 | STATE  | VOLUMES |
++-------------+----------------+--------------------------------------+--------+---------+
+| nas-backend | ontap-nas      | 98e19b74-aec7-4a3d-8dcf-128e5033b214 | online |       0 |
++-------------+----------------+--------------------------------------+--------+---------+
+
+cp sample-input/storage-class-csi.yaml.templ sample-input/storage-class-basic-csi.yaml
+
+# Modify __BACKEND_TYPE__ with the storage driver field above (e.g., ontap-nas)
+vi sample-input/storage-class-basic-csi.yaml
+----

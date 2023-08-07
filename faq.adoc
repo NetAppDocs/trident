@@ -33,17 +33,13 @@ Use the `tridentctl get` command to obtain more information about your Astra Tri
 
 === Can I obtain metrics on how storage is provisioned by Astra Trident?
 
-Yes. Trident 20.01 introduces Prometheus endpoints that can be used to gather information about Astra Trident’s operation, such as the number of backends managed, the number of volumes provisioned, bytes consumed, and so on. You can also use Cloud Insights for monitoring and analysis.
+Yes. Prometheus endpoints that can be used to gather information about Astra Trident operation, such as the number of backends managed, the number of volumes provisioned, bytes consumed, and so on. You can also use link:https://docs.netapp.com/us-en/cloudinsights/[Cloud Insights^] for monitoring and analysis.
 
 === Does the user experience change when using Astra Trident as a CSI Provisioner?
 
 No. There are no changes as far as the user experience and functionalities are concerned. The provisioner name used is `csi.trident.netapp.io`. This method of installing Astra Trident is recommended if you want to use all the new features provided by current and future releases.
 
 == Install and use Astra Trident on a Kubernetes cluster
-
-=== What are the supported versions of `etcd`?
-
-Astra Trident no longer needs an `etcd`. It uses CRDs to maintain state.
 
 === Does Astra Trident support an offline install from a private registry?
 
@@ -147,15 +143,15 @@ The management LIF is mandatory. Data LIF varies:
 
 === Can Astra Trident configure CHAP for ONTAP backends?
 
-Yes. Beginning with 20.04, Astra Trident supports bidirectional CHAP for ONTAP backends. This requires setting `useCHAP=true` in your backend configuration.
+Yes. Astra Trident supports bidirectional CHAP for ONTAP backends. This requires setting `useCHAP=true` in your backend configuration.
 
 === How do I manage export policies with Astra Trident?
 
-Astra Trident can dynamically create and manage export policies from version 20.04 onwards. This enables the storage administrator to provide one or more CIDR blocks in their backend configuration and have Trident add node IPs that fall within these ranges to an export policy it creates. In this manner, Astra Trident automatically manages the addition and deletion of rules for nodes with IPs within the given CIDRs. This feature requires CSI Trident.
+Astra Trident can dynamically create and manage export policies from version 20.04 onwards. This enables the storage administrator to provide one or more CIDR blocks in their backend configuration and have Trident add node IPs that fall within these ranges to an export policy it creates. In this manner, Astra Trident automatically manages the addition and deletion of rules for nodes with IPs within the given CIDRs. 
 
-=== Can we specify a port in the DataLIF?
+// === Can we specify a port in the DataLIF?
 
-Astra Trident 19.01 and later support specifying a port in the DataLIF. Configure it in the `backend.json` file as ``“managementLIF”: <ip address>:<port>”``. For example, if the IP address of your management LIF is 192.0.2.1, and the port is 1000, configure ``"managementLIF": "192.0.2.1:1000"``.
+// Astra Trident 19.01 and later support specifying a port in the DataLIF. Configure it in the `backend.json` file as ``“managementLIF”: <ip address>:<port>”``. For example, if the IP address of your management LIF is 192.0.2.1, and the port is 1000, configure ``"managementLIF": "192.0.2.1:1000"``.
 
 === Can IPv6 addresses be used for the Management and Data LIFs?
 
@@ -237,9 +233,9 @@ PVC protection is automatically enabled on Kubernetes starting from version 1.10
 
 Yes. You can expand a PVC that has been created by Astra Trident. Note that volume autogrow is an ONTAP feature that is not applicable to Trident.
 
-=== If I have a volume that was created outside Astra Trident can I import it into Astra Trident?
+// === If I have a volume that was created outside Astra Trident can I import it into Astra Trident?
 
-Starting in 19.04, you can use the volume import feature to bring volumes into Kubernetes.
+// Starting in 19.04, you can use the volume import feature to bring volumes into Kubernetes.
 
 === Can I import a volume while it is in SnapMirror Data Protection (DP) or offline mode?
 
@@ -250,9 +246,9 @@ Error: could not import volume: volume import failed to get size of volume: volu
 Make sure to remove the DP mode or put the volume online before importing the volume.
 ----
 
-=== Can I expand iSCSI PVCs that were created by Astra Trident?
+// === Can I expand iSCSI PVCs that were created by Astra Trident?
 
-Trident 19.10 supports expanding iSCSI PVs using the CSI Provisioner.
+// Trident 19.10 supports expanding iSCSI PVs using the CSI Provisioner.
 
 === How is resource quota translated to a NetApp cluster?
 

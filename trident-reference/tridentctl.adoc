@@ -129,13 +129,12 @@ Usage:
 ----
 Flags:
 
-* ``--autosupport-image string`: The container image for Autosupport Telemetry (default "netapp/trident autosupport:20.07.0").
+* ``--autosupport-image string`: The container image for Autosupport Telemetry (default "netapp/trident autosupport:<current-version>").
 * ``--autosupport-proxy string`: The address/port of a proxy for sending Autosupport Telemetry.
-* ``--csi`: Install CSI Trident (override for Kubernetes 1.13 only, requires feature gates).
 * ``--enable-node-prep`: Attempt to install required packages on nodes.
 * ``--generate-custom-yaml`: Generate YAML files without installing anything.
 * ``-h, --help`: Help for install.
-* ``--http-request-timeout`: Override the HTTP request timeout for Trident controller’s REST API (default 1m30s).
+* ``--http-request-timeout`: Override the HTTP request timeout for Trident controller's REST API (default 1m30s).
 * ``--image-registry string`: The address/port of an internal image registry.
 * ``--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
 * ``--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
@@ -194,16 +193,6 @@ Usage:
 ----
 Available options:
 `backend`: Update a backend in Astra Trident.
-
-== `upgrade`
-
-You can run the `upgrade` commands to upgrade a resource in Astra Trident.
-----
-Usage:
-tridentctl upgrade [option]
-----
-Available option:
-`volume`: Upgrade one or more persistent volumes from NFS/iSCSI to CSI.
 
 == `version`
 

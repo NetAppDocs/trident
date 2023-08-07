@@ -13,21 +13,10 @@ summary: Astra Trident provides five unique ONTAP storage drivers for communicat
 [.lead]
 Astra Trident provides five unique ONTAP storage drivers for communicating with ONTAP clusters. 
 
-== Astra Control supported drivers
-
-Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. See link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details.  
-
-[WARNING]
-====
-* You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 
-* Use `ontap-san-economy` when anticipated volume usage is expected to be much higher than what ONTAP supports. 
-* Use `ontap-nas-economy` only where anticipated volume usage is expected to be much higher than what ONTAP supports, and the `ontap-san-economy` driver cannot be used. 
-* Do not use use `ontap-nas-economy` if you anticipate the need for data protection, disaster recovery, or mobility.
-====
-
 == Astra Trident storage drivers for ONTAP
 Astra Trident provides the following storage drivers to communicate with the ONTAP cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
+IMPORTANT: If you are using Astra Control for protection, recovery, and mobility, read <<Astra Control driver compatibility>>. 
 
 [cols="2, 1, 1, 2, 2", options="header"]
 |===
@@ -87,4 +76,15 @@ RWX is not available in Filesystem volume mode.
 a|`xfs`, `ext3`, `ext4`
 |===
 
-NOTE: ONTAP backends can be authenticated by using login credentials for a security role (username/password) or the private key and the certificate that is installed on the ONTAP cluster. You can update existing backends to move from one authentication mode to the other with `tridentctl update backend`.
+NOTE: ONTAP backends can be authenticated using login credentials for a security role (username/password) or the private key and the certificate that is installed on the ONTAP cluster. You can update existing backends to move from one authentication mode to the other with `tridentctl update backend`.
+
+== Astra Control driver compatibility
+Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. See link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details.  
+
+[WARNING]
+====
+* You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 
+* Use `ontap-san-economy` when anticipated volume usage is expected to be much higher than what ONTAP supports. 
+* Use `ontap-nas-economy` only where anticipated volume usage is expected to be much higher than what ONTAP supports, and the `ontap-san-economy` driver cannot be used. 
+* Do not use use `ontap-nas-economy` if you anticipate the need for data protection, disaster recovery, or mobility.
+====

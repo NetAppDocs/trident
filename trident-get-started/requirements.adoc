@@ -13,7 +13,7 @@ summary: Before installing Astra Trident you should review these general system 
 [.lead]
 Before installing Astra Trident you should review these general system requirements. Specific backends might have additional requirements. 
 
-== Critical information about Astra Trident 23.01
+== Critical information about Astra Trident
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -32,19 +32,19 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 Astra Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.12
-* Kubernetes 1.21 - 1.27
+* Kubernetes 1.22 - 1.27
 * Mirantis Kubernetes Engine 3.5
-* OpenShift 4.9 - 4.12
+* OpenShift 4.10 - 4.13
 
 The Trident operator is supported with these releases:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.12
-* Kubernetes 1.21 - 1.27
-* OpenShift 4.9 - 4.12
+* Kubernetes 1.22 - 1.27
+* OpenShift 4.10 - 4.13
 
 Astra Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Rancher, and VMWare Tanzu Portfolio.
 
-WARNING: Before upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Astra Trident installed, see link:../trident-managing-k8s/upgrade-operator.html#upgrade-a-helm-based-operator-installation[Upgrade a Helm-based operator installation].
+WARNING: Before upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Astra Trident installed, see link:../trident-managing-k8s/upgrade-operator.html#upgrade-a-helm-installation[Upgrade a Helm installation].
 
 == Supported backends (storage)
 
@@ -68,7 +68,7 @@ The table below summarizes the features available with this release of Astra Tri
 |Kubernetes version
 |Feature gates required?
 
-|CSI Trident
+|Astra Trident
 
 a|1.21 - 1.27
 a|No
@@ -143,85 +143,72 @@ For air-gapped installations, the following list is a reference of container ima
 |Kubernetes version
 |Container image
 
-|v1.21.0
-a|
-* docker.io/netapp/trident:23.04.0                      
-* docker.io/netapp/trident-autosupport:23.04                   
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0             
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0 
-* docker.io/netapp/trident-operator:23.04.0 (optional)   
-
 |v1.22.0
 a|
-* docker.io/netapp/trident:23.04.0                      
-* docker.io/netapp/trident-autosupport:23.04                  
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0            
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0 
-* docker.io/netapp/trident-operator:23.04.0 (optional)    
+* docker.io/netapp/trident:23.07.0                      
+* docker.io/netapp/trident-autosupport:23.07                  
+* registry.k8s.io/sig-storage/csi-provisioner:v3.5.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.3.0            
+* registry.k8s.io/sig-storage/csi-resizer:v1.8.0               
+* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0 
+* docker.io/netapp/trident-operator:23.07.0 (optional)    
 
 |v1.23.0
 a|
-* docker.io/netapp/trident:23.04.0                      
-* docker.io/netapp/trident-autosupport:23.04                  
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0              
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0 
-* docker.io/netapp/trident-operator:23.04.0 (optional)  
+* docker.io/netapp/trident:23.07.0                      
+* docker.io/netapp/trident-autosupport:23.07                  
+* registry.k8s.io/sig-storage/csi-provisioner:v3.5.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.3.0              
+* registry.k8s.io/sig-storage/csi-resizer:v1.8.0               
+* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0 
+* docker.io/netapp/trident-operator:23.07.0 (optional)  
 
 |v1.24.0
 a|
-* docker.io/netapp/trident:23.04.0                      
-* docker.io/netapp/trident-autosupport:23.04                   
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0           
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0 
-* docker.io/netapp/trident-operator:23.04.0 (optional)  
+* docker.io/netapp/trident:23.07.0                      
+* docker.io/netapp/trident-autosupport:23.07                   
+* registry.k8s.io/sig-storage/csi-provisioner:v3.5.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.3.0           
+* registry.k8s.io/sig-storage/csi-resizer:v1.8.0               
+* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0 
+* docker.io/netapp/trident-operator:23.07.0 (optional)  
 
 |v1.25.0
 a|
-* docker.io/netapp/trident:23.04.0                      
-* docker.io/netapp/trident-autosupport:23.04                  
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0              
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0 
-* docker.io/netapp/trident-operator:23.04.0 (optional)    
+* docker.io/netapp/trident:23.07.0                      
+* docker.io/netapp/trident-autosupport:23.07                  
+* registry.k8s.io/sig-storage/csi-provisioner:v3.5.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.3.0              
+* registry.k8s.io/sig-storage/csi-resizer:v1.8.0               
+* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0 
+* docker.io/netapp/trident-operator:23.07.0 (optional)    
 
 |v1.26.0
 a|
-* docker.io/netapp/trident:23.04.0                      
-* docker.io/netapp/trident-autosupport:23.04                   
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0             
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0 
-* docker.io/netapp/trident-operator:23.04.0 (optional)  
+* docker.io/netapp/trident:23.07.0                      
+* docker.io/netapp/trident-autosupport:23.07                   
+* registry.k8s.io/sig-storage/csi-provisioner:v3.5.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.3.0             
+* registry.k8s.io/sig-storage/csi-resizer:v1.8.0               
+* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0 
+* docker.io/netapp/trident-operator:23.07.0 (optional)  
 
 |v1.27.0
 a|
-* docker.io/netapp/trident:23.04.0
-* docker.io/netapp/trident-autosupport:23.04 
-* registry.k8s.io/sig-storage/csi-provisioner:v3.4.1 
-* registry.k8s.io/sig-storage/csi-attacher:v4.2.0 
-* registry.k8s.io/sig-storage/csi-resizer:v1.7.0
-* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.1
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.7.0
-* docker.io/netapp/trident-operator:23.04.0 (optional)
+* docker.io/netapp/trident:23.07.0
+* docker.io/netapp/trident-autosupport:23.07 
+* registry.k8s.io/sig-storage/csi-provisioner:v3.5.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.3.0 
+* registry.k8s.io/sig-storage/csi-resizer:v1.8.0
+* registry.k8s.io/sig-storage/csi-snapshotter:v6.2.2
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.8.0
+* docker.io/netapp/trident-operator:23.07.0 (optional)
 
 
 |===
-
-NOTE: On Kubernetes version 1.21 and above, use the validated `registry.k8s.gcr.io/sig-storage/csi-snapshotter:v6.x` image only if the `v1` version is serving the `volumesnapshots.snapshot.storage.k8s.gcr.io` CRD. If the `v1beta1` version is serving the CRD with/without the `v1` version, use the validated `registry.k8s.gcr.io/sig-storage/csi-snapshotter:v3.x` image.
 

@@ -98,6 +98,8 @@ Status:
 
 You can use `dataSource` to create a PVC using a VolumeSnapshot named `<pvc-name>` as the source of the data. After the PVC is created, it can be attached to a pod and used just like any other PVC.
 
+WARNING: The PVC must be created in the same namespace as its `dataSource`. 
+
 The following example creates the PVC using `pvc1-snap` as the data source. 
 
 ----
@@ -118,8 +120,6 @@ spec:
     kind: VolumeSnapshot
     apiGroup: snapshot.storage.k8s.io
 ----
-
-WARNING: The PVC must be created in the same namespace as its `dataSource`. 
 
 == Import a volume snapshot
 Astra Trident supports the link:https://kubernetes.io/docs/concepts/storage/volume-snapshots/#static[Kubernetes pre-provisioned snapshot process^] to enable the cluster administrator to create a `VolumeSnapshotContent` and make snapshots created outside of Astra Trident available.

@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/vol-import.html
-keywords: volumes, import volumes, drivers, tridentctl import, pv, persistent volumes, pvc, disaster recovery, dr, clone, reuse, managed volume, unmanaged volume, managed, unmanaged
+keywords: volumes, import volumes, drivers, tridentctl import, pv, persistent volumes, pvc, disaster recovery, dr, clone, reuse, managed volume, unmanaged volume, managed
 summary: You can import existing storage volumes as a Kubernetes PV using `tridentctl import`.
 ---
 
@@ -123,7 +123,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 // end tabbed area
 
 === ONTAP SAN
-Astra Trident supports volume import using the `ontap-san` driver. 
+Astra Trident supports volume import using the `ontap-san` driver. Volume import is not supported using the `ontap-san-economy` driver. 
 
 Astra Trident can import ONTAP SAN FlexVols that contain a single LUN. This is consistent with the `ontap-san` driver, which creates a FlexVol for each PVC and a LUN within the FlexVol. Astra Trident imports the FlexVol and associates it with the PVC definition. 
 

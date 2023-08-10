@@ -98,7 +98,7 @@ Status:
 
 You can use `dataSource` to create a PVC using a VolumeSnapshot named `<pvc-name>` as the source of the data. After the PVC is created, it can be attached to a pod and used just like any other PVC.
 
-WARNING: The PVC must be created in the same namespace as its `dataSource`. 
+WARNING: The PVC will be created in the same backend as the source volume for `ontap-san`, `ontap-san-economy`, `ontap-nas`, and `ontap-nas-flexgroup` drivers. Refer to link:https://kb.netapp.com/Cloud/Astra/Trident/Creating_a_PVC_from_a_Trident_PVC_Snapshot_cannot_be_created_in_an_alternate_backend[KB: Creating a PVC from a Trident PVC Snapshot cannot be created in an alternate backend^].
 
 The following example creates the PVC using `pvc1-snap` as the data source. 
 

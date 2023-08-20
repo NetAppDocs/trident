@@ -37,7 +37,7 @@ a|This will set the snapshot policy to the desired value. The default is `none`,
 a|This will set the snapshot reserve to the desired percentage. The default is no value, meaning ONTAP will select the snapshotReserve (usually 5%) if you have selected a snapshotPolicy, or 0% if the snapshotPolicy is none. You can set the default snapshotReserve value in the config file for all ONTAP backends, and you can use it as a volume creation option for all ONTAP backends except ontap-nas-economy.
 
 |`splitOnClone`
-a|When cloning a volume, this will cause ONTAP to immediately split the clone from its parent. The default is `false`. Some use cases for cloning volumes are best served by splitting the clone from its parent immediately upon creation, because there is unlikely to be any opportunity for storage efficiencies. For example, cloning an empty database can offer large time savings but little storage savings, so it’s best to split the clone immediately.
+a|When cloning a volume, this will cause ONTAP to immediately split the clone from its parent. The default is `false`. Some use cases for cloning volumes are best served by splitting the clone from its parent immediately upon creation, because there is unlikely to be any opportunity for storage efficiencies. For example, cloning an empty database can offer large time savings but little storage savings, so it's best to split the clone immediately.
 
 |`encryption`
 a|Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
@@ -62,7 +62,7 @@ The following additional options are for NFS *only*:
 a|This controls the permission set for the volume itself. By default the permissions will be set to ``---rwxr-xr-x`, or in numerical notation 0755, and `root` will be the owner. Either the text or numerical format will work.
 
 |`snapshotDir`
-a|Setting this to `true` will make the `.snapshot` directory visible to clients accessing the volume. The default value is `false`, meaning that visibility of the `.snapshot` directory is disabled by default. Some images, for example the official MySQL image, don’t function as expected when the `.snapshot` directory is visible.
+a|Setting this to `true` will make the `.snapshot` directory visible to clients accessing the volume. The default value is `false`, meaning that visibility of the `.snapshot` directory is disabled by default. Some images, for example the official MySQL image, don't function as expected when the `.snapshot` directory is visible.
 
 |`exportPolicy`
 a|Sets the export policy to be used for the volume. The default is `default`.
@@ -82,7 +82,7 @@ The following additional options are for iSCSI *only*:
 |Sets the file system used to format iSCSI volumes. The default is `ext4`. Valid values are `ext3`, `ext4`, and `xfs`.
 
 |`spaceAllocation`
-|Setting this to `false` will turn off the LUN’s space-allocation feature. The default value is `true`, meaning ONTAP notifies the host when the volume has run out of space and the LUN in the volume cannot accept writes. This option also enables ONTAP to reclaim space automatically when your host deletes data.
+|Setting this to `false` will turn off the LUN's space-allocation feature. The default value is `true`, meaning ONTAP notifies the host when the volume has run out of space and the LUN in the volume cannot accept writes. This option also enables ONTAP to reclaim space automatically when your host deletes data.
 |===
 
 === Examples

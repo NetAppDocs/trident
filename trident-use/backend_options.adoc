@@ -25,7 +25,7 @@ This section covers the steps required to manage backends that were created usin
 
 This will apply to the following scenarios:
 
-* Pre-existing backends, that don’t have a `TridentBackendConfig` because they were created with `tridentctl`.
+* Pre-existing backends, that don't have a `TridentBackendConfig` because they were created with `tridentctl`.
 * New backends that were created with `tridentctl`, while other `TridentBackendConfig` objects exist.
 
 In both scenarios, backends will continue to be present, with Astra Trident scheduling volumes and operating on them. Administrators have one of two choices here:
@@ -201,7 +201,7 @@ tridentctl get backend ontap-san-backend -n trident
 +-------------------+----------------+--------------------------------------+--------+---------+
 ----
 
-From the output, it is seen that `TridentBackendConfig` was created successfully and is bound to a backend [observe the backend’s UUID].
+From the output, it is seen that `TridentBackendConfig` was created successfully and is bound to a backend [observe the backend's UUID].
 
 === Step 1: Confirm `deletionPolicy` is set to `retain`
 

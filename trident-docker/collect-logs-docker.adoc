@@ -26,7 +26,7 @@ ID                  NAME                DESCRIPTION                          ENA
 journalctl -u docker | grep 4fb97d2b956b
 ----
 +
-The standard logging level should allow you to diagnose most issues. If you find that’s not enough, you can enable debug logging.
+The standard logging level should allow you to diagnose most issues. If you find that's not enough, you can enable debug logging.
 
 . To enable debug logging, install the plugin with debug logging enabled:
 +
@@ -41,7 +41,7 @@ docker plugin disable <plugin>
 docker plugin set <plugin> debug=true
 docker plugin enable <plugin>
 ----
-. If you are running the binary itself on the host, logs are available in the host’s `/var/log/netappdvp` directory. To enable debug logging, specify `-debug` when you run the plugin.
+. If you are running the binary itself on the host, logs are available in the host's `/var/log/netappdvp` directory. To enable debug logging, specify `-debug` when you run the plugin.
 
 == General troubleshooting tips
 

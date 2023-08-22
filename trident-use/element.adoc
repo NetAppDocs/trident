@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/element.html
-keywords: trident backend, solidfire, netapp hci
+keywords: trident backend, solidfire, netapp hci, drivers, access modes, rwo, rwx, rwp, rwop, file system
 summary: Learn about how to create and use an Element backend with your Astra Trident installation.
 ---
 
@@ -11,19 +11,12 @@ summary: Learn about how to create and use an Element backend with your Astra Tr
 :imagesdir: ../media/
 
 [.lead]
-Learn about how to create and use an Element backend with your Astra Trident installation.
+Learn how to create and use an Element backend with your Astra Trident installation.
 
-== Before you begin
+== Element driver details
+Astra Trident provides the `solidfire-san` storage driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
-You'll need the following before creating an Element backend. 
-
-* A supported storage system that runs Element software.
-* Credentials to a NetApp HCI/SolidFire cluster admin or tenant user that can manage volumes.
-* All of your Kubernetes worker nodes should have the appropriate iSCSI tools installed. See link:../trident-use/worker-node-prep.html[worker node preparation information].
-
-== Volume modes 
-
-The `solidfire-san` storage driver supports both volume modes: file and block. For the `Filesystem` volumeMode, Astra Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
+The `solidfire-san` storage driver supports _file_ and _block_ volume modes. For the `Filesystem` volumeMode, Astra Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
 
 [cols=5,options="header"]
 |===
@@ -36,28 +29,25 @@ The `solidfire-san` storage driver supports both volume modes: file and block. F
 |`solidfire-san`
 a|iSCSI
 a|Block
-a|RWO,ROX,RWX
-a|No Filesystem. Raw block device.
-
-|`solidfire-san`
-a|iSCSI
-a|Block
-a|RWO,ROX,RWX
+a|RWO, ROX, RWX, RWOP
 a|No Filesystem. Raw block device.
 
 |`solidfire-san`
 a|iSCSI
 a|Filesystem
-a|RWO,ROX
-a|`xfs`, `ext3`, `ext4`
-
-|`solidfire-san`
-a|iSCSI
-a|Filesystem
-a|RWO,ROX
+a|RWO, RWOP
 a|`xfs`, `ext3`, `ext4`
 
 |===
+
+== Before you begin
+
+You'll need the following before creating an Element backend. 
+
+* A supported storage system that runs Element software.
+* Credentials to a NetApp HCI/SolidFire cluster admin or tenant user that can manage volumes.
+* All of your Kubernetes worker nodes should have the appropriate iSCSI tools installed. See link:../trident-use/worker-node-prep.html[worker node preparation information].
+
 == Backend configuration options
 
 See the following table for the backend configuration options:

@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/ontap-nas.html
-keywords: trident backend, ontap nas, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, fsx
+keywords: trident backend, ontap nas, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, fsx, drivers, access modes, rwo, rwx, rwp, rwop, file system
 summary: Learn about configuring an ONTAP backend with ONTAP NAS drivers.
 ---
 
@@ -13,7 +13,43 @@ summary: Learn about configuring an ONTAP backend with ONTAP NAS drivers.
 [.lead]
 Learn about configuring an ONTAP backend with ONTAP and Cloud Volumes ONTAP NAS drivers.
 
-== Important information about ONTAP NAS drivers
+== ONTAP NAS driver details
+Astra Trident provides the following NAS storage drivers to communicate with the ONTAP cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+
+IMPORTANT: If you are using Astra Control for protection, recovery, and mobility, read <<Astra Control driver compatibility>>. 
+
+[cols="2, 1, 1, 2, 2", options="header"]
+|===
+|Driver
+|Protocol
+|volumeMode
+|Access modes supported
+|File systems supported
+
+|`ontap-nas`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|"", `nfs`, `smb`
+
+|`ontap-nas-economy`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|"", `nfs`, `smb`
+
+|`ontap-nas-flexgroup`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|"", `nfs`, `smb`
+
+|===
+
+=== Astra Control driver compatibility
 Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. See link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details. 
 
 * You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 

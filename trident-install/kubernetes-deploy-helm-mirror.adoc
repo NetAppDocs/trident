@@ -92,7 +92,7 @@ a|Specify overrides on the command line.
 For example, to change the default value of `debug`, run the following `--set` command where `23.07.0` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 23.07.0  --create-namespace --namespace --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 23.07.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options

@@ -13,6 +13,25 @@ summary: Learn how to configure Cloud Volumes Service for Google Cloud as the ba
 [.lead]
 Learn how to configure NetApp Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
 
+== Google Cloud driver details
+Astra Trident provides the `gcp-cvs` driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+
+[cols="1, 1, 1, 2, 2", options="header"]
+|===
+|Driver
+|Protocol
+|volumeMode
+|Access modes supported
+|File systems supported
+
+|`gcp-cvs`
+a|NFS
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|`smb`
+
+|===
+
 == Learn about Astra Trident support for Cloud Volumes Service for Google Cloud
 Astra Trident can create Cloud Volumes Service volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
@@ -40,7 +59,7 @@ To configure and use the https://cloud.netapp.com/cloud-volumes-service-for-gcp?
 
 Each backend provisions volumes in a single Google Cloud region. To create volumes in other regions, you can define additional backends. 
 
-[cols=3,options="header"]
+[cols="1, 2, 1",options="header"]
 |===
 |Parameter |Description |Default
 |`version` | |Always 1
@@ -87,7 +106,7 @@ CVS values are `standardsw` or `zoneredundantstandardsw`.
 
 CVS default is "standardsw". 
 
-|`network` |Google Cloud network used for Cloud Volumes Service volumes. |“default”
+|`network` |Google Cloud network used for Cloud Volumes Service volumes. |"default"
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api":false, "method":true}`. 
 

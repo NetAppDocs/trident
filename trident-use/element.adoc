@@ -14,9 +14,9 @@ summary: Learn about how to create and use an Element backend with your Astra Tr
 Learn how to create and use an Element backend with your Astra Trident installation.
 
 == Element driver details
-Astra Trident provides the `solidfire-san` storage driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+Astra Trident provides the `solidfire-san` storage driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), and _ReadWriteMany_ (RWX).
 
-The `solidfire-san` storage driver supports both volume modes: file and block. For the `Filesystem` volumeMode, Astra Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
+The `solidfire-san` storage driver supports _file_ and _block_ volume modes. For the `Filesystem` volumeMode, Astra Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
 
 [cols=5,options="header"]
 |===
@@ -29,25 +29,13 @@ The `solidfire-san` storage driver supports both volume modes: file and block. F
 |`solidfire-san`
 a|iSCSI
 a|Block
-a|RWO,ROX,RWX
-a|No Filesystem. Raw block device.
-
-|`solidfire-san`
-a|iSCSI
-a|Block
-a|RWO,ROX,RWX
+a|RWO, ROX, RWX
 a|No Filesystem. Raw block device.
 
 |`solidfire-san`
 a|iSCSI
 a|Filesystem
-a|RWO,ROX
-a|`xfs`, `ext3`, `ext4`
-
-|`solidfire-san`
-a|iSCSI
-a|Filesystem
-a|RWO,ROX
+a|RWO, ROX
 a|`xfs`, `ext3`, `ext4`
 
 |===

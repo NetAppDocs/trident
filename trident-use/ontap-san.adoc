@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/ontap-san.html
-keywords: trident backend, ontap san, ontap-san, ontap-san-economy, fsx
+keywords: trident backend, ontap san, ontap-san, ontap-san-economy, fsx, drivers, access modes, rwo, rwx, rwp, rwop, file system
 summary: Learn about configuring an ONTAP backend with ONTAP SAN drivers.
 ---
 
@@ -13,7 +13,50 @@ summary: Learn about configuring an ONTAP backend with ONTAP SAN drivers.
 [.lead]
 Learn about configuring an ONTAP backend with ONTAP and Cloud Volumes ONTAP SAN drivers.
 
-== Important information about ONTAP SAN drivers
+== ONTAP SAN driver details
+Astra Trident provides the following SAN storage drivers to communicate with the ONTAP cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+
+IMPORTANT: If you are using Astra Control for protection, recovery, and mobility, read <<Astra Control driver compatibility>>. 
+
+[cols="2, 1, 1, 2, 2", options="header"]
+|===
+|Driver
+|Protocol
+|volumeMode
+|Access modes supported
+|File systems supported
+
+|`ontap-san`
+a|iSCSI
+a|Block
+a|RWO, ROX, RWX, RWOP
+a|No filesystem; raw block device
+
+|`ontap-san`
+a|iSCSI
+a|Filesystem
+a|RWO, RWOP
+
+ROX and RWX are not available in Filesystem volume mode.
+a|`xfs`, `ext3`, `ext4`
+
+|`ontap-san-economy`
+a|iSCSI
+a|Block
+a|RWO, ROX, RWX, RWOP
+a|No filesystem; raw block device
+
+|`ontap-san-economy`
+a|iSCSI
+a|Filesystem
+a|RWO, RWOP
+
+ROX and RWX are not available in Filesystem volume mode.
+a|`xfs`, `ext3`, `ext4`
+|===
+
+
+=== Astra Control driver compatibility
 Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. See link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details. 
 
 * You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 

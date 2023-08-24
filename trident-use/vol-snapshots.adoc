@@ -124,17 +124,20 @@ spec:
 == Import a volume snapshot
 Astra Trident supports the link:https://kubernetes.io/docs/concepts/storage/volume-snapshots/#static[Kubernetes pre-provisioned snapshot process^] to enable the cluster administrator to create a `VolumeSnapshotContent` and make snapshots created outside of Astra Trident available.
 
-To import the volume snapshot, Astra Trident uses the PV name and VolumeSnapshotContent annotation to locate the internal snapshot and name the TridentSnapshot CR it creates. 
+To import the volume snapshot, Astra Trident uses the PV name and `VolumeSnapshotContent` annotation to locate the backend snapshot and name the Trident `VolumeSnapshot` it creates. 
 
 NOTE: The snapshot must have a parent volume.
 
 .Steps
 . *Cluster admin:* Create the `VolumeSnapshotContent` that references the backend snapshot. 
-* The `VolumeSnapshotContent` annotation must be `trident.netapp.io/internalSnapshotName: <backend-snapshot-name>`.
-* The `snapshotHandle` must be `<pv-name>/<VolumeSnapshotContent-name>`. This is the only information provided to Astra Trident by the external snapshotter in the `ListSnapshots` call.
+* The `annotations` must be `trident.netapp.io/internalSnapshotName: <backend-snapshot-name>`.
+* The `snapshotHandle` must be `<pv-name>/<volumeSnapshotContentName>`. This is the only information provided to Astra Trident by the external snapshotter in the `ListSnapshots` call.
++
+NOTE: The `<volumeSnapshotContentName>` cannot always match the backend snapshot name due to CR naming constraints. 
+* `VolumeSnapshotRef` is the name of the Trident `VolumeSnapshot` that will be created.
 +
 .Example
-The following example creates the `VolumeSnapshotContent` for backend snapshot named `snap-01` and `volumeSnapshotRef` named `test-snapshot`.
+The following example creates `VolumeSnapshotContent` that references backend snapshot `snap-01`.
 +
 ----
 apiVersion: snapshot.storage.k8s.io/v1
@@ -152,13 +155,11 @@ spec:
     name: test-snapshot
     namespace: default
 ----
-+
-NOTE: The `volumeSnapshotRef` name cannot always match the backend snapshot name due to CR naming constraints. 
 
-. *Cluster admin:* Bind the `VolumeSnapshot` to the `VolumeSnapshotContent` where `volumeSnapshotContentName` is the name you specified in `volumeSnapshotRef`.
+. *Cluster admin:* Bind the `VolumeSnapshot` to the `VolumeSnapshotContent`.
 +
 .Example
-The following example binds volume snapshot `test-snapshot` to the `VolumeSnapshotContent` named `my-trident-snapshot-content`.
+The following example binds `VolumeSnapshot` named `test-snapshot` to `VolumeSnapshotContent` named `my-trident-snapshot-content`.
 +
 ----
 apiVersion: snapshot.storage.k8s.io/v1
@@ -177,7 +178,7 @@ spec:
 . *Any user:* Create a `PersistentVolumeClaim` to reference the new `VolumeSnapshot`, where the `spec.dataSource` (or `spec.dataSourceRef`) name is the `VolumeSnapshot` name.
 +
 .Example
-The following example creates a PVC referencing the `test-snapshot` volume snapshot. 
+The following example creates a PVC referencing the `VolumeSnapshot` named `test-snapshot`. 
 +
 ----
 apiVersion: v1

@@ -236,7 +236,7 @@ The `VolumeSnapshotContent` object contains details that uniquely identify the s
 
 When a snapshot request comes in, Trident creates the snapshot on the backend. After the snapshot is created, Trident configures a `VolumeSnapshotContent` object and thus exposes the snapshot to the Kubernetes API.
 
-NOTE: Typically, you do not need to manage the `VolumeSnapshotContent` object. An exception to this is when you want to link:../trident-use/vol-snapshots.html#import-a-volume-snapshot[import a volume snapshot] crated outside of Astra Trident. 
+NOTE: Typically, you do not need to manage the `VolumeSnapshotContent` object. An exception to this is when you want to link:../trident-use/vol-snapshots.html#import-a-volume-snapshot[import a volume snapshot] created outside of Astra Trident. 
 
 == Kubernetes `CustomResourceDefinition` objects
 

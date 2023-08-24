@@ -232,11 +232,11 @@ NOTE: The lifecyle of a VolumeSnapshot is independent of the source PVC: a snaps
 
 A Kubernetes `VolumeSnapshotContent` object represents a snapshot taken from an already provisioned volume. It is analogous to a `PersistentVolume` and signifies a provisioned snapshot on the storage cluster. Similar to `PersistentVolumeClaim` and `PersistentVolume` objects, when a snapshot is created, the `VolumeSnapshotContent` object maintains a one-to-one mapping to the `VolumeSnapshot` object, which had requested the snapshot creation.
 
-NOTE: Trident creates `VolumeSnapshotContent` objects and registers them with the Kubernetes cluster automatically based on the volumes that it provisions. You are not expected to manage them yourself.
-
 The `VolumeSnapshotContent` object contains details that uniquely identify the snapshot, such as the `snapshotHandle`. This `snapshotHandle` is a unique combination of the name of the PV and the name of the `VolumeSnapshotContent` object.
 
 When a snapshot request comes in, Trident creates the snapshot on the backend. After the snapshot is created, Trident configures a `VolumeSnapshotContent` object and thus exposes the snapshot to the Kubernetes API.
+
+NOTE: Typically, you do not need to manage the `VolumeSnapshotContent` object. An exception to this is when you want to link:../trident-use/vol-snapshots.html#import-a-volume-snapshot[import a volume snapshot] crated outside of Astra Trident. 
 
 == Kubernetes `CustomResourceDefinition` objects
 

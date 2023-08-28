@@ -44,9 +44,15 @@ Can be changed after initial setting. Refer to <<Update `dataLIF` after initial 
 
 Can be set to use IPv6 addresses if Astra Trident was installed using the `--use-ipv6` flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
 
+*Omit for Metrocluster.* See the <<mcc-best>>.
+
 |Specified address or derived from SVM, if not specified (not recommended)
 
-|`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
+|`svm` |Storage virtual machine to use 
+
+*Omit for Metrocluster.* See the <<mcc-best>>.
+
+|Derived if an SVM `managementLIF` is specified
 
 |`autoExportPolicy`	|Enable automatic export policy creation and updating [Boolean]. 
 
@@ -260,7 +266,7 @@ version: 1
 storageDriverName: ontap-nas
 managementLIF: 192.168.1.66
 username: vsadmin
-password: xxx
+password: password
 ----
 ====
 

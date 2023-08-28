@@ -40,9 +40,15 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 *Do not specify for iSCSI.* Astra Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 
+*Omit for Metrocluster.* See the <<mcc-best>>.
+
 |Derived by the SVM
 
-|`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
+|`svm` |Storage virtual machine to use 
+
+*Omit for Metrocluster.* See the <<mcc-best>>.
+
+|Derived if an SVM `managementLIF` is specified
 
 |`useCHAP` |Use CHAP to authenticate iSCSI for ONTAP SAN drivers [Boolean]. 
 
@@ -226,7 +232,7 @@ version: 1
 storageDriverName: ontap-san
 managementLIF: 192.168.1.66
 username: vsadmin
-password: xxx
+password: password
 ----
 ====
 

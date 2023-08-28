@@ -13,7 +13,10 @@ summary: You should use the same method to uninstall Astra Trident that you used
 [.lead]
 You should use the same method to uninstall Astra Trident that you used to install Astra Trident. 
 
-NOTE: If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should uninstall Astra Trident and reinstall the earlier version using the specific instructions for that link:../earlier-versions.html[version]. This is the only recommended way to _downgrade_ to an earlier version.  
+.About this task 
+* If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should uninstall Astra Trident and reinstall the earlier version using the specific instructions for that link:../earlier-versions.html[version]. This is the only recommended way to _downgrade_ to an earlier version.  
+* For easy upgrade and reinstallation, uninstalling Astra Trident does not remove the CRDs or related objects created by Astra Trident. If you need to completely remove Astra Trident to perform a fresh install, see link:../troubleshooting.html#completely-remove-astra-trident-and-crds[Completely remove Astra Trident and CRDs].
+
 
 .Before you begin
 If you are decommissioning Kubernetes clusters, you must delete all applications that use volumes created by Astra Trident prior to uninstalling. This ensures that PVCs are unpublished on Kubernetes nodes before they are deleted.
@@ -43,15 +46,8 @@ kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"uninst
 ** When the `uninstall` flag is set to `true`, the Trident operator uninstalls Trident, but does not remove the TridentOrchestrator itself. You should clean up the TridentOrchestrator and create a new one if you want to
 install Trident again.
 
-* **Delete `TridentOrchestrator`:** By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. 
-** The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
-** To uninstall Astra Trident and completely remove Astra Trident (including the CRDs it creates), edit `TridentOrchestrator` to pass the `wipeout` option. Subsequent installations will be treated as new installations. 
-+
-----
-kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"wipeout":["crds"],"uninstall":true}}'
-----
-+
-WARNING: This cannot be undone. Do not wipe out the CRDs unless you want a fresh Astra Trident installation. For example, if you are moving to version other than the immediately preceding version.
+* **Delete `TridentOrchestrator`:** By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
+
 
 === Uninstall Helm installation
 If you installed Astra Trident by using Helm, you can uninstall it by using `helm uninstall`.
@@ -68,12 +64,8 @@ release "trident" uninstalled
 ----
 
 == Uninstall a `tridentctl` installation
-Use the `uninstall` command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects. This makes is simple to run the installer again to update to a more recent version.
+Use the `uninstall` command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects. 
 
 ----
 ./tridentctl uninstall -n <namespace>
 ----
-
-To perform a complete removal of Astra Trident, you should remove the finalizers for the CRDs created by Astra Trident and delete the CRDs.
-
-

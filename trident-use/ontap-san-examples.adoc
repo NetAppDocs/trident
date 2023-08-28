@@ -30,7 +30,7 @@ See the following table for the backend configuration options:
 
 A fully-qualified domain name (FQDN) can be specified.
 
-Can be set to use IPv6 addresses if Astra Trident was installed using the `--use-ipv6` flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
+Can be set to use IPv6 addresses if Astra Trident was installed using the `--use-ipv6` flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`.  
 
 For seamless MetroCluster switchover, see the <<mcc-best>>.
 
@@ -222,9 +222,9 @@ password: <password>
 .MetroCluster example
 [%collapsible%closed]
 ====
-You can configure the backend to avoid having to manually update the backend definition after switch over and switch back during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
+You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
 
-For seamless switch over and switch back, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
+For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
 
 ----
 ---

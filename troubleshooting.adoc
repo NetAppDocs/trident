@@ -50,11 +50,7 @@ Installed with tridentctl::
 * If a Trident backend reports that it is in the `failed` state despite having worked before, it is likely caused by changing the SVM/admin credentials associated with the backend. Updating the backend information using `tridentctl update backend` or bouncing the Trident pod will fix this issue.
 * If you encounter permission issues when installing Trident with Docker as the container runtime, attempt the installation of Trident with the `--in cluster=false` flag. This will not use an installer pod and avoid permission troubles seen due to the `trident-installer` user.
 * Use the `uninstall parameter <Uninstalling Trident>` for cleaning up after a failed run. By default, the script does not remove the CRDs that have been created by Trident, making it safe to uninstall and install again even in a running deployment.
-* If you are looking to downgrade to an earlier version of Trident, first run the `tridentctl uninstall` command to remove Trident. Download the desired https://github.com/NetApp/trident/releases[Trident version] and install using the `tridentctl install` command. Only consider a downgrade if there are no new PVs created and if no changes have been made to already existing PVs/backends/ storage classes. Since Trident now uses CRDs for maintaining state, all storage entities created (backends, storage classes, PVs and Volume Snapshots) have `associated CRD objects <Kubernetes CustomResourceDefinition Objects>` instead of data written into the PV that was used by the earlier installed version of Trident. *Newly created PVs will not be usable when moving back to an earlier version.* *Changes made to objects, such as backends, PVs, storage classes, and volume snapshots (created/updated/deleted) will not be visible to Trident when downgraded*. The PV that was used by the earlier version of Trident installed will still be visible to Trident. Going back to an earlier version will not disrupt access for PVs that were already created using the older release, unless they have been upgraded.
-* To completely remove Trident, run the `tridentctl obliviate crd` command. This will remove all CRD objects and undefine the CRDs. Trident will no longer manage any PVs it had already provisioned.
-+
-NOTE: Trident will need to be reconfigured from scratch after this.
-
+* If you want to downgrade to an earlier version of Trident, first run the `tridentctl uninstall` command to remove Trident. Download the desired https://github.com/NetApp/trident/releases[Trident version] and install using the `tridentctl install` command. 
 * After a successful install, if a PVC is stuck in the `Pending` phase, running `kubectl describe pvc` can provide additional information about why Trident failed to provision a PV for this PVC.
 
 == Troubleshooting an unsuccessful Trident deployment using the operator
@@ -146,3 +142,36 @@ INFO Deleted service account.
 INFO Removed Trident user from security context constraint.
 INFO Trident uninstallation succeeded.
 ----
+
+== Completely remove Astra Trident and CRDs
+You can completely remove Astra Trident and all created CRDs and associated custom resources.   
+
+WARNING: This cannot be undone. Do not do this unless you want a completely fresh installation of Astra Trident. To uninstall Astra Trident without removing CRDs, see link:../trident-managing-k8s/uninstall-trident.html[Uninstall Astra Trident].
+
+[role="tabbed-block"]
+====
+
+.Trident operator
+--
+To uninstall Astra Trident and completely remove CRDs using the Trident operator:
+----
+kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"wipeout":["crds"],"uninstall":true}}'
+----
+--
+
+.Helm
+--
+To uninstall Astra Trident and completely remove CRDs using Helm:
+----
+kubectl patch torc trident --type=merge -p '{"spec":{"wipeout":["crds"],"uninstall":true}}'
+----
+--
+
+.`tridentctl`
+--
+To completely remove CRDs after uninstalling Astra Trident using `tridentctl`
+----
+tridentctl obliviate crd
+----
+--
+====

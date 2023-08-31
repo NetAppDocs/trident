@@ -160,16 +160,16 @@ location: eastus
 This is a basic Azure NetApp Files sub volumes backend. 
 
 ----
-{
-    "version": 1,
-    "storageDriverName": "azure-netapp-files-subvolume",
-    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-    "filePoolVolumes": ["/anf-resourcegroup/anf-account/ultra-pool/parent-volume-1"],
-    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-    "clientSecret": "SECRET",
-    "location": "eastus"
-}
+---
+version: 1
+storageDriverName: azure-netapp-files-subvolume
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+filePoolVolumes:
+- "/anf-resourcegroup/anf-account/ultra-pool/parent-volume-1"
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
 ----
 ====
 // End snippet

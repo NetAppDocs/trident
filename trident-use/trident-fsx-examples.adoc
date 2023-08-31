@@ -27,7 +27,7 @@ See the following table for the backend configuration options:
 
 |`storageDriverName` 
 | Name of the storage driver 
-|“ontap-nas”, “ontap-nas-economy”, “ontap-nas-flexgroup”, “ontap-san”, “ontap-san-economy”
+|`ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`
 
 |`backendName`  
 |Custom name or the storage backend 
@@ -35,8 +35,6 @@ See the following table for the backend configuration options:
 
 |`managementLIF` 
 |IP address of a cluster or SVM management LIF 
-
-For seamless MetroCluster switchover, you must specify an SVM management LIF.
 
 A fully-qualified domain name (FQDN) can be specified.
 
@@ -58,10 +56,10 @@ Can be set to use IPv6 addresses if Astra Trident was installed using the `--use
 |Enable automatic export policy creation and updating [Boolean]. 
 
 Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically. 
-|"false"
+|`false`
 
 |`autoExportCIDRs` 
-|List of CIDRs to filter Kubernetes’ node IPs against when `autoExportPolicy` is enabled. 
+|List of CIDRs to filter Kubernetes' node IPs against when `autoExportPolicy` is enabled. 
 
 Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically.	
 |"[“0.0.0.0/0”, “::/0”]"
@@ -94,15 +92,11 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 |Storage virtual machine to use 
 |Derived if an SVM managementLIF is specified.
 
-|`igroupName` 
-|Name of the igroup for SAN volumes to use. Refer to <<Details about `igroupName`>>. 
-|“trident-<backend-UUID>”
-
 |`storagePrefix` 
 |Prefix used when provisioning new volumes in the SVM. 
 
 Cannot be modified after creation. To update this parameter, you will need to create a new backend.
-|“trident”
+|`trident`
 
 |`limitAggregateUsage` |*Do not specify for Amazon FSx for NetApp ONTAP.* 
 
@@ -121,7 +115,7 @@ Also restricts the maximum size of the volumes it manages for qtrees and LUNs, a
 |Maximum LUNs per Flexvol, must be in range [50, 200]. 
 
 SAN only. 
-|"100"
+|`100`
 
 |`debugTraceFlags` 
 |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} 
@@ -142,18 +136,19 @@ If no mount options are specified in the storage class or the configuration file
 Options are `nfs`, `smb`, or null. 
 
 *Must set to `smb` for SMB volumes.* Setting to null defaults to NFS volumes. 
-| "nfs"
+|`nfs`
 
 |`qtreesPerFlexvol`	
 |Maximum Qtrees per FlexVol, must be in range [50, 300]	
-|"200"
+|`200`
 
 |`smbShare` 
-|Name of the SMB share created using Shared Folder Microsoft Management Console. 
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
+ 
+This parameter is required for Amazon FSx for ONTAP backends.
 
-*Required for SMB volumes.* 
 
-|"smb-share"
+|`smb-share`
 
 |`useREST` 
 |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
@@ -161,19 +156,9 @@ Options are `nfs`, `smb`, or null.
 `useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. 
 
 This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
-|"false"
+|`false`
 
 |===
-
-=== Details about `igroupName`
-`igroupName` can be set to an igroup that is already created on the ONTAP cluster. If unspecified, Astra Trident automatically creates an igroup named `trident-<backend-UUID>`. 
-
-If providing a pre-defined igroupName, we recommend using one igroup per Kubernetes cluster, if the SVM is to be shared between environments. This is necessary for Astra Trident to automatically maintain IQN additions and deletions.
-
-* `igroupName` can be updated to point to a new igroup that is created and managed on the SVM outside of Astra Trident.
-* `igroupName` can be omitted. In this case, Astra Trident will create and manage an igroup named `trident-<backend-UUID>`  automatically.
-
-In both cases, volume attachments will continue to be accessible. Future volume attachments will use the updated igroup. This update does not disrupt access to volumes present on the backend.
 
 === Update `dataLIF` after initial configuration
 You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
@@ -192,11 +177,11 @@ You can control default provisioning using these options in the `defaults` secti
 [cols=3,options="header"]
 |===
 |Parameter |Description |Default
-|`spaceAllocation` |Space-allocation for LUNs |“true”
+|`spaceAllocation` |Space-allocation for LUNs |`true`
 
-|`spaceReserve` |Space reservation mode; “none” (thin) or “volume” (thick) |“none”
+|`spaceReserve` |Space reservation mode; “none” (thin) or “volume” (thick) |`none`
 
-|`snapshotPolicy` |Snapshot policy to use |“none”
+|`snapshotPolicy` |Snapshot policy to use |`none`
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool or backend. 
 
@@ -211,15 +196,15 @@ We recommend using a non-shared QoS policy group and ensuring the policy group i
 Not supported by ontap-nas-economy. 
 |“”
 
-|`snapshotReserve` |Percentage of volume reserved for snapshots	“0” |If `snapshotPolicy` is “none”, else “”
+|`snapshotReserve` |Percentage of volume reserved for snapshots	“0” |If `snapshotPolicy` is `none`, `else` “”
 
-|`splitOnClone` |Split a clone from its parent upon creation |“false”
+|`splitOnClone` |Split a clone from its parent upon creation |`false`
 
 |`encryption` |Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
 If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
 
-For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |“false”
+For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |`false`
 
 |`luksEncryption` 
 | Enable LUKS encryption. Refer to link:../trident-reco/security-reco.html#Use-Linux-Unified-Key-Setup-(LUKS)[Use Linux Unified Key Setup (LUKS)]. 
@@ -229,8 +214,8 @@ SAN only.
 
 
 |`tieringPolicy` 
-|Tiering policy to use	“none” 
-|“snapshot-only” for pre-ONTAP 9.5 SVM-DR configuration
+|Tiering policy to use	`none` 
+|`snapshot-only` for pre-ONTAP 9.5 SVM-DR configuration
 
 |`unixPermissions`	|Mode for new volumes. 
 
@@ -252,7 +237,7 @@ SMB default is `ntfs`.
 == Example
 Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
 ----
-apiVersion: storage.k8s.io/v1
+apiVersion: storage.k8s.io/v1 
 kind: StorageClass
 metadata:
   name: nas-smb-sc

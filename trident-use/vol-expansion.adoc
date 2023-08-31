@@ -10,6 +10,7 @@ summary: Astra Trident provides Kubernetes users the ability to expand their vol
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Astra Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI and NFS volumes.
 
 == Expand an iSCSI volume
@@ -18,19 +19,8 @@ You can expand an iSCSI Persistent Volume (PV) by using the CSI provisioner.
 
 NOTE: iSCSI volume expansion is supported by the `ontap-san`, `ontap-san-economy`, `solidfire-san` drivers and requires Kubernetes 1.16 and later.
 
-.Overview
-
-Expanding an iSCSI PV includes the following steps:
-
-* Editing the StorageClass definition to set the `allowVolumeExpansion` field to `true`.
-* Editing the PVC definition and updating the `spec.resources.requests.storage` to reflect the newly desired size, which must be greater than the original size.
-* Attaching the PV must be attached to a pod for it to be resized. There are two scenarios when resizing an iSCSI PV:
-** If the PV is attached to a pod, Astra Trident expands the volume on the storage backend, rescans the device, and resizes the filesystem.
-** When attempting to resize an unattached PV, Astra Trident expands the volume on the storage backend. After the PVC is bound to a pod, Trident rescans the device and resizes the filesystem. Kubernetes then updates the PVC size after the expand operation has successfully completed.
-
-The example below shows how expanding iSCSI PVs work.
-
 === Step 1: Configure the StorageClass to support volume expansion
+Edit the StorageClass definition to set the `allowVolumeExpansion` field to `true`.
 
 ----
 cat storageclass-ontapsan.yaml
@@ -48,6 +38,7 @@ allowVolumeExpansion: True
 For an already existing StorageClass, edit it to include the `allowVolumeExpansion` parameter.
 
 === Step 2: Create a PVC with the StorageClass you created
+Edit the PVC definition and update the `spec.resources.requests.storage` to reflect the newly desired size, which must be greater than the original size.
 
 ----
 cat pvc-ontapsan.yaml
@@ -77,6 +68,10 @@ pvc-8a814d62-bd58-4253-b0d1-82f2885db671   1Gi        RWO            Delete     
 ----
 
 === Step 3: Define a pod that attaches the PVC
+Attach the PV to a pod for it to be resized. There are two scenarios when resizing an iSCSI PV:
+
+* If the PV is attached to a pod, Astra Trident expands the volume on the storage backend, rescans the device, and resizes the filesystem.
+* When attempting to resize an unattached PV, Astra Trident expands the volume on the storage backend. After the PVC is bound to a pod, Trident rescans the device and resizes the filesystem. Kubernetes then updates the PVC size after the expand operation has successfully completed.
 
 In this example, a pod is created that uses the `san-pvc`.
 
@@ -154,7 +149,6 @@ tridentctl get volumes -n trident
 | pvc-8a814d62-bd58-4253-b0d1-82f2885db671 | 2.0 GiB | ontap-san     | block    | a9b7bfff-0505-4e31-b6c5-59f492e02d33 | online | true    |
 +------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 ----
-
 
 == Expand an NFS volume
 

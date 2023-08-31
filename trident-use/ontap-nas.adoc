@@ -1,35 +1,67 @@
 ---
 sidebar: sidebar
 permalink: trident-use/ontap-nas.html
-keywords: trident backend, ontap nas, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, fsx
+keywords: trident backend, ontap nas, ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, fsx, drivers, access modes, rwo, rwx, rwp, rwop, file system
 summary: Learn about configuring an ONTAP backend with ONTAP NAS drivers.
 ---
 
-= Configure an ONTAP NAS backend
+= ONTAP NAS driver overview
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
+[.lead]
 Learn about configuring an ONTAP backend with ONTAP and Cloud Volumes ONTAP NAS drivers.
 
-* link:ontap-nas-prep.html[Preparation]
-* link:ontap-nas-examples.html[Configuration and examples]
+== ONTAP NAS driver details
+Astra Trident provides the following NAS storage drivers to communicate with the ONTAP cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
+IMPORTANT: If you are using Astra Control for protection, recovery, and mobility, read <<Astra Control driver compatibility>>. 
 
-[WARNING]
-====
+[cols="2, 1, 1, 2, 2", options="header"]
+|===
+|Driver
+|Protocol
+|volumeMode
+|Access modes supported
+|File systems supported
+
+|`ontap-nas`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|"", `nfs`, `smb`
+
+|`ontap-nas-economy`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|"", `nfs`, `smb`
+
+|`ontap-nas-flexgroup`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|"", `nfs`, `smb`
+
+|===
+
+=== Astra Control driver compatibility
 Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. See link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details. 
 
 * You must use `ontap-nas` for production workloads that require data protection, disaster recovery, and mobility. 
 * Use `ontap-san-economy` when anticipated volume usage is expected to be much higher than what ONTAP supports. 
 * Use `ontap-nas-economy` only where anticipated volume usage is expected to be much higher than what ONTAP supports, and the `ontap-san-economy` driver cannot be used. 
 * Do not use use `ontap-nas-economy` if you anticipate the need for data protection, disaster recovery, or mobility.
-====
 
 == User permissions
+Astra Trident expects to be run as either an ONTAP or SVM administrator, typically using the `admin` cluster user or a `vsadmin` SVM user, or a user with a different name that has the same role. 
 
-Astra Trident expects to be run as either an ONTAP or SVM administrator, typically using the `admin` cluster user or a `vsadmin` SVM user, or a user with a different name that has the same role. For Amazon FSx for NetApp ONTAP deployments, Astra Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the cluster admin user.
+For Amazon FSx for NetApp ONTAP deployments, Astra Trident expects to be run as either an ONTAP or SVM administrator, using the cluster `fsxadmin` user or a `vsadmin` SVM user, or a user with a different name that has the same role. The `fsxadmin` user is a limited replacement for the cluster admin user.
 
 NOTE: If you use the `limitAggregateUsage` parameter, cluster admin permissions are required. When using Amazon FSx for NetApp ONTAP with Astra Trident, the `limitAggregateUsage` parameter will not work with the `vsadmin` and `fsxadmin` user accounts. The configuration operation will fail if you specify this parameter.
 
-While it is possible to create a more restrictive role within ONTAP that a Trident driver can use, we don’t recommend it. Most new releases of Trident will call additional APIs that would have to be accounted for, making upgrades difficult and error-prone.
+While it is possible to create a more restrictive role within ONTAP that a Trident driver can use, we don't recommend it. Most new releases of Trident will call additional APIs that would have to be accounted for, making upgrades difficult and error-prone.

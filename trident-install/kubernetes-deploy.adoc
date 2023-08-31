@@ -13,14 +13,14 @@ summary: You can install Astra Trident using the Trident operator (manually or u
 [.lead]
 To ensure Astra Trident can be installed in a wide variety of environments and organizations, NetApp offers multiple installation options. You can install Astra Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
 
-== Critical information about Astra Trident 23.01
+== Critical information about Astra Trident 23.07
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
 .*Critical information about Astra Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.26 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.27 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -45,7 +45,6 @@ TIP: If you have not familiarized yourself with the link:../trident-concepts/int
 Select the installation method that's right for you. You should also review the considerations for link:kubernetes-deploy.html#move-between-installation-methods[moving between methods] before making your decision. 
 
 === Using the Trident operator
-
 Whether deploying manually or using Helm, the Trident operator is a great way to simplify installation and dynamically manage Astra Trident resources. You can even link:../trident-get-started/kubernetes-customize-deploy.html[customize your Trident operator deployment] using the attributes in the `TridentOrchestrator` custom resource (CR). 
 
 The benefits of using the Trident operator include:
@@ -60,6 +59,12 @@ The Trident operator automatically creates the following objects for your Kubern
 * Dedicated PodSecurityPolicy (for Kubernetes 1.25 and earlier)
 * The operator itself
 
+====
+
+.*Resource accountability*
+[%collapsible]
+====
+The cluster-scoped Trident operator manages resources associated with an Astra Trident installation at the cluster level. This mitigates errors that might be caused when maintaining cluster-scoped resources using a namespace-scoped operator. This is essential for self-healing and patching.
 ====
 
 .*Self-healing capability*
@@ -78,7 +83,13 @@ For example, consider a scenario where you need to enable Astra Trident to gener
 kubectl patch torc <trident-orchestrator-name> -n trident --type=merge -p '{"spec":{"debug":true}}'
 ----
 
-After `TridentOrchestrator` is updated, the operator processes the updates and patches the existing installation. This might triggers the creation of new pods to modify the installation accordingly.
+After `TridentOrchestrator` is updated, the operator processes the updates and patches the existing installation. This might trigger the creation of new pods to modify the installation accordingly.
+====
+
+.*Clean reinstallation*
+[%collapsible]
+====
+The cluster-scoped Trident operator enables clean removal of cluster-scoped resources. Users can completely uninstall Astra Trident and easily reinstall.
 ====
 
 .*Automatic Kubernetes upgrade handling*

@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/trident-fsx.html
 keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident
-summary: By using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 ---
 
 = Use Astra Trident with Amazon FSx for NetApp ONTAP
@@ -13,6 +13,7 @@ summary: By using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure
 [.lead]
 https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP^] is a fully managed AWS service that enables customers to launch and run file systems powered by the NetApp ONTAP storage operating system. FSx for ONTAP enables you to leverage NetApp features, performance, and administrative capabilities you are familiar with, while taking advantage of the simplicity, agility, security, and scalability of storing data on AWS. FSx for ONTAP supports ONTAP file system features and administration APIs.
 
+== Overview
 A file system is the primary resource in Amazon FSx, analogous to an ONTAP cluster on premises. Within each SVM you can create one or multiple volumes, which are data containers that store the files and folders in your file system. With Amazon FSx for NetApp ONTAP, Data ONTAP will be provided as a managed file system in the cloud. The new file system type is called *NetApp ONTAP*.
 
 Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
@@ -23,7 +24,6 @@ Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netap
 * SMB volumes: 
 ** SMB volumes are supported using the `ontap-nas` driver only. 
 ** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
-** Astra Trident does not support Windows ARM architecture.
 * Volumes created on Amazon FSx file systems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume. To prevent this issue:
 
 ** Do not use **Quick create** to create the FSx for ONTAP file system. The quick create workflow enables automatic backups and does not provide an opt-out option.
@@ -31,7 +31,7 @@ Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netap
 +
 image:screenshot-fsx-backup-disable.png[A screenshot of the AWS console disabling automatic backup.]
 
-== Drivers
+== FSx for ONTAP driver details
 
 You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
 
@@ -41,7 +41,7 @@ You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the follo
 * `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
 * `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
 
-For driver details, see link:../trident-concepts/ontap-drivers.html[ONTAP drivers].
+For driver details, see link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
 
 == Authentication
 

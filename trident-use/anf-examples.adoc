@@ -11,15 +11,14 @@ summary: Learn about NFS and SMB backend configuration options for Azure NetApp 
 :imagesdir: ../media/
 
 [.lead]
-Learn about NFS and SMB backend configuration options for Azure NetApp Files and review configuration examples.
+Learn about NFS and SMB backend configuration options for Azure NetApp Files and review configuration examples. 
 
+== Backend configuration options
 Astra Trident uses your backend configuration (subnet, virtual network, service level, and location), to create Azure NetApp Files volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
 
 NOTE: Astra Trident does not support Manual QoS capacity pools.
 
-== Backend configuration options
-
-Azure NetApp Files backends provide these configuration options.
+Azure NetApp Files backends provide these configuration options. 
 
 [cols=3,options="header"]
 |===
@@ -94,7 +93,7 @@ For more information on Network Features, refer to link:https://docs.microsoft.c
 
 === Required permissions and resources
 
-If you receive a “No capacity pools found” error when creating a PVC, it is likely your app registration doesn’t have the required permissions and resources (subnet, virtual network, capacity pool) associated. If debug is enabled, Astra Trident will log the Azure resources discovered when the backend is created. Verify an appropriate role is being used.
+If you receive a “No capacity pools found” error when creating a PVC, it is likely your app registration doesn't have the required permissions and resources (subnet, virtual network, capacity pool) associated. If debug is enabled, Astra Trident will log the Azure resources discovered when the backend is created. Verify an appropriate role is being used.
 
 The values for `resourceGroups`, `netappAccounts`, `capacityPools`, `virtualNetwork`, and `subnet` can be specified using short or fully-qualified names. Fully-qualified names are recommended in most situations as short names can match multiple resources with the same name.
 
@@ -137,20 +136,19 @@ Ignored for SMB volumes.  |"" (preview feature, requires whitelisting in subscri
 .Example 1: Minimal configuration
 [%collapsible%open]
 ====
-This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to Azure NetApp Files in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes.
+This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to Azure NetApp Files in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
 
-This configuration is ideal when you are just getting started with Azure NetApp Files and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision.
+This configuration is ideal when you are just getting started with Azure NetApp Files and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
 
 ----
-{
-    "version": 1,
-    "storageDriverName": "azure-netapp-files",
-    "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-    "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-    "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-    "clientSecret": "SECRET",
-    "location": "eastus"
-}
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
 ----
 ====
 // End snippet
@@ -180,23 +178,21 @@ This is a basic Azure NetApp Files sub volumes backend.
 .Example 3: Specific service level configuration with capacity pool filters
 [%collapsible%open]
 ====
-This backend configuration places volumes in the Azure `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
+This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
 
 ----
-    {
-        "version": 1,
-        "storageDriverName": "azure-netapp-files",
-        "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-        "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-        "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-        "clientSecret": "SECRET",
-        "location": "eastus",
-        "serviceLevel": "Ultra",
-        "capacityPools": [
-            "application-group-1/account-1/ultra-1",
-            "application-group-1/account-1/ultra-2"
-],
-    }
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+serviceLevel: Ultra
+capacityPools:
+- application-group-1/account-1/ultra-1
+- application-group-1/account-1/ultra-2
 ----
 ====
 // End snippet
@@ -208,31 +204,29 @@ This backend configuration places volumes in the Azure `eastus` location in an `
 This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
 
 ----
-    {
-        "version": 1,
-        "storageDriverName": "azure-netapp-files",
-        "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-        "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-        "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-        "clientSecret": "SECRET",
-        "location": "eastus",
-        "serviceLevel": "Ultra",
-        "capacityPools": [
-            "application-group-1/account-1/ultra-1",
-            "application-group-1/account-1/ultra-2"
-],
-        "virtualNetwork": "my-virtual-network",
-        "subnet": "my-subnet",
-        "networkFeatures": "Standard",
-        "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
-        "limitVolumeSize": "500Gi",
-        "defaults": {
-            "exportRule": "10.0.0.0/24,10.0.1.0/24,10.0.2.100",
-            "snapshotDir": "true",
-            "size": "200Gi",
-            "unixPermissions": "0777"
-        }
-    }
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+serviceLevel: Ultra
+capacityPools:
+- application-group-1/account-1/ultra-1
+- application-group-1/account-1/ultra-2
+virtualNetwork: my-virtual-network
+subnet: my-subnet
+networkFeatures: Standard
+nfsMountOptions: vers=3,proto=tcp,timeo=600
+limitVolumeSize: 500Gi
+defaults:
+  exportRule: 10.0.0.0/24,10.0.1.0/24,10.0.2.100
+  snapshotDir: 'true'
+  size: 200Gi
+  unixPermissions: '0777'
+
 ----
 ====
 // End snippet
@@ -244,47 +238,40 @@ This backend configuration further reduces the scope of volume placement to a si
 This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels were used to differentiate the pools based on `performance`.
 
 ----
-    {
-        "version": 1,
-        "storageDriverName": "azure-netapp-files",
-        "subscriptionID": "9f87c765-4774-fake-ae98-a721add45451",
-        "tenantID": "68e4f836-edc1-fake-bff9-b2d865ee56cf",
-        "clientID": "dd043f63-bf8e-fake-8076-8de91e5713aa",
-        "clientSecret": "SECRET",
-        "location": "eastus",
-        "resourceGroups": ["application-group-1"],
-        "networkFeatures": "Basic",
-        "nfsMountOptions": "vers=3,proto=tcp,timeo=600",
-        "labels": {
-            "cloud": "azure"
-        },
-        "location": "eastus",
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+resourceGroups:
+- application-group-1
+networkFeatures: Basic
+nfsMountOptions: vers=3,proto=tcp,timeo=600
+labels:
+  cloud: azure
+storage:
+- labels:
+    performance: gold
+  serviceLevel: Ultra
+  capacityPools:
+  - ultra-1
+  - ultra-2
+  networkFeatures: Standard
+- labels:
+    performance: silver
+  serviceLevel: Premium
+  capacityPools:
+  - premium-1
+- labels:
+    performance: bronze
+  serviceLevel: Standard
+  capacityPools:
+  - standard-1
+  - standard-2
 
-        "storage": [
-            {
-                "labels": {
-                    "performance": "gold"
-                },
-                "serviceLevel": "Ultra",
-                "capacityPools": ["ultra-1", "ultra-2"],
-                "networkFeatures": "Standard"
-            },
-            {
-                "labels": {
-                    "performance": "silver"
-                },
-                "serviceLevel": "Premium",
-                "capacityPools": ["premium-1"]
-            },
-            {
-                "labels": {
-                    "performance": "bronze"
-                },
-                "serviceLevel": "Standard",
-                "capacityPools": ["standard-1", "standard-2"]
-            }
-        ]
-    }
 ----
 ====
 // End snippet

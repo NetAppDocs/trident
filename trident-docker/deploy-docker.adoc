@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-docker/deploy-docker.html
 keywords: deploy, astra trident, trident for docker, docker
-summary: Astra Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
+summary: Astra Trident for Docker provides direct integration with the Docker ecosystem for NetApp storage platforms. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
 ---
 
 = Deploy Astra Trident
@@ -11,7 +11,7 @@ summary: Astra Trident for Docker provides direct integration with the Docker ec
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident for Docker provides direct integration with the Docker ecosystem for NetApp’s storage platforms. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
+Astra Trident for Docker provides direct integration with the Docker ecosystem for NetApp storage platforms. It supports the provisioning and management of storage resources from the storage platform to Docker hosts, with a framework for adding additional platforms in the future.
 
 Multiple instances of Astra Trident can run concurrently on the same host. This allows simultaneous connections to multiple storage systems and storage types, with the ablity to customize the storage used for the Docker volumes.
 
@@ -121,8 +121,8 @@ Or, https://docs.docker.com/engine/install/[follow the instructions for your dis
 .. Download and unpack the application:
 +
 ----
-wget https://github.com/NetApp/trident/releases/download/v23.01.1/trident-installer-23.01.1.tar.gz
-tar zxf trident-installer-23.01.1.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.07.0/trident-installer-23.07.0.tar.gz
+tar zxf trident-installer-23.07.0.tar.gz
 ----
 .. Move to a location in the bin path:
 +
@@ -152,13 +152,13 @@ cat << EOF > /etc/netappdvp/ontap-nas.json
 }
 EOF
 ----
-. After placing the binary and creating the configuration file(s), start the Trident daemon using the desired configuration file.
+. After placing the binary and creating the configuration file, start the Trident daemon using the desired configuration file.
 +
 ----
 sudo trident --config=/etc/netappdvp/ontap-nas.json
 ----
 +
-NOTE: Unless specified, the default name for the volume driver is “netapp”.
+NOTE: Unless specified, the default name for the volume driver is "netapp".
 +
 After the daemon is started, you can create and manage volumes by using the Docker CLI interface
 . Create a volume:

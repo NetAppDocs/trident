@@ -13,8 +13,32 @@ summary: You can configure Azure NetApp Files as the backend for Astra Trident. 
 [.lead]
 You can configure Azure NetApp Files as the backend for Astra Trident. You can attach NFS and SMB volumes using an Azure NetApp Files backend.
 
-* link:anf-prep.html[Preparation]
-* link:anf-examples.html[Configuration options and examples]
+== Azure NetApp Files driver details
+Astra Trident provides the following Azure NetApp Files storage drivers to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+
+[cols="2, 1, 1, 2, 2", options="header"]
+|===
+|Driver
+|Protocol
+|volumeMode
+|Access modes supported
+|File systems supported
+
+|`azure-netapp-files`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|`nfs`, `smb`
+
+|`azure-netapp-files-subvolume`
+a|NFS
+SMB
+a|Filesystem
+a|RWO, RWOP
+a|`xfs`,`ext3`, `ext4`
+
+|===
 
 == Azure NetApp Files storage drivers
 Astra Trident offers two storage drivers for Azure NetApp Files:

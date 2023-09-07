@@ -124,7 +124,7 @@ Using QoS policy groups with Astra Trident requires ONTAP 9.8 or later. We recom
 
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |""
 
-|`snapshotReserve` |Percentage of volume reserved for snapshots	"0" |If `snapshotPolicy` is "none", otherwise "0"
+|`snapshotReserve` |Percentage of volume reserved for snapshots	|"0" if `snapshotPolicy` is "none", otherwise ""
 
 |`splitOnClone` |Split a clone from its parent upon creation |"false"
 

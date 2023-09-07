@@ -14,7 +14,7 @@ summary: Before using the Trident operator to upgrade Astra Trident, you should 
 Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller Pod and node Pods, and node DaemonSet that enable rolling upgrades.
 
 == Trident operator upgrade handling
-One of the many link:../trident-get-started/kubernetes-deploy.html[benefits of using the Trident operator] to install and upgrade Astra Trident is the automatic handling of Astra Trident and Kubernetes objects without disrupting existing mounted volumes. In this way, Astra Trident can support upgrades with zero downtime, or _rolling upgrades_. In particular, the Trident operator communicates with the Kubernetes cluster to:
+One of the many link:../trident-get-started/kubernetes-deploy.html[benefits of using the Trident operator] to install and upgrade Astra Trident is the automatic handling of Astra Trident and Kubernetes objects without disrupting existing mounted volumes. In this way, Astra Trident can support upgrades with zero downtime, or link:https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/[_rolling upgrades_^]. In particular, the Trident operator communicates with the Kubernetes cluster to:
 
 * Delete and recreate the Trident Controller deployment and node DaemonSet.
 * Replace the Trident Controller Pod and Trident Node Pods with new versions.

@@ -62,8 +62,8 @@ Astra Control provides seamless protection, disaster recovery, and mobility (mov
 [WARNING]
 ====
 
-* Use `ontap-san-economy` only if persistent volume usage count is expected to be higher than what link:https://docs.netapp.com/us-en/ontap/volumes/storage-limits-reference.html[ONTAP supports^]. 
-* Use `ontap-nas-economy` only if persistent volume usage count is expected to be  higher than what link:https://docs.netapp.com/us-en/ontap/volumes/storage-limits-reference.html[ONTAP supports^] and the `ontap-san-economy` driver cannot be used. 
+* Use `ontap-san-economy` only if persistent volume usage count is expected to be higher than link:https://docs.netapp.com/us-en/ontap/volumes/storage-limits-reference.html[supported ONTAP volume limits^]. 
+* Use `ontap-nas-economy` only if persistent volume usage count is expected to be  higher than what link:https://docs.netapp.com/us-en/ontap/volumes/storage-limits-reference.html[supported ONTAP volume limits^] and the `ontap-san-economy` driver cannot be used. 
 * Do not use use `ontap-nas-economy` if you anticipate the need for data protection, disaster recovery, or mobility.
 ====
 

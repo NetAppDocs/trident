@@ -44,7 +44,7 @@ kubectl delete -f 23.04/trident-installer/deploy/bundle.yaml -n trident
 . Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 23.07 for Kubernetes 1.27, run the following command:
 +
 ----
-kubectl create -f 23.07.0/trident-installer/deploy/bundle_post_1_25.yaml -n trident
+kubectl create -f 23.07.1/trident-installer/deploy/bundle_post_1_25.yaml -n trident
 ----
 
 == Upgrade a Helm installation
@@ -54,10 +54,10 @@ WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has
 
 .Steps
 . Download the latest Astra Trident release.
-. Use the `helm upgrade` command where `trident-operator-23.07.0.tgz` reflects the version that you want to upgrade to.
+. Use the `helm upgrade` command where `trident-operator-23.07.1.tgz` reflects the version that you want to upgrade to.
 +
 ----
-helm upgrade <name> trident-operator-23.07.0.tgz
+helm upgrade <name> trident-operator-23.07.1.tgz
 ----
 +
 [NOTE]
@@ -66,7 +66,7 @@ If you set any non-default options during the initial installation (such as spec
 
 For example, to change the default value of `tridentDebug`, run the following command:
 ----
-helm upgrade <name> trident-operator-23.07.0-custom.tgz --set tridentDebug=true
+helm upgrade <name> trident-operator-23.07.1-custom.tgz --set tridentDebug=true
 ----
 ====
 
@@ -81,11 +81,11 @@ NOTE: Before switching between installation methods, review link:../trident-get-
 . Download the latest Astra Trident release.
 +
 ----
-# Download the release required [23.07.0]
-mkdir 23.07.0
-cd 23.07.0
-wget https://github.com/NetApp/trident/releases/download/v22.01.1/trident-installer-23.07.0.tar.gz
-tar -xf trident-installer-23.07.0.tar.gz
+# Download the release required [23.07.1]
+mkdir 23.07.1
+cd 23.07.1
+wget https://github.com/NetApp/trident/releases/download/v22.01.1/trident-installer-23.07.1.tar.gz
+tar -xf trident-installer-23.07.1.tar.gz
 cd trident-installer
 ----
 
@@ -141,5 +141,5 @@ kubectl describe torc trident | grep Message -A 3
 Message:                Trident installed
 Namespace:              trident
 Status:                 Installed
-Version:                v23.07.0
+Version:                v23.07.1
 ----

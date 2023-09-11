@@ -35,18 +35,17 @@ You should use the same method to uninstall Astra Trident that you used to insta
 You can uninstall a trident operator installation manually or using Helm. 
 
 === Uninstall manual installation
-If you installed Astra Trident by using the operator, you can uninstall it by doing one of the following:
+If you installed Astra Trident using the operator, you can uninstall it by doing one of the following:
 
-* **Edit `TridentOrchestrator` to set the uninstall flag:** You can edit `TridentOrchestrator` and set `spec.uninstall=true`. 
-** Edit the `TridentOrchestrator` CR and set the `uninstall` flag as shown below:
+. **Edit `TridentOrchestrator` CR and set the uninstall flag**: 
 +
 ----
 kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"uninstall":true}}'
 ----
-** When the `uninstall` flag is set to `true`, the Trident operator uninstalls Trident, but does not remove the TridentOrchestrator itself. You should clean up the TridentOrchestrator and create a new one if you want to
-install Trident again.
++
+When the `uninstall` flag is set to `true`, the Trident operator uninstalls Trident, but does not remove the TridentOrchestrator itself. You should clean up the TridentOrchestrator and create a new one if you want to install Trident again.
 
-* **Delete `TridentOrchestrator`:** By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
+. **Delete `TridentOrchestrator`**: By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
 
 
 === Uninstall Helm installation
@@ -64,7 +63,7 @@ release "trident" uninstalled
 ----
 
 == Uninstall a `tridentctl` installation
-Use the `uninstall` command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects. 
+Use the `uninstall` command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects: 
 
 ----
 ./tridentctl uninstall -n <namespace>

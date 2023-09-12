@@ -36,8 +36,6 @@ See the following table for the backend configuration options:
 |`managementLIF` 
 |IP address of a cluster or SVM management LIF 
 
-For seamless MetroCluster switchover, you must specify an SVM management LIF.
-
 A fully-qualified domain name (FQDN) can be specified.
 
 Can be set to use IPv6 addresses if Astra Trident was installed using the `--use-ipv6` flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
@@ -61,7 +59,7 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 |`false`
 
 |`autoExportCIDRs` 
-|List of CIDRs to filter Kubernetes’ node IPs against when `autoExportPolicy` is enabled. 
+|List of CIDRs to filter Kubernetes' node IPs against when `autoExportPolicy` is enabled. 
 
 Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically.	
 |"[“0.0.0.0/0”, “::/0”]"
@@ -145,9 +143,10 @@ Options are `nfs`, `smb`, or null.
 |`200`
 
 |`smbShare` 
-|You can specify the name of the SMB share created using Shared Folder Microsoft Management Console or specify a share name to allow Astra Trident to create the SMB share. 
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
+ 
+This parameter is required for Amazon FSx for ONTAP backends.
 
-Alternatively, you can leave the parameter blank to prevent common share access to volumes.
 
 |`smb-share`
 
@@ -238,7 +237,7 @@ SMB default is `ntfs`.
 == Example
 Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
 ----
-apiVersion: storage.k8s.io/v1
+apiVersion: storage.k8s.io/v1 
 kind: StorageClass
 metadata:
   name: nas-smb-sc

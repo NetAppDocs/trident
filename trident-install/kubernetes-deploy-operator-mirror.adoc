@@ -13,7 +13,7 @@ summary: You can manually deploy the Trident operator to install Astra Trident. 
 [.lead]
 You can manually deploy the Trident operator to install Astra Trident. This process applies to installations where the container images required by Astra Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-operator.html[process for standard deployment].
 
-== Critical information about Astra Trident 23.04
+== Critical information about Astra Trident 23.07
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -64,8 +64,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Astra Trident installer package contains everything you need to deploy the Trident operator and install Astra Trident. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v23.04.0/trident-installer-23.04.0.tar.gz
-tar -xf trident-installer-23.04.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.07.1/trident-installer-23.07.1.tar.gz
+tar -xf trident-installer-23.07.1.tar.gz
 cd trident-installer
 ----
 
@@ -78,38 +78,48 @@ kubectl create -f deploy/crds/<VERSION>.yaml
 
 === Step 3: Update the registry location in the operator
 
-In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.04.0` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
+In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:23.07.1` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
 
-* `image: <your-registry>/trident-operator:23.04.0` if your images are all located in one registry.
-* `image: <your-registry>/netapp/trident-operator:23.04.0` if your Trident image is located in a different registry from your CSI images. 
+* `image: <your-registry>/trident-operator:23.07.1` if your images are all located in one registry.
+* `image: <your-registry>/netapp/trident-operator:23.07.1` if your Trident image is located in a different registry from your CSI images. 
 
 === Step 4: Deploy the Trident operator
-The Trident installer deploys the operator in the `trident` namespace. If the `trident` namespace does not exist, use `kubectl apply -f deploy/namespace.yaml` to create it.
-
-To deploy the operator in a namespace other than the `trident` namespace, update `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` prior to deploying the operator. 
-
-. Create the resources and deploy the operator:
-+
-----
-kubectl kustomize deploy/ > deploy/<BUNDLE>.yaml
-----
-+
-[NOTE]
-====
 The Astra Trident installer provides a bundle file that can be used to install the operator and create associated objects. The bundle file is an easy way to deploy the operator and install Astra Trident using a default configuration. 
 
 * For clusters running Kubernetes 1.24 or earlier, use `bundle_pre_1_25.yaml`.
 
 * For clusters running Kubernetes 1.25 or later, use `bundle_post_1_25.yaml`.
-====
 
-. Verify the operator was deployed. 
+.Before you begin
+* By default, the Trident installer deploys the operator in the `trident` namespace. If the `trident` namespace does not exist, create it using: 
 +
 ----
-kubectl get deployment -n <operator-namespace>
+kubectl apply -f deploy/namespace.yaml
+----
+* To deploy the operator in a namespace other than the `trident` namespace, update `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` and generate your bundle file using the `kustomization.yaml`. 
+. Create the `kustomization.yaml` using the following command where _<bundle>_ is `bundle_pre_1_25` or `bundle_post_1_25` based on your Kubernetes version. 
++
+----
+cp kustomization_<bundle>.yaml kustomization.yaml
+----
 
-NAME               READY   UP-TO-DATE   AVAILABLE   AGE
-trident-operator   1/1     1            1           3m
+. Compile the bundle using using the following command where _<bundle>_ is `bundle_pre_1_25` or `bundle_post_1_25` based on your Kubernetes version. 
++
+----
+kubectl kustomize deploy/ > deploy/<bundle>.yaml
+----
+
+.Steps
+. Create the resources and deploy the operator:
++
+----
+kubectl kustomize deploy/ > deploy/<bundle>.yaml
+----
+
+. Verify the operator, deployment, and replicasets were created. 
++
+----
+kubectl get all -n <operator-namespace>
 ----
 
 IMPORTANT: There should only be *one instance* of the operator in a Kubernetes cluster. Do not create multiple deployments of the Trident operator.
@@ -124,8 +134,8 @@ Your link:../trident-get-started/requirements.html#container-images-and-correspo
 --
 ----
 imageRegistry: "<your-registry>"
-autosupportImage: "<your-registry>/trident-autosupport:23.04"
-tridentImage: "<your-registry>/trident:23.04.0"
+autosupportImage: "<your-registry>/trident-autosupport:23.07"
+tridentImage: "<your-registry>/trident:23.07.1"
 ----
 --
 
@@ -134,8 +144,8 @@ tridentImage: "<your-registry>/trident:23.04.0"
 You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----
 imageRegistry: "<your-registry>/sig-storage"
-autosupportImage: "<your-registry>/netapp/trident-autosupport:23.04"
-tridentImage: "<your-registry>/netapp/trident:23.04.0"
+autosupportImage: "<your-registry>/netapp/trident-autosupport:23.07"
+tridentImage: "<your-registry>/netapp/trident:23.07.1"
 ----
 --
 ====
@@ -158,16 +168,16 @@ API Version: trident.netapp.io/v1
 Kind:        TridentOrchestrator
 ...
 Spec:
-  Autosupport Image:  <your-registry>/netapp/trident-autosupport:23.04
+  Autosupport Image:  <your-registry>/netapp/trident-autosupport:23.07
   Debug:              true
   Image Registry:     <your-registry>/sig-storage
   Namespace:          trident
-  Trident Image:      <your-registry>/netapp/trident:23.04.0
+  Trident Image:      <your-registry>/netapp/trident:23.07.1
 Status:
   Current Installation Params:
     IPv6:                       false
     Autosupport Hostname:      
-    Autosupport Image:          <your-registry>/netapp/trident-autosupport:23.04
+    Autosupport Image:          <your-registry>/netapp/trident-autosupport:23.07
     Autosupport Proxy:         
     Autosupport Serial Number: 
     Debug:                      true
@@ -179,11 +189,11 @@ Status:
     Log Format:           text
     Probe Port:           17546
     Silence Autosupport:  false
-    Trident Image:        <your-registry>/netapp/trident:23.04.0
+    Trident Image:        <your-registry>/netapp/trident:23.07.1
   Message:                Trident installed
   Namespace:              trident
   Status:                 Installed
-  Version:                v23.04.0
+  Version:                v23.07.1
 Events:
     Type Reason Age From Message ---- ------ ---- ---- -------Normal
     Installing 74s trident-operator.netapp.io Installing Trident Normal
@@ -243,10 +253,6 @@ You can use `tridentctl` to check the version of Astra Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 23.04.0        | 23.04.0      |
+| 23.07.1        | 23.07.1        |
 +----------------+----------------+
 ----
-
-== What's next
-
-Now you can link:kubernetes-postdeployment.html[create create a backend and storage class, provision a volume, and mount the volume in a pod].

@@ -5,7 +5,7 @@ keywords: backends, storage system, anf, cvs for aws, cvs for gcp, element, hci,
 summary: Learn about how to perform backend management operations by using `kubectl`.
 ---
 
-= Perform backend management with `kubectl`
+= Perform backend management with kubectl
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -38,20 +38,24 @@ You can also run `tridentctl get backend -n trident` or `tridentctl get backend 
 There can be multiple reasons to update a backend:
 
 * Credentials to the storage system have changed. To update credentials, the Kubernetes Secret that is used in the `TridentBackendConfig` object must be updated. Astra Trident will automatically update the backend with the latest credentials provided. Run the following command to update the Kubernetes Secret:
++
 ----
 kubectl apply -f <updated-secret-file.yaml> -n trident
 ----
-* Parameters (such as the name of the ONTAP SVM being used) need to be updated.
-In this case, `TridentBackendConfig` objects can be updated directly through Kubernetes.
+* Parameters (such as the name of the ONTAP SVM being used) need to be updated. 
+** You can update `TridentBackendConfig` objects directly through Kubernetes using the following command: 
++
 ----
 kubectl apply -f <updated-backend-file.yaml>
 ----
-
-Alternatively, make changes to the existing `TridentBackendConfig` CR by running the following command:
+** Alternatively, you can make changes to the existing `TridentBackendConfig` CR using the following command:
++
 ----
 kubectl edit tbc <tbc-name> -n trident
 ----
 
-If a backend update fails, the backend continues to remain in its last known configuration. You can view the logs to determine the cause by running `kubectl get tbc <tbc-name> -o yaml -n trident` or `kubectl describe tbc <tbc-name> -n trident`.
-
-After you identify and correct the problem with the configuration file, you can re-run the update command.
+[NOTE]
+====
+* If a backend update fails, the backend continues to remain in its last known configuration. You can view the logs to determine the cause by running `kubectl get tbc <tbc-name> -o yaml -n trident` or `kubectl describe tbc <tbc-name> -n trident`.
+* After you identify and correct the problem with the configuration file, you can re-run the update command.
+====

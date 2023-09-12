@@ -5,7 +5,7 @@ keywords: what's new, new features, enhancements, known issues, resolved issues,
 summary: NetApp is continually improving and enhancing its products and services. Here are some of the latest features, enhancements, and bug fixes in the latest version of Astra Trident.
 ---
 
-= What's new
+= What’s new
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -15,7 +15,54 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 23.04
+== What’s new in 23.07.1
+*Kubernetes:* Fixed daemonset deletion to support zero-downtime upgrades (link:https://github.com/NetApp/trident/issues/740[Issue #740^]).
+
+== Changes in 23.07
+
+=== Fixes
+
+==== Kubernetes
+** Fixed Trident upgrade to disregard old pods stuck in terminating state (link:https://github.com/NetApp/trident/issues/740[Issue #740^]).
+** Added toleration to "transient-trident-version-pod" definition (link:https://github.com/NetApp/trident/issues/795[Issue #795^]).
+
+==== Astra Trident
+* Fixed ONTAP ZAPI requests to ensure LUN serial numbers are queried when getting LUN attributes to identify and fix ghost iSCSI devices during Node Staging operations.
+* Fixed error handling in storage driver code (link:https://github.com/NetApp/trident/issues/816[Issue #816^]).
+* Fixed quota resize when using ONTAP drivers with use-rest=true.
+* Fixed LUN clone creation in ontap-san-economy.
+* Revert publish info field from `rawDevicePath` to `devicePath`; added logic to populate and recover (in some cases) `devicePath` field.
+
+=== Enhancements
+
+==== Kubernetes
+* Added support for importing pre-provisioned snapshots.
+* Minimized deployment and daemonset linux permissions (link:https://github.com/NetApp/trident/issues/817[Issue #817^]).
+
+==== Astra Trident
+* No longer reporting the state field for "online" volumes and snapshots.
+* Updates the backend state if the ONTAP backend is offline (link:https://github.com/NetApp/trident/issues/801[Issues #801^], link:https://github.com/NetApp/trident/issues/543[#543^]).
+* LUN Serial Number is always retrieved and published during the ControllerVolumePublish workflow.
+* Added additional logic to verify iSCSI multipath device serial number and size.
+* Additional verification for iSCSI volumes to ensure correct multipath device is unstaged.
+
+==== Experimental Enhancement
+
+Added tech preview support for NVMe over TCP for the ONTAP-SAN driver.
+
+==== Documentation
+Many organizational and formatting improvements have been made. 
+
+=== Deprecations
+
+==== Kubernetes
+
+* Removed support for v1beta1 snapshots.
+* Removed support for pre-CSI volumes and storage classes.
+* Updated minimum supported Kubernetes to 1.22.
+
+
+== Changes in 23.04
 IMPORTANT: Force volume detach for ONTAP-SAN-* volumes is supported only with Kubernetes versions with the Non-Graceful Node Shutdown feature gate enabled. Force detach must be enabled at install time using the `--enable-force-detach` Trident installer flag.
 
 === Fixes
@@ -155,7 +202,7 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 * Included a ResourceQuota with Trident installations to ensure Trident DaemonSet is scheduled when PriorityClass consumption is limited by default.
 
-* Added support for Network Features to ANF driver. (link:https://github.com/NetApp/trident/issues/717[GitHub issue #717^])
+* Added support for Network Features to Azure NetApp Files driver. (link:https://github.com/NetApp/trident/issues/717[GitHub issue #717^])
 
 * Added tech preview automatic MetroCluster switchover detection to ONTAP drivers. (link:https://github.com/NetApp/trident/issues/228[GitHub issue #228^])
 
@@ -196,7 +243,7 @@ IMPORTANT: If you are upgrading from any previous Trident release and use Azure 
 * Fixed issue with unpublishing volumes on deleted nodes. (link:https://github.com/NetApp/trident/issues/691[GitHub issue #691^])
 * Added handling of filesystem inconsistencies on block devices. (link:https://github.com/NetApp/trident/issues/656[GitHub issue #656^])
 * Fixed issue pulling auto-support images when setting the `imageRegistry` flag during installation. (link:https://github.com/NetApp/trident/issues/715[GitHub issue #715^])
-* Fixed issue where ANF driver failed to clone a volume with multiple export rules.
+* Fixed issue where Azure NetApp Files driver failed to clone a volume with multiple export rules.
 
 === Enhancements
 
@@ -226,8 +273,8 @@ E-Series driver (disabled since 20.07) has been removed.
 * Fixed issue where attempting to import an already imported volume returns EOF leaving PVC in pending state. (link:https://github.com/NetApp/trident/issues/489[GitHub issue #489])
 * Fixed issue when Astra Trident performance slows down when > 32 snapshots are created on a SolidFire volume.
 * Replaced SHA-1 with SHA-256 in SSL certificate creation.
-* Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
-* Fixed ANF driver to allow duplicate resource names and limit operations to a single location.
+* Fixed Azure NetApp Files driver to allow duplicate resource names and limit operations to a single location.
+* Fixed Azure NetApp Files driver to allow duplicate resource names and limit operations to a single location.
 
 === Enhancements
 
@@ -239,7 +286,7 @@ E-Series driver (disabled since 20.07) has been removed.
 
 * Allow cross-region volumes in GCP driver. (link:https://github.com/NetApp/trident/issues/633[GitHub issue #633^])
 
-* Added support for 'unixPermissions' option to ANF volumes. (link:https://github.com/NetApp/trident/issues/666[GitHub issue #666^])
+* Added support for 'unixPermissions' option to Azure NetApp Files volumes. (link:https://github.com/NetApp/trident/issues/666[GitHub issue #666^])
 
 === Deprecations
 

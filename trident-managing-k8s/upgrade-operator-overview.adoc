@@ -1,0 +1,38 @@
+---
+sidebar: sidebar
+permalink: trident-managing-k8s/upgrade-operator-overview.html
+keywords: upgrade, trident, operator, helm, controller, daemonset, node pods, rolling upgrade, zero downtime
+summary: Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller Pod and node Pods, and node DaemonSet that enable rolling updates.
+---
+
+= Understand the operator upgrade workflow
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Before using the Trident operator to upgrade Astra Trident, you should understand the background processes that occur during upgrade. This includes changes to the Trident controller, controller Pod and node Pods, and node DaemonSet that enable rolling updates.
+
+== Trident operator upgrade handling
+One of the many link:../trident-get-started/kubernetes-deploy.html[benefits of using the Trident operator] to install and upgrade Astra Trident is the automatic handling of Astra Trident and Kubernetes objects without disrupting existing mounted volumes. In this way, Astra Trident can support upgrades with zero downtime, or link:https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/[_rolling updates_^]. In particular, the Trident operator communicates with the Kubernetes cluster to:
+
+* Delete and recreate the Trident Controller deployment and node DaemonSet.
+* Replace the Trident Controller Pod and Trident Node Pods with new versions.
+** If a node is not updated, it does not prevent remaining nodes from being updated.
+** Only nodes with a running Trident Node Pod can mount volumes.
+
+TIP: For more information about Astra Trident architecture on the Kubernetes cluster, refer to link:trident-concepts/intro.html#astra-trident-architecture[Astra Trident architecture].
+
+== Operator upgrade workflow
+When you initiate an upgrade using the Trident operator: 
+
+. The *Trident operator*:
+.. Detects the currently installed version of Astra Trident (version _n_).
+.. Updates all Kubernetes objects including CRDs, RBAC, and Trident SVC.
+.. Deletes the Trident Controller deployment for version _n_.
+.. Creates the Trident Controller deployment for version _n+1_.
+. *Kubernetes* creates Trident Controller Pod for _n+1_.
+. The *Trident operator*: 
+.. Deletes the Trident Node DaemonSet for _n_. The operator does not wait for Node Pod termination.
+.. Creates the Trident Node Daemonset for _n+1_.
+. *Kubernetes* creates Trident Node Pods on nodes not running Trident Node Pod _n_. This ensures there is never more than one Trident Node Pod, of any version, on a node.

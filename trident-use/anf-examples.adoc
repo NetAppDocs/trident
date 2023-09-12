@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/anf-examples.html
 keywords: trident backend, azure netapp files, smb volumes, smb, windows
-summary: Learn about NFS and SMB backend configuration options for ANF and review configuration examples.
+summary: Learn about NFS and SMB backend configuration options for Azure NetApp Files and review configuration examples.
 ---
 
 = Azure NetApp Files backend configuration options and examples
@@ -11,14 +11,14 @@ summary: Learn about NFS and SMB backend configuration options for ANF and revie
 :imagesdir: ../media/
 
 [.lead]
-Learn about NFS and SMB backend configuration options for ANF and review configuration examples. 
+Learn about NFS and SMB backend configuration options for Azure NetApp Files and review configuration examples. 
 
 == Backend configuration options
-Astra Trident uses your backend configuration (subnet, virtual network, service level, and location), to create ANF volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
+Astra Trident uses your backend configuration (subnet, virtual network, service level, and location), to create Azure NetApp Files volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
 
 NOTE: Astra Trident does not support Manual QoS capacity pools.
 
-ANF backends provide these configuration options. 
+Azure NetApp Files backends provide these configuration options. 
 
 [cols=3,options="header"]
 |===
@@ -78,7 +78,7 @@ For more information on Network Features, refer to link:https://docs.microsoft.c
 
 === Required permissions and resources
 
-If you receive a “No capacity pools found” error when creating a PVC, it is likely your app registration doesn’t have the required permissions and resources (subnet, virtual network, capacity pool) associated. If debug is enabled, Astra Trident will log the Azure resources discovered when the backend is created. Verify an appropriate role is being used.
+If you receive a “No capacity pools found” error when creating a PVC, it is likely your app registration doesn't have the required permissions and resources (subnet, virtual network, capacity pool) associated. If debug is enabled, Astra Trident will log the Azure resources discovered when the backend is created. Verify an appropriate role is being used.
 
 The values for `resourceGroups`, `netappAccounts`, `capacityPools`, `virtualNetwork`, and `subnet` can be specified using short or fully-qualified names. Fully-qualified names are recommended in most situations as short names can match multiple resources with the same name.  
 
@@ -121,9 +121,9 @@ Ignored for SMB volumes.  |"" (preview feature, requires whitelisting in subscri
 .Example 1: Minimal configuration
 [%collapsible%open]
 ====
-This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to ANF in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
+This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to Azure NetApp Files in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
 
-This configuration is ideal when you are just getting started with ANF and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
+This configuration is ideal when you are just getting started with Azure NetApp Files and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
 
 ----
 ---
@@ -142,7 +142,7 @@ location: eastus
 .Example 2: Specific service level configuration with capacity pool filters
 [%collapsible%open]
 ====
-This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to ANF in that location and places a new volume on one of them randomly.
+This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
 
 ----
 ---

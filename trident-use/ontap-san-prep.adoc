@@ -11,16 +11,16 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN
 :imagesdir: ../media/
 
 [.lead]
-Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers. 
+Understand the requirements and authentication options for configuring an ONTAP backend with ONTAP SAN drivers.
 
-== Overview
+== Requirements
 For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 
 All your Kubernetes worker nodes must have the appropriate iSCSI tools installed. Refer to link:worker-node-prep.html[Prepare the worker node] for details.
 
-== Authentication
+== Authenticate the ONTAP backend
 
 Astra Trident offers two modes of authenticating an ONTAP backend.
 
@@ -79,7 +79,7 @@ password: password
 
 Keep in mind that the backend definition is the only place the credentials are stored in plain text. After the backend is created, usernames/passwords are encoded with Base64 and stored as Kubernetes secrets. The creation or update of a backend is the only step that requires knowledge of the credentials. As such, it is an admin-only operation, to be performed by the Kubernetes/storage administrator.
 
-=== Enable certificate-based Authentication
+=== Enable certificate-based authentication
 
 New and existing backends can use a certificate and communicate with the ONTAP backend. Three parameters are required in the backend definition.
 
@@ -182,7 +182,7 @@ Updating a backend does not disrupt access to volumes that have already been cre
 
 == Authenticate connections with bidirectional CHAP
 
-Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM’s default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections. See the following sample configuration:
+Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM's default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections. See the following sample configuration:
 
 ----
 ---
@@ -194,7 +194,6 @@ svm: ontap_iscsi_svm
 useCHAP: true
 username: vsadmin
 password: password
-igroupName: trident
 chapInitiatorSecret: cl9qxIm36DKyawxy
 chapTargetInitiatorSecret: rqxigXgkesIpwxyz
 chapTargetUsername: iJF4heBRT0TCwxyz
@@ -210,8 +209,8 @@ In addition to `useCHAP=true`, the `chapInitiatorSecret`, `chapTargetInitiatorSe
 By setting `useCHAP` to true, the storage administrator instructs Astra Trident to configure CHAP on the storage backend. This includes the following:
 
 * Setting up CHAP on the SVM:
-** If the SVM’s default initiator security type is none (set by default) *and* there are no pre-existing LUNs already present in the volume, Astra Trident will set the default security type to `CHAP` and proceed to configuring the CHAP initiator and target username and secrets.
-** If the SVM contains LUNs, Astra Trident will not enable CHAP on the SVM. This ensures that access to LUNs that are already present on the SVM isn’t restricted.
+** If the SVM's default initiator security type is none (set by default) *and* there are no pre-existing LUNs already present in the volume, Astra Trident will set the default security type to `CHAP` and proceed to configuring the CHAP initiator and target username and secrets.
+** If the SVM contains LUNs, Astra Trident will not enable CHAP on the SVM. This ensures that access to LUNs that are already present on the SVM isn't restricted.
 * Configuring the CHAP initiator and target username and secrets; these options must be specified in the backend configuration (as shown above).
 
 After the backend is created, Astra Trident creates a corresponding `tridentbackend` CRD and stores the CHAP secrets and usernames as Kubernetes secrets. All PVs that are created by Astra Trident on this backend will be mounted and attached over CHAP.

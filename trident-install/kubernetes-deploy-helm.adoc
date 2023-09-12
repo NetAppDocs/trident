@@ -1,19 +1,19 @@
 ---
 sidebar: sidebar
-permalink: trident-get-started/kubernetes-deploy-helm-mirror.html
-keywords: deploy, astra trident, operator, helm, helm chart, configuration, values, offline, air gap, gap, registry
-summary: You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are stored in a private registry.   
+permalink: trident-get-started/kubernetes-deploy-helm.html
+keywords: deploy, astra trident, operator, helm, helm chart, configuration, values, standard, registry
+summary: You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are not stored in a private registry.
 ---
 
-= Deploy Trident operator using Helm (Offline mode)
+= Deploy Trident operator using Helm (Standard mode)
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-helm.html[process for standard deployment].
+You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Astra Trident 23.04
+== Critical information about Astra Trident 23.07.1
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -28,8 +28,7 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 // End snippet
 
 == Deploy the Trident operator and install Astra Trident using Helm
-
-Using the Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator[Helm Chart^] you can deploy the Trident operator and install Trident in one step.  
+Using the Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator[Helm Chart^] you can deploy the Trident operator and install Trident in one step. 
 
 Review link:../trident-get-started/kubernetes-deploy.html[the installation overview] to ensure you've met installation prerequisites and selected the correct installation option for your environment.
 
@@ -45,27 +44,11 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `23.04.0` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `23.07.1` is the version of Astra Trident you are installing. 
 +
-[role="tabbed-block"]
-====
-
-.Images in one registry
---
 ----
-helm install <name> netapp-trident/trident-operator --version 23.04.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 23.07.1 --create-namespace --namespace <trident-namespace>
 ----
---
-
-.Images in different registries
---
-You must append `sig-storage` to the `imageRegistry` to use different registry locations.
-----
-helm install <name> netapp-trident/trident-operator --version 23.04.0 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:23.04.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:23.04 --set tridentImage=<your-registry>/netapp/trident:23.04.0 --create-namespace --namespace <trident-namespace>
-----
---
-====
-// end tabbed area
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
 
@@ -89,10 +72,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `23.04.0` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `23.07.1` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 23.04.0  --create-namespace --namespace --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 23.07.1  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options
@@ -253,7 +236,3 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 
 * The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
 * The node plugin handles attaching the storage to the node.
-
-== What's next
-
-Now you can link:kubernetes-postdeployment.html[create create a backend and storage class, provision a volume, and mount the volume in a pod].

@@ -5,19 +5,58 @@ keywords: kubernetes cluster, simple installation, Kubernetes installation
 summary: If you are just getting started with Kubernetes, use the instructions to install Kubernetes to try it out. These instructions provide a bare-bones, single-node cluster that Trident can integrate with for demonstration purposes.
 ---
 
-= Try it out
+= Quick start for Astra Trident
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-NetApp provides a ready-to-use lab image that you can request through link:https://www.netapp.com/us/try-and-buy/test-drive/index.aspx[NetApp Test Drive^]. 
+You can install Astra Trident and get start managing storage resources in a few steps. Before getting started, review link:requirements.html[Astra Trident requirements].
 
-== Learn about the Test Drive
-The Test Drive provides you with a sandbox environment that comes with a three-node Kubernetes cluster and Astra Trident installed and configured. It is a great way to familiarize yourself with Astra Trident and explore its features.
+NOTE: For Docker, refer to link:../trident-docker/deploy-docker.html[Astra Trident for Docker].
 
-Another option is to see the link:https://kubernetes.io/docs/setup/independent/install-kubeadm/[kubeadm Install Guide] provided by Kubernetes.
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png[One] Install Astra Trident
+[role="quick-margin-para"]
+Astra Trident offers several installation methods and modes optimized for a variety of environments and organizations. 
 
-NOTE: You should not use the Kubernetes cluster that you build using these instructions in production. Use the production deployment guides provided by your distribution for creating clusters that are production ready.
+[role="quick-margin-para"]
+link:../trident-get-started/kubernetes-deploy.html[Install Astra Trident]
 
-If this is the first time you're using Kubernetes, familiarize yourself with the concepts and tools link:https://kubernetes.io/docs/home/[here^].
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png[Two] Prepare the worker node
+[role="quick-margin-para"]
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. 
+
+[role="quick-margin-para"]
+link:../trident-use/worker-node-prep.html[Prepare the worker node]
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png[Three] Create a backend
+[role="quick-margin-para"]
+A backend defines the relationship between Astra Trident and a storage system. It tells Astra Trident how to communicate with that storage system and how Astra Trident should provision volumes from it. 
+
+[role="quick-margin-para"]
+link:../trident-use/backends.html[Configure a backend] for your storage system
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create a Kubernetes StorageClass
+[role="quick-margin-para"]
+The Kubernetes StorageClass object specifies Astra Trident as the provisioner and allows you to create a storage class to provision volumes with customizable attributes. Astra Trident creates a matching storage class for Kubernetes objects that specify the Astra Trident provisioner.  
+
+[role="quick-margin-para"]
+link:../trident-use/create-stor-class.html[Create a storage class]
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png[Five] Provision a volume 
+[role="quick-margin-para"]
+A _PersistentVolume_ (PV) is a physical storage resource provisioned by the cluster administrator on a Kubernetes cluster. The _PersistentVolumeClaim_ (PVC) is a request for access to the PersistentVolume on the cluster. 
+
+[role="quick-margin-para"]
+Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
+
+[role="quick-margin-para"]
+link:../trident-use/vol-provision.html[Provision a volume]
+
+== What's next?
+You can now add additional backends, manage storage classes, manage backends, and perform volume operations. 
+
+
+

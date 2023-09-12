@@ -194,6 +194,16 @@ Usage:
 Available options:
 `backend`: Update a backend in Astra Trident.
 
+== `update backend state`
+
+You can run the `update backend state` command to suspend or resume backend operations.
+----
+Usage:
+  tridentctl update backend state [flag]
+----
+Flags:
+`--userstate`: Set to `suspended` to suspend backend operations. Set to `normal` to resume backend operations.
+
 == `version`
 
 You can run the `version` flags to print the version of `tridentctl` and the running Trident service.

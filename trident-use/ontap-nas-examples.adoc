@@ -22,9 +22,9 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |“ontap-nas”, “ontap-nas-economy”, “ontap-nas-flexgroup”, “ontap-san”, “ontap-san-economy”
+|`storageDriverName` | Name of the storage driver |"ontap-nas", "ontap-nas-economy", "ontap-nas-flexgroup", "ontap-san", "ontap-san-economy"
 
-|`backendName`  |Custom name or the storage backend |Driver name + “_” + dataLIF
+|`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
 |`managementLIF` |IP address of a cluster or SVM management LIF 
 
@@ -60,35 +60,35 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 
 |`autoExportCIDRs` |List of CIDRs to filter Kubernetes' node IPs against when `autoExportPolicy` is enabled. 
 
-Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically.	|[“0.0.0.0/0”, “::/0”]`
+Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically.	|["0.0.0.0/0", "::/0"]`
 
-|`labels` |Set of arbitrary JSON-formatted labels to apply on volumes |“”
+|`labels` |Set of arbitrary JSON-formatted labels to apply on volumes |""
 
-|`clientCertificate`	|Base64-encoded value of client certificate. Used for certificate-based auth |“”
+|`clientCertificate`	|Base64-encoded value of client certificate. Used for certificate-based auth |""
 
-|`clientPrivateKey`	|Base64-encoded value of client private key. Used for certificate-based auth	|“”
+|`clientPrivateKey`	|Base64-encoded value of client private key. Used for certificate-based auth	|""
 
-|`trustedCACertificate` |Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth |“”
+|`trustedCACertificate` |Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth |""
 
 |`username` |Username to connect to the cluster/SVM. Used for credential-based auth |
 
 |`password` |Password to connect to the cluster/SVM. Used for credential-based auth |
 
-|`storagePrefix` |Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it |“trident”
+|`storagePrefix` |Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it |"trident"
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
-*Does not apply to Amazon FSx for ONTAP* |“” (not enforced by default)
+*Does not apply to Amazon FSx for ONTAP* |"" (not enforced by default)
 
-|`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |“”  (not enforced by default)
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |""  (not enforced by default)
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. |“”  (not enforced by default)
+Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. |""  (not enforced by default)
 
-|`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |“100”
+|`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |"100"
 
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} 
+|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
 Do not use `debugTraceFlags` unless you are troubleshooting and require a detailed log dump.|null
 
@@ -100,13 +100,9 @@ Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nf
 
 The mount options for Kubernetes-persistent volumes are normally specified in a storage class using `mountOptions`, but if no mount options are specified in a storage class, Astra Trident will use mount options specified in the storage backend configuration file. 
 
-If no mount options are specified in the storage class or the backend configuration file, Astra Trident will not set any mount options on an associated persistent volume.	
+If no mount options are specified in the storage class or the configuration file, Astra Trident will not set any mount options on an associated persistent volume.	|""
 
-There are driver-specific options for `nfsMountOptions`. Refer to the documentation for your driver type for detailed settings.
-
-|“”
-
-|`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|“200”
+|`qtreesPerFlexvol`	|Maximum Qtrees per FlexVol, must be in range [50, 300]	|"200"
 
 |`smbShare` 
 |You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
@@ -132,35 +128,35 @@ You can control default provisioning using these options in the `defaults` secti
 [cols="1,3,2",options="header"]
 |===
 |Parameter |Description |Default
-|`spaceAllocation` |Space-allocation for LUNs |“true”
+|`spaceAllocation` |Space-allocation for LUNs |"true"
 
-|`spaceReserve` |Space reservation mode; “none” (thin) or “volume” (thick) |“none”
+|`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick) |"none"
 
-|`snapshotPolicy` |Snapshot policy to use |“none”
+|`snapshotPolicy` |Snapshot policy to use |"none"
 
-|`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |“”
+|`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |""
 
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
 
-Not supported by ontap-nas-economy. |“”
+Not supported by ontap-nas-economy. |""
 
-|`snapshotReserve` |Percentage of volume reserved for snapshots	“0” |If `snapshotPolicy` is “none”, else “”
+|`snapshotReserve` |Percentage of volume reserved for snapshots	|"0" if `snapshotPolicy` is "none", otherwise ""
 
-|`splitOnClone` |Split a clone from its parent upon creation |“false”
+|`splitOnClone` |Split a clone from its parent upon creation |"false"
 
 |`encryption` |Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
 If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
 
-For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |“false”
+For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |"false"
 
-|`tieringPolicy` |Tiering policy to use	“none” |“snapshot-only” for pre-ONTAP 9.5 SVM-DR configuration
+|`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
 
-|`unixPermissions`	|Mode for new volumes	|“777” for NFS volumes; empty (not applicable) for SMB volumes
+|`unixPermissions`	|Mode for new volumes	|"777" for NFS volumes; empty (not applicable) for SMB volumes
 
-|`snapshotDir` |Controls visibility of the `.snapshot` directory |“false”
+|`snapshotDir` |Controls access to the `.snapshot` directory |"false"
 
-|`exportPolicy` |Export policy to use |“default”
+|`exportPolicy` |Export policy to use |"default"
 
 |`securityStyle` |Security style for new volumes. 
 
@@ -377,7 +373,7 @@ storagePrefix: myPrefix_
 
 In the sample backend definition files shown below, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
 
-Astra Trident sets provisioning labels in the “Comments” field. Comments are set on FlexVol  for `ontap-nas` or FlexGroup for `ontap-nas-flexgroup`. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
+Astra Trident sets provisioning labels in the "Comments" field. Comments are set on FlexVol  for `ontap-nas` or FlexGroup for `ontap-nas-flexgroup`. Astra Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
 In these examples, some of the storage pools set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools override the default values.
 

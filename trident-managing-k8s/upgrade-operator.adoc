@@ -14,7 +14,7 @@ summary: You can easily upgrade an existing Astra Trident installation by using 
 You can upgrade Astra Trident using the Trident operator either manually or using Helm. You can upgrade from a Trident operator installation to another Trident operator installation or upgrade from a `tridentctl` installation to a Trident operator version. Review link:upgrade-trident.html#select-an-upgrade-method[Select an upgrade method] before upgrading a Trident operator installation.  
 
 == Upgrade a manual installation
-You can upgrade a from a cluster-scoped Trident operator installation to another cluster-scoped Trident operator installation. All Astra Trident versions 21.01 and above use a cluster-scoped operator.
+You can upgrade from a cluster-scoped Trident operator installation to another cluster-scoped Trident operator installation. All Astra Trident versions 21.01 and above use a cluster-scoped operator.
 
 NOTE: To upgrade from Astra Trident that was installed using the namespace-scoped operator (versions 20.07 through 20.10), use the upgrade instructions for link:../earlier-versions.html[your installed version] of Astra Trident.
 
@@ -37,10 +37,9 @@ Ensure you are using a Kubernetes cluster running link:../trident-get-started/re
 . Delete the Trident operator that was used to install the current Astra Trident instance. For example, if you are upgrading from 23.04, run the following command:
 +
 ----
-kubectl delete -f 23.04/trident-installer/deploy/bundle.yaml -n trident
+kubectl delete -f 23.04/trident-installer/deploy/<bundle-name.yaml> -n trident
 ----
 . If you customized your initial installation using `TridentOrchestrator` attributes, you can edit the `TridentOrchestrator` object to modify the installation parameters. This might include changes made to specify mirrored Trident and CSI image registries for offline mode, enable debug logs, or specify image pull secrets.
-. Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 23.07 for Kubernetes 1.27, run the following command:
 . Install Astra Trident using the correct bundle YAML file for your environment and Astra Trident version. For example, if you are installing Astra Trident 23.07 for Kubernetes 1.27, run the following command:
 +
 ----
@@ -98,7 +97,7 @@ kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.1
 . Deploy the cluster-scoped operator in the same namespace. 
 +
 ----
-kubectl create -f deploy/<BUNDLE.YAML>
+kubectl create -f deploy/<bundle-name.yaml>
 
 serviceaccount/trident-operator created
 clusterrole.rbac.authorization.k8s.io/trident-operator created

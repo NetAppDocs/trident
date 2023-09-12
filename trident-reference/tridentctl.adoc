@@ -40,11 +40,11 @@ Available commands:
 
 Flags:
 
-* ``-d, --debug`: Debug output.
-* ``-h, --help`: Help for `tridentctl`.
-* ``-n, --namespace string`: Namespace of Astra Trident deployment.
-* ``-o, --output string`: Output format. One of json|yaml|name|wide|ps (default).
-* ``-s, --server string`: Address/port of Astra Trident REST interface.
+* `-d`, `--debug`: Debug output.
+* `-h`, `--help`: Help for `tridentctl`.
+* `-n`, `--namespace string`: Namespace of Astra Trident deployment.
+* `-o`, `--output string`: Output format. One of json|yaml|name|wide|ps (default).
+* `-s`, `--server string`: Address/port of Astra Trident REST interface.
 +
 CAUTION: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
 
@@ -89,7 +89,8 @@ Available options:
 * `volume`: Get one or more volumes from Astra Trident.
 
 `volume` flags:
-* ``-h, --help`: Help for volumes.
+
+* `-h`, `--help`: Help for volumes.
 * `--parentOfSubordinate string`: Limit query to subordinate source volume. 
 * `--subordinateOf string`: Limit query to subordinates of volume. 
 
@@ -101,8 +102,9 @@ Usage:
   tridentctl images [flags]
 ----
 Flags:
-* ``-h, --help`: Help for images.
-* ``-v, --k8s-version string`: Semantic version of Kubernetes cluster.
+
+* `-h`, `--help`: Help for images.
+* `-v`, `--k8s-version string`: Semantic version of Kubernetes cluster.
 
 == `import volume`
 
@@ -181,6 +183,7 @@ Usage:
   tridentctl uninstall [flags]
 ----
 Flags:
+
 * `-h, --help`: Help for uninstall.
 * `--silent`: Disable most output during uninstall.
 
@@ -212,5 +215,6 @@ Usage:
   tridentctl version [flags]
 ----
 Flags:
+
 * `--client`: Client version only (no server required).
 * `-h, --help`: Help for version.

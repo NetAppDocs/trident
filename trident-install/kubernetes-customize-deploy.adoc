@@ -86,14 +86,6 @@ Astra Trident |
 
 |`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as `pod.spec.Tolerations`. |No default; optional
 
-|`userState` |Suspend or restore backend storage operations. 
-
-When suspended, new volumes cannot be provisioned on the backend. Existing volumes remain available. 
-
-`suspended` to suspend backend operations.
-
-`normal` to resume backend operations. |No default; optional
-
 |===
 [NOTE] 
 For more information on formatting pod parameters, see link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].

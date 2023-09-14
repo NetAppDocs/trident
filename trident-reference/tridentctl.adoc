@@ -231,13 +231,14 @@ Use the `update backend state` command to suspend or resume backend operations.
 
 Usage::
 ----
-tridentctl update backend state [flag]
+tridentctl update backend state <backend-name> [flag]
 ----
 
 Flags::
-`--userstate`:: Set to `suspended` to pause backend operations. Set to `normal` to resume backend operations. When set to `suspended`:
+`--user-state`:: Set to `suspended` to pause backend operations. Set to `normal` to resume backend operations. When set to `suspended`:
 * `AddVolume`, `CloneVolume`, `Import Volume`, `ResizeVolume` are paused.
 * `PublishVolume`, `UnPublishVolume`, `CreateSnapshot`, `GetSnapshot`, `RestoreSnapshot`, `DeleteSnapshot`, `RemoveVolume`, `GetVolumeExternal`, `ReconcileNodeAccess` remain available.
+`-h`, `--help`:: Help for backend state. 
 
 === `version`
 

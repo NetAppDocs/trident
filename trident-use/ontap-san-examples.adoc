@@ -101,7 +101,9 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
 
-`useREST` is not supported with MetroCluster.|`false`
+`useREST` is not supported with MetroCluster.
+
+`useREST` is fully qualified for NVMe/TCP. |`false`
 
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
@@ -321,6 +323,7 @@ svm: svm_nvme
 username: vsadmin
 password: password
 sanType: nvme
+userREST: true
 ----
 ====
 
@@ -447,6 +450,7 @@ storageDriverName: ontap-san
 managementLIF: 10.0.0.1
 svm: svm_nvme
 sanType: nvme
+useREST: true
 username: vsadmin
 password: password
 defaults:

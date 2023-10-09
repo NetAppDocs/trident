@@ -29,13 +29,21 @@ Azure NetApp Files backends provide these configuration options.
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + random characters
 
-|`subscriptionID` |The subscription ID from your Azure subscription |
+|`subscriptionID` |The subscription ID from your Azure subscription 
 
-|`tenantID` |The tenant ID from an App Registration |
+Optional when managed identities is enabled on an AKS cluster. |
 
-|`clientID` |The client ID from an App Registration |
+|`tenantID` |The tenant ID from an App Registration
 
-|`clientSecret` |The client secret from an App Registration |
+Optional when managed identities is enabled on an AKS cluster. |
+
+|`clientID` |The client ID from an App Registration
+
+Optional when managed identities is enabled on an AKS cluster. |
+
+|`clientSecret` |The client secret from an App Registration
+
+Optional when managed identities is enabled on an AKS cluster. |
 
 |`serviceLevel` |One of `Standard`, `Premium`, or `Ultra` |"" (random)
 
@@ -116,10 +124,10 @@ Ignored for SMB volumes.  |"" (preview feature, requires whitelisting in subscri
 |===
 
 == Example configurations
+The following examples show basic configurations that leave most parameters to default. This is the easiest way to define a backend.
 
-// Start snippet: collapsible block (open on page load)
-.Example 1: Minimal configuration
-[%collapsible%open]
+.Minimal configuration
+[%collapsible%closed]
 ====
 This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to Azure NetApp Files in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
 
@@ -136,11 +144,31 @@ clientSecret: SECRET
 location: eastus
 ----
 ====
-// End snippet
 
-// Start snippet: collapsible block (open on page load)
-.Example 2: Specific service level configuration with capacity pool filters
-[%collapsible%open]
+.Managed identities for AKS
+[%collapsible%closed]
+====
+This backend configuration omits `subscriptionID`, `tenantID`, `clientID`, and `clientSecret`, which are optional when using managed identities.
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-anf-1
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: azure-netapp-files 
+  capacityPools: ["ultra-pool"]
+  resourceGroups: ["aks-ami-eastus-rg"]
+  netappAccounts: ["smb-na"]
+  virtualNetwork": eastus-prod-vnet
+  subnet: eastus-anf-subnet
+----
+====
+
+.Specific service level configuration with capacity pool filters
+[%collapsible%closed]
 ====
 This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Astra Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
 
@@ -159,11 +187,9 @@ capacityPools:
 - application-group-1/account-1/ultra-2
 ----
 ====
-// End snippet
 
-// Start snippet: collapsible block (open on page load)
-.Example 3: Advanced configuration
-[%collapsible%open]
+.Advanced configuration
+[%collapsible%closed]
 ====
 This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
 
@@ -193,11 +219,9 @@ defaults:
 
 ----
 ====
-// End snippet
 
-// Start snippet: collapsible block (open on page load)
-.Example 4: Virtual pool configuration
-[%collapsible%open]
+.Virtual pool configuration
+[%collapsible%closed]
 ====
 This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels were used to differentiate the pools based on `performance`. 
 
@@ -238,7 +262,7 @@ storage:
 
 ----
 ====
-// End snippet
+
 
 == Storage Class definitions 
 The following `StorageClass` definitions refer to the storage pools above. 

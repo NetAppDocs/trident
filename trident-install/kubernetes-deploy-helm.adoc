@@ -81,7 +81,7 @@ helm install <name> netapp-trident/trident-operator --version 23.07.1  --create-
 == Configuration options
 This table and the `values.yaml` file, which is part of the Helm chart, provide the list of keys and their default values. 
 
-[cols=3,options="header"]
+[cols="1,2,1",options="header"]
 |===
 |Option
 |Description
@@ -125,7 +125,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`imageRegistry`
 |Identifies the registry for the `trident-operator`, `trident`, and other images.  Leave empty to accept the default.
-|""
+|`""`
 
 |`imagePullPolicy`
 |Sets the image pull policy for the `trident-operator`.
@@ -137,7 +137,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`kubeletDir`
 |Allows overriding the host location of kubelet's internal state.
-|'"/var/lib/kubelet"`
+|`"/var/lib/kubelet"`
 
 |`operatorLogLevel`
 |Allows the log level of the Trident operator to be set to: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
@@ -149,11 +149,11 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`operatorImage`
 |Allows the complete override of the image for `trident-operator`.
-|""
+|`""`
 
 |`operatorImageTag`
 |Allows overriding the tag of the `trident-operator` image.
-|""
+|`""`
 
 |`tridentIPv6`
 |Allows enabling Astra Trident to work in IPv6 clusters.
@@ -177,7 +177,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`tridentAutosupportProxy`
 |Allows Astra Trident AutoSupport container to phone home via an HTTP proxy.
-|""
+|`""`
 
 |`tridentLogFormat`
 |Sets the Astra Trident logging format (`text` or `json`).
@@ -197,23 +197,23 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`tridentLogWorkflows`
 |Allows specific Astra Trident workflows to be enabled for trace logging or log suppression.
-|""
+|`""`
 
 |`tridentLogLayers`
 |Allows specific Astra Trident layers to be enabled for trace logging or log suppression.
-|""
+|`""`
 
 |`tridentImage`
 |Allows the complete override of the image for Astra Trident.
-|""
+|`""`
 
 |`tridentImageTag`
 |Allows overriding the tag of the image for Astra Trident.
-|""
+|`""`
 
 |`tridentProbePort`
 |Allows overriding the default port used for Kubernetes liveness/readiness probes.
-|""
+|`""`
 
 |`windows`
 |Allows Astra Trident to be installed on Windows worker node.
@@ -226,6 +226,8 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |`excludePodSecurityPolicy`
 |Excludes the operator pod security policy from creation.
 |`false`
+
+|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
 
 |===
 

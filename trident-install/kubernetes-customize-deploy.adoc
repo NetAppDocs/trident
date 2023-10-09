@@ -28,9 +28,9 @@ This table details `TridentOrchestrator` attributes.
 [cols="1,2,1",options="header"]
 |===
 |Parameter |Description |Default
-|`namespace` |Namespace to install Astra Trident in |"default"
+|`namespace` |Namespace to install Astra Trident in |`"default"`
 
-|`debug` |Enable debugging for Astra Trident |false
+|`debug` |Enable debugging for Astra Trident |`false`
 
 |`enableForceDetach` |`ontap-san` and `ontap-san-economy` only. 
 
@@ -38,32 +38,34 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 *This is an experimental feature in 23.04.* Refer to <<Details about force detach>> for important details. |`false`
 
-|`windows` | Setting to `true` enables installation on Windows worker nodes. | false
+|`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
-|`useIPv6` |Install Astra Trident over IPv6 |false
+|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
 
-|`k8sTimeout` |Timeout for Kubernetes operations |30sec
+|`useIPv6` |Install Astra Trident over IPv6 |`false`
+
+|`k8sTimeout` |Timeout for Kubernetes operations |`30sec`
 
 |`silenceAutosupport` |Don't send autosupport bundles to NetApp
-automatically |false
+automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|"netapp/trident-autosupport:23.07"
+|`"netapp/trident-autosupport:23.07"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
-Telemetry |"http://proxy.example.com:8888"
+Telemetry |`"http://proxy.example.com:8888"`
 
-|`uninstall` |A flag used to uninstall Astra Trident |false
+|`uninstall` |A flag used to uninstall Astra Trident |`false`
 
-|`logFormat` |Astra Trident logging format to be used [text,json] |"text"
+|`logFormat` |Astra Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Astra Trident image to install |"netapp/trident:23.07"
+|`tridentImage` |Astra Trident image to install |`"netapp/trident:23.07"`
 
 |`imageRegistry` |Path to internal registry, of the format
-`<registry FQDN>[:port][/subpath]` |"k8s.gcr.io/sig-storage" (k8s 1.19+)
-or "quay.io/k8scsi"
+`<registry FQDN>[:port][/subpath]` |`"k8s.gcr.io/sig-storage"` (Kubernetes 1.19+)
+or `"quay.io/k8scsi"`
 
-|`kubeletDir` |Path to the kubelet directory on the host |"/var/lib/kubelet"
+|`kubeletDir` |Path to the kubelet directory on the host |`"/var/lib/kubelet"`
 
 |`wipeout` |A list of resources to delete to perform a complete removal of
 Astra Trident |
@@ -108,13 +110,12 @@ When node health is restored and the taint is removed, Astra Trident will:
 . If the node is in a `cleanable` state (the out-of-service taint has been removed and the node is in `Ready` state) and all stale, published paths are clean, Astra Trident will readmit the node as `clean` and allow new published volumes to the node.
 
 == Sample configurations
-You can use the attributes mentioned above when defining `TridentOrchestrator` to customize your installation. 
+You can use the attributes in <<Configuration options>> when defining `TridentOrchestrator` to customize your installation. 
 
-.Example 1: Basic custom configuration
-[%collapsible%open]
+.Basic custom configuration
+[%collapsible%closed]
 ====
-This is an example for a basic custom configuration.
-
+This is an example for a basic custom installation.
 ----
 cat deploy/crds/tridentorchestrator_cr_imagepullsecrets.yaml
 apiVersion: trident.netapp.io/v1
@@ -130,11 +131,11 @@ spec:
 
 ====
 
-.Example 2: Deploy with node selectors
-[%collapsible%open]
+.Node selectors
+[%collapsible%closed]
 ====
 
-This example illustrates how Trident can be deployed with node selectors:
+This example installs Astra Trident with node selectors.
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -150,10 +151,10 @@ spec:
 ----
 ====
 
-.Example 3: Deploy on Windows worker nodes
-[%collapsible%open]
+.Windows worker nodes
+[%collapsible%closed]
 ====
-This example illustrates deployment on a Windows worker node.
+This example installs Astra Trident on a Windows worker node.
 
 ----
 cat deploy/crds/tridentorchestrator_cr.yaml
@@ -165,5 +166,24 @@ spec:
   debug: true
   namespace: trident
   windows: true
+----
+====
+
+.Managed identities on an AKS cluster
+[%collapsible%closed]
+====
+This example installs Astra Trident to enable managed identities on an AKS cluster. 
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullPolicy: IfNotPresent
+  windows: false
+  cloudProvider: "Azure"
 ----
 ====

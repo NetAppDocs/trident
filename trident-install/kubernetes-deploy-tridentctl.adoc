@@ -150,10 +150,12 @@ You can use `tridentctl` to check the version of Astra Trident installed.
 | 23.07.1        | 23.07.1        |
 +----------------+----------------+
 ----
-== Sample configurations
 
-.Example 1: Enable Astra Trident to run on Windows nodes
-[%collapsible%open]
+== Sample configurations
+The following examples provide sample configurations for installing Astra Trident using `tridentctl`.
+
+.Windows nodes
+[%collapsible%closed]
 ====
 To enable Astra Trident to run on Windows nodes:
 ----
@@ -161,11 +163,20 @@ tridentctl install --windows -n trident
 ----
 ====
 
-.Example 2: Enable force detach
-[%collapsible%open]
+.Force detach
+[%collapsible%closed]
 ====
 For more information about force detach, refer to link:..trident-get-started/kubernetes-customize-deploy.html[Customize Trident operator installation].
 ----
 tridentctl install --enable-force-detach=true -n trident
+----
+====
+
+.Managed identities on an AKS cluster
+[%collapsible%closed]
+====
+This example installs Astra Trident to enable managed identities on an AKS cluster on a Windows node.
+----
+tridentctl install --cloud-provider="Azure"  --windows -n trident
 ----
 ====

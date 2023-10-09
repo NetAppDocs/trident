@@ -162,7 +162,7 @@ spec:
   capacityPools: ["ultra-pool"]
   resourceGroups: ["aks-ami-eastus-rg"]
   netappAccounts: ["smb-na"]
-  virtualNetwork": eastus-prod-vnet
+  virtualNetwork: eastus-prod-vnet
   subnet: eastus-anf-subnet
 ----
 ====
@@ -302,8 +302,8 @@ allowVolumeExpansion: true
 === Example definitions for SMB volumes
 Using `nasType`, `node-stage-secret-name`, and  `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. 
 
-.Example 1: Basic configuration on default namespace 
-[%collapsible%open]
+.Basic configuration on default namespace 
+[%collapsible%closed]
 ====
 
 ----
@@ -321,8 +321,8 @@ parameters:
 ----
 ====
 
-.Example 2: Using different secrets per namespace
-[%collapsible%open]
+.Using different secrets per namespace
+[%collapsible%closed]
 ====
 ----
 apiVersion: storage.k8s.io/v1
@@ -338,8 +338,8 @@ parameters:
 ----
 ====
 
-.Example 3: Using different secrets per volume
-[%collapsible%open]
+.Using different secrets per volume
+[%collapsible%closed]
 ====
 ----
 apiVersion: storage.k8s.io/v1
@@ -356,7 +356,7 @@ parameters:
 ====
 
 [NOTE]
-`nasType: `smb` filters for pools which support SMB volumes. `nasType: `nfs` or `nasType: `null` filters for NFS pools.
+`nasType: smb` filters for pools which support SMB volumes. `nasType: nfs` or `nasType: null` filters for NFS pools.
 
 == Create the backend
 

@@ -184,7 +184,11 @@ WARNING: Reboot your worker nodes after installing the iSCSI tools to prevent fa
 == NVMe/TCP volumes
 Install the NVMe tools using the commands for your operating system.
 
-NOTE: If kernel version of your Kubernetes node is too old or if the NVMe package is not available for your kernel version, you might have to update the kernel version of your node to one with the NVMe package. 
+[NOTE]
+====
+* NVMe requires RHEL 9 or later. 
+* If the kernel version of your Kubernetes node is too old or if the NVMe package is not available for your kernel version, you might have to update the kernel version of your node to one with the NVMe package. 
+====
 
 [role="tabbed-block"]
 ====

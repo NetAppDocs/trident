@@ -113,7 +113,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 You can control default provisioning using these options in the `defaults` section of the configuration. For an example, see the configuration examples below.
 
-[cols=3,options="header"]
+[cols="1,3,2",options="header"]
 |===
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |"true"
@@ -447,43 +447,21 @@ storage:
 ---
 version: 1
 storageDriverName: ontap-san
-managementLIF: 10.0.0.1
-svm: svm_nvme
 sanType: nvme
-useREST: true
+managementLIF: 10.0.0.1
+svm: nvme_svm
 username: vsadmin
-password: password
+password: <password>
+useREST: true
 defaults:
   spaceAllocation: 'false'
-  encryption: 'false'
-  qosPolicy: standard
-labels:
-  store: san_store
-  kubernetes-cluster: prod-cluster-1
-region: us_east_1
+  encryption: 'true'
 storage:
 - labels:
-    protection: gold
-    creditpoints: '40000'
-  zone: us_east_1a
-  defaults:
-    spaceAllocation: 'true'
-    encryption: 'true'
-    adaptiveQosPolicy: adaptive-extreme
-- labels:
-    protection: silver
-    creditpoints: '20000'
-  zone: us_east_1b
+    app: testApp
+    cost: '20'
   defaults:
     spaceAllocation: 'false'
-    encryption: 'true'
-    qosPolicy: premium
-- labels:
-    protection: bronze
-    creditpoints: '5000'
-  zone: us_east_1c
-  defaults:
-    spaceAllocation: 'true'
     encryption: 'false'
 ----
 ====
@@ -553,6 +531,19 @@ metadata:
 provisioner: netapp.io/trident
 parameters:
   selector: "creditpoints=5000"
+  fsType: "ext4"
+----
+* The `my-test-app-sc` StorageClass will map to the `testAPP` virtual pool in the `ontap-san` driver with `sanType: nvme`. This is the only pool offering `testApp`. 
++
+----
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-test-app-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "app=testApp"
   fsType: "ext4"
 ----
 

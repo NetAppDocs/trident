@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/prereqs-docker.html
-keywords: deploy, astra trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config
+keywords: deploy, astra trident, docker, trident for docker, nfs, iscsi, protcol, nfs protocol, iscsi protocol, configure host, host config, nvme/tcp, nvme
 summary: You have to install and configure the necessary protocol prerequisites on your host before you can deploy Astra Trident.
 ---
 
@@ -21,25 +21,34 @@ You have to install and configure the necessary protocol prerequisites on your h
 ----
 docker --version
 ----
-* Verify that the protocol prerequisites are installed and configured on your host:
+* Verify that the protocol prerequisites are installed and configured on your host.
 
-[%header,cols=3*]
-|===
-|Protocol
-|Operating system
-|Commands
+=== NFS tools
+Install the NFS tools using the commands for your operating system. 
 
-|NFS
-a|RHEL 8+
-a|`sudo yum install -y nfs-utils`
+[role="tabbed-block"]
+====
+.RHEL 8+
+--
+----
+sudo yum install -y nfs-utils
+----
+--
+.Ubuntu
+--
+----
+sudo apt-get install -y nfs-common
+----
+====
+WARNING: Reboot your worker nodes after installing the NFS tools to prevent failure when attaching volumes to containers.
 
-|NFS
-a|Ubuntu
-a|`sudo apt-get install -y nfs-common`
+=== iSCSI tools
+Install the iSCSI tools using the commands for your operating system.
 
-|iSCSI
-a|RHEL 8+
-a|
+[role="tabbed-block"]
+====
+.RHEL 8+
+--
 . Install the following system packages:
 +
 `sudo yum install -y lsscsi iscsi-initiator-utils sg3_utils device-mapper-multipath`
@@ -61,10 +70,10 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 . Enable and start `iscsi`:
 +
 `sudo systemctl enable --now iscsi`
+--
 
-|iSCSI
-a|Ubuntu
-a|
+.Ubuntu
+--
 . Install the following system packages:
 +
 `sudo apt-get install -y open-iscsi lsscsi sg3-utils multipath-tools scsitools`
@@ -92,4 +101,33 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 `sudo systemctl status multipath-tools`
 `sudo systemctl enable --now open-iscsi.service`
 `sudo systemctl status open-iscsi`
-|===
+--
+====
+
+== NVMe tools
+Install the NVMe tools using the commands for your operating system.
+
+[NOTE]
+====
+* NVMe requires RHEL 9 or later. 
+* If the kernel version of your Kubernetes node is too old or if the NVMe package is not available for your kernel version, you might have to update the kernel version of your node to one with the NVMe package. 
+====
+
+[role="tabbed-block"]
+====
+.RHEL 9
+--
+----
+sudo yum install nvme-cli
+sudo yum install linux-modules-extra-$(uname -r)
+sudo modprobe nvme-tcp
+----
+--
+.Ubuntu
+--
+----
+sudo apt install nvme-cli
+sudo apt -y install linux-modules-extra-$(uname -r)
+sudo modprobe nvme-tcp
+----
+====

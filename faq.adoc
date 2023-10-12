@@ -130,7 +130,7 @@ NetApp supports upgrading Astra Trident from one major release to the next immed
 
 === Is it possible to downgrade Trident to a previous release?
 
-If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should link:../trident-managing-k8s/uninstall-trident.html[uninstall Astra Trident] and reinstall the earlier version using the specific instructions for that version. This is the only recommended way to downgrade to an earlier version.
+If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should link:/trident-managing-k8s/uninstall-trident.html[uninstall Astra Trident] and reinstall the earlier version using the specific instructions for that version. This is the only recommended way to downgrade to an earlier version.
 
 == Manage backends and volumes
 
@@ -160,7 +160,7 @@ Astra Trident supports defining IPv6 addresses for:
  * `managementLIF` and `dataLIF` for ONTAP NAS backends. 
  * `managementLIF` for ONTAP SAN backends. You cannot specify `dataLIF` on an ONTAP SAN backend. 
 
-Astra Trident must be installed using the ``--use-ipv6` flag for it to function over IPv6.
+Astra Trident must be installed using the flag `--use-ipv6` (for `tridentctl` installation), `IPv6` (for Trident operator), or `tridentTPv6` (for Helm installation) for it to function over IPv6.
 
 === Is it possible to update the Management LIF on the backend?
 

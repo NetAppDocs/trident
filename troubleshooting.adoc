@@ -179,33 +179,21 @@ tridentctl obliviate crd
 == NVMe node unstaging failure with RWX raw block namespaces o Kubernetes 1.26 
 If you are running Kubernetes 1.26, node unstaging might fail when using NVMe/TCP with RWX raw block namespaces. The following scenarios provide workaround to the failure. Alternatively, you can upgrade Kubernetes to 1.27. 
 
-[role="tabbed-block"]
-====
-
-.Deleted the namespace and pod
---
+=== Deleted the namespace and pod
 If you delete the namespace and pod, the untaging process gets stuck after you attempt to delete the pod. The PV will not be deleted because Astra Trident cannot find the deleted device. This scenario does not impact the Kubernetes cluster or other functioning. 
 
 .Workaround
 Unmount the PV from the respective node and delete it. 
---
 
-.Blocked dataLIFs
---
+
+=== Blocked dataLIFs
 If you block the dataLIFs, the unstaging process gets stuck when you attempt to delete the pod. In this scenario, you cannot run any NVMe CLI commands on the Kubernetes node. 
 
 .Workaround
 Bring up the dataLIFS to restore full functionality.
---
 
-.Deleted namespace mapping
---
+=== Deleted namespace mapping
 If you delete the namespace mapping to the subsystem that contains the `hostNQN` of the worker node, the unstaging process gets stuck when you attempt to delete the pod. In this scenario, you cannot run any NVMe CLI commands on the Kubernetes node. 
 
 .Workaround
 Add the host back to the subsystem.
---
-==== 
-
-
-

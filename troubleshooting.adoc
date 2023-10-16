@@ -193,7 +193,7 @@ Unmount the persistent volume (corresponding to that namespace) from the respect
 Bring up the dataLIFS to restore full functionality.
 
 === Deleted namespace mapping
-If you delete the namespace mapping to the subsystem that contains the `hostNQN` of the worker node, the unstaging process gets stuck when you attempt to delete the pod. In this scenario, you cannot run any NVMe CLI commands on the Kubernetes node. 
+ If you remove the `hostNQN` of the worker node from the corresponding subsystem, the unstaging process gets stuck when you attempt to delete the pod. In this scenario, you cannot run any NVMe CLI commands on the Kubernetes node. 
 
 .Workaround
 Add the `hostNQN` back to the subsystem.

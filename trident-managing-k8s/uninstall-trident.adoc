@@ -46,7 +46,10 @@ kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"uninst
 When the `uninstall` flag is set to `true`, the Trident operator uninstalls Trident, but does not remove the TridentOrchestrator itself. You should clean up the TridentOrchestrator and create a new one if you want to install Trident again.
 
 . **Delete `TridentOrchestrator`**: By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
-
++
+----
+kubectl delete -f deploy/<bundle.yaml> -n <namespace>
+----
 
 === Uninstall Helm installation
 If you installed Astra Trident by using Helm, you can uninstall it by using `helm uninstall`.

@@ -90,15 +90,15 @@ The Astra Trident installer provides a bundle file that can be used to install t
 kubectl apply -f deploy/namespace.yaml
 ----
 * To deploy the operator in a namespace other than the `trident` namespace, update `serviceaccount.yaml`, `clusterrolebinding.yaml` and `operator.yaml` and generate your bundle file using the `kustomization.yaml`. 
-. Create the `kustomization.yaml` using the following command where _<bundle>_ is `bundle_pre_1_25` or `bundle_post_1_25` based on your Kubernetes version. 
+. Create the `kustomization.yaml` using the following command where _<bundle.yaml>_ is `bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. 
 +
 ----
-cp kustomization_<bundle>.yaml kustomization.yaml
+cp kustomization_<bundle.yaml> deploy/kustomization.yaml
 ----
-. Compile the bundle using using the following command where _<bundle>_ is `bundle_pre_1_25` or `bundle_post_1_25` based on your Kubernetes version. 
+. Compile the bundle using using the following command where _<bundle.yaml>_ is `bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. 
 +
 ----
-kubectl kustomize deploy/ > deploy/<bundle>.yaml
+kubectl kustomize deploy/ > deploy/<bundle.yaml>
 ----
 
 
@@ -107,7 +107,7 @@ kubectl kustomize deploy/ > deploy/<bundle>.yaml
 . Create the resources and deploy the operator:
 +
 ----
-kubectl create -f deploy/<bundle>.yaml
+kubectl create -f deploy/<bundle.yaml>
 ----
 . Verify the operator, deployment, and replicasets were created. 
 +

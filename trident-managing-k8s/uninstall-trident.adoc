@@ -48,7 +48,7 @@ When the `uninstall` flag is set to `true`, the Trident operator uninstalls Trid
 . **Delete `TridentOrchestrator`**: By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
 +
 ----
-kubectl delete -f deploy/<bundle.yaml>
+kubectl delete -f deploy/<bundle.yaml> -n <namespace>
 ----
 
 === Uninstall Helm installation

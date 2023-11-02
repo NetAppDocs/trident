@@ -100,7 +100,7 @@ kubectl apply -f deploy/namespace.yaml
 . Create the `kustomization.yaml` using the following command where _<bundle.yaml>_ is `bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. 
 +
 ----
-cp kustomization_<bundle.yaml> deploy/kustomization.yaml
+cp deploy/kustomization_<bundle.yaml> deploy/kustomization.yaml
 ----
 
 . Compile the bundle using using the following command where _<bundle.yaml>_ is `bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. 

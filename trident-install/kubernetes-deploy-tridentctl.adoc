@@ -169,3 +169,30 @@ For more information about force detach, refer to link:..trident-get-started/kub
 tridentctl install --enable-force-detach=true -n trident
 ----
 ====
+
+== Using tridentctl locally
+Typically, you will use `tridentctl` on a Kubernetes cluster running Astra Trident. However, you can use one of the following options to use `tridentctl` commands locally on a Kubernetes cluster:
+
+.Export KUBECONFIG environment variable
+[%collapsible%closed]
+====
+. Set the KUBECONFIG environment variable to the location of the kubeconfig file:
++
+----
+export KUBECONFIG=<path of that kubeconfig file>
+----
+. Use `tridentctl` to run commands as normal.
++
+----
+tridentctl <cmd> -n <namespace>
+----
+====
+
+.Specify KUBECONFIG path in command
+[%collapsible%closed]
+====
+You can specify the KUBECONFIG path for individual commands using `-k` or `--kubeconfig` as follows:
+----
+tridentctl -k /path/to/kubeconfigFile <cmd> -n <namespace>
+----
+====

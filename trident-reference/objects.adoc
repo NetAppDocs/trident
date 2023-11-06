@@ -255,7 +255,7 @@ Here are a few points to keep in mind about Trident's CRDs:
 
 == Astra Trident `StorageClass` objects
 
-Trident creates matching storage classes for Kubernetes `StorageClass` objects that specify `csi.trident.netapp.io`/`netapp.io/trident` in their provisioner field. The storage class name matches that of the Kubernetes `StorageClass` object it represents.
+Trident creates matching storage classes for Kubernetes `StorageClass` objects that specify `csi.trident.netapp.io` in their provisioner field. The storage class name matches that of the Kubernetes `StorageClass` object it represents.
 
 NOTE: With Kubernetes, these objects are created automatically when a Kubernetes `StorageClass` that uses Trident as a provisioner is registered.
 

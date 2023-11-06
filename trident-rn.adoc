@@ -15,7 +15,37 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What’s new in 23.07.1
+== What’s new in 23.10
+
+=== Fixes
+
+* Fixed volume expansion if a new requested size is smaller than the total volume size for ontap-nas and ontap-nas-flexgroup storage drivers (link:https://github.com/NetApp/trident/issues/834[Issue #834^]).
+* Fixed volume size to display only usable size of the volume during import for ontap-nas and ontap-nas-flexgroup storage drivers (link:https://github.com/NetApp/trident/issues/722[Issue #722^]).
+* Fixed FlexVol name conversion for ONTAP-NAS-Economy.
+* Fixed Astra Trident initialization issue on a windows node when node is rebooted.
+
+=== Enhancements
+
+==== Kubernetes
+Added support for Kubernetes 1.28.
+
+==== Astra Trident
+* Added support for using Azure Managed Identities(AMI) with azure-netapp-files storage driver.
+* Added support for NVMe over TCP for the ONTAP-SAN driver.
+* Added ability to pause the provisioning of a volume when backend is set to suspended state by user.
+
+=== Advanced features available in Astra Control
+
+With the Astra Trident 23.10 release, a new software component called Astra Control Provisioner will be available to licensed Astra Control users. This provisioner provides access to a superset of advanced management and storage provisioning features beyond those that Astra Trident supports. For the 23.10 release, these features include:
+
+* Backup and restore capabilities for applications with ontap-nas-economy driver-backed storage backends
+* Enhanced storage backend security with Kerberos 5 encryption
+* Data recovery using a snapshot
+* SnapMirror enhancements
+
+link:https://docs.netapp.com/us-en/astra-control-center/release-notes/whats-new.html[Learn more about Astra Control Provisioner.^] 
+
+== Changes in 23.07.1
 *Kubernetes:* Fixed daemonset deletion to support zero-downtime upgrades (link:https://github.com/NetApp/trident/issues/740[Issue #740^]).
 
 == Changes in 23.07

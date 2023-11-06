@@ -477,7 +477,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: protection-gold
-provisioner: netapp.io/trident
+provisioner: csi.trident.netapp.io
 parameters:
   selector: "protection=gold"
   fsType: "ext4"
@@ -490,7 +490,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: protection-not-gold
-provisioner: netapp.io/trident
+provisioner: csi.trident.netapp.io
 parameters:
   selector: "protection!=gold"
   fsType: "ext4"
@@ -503,7 +503,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: app-mysqldb
-provisioner: netapp.io/trident
+provisioner: csi.trident.netapp.io
 parameters:
   selector: "app=mysqldb"
   fsType: "ext4"
@@ -516,7 +516,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: protection-silver-creditpoints-20k
-provisioner: netapp.io/trident
+provisioner: csi.trident.netapp.io
 parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
@@ -528,7 +528,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: creditpoints-5k
-provisioner: netapp.io/trident
+provisioner: csi.trident.netapp.io
 parameters:
   selector: "creditpoints=5000"
   fsType: "ext4"

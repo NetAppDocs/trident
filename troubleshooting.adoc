@@ -53,7 +53,7 @@ Installed with tridentctl::
 * If you want to downgrade to an earlier version of Trident, first run the `tridentctl uninstall` command to remove Trident. Download the desired https://github.com/NetApp/trident/releases[Trident version] and install using the `tridentctl install` command. 
 * After a successful install, if a PVC is stuck in the `Pending` phase, running `kubectl describe pvc` can provide additional information about why Trident failed to provision a PV for this PVC.
 
-== Troubleshooting an unsuccessful Trident deployment using the operator
+== Unsuccessful Trident deployment using the operator
 If you are deploying Trident using the operator, the status of `TridentOrchestrator` changes from `Installing` to `Installed`. If you observe the `Failed` status, and the operator is unable to recover by itself, you should check the logs of the operator by running following command:
 ----
 tridentctl logs -l trident-operator
@@ -123,7 +123,7 @@ To address the problem, you should edit the `TridentOrchestrator` CR.
 Alternatively, you can delete `TridentOrchestrator`, and create a new
 one with the modified and accurate definition.
 
-== Troubleshooting an unsuccessful Trident deployment using `tridentctl`
+== Unsuccessful Trident deployment using `tridentctl`
 
 To help figure out what went wrong, you could run the installer again using the ``-d`` argument, which will turn on debug mode and help you understand what the problem is:
 
@@ -175,3 +175,25 @@ tridentctl obliviate crd
 ----
 --
 ====
+
+== NVMe node unstaging failure with RWX raw block namespaces o Kubernetes 1.26 
+If you are running Kubernetes 1.26, node unstaging might fail when using NVMe/TCP with RWX raw block namespaces. The following scenarios provide workaround to the failure. Alternatively, you can upgrade Kubernetes to 1.27. 
+
+=== Deleted the namespace and pod
+Consider a scenario where you have an Astra Trident managed namespace (NVMe persistent volume) attached to a pod. If you delete the namespace directly from the ONTAP backend, the unstaging process gets stuck after you attempt to delete the pod. This scenario does not impact the Kubernetes cluster or other functioning. 
+
+.Workaround
+Unmount the persistent volume (corresponding to that namespace) from the respective node and delete it.
+
+
+=== Blocked dataLIFs
+ If you block (or bring down) all the dataLIFs of the NVMe Astra Trident backend, the unstaging process gets stuck when you attempt to delete the pod. In this scenario, you cannot run any NVMe CLI commands on the Kubernetes node. 
+
+.Workaround
+Bring up the dataLIFS to restore full functionality.
+
+=== Deleted namespace mapping
+ If you remove the `hostNQN` of the worker node from the corresponding subsystem, the unstaging process gets stuck when you attempt to delete the pod. In this scenario, you cannot run any NVMe CLI commands on the Kubernetes node. 
+
+.Workaround
+Add the `hostNQN` back to the subsystem.

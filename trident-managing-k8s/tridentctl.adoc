@@ -48,6 +48,7 @@ The Astra Trident `tridentctl` utility supports the following commands and globa
 ====
 `-d`, `--debug`:: Debug output.
 `-h`, `--help`:: Help for `tridentctl`.
+`-k`, `--kubeconfig string`:: Set the Kubernetes config (KUBECONFIG) path.
 `-n`, `--namespace string`:: Namespace of Astra Trident deployment.
 `-o`, `--output string`:: Output format. One of json|yaml|name|wide|ps (default).
 `-s`, `--server string`:: Address/port of Astra Trident REST interface.
@@ -57,7 +58,7 @@ WARNING: Trident REST interface can be configured to listen and serve at 127.0.0
 
 == Command options and flags
 
-=== `create`
+=== create
 
 Use the `create` command to add a resource to Astra Trident.
 
@@ -69,7 +70,7 @@ tridentctl create [option]
 Options:: 
 `backend`:: Add a backend to Astra Trident.
 
-=== `delete`
+=== delete
 
 Use the `delete` command to remove one or more resources from Astra Trident.
 
@@ -80,12 +81,12 @@ tridentctl delete [option]
 
 Options::
 
-`backend`:: Delete one or more storage backends from Astra Trident.
-`snapshot`:: Delete one or more volume snapshots from Astra Trident.
-`storageclass`:: Delete one or more storage classes from Astra Trident.
-`volume`:: Delete one or more storage volumes from Astra Trident.
+`backend`: Delete one or more storage backends from Astra Trident.
+`snapshot`: Delete one or more volume snapshots from Astra Trident.
+`storageclass`: Delete one or more storage classes from Astra Trident.
+`volume`: Delete one or more storage volumes from Astra Trident.
 
-=== `get`
+=== get
 
 Use the `get` command to get one or more resources from Astra Trident.
 
@@ -96,18 +97,18 @@ tridentctl get [option]
 
 Options:: 
 
-`backend`:: Get one or more storage backends from Astra Trident.
-`snapshot`:: Get one or more snapshots from Astra Trident.
-`storageclass`:: Get one or more storage classes from Astra Trident.
-`volume`:: Get one or more volumes from Astra Trident.
+`backend`: Get one or more storage backends from Astra Trident.
+`snapshot`: Get one or more snapshots from Astra Trident.
+`storageclass`: Get one or more storage classes from Astra Trident.
+`volume`: Get one or more volumes from Astra Trident.
 
 Flags::
 
-`-h`, `--help`:: Help for volumes.
-`--parentOfSubordinate string`:: Limit query to subordinate source volume. 
-`--subordinateOf string`:: Limit query to subordinates of volume. 
+`-h`, `--help`: Help for volumes.
+`--parentOfSubordinate string`: Limit query to subordinate source volume. 
+`--subordinateOf string`: Limit query to subordinates of volume. 
 
-=== `images`
+=== images
 
 Use `images` flags to print a table of the container images Astra Trident needs.
 
@@ -118,10 +119,10 @@ tridentctl images [flags]
 
 Flags::
 
-`-h`, `--help`:: Help for images.
-`-v`, `--k8s-version string`:: Semantic version of Kubernetes cluster.
+`-h`, `--help`: Help for images.
+`-v`, `--k8s-version string`: Semantic version of Kubernetes cluster.
 
-=== `import volume`
+=== import volume
 
 Use the `import volume` command to import an existing volume to Astra Trident.
 
@@ -131,15 +132,14 @@ tridentctl import volume <backendName> <volumeName> [flags]
 ----
 
 Alias::
-`volume, v`
+`volume`, `v`
 
 Flags::
+`-f`, `--filename string`: Path to YAML or JSON PVC file.
+`-h`, `--help`: Help for volume.
+`--no-manage`: Create PV/PVC only. Don't assume volume lifecycle management.
 
-`-f`, `--filename string`:: Path to YAML or JSON PVC file.
-`-h`, `--help`:: Help for volume.
-`--no-manage`:: Create PV/PVC only. Don't assume volume lifecycle management.
-
-=== `install`
+=== install
 
 Use the `install` flags to install Astra Trident.
 
@@ -150,23 +150,23 @@ tridentctl install [flags]
 
 Flags::
 
-`--autosupport-image string`:: The container image for Autosupport Telemetry (default "netapp/trident autosupport:<current-version>").
-`--autosupport-proxy string`:: The address/port of a proxy for sending Autosupport Telemetry.
-`--enable-node-prep`:: Attempt to install required packages on nodes.
-`--generate-custom-yaml`:: Generate YAML files without installing anything.
-`-h`, `--help`:: Help for install.
-`--http-request-timeout`:: Override the HTTP request timeout for Trident controller's REST API (default 1m30s).
-`--image-registry string`:: The address/port of an internal image registry.
-`--k8s-timeout duration`:: The timeout for all Kubernetes operations (default 3m0s).
-`--kubelet-dir string`:: The host location of kubelet's internal state (default "/var/lib/kubelet").
-`--log-format string`:: The Astra Trident logging format (text, json) (default "text").
+`--autosupport-image string`: The container image for Autosupport Telemetry (default "netapp/trident autosupport:<current-version>").
+`--autosupport-proxy string`: The address/port of a proxy for sending Autosupport Telemetry.
+`--enable-node-prep`: Attempt to install required packages on nodes.
+`--generate-custom-yaml`: Generate YAML files without installing anything.
+`-h`, `--help`: Help for install.
+`--http-request-timeout`: Override the HTTP request timeout for Trident controller's REST API (default 1m30s).
+`--image-registry string`: The address/port of an internal image registry.
+`--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
+`--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
+`--log-format string`: The Astra Trident logging format (text, json) (default "text").
 `--pv string`:: The name of the legacy PV used by Astra Trident, makes sure this doesn't exist (default "trident").
-`--pvc string`:: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
-`--silence-autosupport`:: Don't send autosupport bundles to NetApp automatically (default true).
-`--silent`:: Disable most output during installation.
-`--trident-image string`:: The Astra Trident image to install.
-`--use-custom-yaml`:: Use any existing YAML files that exist in setup directory.
-`--use-ipv6`:: Use IPv6 for Astra Trident's communication.
+`--pvc string`: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
+`--silence-autosupport`: Don't send autosupport bundles to NetApp automatically (default true).
+`--silent`: Disable most output during installation.
+`--trident-image string`: The Astra Trident image to install.
+`--use-custom-yaml`: Use any existing YAML files that exist in setup directory.
+`--use-ipv6`: Use IPv6 for Astra Trident's communication.
 
 === `logs`
 

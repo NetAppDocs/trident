@@ -11,196 +11,245 @@ summary: Learn more about tridentctl, a command-line utility that provides simpl
 :imagesdir: ../media/
 
 [.lead]
-The https://github.com/NetApp/trident/releases[Trident installer bundle^] includes a command-line utility, `tridentctl`, that provides simple access to Astra Trident. Kubernetes users with sufficient privileges can use it to install Astra Trident as well as to interact with it directly to manage the namespace that contains the Astra Trident pod.
+The https://github.com/NetApp/trident/releases[Trident installer bundle^] includes the `tridentctl` command-line utility to provide simple access to Astra Trident. Kubernetes users with sufficient privileges can use it to install Astra Trident or manage the namespace that contains the Astra Trident pod.
 
-== Available commands and options
+== Commands and global flags
+You can run `tridentctl help` to get a list of available commands for `tridentctl` or append the `--help` flag to any command to get a list of options and flags for that specific command.
 
-For usage information, run `tridentctl --help`.
-
-The available commands and global options are:
+Usage:: 
 ----
-Usage:
-  tridentctl [command]
+tridentctl [command] [--optional-flag]
 ----
-Available commands:
 
-* `create`: Add a resource to Astra Trident.
-* `delete`: Remove one or more resources from Astra Trident.
-* `get`: Get one or more resources from Astra Trident.
-* `help`: Help about any command.
-* `images`: Print a table of the container images Astra Trident needs.
-* `import`: Import an existing resource to Astra Trident.
-* `install`: Install Astra Trident.
-* `logs`: Print the logs from Astra Trident.
-* `send`: Send a resource from Astra Trident.
-* `uninstall`: Uninstall Astra Trident.
-* `update`: Modify a resource in Astra Trident.
-* `upgrade`: Upgrade a resource in Astra Trident.
-* `version`: Print the version of Astra Trident.
+The Astra Trident `tridentctl` utility supports the following commands and global flags. 
 
-Flags:
+.Commands
+[%collapsible%closed]
+====
 
-* ``-d, --debug`: Debug output.
-* ``-h, --help`: Help for `tridentctl`.
-* ``-n, --namespace string`: Namespace of Astra Trident deployment.
-* ``-o, --output string`: Output format. One of json|yaml|name|wide|ps (default).
-* ``-s, --server string`: Address/port of Astra Trident REST interface.
+`create`:: Add a resource to Astra Trident.
+`delete`:: Remove one or more resources from Astra Trident.
+`get`:: Get one or more resources from Astra Trident.
+`help`:: Help about any command.
+`images`:: Print a table of the container images Astra Trident needs.
+`import`:: Import an existing resource to Astra Trident.
+`install`:: Install Astra Trident.
+`logs`:: Print the logs from Astra Trident.
+`send`:: Send a resource from Astra Trident.
+`uninstall`:: Uninstall Astra Trident.
+`update`:: Modify a resource in Astra Trident.
+`update backend state`:: Temporarily suspend backend operations. 
+`upgrade`:: Upgrade a resource in Astra Trident.
+`version`:: Print the version of Astra Trident.
+====
+
+.Global flags
+[%collapsible%closed]
+====
+`-d`, `--debug`:: Debug output.
+`-h`, `--help`:: Help for `tridentctl`.
+`-n`, `--namespace string`:: Namespace of Astra Trident deployment.
+`-o`, `--output string`:: Output format. One of json|yaml|name|wide|ps (default).
+`-s`, `--server string`:: Address/port of Astra Trident REST interface.
 +
-CAUTION: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
+WARNING: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
+====
 
-CAUTION: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
+== Command options and flags
 
-== `create`
+=== `create`
 
-You can use run the `create` command to add a resource to Astra Trident.
+Use the `create` command to add a resource to Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl create [option]
+tridentctl create [option]
 ----
-Available option:
-`backend`: Add a backend to Astra Trident.
 
-== `delete`
+Options:: 
+`backend`:: Add a backend to Astra Trident.
 
-You can run the `delete` command to remove one or more resources from Astra Trident.
+=== `delete`
+
+Use the `delete` command to remove one or more resources from Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl delete [option]
+tridentctl delete [option]
 ----
-Available options:
 
-* `backend`: Delete one or more storage backends from Astra Trident.
-* `snapshot`: Delete one or more volume snapshots from Astra Trident.
-* `storageclass`: Delete one or more storage classes from Astra Trident.
-* `volume`: Delete one or more storage volumes from Astra Trident.
+Options::
 
-== `get`
+`backend`:: Delete one or more storage backends from Astra Trident.
+`snapshot`:: Delete one or more volume snapshots from Astra Trident.
+`storageclass`:: Delete one or more storage classes from Astra Trident.
+`volume`:: Delete one or more storage volumes from Astra Trident.
 
-You can run the `get` command to get one or more resources from Astra Trident.
+=== `get`
+
+Use the `get` command to get one or more resources from Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl get [option]
+tridentctl get [option]
 ----
-Available options:
 
-* `backend`: Get one or more storage backends from Astra Trident.
-* `snapshot`: Get one or more snapshots from Astra Trident.
-* `storageclass`: Get one or more storage classes from Astra Trident.
-* `volume`: Get one or more volumes from Astra Trident.
+Options:: 
 
-`volume` flags:
-* ``-h, --help`: Help for volumes.
-* `--parentOfSubordinate string`: Limit query to subordinate source volume. 
-* `--subordinateOf string`: Limit query to subordinates of volume. 
+`backend`:: Get one or more storage backends from Astra Trident.
+`snapshot`:: Get one or more snapshots from Astra Trident.
+`storageclass`:: Get one or more storage classes from Astra Trident.
+`volume`:: Get one or more volumes from Astra Trident.
 
-== `images`
+Flags::
 
-You can run the `images` flag to print a table of the container images Astra Trident needs.
+`-h`, `--help`:: Help for volumes.
+`--parentOfSubordinate string`:: Limit query to subordinate source volume. 
+`--subordinateOf string`:: Limit query to subordinates of volume. 
+
+=== `images`
+
+Use `images` flags to print a table of the container images Astra Trident needs.
+
+Usage::
 ----
-Usage:
-  tridentctl images [flags]
+tridentctl images [flags]
 ----
-Flags:
-* ``-h, --help`: Help for images.
-* ``-v, --k8s-version string`: Semantic version of Kubernetes cluster.
 
-== `import volume`
+Flags::
 
-You can run the `import volume` command to import an existing volume to Astra Trident.
+`-h`, `--help`:: Help for images.
+`-v`, `--k8s-version string`:: Semantic version of Kubernetes cluster.
+
+=== `import volume`
+
+Use the `import volume` command to import an existing volume to Astra Trident.
+
+Usage:: 
 ----
-Usage:
-  tridentctl import volume <backendName> <volumeName> [flags]
+tridentctl import volume <backendName> <volumeName> [flags]
 ----
-Aliases:
+
+Alias::
 `volume, v`
 
-Flags:
+Flags::
 
-* ``-f, --filename string`: Path to YAML or JSON PVC file.
-* ``-h, --help`: Help for volume.
-* ``--no-manage`: Create PV/PVC only. Don't assume volume lifecycle management.
+`-f`, `--filename string`:: Path to YAML or JSON PVC file.
+`-h`, `--help`:: Help for volume.
+`--no-manage`:: Create PV/PVC only. Don't assume volume lifecycle management.
 
-== `install`
+=== `install`
 
-You can run the `install` flags to install Astra Trident.
+Use the `install` flags to install Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl install [flags]
+tridentctl install [flags]
 ----
-Flags:
 
-* `--autosupport-image string`: The container image for Autosupport Telemetry (default "netapp/trident autosupport:<current-version>").
-* `--autosupport-proxy string`: The address/port of a proxy for sending Autosupport Telemetry.
-* `--enable-node-prep`: Attempt to install required packages on nodes.
-* `--generate-custom-yaml`: Generate YAML files without installing anything.
-* `-h, --help`: Help for install.
-* `--http-request-timeout`: Override the HTTP request timeout for Trident controller's REST API (default 1m30s).
-* `--image-registry string`: The address/port of an internal image registry.
-* `--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
-* `--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
-* `--log-format string`: The Astra Trident logging format (text, json) (default "text").
-* `--pv string`: The name of the legacy PV used by Astra Trident, makes sure this doesn't exist (default "trident").
-* `--pvc string`: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
-* `--silence-autosupport`: Don't send autosupport bundles to NetApp automatically (default true).
-* `--silent`: Disable most output during installation.
-* `--trident-image string`: The Astra Trident image to install.
-* `--use-custom-yaml`: Use any existing YAML files that exist in setup directory.
-* `--use-ipv6`: Use IPv6 for Astra Trident's communication. 
+Flags::
 
-== `logs`
+`--autosupport-image string`:: The container image for Autosupport Telemetry (default "netapp/trident autosupport:<current-version>").
+`--autosupport-proxy string`:: The address/port of a proxy for sending Autosupport Telemetry.
+`--enable-node-prep`:: Attempt to install required packages on nodes.
+`--generate-custom-yaml`:: Generate YAML files without installing anything.
+`-h`, `--help`:: Help for install.
+`--http-request-timeout`:: Override the HTTP request timeout for Trident controller's REST API (default 1m30s).
+`--image-registry string`:: The address/port of an internal image registry.
+`--k8s-timeout duration`:: The timeout for all Kubernetes operations (default 3m0s).
+`--kubelet-dir string`:: The host location of kubelet's internal state (default "/var/lib/kubelet").
+`--log-format string`:: The Astra Trident logging format (text, json) (default "text").
+`--pv string`:: The name of the legacy PV used by Astra Trident, makes sure this doesn't exist (default "trident").
+`--pvc string`:: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
+`--silence-autosupport`:: Don't send autosupport bundles to NetApp automatically (default true).
+`--silent`:: Disable most output during installation.
+`--trident-image string`:: The Astra Trident image to install.
+`--use-custom-yaml`:: Use any existing YAML files that exist in setup directory.
+`--use-ipv6`:: Use IPv6 for Astra Trident's communication.
 
-You can run the `logs` flags to print the logs from Astra Trident.
+=== `logs`
+
+Use `logs` flags to print the logs from Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl logs [flags]
+tridentctl logs [flags]
 ----
-Flags:
 
-* ``-a, --archive`: Create a support archive with all logs unless otherwise specified.
-* ``-h, --help`: Help for logs.
-* ``-l, --log string`: Astra Trident log to display. One of trident|auto|trident-operator|all (default "auto").
-* ``--node string`: The Kubernetes node name from which to gather node pod logs.
-* ``-p, --previous`: Get the logs for the previous container instance if it exists.
-* ``--sidecars`: Get the logs for the sidecar containers.
+Flags::
 
-== `send`
+`-a`, `--archive`:: Create a support archive with all logs unless otherwise specified.
+`-h`, `--help`:: Help for logs.
+`-l`, `--log string`:: Astra Trident log to display. One of trident|auto|trident-operator|all (default "auto").
+`--node string`:: The Kubernetes node name from which to gather node pod logs.
+`-p`, `--previous`:: Get the logs for the previous container instance if it exists.
+`--sidecars`:: Get the logs for the sidecar containers.
 
-You can run the `send` command to send a resource from Astra Trident.
+=== `send`
+
+Use the `send` command to send a resource from Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl send [option]
+tridentctl send [option]
 ----
-Available option:
-`autosupport`: Send an Autosupport archive to NetApp.
 
-== `uninstall`
+Options::
 
-You can run the `uninstall` flags to uninstall Astra Trident.
-----
-Usage:
-  tridentctl uninstall [flags]
-----
-Flags:
-* `-h, --help`: Help for uninstall.
-* `--silent`: Disable most output during uninstall.
+`autosupport`:: Send an Autosupport archive to NetApp.
 
-== `update`
+=== `uninstall`
 
-You can run the `update` commands to modify a resource in Astra Trident.
-----
-Usage:
-  tridentctl update [option]
-----
-Available options:
-`backend`: Update a backend in Astra Trident.
+Use `uninstall` flags to uninstall Astra Trident.
 
-== `version`
+Usage::
+----
+tridentctl uninstall [flags]
+----
 
-You can run the `version` flags to print the version of `tridentctl` and the running Trident service.
+Flags::
+
+`-h, --help`:: Help for uninstall.
+`--silent`:: Disable most output during uninstall.
+
+=== `update`
+
+Use the `update` command to modify a resource in Astra Trident.
+
+Usage::
 ----
-Usage:
-  tridentctl version [flags]
+tridentctl update [option]
 ----
-Flags:
-* `--client`: Client version only (no server required).
-* `-h, --help`: Help for version.
+
+Options::
+`backend`:: Update a backend in Astra Trident.
+
+=== `update backend state`
+
+Use the `update backend state` command to suspend or resume backend operations.
+
+Usage::
+----
+tridentctl update backend state <backend-name> [flag]
+----
+
+Flags::
+`--user-state`:: Set to `suspended` to pause backend operations. Set to `normal` to resume backend operations. When set to `suspended`:
+* `AddVolume`, `CloneVolume`, `Import Volume`, `ResizeVolume` are paused.
+* `PublishVolume`, `UnPublishVolume`, `CreateSnapshot`, `GetSnapshot`, `RestoreSnapshot`, `DeleteSnapshot`, `RemoveVolume`, `GetVolumeExternal`, `ReconcileNodeAccess` remain available.
+`-h`, `--help`:: Help for backend state. 
+
+=== `version`
+
+Use `version` flags to print the version of `tridentctl` and the running Trident service.
+
+Usage::
+----
+tridentctl version [flags]
+----
+
+Flags::
+
+`--client`:: Client version only (no server required).
+`-h, --help`:: Help for version.

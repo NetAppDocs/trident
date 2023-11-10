@@ -303,12 +303,12 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 
 . When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
 +
-[cols=3,options="header"]
+[cols="1,2,1",options="header"]
 |===
 |Parameter |Description | Example
 
 |`smbShare`
-You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
+| You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
 
 This parameter is optional for on-premises ONTAP. 
 

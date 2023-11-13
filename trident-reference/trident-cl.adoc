@@ -25,10 +25,8 @@ Astra Trident exposes several command-line options for the Trident orchestrator.
 `-k8s_config_path <file>`:: Required; you must specify this path to a KubeConfig file.
 `export`:: Use this command to set the `KUBECONFIG` environment variable to the location of the kubeconfig file in order to run commands locally or from one Kubernetes cluster to another. For example:
 +
-----
-export KUBECONFIG=</kubeconfig/file/path>
-tridentctl <cmd> -n <namespace>
-----
+`export KUBECONFIG=</kubeconfig/file/path>`
+`tridentctl <cmd> -n <namespace>`
 
 == Docker
 

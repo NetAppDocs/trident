@@ -16,9 +16,8 @@ The https://github.com/NetApp/trident/releases[Trident installer bundle^] includ
 == Commands and global flags
 You can run `tridentctl help` to get a list of available commands for `tridentctl` or append the `--help` flag to any command to get a list of options and flags for that specific command.
 
-----
-tridentctl [command] [--optional-flag]
-----
+`tridentctl [command] [--optional-flag]`
+
 
 The Astra Trident `tridentctl` utility supports the following commands and global flags. 
 
@@ -61,9 +60,8 @@ WARNING: Trident REST interface can be configured to listen and serve at 127.0.0
 
 Use the `create` command to add a resource to Astra Trident.
 
-----
-tridentctl create [option]
-----
+`tridentctl create [option]`
+
 
 Options:: 
 `backend`: Add a backend to Astra Trident.
@@ -72,9 +70,7 @@ Options::
 
 Use the `delete` command to remove one or more resources from Astra Trident.
 
-----
-tridentctl delete [option]
-----
+`tridentctl delete [option]`
 
 Options::
 
@@ -87,9 +83,7 @@ Options::
 
 Use the `get` command to get one or more resources from Astra Trident.
 
-----
-tridentctl get [option]
-----
+`tridentctl get [option]`
 
 Options:: 
 
@@ -108,9 +102,7 @@ Flags::
 
 Use `images` flags to print a table of the container images Astra Trident needs.
 
-----
-tridentctl images [flags]
-----
+`tridentctl images [flags]`
 
 Flags::
 
@@ -121,9 +113,7 @@ Flags::
 
 Use the `import volume` command to import an existing volume to Astra Trident.
 
-----
-tridentctl import volume <backendName> <volumeName> [flags]
-----
+`tridentctl import volume <backendName> <volumeName> [flags]`
 
 Aliases::
 `volume`, `v`
@@ -137,9 +127,7 @@ Flags::
 
 Use the `install` flags to install Astra Trident.
 
-----
-tridentctl install [flags]
-----
+`tridentctl install [flags]`
 
 Flags::
 
@@ -165,9 +153,7 @@ Flags::
 
 Use `logs` flags to print the logs from Astra Trident.
 
-----
-tridentctl logs [flags]
-----
+`tridentctl logs [flags]`
 
 Flags::
 
@@ -182,9 +168,7 @@ Flags::
 
 Use the `send` command to send a resource from Astra Trident.
 
-----
-tridentctl send [option]
-----
+`tridentctl send [option]`
 
 Options::
 
@@ -194,9 +178,7 @@ Options::
 
 Use `uninstall` flags to uninstall Astra Trident.
 
-----
-tridentctl uninstall [flags]
-----
+`tridentctl uninstall [flags]`
 
 Flags::
 
@@ -207,9 +189,7 @@ Flags::
 
 Use the `update` command to modify a resource in Astra Trident.
 
-----
-tridentctl update [option]
-----
+`tridentctl update [option]`
 
 Options::
 `backend`: Update a backend in Astra Trident.
@@ -218,9 +198,7 @@ Options::
 
 Use the `update backend state` command to suspend or resume backend operations.
 
-----
-tridentctl update backend state <backend-name> [flag]
-----
+`tridentctl update backend state <backend-name> [flag]`
 
 Flags::
 `-h`, `--help`: Help for backend state. 
@@ -233,9 +211,7 @@ Flags::
 
 Use `version` flags to print the version of `tridentctl` and the running Trident service.
 
-----
-tridentctl version [flags]
-----
+`tridentctl version [flags]`
 
 Flags::
 

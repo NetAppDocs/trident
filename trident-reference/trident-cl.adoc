@@ -22,11 +22,6 @@ Astra Trident exposes several command-line options for the Trident orchestrator.
 
 `-k8s_pod`:: Use this option or `-k8s_api_server` to enable Kubernetes support. Setting this causes Trident to use its containing pod's Kubernetes service account credentials to contact the API server. This only works when Trident runs as a pod in a Kubernetes cluster with service accounts enabled.
 `-k8s_api_server <insecure-address:insecure-port>`:: Use this option or `-k8s_pod` to enable Kubernetes support. When specified, Trident connects to the Kubernetes API server using the provided insecure address and port. This allows Trident to be deployed outside of a pod; however, it only supports insecure connections to the API server. To connect securely, deploy Trident in a pod with the `-k8s_pod` option.
-`-k8s_config_path <file>`:: Required; you must specify this path to a KubeConfig file.
-`export`:: Use this command to set the `KUBECONFIG` environment variable to the location of the kubeconfig file in order to run commands locally or from one Kubernetes cluster to another. For example:
-+
-`export KUBECONFIG=</kubeconfig/file/path>`
-`tridentctl <cmd> -n <namespace>`
 
 == Docker
 

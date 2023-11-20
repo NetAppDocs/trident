@@ -45,12 +45,17 @@ The Astra Trident `tridentctl` utility supports the following commands and globa
 ====
 `-d`, `--debug`:: Debug output.
 `-h`, `--help`:: Help for `tridentctl`.
-`-k`, `--kubeconfig string`:: Specify the `KUBECONFIG` path to run commands locally or from one Kubernetes cluster to another.
+`-k`, `--kubeconfig string`:: Specify the `KUBECONFIG` path to run commands locally or from one Kubernetes cluster to another. 
++
+
+NOTE: Alternatively, you can export the `KUBECONFIG` variable to point to a specific Kubernetes cluster and issue `tridentctl` commands to that cluster.
 `-n`, `--namespace string`:: Namespace of Astra Trident deployment.
 `-o`, `--output string`:: Output format. One of json|yaml|name|wide|ps (default).
 `-s`, `--server string`:: Address/port of Astra Trident REST interface.
 +
+
 WARNING: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
+
 ====
 
 == Command options and flags

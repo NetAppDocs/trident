@@ -37,6 +37,62 @@ Another option is the link:https://kubernetes.io/docs/setup/independent/install-
 
 NOTE: Don't use a Kubernetes cluster that you build using these instructions in a production environment. Use the production deployment guides provided by your distribution for production-ready clusters.
 
+== Kubernetes integration with NetApp products
+The NetApp portfolio of storage products integrates with many aspects of a Kubernetes cluster, providing advanced data management capabilities, which enhance the functionality, capability, performance, and availability of the Kubernetes deployment.
+
+.Amazon FSx for NetApp ONTAP
+[%collapsible%closed]
+====
+
+link:https://www.netapp.com/aws/fsx-ontap/[Amazon FSx for NetApp ONTAP^] is a fully managed AWS service that lets you launch and run file systems powered by the NetApp ONTAP storage operating system. 
+====
+
+.Azure NetApp Files
+[%collapsible%closed]
+====
+
+https://www.netapp.com/azure/azure-netapp-files/[Azure NetApp Files^] is an enterprise-grade Azure file share service, powered by NetApp. You can run your most demanding file-based workloads in Azure natively, with the performance and rich data management you expect from NetApp.
+====
+
+.Cloud Volumes ONTAP
+[%collapsible%closed]
+====
+
+link:https://www.netapp.com/cloud-services/cloud-volumes-ontap/[Cloud Volumes ONTAP^] is a software-only storage appliance that runs the ONTAP data management software in the cloud. 
+====
+
+.Cloud Volumes Service for Google Cloud
+[%collapsible%closed]
+====
+
+link:https://bluexp.netapp.com/google-cloud-netapp-volumes?utm_source=GitHub&utm_campaign=Trident[NetApp Cloud Volumes Service for Google Cloud^] is a cloud native file service that provides NAS volumes over NFS and SMB with all-flash performance. 
+====
+
+.Element software
+[%collapsible%closed]
+====
+
+https://www.netapp.com/data-management/element-software/[Element^] enables the storage administrator to consolidate workloads by guaranteeing performance and enabling a simplified and streamlined storage footprint. 
+====
+
+.NetApp HCI
+[%collapsible%closed]
+====
+
+link:https://docs.netapp.com/us-en/hci/docs/concept_hci_product_overview.html[NetApp HCI^] simplifies the management and scale of the datacenter by automating routine tasks and enabling infrastructure administrators to focus on more important functions.
+
+Astra Trident can provision and manage storage devices for containerized applications directly against the underlying NetApp HCI storage platform.
+====
+
+.NetApp ONTAP
+[%collapsible%closed]
+====
+
+link:https://docs.netapp.com/us-en/ontap/index.html[NetApp ONTAP^] is the NetApp multiprotocol, unified storage operating system that provides advanced data management capabilities for any application. 
+
+ONTAP systems have all-flash, hybrid, or all-HDD configurations and offer many different deployment models, including engineered hardware (FAS and AFF), white-box (ONTAP Select), and cloud-only (Cloud Volumes ONTAP). Astra Trident supports these ONTAP deployment models.
+====
+
 == For more information
 
 * https://docs.netapp.com/us-en/astra-family/intro-family.html[NetApp Astra product family^]

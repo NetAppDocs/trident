@@ -1,0 +1,64 @@
+---
+sidebar: sidebar
+permalink: trident-use/trident-aws-addon.html
+keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident
+summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+---
+
+= Use Astra Trident with Amazon FSx for NetApp ONTAP
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP^] is a fully managed AWS service that enables customers to launch and run file systems powered by the NetApp ONTAP storage operating system. FSx for ONTAP enables you to leverage NetApp features, performance, and administrative capabilities you are familiar with, while taking advantage of the simplicity, agility, security, and scalability of storing data on AWS. FSx for ONTAP supports ONTAP file system features and administration APIs.
+
+== Overview
+A file system is the primary resource in Amazon FSx, analogous to an ONTAP cluster on premises. Within each SVM you can create one or multiple volumes, which are data containers that store the files and folders in your file system. With Amazon FSx for NetApp ONTAP, Data ONTAP will be provided as a managed file system in the cloud. The new file system type is called *NetApp ONTAP*.
+
+Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+
+Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-5A78F93F-7539-4840-AB0B-4A6E3252CF84.html[FabricPool^] to manage storage tiers. It enables you to store data in a tier, based on whether the data is frequently accessed.
+
+== Considerations
+* SMB volumes: 
+** SMB volumes are supported using the `ontap-nas` driver only. 
+** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+* Volumes created on Amazon FSx file systems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume. To prevent this issue:
+
+** Do not use **Quick create** to create the FSx for ONTAP file system. The quick create workflow enables automatic backups and does not provide an opt-out option.
+** When using **Standard create**, disable automatic backup. Disabling automatic backups allows Trident to successfully delete a volume without further manual intervention.
++
+image:screenshot-fsx-backup-disable.png[A screenshot of the AWS console disabling automatic backup.]
+
+== FSx for ONTAP driver details
+
+You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
+
+* `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume.
+* `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
+
+For driver details, see link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
+
+== Authentication
+
+Astra Trident offers two modes of authentication. 
+
+* Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
+* Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. 
++
+WARNING: Astra Trident expects to be run as a `vsadmin` SVM user or as a user with a different name that has the same role. Amazon FSx for NetApp ONTAP has an `fsxadmin` user that is a limited replacement of the ONTAP `admin` cluster user. We strongly recommend using `vsadmin` with Astra Trident. 
+
+You can update backends to move between credential-based and certificate-based methods. However, if you attempt to provide *credentials and certificates*, backend creation will fail. To switch to a different authentication method, you must remove the existing method from the backend configuration.
+
+For details on enabling authentication, refer to the authentication for your driver type:
+
+* link:ontap-nas-prep.html[ONTAP NAS authentication]
+* link:ontap-san-prep.html[ONTAP SAN authentication]
+
+== Find more information
+* https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP documentation^]
+* https://www.netapp.com/blog/amazon-fsx-for-netapp-ontap/[Blog post on Amazon FSx for NetApp ONTAP^]

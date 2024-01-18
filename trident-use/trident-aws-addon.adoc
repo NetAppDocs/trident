@@ -52,11 +52,11 @@ image::../media/aws-eks-05.png[]
 == Install/uninstall the Astra Trident EKS add-on using CLI
 
 .Install the Astra Trident EKS add-on using CLI:
-The following example command installs the AWS add on:
+The following example command installs the Astra Trident EKS add-on:
 * `eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.`
 * `eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.1` (with a dedicated version)
 
 .Uninstall the Astra Trident EKS add-on using CLI:
-The following command uninstalls the AWS Trident add-on:
+The following command uninstalls the Astra Trident EKS add-on:
 `Uninstall add-on using cli:
 eksctl delete addon --cluster K8s-arm --name netapp_trident-operator`

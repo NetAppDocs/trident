@@ -1,0 +1,61 @@
+---
+sidebar: sidebar
+permalink: trident-use/trident-aws-addon.html
+keywords: Trident add-on, Astra Trident EKS add-on, Trident AWS EKS add-on, integrate Trident, Trident
+summary: Add Astra Trident EKS add-on to Kubernetes cluster.
+---
+
+= Configure the Astra Trident EKS add-on version 23.10 on EKS cluser
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Astra Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment. The Astra Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
+
+== Prerequisites
+Ensure that you have the following before configuring the Astra Trident add-on for AWS EKS:
+
+* An Amazon EKS cluster account with add-on subscription
+* AWS permissions to the AWS marketplace:
+    `"aws-marketplace:ViewSubscriptions",
+    "aws-marketplace:Subscribe",
+    "aws-marketplace:Unsubscribe`
+* AMI type: Amazon Linux 2 (AL2_x86_64) or	Amazon Linux 2  Arm(AL2_ARM_64)
+* Node type: AMD or ARM
+* An existing Amazon FSx for NetApp ONTAP file system
+
+== Steps
+. On your your EKS Kubernetes cluster, navigate to the *Add-ons* tab.
++
+image::../media/aws-eks-01.png[]
++
+. Go to *AWS Marketplace add-ons* and choose the _storage_ category.
++
+image::../media/aws-eks-02.png[]
++
+. Locate *AstraTrident by NetApp* and select the checkbox for the Astra Trident add-on.
+. Choose the desired version of the add-on.
++
+image::../media/aws-eks-03.png[]
++
+. Select the IAM role option to inherit from the node.
+. Configure any optional settings as required and select *Next*.
++
+image::../media/aws-eks-04.png[]
++
+. Select *Create*.
+. Verify that the status of the add-on is _Active_.
++
+image::../media/aws-eks-05.png[]
+
+== Install/uninstall the Astra Trident EKS add-on using CLI
+
+.Install the Astra Trident EKS add-on using CLI:
+The following example commands install the Astra Trident EKS add-on:
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.`
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.1` (with a dedicated version)
+
+.Uninstall the Astra Trident EKS add-on using CLI:
+The following command uninstalls the Astra Trident EKS add-on:
+`eksctl delete addon --cluster K8s-arm --name netapp_trident-operator`

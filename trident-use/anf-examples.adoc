@@ -35,15 +35,15 @@ Optional when managed identities is enabled on an AKS cluster. |
 
 |`tenantID` |The tenant ID from an App Registration
 
-Optional when managed identities is enabled on an AKS cluster. |
+Optional when managed identities or cloud identity is enabled on an AKS cluster. |
 
 |`clientID` |The client ID from an App Registration
 
-Optional when managed identities is enabled on an AKS cluster. |
+Optional when managed identities or cloud identity is enabled on an AKS cluster. |
 
 |`clientSecret` |The client secret from an App Registration
 
-Optional when managed identities is enabled on an AKS cluster. |
+Optional when managed identities or cloud identity is enabled on an AKS cluster. |
 
 |`serviceLevel` |One of `Standard`, `Premium`, or `Ultra` |"" (random)
 
@@ -166,6 +166,30 @@ spec:
   netappAccounts: ["smb-na"]
   virtualNetwork: eastus-prod-vnet
   subnet: eastus-anf-subnet
+----
+====
+
+.Cloud identities for AKS
+[%collapsible%closed]
+====
+This backend configuration omits `tenantID`, `clientID`, and `clientSecret`, which are optional when using a cloud identity.
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-anf-1
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: azure-netapp-files 
+  capacityPools: ["ultra-pool"]
+  resourceGroups: ["aks-ami-eastus-rg"]
+  netappAccounts: ["smb-na"]
+  virtualNetwork: eastus-prod-vnet
+  subnet: eastus-anf-subnet
+  location: westus2
+  subscriptionID: d7a8de29-b829-45c0-b898-2cbafd35e3a3
 ----
 ====
 

@@ -42,7 +42,7 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 |`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
 
-|`cloudIdentity` | Set to `azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx` when using cloud identities on an AKS cluster. |`""`
+|`cloudIdentity` | Set to `azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx` when using cloud identity on an AKS cluster. |`""`
 
 |`IPv6` |Install Astra Trident over IPv6 |false
 
@@ -185,5 +185,23 @@ spec:
   debug: true
   namespace: trident
   cloudProvider: "Azure"
+----
+====
+
+.Cloud identity on an AKS cluster
+[%collapsible%closed]
+====
+This example installs Astra Trident to use a cloud identity on an AKS cluster. 
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  cloudProvider: "Azure"
+  cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
 ----
 ====

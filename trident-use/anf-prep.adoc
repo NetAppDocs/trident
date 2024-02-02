@@ -84,6 +84,8 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 
 * The Azure `location` that contains at least one link:https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]. As of Trident 22.01, the `location` parameter is a required field at the top level of the backend configuration file. Location values specified in virtual pools are ignored.
 
+* The `client ID` from your Azure managed identity (user-assigned managed identity). To use a cloud identity and access Azure resources securely with Microsoft Entra ID, obtain you client ID from the Azure portal. Refer to link:https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-manage-user-assigned-managed-identities[Microsoft: Manage user-assigned managed identities^].
+
 == Additional requirements for SMB volumes
 To create an SMB volume, you must have:
 

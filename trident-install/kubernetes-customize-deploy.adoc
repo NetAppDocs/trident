@@ -36,8 +36,6 @@ This table details `TridentOrchestrator` attributes.
 
 Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
 
-*This is an experimental feature in 23.04.* Refer to <<Details about force detach>> for important details. |`false`
-
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
 |`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
@@ -191,7 +189,7 @@ spec:
 .Cloud identity on an AKS cluster
 [%collapsible%closed]
 ====
-This example installs Astra Trident to use a cloud identity on an AKS cluster. 
+This example installs Astra Trident for use with a cloud identity on an AKS cluster. 
 
 ----
 apiVersion: trident.netapp.io/v1

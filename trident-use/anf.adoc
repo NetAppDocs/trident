@@ -81,9 +81,9 @@ tridentctl install --cloud-provider="Azure" -n trident
 --
 ====
 
-== Cloud identity
+== Cloud identity for AKS
 
-Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access Azure resources securely with Microsoft Entra ID based on an annotated service accounts.
+Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access Azure resources securely with Microsoft Entra ID based on an annotated service account.
 
 To take advantage of Kubernetes identity, you must have:
 
@@ -109,16 +109,16 @@ spec:
   namespace: trident
   imagePullPolicy: IfNotPresent
   cloudProvider: "Azure"
-  cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
+  *cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'*
 ----
 --
 
 .Helm
 --
-export CP="Azure"
-export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx".
+`export CP="Azure"`
+`export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
 
-The following example installs Astra Trident sets `cloudProvider` to Azure using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable '$CI':
+The following example installs Astra Trident and sets `cloudProvider` to Azure using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
 ----
 helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
 ----
@@ -126,10 +126,10 @@ helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --s
 
 .`tridentctl`
 --
-export CP="Azure"
-export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx".
+`export CP="Azure"`
+`export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
 
-The following example installs Astra Trident sets set the 'cloud-provider` flag to `$CP`, and 'cloud-identity' to $CI:
+The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 ----
 tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
 ----

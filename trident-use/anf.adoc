@@ -115,6 +115,8 @@ spec:
 
 .Helm
 --
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
 `export CP="Azure"`
 `export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
 
@@ -126,6 +128,8 @@ helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --s
 
 .`tridentctl`
 --
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
 `export CP="Azure"`
 `export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
 

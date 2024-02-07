@@ -227,7 +227,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |Excludes the operator pod security policy from creation.
 |`false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
+|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. Set to `"AWS"` when using managed identities on an EKS cluster. |`""` (Check this ???)
 
 |`cloudIdentity` |Set to workload identity when using cloud identity on an AKS cluster. |`""`
 

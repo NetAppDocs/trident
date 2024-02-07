@@ -35,7 +35,7 @@ a|`nfs`, `smb`
 
 === Considerations
 
-* The Azure NetApp Files service does not support volumes smaller than 100 GB. Astra Trident automatically creates 100-GB volumes if a smaller volume is requested.
+* The Azure NetApp Files service does not support volumes smaller than 100 GB. Astra Trident automatically creates 100-GiB volumes if a smaller volume is requested.
 
 * Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
@@ -68,7 +68,7 @@ spec:
 --
 The following example installs Astra Trident sets `cloudProvider` to Azure using the environment variable `$CP`:
 ----
-helm install trident trident-operator-23.10.0-custom.tgz --create-namespace --namespace <trident-namespace> --set cloudProvider=$CP
+helm install trident trident-operator-100.2402.0.tgz --create-namespace --namespace <trident-namespace> --set cloudProvider=$CP
 ----
 --
 
@@ -81,3 +81,61 @@ tridentctl install --cloud-provider="Azure" -n trident
 --
 ====
 
+== Cloud identity for AKS
+
+Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access Azure resources securely with Microsoft Entra ID based on an annotated service account.
+
+To take advantage of Kubernetes identity, you must have:
+
+* A Kubernetes cluster deployed using AKS
+* Workload identity and oidc-issuer configured on the AKS Kubernetes cluster
+* Astra Trident installed that includes the `cloudProvider` to specify `"Azure"` and `cloudIdentity` specifying workload identity
++
+[role="tabbed-block"]
+====
+.Trident operator
+--
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"Azure"` and set 'cloudIdentity' to 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'.
+
+For example:
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullPolicy: IfNotPresent
+  cloudProvider: "Azure"
+  *cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'*
+----
+--
+
+.Helm
+--
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
+`export CP="Azure"`
+`export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
+
+The following example installs Astra Trident and sets `cloudProvider` to Azure using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
+----
+helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
+----
+--
+
+.`tridentctl`
+--
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
+`export CP="Azure"`
+`export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
+
+The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
+----
+tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
+----
+--
+====

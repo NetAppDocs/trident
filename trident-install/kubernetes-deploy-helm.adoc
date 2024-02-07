@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Astra Trident using Hel
 [.lead]
 You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Astra Trident 23.10
+== Critical information about Astra Trident 24.02
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -228,6 +228,8 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |`false`
 
 |`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
+
+|`cloudIdentity` |Set to workload identity when using cloud identity on an AKS cluster. |`""`
 
 |===
 

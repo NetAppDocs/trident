@@ -142,19 +142,18 @@ tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
 
 == Cloud identity for EKS
 
-Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access AWS resources ???securely with Microsoft Entra ID based on an annotated service account???.
+Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access AWS resources.
 
 To take advantage of Kubernetes identity, you must have:
 
 * A Kubernetes cluster deployed using EKS
-* Workload identity and oidc-issuer configured on the AKS Kubernetes cluster ???
-* Astra Trident installed that includes the `cloudProvider` to specify `"AWS"` and `cloudIdentity` specifying workload identity???
+* Astra Trident installed that includes the `cloudProvider` specifying `"AWS"` and `cloudIdentity` specifying AWS IAM role.
 +
 [role="tabbed-block"]
 ====
 .Trident operator
 --
-To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set 'cloudIdentity' to 'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'.
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set 'cloudIdentity' to AWS IAM role.
 
 For example:
 
@@ -168,7 +167,7 @@ spec:
   namespace: trident
   imagePullPolicy: IfNotPresent
   cloudProvider: "AWS"
-  *cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"
+  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"
 ----
 --
 
@@ -179,7 +178,7 @@ Set the values for *cloud provider* and *cloud identity* flags using the followi
 `export CP="AWS"`
 `export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"
 
-The following example installs Astra Trident and sets `cloudProvider` to AWS using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`: (Check ???)
+The following example installs Astra Trident and sets `cloudProvider` to `AWS` using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
 ----
 helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
 ----

@@ -34,13 +34,13 @@ This table details `TridentOrchestrator` attributes.
 
 |`enableForceDetach` |`ontap-san` and `ontap-san-economy` only. 
 
-Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
+Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. |`false`
 
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""` (Check this ???)
+|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. Set to "AWS" when using AWS IAM role on EKS cluster. |`""` 
 
-|`cloudIdentity` |Set to workload identity when using cloud identity on an AKS cluster. |`""` (Check this ???)
+|`cloudIdentity` |Set to workload identity when using cloud identity on an AKS cluster. |`""` 
 
 |`IPv6` |Install Astra Trident over IPv6 |false
 
@@ -200,6 +200,24 @@ spec:
   debug: true
   namespace: trident
   cloudProvider: "Azure"
+  cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
+----
+====
+
+.Cloud identity on an EKS cluster
+[%collapsible%closed]
+====
+This example installs Astra Trident for use with a cloud identity on an AKS cluster. 
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  cloudProvider: "AWS"
   cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
 ----
 ====

@@ -40,7 +40,7 @@ There is no preference between having a dedicated or shared management LIF for t
 
 === Limit the maximum volume count
 
-ONTAP storage systems have a maximum volume count, which varies based on the software version and hardware platform. See https://hwu.netapp.com/[NetApp Hardware Universe^] for your specific platform and ONTAP version to determine the exact limits. When the volume count is exhausted, provisioning operations fail not only for Trident, but for all the storage requests.
+ONTAP storage systems have a maximum volume count, which varies based on the software version and hardware platform. Refer to https://hwu.netapp.com/[NetApp Hardware Universe^] for your specific platform and ONTAP version to determine the exact limits. When the volume count is exhausted, provisioning operations fail not only for Trident, but for all the storage requests.
 
 Trident's `ontap-nas` and `ontap-san` drivers provision a FlexVolume for each Kubernetes Persistent Volume (PV) that is created. The `ontap-nas-economy` driver creates approximately one FlexVolume for every 200 PVs (configurable between 50 and 300). The `ontap-san-economy` driver creates approximately one FlexVolume for every 100 PVs (configurable between 50 and 200). To prevent Trident from consuming all the available volumes on the storage system, you should set a limit on the SVM. You can do this from the command line:
 
@@ -96,7 +96,7 @@ IMPORTANT: You should assign the QoS policy group to the SVM *only* if your ONTA
 
 === Create QoS policy groups for Trident
 
-Quality of service (QoS) guarantees that performance of critical workloads is not degraded by competing workloads. ONTAP QoS policy groups provide QoS options for volumes, and enable users to define the throughput ceiling for one or more workloads. For more information about QoS, see https://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-perf-mon/GUID-77DF9BAF-4ED7-43F6-AECE-95DFB0680D2F.html[Guaranteeing throughput with QoS^].
+Quality of service (QoS) guarantees that performance of critical workloads is not degraded by competing workloads. ONTAP QoS policy groups provide QoS options for volumes, and enable users to define the throughput ceiling for one or more workloads. For more information about QoS, refer to https://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-perf-mon/GUID-77DF9BAF-4ED7-43F6-AECE-95DFB0680D2F.html[Guaranteeing throughput with QoS^].
 You can specify QoS policy groups in the backend or in a storage pool, and they are applied to each volume created in that pool or backend.
 
 ONTAP has two kinds of QoS policy groups: traditional and adaptive. Traditional policy groups provide a flat maximum (or minimum, in later versions) throughput in IOPS. Adaptive QoS automatically scales the throughput to workload size, maintaining the ratio of IOPS to TBs|GBs as the size of the workload changes. This provides a significant advantage when you are managing hundreds or thousands of workloads in a large deployment.
@@ -129,7 +129,7 @@ storage:
 
 * You should apply the policy groups per volume, so that each volume gets the entire throughput as specified by the policy group. Shared policy groups are not supported.
 
-For more information about QoS policy groups, see https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-cmpr-980/TOC__qos.html[ONTAP 9.8 QoS commands^].
+For more information about QoS policy groups, refer to https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-cmpr-980/TOC__qos.html[ONTAP 9.8 QoS commands^].
 
 === Limit storage resource access to Kubernetes cluster members
 
@@ -214,7 +214,7 @@ a|
 
 NOTE: Although the Max IOPS and Burst IOPS can be set as high as 200,000, the real-world maximum performance of a volume is limited by cluster usage and per-node performance.
 
-Block size and bandwidth have a direct influence on the number of IOPS. As block sizes increase, the system increases bandwidth to a level necessary to process the larger block sizes. As bandwidth increases, the number of IOPS the system is able to attain decreases. See https://www.netapp.com/pdf.html?item=/media/10502-tr-4644pdf.pdf[SolidFire Quality of Service^] for more information about QoS and performance.
+Block size and bandwidth have a direct influence on the number of IOPS. As block sizes increase, the system increases bandwidth to a level necessary to process the larger block sizes. As bandwidth increases, the number of IOPS the system is able to attain decreases. Refer to https://www.netapp.com/pdf.html?item=/media/10502-tr-4644pdf.pdf[SolidFire Quality of Service^] for more information about QoS and performance.
 
 === SolidFire authentication
 

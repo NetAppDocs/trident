@@ -74,7 +74,7 @@ helm install trident trident-operator-100.2402.0.tgz --create-namespace --namesp
 
 .`tridentctl`
 --
-The following example installs Astra Trident sets set the `cloudProvider` flag to `Azure`:
+The following example installs Astra Trident and sets the `cloudProvider` flag to `Azure`:
 ----
 tridentctl install --cloud-provider="Azure" -n trident
 ----
@@ -115,7 +115,7 @@ spec:
 
 .Helm
 --
-Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+Set the values for *cloud-provider (CP)* and *cloud-identity (CI)* flags using the following environment variables:
 
 `export CP="Azure"`
 `export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
@@ -176,7 +176,7 @@ spec:
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
 `export CP="AWS"`
-`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"`
 
 The following example installs Astra Trident and sets `cloudProvider` to `AWS` using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
 ----
@@ -189,7 +189,7 @@ helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --s
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
 `export CP="AWS"`
-`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"`
 
 The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 ----

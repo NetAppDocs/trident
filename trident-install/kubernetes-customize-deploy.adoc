@@ -38,9 +38,9 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when cloud identity on an EKS cluster. |`""` 
+|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
 
-|`cloudIdentity` |Set to workload identity when using cloud identity on an AKS cluster. Set AWS IAM role when using cloud identity on an EKS cluster|`""` 
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role when using cloud identity on an EKS cluster. Refer to link:trident-use/anf.html[]|`""` 
 
 |`IPv6` |Install Astra Trident over IPv6 |false
 
@@ -90,7 +90,7 @@ Astra Trident |
 
 |===
 [NOTE] 
-For more information on formatting pod parameters, see link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
+For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
 
 === Details about force detach
 Force detach is available for `ontap-san` and `ontap-san-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. For more information, refer to link:https://kubernetes.io/docs/concepts/architecture/nodes/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 

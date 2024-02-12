@@ -158,6 +158,10 @@ This parameter is required for Amazon FSx for ONTAP backends.
 This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
 |`false`
 
+|`fsxFilesystemID` |Specify the ID of the AWS FSx file system. |`""` 
+
+|`credentials` |The `name` and `type` of the AWS secret manager.|`""` 
+
 |===
 
 === Update `dataLIF` after initial configuration
@@ -234,8 +238,15 @@ SMB default is `ntfs`.
 
 |===
 
-== Example
+== Example configurations
+
+
+.Minimal configuration
+[%collapsible%closed]
+====
+
 Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
+
 ----
 apiVersion: storage.k8s.io/v1 
 kind: StorageClass
@@ -248,3 +259,27 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
   csi.storage.k8s.io/node-stage-secret-namespace: "default"
 ----
+====
+
+.Cloud identity for EKS
+[%collapsible%closed]
+====
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nas
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: tbc-ontap-nas
+  svm: svm-name
+  aws: 
+    fsxFilesystemID: fs-xxxxxxxxxx
+  managementLIF: 
+  credentials: 
+    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
+    type: awsarn
+----
+====

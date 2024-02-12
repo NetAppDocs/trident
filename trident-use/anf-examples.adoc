@@ -193,29 +193,6 @@ spec:
 ----
 ====
 
-.Cloud identity for EKS
-[%collapsible%closed]
-====
-
-----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: backend-tbc-ontap-nas
-spec:
-  version: 1
-  storageDriverName: ontap-nas
-  backendName: tbc-ontap-nas
-  svm: svm-name
-  aws: 
-    fsxFilesystemID: fs-xxxxxxxxxx
-  managementLIF: 
-  credentials: 
-    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
-    type: awsarn
-----
-====
-
 .Specific service level configuration with capacity pool filters
 [%collapsible%closed]
 ====

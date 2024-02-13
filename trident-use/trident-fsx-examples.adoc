@@ -158,15 +158,19 @@ This parameter is required for Amazon FSx for ONTAP backends.
 This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
 |`false`
 
-|`fsxFilesystemID` |Specify the ID of the AWS FSx file system. |`""` 
-|`apiRegion` |AWS API region name. Optional.|`""`
-|`apikey` |AWS API key. Optional. |`""`
-|`secretKey` |AWS secret key. Optional. |`""`
+|`aws`|
 
-|`credentials` |For ONTAP drivers with FSxN personality, we must include credentials of type credential store (i.e., AWS secret manager).
+You can specify the following in the configuration file for ONTAP to work with AWS FSx and Secret Manager:
 
-- `name`: contains ARN of the secret (secret in turn will have credentials of SVM)
-- `type`: awsarn |`""` 
+- `fsxFilesystemID`: Specify the ID of the AWS FSx file system. 
+- `apiRegion`: AWS API region name.
+- `apikey`: AWS API key.
+- `secretKey`: AWS secret key.
+Refer to link:https://aws.amazon.com/secrets-manager/[AWS Secrets Manager] for more information.|`""`
+
+|`credentials` |Specify the FSx SVM credentials to store in AWS Secret Manager.
+- `name`: Amazon Resource Name (ARN) of the secret, which contains the credentials of SVM.
+- `type`: Set to `awsarn`. |`""` 
 
 |===
 

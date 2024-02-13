@@ -160,7 +160,10 @@ This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role 
 
 |`fsxFilesystemID` |Specify the ID of the AWS FSx file system. |`""` 
 
-|`credentials` |The `name` and `type` of the AWS secret manager.|`""` 
+|`credentials` |For ONTAP drivers with FSxN personality, we must include credentials of type credential store (i.e., AWS secret manager).
+
+- `name`: contains ARN of the secret (secret in turn will have credentials of SVM)
+- `type`: awsarn |`""` 
 
 |===
 

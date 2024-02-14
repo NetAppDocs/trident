@@ -164,7 +164,7 @@ This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role 
 - `apikey`: AWS API key.
 - `secretKey`: AWS secret key.
 
-Refer to link:https://aws.amazon.com/secrets-manager/[AWS Secrets Manager] for more information.| ``
+| ``
 ``
 
 
@@ -174,7 +174,8 @@ Refer to link:https://aws.amazon.com/secrets-manager/[AWS Secrets Manager] for m
 
 |`credentials` |Specify the FSx SVM credentials to store in AWS Secret Manager.
 - `name`: Amazon Resource Name (ARN) of the secret, which contains the credentials of SVM.
-- `type`: Set to `awsarn`. | 
+- `type`: Set to `awsarn`. 
+Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create_secret.html[Create an AWS Secrets Manager secret] for more information.| 
 
 |===
 
@@ -275,7 +276,7 @@ parameters:
 ----
 ====
 
-.Cloud identity for EKS
+.Configuration for AWS FSx for ONTAP with secret manager
 [%collapsible%closed]
 ====
 

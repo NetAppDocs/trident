@@ -41,10 +41,10 @@ kubectl delete -f 23.07.0/trident-installer/deploy/<bundle.yaml> -n trident
 ----
 . If you customized your initial installation using `TridentOrchestrator` attributes, you can edit the `TridentOrchestrator` object to modify the installation parameters. This might include changes made to specify mirrored Trident and CSI image registries for offline mode, enable debug logs, or specify image pull secrets.
 . Install Astra Trident using the correct bundle YAML file for your environment, where _<bundle.yaml>_ is
-`bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. For example, if you are installing Astra Trident 23.10, run the following command:
+`bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. For example, if you are installing Astra Trident 24.02, run the following command:
 +
 ----
-kubectl create -f 23.10.0/trident-installer/deploy/<bundle.yaml> -n trident
+kubectl create -f 24.02.0/trident-installer/deploy/<bundle.yaml> -n trident
 ----
 
 == Upgrade a Helm installation
@@ -53,7 +53,7 @@ You can upgrade an Astra Trident Helm installation.
 WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Astra Trident installed, you must update values.yaml to set `excludePodSecurityPolicy` to `true` or add `--set excludePodSecurityPolicy=true` to the `helm upgrade` command before you can upgrade the cluster.
 
 .Steps
-. If you link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm[installed Astra Trident using Helm], you can use `helm upgrade trident netapp-trident/trident-operator --version 23.10.0` to upgrade in one step. If you did not add the Helm repo or cannot use it to upgrade:
+. If you link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm[installed Astra Trident using Helm], you can use `helm upgrade trident netapp-trident/trident-operator --version 24.02.0` to upgrade in one step. If you did not add the Helm repo or cannot use it to upgrade:
 
 .. Download the latest Astra Trident release from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
 .. Use the `helm upgrade` command where `trident-operator-23.10.0.tgz` reflects the version that you want to upgrade to.
@@ -73,10 +73,10 @@ NOTE: Before switching between installation methods, review link:../trident-get-
 . Download the latest Astra Trident release.
 +
 ----
-# Download the release required [23.10.0]
-mkdir 23.10.0
-cd 23.10.0
-wget https://github.com/NetApp/trident/releases/download/v23.10.0/trident-installer-24.02.0.tar.gz
+# Download the release required [24.020.0]
+mkdir 24.02.0
+cd 24.02.0
+wget https://github.com/NetApp/trident/releases/download/v24.02.0/trident-installer-24.02.0.tar.gz
 tar -xf trident-installer-24.02.0.tar.gz
 cd trident-installer
 ----
@@ -133,5 +133,5 @@ kubectl describe torc trident | grep Message -A 3
 Message:                Trident installed
 Namespace:              trident
 Status:                 Installed
-Version:                v23.10.0
+Version:                v24.02.0
 ----

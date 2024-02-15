@@ -63,8 +63,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Astra Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v23.10.0/trident-installer-23.10.0.tar.gz
-tar -xf trident-installer-23.10.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v23.10.0/trident-installer-24.02.0.tar.gz
+tar -xf trident-installer-24.02.0.tar.gz
 cd trident-installer
 ----
 

@@ -56,10 +56,10 @@ WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has
 . If you link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm[installed Astra Trident using Helm], you can use `helm upgrade trident netapp-trident/trident-operator --version 24.02.0` to upgrade in one step. If you did not add the Helm repo or cannot use it to upgrade:
 
 .. Download the latest Astra Trident release from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
-.. Use the `helm upgrade` command where `trident-operator-23.10.0.tgz` reflects the version that you want to upgrade to.
+.. Use the `helm upgrade` command where `trident-operator-24.02.0.tgz` reflects the version that you want to upgrade to.
 +
 ----
-helm upgrade <name> trident-operator-23.10.0.tgz
+helm upgrade <name> trident-operator-24.02.0.tgz
 ----
 NOTE: If you set custom options during the initial installation (such as specifying private, mirrored registries for Trident and CSI images), append the `helm upgrade` command using `--set` to ensure those options are included in the upgrade command, otherwise the values will reset to default. 
 . Run `helm list` to verify that the chart and app version have both been upgraded. Run `tridentctl logs` to review any debug messages.
@@ -67,7 +67,7 @@ NOTE: If you set custom options during the initial installation (such as specify
 == Upgrade from a `tridentctl` installation to Trident operator
 You can upgrade to the latest release of the Trident operator from a `tridentctl` installation. The existing backends and PVCs will automatically be available.
 
-NOTE: Before switching between installation methods, review link:../trident-get-started/kubernetes-deploy.html#moving-between-installation-methods[Moving between installation methods]
+NOTE: Before switching between installation methods, review link:../trident-get-started/kubernetes-deploy.html#moving-between-installation-methods[Moving between installation methods].
 
 .Steps
 . Download the latest Astra Trident release.

@@ -22,14 +22,10 @@ Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netap
 
 == Considerations
 * SMB volumes: 
-** SMB volumes are supported using the `ontap-nas` driver only. 
+** SMB volumes are supported using the `ontap-nas` driver only.
+** SMB volumes are not supported with Astra Trident EKS add-on.
 ** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
-* Volumes created on Amazon FSx file systems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume. To prevent this issue:
-
-** Do not use **Quick create** to create the FSx for ONTAP file system. The quick create workflow enables automatic backups and does not provide an opt-out option.
-** When using **Standard create**, disable automatic backup. Disabling automatic backups allows Trident to successfully delete a volume without further manual intervention.
-+
-image:screenshot-fsx-backup-disable.png[A screenshot of the AWS console disabling automatic backup.]
+* Prior to Astra Trident 24.02, volumes created on Amazon FSx file systems that have automatic backups enabled, could not be deleted by Trident.  To prevent this issue in Astra Trident 24.02 or later, specify the `fsxFilesystemID`, AWS `apiRegion`, AWS `apikey`, and AWS `secretKey` in the backend configuration file for AWS FSx for ONTAP.
 
 == FSx for ONTAP driver details
 
@@ -86,7 +82,7 @@ spec:
   namespace: trident
   imagePullPolicy: IfNotPresent
   cloudProvider: "AWS"
-  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"
+  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
 ----
 --
 
@@ -95,7 +91,7 @@ spec:
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
 `export CP="AWS"`
-`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"`
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
 
 The following example installs Astra Trident and sets `cloudProvider` to `AWS` using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
 ----
@@ -108,7 +104,7 @@ helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --s
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
 `export CP="AWS"`
-`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/dummy-role'"`
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
 
 The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 ----

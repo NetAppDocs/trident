@@ -125,19 +125,19 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |
 
 |`tridentControllerPluginNodeSelector`
-|Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|Additional node selectors for pods. Refer to link:trident-get-started/architecture.html#understanding-controller-pods-and-node-pods[Understanding controller pods and node pods] for details.
 |
 
 |`tridentControllerPluginTolerations`
-|Overrides Kubernetes tolerations for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|Overrides Kubernetes tolerations for pods. Refer to link:trident-get-started/architecture.html#understanding-controller-pods-and-node-pods[Understanding controller pods and node pods] for details. 
 |
 
 |`tridentNodePluginNodeSelector`
-|Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|Additional node selectors for pods. Refer to link:trident-get-started/architecture.html#understanding-controller-pods-and-node-pods[Understanding controller pods and node pods] for details. 
 |
 
 |`tridentNodePluginTolerations`
-|Overrides Kubernetes tolerations for pods. Refer to <<Understanding controller pods and node pods>> for details. 
+|Overrides Kubernetes tolerations for pods. Refer to link:trident-get-started/architecture.html#understanding-controller-pods-and-node-pods[Understanding controller pods and node pods] for details. 
 |
 
 |`imageRegistry`
@@ -154,7 +154,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`kubeletDir`
 |Allows overriding the host location of kubelet's internal state.
-|'"/var/lib/kubelet"`
+|`"/var/lib/kubelet"`
 
 |`operatorLogLevel`
 |Allows the log level of the Trident operator to be set to: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
@@ -245,7 +245,3 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |`false`
 
 |===
-
-
-
-== What's next

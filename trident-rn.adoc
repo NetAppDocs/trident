@@ -20,9 +20,14 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 === Enhancements
 
-* Added support to use cloud identity on an AKS and EKS clusters.
+* Added support for Cloud Identity.
+** AKS with ANF - Azure Workload Identity will be used as Cloud Identity.
+** EKS with FSxN - AWS IAM role will be used as Cloud Identity.
 * Integrated Astra Trident with AWS Secret Manager to securely store FSx SVM credentials.
 * Added support to install Astra Trident as an add-on on EKS cluster from EKS console.
+* Added ability to configure and disable iSCSI self-healing (link:https://github.com/NetApp/trident/issues/864[Issue #864]).
+* Added FSx personality to ONTAP drivers to enable integration with AWS IAM and SecretsManager, and to enable Astra Trident to delete FSx volumes with backups (link:https://github.com/NetApp/trident/issues/453[Issue #453]).
+
 
 ==== Kubernetes
 
@@ -30,9 +35,11 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 === Fixes
 
+* Added a 10-second delay before performing a clone split during snapshot delete for ONTAP drivers, when a clone is associated with the snapshot.
+
 === Deprecations
 
-
+* Removed in-toto attestations framework from multi-platform image manifests.
 
 == Changes in 23.10
 

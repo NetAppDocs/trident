@@ -83,9 +83,9 @@ tridentctl install --cloud-provider="Azure" -n trident
 
 == Cloud identity for AKS
 
-Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access Azure resources securely with Microsoft Entra ID based on an annotated service account.
+Cloud identity enables Kubernetes pods to access AWS resources by authenticating as an AWS IAM role instead of by providing explicit AWS credentials.
 
-To take advantage of Kubernetes identity, you must have:
+To take advantage of cloud identity in AWS, you must have:
 
 * A Kubernetes cluster deployed using AKS
 * Workload identity and oidc-issuer configured on the AKS Kubernetes cluster

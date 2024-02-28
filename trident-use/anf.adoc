@@ -74,7 +74,7 @@ helm install trident trident-operator-100.2402.0.tgz --create-namespace --namesp
 
 .`tridentctl`
 --
-The following example installs Astra Trident sets set the `cloudProvider` flag to `Azure`:
+The following example installs Astra Trident and sets the `cloudProvider` flag to `Azure`:
 ----
 tridentctl install --cloud-provider="Azure" -n trident
 ----
@@ -83,9 +83,9 @@ tridentctl install --cloud-provider="Azure" -n trident
 
 == Cloud identity for AKS
 
-Cloud identity enables pods to use a Kubernetes identity (a service account). It also enables Kubernetes applications to access Azure resources securely with Microsoft Entra ID based on an annotated service account.
+Cloud identity enables Kubernetes pods to access AWS resources by authenticating as an AWS IAM role instead of by providing explicit AWS credentials.
 
-To take advantage of Kubernetes identity, you must have:
+To take advantage of cloud identity in AWS, you must have:
 
 * A Kubernetes cluster deployed using AKS
 * Workload identity and oidc-issuer configured on the AKS Kubernetes cluster
@@ -115,7 +115,7 @@ spec:
 
 .Helm
 --
-Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+Set the values for *cloud-provider (CP)* and *cloud-identity (CI)* flags using the following environment variables:
 
 `export CP="Azure"`
 `export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
@@ -139,3 +139,4 @@ tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
 ----
 --
 ====
+

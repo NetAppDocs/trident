@@ -158,6 +158,25 @@ This parameter is required for Amazon FSx for ONTAP backends.
 This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
 |`false`
 
+|`aws`| You can specify the following in the configuration file for AWS FSx for ONTAP:
+- `fsxFilesystemID`: Specify the ID of the AWS FSx file system.
+- `apiRegion`: AWS API region name. 
+- `apikey`: AWS API key.
+- `secretKey`: AWS secret key.
+
+| ``
+``
+
+
+`""`
+`""`
+`""`
+
+|`credentials` |Specify the FSx SVM credentials to store in AWS Secret Manager.
+- `name`: Amazon Resource Name (ARN) of the secret, which contains the credentials of SVM.
+- `type`: Set to `awsarn`. 
+Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create_secret.html[Create an AWS Secrets Manager secret] for more information.| 
+
 |===
 
 === Update `dataLIF` after initial configuration
@@ -234,8 +253,15 @@ SMB default is `ntfs`.
 
 |===
 
-== Example
+== Example configurations
+
+
+.Configuration of storage class for SMB volumes
+[%collapsible%closed]
+====
+
 Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
+
 ----
 apiVersion: storage.k8s.io/v1 
 kind: StorageClass
@@ -248,3 +274,27 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
   csi.storage.k8s.io/node-stage-secret-namespace: "default"
 ----
+====
+
+.Configuration for AWS FSx for ONTAP with secret manager
+[%collapsible%closed]
+====
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nas
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: tbc-ontap-nas
+  svm: svm-name
+  aws: 
+    fsxFilesystemID: fs-xxxxxxxxxx
+  managementLIF: 
+  credentials: 
+    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
+    type: awsarn
+----
+====

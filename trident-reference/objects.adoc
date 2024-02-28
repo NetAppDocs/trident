@@ -189,7 +189,7 @@ volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap
 
 [TIP]
 ====
-* The `fsType` parameter is used to control the desired file system type for SAN LUNs. In addition, Kubernetes also uses the presence of `fsType` in a storage class to indicate a filesystem exists. Volume ownership can be controlled using the `fsGroup` security context of a pod only if `fsType` is set. See link:https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[Kubernetes: Configure a Security Context for a Pod or Container^] for an overview on setting volume ownership using the `fsGroup` context. Kubernetes will apply the `fsGroup` value only if:
+* The `fsType` parameter is used to control the desired file system type for SAN LUNs. In addition, Kubernetes also uses the presence of `fsType` in a storage class to indicate a filesystem exists. Volume ownership can be controlled using the `fsGroup` security context of a pod only if `fsType` is set. Refer to link:https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[Kubernetes: Configure a Security Context for a Pod or Container^] for an overview on setting volume ownership using the `fsGroup` context. Kubernetes will apply the `fsGroup` value only if:
 
 ** `fsType` is set in the storage class.
 ** The PVC access mode is RWO.
@@ -197,7 +197,7 @@ volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap
 +
 For NFS storage drivers, a filesystem already exists as part of the NFS export. In order to use `fsGroup` the storage class still needs to specify a `fsType`. You can set it to `nfs` or any non-null value.
 
-* See link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes] for further details on volume expansion.
+* Refer to link:https://docs.netapp.com/us-en/trident/trident-use/vol-expansion.html[Expand volumes] for further details on volume expansion.
 
 * The Trident installer bundle provides several example storage class definitions for use with Trident in ``sample-input/storage-class-*.yaml``. Deleting a Kubernetes storage class causes the corresponding Trident storage class to be deleted as well.
 ====
@@ -251,7 +251,7 @@ CRDs are a Kubernetes construct. Objects of the resources defined above are crea
 Here are a few points to keep in mind about Trident's CRDs:
 
 * When Trident is installed, a set of CRDs are created and can be used like any other resource type.
-* When uninstalling Trident by using the `tridentctl uninstall` command, Trident pods are deleted but the created CRDs are not cleaned up. See link:../trident-managing-k8s/uninstall-trident.html[Uninstall Trident] to understand how Trident can be completely removed and reconfigured from scratch.
+* When uninstalling Trident by using the `tridentctl uninstall` command, Trident pods are deleted but the created CRDs are not cleaned up. Refer to link:../trident-managing-k8s/uninstall-trident.html[Uninstall Trident] to understand how Trident can be completely removed and reconfigured from scratch.
 
 == Astra Trident `StorageClass` objects
 
@@ -269,7 +269,7 @@ Backends represent the storage providers on top of which Trident provisions volu
 
 NOTE: This is one of the two object types that you create and manage yourself. The other is the Kubernetes `StorageClass` object.
 
-For more information about how to construct these objects, see link:../trident-use/backends.html[configuring backends].
+For more information about how to construct these objects, refer to link:../trident-use/backends.html[configuring backends].
 
 == Astra Trident `StoragePool` objects
 
@@ -386,7 +386,7 @@ spec:
          values: ["system-node-critical"]
 ----
 
-For more information on Resource Quotas, see link:https://kubernetes.io/docs/concepts/policy/resource-quotas/[Kubernetes: Resource Quotas^].
+For more information on Resource Quotas, refer to link:https://kubernetes.io/docs/concepts/policy/resource-quotas/[Kubernetes: Resource Quotas^].
 
 === Clean up `ResourceQuota` if installation fails
 

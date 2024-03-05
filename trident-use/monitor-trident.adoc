@@ -60,7 +60,7 @@ metadata:
 This ServiceMonitor definition retrieves metrics returned by the `trident-csi` service and specifically looks for the `metrics` endpoint of the service. As a result, Prometheus is now configured to understand Astra Trident's
 metrics.
 
-In addition to metrics available directly from Astra Trident, kubelet exposes many `kubelet_volume_*` metrics via it's own metrics endpoint. Kubelet can provide information about the volumes that are attached, and pods and other internal operations it handles. See https://kubernetes.io/docs/concepts/cluster-administration/monitoring/[here^].
+In addition to metrics available directly from Astra Trident, kubelet exposes many `kubelet_volume_*` metrics via it's own metrics endpoint. Kubelet can provide information about the volumes that are attached, and pods and other internal operations it handles. Refer to https://kubernetes.io/docs/concepts/cluster-administration/monitoring/[here^].
 
 == Step 3: Query Trident metrics with PromQL
 

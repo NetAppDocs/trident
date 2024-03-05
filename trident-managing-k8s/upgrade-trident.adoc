@@ -22,19 +22,19 @@ When upgrading to the latest release of Astra Trident, consider the following:
 * When upgrading, it is important you provide `parameter.fsType` in `StorageClasses` used by Astra Trident. You can delete and re-create `StorageClasses` without disrupting pre-existing volumes. 
 ** This is a **requirement** for enforcing https://kubernetes.io/docs/tasks/configure-pod-container/security-context/[security contexts^] for SAN volumes. 
 ** The https://github.com/NetApp/trident/tree/master/trident-installer/sample-input[sample input^] directory contains examples, such as https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-samples/storage-class-basic.yaml.templ[`storage-class-basic.yaml.templ`^] and link:https://github.com/NetApp/trident/blob/master/trident-installer/sample-input/storage-class-samples/storage-class-bronze-default.yaml[`storage-class-bronze-default.yaml`^]. 
-** For more information, see link:../trident-rn.html[Known Issues].
+** For more information, refer to link:../trident-rn.html[Known Issues].
 
 == Step 1: Select a version
 Astra Trident versions follow a date-based `YY.MM` naming convention, where "YY" is the last two digits of the year and "MM" is the month. Dot releases follow a `YY.MM.X` convention, where "X" is the patch level. You will select the version to upgrade to based on the version you are upgrading from. 
 
-* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can directly upgrade from 22.10 (or any 22.10 dot release) to 23.10.
-* If you are upgrading from a release outside of the four-release window, perform a multi-step upgrade. Use the upgrade instructions for the link:../earlier-versions.html[earlier version] you are upgrading from to upgrade to the most recent release that fits the four-release window. For example, if you are running 21.10 and want to upgrade to 23.10:
+* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can directly upgrade from 22.10 (or any 22.10 dot release) to 24.02.
+* If you are upgrading from a release outside of the four-release window, perform a multi-step upgrade. Use the upgrade instructions for the link:../earlier-versions.html[earlier version] you are upgrading from to upgrade to the most recent release that fits the four-release window. For example, if you are running 21.10 and want to upgrade to 24.02:
 
 . First upgrade from 21.10 to 22.10.  
 
-. Then upgrade from 22.10 to 23.10.
+. Then upgrade from 22.10 to 24.02.
 
-NOTE: When upgrading using the Trident operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, see the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
+NOTE: When upgrading using the Trident operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, refer to the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
 
 == Step 2: Determine the original installation method
 To determine which version you used to originally install Astra Trident: 

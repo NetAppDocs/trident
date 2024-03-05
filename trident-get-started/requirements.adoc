@@ -31,17 +31,19 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 Astra Trident supports multiple container engines and orchestrators, including the following:
 
-* Anthos On-Prem (VMware) and Anthos on bare metal 1.12
-* Kubernetes 1.23 - 1.28
-* OpenShift 4.10 - 4.13
+* Anthos On-Prem (VMware) and Anthos on bare metal 1.16
+* Kubernetes 1.23 - 1.29
+* OpenShift 4.10 - 4.14
 
 The Trident operator is supported with these releases:
 
-* Anthos On-Prem (VMware) and Anthos on bare metal 1.12
+* Anthos On-Prem (VMware) and Anthos on bare metal 1.16
 * Kubernetes 1.23 - 1.29
-* OpenShift 4.10 - 4.13
+* OpenShift 4.10 - 4.14
 
-Astra Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Rancher, and VMWare Tanzu Portfolio.
+Astra Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Mirantis Kubernetes Engine (MKE), Rancher, and VMWare Tanzu Portfolio. 
+
+Astra Trident and ONTAP can be used as a storage provider for link:https://kubevirt.io/[KubeVirt].
 
 WARNING: Before upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Astra Trident installed, refer to link:../trident-managing-k8s/upgrade-operator.html#upgrade-a-helm-installation[Upgrade a Helm installation].
 

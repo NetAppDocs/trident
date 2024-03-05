@@ -95,7 +95,7 @@ To take advantage of cloud identity in AWS, you must have:
 ====
 .Trident operator
 --
-To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"Azure"` and set 'cloudIdentity' to 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'.
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"Azure"` and set `cloudIdentity` to `azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx`.
 
 For example:
 
@@ -120,7 +120,7 @@ Set the values for *cloud-provider (CP)* and *cloud-identity (CI)* flags using t
 `export CP="Azure"`
 `export CI="azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
 
-The following example installs Astra Trident and sets `cloudProvider` to Azure using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
+The following example installs Astra Trident and sets `cloudProvider` to Azure using the environment variable `$CP` and sets the `cloudIdentity` using the environment variable `$CI`:
 ----
 helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
 ----

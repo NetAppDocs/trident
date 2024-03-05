@@ -25,7 +25,7 @@ Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes 
 ** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 * Prior to Astra Trident 24.02, volumes created on Amazon FSx file systems that have automatic backups enabled, could not be deleted by Trident. To prevent this issue in Astra Trident 24.02 or later, specify the `fsxFilesystemID`, AWS `apiRegion`, AWS `apikey`, and AWS `secretKey` in the backend configuration file for AWS FSx for ONTAP.
 + 
-NOTE: If you are specifying an IAM role to Astra Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples]. 
+NOTE: If you are specifying an IAM role to Astra Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Astra Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples]. 
 
 == FSx for ONTAP driver details
 
@@ -68,7 +68,7 @@ To take advantage of cloud identity in AWS, you must have:
 ====
 .Trident operator
 --
-To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set 'cloudIdentity' to AWS IAM role.
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set `cloudIdentity` to AWS IAM role.
 
 For example:
 

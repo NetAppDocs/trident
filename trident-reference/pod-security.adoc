@@ -13,7 +13,7 @@ summary: Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP)
 [.lead]
 Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Astra Trident enables certain permissions during installation. The following sections detail the permissions set by Astra Trident. 
 
-NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21 and will be removed in v1.25. For more information, see link:https://kubernetes.io/docs/concepts/security/[Kubernetes: Security].
+NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21 and will be removed in v1.25. For more information, Refer to link:https://kubernetes.io/docs/concepts/security/[Kubernetes: Security].
 
 == Required Kubernetes Security Context and Related Fields
 
@@ -25,7 +25,7 @@ NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes
 //row
 |Privileged
 
-|CSI requires mount points to be Bidirectional, which means the Trident node pod must run a privileged container. For more information, see link:https://kubernetes.io/docs/concepts/storage/volumes/#mount-propagation[Kubernetes: Mount propagation].
+|CSI requires mount points to be Bidirectional, which means the Trident node pod must run a privileged container. For more information, refer to link:https://kubernetes.io/docs/concepts/storage/volumes/#mount-propagation[Kubernetes: Mount propagation].
 
 //row 
 |Host networking

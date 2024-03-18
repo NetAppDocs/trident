@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Astra Trident using Hel
 [.lead]
 You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Astra Trident 23.10
+== Critical information about Astra Trident 24.02
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -44,10 +44,10 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `23.10.0` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `100.2402.0` is the version of Astra Trident you are installing. 
 +
 ----
-helm install <name> netapp-trident/trident-operator --version 23.10.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2402.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -72,10 +72,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `23.10.0` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `100.2402.0` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 23.10.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2402.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options
@@ -227,7 +227,9 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |Excludes the operator pod security policy from creation.
 |`false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
+|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
+
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'") when using cloud identity on an EKS cluster.|`""`
 
 |===
 

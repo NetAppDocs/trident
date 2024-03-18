@@ -18,18 +18,14 @@ A file system is the primary resource in Amazon FSx, analogous to an ONTAP clust
 
 Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 
-Amazon FSx for NetApp ONTAP uses https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-5A78F93F-7539-4840-AB0B-4A6E3252CF84.html[FabricPool^] to manage storage tiers. It enables you to store data in a tier, based on whether the data is frequently accessed.
-
 == Considerations
 * SMB volumes: 
-** SMB volumes are supported using the `ontap-nas` driver only. 
+** SMB volumes are supported using the `ontap-nas` driver only.
+** SMB volumes are not supported with Astra Trident EKS add-on.
 ** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
-* Volumes created on Amazon FSx file systems that have automatic backups enabled cannot be deleted by Trident. To delete PVCs, you need to manually delete the PV and the FSx for ONTAP volume. To prevent this issue:
-
-** Do not use **Quick create** to create the FSx for ONTAP file system. The quick create workflow enables automatic backups and does not provide an opt-out option.
-** When using **Standard create**, disable automatic backup. Disabling automatic backups allows Trident to successfully delete a volume without further manual intervention.
-+
-image:screenshot-fsx-backup-disable.png[A screenshot of the AWS console disabling automatic backup.]
+* Prior to Astra Trident 24.02, volumes created on Amazon FSx file systems that have automatic backups enabled, could not be deleted by Trident. To prevent this issue in Astra Trident 24.02 or later, specify the `fsxFilesystemID`, AWS `apiRegion`, AWS `apikey`, and AWS `secretKey` in the backend configuration file for AWS FSx for ONTAP.
++ 
+NOTE: If you are specifying an IAM role to Astra Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Astra Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples]. 
 
 == FSx for ONTAP driver details
 
@@ -41,7 +37,7 @@ You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the follo
 * `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
 * `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
 
-For driver details, see link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
+For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
 
 == Authentication
 
@@ -58,6 +54,64 @@ For details on enabling authentication, refer to the authentication for your dri
 
 * link:ontap-nas-prep.html[ONTAP NAS authentication]
 * link:ontap-san-prep.html[ONTAP SAN authentication]
+
+== Cloud identity for EKS
+
+Cloud identity enables Kubernetes pods to access AWS resources by authenticating as an AWS IAM role instead of by providing explicit AWS credentials.
+
+To take advantage of cloud identity in AWS, you must have:
+
+* A Kubernetes cluster deployed using EKS
+* Astra Trident installed that includes the `cloudProvider` specifying `"AWS"` and `cloudIdentity` specifying AWS IAM role.
++
+[role="tabbed-block"]
+====
+.Trident operator
+--
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set `cloudIdentity` to AWS IAM role.
+
+For example:
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullPolicy: IfNotPresent
+  cloudProvider: "AWS"
+  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
+----
+--
+
+.Helm
+--
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
+`export CP="AWS"`
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
+
+The following example installs Astra Trident and sets `cloudProvider` to `AWS` using the environment variable `$CP` and sets the 'cloudIdentity' using the environment variable `$CI`:
+----
+helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
+----
+--
+
+.`tridentctl`
+--
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
+`export CP="AWS"`
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
+
+The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
+----
+tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
+----
+--
+====
 
 == Find more information
 * https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP documentation^]

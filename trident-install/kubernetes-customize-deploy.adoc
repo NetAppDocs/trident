@@ -34,13 +34,13 @@ This table details `TridentOrchestrator` attributes.
 
 |`enableForceDetach` |`ontap-san` and `ontap-san-economy` only. 
 
-Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
-
-*This is an experimental feature in 23.04.* Refer to <<Details about force detach>> for important details. |`false`
+Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. |`false`
 
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities on an AKS cluster. |`""`
+|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
+
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role") when using cloud identity on an EKS cluster.|`""` 
 
 |`IPv6` |Install Astra Trident over IPv6 |false
 
@@ -50,7 +50,7 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:23.10"`
+|`"netapp/trident-autosupport:24.02"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -59,7 +59,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Astra Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Astra Trident image to install |`"netapp/trident:23.10"`
+|`tridentImage` |Astra Trident image to install |`"netapp/trident:24.02"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"k8s.gcr.io/sig-storage"` (Kubernetes 1.19+)
@@ -90,7 +90,7 @@ Astra Trident |
 
 |===
 [NOTE] 
-For more information on formatting pod parameters, see link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
+For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
 
 === Details about force detach
 Force detach is available for `ontap-san` and `ontap-san-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. For more information, refer to link:https://kubernetes.io/docs/concepts/architecture/nodes/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
@@ -183,5 +183,42 @@ spec:
   debug: true
   namespace: trident
   cloudProvider: "Azure"
+----
+====
+
+.Cloud identity on an AKS cluster
+[%collapsible%closed]
+====
+This example installs Astra Trident for use with a cloud identity on an AKS cluster. 
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  cloudProvider: "Azure"
+  cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
+ 
+----
+====
+
+.Cloud identity on an EKS cluster
+[%collapsible%closed]
+====
+This example installs Astra Trident for use with a cloud identity on an AKS cluster. 
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  cloudProvider: "AWS"
+  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
 ----
 ====

@@ -42,7 +42,7 @@ To determine which version you used to originally install Astra Trident:
 . Use `kubectl get pods -n trident` to examine the pods. 
 * If there is no operator pod, Astra Trident was installed using `tridentctl`.
 * If there is an operator pod, Astra Trident was installed using the Trident operator either manually or using Helm. 
-. If there is an operator pod, use `kubectl describe tproc trident` to determine if Astra Trident was installed using Helm. 
+. If there is an operator pod, use `kubectl describe torc` to determine if Astra Trident was installed using Helm. 
 * If there is a Helm label, Astra Trident was installed using Helm. 
 * If there is no Helm label, Astra Trident was installed manually using the Trident operator. 
 

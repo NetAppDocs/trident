@@ -12,21 +12,29 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 [.lead]
 
-== Authentication
+.Configuration for AWS FSx for ONTAP with project
+[%collapsible%closed]
+====
 
-Astra Trident offers two modes of authentication. 
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nas
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: tbc-ontap-nas
+  svm: svm-name
+  aws: 
+    fsxFilesystemID: fs-xxxxxxxxxx
+  managementLIF: 
+  credentials: 
+    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
+    type: awsarn
+----
+====
 
-* Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
-* Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. 
-+
-WARNING: Astra Trident expects to be run as a `vsadmin` SVM user or as a user with a different name that has the same role. Amazon FSx for NetApp ONTAP has an `fsxadmin` user that is a limited replacement of the ONTAP `admin` cluster user. We strongly recommend using `vsadmin` with Astra Trident. 
-
-You can update backends to move between credential-based and certificate-based methods. However, if you attempt to provide *credentials and certificates*, backend creation will fail. To switch to a different authentication method, you must remove the existing method from the backend configuration.
-
-For details on enabling authentication, refer to the authentication for your driver type:
-
-* link:ontap-nas-prep.html[ONTAP NAS authentication]
-* link:ontap-san-prep.html[ONTAP SAN authentication]
 
 == Cloud identity for EKS
 

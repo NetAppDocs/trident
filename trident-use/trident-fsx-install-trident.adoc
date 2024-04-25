@@ -65,7 +65,11 @@ image::../media/aws-eks-05.png[]
 
 === CSI snapshotter add-on
 
-=== Install the Astra Trident EKS add-on using CLI
+
+
+
+
+=== Install the Astra Trident EKS add-on
 
 [role="tabbed-block"]
 ====
@@ -94,7 +98,7 @@ The following example commands install the Astra Trident EKS add-on:
 
 ====
 
-=== Update the Astra Trident EKS add-on using CLI
+=== Update the Astra Trident EKS add-on
 
 [role="tabbed-block"]
 ====
@@ -121,7 +125,7 @@ The following example commands install the Astra Trident EKS add-on:
 
 ====
 
-=== Uninstall/remove the Astra Trident EKS add-on using CLI
+=== Uninstall/remove the Astra Trident EKS add-on
 
 [role="tabbed-block"]
 ====
@@ -171,7 +175,7 @@ spec:
   cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
 ----
 
-.`tridentctl`
+.tridentctl
 
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 

@@ -71,7 +71,7 @@ image::../media/aws-eks-05.png[]
 ====
 
 
-.EKS portal
+.EKS cluster
 
 --
 
@@ -87,7 +87,9 @@ image::../media/aws-eks-05.png[]
 .AWS CLI
 
 --
-
+The following example commands install the Astra Trident EKS add-on:
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.`
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.1` (with a dedicated version)
 --
 
 ====
@@ -97,7 +99,7 @@ image::../media/aws-eks-05.png[]
 [role="tabbed-block"]
 ====
 
-.EKS portal
+.EKS cluster
 
 --
 
@@ -125,7 +127,7 @@ image::../media/aws-eks-05.png[]
 ====
 
 
-.EKS portal
+.EKS cluster
 
 --
 
@@ -141,33 +143,45 @@ image::../media/aws-eks-05.png[]
 .AWS CLI
 
 --
-
+The following command uninstalls the Astra Trident EKS add-on:
+`eksctl delete addon --cluster K8s-arm --name netapp_trident-operator`
 --
 ====
 
-== Install/uninstall the Astra Trident EKS add-on using CLI
-
-.Install the Astra Trident EKS add-on using CLI:
-The following example commands install the Astra Trident EKS add-on:
-`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.`
-`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.1` (with a dedicated version)
-
-.Uninstall the Astra Trident EKS add-on using CLI:
-The following command uninstalls the Astra Trident EKS add-on:
-`eksctl delete addon --cluster K8s-arm --name netapp_trident-operator`
-
-
-
-=== Adding the EKS Add-on (eks, management consol, AWS CLI)
-
-
-=== Updating the EKS Add-on (eks, management consol, AWS CLI)
-
-
-=== Removing the EKS Add-on (eks, management consol, AWS CLI)
-
-
 == Other installation options
+
+You can also install Astra Trident using one of the following methods:
+
+.Trident operator
+
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set `cloudIdentity` to AWS IAM role.
+
+For example:
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullPolicy: IfNotPresent
+  cloudProvider: "AWS"
+  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
+----
+
+.`tridentctl`
+
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
+`export CP="AWS"`
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
+
+The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
+----
+tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
+----
 
 
 

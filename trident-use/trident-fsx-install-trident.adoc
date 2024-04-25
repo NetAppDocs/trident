@@ -12,7 +12,17 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 [.lead]
 
-== Install Astra Trident  
+== Install Astra Trident  via helm
+
+Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
+
+`export CP="AWS"`
+`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
+
+The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
+----
+tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
+----
 
 == Manage the EKS add-on 
 Astra Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment. The Astra Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
@@ -52,6 +62,88 @@ image::../media/aws-eks-04.png[]
 . Verify that the status of the add-on is _Active_.
 +
 image::../media/aws-eks-05.png[]
+
+=== CSI snapshotter add-on
+
+=== Install the Astra Trident EKS add-on using CLI
+
+[role="tabbed-block"]
+====
+
+
+.EKS portal
+
+--
+
+--
+
+.Management console
+
+--
+
+
+--
+
+.AWS CLI
+
+--
+
+--
+
+====
+
+=== Update the Astra Trident EKS add-on using CLI
+
+[role="tabbed-block"]
+====
+
+.EKS portal
+
+--
+
+--
+
+.Management console
+
+--
+
+
+--
+
+.AWS CLI
+
+--
+
+--
+
+
+====
+
+=== Uninstall/remove the Astra Trident EKS add-on using CLI
+
+[role="tabbed-block"]
+====
+
+
+.EKS portal
+
+--
+
+--
+
+.Management console
+
+--
+
+
+--
+
+.AWS CLI
+
+--
+
+--
+====
 
 == Install/uninstall the Astra Trident EKS add-on using CLI
 

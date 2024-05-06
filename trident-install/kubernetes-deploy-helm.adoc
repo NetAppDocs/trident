@@ -231,6 +231,10 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'") when using cloud identity on an EKS cluster.|`""`
 
+|`iscsiSelfHealingInterval` |The interval at which the iSCSI self-healing is invoked.|`5m0s`
+
+|`iscsiSelfHealingWaitTime` |The wait time after which iSCSI self-healing attempts to fix a stale session.|`7m0s`
+
 |===
 
 === Understanding controller pods and node pods

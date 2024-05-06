@@ -42,7 +42,7 @@ NOTE: If you are specifying an IAM role to Astra Trident, then you can omit spec
 
 Astra Trident offers two modes of authentication. 
 
-* Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
+* Certificate-based(Recommended): Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
 * Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. 
 +
 WARNING: Astra Trident expects to be run as a `vsadmin` SVM user or as a user with a different name that has the same role. Amazon FSx for NetApp ONTAP has an `fsxadmin` user that is a limited replacement of the ONTAP `admin` cluster user. We strongly recommend using `vsadmin` with Astra Trident. 
@@ -53,15 +53,3 @@ For details on enabling authentication, refer to the authentication for your dri
 
 * link:ontap-nas-prep.html[ONTAP NAS authentication]
 * link:ontap-san-prep.html[ONTAP SAN authentication]
-
-== FSx for ONTAP driver details
-
-You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
-
-* `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume.
-* `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
-* `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume.
-* `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
-* `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
-
-For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].

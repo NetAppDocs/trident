@@ -21,7 +21,7 @@ Set the values for *cloud provider* and *cloud identity* flags using the followi
 
 The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 ----
-tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
+helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
 ----
 
 == Manage the EKS add-on 

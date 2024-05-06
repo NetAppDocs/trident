@@ -12,6 +12,18 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 [.lead]
 
+== FSx for ONTAP driver details
+
+You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
+
+* `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume. Recommended for block storage.
+* `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume. Recommended for NFS and SMB.
+* `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
+
+For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
+
 == ONTAP SAN and NAS driver integration
 
 WARNING: If you are configuring for SMB volumes, you must read <<Prepare to provision SMB volumes>> before creating the backend.

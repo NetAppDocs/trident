@@ -208,6 +208,7 @@ helm install trident trident-operator-100.2402.0.tgz --set iscsiSelfHealingInter
 .tridentctl
 --
 To configure or change iSCSI self-healing settings, pass the `iscsi-self-healing-interval` and `iscsi-self-healing-wait-time` parameters during the tridentctl installation or update.
+
 The following example sets the iSCSI self-healing interval to 3 minutes and self-healing wait time to 6 minutes:
 ----
 tridentctl install --iscsi-self-healing-interval=3m0s --iscsi-self-healing-wait-time=6m0s -n trident

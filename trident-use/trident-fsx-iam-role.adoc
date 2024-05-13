@@ -14,9 +14,12 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 You can configure Kubernetes pods to access AWS resources by authenticating as an AWS IAM role instead of by providing explicit AWS credentials.
 
-To authenticate using an AWS IAM role, you must have a Kubernetes cluster deployed using EKS
+[NOTE]
+To authenticate using an AWS IAM role, you must have a Kubernetes cluster deployed using EKS.
 
-== Create AWS Secret Manager secret to store Astra Trident CSI credentials
+== Create AWS Secret Manager secret
+
+This example creates an AWS Secret Manager secret to store Astra Trident CSI credentials:
 
 `aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials" --secret-string "{"user":"vsadmin","password":"<svmpassword>"}"`
 
@@ -25,14 +28,14 @@ To authenticate using an AWS IAM role, you must have a Kubernetes cluster deploy
 [role="tabbed-block"]
 ====
 
-.AWS CLI:
+.AWS CLI
 --
 
 The following examples creates an IAM policy:
 
 `aws iam create-policy --policy-name AmazonEBSCSIDriverPolicy --policy-document file://policy.json --description "This policy grants access to Trident CSI to FSxN and Secret manager"`
 
-Policy JSON file:
+*Policy JSON file*:
 
 `policy.json:
 {
@@ -62,7 +65,7 @@ Policy JSON file:
 }`
 --
 
-.eksctl:
+.EKS cluster
 
 --
 

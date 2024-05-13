@@ -11,7 +11,24 @@ summary: Learn about backend configuration options for Amazon FSx for ONTAP. Thi
 :imagesdir: ../media/
 
 [.lead]
-Learn about backend configuration options for Amazon FSx for ONTAP. This section provides backend configuration examples.
 
-== Backend configuration options
 
+.Steps
+
+. Mount the volume in a pod.
++
+----
+kubectl create -f pv-pod.yaml
+----
++
+NOTE: You can monitor the progress using `kubectl get pod --watch`.
+. Verify that the volume is mounted on `/my/mount/path`.
++
+----
+kubectl exec -it task-pv-pod -- df -h /my/mount/path
+----
+. You can now delete the Pod. The Pod application will no longer exist, but the volume will remain. 
++
+----
+kubectl delete pod task-pv-pod
+----

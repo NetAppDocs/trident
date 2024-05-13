@@ -12,35 +12,9 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 [.lead]
 
-== FSx for ONTAP driver details
-
-You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
-
-* `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume. Recommended for block storage.
-* `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume. Recommended for NFS and SMB.
-* `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
-* `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
-* `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
-
-For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
-
 == ONTAP SAN and NAS driver integration
 
-WARNING: If you are configuring for SMB volumes, you must read <<Prepare to provision SMB volumes>> before creating the backend.
-
-.Steps
-. Deploy Astra Trident using one of the link:../trident-get-started/kubernetes-deploy.html[deployment methods].
-. Collect your SVM management LIF DNS name. For example, using the AWS CLI, find the `DNSName` entry under `Endpoints` -> `Management` after running the following command:
-+
-----
-aws fsx describe-storage-virtual-machines --region <file system region>
-----
-. Create and install certificates for link:ontap-nas-prep.html[NAS backend authentication] or link:ontap-san-prep.html[SAN backend authentication].
-+
-NOTE: You can log in to your file system (for example to install certificates) using SSH from anywhere that can reach your file system. Use the `fsxadmin` user, the password you configured when you created your file system, and the management DNS name from `aws fsx describe-file-systems`.
-
-. Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
-+
+Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
 
 [role="tabbed-block"]
 ====
@@ -99,7 +73,6 @@ spec:
   svm: svm-name
   aws: 
     fsxFilesystemID: fs-xxxxxxxxxx
-  managementLIF: 
   credentials: 
     name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
     type: awsarn
@@ -140,6 +113,18 @@ For information about creating backends, see these links:
 +
 * link:ontap-nas.html[Configure a backend with ONTAP NAS drivers]
 * link:ontap-san.html[Configure a backend with ONTAP SAN drivers]
+
+== FSx for ONTAP driver details
+
+You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
+
+* `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume. Recommended for block storage.
+* `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume. Recommended for NFS and SMB.
+* `ontap-san-economy`: Each PV provisioned is a LUN with a configurable number of LUNs per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-economy`: Each PV provisioned is a qtree, with a configurable number of qtrees per Amazon FSx for NetApp ONTAP volume.
+* `ontap-nas-flexgroup`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP FlexGroup volume.
+
+For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
 
 == Prepare to provision SMB volumes
 You can provision SMB volumes using the `ontap-nas` driver. Before you complete <<ONTAP SAN and NAS driver integration>> complete the following steps. 

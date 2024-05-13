@@ -14,33 +14,62 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 You can configure Kubernetes pods to access AWS resources by authenticating as an AWS IAM role instead of by providing explicit AWS credentials.
 
-To authenticate using an AWS IAM role, you must have:
+To authenticate using an AWS IAM role, you must have a Kubernetes cluster deployed using EKS
 
-* A Kubernetes cluster deployed using EKS
-* Astra Trident installed that includes the `cloudProvider` specifying `"AWS"` and `cloudIdentity` specifying AWS IAM role.
-+
+== Create AWS Secret Manager secret to store Astra Trident CSI credentials
 
-.Configuration for AWS FSx for ONTAP with project
-[%collapsible%closed]
+`aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials" --secret-string "{"user":"vsadmin","password":"<svmpassword>"}"`
+
+== Create IAM Policy
+
+[role="tabbed-block"]
 ====
 
-----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: backend-tbc-ontap-nas
-spec:
-  version: 1
-  storageDriverName: ontap-nas
-  backendName: tbc-ontap-nas
-  svm: svm-name
-  aws: 
-    fsxFilesystemID: fs-xxxxxxxxxx
-  managementLIF: 
-  credentials: 
-    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
-    type: awsarn
-----
+.AWS CLI:
+--
+
+The following examples creates an IAM policy:
+
+`aws iam create-policy --policy-name AmazonEBSCSIDriverPolicy --policy-document file://policy.json --description "This policy grants access to Trident CSI to FSxN and Secret manager"`
+
+Policy JSON file:
+
+`policy.json:
+{
+    "Statement": [
+        {
+            "Action": [
+                "fsx:DescribeFileSystems",
+                "fsx:DescribeVolumes",
+                "fsx:CreateVolume",
+                "fsx:RestoreVolumeFromSnapshot",
+                "fsx:DescribeStorageVirtualMachines",
+                "fsx:UntagResource",
+                "fsx:UpdateVolume",
+                "fsx:TagResource",
+                "fsx:DeleteVolume"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": "secretsmanager:GetSecretValue",
+            "Effect": "Allow",
+            "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:<aws-secret-manager-name>"
+        }
+    ],
+    "Version": "2012-10-17"
+}`
+--
+
+.eksctl:
+
+--
+
+The following example creates an IAM role for service account in EKS: 
+
+`eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster my-cluster --role-name AmazonEKS_EBS_CSI_DriverRole --read-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve`
+
+--
+
 ====
-
-

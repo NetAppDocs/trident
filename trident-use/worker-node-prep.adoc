@@ -179,8 +179,6 @@ sudo systemctl status open-iscsi
 NOTE: For Ubuntu 18.04, you must discover target ports with `iscsiadm` before starting `open-iscsi` for the iSCSI daemon to start. You can alternatively modify the `iscsi` service to start `iscsid` automatically.
 ====
 
-WARNING: Reboot your worker nodes after installing the iSCSI tools to prevent failure when attaching volumes to containers.
-
 == NVMe/TCP volumes
 Install the NVMe tools using the commands for your operating system.
 

@@ -11,8 +11,17 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 :imagesdir: ../media/
 
 [.lead]
+Astra Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment.
 
-== Install Astra Trident  via helm
+You can install Astra Trident using one of the following methods:
+* Helm
+* EKS add-on
+
+----
+If you want to make use of the snapshot functionality, install the CSI snapshot controller add-on. Refer to https://docs.aws.amazon.com/eks/latest/userguide/csi-snapshot-controller.html.
+----
+
+== Install Astra Trident via helm
 
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
@@ -24,8 +33,8 @@ The following example installs Astra Trident and sets the `cloud-provider` flag 
 helm install trident trident-operator-100.2402.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI
 ----
 
-== Manage the Astra Trident EKS add-on 
-Astra Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment. The Astra Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
+== Install Astra Trident via the EKS add-on 
+The Astra Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
 
 === Prerequisites
 Ensure that you have the following before configuring the Astra Trident add-on for AWS EKS:
@@ -49,8 +58,8 @@ Ensure that you have the following before configuring the Astra Trident add-on f
 --
 The following example commands install the Astra Trident EKS add-on:
 
-`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.`
-`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.1` (with a dedicated version)
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v24.02.0-eksbuild.`
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v24.02.0-eksbuild.1` (with a dedicated version)
 --
 
 .Management console
@@ -204,45 +213,3 @@ Replace `my-cluster` with the name of your cluster, and then run the following c
 
 --
 ====
-
-== CSI snapshot controller add-on
-
-Refer to https://docs.aws.amazon.com/eks/latest/userguide/csi-snapshot-controller.html.
-
-== Other installation options
-
-You can also install Astra Trident using one of the following methods:
-
-.Trident operator
-
-To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"AWS"` and set `cloudIdentity` to AWS IAM role.
-
-For example:
-
-----
-apiVersion: trident.netapp.io/v1
-kind: TridentOrchestrator
-metadata:
-  name: trident
-spec:
-  debug: true
-  namespace: trident
-  imagePullPolicy: IfNotPresent
-  cloudProvider: "AWS"
-  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
-----
-
-.tridentctl
-
-Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
-
-`export CP="AWS"`
-`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"`
-
-The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
-----
-tridentctl install --cloud-provider=$CP --cloud-identity="$CI" -n trident
-----
-
-
-

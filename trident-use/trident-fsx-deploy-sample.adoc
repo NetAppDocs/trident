@@ -20,6 +20,56 @@ Deploy sample application.
 ----
 kubectl create -f pv-pod.yaml
 ----
+
+These examples show basic configurations to attach the PVC to a pod. 
+
+*Basic configuration*:
+----
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pv-pod
+spec:
+  volumes:
+    - name: pv-storage
+      persistentVolumeClaim:
+       claimName: basic
+  containers:
+    - name: pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/my/mount/path"
+          name: pv-storage
+----
+
+*Basic NVMe/TCP configuration*:
+----
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+    - image: nginx
+      name: nginx
+      resources: {}
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: task-pv-storage
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+      claimName: pvc-san-nvme
+----
+
 +
 NOTE: You can monitor the progress using `kubectl get pod --watch`.
 . Verify that the volume is mounted on `/my/mount/path`.

@@ -22,13 +22,13 @@ The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes Stor
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: <Name>
+  name: ontap-gold
 provisioner: csi.trident.netapp.io
-mountOptions: <Mount Options>
 parameters:
-  <Trident Parameters>
-allowVolumeExpansion: true
-volumeBindingMode: Immediate
+  backendType: "ontap-nas"
+  media: "ssd"
+  provisioningType: "thin"
+  snapshots: "true"
 ----
 
 Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
@@ -206,3 +206,26 @@ pvc-storage Bound  pv-name 2Gi      RWO                       5m
 ----
 
 Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
+
+== Astra Trident attributes
+
+These parameters determine which Astra Trident-managed storage pools should be utilized to provision volumes of a given type.
+
+[cols=",,,,,",options="header",]
+|===
+|Attribute |Type |Values |Offer |Request |Supported by |media^1^ |string |hdd, hybrid, ssd |Pool contains media of this type; hybrid means both |Media type specified |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san
+
+|provisioningType |string |thin, thick |Pool supports this provisioning method |Provisioning method specified |thick: all ontap; thin: all ontap & solidfire-san
+
+|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, gcp-cvs, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
+
+|snapshots |bool |true, false |Pool supports volumes with snapshots |Volume with snapshots enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
+
+|clones |bool |true, false |Pool supports cloning volumes |Volume with clones enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
+
+|encryption |bool |true, false |Pool supports encrypted volumes |Volume with encryption enabled |ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, ontap-san
+
+|IOPS |int |positive integer |Pool is capable of guaranteeing IOPS in this range |Volume guaranteed these IOPS |solidfire-san
+|===
+
+^1^: Not supported by ONTAP Select systems

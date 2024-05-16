@@ -14,47 +14,7 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 
 == ONTAP SAN and NAS driver integration
 
-Create a backend file using your certificates and the DNS name of your management LIF, as shown in the sample below:
-
-[role="tabbed-block"]
-====
-
-.YAML
---
-----
-version: 1
-storageDriverName: ontap-san
-backendName: customBackendName
-managementLIF: svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal
-svm: svm01
-clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
-clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
-trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
-----
---
-
-.JSON
---
-----
-{
-  "version": 1,
-  "storageDriverName": "ontap-san",
-  "backendName": "customBackendName",
-  "managementLIF": "svm-XXXXXXXXXXXXXXXXX.fs-XXXXXXXXXXXXXXXXX.fsx.us-east-2.aws.internal",
-  "svm": "svm01",
-  "clientCertificate": "ZXR0ZXJwYXB...ICMgJ3BhcGVyc2",
-  "clientPrivateKey": "vciwKIyAgZG...0cnksIGRlc2NyaX",
-  "trustedCACertificate": "zcyBbaG...b3Igb3duIGNsYXNz"
- }
-
-----
---
-
-====
-+
-
-Alternatively, you can create a backend file using the SVM credentials (username and password) stored in AWS Secret Manager as shown in this example:
-+
+You can create a backend file using the SVM credentials (username and password) stored in AWS Secret Manager as shown in this example:
 
 [role="tabbed-block"]
 ====
@@ -108,7 +68,7 @@ spec:
 --
 
 ====
-+
+
 For information about creating backends, see these links:
 +
 * link:ontap-nas.html[Configure a backend with ONTAP NAS drivers]
@@ -126,71 +86,51 @@ You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the follo
 
 For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
 
-== Prepare to provision SMB volumes
-You can provision SMB volumes using the `ontap-nas` driver. Before you complete <<ONTAP SAN and NAS driver integration>> complete the following steps. 
 
-.Before you begin
-Before you can provision SMB volumes using the `ontap-nas` driver, you must have the following. 
+== Example configurations
 
-* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+.Configuration for AWS FSx for ONTAP with secret manager
+[%collapsible%closed]
+====
 
-* At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
-+
 ----
-kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nas
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: tbc-ontap-nas
+  svm: svm-name
+  aws: 
+    fsxFilesystemID: fs-xxxxxxxxxx
+  managementLIF: 
+  credentials: 
+    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
+    type: awsarn
 ----
+====
 
-* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
+.Configuration of storage class for SMB volumes
+[%collapsible%closed]
+====
 
-.Steps
+Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
 
-. Create SMB shares. You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
-.. If necessary, create the directory path structure for the share.
-+
-The `vserver cifs share create` command checks the path specified in the -path option during share creation. If the specified path does not exist, the command fails.
-
-.. Create an SMB share associated with the specified SVM:
-+
 ----
-vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
+apiVersion: storage.k8s.io/v1 
+kind: StorageClass
+metadata:
+  name: nas-smb-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-nas"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: "default"
 ----
-
-.. Verify that the share was created:
-+
-----
-vserver cifs share show -share-name share_name
-----
-+
-NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-task.html[Create an SMB share^] for full details.
-
-. When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
-+
-[cols=3,options="header"]
-|===
-|Parameter |Description | Example
-
-|`smbShare`
-|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
- 
-This parameter is required for Amazon FSx for ONTAP backends.
-
-| `smb-share` 
-
-|`nasType`
-| *Must set to `smb`.* If null, defaults to `nfs`.
-|`smb`
-
-|`securityStyle` 
-|Security style for new volumes. 
-
-*Must be set to `ntfs` or `mixed` for SMB volumes.*
-|`ntfs` or `mixed` for SMB volumes
-
-|`unixPermissions`
-|Mode for new volumes. *Must be left empty for SMB volumes.*
-|""
-|===
-
+====
 
 == Backend advanced configuration and examples
 
@@ -358,16 +298,6 @@ Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create
 
 |===
 
-=== Update `dataLIF` after initial configuration
-You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
-
-----
-tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
-----
-
-NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 
-
-
 == Backend configuration options for provisioning volumes
 
 You can control default provisioning using these options in the `defaults` section of the configuration. For an example, see the configuration examples below.
@@ -432,50 +362,68 @@ SMB default is `ntfs`.
 
 |===
 
-== Example configurations
 
+== Prepare to provision SMB volumes
+You can provision SMB volumes using the `ontap-nas` driver. Before you complete <<ONTAP SAN and NAS driver integration>> complete the following steps. 
 
-.Configuration of storage class for SMB volumes
-[%collapsible%closed]
-====
+.Before you begin
+Before you can provision SMB volumes using the `ontap-nas` driver, you must have the following. 
 
-Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
+* At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
++
 ----
-apiVersion: storage.k8s.io/v1 
-kind: StorageClass
-metadata:
-  name: nas-smb-sc
-provisioner: csi.trident.netapp.io
-parameters:
-  backendType: "ontap-nas"
-  trident.netapp.io/nasType: "smb"
-  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
-  csi.storage.k8s.io/node-stage-secret-namespace: "default"
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
 ----
-====
 
-.Configuration for AWS FSx for ONTAP with secret manager
-[%collapsible%closed]
-====
+* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
 
+.Steps
+
+. Create SMB shares. You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
+.. If necessary, create the directory path structure for the share.
++
+The `vserver cifs share create` command checks the path specified in the -path option during share creation. If the specified path does not exist, the command fails.
+
+.. Create an SMB share associated with the specified SVM:
++
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: backend-tbc-ontap-nas
-spec:
-  version: 1
-  storageDriverName: ontap-nas
-  backendName: tbc-ontap-nas
-  svm: svm-name
-  aws: 
-    fsxFilesystemID: fs-xxxxxxxxxx
-  managementLIF: 
-  credentials: 
-    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
-    type: awsarn
+vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
 ----
-====
 
+.. Verify that the share was created:
++
+----
+vserver cifs share show -share-name share_name
+----
++
+NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-task.html[Create an SMB share^] for full details.
 
+. When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
++
+[cols=3,options="header"]
+|===
+|Parameter |Description | Example
+
+|`smbShare`
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
+ 
+This parameter is required for Amazon FSx for ONTAP backends.
+
+| `smb-share` 
+
+|`nasType`
+| *Must set to `smb`.* If null, defaults to `nfs`.
+|`smb`
+
+|`securityStyle` 
+|Security style for new volumes. 
+
+*Must be set to `ntfs` or `mixed` for SMB volumes.*
+|`ntfs` or `mixed` for SMB volumes
+
+|`unixPermissions`
+|Mode for new volumes. *Must be left empty for SMB volumes.*
+|""
+|===

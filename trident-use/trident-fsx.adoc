@@ -27,27 +27,24 @@ In addition to link:../trident-get-started/requirements.html[Astra Trident requi
 * Worker nodes that are prepared for link:worker-node-prep.html[NFS or iSCSI].
 +
 NOTE: Ensure you follow the node preparation steps required for Amazon Linux and Ubuntu https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html[Amazon Machine Images^] (AMIs) depending on your EKS AMI type.
-* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details.
 
 == Considerations
 * SMB volumes: 
 ** SMB volumes are supported using the `ontap-nas` driver only.
 ** SMB volumes are not supported with Astra Trident EKS add-on.
-** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details.
 * Prior to Astra Trident 24.02, volumes created on Amazon FSx file systems that have automatic backups enabled, could not be deleted by Trident. To prevent this issue in Astra Trident 24.02 or later, specify the `fsxFilesystemID`, AWS `apiRegion`, AWS `apikey`, and AWS `secretKey` in the backend configuration file for AWS FSx for ONTAP.
 + 
-NOTE: If you are specifying an IAM role to Astra Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Astra Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples]. 
+NOTE: If you are specifying an IAM role to Astra Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Astra Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
 
 == Authentication
 
 Astra Trident offers two modes of authentication. 
 
-* Certificate-based(Recommended): Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM.
-* Credential-based: You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. 
+* Credential-based(Recommended): Stores credentials securely in AWS Secrets Manager. You can use the `fsxadmin` user for your file system or the `vsadmin` user configured for your SVM. 
 +
-WARNING: Astra Trident expects to be run as a `vsadmin` SVM user or as a user with a different name that has the same role. Amazon FSx for NetApp ONTAP has an `fsxadmin` user that is a limited replacement of the ONTAP `admin` cluster user. We strongly recommend using `vsadmin` with Astra Trident. 
-
-You can update backends to move between credential-based and certificate-based methods. However, if you attempt to provide *credentials and certificates*, backend creation will fail. To switch to a different authentication method, you must remove the existing method from the backend configuration.
+WARNING: Astra Trident expects to be run as a `vsadmin` SVM user or as a user with a different name that has the same role. Amazon FSx for NetApp ONTAP has an `fsxadmin` user that is a limited replacement of the ONTAP `admin` cluster user. We strongly recommend using `vsadmin` with Astra Trident.
+* Certificate-based: Astra Trident will communicate with the SVM on your FSx file system using a certificate installed on your SVM. 
 
 For details on enabling authentication, refer to the authentication for your driver type:
 

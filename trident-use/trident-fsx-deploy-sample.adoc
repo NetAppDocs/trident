@@ -20,10 +20,9 @@ Deploy sample application.
 ----
 kubectl create -f pv-pod.yaml
 ----
-
-These examples show basic configurations to attach the PVC to a pod. 
-
+These examples show basic configurations to attach the PVC to a pod:
 *Basic configuration*:
++
 ----
 kind: Pod
 apiVersion: v1
@@ -44,8 +43,8 @@ spec:
         - mountPath: "/my/mount/path"
           name: pv-storage
 ----
-
 *Basic NVMe/TCP configuration*:
++
 ----
 apiVersion: v1
 kind: Pod
@@ -69,9 +68,8 @@ spec:
       persistentVolumeClaim:
       claimName: pvc-san-nvme
 ----
-
-+
 NOTE: You can monitor the progress using `kubectl get pod --watch`.
+
 . Verify that the volume is mounted on `/my/mount/path`.
 +
 ----

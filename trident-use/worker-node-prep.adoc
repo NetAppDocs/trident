@@ -192,7 +192,7 @@ You can configure the following Astra Trident iSCSI self-healing settings to fix
 Setting the iSCSI self-healing interval to 0 stops iSCSI self-healing completely. We do not recommend disabling iSCSI Self-healing; it should only be disabled in certain scenarios when iSCSI self-healing is not working as intended or for debugging purposes.
 ====
 
-* *iSCSI Self-Healing Wait Time*: Determines the duration iSCSI self-healing waits before logging out of an unhealthy session and trying to log in again (default: 7 minutes). You can configure it to a larger number so that sessions that are identified as unhealthy have to wait longer before being logged out and then an attempt is made to log in again, or a smaller number to log out and log in earlier.
+* *iSCSI Self-Healing Wait Time*: Determines the duration iSCSI self-healing waits before logging out of an unhealthy session and trying to log in again (default: 7 minutes). You can configure it to a larger number so that sessions that are identified as unhealthy have to wait longer before being logged out and then an attempt is made to log back in, or a smaller number to log out and log in earlier.
 
 [role="tabbed-block"]
 ====
@@ -202,7 +202,7 @@ To configure or change iSCSI self-healing settings, pass the `iscsiSelfHealingIn
 
 The following example sets the iSCSI self-healing interval to 3 minutes and self-healing wait time to 6 minutes:
 ----
-helm install trident trident-operator-100.2402.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s
+helm install trident trident-operator-100.2402.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
 ----
 --
 .tridentctl

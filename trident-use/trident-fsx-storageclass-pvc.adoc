@@ -149,31 +149,6 @@ spec:
           name: pv-storage
 ----
 
-.Basic NVMe/TCP configuration
-----
----
-apiVersion: v1
-kind: Pod
-metadata:
-  creationTimestamp: null
-  labels:
-    run: nginx
-  name: nginx
-spec:
-  containers:
-    - image: nginx
-      name: nginx
-      resources: {}
-      volumeMounts:
-        - mountPath: "/usr/share/nginx/html"
-          name: task-pv-storage
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
-  volumes:
-    - name: task-pv-storage
-      persistentVolumeClaim:
-      claimName: pvc-san-nvme
-----
 ====
 
 === Create the PV and PVC

@@ -29,7 +29,7 @@ Customizable volume names and metadata are compatible with ONTAP on-premises dri
 3. In the case of volume imports, the metadata is updated only if the existing volume has metadata in a specific format. Example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
 4. In the case of volume imports, the virtual storage pool is not applied to imported volume.
 
-== Key behaviors or customizable volume names
+== Key behaviors of customizable volume names
 
 . If a failure occurs during the creation or update of a backend, the creation of backend must fail. However, if a failure is observed during volume creation, Astra Trident will fall back to the old naming method.
 . If the input templates do not contain uniqueness volume names, Astra Trident will modify the template to ensure that it has unique volume names.

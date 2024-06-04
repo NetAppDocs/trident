@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/vol-custom-name.html
 keywords: volumes, volume name, custom volume name, on-demand volume snapshots, expand volumes, iscsci volumes, nfs volumes, expand, expansion,
-summary: Astra Trident supports assigning meaningful names and metadata to the volumes created so that it is easier to identify, monitor manage and easily map the the volumes to respective Kubernetes resources(PVCs).
+summary: Astra Trident supports assigning meaningful names and metadata to the volumes created so that it is easier to identify, monitor manage and easily map the volumes to respective Kubernetes resources(PVCs).
 ---
 
 = Customize volume names
@@ -11,16 +11,16 @@ summary: Astra Trident supports assigning meaningful names and metadata to the v
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident supports assigning meaningful names and metadata to the volumes created to identify, monitor manage and easily map the the volumes to respective Kubernetes resources(PVCs). You can defile custom name templates for volume names and metadata at the backend level and volumes created, imported, or cloned adhere to the name templates.
+Astra Trident supports assigning meaningful names and metadata to the volumes created to identify, monitor manage and easily map the volumes to respective Kubernetes resources(PVCs). You can define custom name templates for volume names and metadata at the backend level and volumes created, imported, or cloned adhere to the name templates.
 
 == Before you begin
 
 Customizable volume names and metadata are compatible with ONTAP on-premises drivers and support the following operations:
 
 1. Customizable volume names support volume create, import, and clone operations.
-2. Only the name of the NAS-economy volume complies with the template in the case of NAS-economy volumes.
+2. In the case of NAS economy volumes, only the name of the NAS-economy volume complies with the name template.
 3. In the case of SAN Economy, only the LUN name complies with the template.
-4. Pool volume names for NAS-economy and SAN Economy do not comply with the template as they are transparent to Astra rident users.
+4. Pool volume names for NAS-economy and SAN-Economy do not comply with the template.
 
 == Limitations
 
@@ -39,7 +39,7 @@ NOTE: Astra Trident does not support the use of a slice operator with the storag
 . If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will fall back to the old naming method. For the other ONTAP drivers if the volume name exceeds the name limit, the volume creation process fails.
 . If the name template is correct but the corresponding value is not provided, the phrase `no_value` will be included as part of the volume name.
 
-== Example templates
+== Example name templates
 
 Custom name templates can be defined at the root level and at the pool level.
 

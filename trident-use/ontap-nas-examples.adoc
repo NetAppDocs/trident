@@ -166,6 +166,10 @@ SMB supports `mixed` and `ntfs` security styles.
 
 SMB default is `ntfs`.
 
+|`nameTemplate` | Contains custom volume names.
+
+|""
+
 |===
 
 NOTE: Using QoS policy groups with Astra Trident requires ONTAP 9.8 or later. It is recommended to use a non-shared QoS policy group and ensure the policy group is applied to each constituent individually. A shared QoS policy group will enforce the ceiling for the total throughput of all workloads.
@@ -364,6 +368,26 @@ clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
 clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
 trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 storagePrefix: myPrefix_
+----
+====
+
+.Backend configuration example with nameTemplate
+[%collapsible%closed]
+====
+
+----
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: ontap-nas-backend
+managementLIF": <ip address>
+svm: svm0
+username: <admin>
+password: <password>
+defaults: {
+              "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
+"labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====
 

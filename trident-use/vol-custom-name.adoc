@@ -40,19 +40,18 @@ Custom name templates can be defined at the root and/or pool level.
 .Root level example
 
 ----
-{
-   "version": 1,
-   "storageDriverName": "ontap-nas",
-   "backendName": "ontap-nfs-backend",
-   "managementLIF": "<ip address>",
-   "svm": "svm0",
-   "username": "<admin>",
-   "password": "<password>",
-   "defaults": {
-                 "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-    },
-    "labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
-}
+
+"version": 1,
+"storageDriverName": "ontap-nas",
+"backendName": "ontap-nfs-backend",
+"managementLIF": "<ip address>",
+"svm": "svm0",
+"username": "<admin>",
+"password": "<password>",
+"defaults": {
+              "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
+"labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 
 ----
 
@@ -87,7 +86,7 @@ Custom name templates can be defined at the root and/or pool level.
 }
 ----
 
-== Example name templates
+== Name template examples
 
 ----
 "nameTemplate": "backend_{{.config.StoragePrefix}}_{{slice .config.BackendName 0 5}}"

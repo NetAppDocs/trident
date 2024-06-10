@@ -293,7 +293,7 @@ storage:
 ----
 ====
 
-.Azure Netapp Files backend configuration with supportedTopologies
+.Supported topologies configuration
 [%collapsible%closed]
 ====
 Astra Trident facilitates provisioning of volumes for workloads based on regions and availability zones. The `supportedTopologies` block in this backend configuration is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a StorageClass. For StorageClasses that contain a subset of the regions and zones provided in a backend, Astra Trident will create a volume on the backend.
@@ -314,9 +314,9 @@ capacityPools:
 - application-group-1/account-1/ultra-2
 supportedTopologies:
 - topology.kubernetes.io/region: eastus
-  topology.kubernetes.io/zone: "1"
+  topology.kubernetes.io/zone: eastus-1
 - topology.kubernetes.io/region: eastus
-  topology.kubernetes.io/zone: "2"
+  topology.kubernetes.io/zone: eastus-2
 ----
 ====
 

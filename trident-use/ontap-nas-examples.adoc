@@ -166,7 +166,7 @@ SMB supports `mixed` and `ntfs` security styles.
 
 SMB default is `ntfs`.
 
-|`nameTemplate` | Contains custom volume names.
+|`nameTemplate` | Template to create custom volume names.
 
 |""
 
@@ -380,13 +380,13 @@ storagePrefix: myPrefix_
 version: 1
 storageDriverName: ontap-nas
 backendName: ontap-nas-backend
-managementLIF": <ip address>
+managementLIF: <ip address>
 svm: svm0
 username: <admin>
 password: <password>
 defaults: {
               "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-},
+}
 "labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====

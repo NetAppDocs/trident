@@ -11,27 +11,25 @@ summary: Astra Trident supports assigning meaningful names and labels to the vol
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident supports assigning meaningful names and labels to the volumes created to identify, monitor manage and easily map the volumes to respective Kubernetes resources(PVCs). You can define custom name templates for volume names and labels at the backend level and volumes created, imported, or cloned adhere to the name templates.
+Astra Trident supports assigning meaningful names and labels to the volumes created to identify and easily map the volumes to respective Kubernetes resources(PVCs). You can define templates for creating custom volume names and custom labels at the backend level; volumes created, imported, or cloned adhere to the templates.
 
 == Before you begin
 
-Customizable volume names and labels are compatible with ONTAP on-premises drivers and support the following:
+Customizable volume names and labels support:
 
-. Customizable volume names support volume create, import, and clone operations.
+. Volume create, import, and clone operations.
 . In the case of ontap-nas-economy driver, only the name of the Qtree volume complies with the name template.
-. In the case of ontap-san-economy driver, only the LUN name complies with the template.
+. In the case of ontap-san-economy driver, only the LUN name complies with the name template.
 
 == Limitations
 
 . Customizable volume names are compatible with ONTAP on-premises drivers only.
 . Customizable volume names do not apply to existing volumes.
 
-
 == Key behaviors of customizable volume names
 
-. If a failure occurs due to invalid syntax in a name template, the backend creation fails. However, if the template application fails, the volume name will not adhere to the template and Astra Trident will follow existing naming convention.
-. Storage prefix is not applicable when a relevant name template is defined in the backend configuration.
-
+. If a failure occurs due to invalid syntax in a name template, the backend creation fails. However, if the template application fails, the volume will be named according to existing naming convention.
+. Storage prefix is not applicable when a volume is named using a name template from the backend configuration.
 
 == Backend configuration examples with name template and labels
 
@@ -40,7 +38,7 @@ Custom name templates can be defined at the root and/or pool level.
 .Root level example
 
 ----
-
+{
 "version": 1,
 "storageDriverName": "ontap-nas",
 "backendName": "ontap-nfs-backend",
@@ -49,9 +47,10 @@ Custom name templates can be defined at the root and/or pool level.
 "username": "<admin>",
 "password": "<password>",
 "defaults": {
-              "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+    "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
 },
 "labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+}
 
 ----
 
@@ -69,18 +68,18 @@ Custom name templates can be defined at the root and/or pool level.
   "useREST": true,
   "storage": [
   {
-                "labels":{"type":"pool01", "template": "{{ .volume.Name }}"},
-                "defaults":
-                {
-                                "nameTemplate": "pool01_{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-                }
-   }
+      "labels":{"labelname":"label1", "template": "{{ .volume.Name }}"},
+      "defaults":
+      {
+          "nameTemplate": "pool01_{{ .volume.Name }}_{{ .labels.labelname }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+      }
+   },
   {
-            "labels":{"type":"pool02", "template": "{{ .volume.Name }}"},
-            "defaults":
-            {
-                            "nameTemplate": "pool02_{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-            }
+      "labels":{"labelname":"label2", "template": "{{ .volume.Name }}"},
+      "defaults":
+      {
+          "nameTemplate": "pool02_{{ .volume.Name }}_{{ .labels.labelname }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+      }
 }
   ]
 }
@@ -88,20 +87,22 @@ Custom name templates can be defined at the root and/or pool level.
 
 == Name template examples
 
-----
-"nameTemplate": "backend_{{.config.StoragePrefix}}_{{slice .config.BackendName 0 5}}"
+*Example 1*:
 
 ----
-
-----
-"nameTemplate": "pool_{{.config.StoragePrefix}}_{{slice .volume.RequestName 5 15}}""
+"nameTemplate": "{{ .config.StoragePrefix }}_{{ .volume.Name }}_{{ .config.BackendName }}"
 ----
 
+*Example 2*:
+
+----
+"nameTemplate": "pool_{{ .config.StoragePrefix }}_{{ .volume.Name }}_{{ slice .volume.RequestName 1 5 }}""
+----
 
 == Points to consider
 
 . In the case of volume imports, the labels is updated only if the existing volume has labels in a specific format. Example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
-. In the case of volume imports, the virtual storage pool is not applied to imported volume.
+. In the case of managed volume imports, the volume name follow the name template defined at the root leven in the backend definition. 
 . Astra Trident does not support the use of a slice operator with the storage prefix.
-. If the input templates do not contain unique volume names, Astra Trident will modify the template to ensure that it has unique volume names.
-. If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will fall back to the old naming method. For the other ONTAP drivers if the volume name exceeds the name limit, the volume creation process fails.
+. If the templates do not result in unique volume names, Astra Trident will append a UUID to create unique volume names.
+. If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will name the volumes according to the existing naming convention. For all other ONTAP drivers if the volume name exceeds the name limit, the volume creation process fails.

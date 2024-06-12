@@ -385,8 +385,8 @@ svm: svm0
 username: <admin>
 password: <password>
 defaults: {
-              "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-}
+    "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
 "labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====

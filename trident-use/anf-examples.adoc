@@ -296,7 +296,7 @@ storage:
 .Supported topologies configuration
 [%collapsible%closed]
 ====
-Astra Trident facilitates provisioning of volumes for workloads based on regions and availability zones. The `supportedTopologies` block in this backend configuration is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a StorageClass. For StorageClasses that contain a subset of the regions and zones provided in a backend, Astra Trident will create a volume on the backend.
+Astra Trident facilitates provisioning of volumes for workloads based on regions and availability zones. The `supportedTopologies` block in this backend configuration is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a storage class. For storage classes that contain a subset of the regions and zones provided in a backend, Astra Trident will create volumes in the mentioned region and zone.
 For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].
 
 ----
@@ -320,7 +320,7 @@ supportedTopologies:
 ----
 ====
 
-== Storage Class definitions 
+== Storage class definitions 
 The following `StorageClass` definitions refer to the storage pools above. 
 
 === Example definitions using `parameter.selector` field

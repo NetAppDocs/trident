@@ -39,7 +39,7 @@ Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] 
 . This is a Kubernetes object, so use `kubectl` to create it in Kubernetes.
 +
 ----
-kubectl create -f sample-input/storage-class-basic-csi.yaml
+kubectl create -f sample-input/storage-class-samples/storage-class-ontapnas-gold.yaml
 ----
 
 . You should now see a *basic-csi* storage class in both Kubernetes and Astra Trident, and Astra Trident should have discovered the pools on the backend.

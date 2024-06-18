@@ -99,11 +99,11 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST` When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
+`useREST`  When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend; when set to `false`, Astra Trident will use ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Astra Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls. For earlier Astra Trident and ONTAP versions, change `useREST` to `true` to use ONTAP REST APIs or to `false` to use ONTAP ZAPI calls.
 
 `useREST` is not supported with MetroCluster.
 
-`useREST` is fully qualified for NVMe/TCP. |`false`
+`useREST` is fully qualified for NVMe/TCP. |`true`
 
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 

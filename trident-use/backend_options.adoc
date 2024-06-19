@@ -19,6 +19,13 @@ With the introduction of `TridentBackendConfig`, administrators now have two uni
 * Can backends created using `tridentctl` be managed with `TridentBackendConfig`?
 * Can backends created using `TridentBackendConfig` be managed using `tridentctl`?
 
+== Points to consider
+
+* If a backend is created using a TridentBackendConfig (tbc), the backend cannot be updated using a `backend.json` file. 
+* If the `userState` has been set in a tbc, it cannot be modified using the `tridentctl update backend state <backend-name> --user-state suspended/normal` command.
+* To regain the ability to set the `userState` via tridentctl once it has been set via tbc, the `userState` field must be removed from the tbc. This can be done using the `kubectl edit tbc` command. Once the `userState` field is removed, you can use the `tridentctl update backend state` command to change the `userState` of a backend.
+•	Use the `tridentctl update backend state` to change the `userState`. You can also update the `userState` using `TridentBackendConfig` or `backend.json` file; this triggers a complete re-initialization of the backend and can be time-consuming. 
+
 == Manage `tridentctl` backends using `TridentBackendConfig`
 
 This section covers the steps required to manage backends that were created using `tridentctl` directly through the Kubernetes interface by creating `TridentBackendConfig` objects.

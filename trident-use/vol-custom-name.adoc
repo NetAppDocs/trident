@@ -29,7 +29,7 @@ Customizable volume names and labels support:
 == Key behaviors of customizable volume names
 
 . If a failure occurs due to invalid syntax in a name template, the backend creation fails. However, if the template application fails, the volume will be named according to existing naming convention.
-. Storage prefix is not applicable when a volume is named using a name template from the backend configuration.
+. Storage prefix is not applicable when a volume is named using a name template from the backend configuration. Any desired prefix value may be directly added to the template.
 
 == Backend configuration examples with name template and labels
 
@@ -47,9 +47,9 @@ Custom name templates can be defined at the root and/or pool level.
 "username": "<admin>",
 "password": "<password>",
 "defaults": {
-    "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
 },
-"labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 }
 
 ----
@@ -68,17 +68,17 @@ Custom name templates can be defined at the root and/or pool level.
   "useREST": true,
   "storage": [
   {
-      "labels":{"labelname":"label1", "template": "{{ .volume.Name }}"},
+      "labels":{"labelname":"label1", "name": "{{ .volume.Name }}"},
       "defaults":
       {
-          "nameTemplate": "pool01_{{ .volume.Name }}_{{ .labels.labelname }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+          "nameTemplate": "pool01_{{ .volume.Name }}_{{ .labels.cluster }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
       }
    },
   {
-      "labels":{"labelname":"label2", "template": "{{ .volume.Name }}"},
+      "labels":{"cluster":"label2", "name": "{{ .volume.Name }}"},
       "defaults":
       {
-          "nameTemplate": "pool02_{{ .volume.Name }}_{{ .labels.labelname }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+          "nameTemplate": "pool02_{{ .volume.Name }}_{{ .labels.cluster }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
       }
 }
   ]
@@ -104,5 +104,5 @@ Custom name templates can be defined at the root and/or pool level.
 . In the case of volume imports, the labels are updated only if the existing volume has labels in a specific format. For example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
 . In the case of managed volume imports, the volume name follows the name template defined at the root level in the backend definition. 
 . Astra Trident does not support the use of a slice operator with the storage prefix.
-. If the templates do not result in unique volume names, Astra Trident will append a UUID to create unique volume names.
+. If the templates do not result in unique volume names, Astra Trident will append a few random characters to create unique volume names.
 . If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will name the volumes according to the existing naming convention. For all other ONTAP drivers, if the volume name exceeds the name limit, the volume creation process fails.

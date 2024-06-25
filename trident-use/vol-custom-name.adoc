@@ -101,7 +101,7 @@ Custom name templates can be defined at the root and/or pool level.
 
 == Points to consider
 
-. In the case of volume imports, the labels are updated only if the existing volume has labels in a specific format. Example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
+. In the case of volume imports, the labels are updated only if the existing volume has labels in a specific format. For example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
 . In the case of managed volume imports, the volume name follows the name template defined at the root level in the backend definition. 
 . Astra Trident does not support the use of a slice operator with the storage prefix.
 . If the templates do not result in unique volume names, Astra Trident will append a UUID to create unique volume names.

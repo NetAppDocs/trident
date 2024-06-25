@@ -11,7 +11,7 @@ summary: Astra Trident supports assigning meaningful names and labels to the vol
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident supports assigning meaningful names and labels to the volumes created to identify and easily map the volumes to respective Kubernetes resources(PVCs). You can define templates for creating custom volume names and custom labels at the backend level; volumes created, imported, or cloned adhere to the templates.
+With Astra Trident, you can assign meaningful names and labels to volumes you create. This helps you identify and easily map volumes to their respective Kubernetes resources (PVCs). You can also define templates at the backend level for creating custom volume names and custom labels; any volumes that you create, import, or clone will adhere to the templates.
 
 == Before you begin
 
@@ -101,8 +101,8 @@ Custom name templates can be defined at the root and/or pool level.
 
 == Points to consider
 
-. In the case of volume imports, the labels is updated only if the existing volume has labels in a specific format. Example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
-. In the case of managed volume imports, the volume name follow the name template defined at the root leven in the backend definition. 
+. In the case of volume imports, the labels are updated only if the existing volume has labels in a specific format. Example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
+. In the case of managed volume imports, the volume name follows the name template defined at the root level in the backend definition. 
 . Astra Trident does not support the use of a slice operator with the storage prefix.
 . If the templates do not result in unique volume names, Astra Trident will append a UUID to create unique volume names.
-. If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will name the volumes according to the existing naming convention. For all other ONTAP drivers if the volume name exceeds the name limit, the volume creation process fails.
+. If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will name the volumes according to the existing naming convention. For all other ONTAP drivers, if the volume name exceeds the name limit, the volume creation process fails.

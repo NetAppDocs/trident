@@ -336,16 +336,16 @@ useREST: true
 ----
 ---
 version: 1
-storageDriverName: ontap-san
-backendName: ontap-san-backend
+storageDriverName: ontap-nas
+backendName: ontap-nas-backend
 managementLIF: <ip address>
 svm: svm0
 username: <admin>
 password: <password>
 defaults: {
-    "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
 },
-"labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====
 

@@ -204,6 +204,13 @@ Use the `update backend state` command to suspend or resume backend operations.
 
 `tridentctl update backend state <backend-name> [flag]`
 
+.Points to consider
+
+* If a backend is created using a TridentBackendConfig (tbc), the backend cannot be updated using a `backend.json` file. 
+* If the `userState` has been set in a tbc, it cannot be modified using the `tridentctl update backend state <backend-name> --user-state suspended/normal` command.
+* To regain the ability to set the `userState` via tridentctl once it has been set via tbc, the `userState` field must be removed from the tbc. This can be done using the `kubectl edit tbc` command. Once the `userState` field is removed, you can use the `tridentctl update backend state` command to change the `userState` of a backend.
+* Use the `tridentctl update backend state` to change the `userState`. You can also update the `userState` using `TridentBackendConfig` or `backend.json` file; this triggers a complete re-initialization of the backend and can be time-consuming. 
+
 Flags::
 `-h`, `--help`: Help for backend state. 
 `--user-state`: Set to `suspended` to pause backend operations. Set to `normal` to resume backend operations. When set to `suspended`:

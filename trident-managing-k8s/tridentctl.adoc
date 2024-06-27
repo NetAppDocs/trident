@@ -208,8 +208,62 @@ Flags::
 `-h`, `--help`: Help for backend state. 
 `--user-state`: Set to `suspended` to pause backend operations. Set to `normal` to resume backend operations. When set to `suspended`:
 +
-* `AddVolume`, `CloneVolume`, `Import Volume`, `ResizeVolume` are paused.
-* `PublishVolume`, `UnPublishVolume`, `CreateSnapshot`, `GetSnapshot`, `RestoreSnapshot`, `DeleteSnapshot`, `RemoveVolume`, `GetVolumeExternal`, `ReconcileNodeAccess` remain available.
+* `AddVolume` and `Import Volume` are paused.
+* `CloneVolume`, `ResizeVolume`, `PublishVolume`, `UnPublishVolume`, `CreateSnapshot`, `GetSnapshot`, `RestoreSnapshot`, `DeleteSnapshot`, `RemoveVolume`, `GetVolumeExternal`, `ReconcileNodeAccess` remain available.
+
+You can also update the backend state using `userState` field in the backend configuration file `TridentBackendConfig` or `backend.json`.
+For more information, refer to link:../trident-use/backend_options.html[Options for managing backends] and link:../trident-use/backend_ops_kubectl.html[Perform backend management with kubectl].
+
+*Example:*
+
+[role="tabbed-block"]
+====
+
+.JSON
+--
+Follow these steps to update the `userState` using the `backend.json` file:
+
+. Edit the `backend.json` file to include the `userState` field with its value set to 'suspended'.
+. Update the backend using the `tridentctl backend update` command and the path to the updated `backend.json` file.
++
+*Example*: `tridentctl backend update -f /<path to backend JSON file>/backend.json`
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas",
+    "managementLIF": "<redacted>",
+    "svm": "nas-svm",
+    "backendName": "customBackend",
+    "username": "<redacted>",
+    "password": "<redacted>",
+    "userState": "suspended",
+}
+
+----
+--
+
+.YAML
+--
+You can edit the tbc after it has been applied using the `kubectl edit <tbc-name> -n <namespace>` command.
+The following example updates the backend state to suspend using the `userState: suspended` option:
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-ontap-nas
+spec:
+  version: 1
+  backendName: customBackend
+  storageDriverName: ontap-nas
+  managementLIF: <redacted>
+  svm: nas-svm
+userState: suspended
+  credentials:
+    name: backend-tbc-ontap-nas-secret
+----
+--
+====
 
 === version
 

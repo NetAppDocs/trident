@@ -26,6 +26,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Added support for custom volume names and metadata (labels) on the ONTAP storage backends.
 * Enhanced the `azure-netapp-files` (ANF) driver to automatically enable the snapshot directory by default when the NFS mount options are set to use NFS version 4.x.
 * Added Bottlerocket support for NFS volumes.
+* Added technical preview support for Google Cloud NetApp Volumes. 
 
 ==== Kubernetes
 
@@ -38,7 +39,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Fixed Astra Trident installation failures due to stale transactions.
 * Fixed tridentctl to ignore warning messages from Kubernetes (link:https://github.com/NetApp/trident/issues/892[Issue #892]).
 * Changed Astra Trident controller `SecurityContextConstraint` priority to `0` (link:https://github.com/NetApp/trident/issues/887[Issue #887]).
-* ONTAP drivers now accept volume sizes below 20MiB (link: https://github.com/NetApp/trident/issues/885[Issue[#885]).
+* ONTAP drivers now accept volume sizes below 20MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
 * Prevent shrinking of Flexvols during resize operation for the ONTAP-SAN driver.
 * Fixed ANF volume import failure with NFS v4.1.
 

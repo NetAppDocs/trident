@@ -53,7 +53,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 .Images in one registry
 --
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2402.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
 ----
 --
 
@@ -61,7 +61,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2402.0 --set i
 --
 You must append `sig-storage` to the `imageRegistry` to use different registry locations.
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2402.0 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:24.06.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:24.06 --set tridentImage=<your-registry>/netapp/trident:24.06.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:24.06.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:24.06 --set tridentImage=<your-registry>/netapp/trident:24.06.0 --create-namespace --namespace <trident-namespace>
 ----
 --
 ====
@@ -92,7 +92,7 @@ a|Specify overrides on the command line.
 For example, to change the default value of `debug`, run the following `--set` command where `100.2402.0` is the version of Astra Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2402.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2406.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options

@@ -19,6 +19,8 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 === Enhancements
 
+* **IMPORTANT**: The `limitVolumeSize` parameter now limits qtree/LUN sizes in the ONTAP economy drivers. Use the new  `limitVolumePoolSize`
+  parameter to control Flexvol sizes in those drivers. (link:https://github.com/NetApp/trident/issues/341[Issue #341]).
 * Added ability for iSCSI self-healing to initiate SCSI scans by exact LUN ID if deprecated igroups are in use (link:https://github.com/NetApp/trident/issues/883[Issue #883]).
 * Added support for volume clone and resize operations to be allowed even when the backend is in suspended mode.
 * Added ability for user-configured log settings for the Trident controller to be propagated to Astra Trident node pods.

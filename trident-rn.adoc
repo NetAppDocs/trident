@@ -20,7 +20,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 === Enhancements
 
 * Added ability for iSCSI self-healing to initiate SCSI scans by exact LUN ID if deprecated igroups are in use (link:https://github.com/NetApp/trident/issues/883[Issue #883]).
-* Added support for operations such as Clone and Resize to be allowed even when the backend is in suspended mode.
+* Added support for volume clone and resize operations to be allowed even when the backend is in suspended mode.
 * Added ability for user-configured log settings for the Trident controller to be propagated to Astra Trident node pods.
 * Added support in Astra Trident to use REST by default instead of ZAPI for ONTAP versions 9.15.1 and later.
 * Added support for custom volume names and metadata (labels) on the ONTAP storage backends.
@@ -40,12 +40,12 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Fixed tridentctl to ignore warning messages from Kubernetes (link:https://github.com/NetApp/trident/issues/892[Issue #892]).
 * Changed Astra Trident controller `SecurityContextConstraint` priority to `0` (link:https://github.com/NetApp/trident/issues/887[Issue #887]).
 * ONTAP drivers now accept volume sizes below 20MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
-* Prevent shrinking of Flexvols during resize operation for the ONTAP-SAN driver.
+* Fixed Astra Trident to prevent shrinking of Flexvols during resize operation for the ONTAP-SAN driver.
 * Fixed ANF volume import failure with NFS v4.1.
 
 === Deprecations
 
-* Removed support for EOL Windows server 2019. 
+* Removed support for EOL Windows Server 2019. 
 
 == Changes in 24.02
 

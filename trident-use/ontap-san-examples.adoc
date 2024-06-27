@@ -144,6 +144,10 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 
 |`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
 
+|`nameTemplate` | Template to create custom volume names.
+
+|""
+
 |===
 
 === Volume provisioning examples
@@ -322,6 +326,26 @@ username: vsadmin
 password: password
 sanType: nvme
 useREST: true
+----
+====
+
+.Backend configuration example with nameTemplate
+[%collapsible%closed]
+====
+
+----
+---
+version: 1
+storageDriverName: ontap-san
+backendName: ontap-san-backend
+managementLIF: <ip address>
+svm: svm0
+username: <admin>
+password: <password>
+defaults: {
+    "nameTemplate": "{{.volume.Name}}_{{.labels.labelname}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
+"labels": {"labelname": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====
 

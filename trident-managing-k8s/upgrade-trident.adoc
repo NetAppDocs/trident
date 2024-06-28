@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-managing-k8s/upgrade-trident.html
 keywords: upgrade, trident, methods, operator, tridentctl, helm
-summary: Astra Trident follows a four-month release cadence, delivering four major releases every calendar year. Each new release builds on top of the previous releases, providing new features and performance enhancements as well as bug fixes and improvements. You are encouraged to upgrade at least once a year to take advantage of the new features in Astra Trident.
+summary: Astra Trident follows a four-month release cadence, delivering three major releases every calendar year. Each new release builds on top of the previous releases, providing new features and performance enhancements as well as bug fixes and improvements. You are encouraged to upgrade at least once a year to take advantage of the new features in Astra Trident.
 ---
 
 = Upgrade Astra Trident
@@ -27,12 +27,12 @@ When upgrading to the latest release of Astra Trident, consider the following:
 == Step 1: Select a version
 Astra Trident versions follow a date-based `YY.MM` naming convention, where "YY" is the last two digits of the year and "MM" is the month. Dot releases follow a `YY.MM.X` convention, where "X" is the patch level. You will select the version to upgrade to based on the version you are upgrading from. 
 
-* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can directly upgrade from 23.04 (or any 23.01 dot release) to 24.06.
+* You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can directly upgrade from 23.04 (or any 23.04 dot release) to 24.06.
 * If you are upgrading from a release outside of the four-release window, perform a multi-step upgrade. Use the upgrade instructions for the link:../earlier-versions.html[earlier version] you are upgrading from to upgrade to the most recent release that fits the four-release window. For example, if you are running 22.01 and want to upgrade to 24.06:
 
-. First upgrade from 22.07 to 23.07.  
+. First upgrade from 22.07 to 23.04.  
 
-. Then upgrade from 23.07 to 24.06.
+. Then upgrade from 23.04 to 24.06.
 
 NOTE: When upgrading using the Trident operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, refer to the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
 

@@ -1,0 +1,108 @@
+---
+sidebar: sidebar
+permalink: trident-use/vol-custom-name.html
+keywords: volumes, volume name, custom volume name, on-demand volume snapshots, expand volumes, iscsci volumes, nfs volumes, expand, expansion,
+summary: Astra Trident supports assigning meaningful names and labels to the volumes created so that it is easier to identify, monitor manage and easily map the volumes to respective Kubernetes resources(PVCs).
+---
+
+= Customize volume names and labels
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+With Astra Trident, you can assign meaningful names and labels to volumes you create. This helps you identify and easily map volumes to their respective Kubernetes resources (PVCs). You can also define templates at the backend level for creating custom volume names and custom labels; any volumes that you create, import, or clone will adhere to the templates.
+
+== Before you begin
+
+Customizable volume names and labels support:
+
+. Volume create, import, and clone operations.
+. In the case of ontap-nas-economy driver, only the name of the Qtree volume complies with the name template.
+. In the case of ontap-san-economy driver, only the LUN name complies with the name template.
+
+== Limitations
+
+. Customizable volume names are compatible with ONTAP on-premises drivers only.
+. Customizable volume names do not apply to existing volumes.
+
+== Key behaviors of customizable volume names
+
+. If a failure occurs due to invalid syntax in a name template, the backend creation fails. However, if the template application fails, the volume will be named according to existing naming convention.
+. Storage prefix is not applicable when a volume is named using a name template from the backend configuration. Any desired prefix value may be directly added to the template.
+
+== Backend configuration examples with name template and labels
+
+Custom name templates can be defined at the root and/or pool level.
+
+.Root level example
+
+----
+{
+"version": 1,
+"storageDriverName": "ontap-nas",
+"backendName": "ontap-nfs-backend",
+"managementLIF": "<ip address>",
+"svm": "svm0",
+"username": "<admin>",
+"password": "<password>",
+"defaults": {
+    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
+"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+}
+
+----
+
+.Pool level example
+
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-nas",
+  "backendName": "ontap-nfs-backend",
+  "managementLIF": "<ip address>",
+  "svm": "svm0",
+ "username": "<admin>",
+  "password": "<password>",
+  "useREST": true,
+  "storage": [
+  {
+      "labels":{"labelname":"label1", "name": "{{ .volume.Name }}"},
+      "defaults":
+      {
+          "nameTemplate": "pool01_{{ .volume.Name }}_{{ .labels.cluster }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+      }
+   },
+  {
+      "labels":{"cluster":"label2", "name": "{{ .volume.Name }}"},
+      "defaults":
+      {
+          "nameTemplate": "pool02_{{ .volume.Name }}_{{ .labels.cluster }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+      }
+}
+  ]
+}
+----
+
+== Name template examples
+
+*Example 1*:
+
+----
+"nameTemplate": "{{ .config.StoragePrefix }}_{{ .volume.Name }}_{{ .config.BackendName }}"
+----
+
+*Example 2*:
+
+----
+"nameTemplate": "pool_{{ .config.StoragePrefix }}_{{ .volume.Name }}_{{ slice .volume.RequestName 1 5 }}""
+----
+
+== Points to consider
+
+. In the case of volume imports, the labels are updated only if the existing volume has labels in a specific format. For example: `{"provisioning":{"Cluster":"ClusterA", "PVC": "pvcname"}}`.
+. In the case of managed volume imports, the volume name follows the name template defined at the root level in the backend definition. 
+. Astra Trident does not support the use of a slice operator with the storage prefix.
+. If the templates do not result in unique volume names, Astra Trident will append a few random characters to create unique volume names.
+. If the custom name for a NAS economy volume exceeds 64 characters in length, Astra Trident will name the volumes according to the existing naming convention. For all other ONTAP drivers, if the volume name exceeds the name limit, the volume creation process fails.

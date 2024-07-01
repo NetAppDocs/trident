@@ -13,7 +13,7 @@ summary: You can install Astra Trident using `tridentctl`. This process applies 
 [.lead]
 You can install Astra Trident using `tridentctl`. This process applies to installations where the container images required by Astra Trident are stored either in a private registry or not. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
-== Critical information about Astra Trident 24.02
+== Critical information about Astra Trident 24.06
 *You must read the following critical information about Astra Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -63,8 +63,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Astra Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Astra Trident version. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v24.02.0/trident-installer-24.02.0.tar.gz
-tar -xf trident-installer-24.02.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v24.06.0/trident-installer-24.06.0.tar.gz
+tar -xf trident-installer-24.06.0.tar.gz
 cd trident-installer
 ----
 
@@ -85,7 +85,7 @@ Install Astra Trident in the desired namespace by executing the `tridentctl inst
 .Images in one registry
 --
 ----
-./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:24.02 --trident-image <your-registry>/trident:24.02.0
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:24.06 --trident-image <your-registry>/trident:24.06.0
 ----
 --
 
@@ -93,7 +93,7 @@ Install Astra Trident in the desired namespace by executing the `tridentctl inst
 --
 You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----
-./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:24.02 --trident-image <your-registry>/netapp/trident:24.02.0
+./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:24.06 --trident-image <your-registry>/netapp/trident:24.06.0
 ----
 --
 
@@ -114,7 +114,7 @@ INFO Created Trident daemonset.
 INFO Waiting for Trident pod to start.
 INFO Trident pod started.                          namespace=trident pod=trident-controller-679648bd45-cv2mx
 INFO Waiting for Trident REST interface.
-INFO Trident REST interface is up.                 version=24.02.0
+INFO Trident REST interface is up.                 version=24.06.0
 INFO Trident installation succeeded.
 ....
 ----
@@ -147,7 +147,7 @@ You can use `tridentctl` to check the version of Astra Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 24.02.0        | 24.02.0        |
+| 24.06.0        | 24.06.0        |
 +----------------+----------------+
 ----
 

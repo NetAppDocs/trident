@@ -97,13 +97,11 @@ Also restricts the maximum size of the volumes it manages for qtrees and LUNs.
 
 Do not use unless you are troubleshooting and require a detailed log dump.|`null`
 
-|`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
+|`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
+`useREST`  When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend; when set to `false`, Astra Trident will use ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Astra Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.
 
-`useREST` is not supported with MetroCluster.
-
-`useREST` is fully qualified for NVMe/TCP. |`false`
+`useREST` is fully qualified for NVMe/TCP. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
@@ -145,6 +143,10 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 |`securityStyle` |Security style for new volumes |`unix`
 
 |`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
+
+|`nameTemplate` | Template to create custom volume names.
+
+|""
 
 |===
 
@@ -227,7 +229,7 @@ password: <password>
 ====
 
 [#mcc-best]
-.MetroCluster example
+. example
 [%collapsible%closed]
 ====
 You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
@@ -324,6 +326,26 @@ username: vsadmin
 password: password
 sanType: nvme
 useREST: true
+----
+====
+
+.Backend configuration example with nameTemplate
+[%collapsible%closed]
+====
+
+----
+---
+version: 1
+storageDriverName: ontap-san
+backendName: ontap-san-backend
+managementLIF: <ip address>
+svm: svm0
+username: <admin>
+password: <password>
+defaults: {
+    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
+"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====
 

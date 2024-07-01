@@ -50,7 +50,7 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:24.02"`
+|`"netapp/trident-autosupport:24.06"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -59,7 +59,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Astra Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Astra Trident image to install |`"netapp/trident:24.02"`
+|`tridentImage` |Astra Trident image to install |`"netapp/trident:24.06"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"k8s.gcr.io/sig-storage"` (Kubernetes 1.19+)

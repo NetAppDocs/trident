@@ -53,7 +53,7 @@ You can upgrade an Astra Trident Helm installation.
 WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Astra Trident installed, you must update values.yaml to set `excludePodSecurityPolicy` to `true` or add `--set excludePodSecurityPolicy=true` to the `helm upgrade` command before you can upgrade the cluster.
 
 .Steps
-. If you link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm[installed Astra Trident using Helm], you can use `helm upgrade trident netapp-trident/trident-operator --version 100.2402.0` to upgrade in one step. If you did not add the Helm repo or cannot use it to upgrade:
+. If you link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm[installed Astra Trident using Helm], you can use `helm upgrade trident netapp-trident/trident-operator --version 100.2406.0` to upgrade in one step. If you did not add the Helm repo or cannot use it to upgrade:
 
 .. Download the latest Astra Trident release from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
 .. Use the `helm upgrade` command where `trident-operator-24.06.0.tgz` reflects the version that you want to upgrade to.

@@ -45,7 +45,7 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `100.2402.0` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `100.2406.0` is the version of Astra Trident you are installing. 
 +
 [role="tabbed-block"]
 ====
@@ -89,7 +89,7 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `100.2402.0` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `100.2406.0` is the version of Astra Trident you are installing:
 
 ----
 helm install <name> netapp-trident/trident-operator --version 100.2406.0  --create-namespace --namespace trident --set tridentDebug=true

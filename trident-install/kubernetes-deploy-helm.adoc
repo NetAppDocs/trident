@@ -44,7 +44,7 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `100.2402.0` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `100.2404.0` is the version of Astra Trident you are installing. 
 +
 ----
 helm install <name> netapp-trident/trident-operator --version 100.2406.0 --create-namespace --namespace <trident-namespace>
@@ -72,7 +72,7 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `100.2402.0` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `100.2406.0` is the version of Astra Trident you are installing:
 
 ----
 helm install <name> netapp-trident/trident-operator --version 100.2406.0  --create-namespace --namespace trident --set tridentDebug=true

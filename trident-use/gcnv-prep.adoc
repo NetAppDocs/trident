@@ -1,0 +1,88 @@
+---
+sidebar: sidebar
+permalink: trident-use/gcnv-prep.html
+keywords: trident backend, google could netapp files, smb volumes, smb, windows, active directory, csi proxy, aks, cloud identity
+summary: Before you can configure your Google Cloud NetApp Files backend, you need to ensure the following requirements are met. 
+---
+
+= Prepare to configure an Google Cloud NetApp Files backend
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+
+[.lead]
+Before you can configure your Google Cloud NetApp Files backend, you need to ensure the following requirements are met. 
+
+?? need to review this entire page
+
+== Prerequisites for NFS volumes 
+
+
+If you are using Google Cloud NetApp Files for the first time or in a new location, some initial configuration is required to set up Google Cloud NetApp files and create an NFS volume. Refer to https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-quickstart-set-up-account-create-volumes[Azure: Set up Azure NetApp Files and create an NFS volume^].
+
+To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure NetApp Files^] backend, you need the following:
+
+[NOTE]
+====
+* `tenantID`, `clientID`, and `clientSecret` are optional when using a cloud identity on an AKS cluster.
+====
+
+
+* A capacity pool. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-set-up-capacity-pool[Microsoft: Create a capacity pool for Azure NetApp Files^].
+* A subnet delegated to Azure NetApp Files. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[Microsoft: Delegate a subnet to Azure NetApp Files^].
+* `subscriptionID` from an Azure subscription with Azure NetApp Files enabled.
+* `tenantID`, `clientID`, and `clientSecret` from an link:https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal[App Registration^] in Azure Active Directory with sufficient permissions to the Azure NetApp Files service. The App Registration should use either: 
+
+**  The Owner or Contributor role link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[predefined by Azure^]. 
+
+** A link:https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles-portal[custom Contributor role] at the subscription level (`assignableScopes`) with the following permissions that are limited to only what Astra Trident requires. After creating the custom role, link:https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal[assign the role using the Azure portal^].
++
+.Custom contributor role
+[%collapsible%closed]
+====
+[source,JSON]
+----
+{
+    "id": "/subscriptions/<subscription-id>/providers/Microsoft.Authorization/roleDefinitions/<role-definition-id>",
+    "properties": {
+        "roleName": "custom-role-with-limited-perms",
+        "description": "custom role providing limited permissions",
+        "assignableScopes": [
+            "/subscriptions/<subscription-id>"
+        ],
+        "permissions": [
+            {
+                "actions": [
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/delete",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots/read",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots/write",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots/delete",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/MountTargets/read",
+                    "Microsoft.Network/virtualNetworks/read",
+                    "Microsoft.Network/virtualNetworks/subnets/read",
+                    "Microsoft.Features/featureProviders/subscriptionFeatureRegistrations/read",
+                    "Microsoft.Features/featureProviders/subscriptionFeatureRegistrations/write",
+                    "Microsoft.Features/featureProviders/subscriptionFeatureRegistrations/delete",
+                    "Microsoft.Features/features/read",
+                    "Microsoft.Features/operations/read",
+                    "Microsoft.Features/providers/features/read",
+                    "Microsoft.Features/providers/features/register/action",
+                    "Microsoft.Features/providers/features/unregister/action",
+                    "Microsoft.Features/subscriptionFeatureRegistrations/read"
+                ],
+                "notActions": [],
+                "dataActions": [],
+                "notDataActions": []
+            }
+        ]
+    }
+}
+----
+====
+
+* The Azure `location` that contains at least one https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-delegate-subnet[delegated subnet^]. As of Trident 22.01, the `location` parameter is a required field at the top level of the backend configuration file. Location values specified in virtual pools are ignored.

@@ -134,7 +134,7 @@ This configuration is ideal when you are just getting started with Google Cloud 
 ----
 ---
 version: 1
-storageDriverName: google-cloud-netapp-files
+storageDriverName: google-cloud-netapp-volumes
 subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
 tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
 clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
@@ -156,7 +156,7 @@ metadata:
   namespace: trident
 spec:
   version: 1
-  storageDriverName: google-cloud-netapp-files 
+  storageDriverName: google-cloud-netapp-volumes 
   capacityPools: ["ultra-pool"]
   resourceGroups: ["aks-ami-eastus-rg"]
   netappAccounts: ["smb-na"]
@@ -196,7 +196,7 @@ This backend configuration further reduces the scope of volume placement to a si
 ----
 ---
 version: 1
-storageDriverName: google-cloud-netapp-files
+storageDriverName: google-cloud-netapp-volumes
 subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
 tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
 clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
@@ -228,7 +228,7 @@ This backend configuration defines multiple storage pools in a single file. This
 ----
 ---
 version: 1
-storageDriverName: google-cloud-netapp-files
+storageDriverName: google-cloud-netapp-volumes
 subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
 tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
 clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
@@ -272,7 +272,7 @@ For more information, refer to link:../trident-use/csi-topology.html[Use CSI Top
 ----
 ---
 version: 1
-storageDriverName: google-cloud-netapp-files
+storageDriverName: google-cloud-netapp-volumes
 subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
 tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
 clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
@@ -335,7 +335,7 @@ metadata:
   name: anf-sc-smb
 provisioner: csi.trident.netapp.io
 parameters:
-  backendType: "google-cloud-netapp-files"
+  backendType: "google-cloud-netapp-volumes"
   trident.netapp.io/nasType: "smb"
   csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
   csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}

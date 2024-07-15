@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/gcnv.html
-keywords: trident backend, google cloud netapp files, nfs volumes, nfs, windows, drivers, access modes, rwo, rwx, rwp, rwop, file system, gke, cloud identity, google cloud
+keywords: trident backend, google cloud netapp files, nfs volumes, nfs, drivers, access modes, rwo, rwx, rwp, rwop, file system, gke, cloud identity, google cloud
 summary: 
 ---
 
@@ -15,8 +15,13 @@ You can configure Google Cloud NetApp Files as the backend for Astra Trident. Yo
 
 Astra Trident also supports credential management using ?? Google Kubernetes Engine (GKE) clusters.
 
+
+---
+ Google Cloud NetApp Volumes is a technical preview feature in Astra Trident 24.06. 
+---
+
 == Google Cloud NetApp Files driver details
-Astra Trident provides the following Google Cloud NetApp Files storage drivers to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+Astra Trident provides the `gcp-cvs` driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
 [cols="2, 1, 1, 2, 2", options="header"]
 |===
@@ -52,7 +57,7 @@ To take advantage of cloud identity in Google Cloud, you must have:
 ====
 .Trident operator
 --
-To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"GCP"` and set `cloudIdentity` to `iam.gke.io/gcp-service-account: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx`.
+To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"GCP"` and set `cloudIdentity` to `iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com`.
 
 For example:
 
@@ -66,7 +71,7 @@ spec:
   namespace: trident
   imagePullPolicy: IfNotPresent
   cloudProvider: "GCP"
-  cloudIdentity: 'iam.gke.io/gcp-service-account: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'
+  cloudIdentity: 'iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com'
 ----
 --
 
@@ -88,7 +93,7 @@ helm install trident trident-operator-100.2406.0.tgz --set cloudProvider=$CP --s
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
 `export CP="GCP"`
-`export ANNOTATION="iam.gke.io/gcp-service-account: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"`
+`export ANNOTATION="iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"`
 
 The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$ANNOTATION`:
 ----

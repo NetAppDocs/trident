@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/gcnv-examples.html
-keywords: trident backend, google cloud netapp files, nfs volumes, nfs, windows
+keywords: trident backend, google cloud netapp files, nfs volumes, nfs
 summary: Learn about NFS and NFS backend configuration options for Google Cloud NetApp Files and review configuration examples.
 ---
 
@@ -28,11 +28,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
 
-|`storageClass` |Optional parameter used to specify the CVS service type. 
-
-Use `software` to select the CVS service type. Otherwise, Astra Trident assumes CVS-Performance service type (`hardware`). |
-
-|`storagePools` | CVS service type only. Optional parameter used to specify storage pools for volume creation. |
+|`storagePools` | Optional parameter used to specify storage pools for volume creation. |
 
 |`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal home page. |
 
@@ -58,13 +54,9 @@ Proxy servers with authentication enabled are not supported. |
 
 | `serviceLevel` |The CVS-Performance or CVS service level for new volumes. 
 
-CVS-Performance values are `standard`, `premium`, or `extreme`.
+CVS-Performance values are `flex`, `standard`, `premium`, or `extreme`.
 
-CVS values are `standardsw` or `zoneredundantstandardsw`. 
-
-|CVS-Performance default is "standard".
-
-CVS default is "standardsw". 
+|
 
 |`network` |Google Cloud network used for Cloud Volumes Service volumes. |"default"
 
@@ -86,18 +78,10 @@ For example:
 
 If you receive a “No capacity pools found” error when creating a PVC, it is likely your app registration doesn't have the required permissions and resources (subnet, virtual network, capacity pool) associated. If debug is enabled, Astra Trident will log the Google Cloud resources discovered when the backend is created. Verify an appropriate role is being used.
 
-The values for `resourceGroups`, `netappAccounts`, `capacityPools`, `virtualNetwork`, and `subnet` can be specified using short or fully-qualified names. Fully-qualified names are recommended in most situations as short names can match multiple resources with the same name.  
-
-The `resourceGroups`, `netappAccounts`, and `capacityPools` values are filters that restrict the set of discovered resources to those available to this storage backend and may be specified in any combination. Fully-qualified names follow this format:
-
 [cols=2,options="header"]
 |===
 |Type |Format
-|Resource group |<resource group>
-|NetApp account |<resource group>/<netapp account>
-|Capacity pool |<resource group>/<netapp account>/<capacity pool>
-|Virtual network |<resource group>/<virtual network>
-|Subnet |<resource group>/<virtual network>/<subnet>
+
 |===
 
 == Volume provisioning options
@@ -112,9 +96,7 @@ You can control default volume provisioning in the `defaults` section of the con
 |`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept CVS default of 0)
 |`size` |The size of new volumes. 
 
-CVS-Performance minimum is 100 GiB. 
-
-CVS minimum is 1 GiB. 
+GCNV with Standard, Premium, and Extreme is 100GiB and Flex is 1GiB.
 
 |CVS-Performance service type defaults to "100GiB". 
 
@@ -152,18 +134,15 @@ This backend configuration omits `tenantID`, `clientID`, and `clientSecret`, whi
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  name: backend-tbc-anf-1
-  namespace: trident
+  name: backend-tbc-gcp-gcnv
 spec:
   version: 1
   storageDriverName: google-cloud-netapp-volumes 
-  capacityPools: ["ultra-pool"]
-  resourceGroups: ["aks-ami-eastus-rg"]
-  netappAccounts: ["smb-na"]
-  virtualNetwork: eastus-prod-vnet
-  subnet: eastus-anf-subnet
-  location: eastus
-  subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+  projectNumber: '012345678901'
+  network: gcnv-network
+  location: us-west2
+  serviceLevel: Premium
+  storagePool: pool-premium1
 ----
 ====
 
@@ -358,9 +337,6 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
 ----
 ====
-
-[NOTE]
-`nasType: smb` filters for pools which support SMB volumes. `nasType: nfs` or `nasType: null` filters for NFS pools.
 
 == Create the backend
 

@@ -157,7 +157,9 @@ See the following table for the backend configuration options:
 
 A fully-qualified domain name (FQDN) can be specified.
 
-Can be set to use IPv6 addresses if Astra Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
+Can be set to use IPv6 addresses if Astra Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]. 
+
+If you provide the `fsxFilesystemID` under the `aws` field, you need not to provide the `managementLIF` because Astra Trident retrieves the SVM `managementLIF` information from AWS. So, you must provide credentials for a user under the SVM (For example: vsadmin) and the user must have the `vsadmin` role.
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
 |`dataLIF` 
@@ -234,7 +236,7 @@ Also restricts the maximum size of the volumes it manages for qtrees and LUNs, a
 |Maximum LUNs per Flexvol, must be in range [50, 200]. 
 
 SAN only. 
-|`100`
+|"`100`"
 
 |`debugTraceFlags` 
 |Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} 
@@ -259,7 +261,7 @@ Options are `nfs`, `smb`, or null.
 
 |`qtreesPerFlexvol`	
 |Maximum Qtrees per FlexVol, must be in range [50, 300]	
-|`200`
+|`"200"`
 
 |`smbShare` 
 |You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.

@@ -81,6 +81,10 @@ Mount options set in a storage class definition override mount options set in ba
 
 Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
 
+| `supportedTopologies` | Represents a list of regions and zones that are supported by this backend. 
+
+For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology]. |  
+
 |===
 
 [NOTE]
@@ -289,8 +293,34 @@ storage:
 ----
 ====
 
+.Supported topologies configuration
+[%collapsible%closed]
+====
+Astra Trident facilitates provisioning of volumes for workloads based on regions and availability zones. The `supportedTopologies` block in this backend configuration is used to provide a list of regions and zones per backend. The region and zone values specified here must match the region and zone values from the labels on each Kubernetes cluster node. These regions and zones represent the list of permissible values that can be provided in a storage class. For storage classes that contain a subset of the regions and zones provided in a backend, Astra Trident will create volumes in the mentioned region and zone.
+For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].
 
-== Storage Class definitions 
+----
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: eastus
+serviceLevel: Ultra
+capacityPools:
+- application-group-1/account-1/ultra-1
+- application-group-1/account-1/ultra-2
+supportedTopologies:
+- topology.kubernetes.io/region: eastus
+  topology.kubernetes.io/zone: eastus-1
+- topology.kubernetes.io/region: eastus
+  topology.kubernetes.io/zone: eastus-2
+----
+====
+
+== Storage class definitions 
 The following `StorageClass` definitions refer to the storage pools above. 
 
 === Example definitions using `parameter.selector` field

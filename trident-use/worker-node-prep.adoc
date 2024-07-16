@@ -17,13 +17,13 @@ All worker nodes in the Kubernetes cluster must be able to mount the volumes you
 If you are using a combination of drivers, you should install all required tools for your drivers. Recent versions of RedHat CoreOS have the tools installed by default.  
 
 .NFS tools
-Install the NFS tools if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`.
+link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#nfs-volumes[Install the NFS tools] if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`.
 
 .iSCSI tools
-Install the iSCSI tools if you are using: `ontap-san`, `ontap-san-economy`, `solidfire-san`.
+link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#install-the-iscsi-tools[Install the iSCSI tools] if you are using: `ontap-san`, `ontap-san-economy`, `solidfire-san`.
 
 .NVMe tools
-Install the NVMe tools if you are using `ontap-san` for nonvolatile memory express (NVMe) over TCP (NVMe/TCP) protocol. 
+link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#nvmetcp-volumes[Install the NVMe tools] if you are using `ontap-san` for nonvolatile memory express (NVMe) over TCP (NVMe/TCP) protocol. 
 
 NOTE: We recommend ONTAP 9.12 or later for NVMe/TCP. 
 
@@ -200,7 +200,7 @@ To configure or change iSCSI self-healing settings, pass the `iscsiSelfHealingIn
 
 The following example sets the iSCSI self-healing interval to 3 minutes and self-healing wait time to 6 minutes:
 ----
-helm install trident trident-operator-100.2402.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
+helm install trident trident-operator-100.2406.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
 ----
 --
 .tridentctl

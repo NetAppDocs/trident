@@ -111,11 +111,12 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 
 |`smb-share`
 
-|`useREST` |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
+|`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
+`useREST`  When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend; when set to `false`, Astra Trident will use ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
+Beginning with the Astra Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.  
 
-`useREST` is not supported with MetroCluster.|false
+|`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 |===
 
@@ -165,6 +166,10 @@ SMB supports `mixed` and `ntfs` security styles.
 |NFS default is `unix`.
 
 SMB default is `ntfs`.
+
+|`nameTemplate` | Template to create custom volume names.
+
+|""
 
 |===
 
@@ -364,6 +369,26 @@ clientCertificate: ZXR0ZXJwYXB...ICMgJ3BhcGVyc2
 clientPrivateKey: vciwKIyAgZG...0cnksIGRlc2NyaX
 trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 storagePrefix: myPrefix_
+----
+====
+
+.Backend configuration example with nameTemplate
+[%collapsible%closed]
+====
+
+----
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: ontap-nas-backend
+managementLIF: <ip address>
+svm: svm0
+username: <admin>
+password: <password>
+defaults: {
+    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
+},
+"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
 ----
 ====
 

@@ -1,17 +1,17 @@
 ---
 sidebar: sidebar
 permalink: trident-use/gcnv-examples.html
-keywords: trident backend, google cloud netapp files, nfs volumes, nfs
-summary: Learn about NFS and NFS backend configuration options for Google Cloud NetApp Files and review configuration examples.
+keywords: trident backend, google cloud netapp volumes, nfs volumes, nfs
+summary: Learn about NFS and NFS backend configuration options for Google Cloud NetApp Volumes and review configuration examples.
 ---
 
-= Azure NetApp Files backend configuration options and examples
+= Google Cloud NetApp Volumes backend configuration options and examples
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Learn about NFS backend configuration options for Google Cloud NetApp Files and review configuration examples. 
+Learn about NFS backend configuration options for Google Cloud NetApp Volumes and review configuration examples. 
 
 == Backend configuration options
 
@@ -22,15 +22,13 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |"google-cloud-netapp-files"
+|`storageDriverName` | Name of the storage driver |"google-cloud-netapp-volumes"
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
 
 |`storagePools` | Optional parameter used to specify storage pools for volume creation. |
 
 |`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal home page. |
-
-|`hostProjectNumber` |Required if using a shared VPC network. In this scenario, `projectNumber` is the service project, and `hostProjectNumber` is the host project.|
 
 |`apiRegion` |The Google Cloud region where Astra Trident creates Cloud Volumes Service volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
 
@@ -79,7 +77,7 @@ You can control default volume provisioning in the `defaults` section of the con
 [cols=",,",options="header",]
 |===
 |Parameter |Description |Default
-|`exportRule` |The export rules for new volumes. Must be a comma-separated list of any combination of IPv4 addresses or IPv4 subnets in CIDR notation. |"0.0.0.0/0"
+|`exportRule` |The export rules for new volumes. Must be a comma-separated list of any combination of IPv4 addresses. |"0.0.0.0/0"
 |`snapshotDir` |Access to the `.snapshot` directory | "false"
 |`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept CVS default of 0)
 |`size` |The size of new volumes. 
@@ -89,6 +87,7 @@ GCNV with Standard, Premium, and Extreme is 100GiB and Flex is 1GiB.
 |CVS-Performance service type defaults to "100GiB". 
 
 CVS service type does not set a default but requires a 1 GiB minimum.  
+|`unixPermissions` |The unix permissions of new volumes (4 octal digits).
 |===
 
 == Example configurations
@@ -97,9 +96,9 @@ The following examples show basic configurations that leave most parameters to d
 .Minimal configuration
 [%collapsible%closed]
 ====
-This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your NetApp accounts, capacity pools, and subnets delegated to Google Cloud NetApp Files in the configured location, and places new volumes on one of those pools and subnets randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
+This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your storage pools delegated to Google Cloud NetApp Volumes in the configured location, and places new volumes on one of those pools randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
 
-This configuration is ideal when you are just getting started with Google Cloud NetApp Files and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
+This configuration is ideal when you are just getting started with Google Cloud NetApp Volumes and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
 
 ----
 ---
@@ -259,7 +258,7 @@ storage:
 ----
 ====
 
-.Backend configuration example for Google Cloud Netapp Files
+.Backend configuration example for Google Cloud Netapp Volumes
 [%collapsible%closed]
 ====
 ----

@@ -1,29 +1,29 @@
 ---
 sidebar: sidebar
 permalink: trident-use/gcnv-prep.html
-keywords: trident backend, google could netapp files, smb volumes, active directory, csi proxy, aks, cloud identity
-summary: Before you can configure your Google Cloud NetApp Files backend, you need to ensure the following requirements are met. 
+keywords: trident backend, google could netapp volumes, smb volumes, active directory, csi proxy, aks, cloud identity
+summary: Before you can configure your Google Cloud NetApp Volumes backend, you need to ensure the following requirements are met. 
 ---
 
-= Prepare to configure an Google Cloud NetApp Files backend
+= Prepare to configure an Google Cloud NetApp Volumes backend
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 
 [.lead]
-Before you can configure your Google Cloud NetApp Files backend, you need to ensure the following requirements are met. 
+Before you can configure your Google Cloud NetApp Volumes backend, you need to ensure the following requirements are met. 
 
 == Prerequisites for NFS volumes 
 
-If you are using Google Cloud NetApp Files for the first time or in a new location, some initial configuration is required to set up Google Cloud NetApp files and create an NFS volume. Refer to link:https://cloud.google.com/netapp/volumes/docs/before-you-begin/application-resilience[Before you begin^].
+If you are using Google Cloud NetApp Volumes for the first time or in a new location, some initial configuration is required to set up Google Cloud NetApp Volumes and create an NFS volume. Refer to link:https://cloud.google.com/netapp/volumes/docs/before-you-begin/application-resilience[Before you begin^].
 
-Ensure that you have the following before configuring Google Cloud NetApp Files backend:
+Ensure that you have the following before configuring Google Cloud NetApp Volumes backend:
 
-* A Google Cloud account configured with NetApp Cloud Volumes Service. Refer to link:https://cloud.google.com/iam/docs/service-account-overview[Service accounts overview^]
+* A Google Cloud account configured with Google Cloud service. Refer to link:https://cloud.google.com/iam/docs/service-account-overview[Google Cloud Service accounts overview^]
 * Project number of your Google Cloud account. 
 * Google Cloud service account with the NetApp Volumes Admin(`netappcloudvolumes.admin`) role. Refer to link:https://cloud.google.com/netapp/volumes/docs/get-started/configure-access/iam#roles_and_permissions[Identity and Access Management roles and permissions^]
 * API key file for your Cloud Volumes Service account.
 * A storage pool. Refer to link:https://cloud.google.com/netapp/volumes/docs/configure-and-use/storage-pools/overview[Storage pools overview ^].
 
-For more information about To set up access to Google Cloud NetApp Volumes, refer to link:https://cloud.google.com/netapp/volumes/docs/get-started/configure-access/workflow#before_you_begin[Set up access to NetApp Volumes^].
+For more information about To set up access to Google Cloud NetApp Volumes, refer to link:https://cloud.google.com/netapp/volumes/docs/get-started/configure-access/workflow#before_you_begin[Set up access to Google Cloud NetApp Volumes^].

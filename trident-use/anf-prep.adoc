@@ -91,7 +91,7 @@ To create an SMB volume, you must have:
 
 * Active Directory configured and connected to Azure NetApp Files. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/create-active-directory-connections[Microsoft: Create and manage Active Directory connections for Azure NetApp Files^].
 
-* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2022. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
 * At least one Astra Trident secret containing your Active Directory credentials so Azure NetApp Files can authenticate to Active Directory. To generate secret `smbcreds`:
 +

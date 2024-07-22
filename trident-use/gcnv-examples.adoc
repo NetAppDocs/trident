@@ -22,7 +22,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |"google-cloud-netapp-volumes"
+|`storageDriverName` | Name of the storage driver |The value of `storageDriverName` must be specified as "google-cloud-netapp-volumes".
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
 
@@ -30,7 +30,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 
 |`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal home page. |
 
-|`apiRegion` |The Google Cloud region where Astra Trident creates Cloud Volumes Service volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
+|`location` |The Google Cloud location where Astra Trident creates GCNV volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
 
 Cross-region traffic incurs an additional cost.|
 
@@ -38,23 +38,14 @@ Cross-region traffic incurs an additional cost.|
 
 It includes the JSON-formatted contents of a Google Cloud service account's private key file (copied verbatim into the backend configuration file). |
 
-|`proxyURL` |Proxy URL if proxy server required to connect to CVS account. The proxy server can either be an HTTP proxy or an HTTPS proxy. 
-
-For an HTTPS proxy, certificate validation is skipped to allow the usage of self-signed certificates in the proxy server. 
-
-Proxy servers with authentication enabled are not supported. |
-
 |`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
 
 |`limitVolumeSize`  |Fail provisioning if the requested volume size is above this value. |"" (not enforced by default)
 
-| `serviceLevel` |The CVS-Performance or CVS service level for new volumes. 
+| `serviceLevel` | The service level of a storage pool and its volumes.
+The values are `flex`, `standard`, `premium`, or `extreme`.|
 
-CVS-Performance values are `flex`, `standard`, `premium`, or `extreme`.
-
-|
-
-|`network` |Google Cloud network used for Cloud Volumes Service volumes. |"default"
+|`network` |Google Cloud network used for GCNV volumes. |"default"
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api":false, "method":true}`. 
 
@@ -84,9 +75,9 @@ You can control default volume provisioning in the `defaults` section of the con
 
 GCNV with Standard, Premium, and Extreme is 100GiB and Flex is 1GiB.
 
-|CVS-Performance service type defaults to "100GiB". 
+| 
 
-CVS service type does not set a default but requires a 1 GiB minimum.  
+The service type does not set a default, but requires a 1 GiB minimum.  
 
 |`unixPermissions` |The unix permissions of new volumes (4 octal digits).| ""
 
@@ -151,25 +142,6 @@ apiKey:
 ====
 
 
-.Cloud identity for GKE
-[%collapsible%closed]
-====
-----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: backend-tbc-gcp-gcnv
-spec:
-  version: 1
-  storageDriverName: google-cloud-netapp-volumes 
-  projectNumber: '012345678901'
-  network: gcnv-network
-  location: us-west2
-  serviceLevel: Premium
-  storagePool: pool-premium1
-----
-====
-
 .Virtual pool configuration
 [%collapsible%closed]
 ====
@@ -216,47 +188,52 @@ apiKey:
     znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
     XsYg6gyxy4zq7OlwWgLwGa==
     -----END PRIVATE KEY-----
-  client_email: cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com
-  client_id: '123456789012345678901'
-  auth_uri: https://accounts.google.com/o/oauth2/auth
-  token_uri: https://oauth2.googleapis.com/token
-  auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
-  client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com
-nfsMountOptions: vers=3,proto=tcp,timeo=600
-defaults:
-  snapshotReserve: '5'
-  exportRule: 0.0.0.0/0
-labels:
-  cloud: gcp
-region: us-west2
-storage:
-- labels:
-    performance: extreme
-    protection: extra
-  serviceLevel: extreme
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-gcp-gcnv
+spec:
+  version: 1
+  storageDriverName: google-cloud-netapp-volumes
+  projectNumber: '012345678901'
+  network: gcnv-network
+  location: us-west2
+  serviceLevel: Premium
+  storagePool: pool-premium1
+  apiKey:
+    type: service_account
+    project_id: my-gcp-project
+    client_email: cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com
+    client_id: '123456789012345678901'
+    auth_uri: https://accounts.google.com/o/oauth2/auth
+    token_uri: https://oauth2.googleapis.com/token
+    auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com
+  credentials:
+    name: backend-tbc-gcp-gcnv-secret
+  nfsMountOptions: nfsvers=3,proto=tcp,timeo=600
   defaults:
-    snapshotDir: 'true'
     snapshotReserve: '10'
     exportRule: 10.0.0.0/24
-- labels:
-    performance: extreme
-    protection: standard
-  serviceLevel: extreme
-- labels:
-    performance: premium
-    protection: extra
-  serviceLevel: premium
-  defaults:
-    snapshotDir: 'true'
-    snapshotReserve: '10'
-- labels:
-    performance: premium
-    protection: standard
-  serviceLevel: premium
-- labels:
-    performance: standard
-  serviceLevel: standard
-
+    size: 2Ti
+  labels:
+    cloud: gcp
+  region: us-west2
+  storage:
+    - labels:
+        performance: extreme
+      serviceLevel: extreme
+      defaults:
+        snapshotReserve: '5'
+        exportRule: 0.0.0.0/0
+        size: 1Ti
+    - labels:
+        performance: premium
+      serviceLevel: premium
+    - labels:
+        performance: standard
+      serviceLevel: standard
 ----
 ====
 

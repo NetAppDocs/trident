@@ -71,7 +71,7 @@ The following examples creates an IAM policy:
 
 The following example creates an IAM role for service account in EKS: 
 
-`eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster my-cluster --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve`
+`eksctl create iamserviceaccount --name trident-controller --namespace kube-system --cluster <my-cluster> --role-name <AmazonEKS_EBS_CSI_DriverRole> --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve`
 
 --
 

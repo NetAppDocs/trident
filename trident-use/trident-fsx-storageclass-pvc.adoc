@@ -39,7 +39,7 @@ Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] 
 . This is a Kubernetes object, so use `kubectl` to create it in Kubernetes.
 +
 ----
-kubectl create -f sample-input/storage-class-samples/storage-class-ontapnas-gold.yaml
+kubectl create -f storage-class-ontapnas.yaml
 ----
 
 . You should now see a *basic-csi* storage class in both Kubernetes and Astra Trident, and Astra Trident should have discovered the pools on the backend.
@@ -77,7 +77,7 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
     path: "/my/host/path"
 ----
@@ -89,7 +89,7 @@ spec:
 These examples show basic PVC configuration options. 
 
 .PVC with RWO access
-This example shows a basic PVC with RWO access that is associated with a StorageClass named `basic-csi`.
+This example shows a basic PVC with RWX access that is associated with a StorageClass named `basic-csi`.
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -97,7 +97,7 @@ metadata:
   name: pvc-storage
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
@@ -122,38 +122,7 @@ storageClassName: protection-gold
 ----
 ====
 
-.Pod manifest samples
-[%collapsible]
-====
-These examples show basic configurations to attach the PVC to a pod. 
-
-.Basic configuration
-----
-kind: Pod
-apiVersion: v1
-metadata:
-  name: pv-pod
-spec:
-  volumes:
-    - name: pv-storage
-      persistentVolumeClaim:
-       claimName: basic
-  containers:
-    - name: pv-container
-      image: nginx
-      ports:
-        - containerPort: 80
-          name: "http-server"
-      volumeMounts:
-        - mountPath: "/my/mount/path"
-          name: pv-storage
-----
-
-====
-
 === Create the PV and PVC
-
-
 .Steps
 . Create the PV.
 +

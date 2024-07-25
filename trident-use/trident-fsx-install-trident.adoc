@@ -31,7 +31,7 @@ Set the values for *cloud provider* and *cloud identity* flags using the followi
 
 The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 ----
-helm install trident trident-operator-100.2406.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace kube-system
+helm install trident trident-operator-100.2406.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
 ----
 
 == Install Astra Trident via the EKS add-on 
@@ -156,8 +156,10 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 
 .AWS CLI
 
+The following example updates the EKS add-on:
 --
-
+aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni --addon-version v24.2.0-eksbuild.1 \
+    --service-account-role-arn arn:aws:iam::111122223333:role/role-name --configuration-values '{}' --resolve-conflicts PRESERVE
 --
 
 

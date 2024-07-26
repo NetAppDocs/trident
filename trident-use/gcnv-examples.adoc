@@ -30,7 +30,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 
 |`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal home page. |
 
-|`location` |The Google Cloud location where Astra Trident creates GCNV volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
+|`location` |The Google Cloud location where Astra Trident creates GCNV volumes. When creating cross-region Kubernetes clusters, volumes created in a `location` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
 
 Cross-region traffic incurs an additional cost.|
 
@@ -45,9 +45,9 @@ It includes the JSON-formatted contents of a Google Cloud service account's priv
 | `serviceLevel` | The service level of a storage pool and its volumes.
 The values are `flex`, `standard`, `premium`, or `extreme`.|
 
-|`network` |Google Cloud network used for GCNV volumes. |"default"
+|`network` |Google Cloud network used for GCNV volumes. |
 
-|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `\{"api":false, "method":true}`. 
+|`debugTraceFlags` |Debug flags to use when troubleshooting. Example, `{"api":false, "method":true}`. 
 
 Do not use this unless you are troubleshooting and require a detailed log dump. |null
 
@@ -56,8 +56,7 @@ Do not use this unless you are troubleshooting and require a detailed log dump. 
 For example:
 `- key: topology.kubernetes.io/region
   values:
-  - us-east1
-  - europe-west1`
+  - us-west2`
 |
 |===
 
@@ -98,7 +97,7 @@ This configuration is ideal when you are just getting started with Google Cloud 
 version: 1
 storageDriverName: google-cloud-netapp-volumes
 projectNumber: '012345678901'
-apiRegion: us-west2
+location: us-west2
 apiKey:
   type: service_account
   project_id: my-gcp-project
@@ -151,13 +150,12 @@ Here, specific defaults are set for all virtual pools, which set the `snapshotRe
 
 ----
 ---
-version: 1
-storageDriverName: google-cloud-netapp-volumes
-projectNumber: '012345678901'
-apiRegion: us-west2
-apiKey:
-  type: service_account
-  project_id: my-gcp-project
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-gcp-gcnv-secret
+type: Opaque
+stringData:
   private_key_id: "<id_value>"
   private_key: |
     -----BEGIN PRIVATE KEY-----
@@ -197,7 +195,7 @@ spec:
   version: 1
   storageDriverName: google-cloud-netapp-volumes
   projectNumber: '012345678901'
-  network: gcnv-network
+  network: default
   location: us-west2
   serviceLevel: Premium
   storagePool: pool-premium1

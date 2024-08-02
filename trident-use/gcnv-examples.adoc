@@ -260,6 +260,11 @@ spec:
   location: us-west2
   serviceLevel: Premium
   storagePool: pool-premium1
+  supportedTopologies:
+  - topology.kubernetes.io/region: us-west2
+    topology.kubernetes.io/zone: us-west2-b
+  - topology.kubernetes.io/region: us-west2
+    topology.kubernetes.io/zone: us-west2-a
   apiKey:
     type: service_account
     project_id: my-gcp-project

@@ -27,7 +27,7 @@ This example creates an AWS Secret Manager secret to store Astra Trident CSI cre
 
 The following examples creates an IAM policy using the AWS CLI:
 
-`aws iam create-policy --policy-name AmazonEBSCSIDriverPolicy --policy-document file://policy.json --description "This policy grants access to Trident CSI to FSxN and Secret manager"`
+`aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json --description "This policy grants access to Trident CSI to FSxN and Secret manager"`
 
 *Policy JSON file*:
 ----
@@ -63,4 +63,4 @@ policy.json:
 
 The following example creates an IAM role for service account in EKS: 
 
-`eksctl create iamserviceaccount --name trident-controller --namespace trident --cluster <my-cluster> --role-name <AmazonEKS_EBS_CSI_DriverRole> --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve`
+`eksctl create iamserviceaccount --name trident-controller --namespace trident --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonFSxNCSIDriverPolicy --approve`

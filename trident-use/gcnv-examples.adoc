@@ -33,12 +33,13 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 |`location` |The Google Cloud location where Astra Trident creates GCNV volumes. When creating cross-region Kubernetes clusters, volumes created in a `location` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
 
 Cross-region traffic incurs an additional cost.
-
-If you are using a zonal flex storage pool, the location must include the zone.|
+|
 
 |`apiKey` |API key for the Google Cloud service account with the `netappcloudvolumes.admin` role. 
 
-It includes the JSON-formatted contents of a Google Cloud service account's private key file (copied verbatim into the backend configuration file). |
+It includes the JSON-formatted contents of a Google Cloud service account's private key file (copied verbatim into the backend configuration file). 
+
+The `apiKey` must include key-value pairs for the following keys: `type`, `project_id`, `client_email`, `client_id`, `auth_uri`, `token_uri`, `auth_provider_x509_cert_url`, and `client_x509_cert_url`. |
 
 |`nfsMountOptions` |Fine-grained control of NFS mount options. |"nfsvers=3"
 
@@ -53,12 +54,14 @@ The values are `flex`, `standard`, `premium`, or `extreme`.|
 
 Do not use this unless you are troubleshooting and require a detailed log dump. |null
 
-|`allowedTopologies` | To enable cross-region access, your StorageClass definition for `allowedTopologies` must include all regions. 
+| `supportedTopologies` | Represents a list of regions and zones that are supported by this backend. 
+
+For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].  
 
 For example:
-`- key: topology.kubernetes.io/region
-  values:
-  - us-west2`
+`  supportedTopologies:
+  - topology.kubernetes.io/region: europe-west6
+    topology.kubernetes.io/zone: europe-west6-b`
 |
 |===
 
@@ -74,11 +77,11 @@ You can control default volume provisioning in the `defaults` section of the con
 |`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept default of 0)
 |`size` |The size of new volumes. 
 
-GCNV with Standard, Premium, and Extreme is 100GiB and Flex is 1GiB.
+Minimum size for GCNV with Standard, Premium, and Extreme serviceLevel is 100GiB and Flex serviceLevel is 1GiB.
 
 | 
 
-The service type does not set a default, but requires a 1 GiB minimum.  
+The service type does not set a default, but requires a 1GiB minimum.  
 
 |`unixPermissions` |The unix permissions of new volumes (4 octal digits).| ""
 
@@ -97,54 +100,39 @@ This configuration is ideal when you are just getting started with Google Cloud 
 ----
 ---
 
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-gcnv-secret
+type: Opaque
+stringData:
+  private_key_id: 'f2cb6ed6d7cc10c453f7d3406fc700c5df0ab9ec'
+  private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmU90awmHPRD7c\nTqdgvBb1x8/EKHIp6Ku4zBKOwfhlkXDb1UYC6HL0bIK1Z3mAqBrL+vaQZelWA6zi\nWMVo9wnnJM2getV7sewGejWjSUP0HFAN1cJQ4PkVEbugpFJFQrf356m7VhyJHcTv\nWdXn7yMBOj36sqBt+ySK0SGBVEKvs5edEWfh6n+I/VnOwRAGf05TbX3+4Ia3n50V\nP4q5jVO9xkEDdFK5sx1Q2/tttGh5H5fTgILZgXbaar4eLAYZolRvSAnFONnxmA0x\nRtyRz7sEBxCpzn3QPvY1OQITbY/vK/T7vEusTp38dEy5tqUTki97ft7ioggBfz36\nWkMcvqr5AgMBAAECggEAPxKGQeN8W7CxdbGN3yz0N/exXd1IjYPhuo4Ia4I6w6lH\ndtWFWwzyqqWLW2cFuDgHEVr1rQQ4W5nBMYQgOBGV+8UFBNoPonxx2HL3bBgYYLVr\n1hM9QJZPXiH/WId3ezQ1txhuUM/yujxDtdAHQZB5YbnITwz1sT8POGTdo8FkGGQQ\nVbll+4zqSPcFsZDXkXCZSuIWN8AwlA7alOEoeHz17m+Icb6k9c5U05zeWCeSiort\nXSbJp3cwScCgFqGqgV1mkS/0pzjZLuTAb/5078qw8c+P0T8tF6bopa+0ALmI0TCw\n3RyR7s4nUnwcM/gbVnN/NTn1Q9nGOgeXVsdBeYxo0QKBgQDqKMWcWDGETGcna3dY\nYCN3LfNi5YIdVVfZ3RVvUrOyc/JAm+F7C7UMNaomI2W2+6gK2+335TjoeywsJoHb\nJ7VDfS5sMIi+6fPaJgG9PkXpwEuOK+fv1tQSH+cHUAMSLlM9Jo0yW6s5OtaoyRQT\nhqJAaNoznL/dx45wat3ZYj+3swKBgQC112o04vtNAdECNuKdDL+wynbByo/k6SWJ\nP4rsH7enL9A47FeQOjd6XLuOx6FHiHQMnbSB0zAf75KGWwfQBJemsgCA3sHRsIQw\n2j+sgk8DCKQMRPeWw0aLxvJeePHUirrynLhGz4EXCgRVhzDk4TYWSqCa+pKUKeTB\n4BhokQZ8owKBgAs/Yh6cbeR49wuBsf3gwFNdNa+ubo2SJ+IjKIBsbI1J3H0V/8K1\nUUEA4udqE9yyQeQjpE6gCBfCsuB8CQjJ438WaEByJF9nRXtZEARTFXCg+AAgQ8fV\nfeJQ/fvv7/XTm9P4IhglJxhcpyr8XaaCdRC6+KA6C01P5JupxnZGreDZAoGAImfP\nwJHx2nAti6220uBGpLyqG6Cn+Tfj0kQjlOmrZga17w9IwhFBzfUdx7Yd3dsDmh98\nt9Otl11M6/7tS36S8wda8Qc0xOgRGu0wfwNoz7oiz+98qRnpjyjlUtqvZveYx66/\nbyZz1lge2c/qgGPcR/t2x9wBP+dtUQGFnMNT5uECgYEAheMkp72UUCyjQ+Xq1UcU\nmmD027K1dq8f+Ixag769z6ClqjR6x7bpsJ9uPvbuYWV+hu/KsUh36E5d5jfYAeWt\nykJjSl2m5zjOXhVKdQzCrvFJtzQ7jXg1PDQZmlCqe383JJcP/pW/SygC3DNvemgc\nCld94eUiCB6yXuQipnY9qyE=\n-----END PRIVATE KEY-----\n"
+
+---
+
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  name: <name of backend>
+  name: backend-tbc-gcnv
 spec:
   version: 1
   storageDriverName: google-cloud-netapp-volumes
-  projectNumber: '012345678901'
-  location: us-west2
+  projectNumber: '123455380079'
+  location: europe-west6
+  serviceLevel: premium
+  storagePool: premium-pool-europe-west6
   apiKey:
     type: service_account
-    project_id: my-gcp-project
-    private_key_id: "<id_value>"
-    private_key: |
-      -----BEGIN PRIVATE KEY-----
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-      XsYg6gyxy4zq7OlwWgLwGa==
-      -----END PRIVATE KEY-----
-    client_email: cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com
-    client_id: '123456789012345678901'
+    project_id: my-gcnv-project
+    client_email: myproject-prod@my-gcnv-project.iam.gserviceaccount.com
+    client_id: '103346282737811234567'
     auth_uri: https://accounts.google.com/o/oauth2/auth
     token_uri: https://oauth2.googleapis.com/token
     auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
-    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com
+    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/myproject-prod%40my-gcnv-project.iam.gserviceaccount.com
+  credentials:
+    name: backend-tbc-gcnv-secret
 ----
 ====
 
@@ -152,80 +140,41 @@ spec:
 .Virtual pool configuration
 [%collapsible%closed]
 ====
-This sample uses `storage` to configure virtual pools and the `StorageClasses` that refer back to them. Refer to <<Storage class definitions>> to see how the storage classes were defined. 
 
-Here, specific defaults are set for all virtual pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual pools are defined in the `storage` section. Each individual virtual pool defines its own `serviceLevel`, and some pools overwrite the default values. Virtual pool labels were used to differentiate the pools based on `performance` and `protection`.
+This backend configuration defines multiple virtual pools in a single file. Virtual pools are defined in the `storage` section. They are useful when you have multiple storage pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels are used to differentiate the pools. For instance, in the example below `performance` label and `serviceLevel` type is used to differentiate virtual pools.
+
+Also, you can set some default values to be applicable to all virtual pools. Like `snapshotReserve` at 10% and the `exportRule` to 0.0.0.0/24 in the below example; and also overwrite the default values for individual virtual pools.
 
 ----
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: backend-tbc-gcp-gcnv-secret
-type: Opaque
-stringData:
-  private_key_id: "<id_value>"
-  private_key: |
-    -----BEGIN PRIVATE KEY-----
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
-    XsYg6gyxy4zq7OlwWgLwGa==
-    -----END PRIVATE KEY-----
----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  name: backend-tbc-gcp-gcnv
+  name: backend-tbc-gcnv
 spec:
   version: 1
   storageDriverName: google-cloud-netapp-volumes
-  projectNumber: '012345678901'
-  network: default
-  location: us-west2
-  serviceLevel: Premium
-  storagePool: pool-premium1
+  projectNumber: '123455380079'
+  location: europe-west6
+  serviceLevel: premium
+  storagePool: premium-pool-europe-west6
   apiKey:
     type: service_account
-    project_id: my-gcp-project
-    client_email: cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com
-    client_id: '123456789012345678901'
+    project_id: my-gcnv-project
+    client_email: myproject-prod@my-gcnv-project.iam.gserviceaccount.com
+    client_id: '103346282737811234567'
     auth_uri: https://accounts.google.com/o/oauth2/auth
     token_uri: https://oauth2.googleapis.com/token
     auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
-    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com
+    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/myproject-prod%40my-gcnv-project.iam.gserviceaccount.com
   credentials:
-    name: backend-tbc-gcp-gcnv-secret
+    name: backend-tbc-gcnv-secret
   nfsMountOptions: nfsvers=3,proto=tcp,timeo=600
   defaults:
     snapshotReserve: '10'
     exportRule: 10.0.0.0/24
-    size: 2Ti
   labels:
     cloud: gcp
-  location: us-west2
+  location: europe-west6
   storage:
     - labels:
         performance: extreme
@@ -233,7 +182,6 @@ spec:
       defaults:
         snapshotReserve: '5'
         exportRule: 0.0.0.0/0
-        size: 1Ti
     - labels:
         performance: premium
       serviceLevel: premium
@@ -243,55 +191,104 @@ spec:
 ----
 ====
 
-.Backend configuration example for Google Cloud Netapp Volumes
-[%collapsible%closed]
-====
-----
-
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: backend-tbc-gcp-gcnv
-spec:
-  version: 1
-  storageDriverName: google-cloud-netapp-volumes
-  projectNumber: '012345678901'
-  network: gcnv-network
-  location: us-west2
-  serviceLevel: Premium
-  storagePool: pool-premium1
-  supportedTopologies:
-  - topology.kubernetes.io/region: us-west2
-    topology.kubernetes.io/zone: us-west2-b
-  - topology.kubernetes.io/region: us-west2
-    topology.kubernetes.io/zone: us-west2-a
-  apiKey:
-    type: service_account
-    project_id: my-gcp-project
-    client_email: cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com
-    client_id: '123456789012345678901'
-    auth_uri: https://accounts.google.com/o/oauth2/auth
-    token_uri: https://oauth2.googleapis.com/token
-    auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
-    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com
-  credentials:
-    name: backend-tbc-gcp-gcnv-secret
-
-----
-====
-
 == What's next?
 
 After you create the backend configuration file, run the following command:
 
 ----
-tridentctl create backend -f <backend-file>
+kubectl create -f <backend-file>
 ----
 
-If the backend creation fails, something is wrong with the backend configuration. You can view the logs to determine the cause by running the following command:
+To verify that the backend is successfully created, run the following command:
+----
+kubectl get tridentbackendconfig
+
+NAME               BACKEND NAME       BACKEND UUID                           PHASE   STATUS
+backend-tbc-gcnv   backend-tbc-gcnv   b2fd1ff9-b234-477e-88fd-713913294f65   Bound   Success
+----
+
+If the backend creation fails, something is wrong with the backend configuration. You can describe the backend using the `kubectl get tridentbackendconfig <backend-name>` command or view the logs to determine the cause by running the following command:
 
 ----
 tridentctl logs
 ----
 
-After you identify and correct the problem with the configuration file, you can run the create command again.
+After you identify and correct the problem with the configuration file, you can delete the backend and run the create command again.
+
+== Storage class definition example
+
+The following is a basic `StorageClass` definition that refers to the backend above. 
+
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gcnv-nfs-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "google-cloud-netapp-volumes"
+
+----
+
+=== Example definitions using `parameter.selector` field
+Using `parameter.selector` you can specify for each `StorageClass` the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: extreme-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=extreme"
+  backendType: "google-cloud-netapp-volumes"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: premium-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=premium"
+  backendType: "google-cloud-netapp-volumes"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=standard"
+  backendType: "google-cloud-netapp-volumes"
+
+----
+
+
+For more details on storage classes, refer to link:../trident-use/create-stor-class.html[Create a storage class^]
+
+== PVC definition example
+
+----
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gcnv-nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: gcnv-nfs-sc
+
+----
+
+To verify if the PVC is bound, run the following command: 
+
+----
+kubectl get pvc gcnv-nfs-pvc
+
+NAME          STATUS   VOLUME                                    CAPACITY     ACCESS MODES   STORAGECLASS AGE
+gcnv-nfs-pvc  Bound    pvc-b00f2414-e229-40e6-9b16-ee03eb79a213  100Gi        RWX             gcnv-nfs-sc   1m
+
+----

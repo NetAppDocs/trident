@@ -24,7 +24,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 
 |`storageDriverName` | Name of the storage driver |The value of `storageDriverName` must be specified as "google-cloud-netapp-volumes".
 
-|`backendName`  |Custom name or the storage backend |Driver name + "_" + part of API key
+|`backendName`  |(Optional) Custom name of the storage backend |Driver name + "_" + part of API key
 
 |`storagePools` | Optional parameter used to specify storage pools for volume creation. |
 
@@ -107,7 +107,35 @@ metadata:
 type: Opaque
 stringData:
   private_key_id: 'f2cb6ed6d7cc10c453f7d3406fc700c5df0ab9ec'
-  private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmU90awmHPRD7c\nTqdgvBb1x8/EKHIp6Ku4zBKOwfhlkXDb1UYC6HL0bIK1Z3mAqBrL+vaQZelWA6zi\nWMVo9wnnJM2getV7sewGejWjSUP0HFAN1cJQ4PkVEbugpFJFQrf356m7VhyJHcTv\nWdXn7yMBOj36sqBt+ySK0SGBVEKvs5edEWfh6n+I/VnOwRAGf05TbX3+4Ia3n50V\nP4q5jVO9xkEDdFK5sx1Q2/tttGh5H5fTgILZgXbaar4eLAYZolRvSAnFONnxmA0x\nRtyRz7sEBxCpzn3QPvY1OQITbY/vK/T7vEusTp38dEy5tqUTki97ft7ioggBfz36\nWkMcvqr5AgMBAAECggEAPxKGQeN8W7CxdbGN3yz0N/exXd1IjYPhuo4Ia4I6w6lH\ndtWFWwzyqqWLW2cFuDgHEVr1rQQ4W5nBMYQgOBGV+8UFBNoPonxx2HL3bBgYYLVr\n1hM9QJZPXiH/WId3ezQ1txhuUM/yujxDtdAHQZB5YbnITwz1sT8POGTdo8FkGGQQ\nVbll+4zqSPcFsZDXkXCZSuIWN8AwlA7alOEoeHz17m+Icb6k9c5U05zeWCeSiort\nXSbJp3cwScCgFqGqgV1mkS/0pzjZLuTAb/5078qw8c+P0T8tF6bopa+0ALmI0TCw\n3RyR7s4nUnwcM/gbVnN/NTn1Q9nGOgeXVsdBeYxo0QKBgQDqKMWcWDGETGcna3dY\nYCN3LfNi5YIdVVfZ3RVvUrOyc/JAm+F7C7UMNaomI2W2+6gK2+335TjoeywsJoHb\nJ7VDfS5sMIi+6fPaJgG9PkXpwEuOK+fv1tQSH+cHUAMSLlM9Jo0yW6s5OtaoyRQT\nhqJAaNoznL/dx45wat3ZYj+3swKBgQC112o04vtNAdECNuKdDL+wynbByo/k6SWJ\nP4rsH7enL9A47FeQOjd6XLuOx6FHiHQMnbSB0zAf75KGWwfQBJemsgCA3sHRsIQw\n2j+sgk8DCKQMRPeWw0aLxvJeePHUirrynLhGz4EXCgRVhzDk4TYWSqCa+pKUKeTB\n4BhokQZ8owKBgAs/Yh6cbeR49wuBsf3gwFNdNa+ubo2SJ+IjKIBsbI1J3H0V/8K1\nUUEA4udqE9yyQeQjpE6gCBfCsuB8CQjJ438WaEByJF9nRXtZEARTFXCg+AAgQ8fV\nfeJQ/fvv7/XTm9P4IhglJxhcpyr8XaaCdRC6+KA6C01P5JupxnZGreDZAoGAImfP\nwJHx2nAti6220uBGpLyqG6Cn+Tfj0kQjlOmrZga17w9IwhFBzfUdx7Yd3dsDmh98\nt9Otl11M6/7tS36S8wda8Qc0xOgRGu0wfwNoz7oiz+98qRnpjyjlUtqvZveYx66/\nbyZz1lge2c/qgGPcR/t2x9wBP+dtUQGFnMNT5uECgYEAheMkp72UUCyjQ+Xq1UcU\nmmD027K1dq8f+Ixag769z6ClqjR6x7bpsJ9uPvbuYWV+hu/KsUh36E5d5jfYAeWt\nykJjSl2m5zjOXhVKdQzCrvFJtzQ7jXg1PDQZmlCqe383JJcP/pW/SygC3DNvemgc\nCld94eUiCB6yXuQipnY9qyE=\n-----END PRIVATE KEY-----\n"
+  private_key:| 
+  -----BEGIN PRIVATE KEY-----
+  znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    znHczZsrrtHisIsAbOguSaPIKeyAZNchRAGzlzZE4jK3bl/qp8B4Kws8zX5ojY9m
+    XsYg6gyxy4zq7OlwWgLwGa==
+  -----END PRIVATE KEY-----
 
 ---
 
@@ -144,6 +172,8 @@ spec:
 This backend configuration defines multiple virtual pools in a single file. Virtual pools are defined in the `storage` section. They are useful when you have multiple storage pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels are used to differentiate the pools. For instance, in the example below `performance` label and `serviceLevel` type is used to differentiate virtual pools.
 
 Also, you can set some default values to be applicable to all virtual pools. Like `snapshotReserve` at 10% and the `exportRule` to 0.0.0.0/24 in the below example; and also overwrite the default values for individual virtual pools.
+
+For more information, refer to link:../trident-concepts/virtual-storage-pool.html[Virtual pools].
 
 ----
 apiVersion: trident.netapp.io/v1
@@ -231,7 +261,7 @@ parameters:
 ----
 
 === Example definitions using `parameter.selector` field
-Using `parameter.selector` you can specify for each `StorageClass` the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
+Using `parameter.selector` you can specify for each `StorageClass` the link:../trident-concepts/virtual-storage-pool.html[virtual pool] that is used to host a volume. The volume will have the aspects defined in the chosen pool.
 
 ----
 apiVersion: storage.k8s.io/v1
@@ -264,7 +294,7 @@ parameters:
 ----
 
 
-For more details on storage classes, refer to link:../trident-use/create-stor-class.html[Create a storage class^]
+For more details on storage classes, refer to link:../trident-use/create-stor-class.html[Create a storage class^].
 
 == PVC definition example
 

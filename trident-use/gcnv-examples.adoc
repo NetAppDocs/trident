@@ -176,8 +176,6 @@ spec:
   storageDriverName: google-cloud-netapp-volumes
   projectNumber: '123455380079'
   location: europe-west6
-  serviceLevel: premium
-  storagePool: premium-pool-europe-west6
   apiKey:
     type: service_account
     project_id: my-gcnv-project
@@ -195,7 +193,6 @@ spec:
     exportRule: 10.0.0.0/24
   labels:
     cloud: gcp
-  location: europe-west6
   storage:
     - labels:
         performance: extreme

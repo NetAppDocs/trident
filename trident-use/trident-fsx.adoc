@@ -32,7 +32,7 @@ NOTE: Ensure you follow the node preparation steps required for Amazon Linux and
 * SMB volumes: 
 ** SMB volumes are supported using the `ontap-nas` driver only.
 ** SMB volumes are not supported with Astra Trident EKS add-on.
-** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details.
+** Astra Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to link:../trident-use/trident-fsx-storage-backend.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes] for details.
 * Prior to Astra Trident 24.02, volumes created on Amazon FSx file systems that have automatic backups enabled, could not be deleted by Trident. To prevent this issue in Astra Trident 24.02 or later, specify the `fsxFilesystemID`, AWS `apiRegion`, AWS `apikey`, and AWS `secretKey` in the backend configuration file for AWS FSx for ONTAP.
 + 
 NOTE: If you are specifying an IAM role to Astra Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Astra Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples].

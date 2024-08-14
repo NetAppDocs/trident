@@ -343,7 +343,9 @@ tridentctl logs
 
 After you identify and correct the problem with the configuration file, you can delete the backend and run the create command again.
 
-== Storage class definition examples
+== More examples 
+
+=== Storage class definition examples
 
 The following is a basic `StorageClass` definition that refers to the backend above. 
 
@@ -358,7 +360,8 @@ parameters:
 
 ----
 
-=== Example definitions using `parameter.selector` field
+*Example definitions using `parameter.selector` field:*
+
 Using `parameter.selector` you can specify for each `StorageClass` the link:../trident-concepts/virtual-storage-pool.html[virtual pool] that is used to host a volume. The volume will have the aspects defined in the chosen pool.
 
 ----
@@ -391,10 +394,9 @@ parameters:
 
 ----
 
-
 For more details on storage classes, refer to link:../trident-use/create-stor-class.html[Create a storage class^].
 
-== PVC definition example
+=== PVC definition example
 
 ----
 kind: PersistentVolumeClaim

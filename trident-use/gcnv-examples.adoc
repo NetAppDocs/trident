@@ -59,7 +59,7 @@ Do not use this unless you are troubleshooting and require a detailed log dump. 
 For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].  
 
 For example:
-`  supportedTopologies:
+`supportedTopologies:
   - topology.kubernetes.io/region: europe-west6
     topology.kubernetes.io/zone: europe-west6-b`
 |
@@ -360,7 +360,7 @@ parameters:
 
 ----
 
-*Example definitions using `parameter.selector` field:*
+*Example definitions using the `parameter.selector` field:*
 
 Using `parameter.selector` you can specify for each `StorageClass` the link:../trident-concepts/virtual-storage-pool.html[virtual pool] that is used to host a volume. The volume will have the aspects defined in the chosen pool.
 

@@ -1,0 +1,36 @@
+---
+sidebar: sidebar
+permalink: trident-use/gcnv.html
+keywords: trident backend, google cloud netapp volumes, nfs volumes, nfs, drivers, access modes, rwo, rwx, rwp, rwop, file system, gke, cloud identity, google cloud
+summary: 
+---
+
+= Configure a Google Cloud NetApp Volumes backend
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+You can now configure Google Cloud NetApp Volumes as the backend for Astra Trident. You can attach NFS volumes using a Google Cloud NetApp Volumes backend.
+
+----
+ Google Cloud NetApp Volumes is a tech preview feature in Astra Trident 24.06. 
+----
+
+== Google Cloud NetApp Volumes driver details
+Astra Trident provides the `google-cloud-netapp-volumes` driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+
+[cols="2, 1, 1, 2, 2", options="header"]
+|===
+|Driver
+|Protocol
+|volumeMode
+|Access modes supported
+|File systems supported
+|`google-cloud-netapp-volumes`
+a|NFS
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|`nfs`
+
+|===

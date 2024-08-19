@@ -64,6 +64,10 @@ To configure the maximum size for volumes that can be created by Trident, use th
 
 In addition to controlling the volume size at the storage array, you should also leverage Kubernetes capabilities.
 
+=== Limit the maximum size of FlexVols created by Trident
+
+To configure the maximum size for FlexVols that can be created by Trident, use the `limitPoolVolumeSize` parameter in your `backend.json` definition.
+
 === Configure Trident to use bidirectional CHAP
 
 You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. 

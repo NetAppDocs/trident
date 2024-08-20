@@ -113,7 +113,7 @@ This value cannot be changed or omitted.
 a|`netappdvp`
 
 |`limitVolumeSize`
-a|Maximum requestable volume size and qtree parent volume size. *For the `ontap-nas-economy` driver, this option additionally limits the size of the FlexVols that it creates*.
+a|Maximum requestable volume size and qtree volume size.
 a|`300g`
 
 |`qtreesPerFlexvol`
@@ -128,7 +128,8 @@ Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
 |`limitVolumePoolSize` |*Supported for `ontap-san-economy` and `ontap-san-economy` drivers only.* 
 
-Limits volume size of the parents FlexVol created.| 
+Limits the FlexVol sizes in ONTAP ontap-nas-economy and ontap-SAN-economy drivers.
+a|`300`
 
 |===
 

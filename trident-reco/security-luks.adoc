@@ -102,6 +102,27 @@ defaults:
   snapshotReserve: '10'
 ----
 
+== PVC configuration for importing LUKS volumes
+
+To import LUKS volumes dynamically, set the annotation `trident.netapp.io/luksEncryption` to true in the PVC as shown in this example:
+
+----
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: luks-pvc
+  namespace: trident
+  annotations:
+    trident.netapp.io/luksEncryption: "true"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: luks-sc
+----
+
 == Rotate a LUKS passphrase
 You can rotate the LUKS passphrase and confirm rotation. 
 

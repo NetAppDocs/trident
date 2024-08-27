@@ -104,7 +104,7 @@ defaults:
 
 == PVC configuration for importing LUKS volumes
 
-To import LUKS volumes dynamically, set the annotation `trident.netapp.io/luksEncryption` to `true` in the PVC as shown in this example:
+To import LUKS volumes dynamically, set the annotation `trident.netapp.io/luksEncryption` to `true` and include a LUKS-enabled storage class in the PVC as shown in this example.
 
 ----
 kind: PersistentVolumeClaim

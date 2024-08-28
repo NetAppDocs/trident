@@ -2,28 +2,28 @@
 sidebar: sidebar
 permalink: trident-get-started/architecture.html
 keywords: trident backend, AFF, FAS, ONTAP Select, Cloud, Amazon FSx for NetApp ONTAP, drivers, ONTAP drivers
-summary: Astra Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Astra Trident volume. 
+summary: Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Trident volume. 
 ---
 
-= Astra Trident architecture
+= Trident architecture
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Astra Trident volume. 
+Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Trident volume. 
 
 == Understanding controller pods and node pods
-Astra Trident deploys as a single <<Trident Controller Pod>> and one or more <<Trident Node Pods>> on the Kubernetes cluster and uses standard Kubernetes _CSI Sidecar Containers_ to simplify the deployment of CSI plugins. link:https://kubernetes-csi.github.io/docs/sidecar-containers.html[Kubernetes CSI Sidecar Containers^] are maintained by the Kubernetes Storage community. 
+Trident deploys as a single <<Trident Controller Pod>> and one or more <<Trident Node Pods>> on the Kubernetes cluster and uses standard Kubernetes _CSI Sidecar Containers_ to simplify the deployment of CSI plugins. link:https://kubernetes-csi.github.io/docs/sidecar-containers.html[Kubernetes CSI Sidecar Containers^] are maintained by the Kubernetes Storage community. 
 
-Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. You can configure node selectors and tolerations for controller and node pods during Astra Trident installation.
+Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. You can configure node selectors and tolerations for controller and node pods during Trident installation.
 
 * The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
 * The node plugin handles attaching the storage to the node.
 
 
-.Astra Trident deployed on the Kubernetes cluster
-image::../media/trident-arch.png[Diagram of the Astra Trident  architecture on the Kubernetes cluster.]
+.Trident deployed on the Kubernetes cluster
+image::../media/trident-arch.png[Diagram of the Trident  architecture on the Kubernetes cluster.]
 
 === Trident Controller Pod
 The Trident Controller Pod is a single Pod running the CSI Controller plugin. 
@@ -47,7 +47,7 @@ image::../media/node-pod.png[Diagram of the Trident Node Pod running the CSI Nod
 
 == Supported Kubernetes cluster architectures
 
-Astra Trident is supported with the following Kubernetes architectures:
+Trident is supported with the following Kubernetes architectures:
 
 [cols="3,1,2",options="header"]
 |===

@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-concepts/virtual-storage-pool.html
-keywords: virtual pools, astra trident, backends
-summary: Virtual pools provide a layer of abstraction between Astra Trident's storage backends and Kubernetes' StorageClasses. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a StorageClass specify which physical backend, backend pool, or backend type to use to meet desired criteria.
+keywords: virtual pools, Trident, backends
+summary: Virtual pools provide a layer of abstraction between Trident's storage backends and Kubernetes' StorageClasses. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a StorageClass specify which physical backend, backend pool, or backend type to use to meet desired criteria.
 ---
 
 = Virtual pools
@@ -11,10 +11,10 @@ summary: Virtual pools provide a layer of abstraction between Astra Trident's st
 :imagesdir: ../media/
 
 [.lead]
-Virtual pools provide a layer of abstraction between Astra Trident storage backends and Kubernetes `StorageClasses`. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a `StorageClass` specify which physical backend, backend pool, or backend type to use to meet desired criteria.
+Virtual pools provide a layer of abstraction between Trident storage backends and Kubernetes `StorageClasses`. They allow an administrator to define aspects, such as location, performance, and protection for each backend in a common, backend-agnostic way without making a `StorageClass` specify which physical backend, backend pool, or backend type to use to meet desired criteria.
 
 == Learn about virtual pools
-The storage administrator can define virtual pools on any of the Astra Trident backends in a JSON or YAML definition file.
+The storage administrator can define virtual pools on any of the Trident backends in a JSON or YAML definition file.
 
 image::virtual_storage_pools.png[Shows the conceptual diagram of virtual pools.]
 

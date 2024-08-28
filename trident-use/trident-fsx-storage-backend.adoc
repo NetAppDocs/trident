@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/trident-fsx-storage-backend.html
 keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident
-summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 ---
 
 = Configure the Storage Backend
@@ -76,7 +76,7 @@ For information about creating backends, refer to these pages:
 
 == FSx for ONTAP driver details
 
-You can integrate Astra Trident with Amazon FSx for NetApp ONTAP using the following drivers:
+You can integrate Trident with Amazon FSx for NetApp ONTAP using the following drivers:
 
 * `ontap-san`: Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume. Recommended for block storage.
 * `ontap-nas`: Each PV provisioned is a full Amazon FSx for NetApp ONTAP volume. Recommended for NFS and SMB.
@@ -157,32 +157,32 @@ See the following table for the backend configuration options:
 
 A fully-qualified domain name (FQDN) can be specified.
 
-Can be set to use IPv6 addresses if Astra Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]. 
+Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]. 
 
-If you provide the `fsxFilesystemID` under the `aws` field, you need not to provide the `managementLIF` because Astra Trident retrieves the SVM `managementLIF` information from AWS. So, you must provide credentials for a user under the SVM (For example: vsadmin) and the user must have the `vsadmin` role.
+If you provide the `fsxFilesystemID` under the `aws` field, you need not to provide the `managementLIF` because Trident retrieves the SVM `managementLIF` information from AWS. So, you must provide credentials for a user under the SVM (For example: vsadmin) and the user must have the `vsadmin` role.
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: We recommend specifying dataLIF. If not provided, Astra Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: We recommend specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
-*ONTAP SAN drivers*: Do not specify for iSCSI. Astra Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
+*ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 
-Can be set to use IPv6 addresses if Astra Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
+Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555].  
 
 |
 
 |`autoExportPolicy`	
 |Enable automatic export policy creation and updating [Boolean]. 
 
-Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically. 
+Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage export policies automatically. 
 |`false`
 
 |`autoExportCIDRs` 
 |List of CIDRs to filter Kubernetes' node IPs against when `autoExportPolicy` is enabled. 
 
-Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can manage export policies automatically.	
+Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage export policies automatically.	
 |"[“0.0.0.0/0”, “::/0”]"
 
 |`labels` 
@@ -221,7 +221,7 @@ Cannot be modified after creation. To update this parameter, you will need to cr
 
 |`limitAggregateUsage` |*Do not specify for Amazon FSx for NetApp ONTAP.* 
 
-The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Astra Trident.
+The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.
 
 |Do not use.
 
@@ -247,9 +247,9 @@ Do not use `debugTraceFlags` unless you are troubleshooting and require a detail
 |`nfsMountOptions`	
 |Comma-separated list of NFS mount options. 
 
-The mount options for Kubernetes-persistent volumes are normally specified in storage classes, but if no mount options are specified in a storage class, Astra Trident will fall back to using the mount options specified in the storage backend's configuration file. 
+The mount options for Kubernetes-persistent volumes are normally specified in storage classes, but if no mount options are specified in a storage class, Trident will fall back to using the mount options specified in the storage backend's configuration file. 
 
-If no mount options are specified in the storage class or the configuration file, Astra Trident will not set any mount options on an associated persistent volume.	
+If no mount options are specified in the storage class or the configuration file, Trident will not set any mount options on an associated persistent volume.	
 |""
 
 | `nasType` | Configure NFS or SMB volumes creation. 
@@ -264,7 +264,7 @@ Options are `nfs`, `smb`, or null.
 |`"200"`
 
 |`smbShare` 
-|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Trident to create the SMB share.
  
 This parameter is required for Amazon FSx for ONTAP backends.
 
@@ -274,7 +274,7 @@ This parameter is required for Amazon FSx for ONTAP backends.
 |`useREST` 
 |Boolean parameter to use ONTAP REST APIs. *Tech preview* 
 
-`useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Astra Trident will use ONTAP REST APIs to communicate with the backend. 
+`useREST` is provided as a **tech preview** that is recommended for test environments and not for production workloads. When set to `true`, Trident will use ONTAP REST APIs to communicate with the backend. 
 
 This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles.
 |`false`
@@ -315,7 +315,7 @@ You can control default provisioning using these options in the `defaults` secti
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool or backend. 
 
-Using QoS policy groups with Astra Trident requires ONTAP 9.8 or later. 
+Using QoS policy groups with Trident requires ONTAP 9.8 or later. 
 
 We recommend using a non-shared QoS policy group and ensuring the policy group is applied to each constituent individually. A shared QoS policy group will enforce the ceiling for the total throughput of all workloads.
 
@@ -332,9 +332,9 @@ Not supported by ontap-nas-economy.
 
 |`encryption` |Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
-If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
+If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
 
-For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE]. |`false`
+For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |`false`
 
 |`luksEncryption` 
 | Enable LUKS encryption. Refer to link:../trident-reco/security-reco.html#Use-Linux-Unified-Key-Setup-(LUKS)[Use Linux Unified Key Setup (LUKS)]. 
@@ -371,9 +371,9 @@ You can provision SMB volumes using the `ontap-nas` driver. Before you complete 
 .Before you begin
 Before you can provision SMB volumes using the `ontap-nas` driver, you must have the following. 
 
-* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2019. Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
-* At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
+* At least one Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
 +
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
@@ -409,7 +409,7 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Parameter |Description | Example
 
 |`smbShare`
-|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Astra Trident to create the SMB share.
+|You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI or a name to allow Trident to create the SMB share.
  
 This parameter is required for Amazon FSx for ONTAP backends.
 

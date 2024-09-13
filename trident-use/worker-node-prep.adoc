@@ -88,7 +88,9 @@ NOTE: For example, if CHAP secrets were rotated on the storage controller and th
 
 *Points to consider before upgrading Trident*
 
- * If a mix of older, backend-scoped Trident igroups (Trident v22.10 or earlier) and current per-node igroups (Trident 23.04 or later) are detected to be in use, iSCSI self-healing scans for a single LUN at a time, instead of all LUNs. 
+ * If only per-node igroups (introduced in 23.04+) are in use, iSCSI self-healing will initiate SCSI rescans for all devices in the SCSI bus.
+ * If only backend-scoped igroups (deprecated as of 23.04) are in use, iSCSI self-healing will initiate SCSI rescans for exact LUN IDs in the SCSI bus. 
+ * If a mix of per-node igroups and backend-scoped igroups are in use, iSCSI self-healing will initiate SCSI rescans for exact LUN IDs in the SCSI bus. 
 
 * If you are upgrading from a previous version of Trident that used backend-scoped igroups (like v22.10 and earlier), perform the following steps:
 +

@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-get-started/architecture.html
 keywords: trident backend, AFF, FAS, ONTAP Select, Cloud, Amazon FSx for NetApp ONTAP, drivers, ONTAP drivers
-summary: Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Trident volume. 
+summary: Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount a Trident volume. 
 ---
 
 = Trident architecture
@@ -11,7 +11,7 @@ summary: Trident runs as a single Controller Pod plus a Node Pod on each worker 
 :imagesdir: ../media/
 
 [.lead]
-Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Trident volume. 
+Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount a Trident volume. 
 
 == Understanding controller pods and node pods
 Trident deploys as a single <<Trident Controller Pod>> and one or more <<Trident Node Pods>> on the Kubernetes cluster and uses standard Kubernetes _CSI Sidecar Containers_ to simplify the deployment of CSI plugins. link:https://kubernetes-csi.github.io/docs/sidecar-containers.html[Kubernetes CSI Sidecar Containers^] are maintained by the Kubernetes Storage community. 

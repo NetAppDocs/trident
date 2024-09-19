@@ -5,7 +5,7 @@ keywords: upgrade, trident, methods, operator, tridentctl, helm
 summary: You can easily upgrade an existing Trident installation by using the operator.
 ---
 
-= Upgrade an Trident installation using Trident operator or Helm
+= Upgrade a Trident installation using Trident operator or Helm
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -48,7 +48,7 @@ kubectl create -f 24.06.0/trident-installer/deploy/<bundle.yaml> -n trident
 ----
 
 == Upgrade a Helm installation
-You can upgrade an Trident Helm installation.  
+You can upgrade a Trident Helm installation.  
 
 WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Trident installed, you must update values.yaml to set `excludePodSecurityPolicy` to `true` or add `--set excludePodSecurityPolicy=true` to the `helm upgrade` command before you can upgrade the cluster.
 

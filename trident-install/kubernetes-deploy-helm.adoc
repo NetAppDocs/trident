@@ -105,8 +105,26 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`affinity`
 |Affinity for pod assignment
-|
+a|
+----
+affinity:  
+  nodeAffinity:    
+    requiredDuringSchedulingIgnoredDuringExecution:      
+      nodeSelectorTerms:        
+        - matchExpressions:            
+            - key: kubernetes.io/arch              
+              operator: In               
+              values:              
+              - arm64              
+              - amd64            
+            - key: kubernetes.io/os              
+              operator: In              
+              values:              
+              - linux 
 
+----
+
+WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide custom affinity, extend the default affinity.
 |`tridentControllerPluginNodeSelector`
 |Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
 |

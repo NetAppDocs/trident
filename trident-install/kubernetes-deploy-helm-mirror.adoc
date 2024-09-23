@@ -124,8 +124,8 @@ WARNING: Do not remove the default affinity from the values.yaml file. When you 
 
 |`affinity`
 |Affinity for pod assignment
-|
-
+a| 
+----
 affinity:  
   nodeAffinity:    
     requiredDuringSchedulingIgnoredDuringExecution:      
@@ -139,7 +139,10 @@ affinity:
             - key: kubernetes.io/os              
               operator: In              
               values:              
-              - linux
+              - linux 
+----
+
+WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide custom affinity, extend the default affinity.
 
 |`tridentControllerPluginNodeSelector`
 |Additional node selectors for pods. Refer to link:../trident-get-started/architecture.html#understanding-controller-pods-and-node-pods[Understanding controller pods and node pods] for details.

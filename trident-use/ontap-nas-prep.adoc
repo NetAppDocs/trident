@@ -218,8 +218,7 @@ NOTE: When using this feature, you must ensure that the root junction in your SV
 
 Here is an explanation of how this feature works using the example above:
 
-* `autoExportPolicy` is set to `true`. This indicates that Astra Trident will create an export policy for each volume provisioned with this backend for the `svm1` SVM and handle the addition and deletion of rules using `autoexportCIDRs` address blocks. Until a volume is attached to a node, the volume will use an empty export policy with no rules to prevent unwanted access to that volume. When a volume is published to a node Astra Trident will create an export policy with the same name as the underlying qtree containing the node IP within the specified CIDR block. These IPs will also be added to the export policy 
-used by the parent FlexVol.
+* `autoExportPolicy` is set to `true`. This indicates that Astra Trident will create an export policy for each volume provisioned with this backend for the `svm1` SVM and handle the addition and deletion of rules using `autoexportCIDRs` address blocks. Until a volume is attached to a node, the volume will use an empty export policy with no rules to prevent unwanted access to that volume. When a volume is published to a node Astra Trident will create an export policy with the same name as the underlying qtree containing the node IP within the specified CIDR block. These IPs will also be added to the export policy used by the parent FlexVol.
 ** For example:
 *** backend UUID 403b5326-8482-40db-96d0-d83fb3f4daec
 *** `autoExportPolicy` set to `true`
@@ -260,7 +259,7 @@ items:
 
 When a node is removed, Astra Trident checks all export policies to remove the access rules corresponding to the node. By removing this node IP from the export policies of managed backends, Astra Trident prevents rogue mounts, unless this IP is reused by a new node in the cluster.
 
-For previously existing backends, updating the backend with `tridentctl update backend` will ensure that Astra Trident manages the export policies automatically. This will create two new export policies named after the backend's UUID and qtree name and volumes that are present on the backend will use the newly created export policies when they are mounted again.
+For previously existing backends, updating the backend with `tridentctl update backend` will ensure that Astra Trident manages the export policies automatically. This will create two new export policies named after the backend's UUID and qtree name. Volumes that are present on the backend will use the newly created export policies when they are mounted again.
 
 NOTE: Deleting a backend with auto-managed export policies will delete the dynamically created export policy. If the backend is re-created, it is treated as a new backend and will result in the creation of a new export policy.
 

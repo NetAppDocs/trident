@@ -25,7 +25,7 @@ Setting up a replication relationship involves the following:
 
 * Setting the time for the snapshot to be taken
 
-. Create an AppVault for the source application on the source cluster. Depending on your storage provider, modify an example in AppVault custom resources to fit your environment:
+. Create an AppVault for the source application on the source cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-primary-source.yaml`).
 +
@@ -34,7 +34,7 @@ Setting up a replication relationship involves the following:
 ** *metadata.name*: (Required) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
 The following installation options are available:
 +
-** *spec.providerConfig*: (Required) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to AppVault custom resources for examples of AppVault CRs with other providers.
+** *spec.providerConfig*: (Required) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples of AppVault CRs with other providers.
 +
 ** *spec.providerCredentials*: (Required) Stores references to any credential required to access the AppVault using the specified provider.
 +
@@ -66,7 +66,7 @@ kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-
 ** *metadata.name*: (Required) The name of the AppVault custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
 ** *spec.includedNamespaces*: (Required) Use namespace names and optionally narrow the scope of the namespaces with labels to specify namespaces that the application resources exist in.
 +
-Example YAML:
+*Example YAML*:
 +
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -101,7 +101,7 @@ kubectl apply -f trident-protect-app-source.yaml -n trident-protect
 ** *spec.recurrenceRule*: Define a start date in UTC time and a recurrence interval.
 ** *spec.snapshotRetention*: Must be set to 2.
 +
-Example YAML:
+*Example YAML*:
 +
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -132,12 +132,12 @@ kubectl apply -f trident-protect-schedule.yaml -n trident-protect
 ----
 kubectl apply -f trident-protect-appvault-primary-destination.yaml -n trident-protect
 ----
-. Create an AppVault for the destination application on the destination cluster. Depending on your storage provider, modify an example in AppVault custom resources to fit your environment:
+. Create an AppVault for the destination application on the destination cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 +
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-secondary-destination.yaml`).
 .. Configure the following attributes:
 ** *metadata.name*: (_Required_) The name of the AppVault custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
-** *spec.providerConfig*: (_Required_) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to AppVault custom resources for examples of AppVault CRs with other providers.
+** *spec.providerConfig*: (_Required_) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples of AppVault CRs with other providers.
 ** *spec.providerCredentials*: (_Required_) Stores references to any credential required to access the AppVault using the specified provider.
 *** *spec.providerCredentials.valueFromSecret*: (_Required_) Indicates that the credential value should come from a secret.
 **** *key*: (Required) The valid key of the secret to select from.
@@ -162,7 +162,7 @@ kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n trident-
 ** *metadata.name*: (_Required_) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
 ** *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in.
 +
-Example YAML:
+*Example YAML*:
 +
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -192,7 +192,7 @@ kubectl apply -f trident-protect-app-destination.yaml -n trident-protect
 ** *spec.storageClassName*: (Required) Choose the name of a valid storage class on the cluster. The storage class must be used by the source cluster where the source application is deployed.
 ** *spec.recurrenceRule*: Define a start date in UTC time and a recurrence interval.
 +
-Example YAML:
+*Example YAML*:
 +
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -291,7 +291,7 @@ In this situation, you are swapping the source and destination.
 * spec.AppVaultRef: (Required) This value must match the name of the AppVault for the source application.
 * spec.ApplicationRef: (Required) This value must match the metadata.name field of the source application CR file.
 +
-Example YAML:
+*Example YAML*:
 +
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -350,7 +350,7 @@ This process starts from a relationship that has completed a failover to a desti
 * Reverse the replication.
 
 . Perform the Resync a failed over replication steps
-. Perform the Resync a failed over replication steps.
+. Perform the Reverse resync a failed over replication steps.
 
 === Delete a replication relationship
 

@@ -4,7 +4,6 @@ permalink: trident-protect/trident-protect-generate-support-bundle.html
 keywords: trident, protect, bundle, support, netapp, custom, resource, file
 summary: Trident protect enables administrators to generate bundles that include information useful to NetApp Support, including logs, metrics, and topology information about the clusters and apps under management. If you are connected to the Internet, you can upload support bundles to the NetApp Support Site (NSS) using a custom resource (CR) file.
 ---
-
 = Generate a support bundle
 :hardbreaks:
 :nofooter:
@@ -29,7 +28,7 @@ Trident protect enables administrators to generate bundles that include informat
 +
 *Example YAML*:
 +
-====
+----
 apiVersion: protect.trident.netapp.io/v1
 kind: AutoSupportBundle
 metadata:
@@ -38,7 +37,7 @@ spec:
   triggerType: Manual
   uploadEnabled: true
   dataWindowStart: 2024-05-05T12:30:00Z
-====
+----
 . After you populate the `astra-support-bundle.yaml` file with the correct values, apply the CR:
 +
 ----

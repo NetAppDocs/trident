@@ -1,10 +1,9 @@
 ---
 sidebar: sidebar
-permalink: trident-protect/trident-protect-protect-apps.adochooks.html
+permalink: trident-protect/trident-protect-protect-apps.html
 keywords: protect, snapshots, demand, configuration, cluster, appvaul
 summary: Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 ---
-
 = Protect your data
 :hardbreaks:
 :nofooter:
@@ -25,7 +24,7 @@ You can create an on-demand snapshot at any time.
 * <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
 * <APPLICATION_NAME>: The Kubernetes name of the application to snapshot.
 * <APPVAULT_NAME>: The name of the AppVault where the snapshot contents (metadata) should be stored.
-* <RECLAIM_POLICY>: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to Retain, the snapshot will be deleted. Valid options:
+* <RECLAIM_POLICY>: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to `Retain`, the snapshot will be deleted. Valid options:
 ** `Retain`
 ** `Delete` (default)
 +
@@ -77,7 +76,7 @@ spec:
   dataMover: Kopia
 ----
 +
-. After you populate the trident-protect-backup-cr.yaml file with the correct values, apply the CR:
+. After you populate the `trident-protect-backup-cr.yam`l file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-backup-cr.yaml
@@ -99,10 +98,10 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 ** `daily` (requires that you specify `spec.minute` and `spec.hour`)
 ** `weekly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfWeek`)
 ** `monthly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfMonth`)
-* <DAY_OF_MONTH>: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to monthly.
-* <DAY_OF_WEEK>: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to weekly.
-* <HOUR_OF_DAY>: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to daily, weekly, or monthly.
-* <MINUTE_OF_HOUR>: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to hourly, daily, weekly, or monthly.
+* <DAY_OF_MONTH>: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to `monthly`.
+* <DAY_OF_WEEK>: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `weekly`.
+* <HOUR_OF_DAY>: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
+* <MINUTE_OF_HOUR>: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
 +
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -124,7 +123,7 @@ spec:
 ----
 +
 
-. After you populate the trident-protect-schedule-cr.yaml file with the correct values, apply the CR:
+. After you populate the `trident-protect-schedule-cr.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-schedule-cr.yaml

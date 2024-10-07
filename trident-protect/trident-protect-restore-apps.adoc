@@ -49,14 +49,14 @@ spec:
   namespaceMapping: [{"source": "<SOURCE_NAMESPACE>", "destination": "<DESTINATION_NAMESPACE>"}]
 -------
 +
-. (Optional) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
-*  "<INCLUDE-EXCLUDE>": (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
-** <GROUP>: (Optional) Group of the resource to be filtered.
-** <KIND>: (Optional) Kind of the resource to be filtered.
-** <VERSION>: (Optional) Version of the resource to be filtered.
-** <NAMES>: (Optional) Names in the Kubernetes metadata.name field of the resource to be filtered.
-** <NAMESPACES>: (Optional) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-** <SELECTORS>: (Optional) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`.
+. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
+*  "<INCLUDE-EXCLUDE>": (_Required for filtering_) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+** <GROUP>: (_Optional_) Group of the resource to be filtered.
+** <KIND>: (_Optional_) Kind of the resource to be filtered.
+** <VERSION>: (_Optional_) Version of the resource to be filtered.
+** <NAMES>: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
+** <NAMESPACES>: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
+** <SELECTORS>: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`.
 +
 For example:
 +
@@ -106,16 +106,16 @@ spec:
   appArchivePath: <BACKUP_PATH>
 -------
 +
-. (Optional) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
+. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 
-* "<INCLUDE-EXCLUDE>": (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* "<INCLUDE-EXCLUDE>": (_Required for filtering_) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 
-** <GROUP>: (Optional) Group of the resource to be filtered.
-** <KIND>: (Optional) Kind of the resource to be filtered.
-** <VERSION>: (Optional) Version of the resource to be filtered.
-** <NAMES>: (Optional) Names in the Kubernetes metadata.name field of the resource to be filtered.
-** <NAMESPACES>: (Optional) Namespaces in the Kubernetes metadata.name field of the resource to be filtered. 
-** <SELECTORS>: (Optional) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`.
+** <GROUP>: (_Optional_) Group of the resource to be filtered.
+** <KIND>: (_Optional_) Kind of the resource to be filtered.
+** <VERSION>: (_Optional_) Version of the resource to be filtered.
+** <NAMES>: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
+** <NAMESPACES>: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered. 
+** <SELECTORS>: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`.
 +
 For example:
 +
@@ -167,16 +167,16 @@ spec:
   namespaceMapping: [{"source": "<SOURCE_NAMESPACE>", "destination": "<DESTINATION_NAMESPACE>"}]
 -------
 +
-. (Optional) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
+. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
 * "<INCLUDE-EXCLUDE>": (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 +
-* <GROUP>: (Optional) Group of the resource to be filtered.
-* <KIND>: (Optional) Kind of the resource to be filtered.
-* <VERSION>: (Optional) Version of the resource to be filtered.
-* <NAMES>: (Optional) Names in the Kubernetes metadata.name field of the resource to be filtered.
-* <NAMESPACES>: (Optional) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-* <SELECTORS>: (Optional) Label selector string in the Kubernetes metadata.name field of the resource as defined in the Kubernetes documentation. Example: `"trident.netapp.io/os=linux"`. 
+* <GROUP>: (_Optional_) Group of the resource to be filtered.
+* <KIND>: (_Optional_) Kind of the resource to be filtered.
+* <VERSION>: (_Optional_) Version of the resource to be filtered.
+* <NAMES>: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
+* <NAMESPACES>: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
+* <SELECTORS>: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`. 
 +
 For example:
 +
@@ -223,16 +223,16 @@ spec:
   appVaultRef: <APPVAULT_NAME>
 -------
 +
-. (Optional) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
+. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 
-* "<INCLUDE-EXCLUDE>": (Required for filtering) Use include or exclude to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* "<INCLUDE-EXCLUDE>": (_Required for filtering_) Use include or exclude to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 
-* <GROUP>: (Optional) Group of the resource to be filtered.
-* <KIND>: (Optional) Kind of the resource to be filtered.
-* <VERSION>: (Optional) Version of the resource to be filtered.
-* <NAMES>: (Optional) Names in the Kubernetes metadata.name field of the resource to be filtered.
-* <NAMESPACES>: (Optional) Namespaces in the Kubernetes metadata.name field of the resource to be filtered. 
-* <SELECTORS>: (Optional) Label selector string in the Kubernetes metadata.name field of the resource as defined in the Kubernetes documentation. Example: `"trident.netapp.io/os=linux"`.
+* <GROUP>: (_Optional_) Group of the resource to be filtered.
+* <KIND>: (_Optional_) Kind of the resource to be filtered.
+* <VERSION>: (_Optional_) Version of the resource to be filtered.
+* <NAMES>: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
+* <NAMESPACES>: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered. 
+* <SELECTORS>: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`.
 +
 For example:
 +

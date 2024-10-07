@@ -27,25 +27,25 @@ To clone to the same cluster, create a snapshot or backup and restore the data t
 .Steps
 
 . Do one of the following:
-.. <<Create an on-demand snapshot,Create a snapshot>>.
-.. <<Create an on-demand backup, Create a backup >>.
+.. link:trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create a snapshot].
+.. link:trident-protect-protect-apps.html#create-an-on-demand-backup[Create a backup].
 
 . On the same cluster, do one of the following, depending on if you created a snapshot or a backup:
-.. <<Restore from a snapshot to a different namespace, Restore your data from the snapshot>>.
-.. <<Restore from a backup to a different namespace, Restore your data from the backup>>.
+.. link:trident-protect-restore-apps.html#restore-from-a-snapshot-to-a-different-namespace[Restore your data from the snapshot].
+.. link:trident-protect-restore-apps.html#restore-from-a-backup-to-a-different-namespace[Restore your data from the backup].
 
 === Clone to different cluster
 
 To clone to a different cluster (perform a cross-cluster clone), create a snapshot or backup and restore the data to a different cluster. Make sure that Trident protect is installed on the destination cluster.
 
 * Do one of the following:
-.. <<Create an on-demand snapshot, Create a snapshot>>.
-.. <<Create an on-demand backup, Create a backup>>.
+.. link:trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create a snapshot].
+.. link:trident-protect-protect-apps.html#create-an-on-demand-backup[Create a backup].
 
 * Ensure that the AppVault CR for the object storage bucket that contains the backup or snapshot has been configured on the destination cluster.
 * On the destination cluster, do one of the following, depending on if you created a snapshot or a backup:
-.. <<Restore from a snapshot to a different namespace, Restore your data from the snapshot>>.
-.. <<Restore from a backup to a different namespace, Restore your data from the backup>>.
+.. link:trident-protect-restore-apps.html#restore-from-a-snapshot-to-a-different-namespace[Restore your data from the snapshot].
+.. link:trident-protect-restore-apps.html#restore-from-a-backup-to-a-different-namespace[Restore your data from the backup].
 
 == Migrate data from one storage class to another storage class
 

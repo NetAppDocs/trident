@@ -1,0 +1,207 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-cli.html
+keywords: trident, protect, command line utility, cli, netapp, custom, resources
+summary: You can use the protectctl command to create and interact with Trident Protect custom resources.
+---
+= Trident Protect command line utility
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+You can use the `protectctl` command to create and interact with Trident Protect custom resources.
+
+== Installation
+Get the protectctl binary via the ACS registry:
+----
+docker login cr.astra.netapp.io -u ACCOUNT_ID –p API_TOKEN
+docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
+docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
+
+# You can also run the container with no commands to get these instructions:
+docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
+# The default platform is linux/amd64, but two more are available:
+#     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
+#     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
+----
+The protectctl binary should now be on your filesystem. You can use it directly:
+----
+./protectctl help
+----
+Or install it globally (elevated privilege may be required):
+----
+# Linux
+cp ./protectctl /usr/bin/
+# MacOS
+cp ./protectctl /usr/local/bin/
+----
+You can now use it from anywhere:
+----
+protectctl --help
+----
+== Auto-complete
+To enable auto-complete, append such a line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
+----
+source <(protectctl completion zsh)
+----
+To use auto-complete in Bash, depending on your OS/distribution, you may have to first install a bash-completion package and then also source the bash completion script, e.g. `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion, inside your .bashrc`.
+
+See `protectctl completion --help` for other supported shells.
+
+== Configuration file
+Now that protectctl is installed, configure the trident-protect namespace:
+----
+mkdir -p ~/.trident-protect
+echo 'namespace: trident-protect' > ~/.trident-protect/protectctl.yaml
+----
+== Overview
+The protectctl command is structured similarly to kubectl and tridentctl, top-level basic command are the following verbs:
+[cols="2,2a" options="header"]
+|===
+| Command
+| Description
+
+| `create`
+| create resource
+
+| `delete`
+| delete one or more resources
+
+| `get`
+| get one or more resources
+special command: `protectctl get all`
+
+| `wait` 
+| wait for a resource to be in a final state (e.g. Ready, Complete, Available, Failed or Removed)
+|===
+
+The typical structure of a command is
+----
+protectctl <verb> <resource-type> [<name>]
+----
+
+Some of the supported resource types are
+
+* application
+* appvault
+* backup
+* backupinplacerestore
+* backuprestore
+* snapshot
+* snapshotinplacerestore
+* snapshotrestore
+* schedule
+
+These resource types correspond to the Trident Protect custom resources and can be used to create these CR’s. For example, to restore snapshots and backups, use the resource 
+`typessnapshotrestore`, `snapshotinplacerestore` , `backuprestore`, and `backupinplacerestore`.
+
+To get a list of all applications use:
+----
+protectctl get application
+----
+
+To get a list of all supported resources use:
+----
+protectctl get all
+----
+
+To delete a resource use:
+----
+protectctl delete application mysql
+----
+
+== Create application
+
+*Simple application:*
+----
+protectctl create app minio --namespaces namespace1,namespace2
+----
+
+*Application with namespace label selector and cluster-scoped resources:*
+----
+protectctl create app minio \
+--namespaces 'namespace1(key=value1),namespace2(environment in (production, qa))' 
+--csr 'rbac.authorization.k8s.io/v1/ClusterRole(key=value)'
+----
+
+== Create AppVault
+ 
+*GCP example:*
+----
+kubectl create secret generic gcp-creds --from-file=./gcp_credentials.json  -n trident-protect
+protectctl create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
+----
+
+Use the following help command to get a list of supported providers and what arguments can be specified:
+----
+protectctl create appvault –help
+protectctl create appvault azure –help
+----
+
+Please see section "AppVault custom resources" for examples for provider-specific secrets.
+
+== Create backup
+----
+protectctl create backup mybackup --appvault my-new-vault --app minio
+----
+
+== Restore backup
+Restore backup using existing Backup CR:
+----
+protectctl create backuprestore minio2 minio:minio2 –backup mybackup
+----
+
+Restore backup without existing Backup CR, e.g. in a disaster recovery scenario (AppVault pointing to the bucket must exist):
+----
+protectctl create backuprestore minio2 minio:minio2 --path minio_c22fe644-2606-4630-93ab-6319e1640b18/backups/mybackup_42e753bd-47ec-4f92-9282-bd65910ac064 --appvault  my-new-vault 
+----
+
+[NOTE]
+====
+The value for the `--path` parameter can be found in the backup CR field `appArchivePath`, or using the AppVault browser.
+====
+
+Restoring a backup (in-place) with a resource filter would look like this:
+----
+protectctl create backupinplacerestore restore1 --backup mybackup --resource-filter-include '[{"Kind":"PersistentVolumeClaim"}]'
+----
+
+The resource filter can be specified either as -include or -exclude filter, the argument is a list of resource matchers in JSON format. A full example of what a single resource matcher can look like:
+----
+{"Group":"apps","Kind":"Deployment","Version":"v1","Names":["my-deployment"],"Namespaces":["my-namespace"],"LabelSelectors":["app=my-app"]}
+----
+
+For normal restore (not in-place) a storage class mapping can be specified as a comma-separated list:
+----
+--storageclass-mapping source-class1:target-class1,source-class2:target-class2
+----
+
+== AppVault browser
+
+To see the content of an AppVault:
+----
+protectctl get appvaultcontent gcp-vault --show-resources all
+----
+
+Example output:
+----
++-------------+-------+----------+-----------------------------+---------------------------+
+|   CLUSTER   |  APP  |   TYPE   |            NAME             |         TIMESTAMP         |
++-------------+-------+----------+-----------------------------+---------------------------+
+|             | mysql | snapshot | mysnap                      | 2024-08-09 21:02:11 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815180300 | 2024-08-15 18:03:06 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815190300 | 2024-08-15 19:03:06 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815200300 | 2024-08-15 20:03:06 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815180300 | 2024-08-15 18:04:25 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815190300 | 2024-08-15 19:03:30 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815200300 | 2024-08-15 20:04:21 (UTC) |
+| production1 | mysql | backup   | mybackup5                   | 2024-08-09 22:25:13 (UTC) |
+|             | mysql | backup   | mybackup                    | 2024-08-09 21:02:52 (UTC) |
++-------------+-------+----------+-----------------------------+---------------------------+ 
+----
+To see the AppVaultPath for each resource, use `flag --show-paths`.
+
+The cluster name in the first column of the table is only available if a cluster name was specified in the trident protect helm installation, e.g. using `--set clusterName=production1`. 

@@ -1,0 +1,153 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-protect-apps.adochooks.html
+keywords: protect, snapshots, demand, configuration, cluster, appvaul
+summary: Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
+---
+
+= Protect your data
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
+
+== Create an on-demand snapshot
+You can create an on-demand snapshot at any time.
+
+.Steps
+
+. Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
+
+* <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
+* <APPLICATION_NAME>: The Kubernetes name of the application to snapshot.
+* <APPVAULT_NAME>: The name of the AppVault where the snapshot contents (metadata) should be stored.
+* <RECLAIM_POLICY>: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to Retain, the snapshot will be deleted. Valid options:
+** `Retain`
+** `Delete` (default)
++
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Snapshot
+metadata:
+  namespace: trident-protect
+  name: <CR_NAME>
+spec: 
+  applicationRef: <APPLICATION_NAME>
+  appVaultRef: <APPVAULT_NAME>
+  reclaimPolicy: <RECLAIM_POLICY>
+----
++
+. After you populate the `trident-protect-snapshot-cr.yaml` file with the correct values, apply the CR:
++
+----
+kubectl apply -f trident-protect-snapshot-cr.yaml
+----
+
+== Create an on-demand backup
+You can back up an app at any time.
+
+.Steps
+. Create the custom resource (CR) file and name it `trident-protect-backup-cr.yaml`. 
+. In the file you created, configure the following attributes:
+
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.applicationRef*: (_Required_) The Kubernetes name of the application to back up.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
+* *spec.dataMover*: (_Optional_) A string indicating which backup tool to use for the backup operation. Possible values (case sensitive):
+** `Restic` (default)
+** `Kopia`
+* *spec.reclaimPolicy*: (_Optional_) Defines what happens to a backup when released from its claim. Possible values:
+** `Delete` (default)
+** `Retain`
+* *Spec.snapshotRef*: (_Optional_): Name of the Snapshot to use as the source of the Backup. If not provided, a temporary Snapshot will be created and backed up.
++
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Backup
+metadata:
+  namespace: trident-protect
+  name: my-cr-name
+spec: 
+  applicationRef: my-application
+  appVaultRef: appvault-name
+  dataMover: Kopia
+----
++
+. After you populate the trident-protect-backup-cr.yaml file with the correct values, apply the CR:
++
+----
+kubectl apply -f trident-protect-backup-cr.yaml
+----
+
+== Create a data protection schedule
+A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
+
+.Steps
+. Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. Update the values in brackets <> to match your Astra environment, cluster configuration, and data protection needs:
+
+* <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
+* <APPLICATION_NAME>: The Kubernetes name of the application to back up.
+* <APPVAULT_NAME>: The name of the AppVault where the backup contents should be stored.
+* <BACKUPS_RETAINED>: The number of backups to retain. Zero indicates that no backups should be created.
+* <SNAPSHOTS_RETAINED>: The number of snapshots to retain. Zero indicates that no snapshots should be created.
+* <GRANULARITY>: The frequency at which the schedule should run. Possible values, along with required associated fields:
+** `hourly` (requires that you specify `spec.minute`)
+** `daily` (requires that you specify `spec.minute` and `spec.hour`)
+** `weekly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfWeek`)
+** `monthly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfMonth`)
+* <DAY_OF_MONTH>: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to monthly.
+* <DAY_OF_WEEK>: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to weekly.
+* <HOUR_OF_DAY>: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to daily, weekly, or monthly.
+* <MINUTE_OF_HOUR>: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to hourly, daily, weekly, or monthly.
++
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Schedule
+metadata:
+  namespace: trident-protect
+  name: <CR_NAME>
+spec:
+  applicationRef: <APPLICATION_NAME>
+  appVaultRef: <APPVAULT_NAME>
+  backupRetention: "<BACKUPS_RETAINED>"
+  snapshotRetention: "<SNAPSHOTS_RETAINED>"
+  granularity: <GRANULARITY>
+  dayOfMonth: "<DAY_OF_MONTH>"
+  dayOfWeek: "<DAY_OF_WEEK>"
+  hour: "<HOUR_OF_DAY>"
+  minute: "<MINUTE_OF_HOUR>"
+
+----
++
+
+. After you populate the trident-protect-schedule-cr.yaml file with the correct values, apply the CR:
++
+----
+kubectl apply -f trident-protect-schedule-cr.yaml
+----
+
+== Delete a snapshot
+
+Delete the scheduled or on-demand snapshots that you no longer need.
+
+.Step
+. Remove the snapshot CR associated with the snapshot:
++
+----
+kubectl delete snapshot <snapshot_name> -n trident-protect
+----
+
+== Delete a backup
+
+Delete the scheduled or on-demand backups that you no longer need.
+
+.Step
+. Remove the backup CR associated with the backup:
++
+----
+kubectl delete backup <backup_name> -n trident-protect
+----

@@ -37,6 +37,8 @@ Review link:../trident-get-started/kubernetes-deploy.html[the installation overv
 
 In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you-deploy[deployment prerequisites] you need link:https://v3.helm.sh/[Helm version 3^].
 
+NOTE: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
+
 .Steps
 
 . Add the Astra Trident Helm repository:

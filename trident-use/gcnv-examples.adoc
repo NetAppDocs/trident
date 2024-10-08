@@ -319,6 +319,25 @@ spec:
 ----
 ====
 
+.Cloud identity for GKE
+[%collapsible%closed]
+====
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-gcp-gcnv
+spec:
+  version: 1
+  storageDriverName: google-cloud-netapp-volumes 
+  projectNumber: '012345678901'
+  network: gcnv-network
+  location: us-west2
+  serviceLevel: Premium
+  storagePool: pool-premium1
+----
+====
+
 == What's next?
 
 After you create the backend configuration file, run the following command:

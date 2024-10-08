@@ -105,17 +105,12 @@ sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.c
 . Install the following system packages:
 +
 ----
-sudo yum install -y lsscsi iscsi-initiator-utils sg3_utils device-mapper-multipath
+sudo yum install -y lsscsi iscsi-initiator-utils device-mapper-multipath
 ----
 . Check that iscsi-initiator-utils version is 6.2.0.874-2.el7 or later:
 +
 ----
 rpm -q iscsi-initiator-utils
-----
-. Set scanning to manual:
-+
-----
-sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf
 ----
 . Enable multipathing:
 +

@@ -1,0 +1,168 @@
+---
+permalink: concepts/manage-authorization-access-control.html
+sidebar: sidebar
+keywords: manage, authentication, rbac
+summary: "Trident protect uses the Kubernetes model of role-based access control (RBAC). You can use Trident protect RBAC features to more finely control access to resources."
+---
+= Manage authorization and access control
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Trident protect uses the Kubernetes model of role-based access control (RBAC). By default, Trident protect provides a single system namespace and its associated default service account. If you have an organization with many users or specific security needs, you can use the RBAC features of Trident protect to gain more granular control over access to resources and namespaces.
+
+With Trident protect, the cluster administrator always has access to resources in the default `trident-protect-system` namespace, and can also access resources in all other namespaces. You can create additional namespaces and add resources to them to help control access to those resources by other users, or to make administering groups of resources easier.
+
+[NOTE]
+======
+Only administrators should have access to privileged Trident protect objects, which include:
+
+* *AppVault*: Requires bucket credential data
+* *AutoSupportBundle*: Collects metrics, logs, and other sensitive Trident protect data
+* *AutoSupportBundleSchedule*: Manages log collection schedules
+
+As a best practice, use RBAC to restrict access to privileged objects to administrators.
+======
+
+For more information about how RBAC regulates access to resources and namespaces, refer to the https://kubernetes.io/docs/reference/access-authn-authz/rbac/[Kubernetes RBAC documentation^].
+
+Fore information about service accounts, refer to the https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/[Kubernetes service account documentation^].
+
+== Example: Manage access for two groups of users
+For example, an organization has a cluster administrator, a group of engineering users, and a group of marketing users. The cluster administrator would complete the following tasks to create an environment where the engineering group and the marketing group each have access to only the resources assigned to their respective namespaces. 
+
+=== Step 1: Create a namespace to contain resources for each group
+Creating a namespace enables you to logically separate resources and better control who has access to those resources.
+
+. Create a namespace for the engineering group:
++
+[source,console]
+----
+$ kubectl create ns engineering-ns
+----
+
+. Create a namespace for the marketing group:
++
+[source,console]
+----
+$ kubectl create ns marketing-ns
+----
+
+=== Step 2: Create new service accounts to interact with resources in each namespace
+Each new namespace you create comes with a default service account, but you should create a service account for each group of users so that you can further divide privileges between groups in the future if necessary. 
+
+. Create a service account for the engineering group:
++
+[source,yaml]
+----
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: eng-user
+  namespace: engineering-ns
+----
+
+. Create a service account for the marketing group:
++
+[source,console]
+----
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mkt-user
+  namespace: marketing-ns
+----
+
+
+=== Step 3: Create a secret for each new service account
+A service account secret is used to authenticate with the service account, and can easily be deleted and recreated if compromised.
+
+. Create a secret for the engineering service account:
++
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    kubernetes.io/service-account.name: eng-user
+  name: eng-user-secret
+  namespace: engineering-ns
+type: kubernetes.io/service-account-token
+----
+
+. Create a secret for the marketing service account:
++
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    kubernetes.io/service-account.name: mkt-user
+  name: mkt-user-secret
+  namespace: marketing-ns
+type: kubernetes.io/service-account-token
+----
+
+
+=== Step 4: Create a RoleBinding object to bind the ClusterRole object to each new service account
+A default ClusterRole object is created when you install Trident protect. You can bind this ClusterRole to the service account by creating and applying a RoleBinding object. 
+
+. Bind the ClusterRole to the engineering service account:
++
+[source,yaml]
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: engineering-ns-tenant-rolebinding
+  namespace: engineering-ns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: trident-protect-tenant-cluster-role
+subjects:
+- kind: ServiceAccount
+  name: eng-user
+  namespace: engineering-ns
+----
+
+. Bind the ClusterRole to the marketing service account:
++
+[source,yaml]
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: marketing-ns-tenant-rolebinding
+  namespace: marketing-ns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: trident-protect-tenant-cluster-role
+subjects:
+- kind: ServiceAccount
+  name: mkt-user
+  namespace: marketing-ns
+----
+
+
+=== Step 5: Test permissions
+Test that the permissions are correct.
+
+. Confirm that engineering users can access engineering resources:
++
+[source,console]
+----
+kubectl auth can-i --as=system:serviceaccount:eng-1:eng-user get applications.protect.trident.netapp.io -n engineering-ns
+----
+
+. Confirm that engineering users cannot access marketing resources:
++
+[source,console]
+----
+kubectl auth can-i --as=system:serviceaccount:eng-1:eng-user get applications.protect.trident.netapp.io -n marketing-ns
+----
+
+

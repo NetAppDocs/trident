@@ -1,0 +1,60 @@
+---
+sidebar: sidebar
+permalink: learn-about-trident-protect.html
+keywords: overview, concepts, features, use case, workloads, how workload factory works
+summary: Workload Factory for VMware provides tools to move your data from on-premises systems to VMware Cloud on AWS. The VMware migration advisor enables you to analyze your current virtual machine configurations in on-premises vSphere environments and generate a plan to deploy recommended VM layouts to VMware Cloud on AWS vSphere clusters and use customized Amazon FSx for NetApp ONTAP file systems as external datastores.
+---
+
+= Learn about Trident protect
+:icons: font
+:imagesdir: ./media/
+
+[.lead]
+Workload Factory for VMware provides tools to move your data from on-premises systems to either VMware Cloud on AWS (VMC) or Amazon EC2. The VMware migration advisor enables you to analyze your current virtual machine configurations in on-premises vSphere environments and generate a plan to deploy recommended VM layouts to Amazon EC2 or VMware Cloud on AWS vSphere clusters and use customized Amazon FSx for NetApp ONTAP file systems as external datastores.
+
+Amazon FSx for NetApp ONTAP is an external NFS datastore built on NetApp's ONTAP file system that can be attached to Amazon EC2 instances or VMware Cloud on AWS vSphere clusters. There is no need to add more hosts to increase available storage; instead, just use FSx for ONTAP volumes as external datastores to complement vSAN datastores. This provides you with a flexible, high-performance, virtualized storage infrastructure that scales independently of compute resources.
+
+image:diagram-vmware-fsx-overview.png[A diagram showing the architecture.]
+
+== How the VMware migration advisor works
+
+The migration advisor can help you move on-premises virtual machines (VMs) and their data, running on any VMware supported datastores, to either Amazon EC2 or VMware Cloud datastores, which includes supplemental NFS datastores on an FSx for ONTAP file system.
+
+image:diagram-vmware-fsx-old-new.png[A diagram showing an example old architecture and new architecture after migration.]
+
+Note that you can attach up to four (4) FSx for ONTAP volumes to a single vSphere cluster on VMware Cloud on AWS.
+// How many FSx volumes can you attach to an EC2 instance?
+
+== What you can do with the migration advisor
+
+The migration advisor provides the following functionality:
+
+* Analyze current on-premises VM configurations
+* Determine which VMs to migrate to Amazon EC2 or VMware Cloud on AWS
+* Identify the space required on FSx for ONTAP volumes to be used as VM external datastores
+* Review resulting report to understand the deployment steps
+* Perform the actual deployment
+
+The migration advisor supports configuration planning for a single Amazon EC2 instance or VMware Cloud on AWS cluster connected to a single FSx for ONTAP file system.
+
+== Benefits of using the migration advisor
+
+Transitioning parts of your current infrastructure to Amazon EC2 or VMware Cloud on AWS using Amazon FSx for ONTAP as external NFS datastores provides the following benefits: 
+
+* Cost optimization due to host and storage decoupling and advanced data efficiency
+* Ability to grow the storage capacity as needed without the need to purchase additional host instances
+* NetApp ONTAP data management capabilities in the cloud, such as space efficient snapshots, cloning, compression, deduplication, compaction, and replication
+* Reduction in management of hardware refreshes
+* Ability to change data throughput, IOPS, and the size of the file system in addition to increase or decrease the size of volumes
+* High availability supporting multiple Availability Zone (AZ) deployments
+* Cost and latency reduction from single-AZ configurations that use VPC peering without requiring a Transit Gateway
+
+== Cost
+
+There is no cost for using the VMware migration advisor.
+
+You'll need to pay for AWS resources that you deploy based on the recommendations from the migration advisor.
+
+== Licensing
+
+No special licenses are needed from NetApp to use the migration advisor.

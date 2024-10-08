@@ -4,7 +4,6 @@ permalink: trident-protect/trident-protect-restore-apps.html
 keywords: trident, protect, restore, data, backup
 summary: You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 ---
-
 = Restore your data
 :hardbreaks:
 :nofooter:
@@ -18,8 +17,6 @@ You can use Trident protect to restore your application from a snapshot or backu
 == Restore from a backup to a different namespace
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
-
-.Steps
 
 . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
 +
@@ -81,8 +78,6 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 
 == Restore from a backup to the original namespace
 
-.Steps
-
 . Create the custom resource (CR) file and name it `trident-protect-backup-ipr-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 +
 * <CR_NAME>: The name of this CR operation; choose a sensible name for your environment.
@@ -139,8 +134,6 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 == Restore from a snapshot to a different namespace
 
 You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
-
-.Steps
 
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 +
@@ -200,7 +193,6 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 -----
 
 == Restore from a snapshot to the original namespace
-.Steps
 
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-ipr-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 

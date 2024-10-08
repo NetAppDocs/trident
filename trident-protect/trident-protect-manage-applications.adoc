@@ -4,7 +4,6 @@ permalink: trident-protect/trident-protect-manage-applications.html
 keywords: appvault, data protection, custom resource, namespace, application, cluster
 summary: TBD
 ---
-
 = Manage your application
 :hardbreaks:
 :nofooter:
@@ -21,10 +20,8 @@ You need to create an AppVault CR that will be used in data protection operation
 == Create application CRs
 You need to create an application CR for each application that you want to protect with Trident protect.
 
-.Steps
-
 . Create the destination application CR file:
-.. Create the custom resource (CR) file and name it (for example, *maria-app.yaml*).
+.. Create the custom resource (CR) file and name it (for example, `maria-app.yaml`).
 .. Configure the following attributes:
 * *metadata.name*: (_Required_) The name of the application custom resource. Note the name you choose because other CR files needed for protection operations refer to this value.
 * *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in.

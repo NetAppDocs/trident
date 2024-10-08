@@ -4,7 +4,6 @@ permalink: trident-protect/trident-protect-use-snapmirror-replication.html
 keywords: trident, protect, netapp, snapmirror, data, asynchronous, replication, clusters
 summary: Using Trident protect, you can use the asynchronous replication capabilities of NetApp SnapMirror technology to replicate data and application changes from one storage backend to another, on the same cluster or between different clusters.
 ---
-
 = Replicate your data with NetApp SnapMirror
 :hardbreaks:
 :nofooter:
@@ -31,19 +30,19 @@ Setting up a replication relationship involves the following:
 +
 .. Configure the following attributes:
 +
-** *metadata.name*: (Required) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
+** *metadata.name*: (_Required_) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
 The following installation options are available:
 +
-** *spec.providerConfig*: (Required) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples of AppVault CRs with other providers.
+** *spec.providerConfig*: (_Required_) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples of AppVault CRs with other providers.
 +
-** *spec.providerCredentials*: (Required) Stores references to any credential required to access the AppVault using the specified provider.
+** *spec.providerCredentials*: (_Required_) Stores references to any credential required to access the AppVault using the specified provider.
 +
-*** *spec.providerCredentials.valueFromSecret*: (Required) Indicates that the credential value should come from a secret.
+*** *spec.providerCredentials.valueFromSecret*: (_Required_) Indicates that the credential value should come from a secret.
 +
-**** *key*: (Required) The valid key of the secret to select from.
-**** *name*: (Required) Name of the secret containing the value for this field. Must be in the same namespace.
-*** *spec.providerCredentials.secretAccessKey*: (Required) The access key used to access the provider. The *name* should match *spec.providerCredentials.valueFromSecret.name*.
-** *spec.providerType*: (Required) Determines what provides the backup; for example, NetApp ONTAP S3, generic S3, Google Cloud, or Microsoft Azure. Possible values:
+**** *key*: (_Required_) The valid key of the secret to select from.
+**** *name*: (_Required_) Name of the secret containing the value for this field. Must be in the same namespace.
+*** *spec.providerCredentials.secretAccessKey*: (_Required_) The access key used to access the provider. The *name* should match *spec.providerCredentials.valueFromSecret.name*.
+** *spec.providerType*: (_Required_) Determines what provides the backup; for example, NetApp ONTAP S3, generic S3, Google Cloud, or Microsoft Azure. Possible values:
 
 *** aws
 *** azure
@@ -51,7 +50,7 @@ The following installation options are available:
 *** generic-s3
 *** ontap-s3
 *** storagegrid-s3
-.. After you populate the trident-protect-appvault-primary-source.yaml file with the correct values, apply the CR:
+.. After you populate the `trident-protect-appvault-primary-source.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-
@@ -59,12 +58,12 @@ kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-
 +
 . Create the source application CR:
 +
-.. Create the custom resource (CR) file and name it (for example, trident-protect-app-source.yaml).
+.. Create the custom resource (CR) file and name it (for example, `trident-protect-app-source.yaml`).
 +
 .. Configure the following attributes:
 +
-** *metadata.name*: (Required) The name of the AppVault custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
-** *spec.includedNamespaces*: (Required) Use namespace names and optionally narrow the scope of the namespaces with labels to specify namespaces that the application resources exist in.
+** *metadata.name*: (_Required_) The name of the AppVault custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
+** *spec.includedNamespaces*: (_Required_) Use namespace names and optionally narrow the scope of the namespaces with labels to specify namespaces that the application resources exist in.
 +
 *Example YAML*:
 +
@@ -89,7 +88,7 @@ kubectl apply -f trident-protect-app-source.yaml -n trident-protect
 
 . Create a replication schedule for the source application:
 
-.. Create the custom resource (CR) file and name it (for example, trident-protect-schedule.yaml).
+.. Create the custom resource (CR) file and name it (for example, `trident-protect-schedule.yaml`).
 .. Configure the following attributes:
 
 ** *metadata.name*: (_Required_) The name of the schedule custom resource.
@@ -120,7 +119,7 @@ spec:
     RRULE:FREQ=MINUTELY;INTERVAL=5
   snapshotRetention: "2"
 ----
-.. After you populate the trident-protect-schedule.yaml file with the correct values, apply the CR:
+.. After you populate the `trident-protect-schedule.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-schedule.yaml -n trident-protect
@@ -140,8 +139,8 @@ kubectl apply -f trident-protect-appvault-primary-destination.yaml -n trident-pr
 ** *spec.providerConfig*: (_Required_) Stores the configuration necessary to access the AppVault using the specified provider. Choose a bucketName and any other necessary details for your provider. Make note of the values you choose, because other CR files needed for a replication relationship refer to these values. Refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples of AppVault CRs with other providers.
 ** *spec.providerCredentials*: (_Required_) Stores references to any credential required to access the AppVault using the specified provider.
 *** *spec.providerCredentials.valueFromSecret*: (_Required_) Indicates that the credential value should come from a secret.
-**** *key*: (Required) The valid key of the secret to select from.
-**** *name*: (Required) Name of the secret containing the value for this field. Must be in the same namespace.
+**** *key*: (_Required_) The valid key of the secret to select from.
+**** *name*: (_Required_) Name of the secret containing the value for this field. Must be in the same namespace.
 *** *spec.providerCredentials.secretAccessKey*: (_Required_) The access key used to access the provider. The *name* should match *spec.providerCredentials.valueFromSecret.name*.
 ** *spec.providerType*: (_Required_) Determines what provides the backup; for example, NetApp ONTAP S3, generic S3, Google Cloud, or Microsoft Azure. Possible values:
 *** aws
@@ -151,7 +150,7 @@ kubectl apply -f trident-protect-appvault-primary-destination.yaml -n trident-pr
 *** ontap-s3
 *** storagegrid-s3
 
-.. After you populate the trident-protect-appvault-secondary-destination.yaml file with the correct values, apply the CR:
+.. After you populate the `trident-protect-appvault-secondary-destination.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n trident-protect
@@ -175,21 +174,21 @@ spec:
     labelSelector: {}
     namespace: maria
 ----
-.. After you populate the trident-protect-app-destination.yaml file with the correct values, apply the CR:
+.. After you populate the `trident-protect-app-destination.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-app-destination.yaml -n trident-protect
 ----
 . Create an AppMirrorRelationship CR file:
-.. Create the custom resource (CR) file and name it (for example, trident-protect-relationship.yaml).
+.. Create the custom resource (CR) file and name it (for example, `trident-protect-relationship.yaml`).
 .. Configure the following attributes:
 ** *metadata.name:* (Required) The name of the custom resource.
-** *spec.destinationAppVaultRef*: (Required) This value must match the name of the AppVault for the destination application on the destination cluster.
-** *spec.destinationApplicationRef*: (Required) This value must match the name of the destination application CR file.
-** *spec.namespaceMapping*: (Required) The destination and source namespaces must match the application namespace defined in the respective application CR.
-** *spec.sourceAppVaultRef*: (Required) This value must match the name of the AppVault for the source application.
-** *spec.sourceApplicationName*: (Required) This value must match the name of the source application you defined in the source application CR.
-** *spec.storageClassName*: (Required) Choose the name of a valid storage class on the cluster. The storage class must be used by the source cluster where the source application is deployed.
+** *spec.destinationAppVaultRef*: (_Required_) This value must match the name of the AppVault for the destination application on the destination cluster.
+** *spec.destinationApplicationRef*: (_Required_) This value must match the name of the destination application CR file.
+** *spec.namespaceMapping*: (_Required_) The destination and source namespaces must match the application namespace defined in the respective application CR.
+** *spec.sourceAppVaultRef*: (_Required_) This value must match the name of the AppVault for the source application.
+** *spec.sourceApplicationName*: (_Required_) This value must match the name of the source application you defined in the source application CR.
+** *spec.storageClassName*: (_Required_) Choose the name of a valid storage class on the cluster. The storage class must be used by the source cluster where the source application is deployed.
 ** *spec.recurrenceRule*: Define a start date in UTC time and a recurrence interval.
 +
 *Example YAML*:
@@ -215,7 +214,7 @@ spec:
   sourceApplicationUID: 7498d32c-328e-4ddd-9029-122540866aeb
   storageClassName: sc-vsim-2
 ----
-.. After you populate the trident-protect-relationship.yaml file with the correct values, apply the CR:
+.. After you populate the `trident-protect-relationship.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-relationship.yaml -n trident-protect
@@ -232,7 +231,7 @@ Using Trident protect, you can fail over replicated applications to a destinatio
 
 . (_Optional_) Create execution hooks on the destination cluster if you need them to run on the failed over application. You can create these execution hooks ahead of time if needed.
 
-. Open the AppMirrorRelationship CR file (for example, trident-protect-relationship.yaml) and change the value of spec.desiredState to promoted.
+. Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of *spec.desiredState* to promoted.
 
 . Save the CR file.
 
@@ -258,7 +257,7 @@ The process stops the app on the new destination cluster before re-establishing 
 
 . Create a snapshot of the source application.
 +
-. Open the AppMirrorRelationship CR file (for example, trident-protect-relationship.yaml) and change the value of spec.desiredState to established. 
+. Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of spec.desiredState to established. 
 +
 . Save the CR file.
 +
@@ -285,11 +284,11 @@ In this situation, you are swapping the source and destination.
 
 . Disable the protection policy schedules for the source application.
 . Create a ShutdownSnapshot CR file:
-.. Create the custom resource (CR) file and name it (for example, trident-protect-shutdownsnapshot.yaml).
+.. Create the custom resource (CR) file and name it (for example, `trident-protect-shutdownsnapshot.yaml`).
 .. Configure the following attributes:
-* metadata.name: (Required) The name of the custom resource.
-* spec.AppVaultRef: (Required) This value must match the name of the AppVault for the source application.
-* spec.ApplicationRef: (Required) This value must match the metadata.name field of the source application CR file.
+* *metadata.name*: (_Required_) The name of the custom resource.
+* *spec.AppVaultRef*: (_Required_) This value must match the name of the AppVault for the source application.
+* *spec.ApplicationRef*: (_Required_) This value must match the metadata.name field of the source application CR file.
 +
 *Example YAML*:
 +
@@ -304,7 +303,7 @@ spec:
   applicationRef: maria-8434b1cd-0a66-4048-8a28-ed5951a2c1d4
 ----
 
-. After you populate the trident-protect-shutdownsnapshot.yaml file with the correct values, apply the CR:
+. After you populate the `trident-protect-shutdownsnapshot.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-shutdownsnapshot.yaml -n trident-protect
@@ -315,7 +314,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n trident-protect
 kubectl get shutdownsnapshot -n trident-protect <ShutdownSnapshot name> -o yaml
 ----
 
-. Find the value of shutdownsnapshot.status.appArchivePath using the following command, and record the last part of the file path (also called the basename; this will be everything after the last slash):
+. Find the value of *shutdownsnapshot.status.appArchivePath* using the following command, and record the last part of the file path (also called the basename; this will be everything after the last slash):
 +
 ----
 k get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o jsonpath='{.status.appArchivePath}'
@@ -323,9 +322,9 @@ k get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o jsonpath='
 +
 . Perform a fail over from the destination cluster to the source cluster, with the following change:
 +
-* In step 2 of the fail over procedure, include the spec.promotedSnapshot field in the AppMirrorRelationship CR file, and set its value to the basename you recorded in step 5 above.
+* In step 2 of the fail over procedure, include the `spec.promotedSnapshot` field in the AppMirrorRelationship CR file, and set its value to the basename you recorded in step 5 above.
 +
-. Perform the reverse resync steps in Resync a failed over replication.
+. Perform the reverse resync steps in <<Resync a failed over replication>>.
 +
 . Enable protection schedules on the new source cluster.
 
@@ -349,8 +348,8 @@ This process starts from a relationship that has completed a failover to a desti
 * Resync the relationship.
 * Reverse the replication.
 
-. Perform the Resync a failed over replication steps
-. Perform the Reverse resync a failed over replication steps.
+. Perform the <<Resync a failed over replication>> steps
+. Perform the <<Reverse resync a failed over replication>> steps
 
 === Delete a replication relationship
 

@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-protect/trident-protect-protect-apps.html
-keywords: protect, snapshots, demand, configuration, cluster, appvaul
+keywords: protect, snapshots, demand, configuration, cluster, appvault
 summary: Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 ---
 = Protect your data
@@ -16,8 +16,6 @@ Protect all apps by taking snapshots and backups using an automated protection p
 
 == Create an on-demand snapshot
 You can create an on-demand snapshot at any time.
-
-.Steps
 
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
 
@@ -49,7 +47,6 @@ kubectl apply -f trident-protect-snapshot-cr.yaml
 == Create an on-demand backup
 You can back up an app at any time.
 
-.Steps
 . Create the custom resource (CR) file and name it `trident-protect-backup-cr.yaml`. 
 . In the file you created, configure the following attributes:
 
@@ -76,7 +73,7 @@ spec:
   dataMover: Kopia
 ----
 +
-. After you populate the `trident-protect-backup-cr.yam`l file with the correct values, apply the CR:
+. After you populate the `trident-protect-backup-cr.yaml` file with the correct values, apply the CR:
 +
 ----
 kubectl apply -f trident-protect-backup-cr.yaml
@@ -85,7 +82,6 @@ kubectl apply -f trident-protect-backup-cr.yaml
 == Create a data protection schedule
 A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
 
-.Steps
 . Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. Update the values in brackets <> to match your Astra environment, cluster configuration, and data protection needs:
 
 * <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
@@ -133,7 +129,6 @@ kubectl apply -f trident-protect-schedule-cr.yaml
 
 Delete the scheduled or on-demand snapshots that you no longer need.
 
-.Step
 . Remove the snapshot CR associated with the snapshot:
 +
 ----
@@ -144,7 +139,6 @@ kubectl delete snapshot <snapshot_name> -n trident-protect
 
 Delete the scheduled or on-demand backups that you no longer need.
 
-.Step
 . Remove the backup CR associated with the backup:
 +
 ----

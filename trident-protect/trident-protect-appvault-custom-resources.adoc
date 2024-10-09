@@ -59,7 +59,7 @@ spec:
       valueFromSecret:
         key: keySecret 
         name: gcp-trident-protect-src-bucket-secret
-  providerType: gcp
+  providerType: GCP
 ----
 --
 .Example AppVault CR creation using the Trident protect CLI
@@ -111,7 +111,7 @@ spec:
       valueFromSecret:
         key: secretAccessKey
         name: generic-s3-trident-protect-src-bucket-secret
-  providerType: aws
+  providerType: AWS
 ----
 --
 .Example AppVault CR creation using the Trident protect CLI
@@ -158,7 +158,7 @@ spec:
       valueFromSecret:
         key: accountKey
         name: azure-trident-protect-src-bucket-secret
-  providerType: azure
+  providerType: Azure
 ----
 --
 .Example AppVault CR creation using the Trident protect CLI

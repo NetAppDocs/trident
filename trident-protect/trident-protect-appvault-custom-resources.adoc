@@ -35,8 +35,9 @@ Key generation example:
 kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.json> -n trident-protect
 ----
 
-AppVault definition example:
+The following AppVault definition examples are given as a CR that you can use and modify, and an example Trident protect CLI command that generates the AppVault CR for you:
 
+// begin tabbed block
 [role="tabbed-block"]
 ====
 .Example AppVault CR
@@ -65,14 +66,11 @@ spec:
 --
 [source,console]
 ----
-kubectl create secret generic gcp-creds --from-file=./gcp_credentials.json -n trident-protect
-----
-[source,console]
-----
 protectctl create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
 ----
 --
 ====
+// end tabbed block
 
 
 
@@ -83,7 +81,13 @@ Key generation example:
 kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<accesskey id> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
 
-AppVault definition example:
+The following AppVault definition examples are given as a CR that you can use and modify, and an example Trident protect CLI command that generates the AppVault CR for you:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Example AppVault CR
+--
 [source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -107,6 +111,18 @@ spec:
         name: generic-s3-trident-protect-src-bucket-secret
   providerType: aws
 ----
+--
+.Example AppVault CR creation using the Trident protect CLI
+--
+[source,console]
+----
+protectctl create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>
+----
+--
+====
+// end tabbed block
+
+
 
 === Microsoft Azure
 
@@ -114,11 +130,16 @@ Key generation example:
 
 [source,console]
 ----
-kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=<myAKSStorageAccount> --from-literal=azurestorageaccountkey=<storage key>
+kubectl create secret generic <secret-name> --from-literal=accountKey=<accountKey> -n trident-protect
 ----
 
-AppVault definition example:
+The following AppVault definition examples are given as a CR that you can use and modify, and an example Trident protect CLI command that generates the AppVault CR for you:
 
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Example AppVault CR
+--
 [source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
@@ -139,4 +160,13 @@ spec:
         name: azure-trident-protect-src-bucket-secret
   providerType: azure
 ----
-
+--
+.Example AppVault CR creation using the Trident protect CLI
+--
+[source,console]
+----
+protectctl create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+----
+--
+====
+// end tabbed block

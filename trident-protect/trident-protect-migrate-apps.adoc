@@ -36,12 +36,12 @@ To clone to the same cluster, create a snapshot or backup and restore the data t
 
 To clone to a different cluster (perform a cross-cluster clone), create a snapshot or backup and restore the data to a different cluster. Make sure that Trident protect is installed on the destination cluster.
 
-* Do one of the following:
+. Do one of the following:
 .. link:trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create a snapshot].
 .. link:trident-protect-protect-apps.html#create-an-on-demand-backup[Create a backup].
 
-* Ensure that the AppVault CR for the object storage bucket that contains the backup or snapshot has been configured on the destination cluster.
-* On the destination cluster, do one of the following, depending on if you created a snapshot or a backup:
+. Ensure that the AppVault CR for the object storage bucket that contains the backup or snapshot has been configured on the destination cluster.
+. On the destination cluster, do one of the following, depending on if you created a snapshot or a backup:
 .. link:trident-protect-restore-apps.html#restore-from-a-snapshot-to-a-different-namespace[Restore your data from the snapshot].
 .. link:trident-protect-restore-apps.html#restore-from-a-backup-to-a-different-namespace[Restore your data from the backup].
 
@@ -52,7 +52,7 @@ You can migrate data from one storage class to a different storage class by rest
 For example (excluding the secrets from the restore):
 
 [source,yaml]
------
+----
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
@@ -71,5 +71,5 @@ spec:
       kind: Secret
       version: v1
     resourceSelectionCriteria: exclude
------
+----
 

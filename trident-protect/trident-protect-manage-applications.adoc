@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-manage-applications.html
 keywords: appvault, data protection, custom resource, namespace, application, cluster
 summary: "You can make Trident protect aware of an application you want to manage by creating an application CR and an associated AppVault CR."
 ---
-= Manage applications
+= Define an application for management
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,13 +12,13 @@ summary: "You can make Trident protect aware of an application you want to manag
 :imagesdir: ../media/
 
 [.lead]
-You can make Trident protect aware of an application you want to manage by creating an application CR and an associated AppVault CR.
+You can define an application that you want to manage with Trident protect by creating an application CR and an associated AppVault CR.
 
 == Create an AppVault CR
 You need to create an AppVault CR that will be used when performing data protection operations on the application, and the AppVault CR needs to reside on the cluster where Trident protect is installed. The AppVault CR is specific to your environment; for examples of AppVault CRs, refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources.]
 
 == Create an application CR
-You need to create an application CR for each application that you want to manage with Trident protect. You can add an application for management by creating an application CR or by using the Trident protect CLI.
+You need to create an application CR to for each application that you want to manage with Trident protect. You can add an application for management by manually creating an application CR or by using the Trident protect CLI to create the CR.
 
 [role="tabbed-block"]
 ====

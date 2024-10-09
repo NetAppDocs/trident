@@ -36,12 +36,17 @@ kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.js
 ----
 
 AppVault definition example:
+
+[role="tabbed-block"]
+====
+.Example AppVault CR
+--
 [source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
-  name: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  name: gcp-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
   providerConfig:
@@ -55,6 +60,21 @@ spec:
         name: gcp-trident-protect-src-bucket-secret
   providerType: gcp
 ----
+--
+.Example AppVault CR creation using the Trident protect CLI
+--
+[source,console]
+----
+kubectl create secret generic gcp-creds --from-file=./gcp_credentials.json -n trident-protect
+----
+[source,console]
+----
+protectctl create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
+----
+--
+====
+
+
 
 === Amazon S3
 Key generation example:
@@ -69,7 +89,7 @@ AppVault definition example:
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
-  name: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
   providerConfig:
@@ -104,7 +124,7 @@ AppVault definition example:
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
-  name: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  name: azure-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
   providerConfig:

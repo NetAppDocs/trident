@@ -18,6 +18,8 @@ You can use Trident protect to restore your application from a snapshot or backu
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
 
+.Steps
+
 . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
 +
 * <CR_NAME>: The name of this CR operation; choose a sensible name for your environment.
@@ -26,6 +28,7 @@ When you restore a backup to a different namespace using a BackupRestore CR, Tri
 
 * <BACKUP_PATH>: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
 +
+[source,console]
 -----
 kubectl get backups <BACKUP_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 -----
@@ -34,6 +37,7 @@ kubectl get backups <BACKUP_NAME> -n trident-protect -o jsonpath='{.status.appAr
 +
 * <DESTINATION_NAMESPACE>: The destination namespace of the restore operation.
 +
+[source,yaml]
 -------
 apiVersion: protect.trident.netapp.io/v1o	
 kind: BackupRestore
@@ -57,6 +61,7 @@ spec:
 +
 For example:
 +
+[source,yaml]
 -------
 spec:    
   resourceFilter: 
@@ -72,6 +77,7 @@ spec:
 + 
 . After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
 +
+[source,console]
 -----
 kubectl apply -f trident-protect-backup-restore-cr.yaml
 -----
@@ -84,6 +90,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 * <APPVAULT_NAME>: The name of the AppVault where the backup contents are stored.
 * <BACKUP_PATH>: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
 +
+[source,console]
 -----
 kubectl get backups <BACKUP_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 -----
@@ -128,6 +135,8 @@ spec:
 -------
 +
 . After you populate the `trident-protect-backup-ipr-cr.yaml` file with the correct values, apply the CR:
++
+[source,console]
 ------
 kubectl apply -f trident-protect-backup-ipr-cr.yaml
 ------
@@ -141,6 +150,7 @@ You can restore data from a snapshot using a custom resource (CR) file either to
 * <APPVAULT_NAME>: The name of the AppVault where the snapshot contents are stored.
 * <SNAPSHOT_PATH>: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
 +
+[source,console]
 -----
 kubectl get snapshots <SNAPHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 -----
@@ -188,6 +198,7 @@ spec:
 +
 . After you populate the `trident-protect-snapshot-restore-cr.yaml` file with the correct values, apply the CR:
 +
+[source,console]
 -----
 kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 -----
@@ -200,6 +211,7 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 * <APPVAULT_NAME>: The name of the AppVault where the snapshot contents are stored.
 * <BACKUP_PATH>: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
 +
+[source,console]
 ------
 kubectl get snapshot <SNAPSHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 ------
@@ -242,6 +254,8 @@ labelSelectors: <SELECTORS>
 -------
 +
 . After you populate the `trident-protect-snapshot-ipr-cr.yaml` file with the correct values, apply the CR:
++
+[source,console]
 ------
 kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 ------

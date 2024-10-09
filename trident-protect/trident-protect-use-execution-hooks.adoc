@@ -41,8 +41,9 @@ You can create a custom execution hook for an app using Trident protect. You nee
 ** NamespaceName
 * *spec.matchingCriteria.value*: (_Optional_) A string or regular expression identifying the execution hook filter value.
 +
-*Example YAML*:
+Example YAML:
 +
+[source,yaml]
 -----
 apiVersion: protect.trident.netapp.io/v1
 kind: ExecHook
@@ -78,7 +79,8 @@ spec:
 -----
 + 
 . After you populate the CR file with the correct values, apply the CR:
-
++
+[source,console]
 ----- 
 kubectl apply -f trident-protect-hook.yaml
 -----

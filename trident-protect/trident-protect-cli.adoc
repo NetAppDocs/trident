@@ -12,12 +12,15 @@ summary: You can use the protectctl command to create and interact with Trident 
 :imagesdir: ../media/
 
 [.lead]
-You can use the protectctl command to create and interact with Trident Protect custom resources.
+You can use the Trident protect `protectctl` command line utility to create and interact with Trident Protect custom resources (CRs).
 
 == Installation
+Before using the command line utility, you need to install it.
+
+.Steps
 Get the protectctl binary via the ACS registry:
 ----
-docker login cr.astra.netapp.io -u ACCOUNT_ID –p API_TOKEN
+docker login cr.astra.netapp.io -u ACCOUNT_ID -p API_TOKEN
 docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
 docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
 
@@ -137,8 +140,8 @@ protectctl create vault gcp my-new-vault --bucket mybucket --project my-gcp-proj
 
 Use the following help command to get a list of supported providers and what arguments can be specified:
 ----
-protectctl create appvault –help
-protectctl create appvault azure –help
+protectctl create appvault -help
+protectctl create appvault azure -help
 ----
 
 Please see section link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples for provider-specific secrets.
@@ -151,7 +154,7 @@ protectctl create backup mybackup --appvault my-new-vault --app minio
 == Restore backup
 Restore backup using existing Backup CR:
 ----
-protectctl create backuprestore minio2 minio:minio2 –backup mybackup
+protectctl create backuprestore minio2 minio:minio2 -backup mybackup
 ----
 
 Restore backup without existing Backup CR, e.g. in a disaster recovery scenario (AppVault pointing to the bucket must exist):

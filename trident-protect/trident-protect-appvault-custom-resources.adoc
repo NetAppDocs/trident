@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-appvault-custom-resources.html
 keywords: trident. appvault, custom, protect, kubernetes
-summary: The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVaults are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication.
+summary: The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVaults are the declarative Kubernetes workflow representation of a storage bucket. 
 ---
 = AppVault custom resources
 :hardbreaks:
@@ -27,11 +27,16 @@ ProviderType can be one of the following:
 * storagegrid-s3
 
 === Google Cloud
-*Key generation example:*
+
+Key generation example:
+
+[source,console]
 ----
 kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.json> -n trident-protect
 ----
-*AppVault definition example:*
+
+AppVault definition example:
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
@@ -50,12 +55,16 @@ spec:
         name: gcp-trident-protect-src-bucket-secret
   providerType: gcp
 ----
+
 === Amazon S3
-*Key generation example:*
+Key generation example:
+[source,console]
 ----
 kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<accesskey id> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
-*AppVault definition example:*
+
+AppVault definition example:
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
@@ -77,13 +86,20 @@ spec:
         key: secretAccessKey
         name: generic-s3-trident-protect-src-bucket-secret
   providerType: aws
----- 
+----
+
 === Microsoft Azure
-*Key generation example:*
+
+Key generation example:
+
+[source,console]
 ----
 kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=<myAKSStorageAccount> --from-literal=azurestorageaccountkey=<storage key>
 ----
-*AppVault definition example:*
+
+AppVault definition example:
+
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault

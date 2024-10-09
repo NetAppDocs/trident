@@ -34,6 +34,7 @@ For example, an organization has a cluster administrator, a group of engineering
 === Step 1: Create a namespace to contain resources for each group
 Creating a namespace enables you to logically separate resources and better control who has access to those resources.
 
+.Steps
 . Create a namespace for the engineering group:
 +
 [source,console]
@@ -51,6 +52,7 @@ $ kubectl create ns marketing-ns
 === Step 2: Create new service accounts to interact with resources in each namespace
 Each new namespace you create comes with a default service account, but you should create a service account for each group of users so that you can further divide privileges between groups in the future if necessary. 
 
+.Steps
 . Create a service account for the engineering group:
 +
 [source,yaml]
@@ -77,6 +79,7 @@ metadata:
 === Step 3: Create a secret for each new service account
 A service account secret is used to authenticate with the service account, and can easily be deleted and recreated if compromised.
 
+.Steps
 . Create a secret for the engineering service account:
 +
 [source,yaml]
@@ -109,6 +112,7 @@ type: kubernetes.io/service-account-token
 === Step 4: Create a RoleBinding object to bind the ClusterRole object to each new service account
 A default ClusterRole object is created when you install Trident protect. You can bind this ClusterRole to the service account by creating and applying a RoleBinding object. 
 
+.Steps
 . Bind the ClusterRole to the engineering service account:
 +
 [source,yaml]
@@ -151,6 +155,7 @@ subjects:
 === Step 5: Test permissions
 Test that the permissions are correct.
 
+.Steps
 . Confirm that engineering users can access engineering resources:
 +
 [source,console]

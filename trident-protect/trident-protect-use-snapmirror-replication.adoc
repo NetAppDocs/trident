@@ -238,6 +238,8 @@ kubectl get amr -n trident-protect <relationship name> -o=jsonpath='{.status}' |
 
 Using Trident protect, you can fail over replicated applications to a destination cluster. This procedure stops the replication relationship and brings the app online on the destination cluster. This procedure does not stop the app on the source cluster if it was operational.
 
+.Steps
+
 . (_Optional_) Create execution hooks on the destination cluster if you need them to run on the failed over application. You can create these execution hooks ahead of time if needed.
 
 . Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of *spec.desiredState* to promoted.
@@ -266,6 +268,8 @@ The resync operation re-establishes the replication relationship. You can choose
 
 The process stops the app on the new destination cluster before re-establishing replication.
 
+.Steps
+
 . Create a snapshot of the source application.
 +
 . Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of spec.desiredState to established. 
@@ -283,6 +287,8 @@ kubectl apply -f trident-protect-relationship.yaml -n trident-protect
 
 === Reverse resync a failed over replication
 
+.Steps
+
 . Delete the AppMirrorRelationship CR on the original destination cluster.This causes the destination to become the source.If there are any protection schedules remaining on the new destination cluster, remove them.
 . Set up a replication relationship by applying the CR files you originally used to set up the relationship to the opposite clusters.
 . Ensure the AppVault CRs are ready on each cluster.
@@ -293,6 +299,8 @@ kubectl apply -f trident-protect-relationship.yaml -n trident-protect
 This is the planned operation to move the application to the destination storage backend while continuing to replicate back to the original source storage backend. Trident protect stops the source application and replicates the data to the destination before failing over to the destination app.
 
 In this situation, you are swapping the source and destination.
+
+.Steps
 
 . Disable the protection policy schedules for the source application.
 . Create a ShutdownSnapshot CR file:
@@ -364,12 +372,16 @@ This process starts from a relationship that has completed a failover to a desti
 * Resync the relationship.
 * Reverse the replication.
 
+.Steps
+
 . Perform the <<Resync a failed over replication>> steps
 . Perform the <<Reverse resync a failed over replication>> steps
 
 === Delete a replication relationship
 
 When you delete the application replication relationship, this results in two separate applications with no relationship between them.
+
+.Steps
 
 . Delete the AppMirrorRelationship CR:
 +

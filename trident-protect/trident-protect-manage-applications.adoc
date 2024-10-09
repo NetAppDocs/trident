@@ -15,19 +15,24 @@ summary: "You can make Trident protect aware of an application you want to manag
 You can make Trident protect aware of an application you want to manage by creating an application CR and an associated AppVault CR.
 
 == Create an AppVault CR
-You need to create an AppVault CR that will be used in data protection operations, and the AppVault CR needs to reside on the cluster where Trident protect is installed. The AppVault CR is specific to your environment; for examples of AppVault CRs, refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources.]
+You need to create an AppVault CR that will be used when performing data protection operations on the application, and the AppVault CR needs to reside on the cluster where Trident protect is installed. The AppVault CR is specific to your environment; for examples of AppVault CRs, refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources.]
 
-== Create application CRs
-You need to create an application CR for each application that you want to manage with Trident protect.
+== Create an application CR
+You need to create an application CR for each application that you want to manage with Trident protect. You can add an application for management by creating an application CR or by using the Trident protect CLI.
 
+[role="tabbed-block"]
+====
+.Add an application using a CR
+--
 . Create the destination application CR file:
 .. Create the custom resource (CR) file and name it (for example, `maria-app.yaml`).
 .. Configure the following attributes:
 * *metadata.name*: (_Required_) The name of the application custom resource. Note the name you choose because other CR files needed for protection operations refer to this value.
 * *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in.
 +
-*Example YAML*:
+Example YAML:
 +
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: Application
@@ -38,6 +43,20 @@ spec:
   includedNamespaces:
     labelSelector: {}
     namespace: maria
-CLI:
+----
+--
+.Add an application using the Trident protect CLI
+--
+. Create the application definition. For example
+[source,console]
+----
 protectctl create app maria --namespaces maria
 ----
+--
+
+====
+
+// end tabbed area
+
+
+

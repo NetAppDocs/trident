@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-use-execution-hooks.html
 keywords: trident, protect, execution hooks 
 summary: You can create a custom execution hook for an app using Trident protect. You need to have Owner, Admin, or Member permissions to create execution hooks.
 ---
-= Create an execution hook
+= Manage execution hooks
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,6 +12,29 @@ summary: You can create a custom execution hook for an app using Trident protect
 :imagesdir: ../media/
 
 [.lead]
+An execution hook is a custom action that you can configure to run in conjunction with a data protection operation of a managed app. For example, if you have a database app, you can use an execution hook to pause all database transactions before a snapshot, and resume transactions after the snapshot is complete. This ensures application-consistent snapshots.
+
+== Types of execution hooks
+Trident protect supports the following types of execution hooks, based on when they can be run:
+
+* Pre-snapshot
+* Post-snapshot
+* Pre-backup
+* Post-backup
+* Post-restore
+* Post-failover
+
+== Execution hook filters
+When you add or edit an execution hook for an application, you can add filters to the execution hook to manage which containers the hook will match. Filters are useful for applications that use the same container image on all containers, but might use each image for a different purpose (such as Elasticsearch). Filters allow you to create scenarios where execution hooks run on some but not necessarily all identical containers. If you create multiple filters for a single execution hook, they are combined with a logical AND operator. You can have up to 10 active filters per execution hook.
+
+Each filter you add to an execution hook uses a regular expression to match containers in your cluster. When a hook matches a container, the hook will run its associated script on that container. Regular expressions for filters use the Regular Expression 2 (RE2) syntax, which does not support creating a filter that excludes containers from the list of matches. For information on the syntax that Trident protect supports for regular expressions in execution hook filters, see https://github.com/google/re2/wiki/Syntax[Regular Expression 2 (RE2) syntax support^].
+
+NOTE: If you add a namespace filter to an execution hook that runs after a restore or clone operation and the restore or clone source and destination are in different namespaces, the namespace filter is only applied to the destination namespace.
+
+== Execution hook examples
+Visit the https://github.com/NetApp/Verda[NetApp Verda GitHub project] to download real execution hooks for popular apps such as Apache Cassandra and Elasticsearch. You can also see examples and get ideas for structuring your own custom execution hooks.
+
+== Create an execution hook
 You can create a custom execution hook for an app using Trident protect. You need to have Owner, Admin, or Member permissions to create execution hooks.
 
 . Create the custom resource (CR) file and name it `trident-protect-hook.yaml`.

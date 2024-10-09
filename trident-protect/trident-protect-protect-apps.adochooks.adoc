@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-protect-apps.html
 keywords: protect, snapshots, demand, configuration, cluster, appvault
 summary: Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 ---
-= Protect your data
+= Protect applications
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -26,6 +26,7 @@ You can create an on-demand snapshot at any time.
 ** `Retain`
 ** `Delete` (default)
 +
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
@@ -40,6 +41,7 @@ spec:
 +
 . After you populate the `trident-protect-snapshot-cr.yaml` file with the correct values, apply the CR:
 +
+[source,console]
 ----
 kubectl apply -f trident-protect-snapshot-cr.yaml
 ----
@@ -61,6 +63,7 @@ You can back up an app at any time.
 ** `Retain`
 * *Spec.snapshotRef*: (_Optional_): Name of the Snapshot to use as the source of the Backup. If not provided, a temporary Snapshot will be created and backed up.
 +
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: Backup
@@ -75,6 +78,7 @@ spec:
 +
 . After you populate the `trident-protect-backup-cr.yaml` file with the correct values, apply the CR:
 +
+[source,console]
 ----
 kubectl apply -f trident-protect-backup-cr.yaml
 ----
@@ -99,6 +103,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 * <HOUR_OF_DAY>: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
 * <MINUTE_OF_HOUR>: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
 +
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
@@ -121,6 +126,7 @@ spec:
 
 . After you populate the `trident-protect-schedule-cr.yaml` file with the correct values, apply the CR:
 +
+[source,console]
 ----
 kubectl apply -f trident-protect-schedule-cr.yaml
 ----
@@ -131,6 +137,7 @@ Delete the scheduled or on-demand snapshots that you no longer need.
 
 . Remove the snapshot CR associated with the snapshot:
 +
+[source,console]
 ----
 kubectl delete snapshot <snapshot_name> -n trident-protect
 ----
@@ -141,6 +148,7 @@ Delete the scheduled or on-demand backups that you no longer need.
 
 . Remove the backup CR associated with the backup:
 +
+[source,console]
 ----
 kubectl delete backup <backup_name> -n trident-protect
 ----

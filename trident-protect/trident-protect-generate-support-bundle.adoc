@@ -26,8 +26,9 @@ Trident protect enables administrators to generate bundles that include informat
 *** false (default)
 ** *spec.dataWindowStart*: (_Optional_) A date string in RFC 3339 format that specifies the date and time that the window of included data in the support bundle should begin. If not specified, defaults to 24 hours ago. The earliest window date you can specify is 7 days ago.
 +
-*Example YAML*:
+Example YAML:
 +
+[source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: AutoSupportBundle
@@ -40,6 +41,7 @@ spec:
 ----
 . After you populate the `astra-support-bundle.yaml` file with the correct values, apply the CR:
 +
+[source,console]
 ----
 kubectl apply -f trident-protect-support-bundle.yaml
 ----

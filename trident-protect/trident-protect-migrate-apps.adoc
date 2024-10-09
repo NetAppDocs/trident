@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-migrate-apps.html
 keywords: trident, protect, migrate, storage, restore, backup
 summary: You can restore your backup or snapshot data to a different cluster or storage class
 ---
-= Migrate your data
+= Migrate applications
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -51,6 +51,7 @@ You can migrate data from one storage class to a different storage class by rest
 
 For example (excluding the secrets from the restore):
 
+[source,yaml]
 -----
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore

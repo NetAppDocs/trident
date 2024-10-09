@@ -12,7 +12,7 @@ summary: You can use the protectctl command to create and interact with Trident 
 :imagesdir: ../media/
 
 [.lead]
-You can use the Trident protect `protectctl` command line utility to create and interact with Trident protect custom resources (CRs).
+You can use the Trident protect command line utility to create and interact with Trident protect custom resources (CRs).
 
 == Installation
 Before using the command line utility, you need to install it.
@@ -23,32 +23,49 @@ Before using the command line utility, you need to install it.
 [source,console]
 ----
 docker login cr.astra.netapp.io -u ACCOUNT_ID -p API_TOKEN
-docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
-docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
-
-# You can also run the container with no commands to get these instructions:
-docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
-# The default platform is linux/amd64, but two more are available:
-#     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
-#     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
 ----
-The protectctl binary should now be on your local machine. You can use the help function to get usage guidance:
++
+[source,console]
+----
+docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
+----
++
+[source,console]
+----
+docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
+----
+
+// You can also run the container with no commands to get these instructions:
+//docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
+// # The default platform is linux/amd64, but two more are available:
+// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
+// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
+
+. The protectctl binary should now be on your local machine. You can use the help function to get usage guidance:
++
+[source,console]
 ----
 ./protectctl help
 ----
-Or install it globally (elevated privilege may be required):
+
+. Or install it globally (elevated privilege may be required):
++
+[source,console]
 ----
 # Linux
 cp ./protectctl /usr/bin/
 # MacOS
 cp ./protectctl /usr/local/bin/
 ----
-If you install the binary globally, you can now use it from any directory:
+. If you install the binary globally, you can now use it from any directory:
 ----
 protectctl --help
 ----
 == Auto-complete
-To enable auto-complete, append such a line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
+
+.Steps
+
+. To enable auto-complete, append such a line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
 ----
 source <(protectctl completion zsh)
 ----
@@ -57,38 +74,50 @@ To use auto-complete in Bash, depending on your OS/distribution, you may have to
 See `protectctl completion --help` for other supported shells.
 
 == Configuration file
-Now that protectctl is installed, configure the trident-protect namespace:
+After you have installed the Trident protect CLI, you can configure it. 
+
+.Steps
+. Configure the trident-protect namespace:
++
+[source,console]
 ----
 mkdir -p ~/.trident-protect
+----
++
+[source,console]
+----
 echo 'namespace: trident-protect' > ~/.trident-protect/protectctl.yaml
 ----
-== Overview
-The protectctl command is structured similarly to kubectl and tridentctl, top-level basic command are the following verbs:
+
+== Basic usage of the Trident protect CLI
+The protectctl command syntax is similar to the Kubernetes `kubectl` and Trident `tridentctl` utilities. You can use the following top-level verbs:
+
 [cols="2,2a" options="header"]
 |===
-| Command
-| Description
+|Command
+|Description
 
-| `create`
-| create resource
+|`create`
+|Create a resource.
 
-| `delete`
-| delete one or more resources
+|`delete`
+|Delete one or more resources.
 
-| `get`
-| get one or more resources
-special command: `protectctl get all`
+|`get`
+|Get one or more resources. For example, `protectctl get all` gets all resources on the system. 
 
-| `wait` 
-| wait for a resource to be in a final state (e.g. Ready, Complete, Available, Failed or Removed)
+|`wait` 
+|Wait for a resource to be in its final state (Possible states are `Ready`, `Complete`, `Available`, `Failed` or `Removed`).
 |===
 
-The typical structure of a command is
+The typical structure of a command is:
+
+[source,console]
 ----
 protectctl <verb> <resource-type> [<name>]
 ----
 
-Some of the supported resource types are
+The following are the supported resource types:
 
 * application
 * appvault
@@ -100,20 +129,23 @@ Some of the supported resource types are
 * snapshotrestore
 * schedule
 
-These resource types correspond to the Trident protect custom resources and can be used to create these CRs. For example, to restore snapshots and backups, use the resource 
-`typessnapshotrestore`, `snapshotinplacerestore` , `backuprestore`, and `backupinplacerestore`.
+These resource types correspond to the Trident protect custom resources, and you can use them to create the corresponding CRs. For example, to restore snapshots and backups, use the resources 
+`snapshotrestore`, `snapshotinplacerestore`, `backuprestore`, and `backupinplacerestore`.
 
 To get a list of all applications use:
+[source,console]
 ----
 protectctl get application
 ----
 
 To get a list of all supported resources use:
+[source,console]
 ----
 protectctl get all
 ----
 
 To delete a resource use:
+[source,console]
 ----
 protectctl delete application mysql
 ----

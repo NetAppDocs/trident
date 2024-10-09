@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-restore-apps.html
 keywords: trident, protect, restore, data, backup
 summary: You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 ---
-= Restore your data
+= Restore applications
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -97,6 +97,7 @@ kubectl get backups <BACKUP_NAME> -n trident-protect -o jsonpath='{.status.appAr
 +
 For example:
 +
+[source,yaml]
 -------
 apiVersion: protect.trident.netapp.io/v1
 kind: BackupInplaceRestore
@@ -121,6 +122,7 @@ spec:
 +
 For example:
 +
+[source,yaml]
 -------
 spec:    
   resourceFilter: 
@@ -158,6 +160,7 @@ kubectl get snapshots <SNAPHOT_NAME> -n trident-protect -o jsonpath='{.status.ap
 * <SOURCE_NAMESPACE>: The source namespace of the restore operation.
 * <DESTINATION_NAMESPACE>: The destination namespace of the restore operation.
 +
+[source,yaml]
 -------
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
@@ -183,6 +186,7 @@ spec:
 +
 For example:
 +
+[source,yaml]
 -------
 spec:    
   resourceFilter: 
@@ -216,6 +220,7 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 kubectl get snapshot <SNAPSHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 ------
 +
+[source,yaml]
 -------
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotInplaceRestore
@@ -240,6 +245,7 @@ spec:
 +
 For example:
 +
+[source,yaml]
 -------
 spec:    
   resourceFilter: 

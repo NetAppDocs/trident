@@ -18,7 +18,9 @@ You can use the Trident protect `protectctl` command line utility to create and 
 Before using the command line utility, you need to install it.
 
 .Steps
-Get the protectctl binary via the ACS registry:
+. Download the Trident protect CLI binary using the ACS registry:
++
+[source,console]
 ----
 docker login cr.astra.netapp.io -u ACCOUNT_ID -p API_TOKEN
 docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
@@ -30,7 +32,7 @@ docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
 #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
 #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
 ----
-The protectctl binary should now be on your filesystem. You can use it directly:
+The protectctl binary should now be on your local machine. You can use the help function to get usage guidance:
 ----
 ./protectctl help
 ----
@@ -41,7 +43,7 @@ cp ./protectctl /usr/bin/
 # MacOS
 cp ./protectctl /usr/local/bin/
 ----
-You can now use it from anywhere:
+If you install the binary globally, you can now use it from any directory:
 ----
 protectctl --help
 ----

@@ -160,3 +160,15 @@ Delete the scheduled or on-demand backups that you no longer need.
 ----
 kubectl delete backup <backup_name> -n trident-protect
 ----
+
+== Check the status of a backup operation
+You can use the command line to check the status of a backup operation that is in progress, has completed, or has failed.
+
+.Steps
+
+. Use the following command to retrieve status of the backup operation, replacing values in brackes with information from your environment:
++
+[source,console]
+------
+kubectl get backup -n <namespace_name> <my_backup_cr_name>
+------

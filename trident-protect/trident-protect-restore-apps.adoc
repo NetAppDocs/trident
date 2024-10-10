@@ -273,19 +273,14 @@ labelSelectors: <SELECTORS>
 kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 ------
 
+== Check the status of a restore operation
+You can use the command line to check the status of a restore operation that is in progress, has completed, or has failed.
 
+.Steps
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+. Use the following command to retrieve status of the restore operation, replacing values in brackes with information from your environment:
++
+[source,console]
+------
+kubectl get backuprestore -n <namespace_name> <my_restore_cr_name>
+------

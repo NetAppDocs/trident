@@ -51,13 +51,13 @@ spec:
 kubectl apply -f trident-protect-snapshot-cr.yaml
 ----
 --
-.Create a snapshot using the Trident protect CLI
+.Create a snapshot using the CLI
 --
-. Create the backup. For example:
+. Create the snapshot. For example:
 +
 [source,console]
 ----
-tridentctl protect create backup mybackup --appvault my-new-vault --app minio
+tridentctl protect create snapshot mysnapshot --appvault my-new-appvault --app minio
 ----
 --
 ====
@@ -66,8 +66,11 @@ tridentctl protect create backup mybackup --appvault my-new-vault --app minio
 == Create an on-demand backup
 You can back up an app at any time.
 
-.Steps
-
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create a backup using a CR
+--
 . Create the custom resource (CR) file and name it `trident-protect-backup-cr.yaml`. 
 . In the file you created, configure the following attributes:
 
@@ -80,7 +83,7 @@ You can back up an app at any time.
 * *spec.reclaimPolicy*: (_Optional_) Defines what happens to a backup when released from its claim. Possible values:
 ** `Delete` (default)
 ** `Retain`
-* *Spec.snapshotRef*: (_Optional_): Name of the Snapshot to use as the source of the Backup. If not provided, a temporary Snapshot will be created and backed up.
+* *Spec.snapshotRef*: (_Optional_): Name of the snapshot to use as the source of the backup. If not provided, a temporary snapshot will be created and backed up.
 +
 [source,yaml]
 ----
@@ -101,11 +104,29 @@ spec:
 ----
 kubectl apply -f trident-protect-backup-cr.yaml
 ----
+--
+.Create a backup using the CLI
+--
+. Create the backup. For example:
++
+[source,console]
+----
+tridentctl protect create backup mybackup --appvault my-new-vault --app minio
+----
+--
+====
+// end tabbed block
+
+
 
 == Create a data protection schedule
 A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
 
-.Steps
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create a protection schedule using a CR
+--
 . Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. Update the values in brackets <> to match your Astra environment, cluster configuration, and data protection needs:
 
 * <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
@@ -150,6 +171,18 @@ spec:
 ----
 kubectl apply -f trident-protect-schedule-cr.yaml
 ----
+--
+.Create a protection schedule using the CLI
+--
+. Create the protection schedule. For example:
++
+[source,console]
+----
+tridentctl protect create schedule myschedule --appvault my-new-vault --app minio
+----
+--
+====
+// end tabbed block
 
 == Delete a snapshot
 

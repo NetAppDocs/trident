@@ -12,7 +12,7 @@ summary: You can restore your backup or snapshot data to a different cluster or 
 :imagesdir: ../media/
 
 [.lead]
-You can restore your backup or snapshot data to a different cluster or storage class.
+You can migrate your applications between clusters or storage classes by restoring your backup or snapshot data to a different cluster or storage class.
 
 == Backup and restore operations
 
@@ -20,7 +20,7 @@ To perform backup and restore operations for the following scenarios, you can au
 
 === Clone to same cluster
 
-To clone to the same cluster, create a snapshot or backup and restore the data to the same cluster.
+To clone an application to the same cluster, create a snapshot or backup and restore the data to the same cluster.
 
 .Steps
 
@@ -34,7 +34,7 @@ To clone to the same cluster, create a snapshot or backup and restore the data t
 
 === Clone to different cluster
 
-To clone to a different cluster (perform a cross-cluster clone), create a snapshot or backup and restore the data to a different cluster. Make sure that Trident protect is installed on the destination cluster.
+To clone an application to a different cluster (perform a cross-cluster clone), create a snapshot or backup and restore the data to a different cluster. Make sure that Trident protect is installed on the destination cluster.
 
 .Steps
 
@@ -51,7 +51,7 @@ To clone to a different cluster (perform a cross-cluster clone), create a snapsh
 
 You can migrate data from one storage class to a different storage class by restoring a snapshot to the different destination storage class.
 
-For example (excluding the secrets from the restore):
+For example (excluding the secrets from the restore CR):
 
 [source,yaml]
 ----

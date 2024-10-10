@@ -66,7 +66,7 @@ spec:
 --
 [source,console]
 ----
-protectctl create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
+tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
 ----
 --
 ====
@@ -118,7 +118,7 @@ spec:
 --
 [source,console]
 ----
-protectctl create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>
+tridentctl protect create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>
 ----
 --
 ====
@@ -165,7 +165,7 @@ spec:
 --
 [source,console]
 ----
-protectctl create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
 ----
 --
 ====

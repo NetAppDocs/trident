@@ -12,13 +12,13 @@ summary: You can use the protectctl command to create and interact with Trident 
 :imagesdir: ../media/
 
 [.lead]
-You can use the Trident protect command line utility to create and interact with Trident protect custom resources (CRs).
+You can use the Trident protect command line plugin to create and interact with Trident protect custom resources (CRs). The plugin is an extension of the Trident `tridentctl` utility.
 
 == Installation
 Before using the command line utility, you need to install it.
 
 .Steps
-. Download the Trident protect CLI binary using the ACS registry:
+. Download the Trident protect CLI plugin using the ACS registry:
 +
 [source,console]
 ----
@@ -41,11 +41,11 @@ docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.
 // #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
 // #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
 
-. The protectctl binary should now be on your local machine. You can use the help function to get usage guidance:
+. The protectctl plugin should now be on your local machine. You can use the help function to get usage guidance:
 +
 [source,console]
 ----
-./protectctl help
+./tridentctl protect help
 ----
 
 . Or install it globally (elevated privilege may be required):
@@ -59,7 +59,7 @@ cp ./protectctl /usr/local/bin/
 ----
 . If you install the binary globally, you can now use it from any directory:
 ----
-protectctl --help
+tridentctl protect --help
 ----
 == Auto-complete
 
@@ -67,14 +67,14 @@ protectctl --help
 
 . To enable auto-complete, append such a line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
 ----
-source <(protectctl completion zsh)
+source <(tridentctl protect completion zsh)
 ----
-To use auto-complete in Bash, depending on your OS/distribution, you may have to first install a bash-completion package and then also source the bash completion script, e.g. `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc`.
+To use auto-complete in Bash, depending on your operating system, you might need to first install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
 
-See `protectctl completion --help` for other supported shells.
+See `tridentctl protect completion --help` for other supported shells.
 
 == Configuration file
-After you have installed the Trident protect CLI, you can configure it. 
+After you have installed the Trident protect CLI plugin, you can configure it. 
 
 .Steps
 . Configure the trident-protect namespace:
@@ -90,7 +90,7 @@ echo 'namespace: trident-protect' > ~/.trident-protect/protectctl.yaml
 ----
 
 == Basic usage of the Trident protect CLI
-The protectctl command syntax is similar to the Kubernetes `kubectl` and Trident `tridentctl` utilities. You can use the following top-level verbs:
+The plugin command syntax is similar to the Kubernetes `kubectl` utility. You can use the following top-level verbs:
 
 [cols="2,2a" options="header"]
 |===
@@ -104,7 +104,7 @@ The protectctl command syntax is similar to the Kubernetes `kubectl` and Trident
 |Delete one or more resources.
 
 |`get`
-|Get one or more resources. For example, `protectctl get all` gets all resources on the system. 
+|Get one or more resources. For example, `tridentctl protect get all` gets all resources on the system. 
 
 |`wait` 
 |Wait for a resource to be in its final state (Possible states are `Ready`, `Complete`, `Available`, `Failed` or `Removed`).
@@ -114,7 +114,7 @@ The typical structure of a command is:
 
 [source,console]
 ----
-protectctl <verb> <resource-type> [<name>]
+tridentctl protect <verb> <resource-type> [<name>]
 ----
 
 The following are the supported resource types:
@@ -135,31 +135,31 @@ These resource types correspond to the Trident protect custom resources, and you
 To get a list of all applications use:
 [source,console]
 ----
-protectctl get application
+tridentctl protect get application
 ----
 
 To get a list of all supported resources use:
 [source,console]
 ----
-protectctl get all
+tridentctl protect get all
 ----
 
 To delete a resource use:
 [source,console]
 ----
-protectctl delete application mysql
+tridentctl protect delete application mysql
 ----
 
 == Create application
 
 *Simple application:*
 ----
-protectctl create app minio --namespaces namespace1,namespace2
+tridentctl protect create app minio --namespaces namespace1,namespace2
 ----
 
 *Application with namespace label selector and cluster-scoped resources:*
 ----
-protectctl create app minio \
+tridentctl protect create app minio \
 --namespaces 'namespace1(key=value1),namespace2(environment in (production, qa))' 
 --csr 'rbac.authorization.k8s.io/v1/ClusterRole(key=value)'
 ----
@@ -169,31 +169,31 @@ protectctl create app minio \
 *GCP example:*
 ----
 kubectl create secret generic gcp-creds --from-file=./gcp_credentials.json  -n trident-protect
-protectctl create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
+tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
 ----
 
 Use the following help command to get a list of supported providers and what arguments can be specified:
 ----
-protectctl create appvault -help
-protectctl create appvault azure -help
+tridentctl protect create appvault -help
+tridentctl protect create appvault azure -help
 ----
 
 Please see section link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples for provider-specific secrets.
 
 == Create backup
 ----
-protectctl create backup mybackup --appvault my-new-vault --app minio
+tridentctl protect create backup mybackup --appvault my-new-vault --app minio
 ----
 
 == Restore backup
 Restore backup using existing Backup CR:
 ----
-protectctl create backuprestore minio2 minio:minio2 -backup mybackup
+tridentctl protect create backuprestore minio2 minio:minio2 -backup mybackup
 ----
 
 Restore backup without existing Backup CR, e.g. in a disaster recovery scenario (AppVault pointing to the bucket must exist):
 ----
-protectctl create backuprestore minio2 minio:minio2 --path minio_c22fe644-2606-4630-93ab-6319e1640b18/backups/mybackup_42e753bd-47ec-4f92-9282-bd65910ac064 --appvault  my-new-vault 
+tridentctl protect create backuprestore minio2 minio:minio2 --path minio_c22fe644-2606-4630-93ab-6319e1640b18/backups/mybackup_42e753bd-47ec-4f92-9282-bd65910ac064 --appvault  my-new-vault 
 ----
 
 [NOTE]
@@ -203,7 +203,7 @@ The value for the `--path` parameter can be found in the backup CR field `appArc
 
 Restoring a backup (in-place) with a resource filter would look like this:
 ----
-protectctl create backupinplacerestore restore1 --backup mybackup --resource-filter-include '[{"Kind":"PersistentVolumeClaim"}]'
+tridentctl protect create backupinplacerestore restore1 --backup mybackup --resource-filter-include '[{"Kind":"PersistentVolumeClaim"}]'
 ----
 
 The resource filter can be specified either as -include or -exclude filter, the argument is a list of resource matchers in JSON format. A full example of what a single resource matcher can look like:
@@ -220,7 +220,7 @@ For normal restore (not in-place) a storage class mapping can be specified as a 
 
 To see the content of an AppVault:
 ----
-protectctl get appvaultcontent gcp-vault --show-resources all
+tridentctl protect get appvaultcontent gcp-vault --show-resources all
 ----
 
 *Example output*:

@@ -282,5 +282,5 @@ You can use the command line to check the status of a restore operation that is 
 +
 [source,console]
 ------
-kubectl get backuprestore -n <namespace_name> <my_restore_cr_name>
+kubectl get backuprestore -n <namespace_name> <my_restore_cr_name> -o jsonpath='{.status}'
 ------

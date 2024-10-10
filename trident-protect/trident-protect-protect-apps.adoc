@@ -17,7 +17,11 @@ Protect all apps by taking snapshots and backups using an automated protection p
 == Create an on-demand snapshot
 You can create an on-demand snapshot at any time.
 
-.Steps
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create a snapshot using a CR
+--
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
 
 * <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
@@ -46,6 +50,18 @@ spec:
 ----
 kubectl apply -f trident-protect-snapshot-cr.yaml
 ----
+--
+.Create a snapshot using the Trident protect CLI
+--
+. Create the backup. For example:
++
+[source,console]
+----
+tridentctl protect create backup mybackup --appvault my-new-vault --app minio
+----
+--
+====
+// end tabbed block
 
 == Create an on-demand backup
 You can back up an app at any time.
@@ -170,5 +186,5 @@ You can use the command line to check the status of a backup operation that is i
 +
 [source,console]
 ------
-kubectl get backup -n <namespace_name> <my_backup_cr_name>
+kubectl get backup -n <namespace_name> <my_backup_cr_name> -o jsonpath='{.status}'
 ------

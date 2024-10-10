@@ -37,7 +37,7 @@ Review link:../trident-get-started/kubernetes-deploy.html[the installation overv
 
 In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you-deploy[deployment prerequisites] you need link:https://v3.helm.sh/[Helm version 3^].
 
-NOTE: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
+IMPORTANT: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
 
 .Steps
 
@@ -61,9 +61,8 @@ helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set i
 
 .Images in different registries
 --
-You must append `sig-storage` to the `imageRegistry` to use different registry locations.
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:24.06.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:24.06 --set tridentImage=<your-registry>/netapp/trident:24.06.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:24.06.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:24.06 --set tridentImage=<your-registry>/trident:24.06.0 --create-namespace --namespace <trident-namespace>
 ----
 --
 ====

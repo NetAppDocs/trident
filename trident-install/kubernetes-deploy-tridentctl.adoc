@@ -91,9 +91,8 @@ Install Astra Trident in the desired namespace by executing the `tridentctl inst
 
 .Images in different registries
 --
-You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----
-./tridentctl install -n trident --image-registry <your-registry>/sig-storage --autosupport-image <your-registry>/netapp/trident-autosupport:24.06 --trident-image <your-registry>/netapp/trident:24.06.0
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:24.06 --trident-image <your-registry>/trident:24.06.0
 ----
 --
 

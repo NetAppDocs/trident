@@ -141,11 +141,10 @@ tridentImage: "<your-registry>/trident:24.06.0"
 
 .Images in different registries
 --
-You must append `sig-storage` to the `imageRegistry` to use different registry locations. 
 ----
-imageRegistry: "<your-registry>/sig-storage"
-autosupportImage: "<your-registry>/netapp/trident-autosupport:24.06"
-tridentImage: "<your-registry>/netapp/trident:24.06.0"
+imageRegistry: "<your-registry>"
+autosupportImage: "<your-registry>/trident-autosupport:24.06"
+tridentImage: "<your-registry>/trident:24.06.0"
 ----
 --
 ====
@@ -168,28 +167,28 @@ API Version: trident.netapp.io/v1
 Kind:        TridentOrchestrator
 ...
 Spec:
-  Autosupport Image:  <your-registry>/netapp/trident-autosupport:24.06
+  Autosupport Image:  <your-registry>/trident-autosupport:24.06
   Debug:              true
-  Image Registry:     <your-registry>/sig-storage
+  Image Registry:     <your-registry>
   Namespace:          trident
-  Trident Image:      <your-registry>/netapp/trident:24.06.0
+  Trident Image:      <your-registry>/trident:24.06.0
 Status:
   Current Installation Params:
     IPv6:                       false
     Autosupport Hostname:      
-    Autosupport Image:          <your-registry>/netapp/trident-autosupport:24.06
+    Autosupport Image:          <your-registry>/trident-autosupport:24.06
     Autosupport Proxy:         
     Autosupport Serial Number: 
     Debug:                      true
     Http Request Timeout:       90s
     Image Pull Secrets:
-    Image Registry:       <your-registry>/sig-storage
+    Image Registry:       <your-registry>
     k8sTimeout:           30
     Kubelet Dir:          /var/lib/kubelet
     Log Format:           text
     Probe Port:           17546
     Silence Autosupport:  false
-    Trident Image:        <your-registry>/netapp/trident:24.06.0
+    Trident Image:        <your-registry>/trident:24.06.0
   Message:                Trident installed
   Namespace:              trident
   Status:                 Installed

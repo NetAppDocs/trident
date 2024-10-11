@@ -14,6 +14,13 @@ summary: You can use the protectctl command to create and interact with Trident 
 [.lead]
 You can use the Trident protect command line plugin to create and interact with Trident protect custom resources (CRs). The plugin is an extension of the Trident `tridentctl` utility.
 
+// You can also run the container with no commands to get these instructions:
+//docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
+// # The default platform is linux/amd64, but two more are available:
+// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
+// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
+
+
 == Installation
 Before using the command line utility, you need to install it.
 
@@ -34,12 +41,6 @@ docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
 ----
 docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
 ----
-
-// You can also run the container with no commands to get these instructions:
-//docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
-// # The default platform is linux/amd64, but two more are available:
-// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
-// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
 
 . The protectctl plugin should now be on your local machine. You can use the help function to get usage guidance:
 +

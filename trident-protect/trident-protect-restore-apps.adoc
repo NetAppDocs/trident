@@ -21,7 +21,7 @@ When you restore a backup to a different namespace using a BackupRestore CR, Tri
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Do the thing using a CR
+.Restore the backup using a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
 +
@@ -86,13 +86,13 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 -----
 
 --
-.Do the thing using the CLI
+.Restore the backup using the CLI
 --
 . Restore the backup to a different namespace:
 +
 [source,console]
 -----
-tridentctl protect create backuprestore
+tridentctl protect create backuprestore minio2 minio:minio2 -backup <backup_name>
 -----
 --
 ====
@@ -105,7 +105,7 @@ tridentctl protect create backuprestore
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Do the thing using a CR
+.Restore the backup using a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-backup-ipr-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 +
@@ -167,7 +167,7 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 ------
 
 --
-.Do the thing using the CLI
+.Restore the backup using the CLI
 --
 . Restore the backup to the original namespace:
 +
@@ -188,7 +188,7 @@ You can restore data from a snapshot using a custom resource (CR) file either to
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Do the thing using a CR
+.Restore the snapshot using a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 +
@@ -253,7 +253,7 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 
 
 --
-.Do the thing using the CLI
+.Restore the snapshot using the CLI
 --
 . Restore the snapshot to a different namespace:
 +
@@ -271,7 +271,7 @@ tridentctl protect create snapshotrestore
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Do the thing using a CR
+.Restore the snapshot using a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-ipr-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 
@@ -331,7 +331,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 ------
 
 --
-.Do the thing using the CLI
+.Restore the snapshot using the CLI
 --
 
 . Restore the snapshot to the original namespace:

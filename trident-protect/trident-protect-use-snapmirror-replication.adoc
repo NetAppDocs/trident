@@ -186,6 +186,12 @@ spec:
 kubectl apply -f trident-protect-app-destination.yaml -n trident-protect
 ----
 . Create an AppMirrorRelationship CR file:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Manually create the AppMirrorRelationship CR file
+--
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-relationship.yaml`).
 .. Configure the following attributes:
 ** *metadata.name:* (Required) The name of the custom resource.
@@ -227,6 +233,22 @@ spec:
 ----
 kubectl apply -f trident-protect-relationship.yaml -n trident-protect
 ----
+
+--
+.Create the AppMirrorRelationship CR file using the CLI
+--
+. Create the AppMirrorRelationship CR file:
++
+[source,console]
+----
+tridentctl protect create appmirrorelationship
+----
+--
+====
+// end tabbed block
+
+
+
 . (_Optional_) Check the state and status of the replication relationship:
 +
 [source,console]

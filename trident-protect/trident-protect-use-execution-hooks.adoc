@@ -37,8 +37,11 @@ Visit the https://github.com/NetApp/Verda[NetApp Verda GitHub project] to downlo
 == Create an execution hook
 You can create a custom execution hook for an app using Trident protect. You need to have Owner, Admin, or Member permissions to create execution hooks.
 
-.Steps
-
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Do the thing using a CR
+--
 . Create the custom resource (CR) file and name it `trident-protect-hook.yaml`.
 +
 . Configure the following attributes to match your Trident protect environment and cluster configuration:
@@ -109,5 +112,20 @@ spec:
 ----- 
 kubectl apply -f trident-protect-hook.yaml
 -----
+
+--
+.Do the thing using the CLI
+--
+. Create the execution hook:
++
+[source,console]
+----- 
+tridentctl protect create exechook
+-----
+--
+====
+// end tabbed block
+
+
 
 

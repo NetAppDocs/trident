@@ -17,17 +17,17 @@ You might need to remove Trident protect components if you are upgrading from a 
 To remove Trident protect, perform the following steps.
 
 .Steps
-. Remove Trident protect:
-+
-[source,console]
-----
-helm uninstall -n trident-protect trident-protect
-----
 . Remove the Trident protect CR files:
 +
 [source,console]
 ----
 helm uninstall trident-protect-crds
+----
+. Remove Trident protect:
++
+[source,console]
+----
+helm uninstall -n trident-protect trident-protect
 ----
 . Remove the Trident protect namespace:
 +

@@ -196,7 +196,7 @@ kubectl apply -f trident-protect-app-destination.yaml -n trident-protect
 .. Configure the following attributes:
 ** *metadata.name:* (Required) The name of the custom resource.
 ** *spec.destinationAppVaultRef*: (_Required_) This value must match the name of the AppVault for the destination application on the destination cluster.
-** *spec.destinationApplicationRef*: (_Required_) This value must match the name of the destination application CR file.
+//** *spec.destinationApplicationRef*: (_Required_) This value must match the name of the destination application CR file.
 ** *spec.namespaceMapping*: (_Required_) The destination and source namespaces must match the application namespace defined in the respective application CR.
 ** *spec.sourceAppVaultRef*: (_Required_) This value must match the name of the AppVault for the source application.
 ** *spec.sourceApplicationName*: (_Required_) This value must match the name of the source application you defined in the source application CR.
@@ -215,7 +215,6 @@ metadata:
 spec:
   desiredState: established
   destinationAppVaultRef: generic-s3-trident-protect-dst-bucket-8fe0b902-f369-4317-93d1-ad7f2edc02b5
-  destinationApplicationRef: maria-28a7ebaa-bc0f-4692-b2fa-3588f44ffb53
   namespaceMapping:
     - destination: maria
       source: maria

@@ -53,11 +53,11 @@ kubectl apply -f trident-protect-support-bundle.yaml
 --
 .Create a support bundle using the CLI
 --
-. Create the support bundle:
+. Create the support bundle, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----
-tridentctl protect create autosupportbundle
+tridentctl protect create autosupportbundle <my_bundle_name> 
 ----
 --
 ====

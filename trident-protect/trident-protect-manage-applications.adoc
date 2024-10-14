@@ -48,11 +48,11 @@ spec:
 --
 .Add an application using the Trident protect CLI
 --
-. Create the application definition. For example:
+. Create the application definition, replacing values in brackets with information from your environment. You can include namespaces and resources in the application definition using comma-separated lists with the arguments shown in the following example:
 +
 [source,console]
 ----
-tridentctl protect create app maria --namespaces maria
+tridentctl protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include>
 ----
 --
 

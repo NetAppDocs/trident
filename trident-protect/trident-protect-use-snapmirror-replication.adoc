@@ -296,8 +296,11 @@ This is the planned operation to move the application to the destination storage
 
 In this situation, you are swapping the source and destination.
 
-.Steps
-
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create a shutdown snapshot using a CR
+--
 . Disable the protection policy schedules for the source application.
 . Create a ShutdownSnapshot CR file:
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-shutdownsnapshot.yaml`).
@@ -326,6 +329,22 @@ spec:
 ----
 kubectl apply -f trident-protect-shutdownsnapshot.yaml -n trident-protect
 ----
+
+--
+.Create a shutdown snapshot using the CLI
+--
+
+. Create the shutdown snapshot, replacing values in brackets with information from your environment. For example:
++
+[source,console]
+----
+tridentctl protect create shutdownsnapshot <myshutdownsnapshot> --appvault <my-vault> --app <app_to_snapshot>
+----
+--
+====
+// end tabbed block
+
+
 . After the snapshot completes, get the status of the snapshot:
 +
 [source,console]
@@ -375,7 +394,7 @@ This process starts from a relationship that has completed a failover to a desti
 
 === Delete a replication relationship
 
-When you delete the application replication relationship, this results in two separate applications with no relationship between them.
+You can delete a replication relationship at any time. When you delete the application replication relationship, it results in two separate applications with no relationship between them.
 
 .Steps
 

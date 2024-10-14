@@ -88,11 +88,11 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 --
 .Restore the backup using the CLI
 --
-. Restore the backup to a different namespace:
+. Restore the backup to a different namespace, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 -----
-tridentctl protect create backuprestore minio2 minio:minio2 -backup <backup_name>
+tridentctl protect create backuprestore <my_restore_name> minio:minio2 -backup <backup_to_restore>
 -----
 --
 ====

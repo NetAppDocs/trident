@@ -159,32 +159,7 @@ kubectl apply -f trident-protect-appvault-primary-destination.yaml -n trident-pr
 ----
 kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n trident-protect
 ----
-. Create the destination application CR file:
-.. Create the custom resource (CR) file and name it (for example, `trident-protect-app-destination.yaml`).
-.. Configure the following attributes:
-** *metadata.name*: (_Required_) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
-** *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in.
-+
-Example YAML:
-+
-[source,yaml]
-----
-apiVersion: protect.trident.netapp.io/v1
-kind: Application
-metadata:
-  name: maria-28a7ebaa-bc0f-4692-b2fa-3588f44ffb53
-  namespace: trident-protect
-spec:
-  includedNamespaces:
-    labelSelector: {}
-    namespace: maria
-----
-.. After you populate the `trident-protect-app-destination.yaml` file with the correct values, apply the CR:
-+
-[source,console]
-----
-kubectl apply -f trident-protect-app-destination.yaml -n trident-protect
-----
+
 . Create an AppMirrorRelationship CR file:
 
 // begin tabbed block
@@ -410,3 +385,33 @@ When you delete the application replication relationship, this results in two se
 ----
 kubectl delete -f trident-protect-relationship.yaml -n trident-protect
 ----
+
+
+////
+. Create the destination application CR file:
+.. Create the custom resource (CR) file and name it (for example, `trident-protect-app-destination.yaml`).
+.. Configure the following attributes:
+** *metadata.name*: (_Required_) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
+** *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in.
++
+Example YAML:
++
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Application
+metadata:
+  name: maria-28a7ebaa-bc0f-4692-b2fa-3588f44ffb53
+  namespace: trident-protect
+spec:
+  includedNamespaces:
+    labelSelector: {}
+    namespace: maria
+----
+.. After you populate the `trident-protect-app-destination.yaml` file with the correct values, apply the CR:
++
+[source,console]
+----
+kubectl apply -f trident-protect-app-destination.yaml -n trident-protect
+----
+////

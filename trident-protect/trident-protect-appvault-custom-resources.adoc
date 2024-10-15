@@ -170,3 +170,37 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 --
 ====
 // end tabbed block
+
+== Use the AppVault browser to view AppVault information
+You can use the Trident protect CLI plugin to view information about AppVault objects that have been created on the cluster.
+
+.Steps
+
+. View the contents of an AppVault object:
++
+[source,console]
+----
+tridentctl protect get appvaultcontent gcp-vault --show-resources all
+----
++
+*Example output*:
++
+----
++-------------+-------+----------+-----------------------------+---------------------------+
+|   CLUSTER   |  APP  |   TYPE   |            NAME             |         TIMESTAMP         |
++-------------+-------+----------+-----------------------------+---------------------------+
+|             | mysql | snapshot | mysnap                      | 2024-08-09 21:02:11 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815180300 | 2024-08-15 18:03:06 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815190300 | 2024-08-15 19:03:06 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815200300 | 2024-08-15 20:03:06 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815180300 | 2024-08-15 18:04:25 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815190300 | 2024-08-15 19:03:30 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815200300 | 2024-08-15 20:04:21 (UTC) |
+| production1 | mysql | backup   | mybackup5                   | 2024-08-09 22:25:13 (UTC) |
+|             | mysql | backup   | mybackup                    | 2024-08-09 21:02:52 (UTC) |
++-------------+-------+----------+-----------------------------+---------------------------+ 
+----
+
+. (Optional) To see the AppVaultPath for each resource, use the flag `--show-paths`.
++
+The cluster name in the first column of the table is only available if a cluster name was specified in the Trident protect helm installation. For example: `--set clusterName=production1`. 

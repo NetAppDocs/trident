@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-cli.html
 keywords: trident, protect, command line utility, cli, netapp, custom, resources
 summary: You can use the protectctl command to create and interact with Trident protect custom resources.
 ---
-= Install and configure the Trident protect CLI
+= Install and configure the Trident protect CLI plugin
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -14,15 +14,8 @@ summary: You can use the protectctl command to create and interact with Trident 
 [.lead]
 You can use the Trident protect command line plugin to create and interact with Trident protect custom resources (CRs). The plugin is an extension of the Trident `tridentctl` utility.
 
-// You can also run the container with no commands to get these instructions:
-//docker run --rm cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
-// # The default platform is linux/amd64, but two more are available:
-// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-linuxarm64
-// #     cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1-darwinarm64
-
-
-== Installation
-Before using the command line utility, you need to install it.
+== Install the Trident protect CLI plugin
+Before using the command line utility, you need to install it on the machine you use to access your cluster.
 
 .Steps
 . Download the Trident protect CLI plugin using the ACS registry:
@@ -36,20 +29,13 @@ docker login cr.astra.netapp.io -u ACCOUNT_ID -p API_TOKEN
 ----
 docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
 ----
+. Install the plugin:
 +
 [source,console]
 ----
 docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
 ----
-
-. The protectctl plugin should now be on your local machine. You can use the help function to get usage guidance:
-+
-[source,console]
-----
-./tridentctl protect help
-----
-
-. Or install it globally (elevated privilege may be required):
+. (Optional) To install the plugin globally, use the following commands (elevated privilege may be required):
 +
 [source,console]
 ----
@@ -58,23 +44,19 @@ cp ./protectctl /usr/bin/
 # MacOS
 cp ./protectctl /usr/local/bin/
 ----
-. If you install the binary globally, you can now use it from any directory:
-----
-tridentctl protect --help
-----
-== Auto-complete
 
-.Steps
+== View Trident CLI plugin help
+You can use the built-in plugin help features to get detailed help on the capabilities of the plugin:
 
-. To enable auto-complete, append such a line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
+.Steps 
+. Use the help function to view usage guidance:
++
+[source,console]
 ----
-source <(tridentctl protect completion zsh)
+./tridentctl protect help
 ----
-To use auto-complete in Bash, depending on your operating system, you might need to first install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
 
-See `tridentctl protect completion --help` for other supported shells.
-
-== Configuration file
+== Configure the Trident CLI plugin
 After you have installed the Trident protect CLI plugin, you can configure it. 
 
 .Steps
@@ -84,11 +66,19 @@ After you have installed the Trident protect CLI plugin, you can configure it.
 ----
 mkdir -p ~/.trident-protect
 ----
+
+. To enable auto-completion, append the following line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
 +
 [source,console]
 ----
-echo 'namespace: trident-protect' > ~/.trident-protect/protectctl.yaml
+source <(tridentctl protect completion zsh)>
 ----
+To use auto-completion in the Bash shell you might need to first install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
+
+Use the `tridentctl protect completion --help` command for more information.
+
+////
+
 
 == Basic usage of the Trident protect CLI
 The plugin command syntax is similar to the Kubernetes `kubectl` utility. You can use the following top-level verbs:
@@ -217,29 +207,4 @@ For normal restore (not in-place) a storage class mapping can be specified as a 
 --storageclass-mapping source-class1:target-class1,source-class2:target-class2
 ----
 
-== AppVault browser
-
-To see the content of an AppVault:
-----
-tridentctl protect get appvaultcontent gcp-vault --show-resources all
-----
-
-*Example output*:
-----
-+-------------+-------+----------+-----------------------------+---------------------------+
-|   CLUSTER   |  APP  |   TYPE   |            NAME             |         TIMESTAMP         |
-+-------------+-------+----------+-----------------------------+---------------------------+
-|             | mysql | snapshot | mysnap                      | 2024-08-09 21:02:11 (UTC) |
-| production1 | mysql | snapshot | hourly-e7db6-20240815180300 | 2024-08-15 18:03:06 (UTC) |
-| production1 | mysql | snapshot | hourly-e7db6-20240815190300 | 2024-08-15 19:03:06 (UTC) |
-| production1 | mysql | snapshot | hourly-e7db6-20240815200300 | 2024-08-15 20:03:06 (UTC) |
-| production1 | mysql | backup   | hourly-e7db6-20240815180300 | 2024-08-15 18:04:25 (UTC) |
-| production1 | mysql | backup   | hourly-e7db6-20240815190300 | 2024-08-15 19:03:30 (UTC) |
-| production1 | mysql | backup   | hourly-e7db6-20240815200300 | 2024-08-15 20:04:21 (UTC) |
-| production1 | mysql | backup   | mybackup5                   | 2024-08-09 22:25:13 (UTC) |
-|             | mysql | backup   | mybackup                    | 2024-08-09 21:02:52 (UTC) |
-+-------------+-------+----------+-----------------------------+---------------------------+ 
-----
-To see the AppVaultPath for each resource, use `flag --show-paths`.
-
-The cluster name in the first column of the table is only available if a cluster name was specified in the trident protect helm installation, e.g. using `--set clusterName=production1`. 
+////

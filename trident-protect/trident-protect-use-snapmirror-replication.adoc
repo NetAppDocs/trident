@@ -211,11 +211,11 @@ kubectl apply -f trident-protect-relationship.yaml -n trident-protect
 --
 .Create the AppMirrorRelationship CR file using the CLI
 --
-. Create the AppMirrorRelationship CR file:
+. Create the AppMirrorRelationship CR file, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----
-tridentctl protect create appmirrorelationship
+tridentctl protect create appmirrorelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> -- source-app-vault <my_source_app_vault>
 ----
 --
 ====
@@ -338,7 +338,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n trident-protect
 +
 [source,console]
 ----
-tridentctl protect create shutdownsnapshot <myshutdownsnapshot> --appvault <my-vault> --app <app_to_snapshot>
+tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot>
 ----
 --
 ====
@@ -349,7 +349,7 @@ tridentctl protect create shutdownsnapshot <myshutdownsnapshot> --appvault <my-v
 +
 [source,console]
 ----
-kubectl get shutdownsnapshot -n trident-protect <ShutdownSnapshot name> -o yaml
+kubectl get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o yaml
 ----
 
 . Find the value of *shutdownsnapshot.status.appArchivePath* using the following command, and record the last part of the file path (also called the basename; this will be everything after the last slash):

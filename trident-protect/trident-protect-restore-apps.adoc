@@ -88,17 +88,15 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 --
 .Restore the backup using the CLI
 --
-. Restore the backup to a different namespace, replacing values in brackets with information from your environment. For example:
+. Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. For example:
 +
 [source,console]
 -----
-tridentctl protect create backuprestore <my_restore_name> minio:minio2 -backup <backup_to_restore>
+tridentctl protect create backuprestore <my_restore_name> --backup <backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
 -----
 --
 ====
 // end tabbed block
-
-
 
 == Restore from a backup to the original namespace
 
@@ -169,11 +167,11 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 --
 .Restore the backup using the CLI
 --
-. Restore the backup to the original namespace:
+. Restore the backup to the original namespace, replacing values in brackets with information from your environment. The `backup` argument uses a namespace and backup name in the format `<namespace>/<name>`. For example:
 +
 [source,console]
 -----
-tridentctl protect create backupinplacerestore
+tridentctl protect create backupinplacerestore <my_restore_name> --backup <namespace/backup_to_restore> 
 -----
 --
 ====
@@ -255,11 +253,16 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 --
 .Restore the snapshot using the CLI
 --
-. Restore the snapshot to a different namespace:
+. Restore the snapshot to a different namespace, replacing values in brackets with information from your environment.
++
+* The `snapshot` argument uses a namespace and snapshot name in the format `<namespace>/<name>`. 
+* The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`.
++
+For example:
 +
 [source,console]
 -----
-tridentctl protect create snapshotrestore
+tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
 -----
 --
 ====
@@ -329,18 +332,16 @@ labelSelectors: <SELECTORS>
 ------
 kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 ------
-
 --
 .Restore the snapshot using the CLI
 --
 
-. Restore the snapshot to the original namespace:
+. Restore the snapshot to the original namespace, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 -----
-tridentctl protect create snapshotinplacerestore
+tridentctl protect create snapshotinplacerestore <my_restore_name> --snapshot <snapshot_to_restore>
 -----
-
 --
 ====
 // end tabbed block

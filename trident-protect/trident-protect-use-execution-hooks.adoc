@@ -116,11 +116,11 @@ kubectl apply -f trident-protect-hook.yaml
 --
 .Do the thing using the CLI
 --
-. Create the execution hook:
+. Create the execution hook, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----- 
-tridentctl protect create exechook
+tridentctl protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage>
 -----
 --
 ====

@@ -18,18 +18,19 @@ You can use the Trident protect command line plugin to create and interact with 
 Before using the command line utility, you need to install it on the machine you use to access your cluster.
 
 .Steps
-. Download the Trident protect CLI plugin using the ACS registry:
+. Log in to the Docker registry:
 +
 [source,console]
 ----
 docker login cr.astra.netapp.io -u ACCOUNT_ID -p API_TOKEN
 ----
+. Download the Trident protect CLI plugin:
 +
 [source,console]
 ----
 docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
 ----
-. Install the plugin:
+. Install the plugin on your local machine:
 +
 [source,console]
 ----

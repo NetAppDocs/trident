@@ -36,14 +36,11 @@ docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
 ----
 docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
 ----
-. (Optional) To install the plugin globally, use the following commands (elevated privilege may be required):
+. (Optional) To install the plugin globally, copy the plugin binary to a global path, such as `/usr/bin` or `/usr/local/bin` (you might need elevated privileges). For example:
 +
 [source,console]
 ----
-# Linux
-cp ./protectctl /usr/bin/
-# MacOS
-cp ./protectctl /usr/local/bin/
+cp ./tridentctl-protect /usr/local/bin/
 ----
 
 == View Trident CLI plugin help
@@ -54,7 +51,7 @@ You can use the built-in plugin help features to get detailed help on the capabi
 +
 [source,console]
 ----
-./tridentctl protect help
+tridentctl protect help
 ----
 
 == Configure the Trident CLI plugin

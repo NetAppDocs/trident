@@ -24,9 +24,9 @@ You can create an on-demand snapshot at any time.
 --
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
 
-* <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
 * <APPLICATION_NAME>: The Kubernetes name of the application to snapshot.
-* <APPVAULT_NAME>: The name of the AppVault where the snapshot contents (metadata) should be stored.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents (metadata) should be stored.
 * <RECLAIM_POLICY>: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to `Retain`, the snapshot will be deleted. Valid options:
 ** `Retain`
 ** `Delete` (default)
@@ -78,8 +78,8 @@ You can back up an app at any time.
 * *spec.applicationRef*: (_Required_) The Kubernetes name of the application to back up.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
 * *spec.dataMover*: (_Optional_) A string indicating which backup tool to use for the backup operation. Possible values (case sensitive):
-** `Restic` (default)
-** `Kopia`
+** `Restic`
+** `Kopia` (default)
 * *spec.reclaimPolicy*: (_Optional_) Defines what happens to a backup when released from its claim. Possible values:
 ** `Delete` (default)
 ** `Retain`
@@ -129,9 +129,12 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 --
 . Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. Update the values in brackets <> to match your Astra environment, cluster configuration, and data protection needs:
 
-* <CR_NAME>: The name of this custom resource; choose a unique and sensible name for your environment.
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.dataMover*: (_Optional_) A string indicating which backup tool to use for the backup operation. Possible values (case sensitive):
+** `Restic`
+** `Kopia` (default)
 * <APPLICATION_NAME>: The Kubernetes name of the application to back up.
-* <APPVAULT_NAME>: The name of the AppVault where the backup contents should be stored.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
 * <BACKUPS_RETAINED>: The number of backups to retain. Zero indicates that no backups should be created.
 * <SNAPSHOTS_RETAINED>: The number of snapshots to retain. Zero indicates that no snapshots should be created.
 * <GRANULARITY>: The frequency at which the schedule should run. Possible values, along with required associated fields:

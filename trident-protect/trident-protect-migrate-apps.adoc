@@ -82,8 +82,8 @@ spec:
 --
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
 +
-* <CR_NAME>: The name of this CR operation; choose a sensible name for your environment.
-* <APPVAULT_NAME>: The name of the AppVault where the snapshot contents are stored.
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents are stored.
 * <SNAPSHOT_PATH>: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
 +
 [source,console]

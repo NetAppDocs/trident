@@ -12,7 +12,7 @@ summary: You can use the protectctl command to create and interact with Trident 
 :imagesdir: ../media/
 
 [.lead]
-You can use the Trident protect command line plugin to create and interact with Trident protect custom resources (CRs). The plugin is an extension of the Trident `tridentctl` utility.
+You can use the Trident protect command line plugin, which is an extension of the Trident `tridentctl` utility, to create and interact with Trident protect custom resources (CRs). By default, if you use the plugin to create a CR, the plugin creates a temporary CR file and automatically applies it to the cluster.
 
 == Install the Trident protect CLI plugin
 Before using the command line utility, you need to install it on the machine you use to access your cluster.
@@ -22,19 +22,19 @@ Before using the command line utility, you need to install it on the machine you
 +
 [source,console]
 ----
-docker login cr.astra.netapp.io -u ACCOUNT_ID -p API_TOKEN
+docker login cr.astra.netapp.io -u <ACCOUNT_ID> -p <API_TOKEN>
 ----
 . Download the Trident protect CLI plugin:
 +
 [source,console]
 ----
-docker pull cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1
+docker pull cr.astra.netapp.io/trident-protectctl:24.11.0
 ----
 . Install the plugin on your local machine:
 +
 [source,console]
 ----
-docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0-preview.1 cp protectctl /pctl-tmp
+docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.11.0 cp protectctl /pctl-tmp
 ----
 . (Optional) To install the plugin globally, copy the plugin binary to a global path, such as `/usr/bin` or `/usr/local/bin` (you might need elevated privileges). For example:
 +

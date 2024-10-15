@@ -36,10 +36,10 @@ kubectl create secret docker-registry regcred --docker-username=<account-id> --d
 +
 [source,console]
 ----
-helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-crds oci://cr.astra.netapp.io/trident-protect-crds --version 24.10.0-preview.1
+helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-crds oci://cr.astra.netapp.io/trident-protect-crds --version 24.11.0
 ----
 +
 [source,console]
 ----
-helm install -n trident-protect --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.10.0-preview.1
+helm install -n trident-protect --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.11.0
 ----

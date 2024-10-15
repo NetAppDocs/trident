@@ -58,25 +58,28 @@ tridentctl protect help
 After you have installed the Trident protect CLI plugin, you can configure it. 
 
 .Steps
+
+. To enable command auto-completion, append the following line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
++
+[source,console]
+----
+source <(tridentctl protect completion zsh)>
+----
++
+To use auto-completion in the Bash shell you might need to first install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
++
+For more information, use the `tridentctl protect completion --help` command.
+
+
+
+////
+
 . Configure the trident-protect namespace:
 +
 [source,console]
 ----
 mkdir -p ~/.trident-protect
 ----
-
-. To enable auto-completion, append the following line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
-+
-[source,console]
-----
-source <(tridentctl protect completion zsh)>
-----
-To use auto-completion in the Bash shell you might need to first install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
-
-Use the `tridentctl protect completion --help` command for more information.
-
-////
-
 
 == Basic usage of the Trident protect CLI
 The plugin command syntax is similar to the Kubernetes `kubectl` utility. You can use the following top-level verbs:

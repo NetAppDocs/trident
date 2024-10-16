@@ -278,7 +278,7 @@ tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespac
 
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents are stored.
-* <BACKUP_PATH>: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
+* *spec.appArchivePath*: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
 +
 [source,console]
 ------
@@ -293,8 +293,8 @@ metadata:
   name: my-cr-name
   namespace: trident-protect
 spec:
-  appArchivePath: my-snapshot-path
   appVaultRef: appvault-name
+    appArchivePath: my-snapshot-path
 -------
 +
 . (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:

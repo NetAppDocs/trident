@@ -282,7 +282,7 @@ tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespac
 +
 [source,console]
 ------
-kubectl get snapshot <SNAPSHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
+kubectl get snapshots <SNAPSHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 ------
 +
 [source,yaml]

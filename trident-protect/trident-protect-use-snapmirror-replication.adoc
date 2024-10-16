@@ -72,13 +72,16 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 --
 ====
 // end tabbed block
-+
+
 . Create the source application CR:
-+
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create the source application using a CR
+--
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-app-source.yaml`).
-+
 .. Configure the following attributes:
-+
 ** *metadata.name*: (_Required_) The name of the AppVault custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
 ** *spec.includedNamespaces*: (_Required_) Use namespace names and optionally narrow the scope of the namespaces with labels to specify namespaces that the application resources exist in.
 +
@@ -102,11 +105,29 @@ spec:
 -----
 kubectl apply -f trident-protect-app-source.yaml -n trident-protect
 -----
+
+--
+.Create the source application using the CLI
+--
+. Create the source application. For example:
++
+[source,console]
+----
+tridentctl protect create app maria --namespaces maria
+----
+--
+====
+// end tabbed block
+
 +
 .. (_Optional_) Take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
 
 . Create a replication schedule for the source application:
-
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create a replication schedule using a CR
+--
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-schedule.yaml`).
 .. Configure the following attributes:
 
@@ -145,6 +166,18 @@ spec:
 ----
 kubectl apply -f trident-protect-schedule.yaml -n trident-protect
 ----
+
+--
+.Create a replication schedule using the CLI
+--
+
+
+
+--
+====
+// end tabbed block
+
+
 . Create a source application AppVault CR on the destination cluster that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
 +
 . Apply the CR:
@@ -226,7 +259,6 @@ spec:
 ----
 kubectl apply -f trident-protect-relationship.yaml -n trident-protect
 ----
-
 --
 .Create the AppMirrorRelationship CR file using the CLI
 --

@@ -25,7 +25,6 @@ Setting up a replication relationship involves the following:
 .Steps
 . Create an AppVault for the source application on the source cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 
-// begin tabbed block
 [role="tabbed-block"]
 ====
 .Create an AppVault using a CR
@@ -71,11 +70,10 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 ----
 --
 ====
-// end tabbed block
+
 
 . Create the source application CR:
 
-// begin tabbed block
 [role="tabbed-block"]
 ====
 .Create the source application using a CR
@@ -117,13 +115,13 @@ tridentctl protect create app maria --namespaces maria
 ----
 --
 ====
-// end tabbed block
 
-+
+
+
 .. (_Optional_) Take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
 
 . Create a replication schedule for the source application:
-// begin tabbed block
+
 [role="tabbed-block"]
 ====
 .Create a replication schedule using a CR
@@ -175,7 +173,7 @@ kubectl apply -f trident-protect-schedule.yaml -n trident-protect
 
 --
 ====
-// end tabbed block
+
 
 
 . Create a source application AppVault CR on the destination cluster that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
@@ -214,7 +212,7 @@ kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n trident-
 
 . Create an AppMirrorRelationship CR file:
 
-// begin tabbed block
+
 [role="tabbed-block"]
 ====
 .Manually create the AppMirrorRelationship CR file
@@ -270,8 +268,6 @@ tridentctl protect create appmirrorelationship <name_of_appmirorrelationship> --
 ----
 --
 ====
-// end tabbed block
-
 . (_Optional_) Check the state and status of the replication relationship:
 +
 [source,console]
@@ -345,7 +341,7 @@ This is the planned operation to move the application to the destination storage
 
 In this situation, you are swapping the source and destination.
 
-// begin tabbed block
+
 [role="tabbed-block"]
 ====
 .Create a shutdown snapshot using a CR
@@ -391,7 +387,7 @@ tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my
 ----
 --
 ====
-// end tabbed block
+
 
 . After the snapshot completes, get the status of the snapshot:
 +
@@ -406,13 +402,10 @@ kubectl get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o yaml
 ----
 k get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o jsonpath='{.status.appArchivePath}'
 ----
-+
 . Perform a fail over from the destination cluster to the source cluster, with the following change:
 +
 * In step 2 of the fail over procedure, include the `spec.promotedSnapshot` field in the AppMirrorRelationship CR file, and set its value to the basename you recorded in step 5 above.
-+
 . Perform the reverse resync steps in <<Resync a failed over replication>>.
-+
 . Enable protection schedules on the new source cluster.
 
 === Result

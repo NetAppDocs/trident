@@ -211,7 +211,7 @@ kubectl apply -f trident-protect-relationship.yaml -n trident-protect
 --
 .Create the AppMirrorRelationship CR file using the CLI
 --
-. Create the AppMirrorRelationship CR file, replacing values in brackets with information from your environment. For example:
+. Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----
@@ -220,8 +220,6 @@ tridentctl protect create appmirrorelationship <name_of_appmirorrelationship> --
 --
 ====
 // end tabbed block
-
-
 
 . (_Optional_) Check the state and status of the replication relationship:
 +
@@ -343,7 +341,6 @@ tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my
 --
 ====
 // end tabbed block
-
 
 . After the snapshot completes, get the status of the snapshot:
 +

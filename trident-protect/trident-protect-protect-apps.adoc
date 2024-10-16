@@ -22,12 +22,12 @@ You can create an on-demand snapshot at any time.
 ====
 .Create a snapshot using a CR
 --
-. Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. Update the values in brackets <> to match your Astra environment and cluster configuration:
-
+. Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. 
+. In the file you created, configure the following attributes:
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
-* <APPLICATION_NAME>: The Kubernetes name of the application to snapshot.
+* *spec.applicationRef*: The Kubernetes name of the application to snapshot.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents (metadata) should be stored.
-* <RECLAIM_POLICY>: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to `Retain`, the snapshot will be deleted. Valid options:
+* *spec.reclaimPolicy*: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to `Retain`, the snapshot will be deleted. Valid options:
 ** `Retain`
 ** `Delete` (default)
 +
@@ -37,11 +37,11 @@ apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
 metadata:
   namespace: trident-protect
-  name: <CR_NAME>
+  name: my-cr-name
 spec: 
-  applicationRef: <APPLICATION_NAME>
-  appVaultRef: <APPVAULT_NAME>
-  reclaimPolicy: <RECLAIM_POLICY>
+  applicationRef: my-application
+  appVaultRef: appvault-name
+  reclaimPolicy: Delete
 ----
 +
 . After you populate the `trident-protect-snapshot-cr.yaml` file with the correct values, apply the CR:
@@ -53,7 +53,7 @@ kubectl apply -f trident-protect-snapshot-cr.yaml
 --
 .Create a snapshot using the CLI
 --
-. Create the snapshot, replacing values in brackets with information from your environment. For example: For example:
+. Create the snapshot, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----
@@ -73,7 +73,6 @@ You can back up an app at any time.
 --
 . Create the custom resource (CR) file and name it `trident-protect-backup-cr.yaml`. 
 . In the file you created, configure the following attributes:
-
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
 * *spec.applicationRef*: (_Required_) The Kubernetes name of the application to back up.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
@@ -117,8 +116,6 @@ tridentctl protect create backup <my_backup_name> --appvault <my-vault-name> --a
 ====
 // end tabbed block
 
-
-
 == Create a data protection schedule
 A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
 
@@ -127,25 +124,26 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 ====
 .Create a protection schedule using a CR
 --
-. Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. Update the values in brackets <> to match your Astra environment, cluster configuration, and data protection needs:
+. Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. 
+. In the file you created, configure the following attributes:
 
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
 * *spec.dataMover*: (_Optional_) A string indicating which backup tool to use for the backup operation. Possible values (case sensitive):
 ** `Restic`
 ** `Kopia` (default)
-* <APPLICATION_NAME>: The Kubernetes name of the application to back up.
+* *spec.applicationRef*: The Kubernetes name of the application to back up.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
-* <BACKUPS_RETAINED>: The number of backups to retain. Zero indicates that no backups should be created.
-* <SNAPSHOTS_RETAINED>: The number of snapshots to retain. Zero indicates that no snapshots should be created.
-* <GRANULARITY>: The frequency at which the schedule should run. Possible values, along with required associated fields:
+* *spec.backupRetention*: The number of backups to retain. Zero indicates that no backups should be created.
+* *spec.snapshotRetention*: The number of snapshots to retain. Zero indicates that no snapshots should be created.
+* *spec.granularity*: The frequency at which the schedule should run. Possible values, along with required associated fields:
 ** `hourly` (requires that you specify `spec.minute`)
 ** `daily` (requires that you specify `spec.minute` and `spec.hour`)
 ** `weekly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfWeek`)
 ** `monthly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfMonth`)
-* <DAY_OF_MONTH>: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to `monthly`.
-* <DAY_OF_WEEK>: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `weekly`.
-* <HOUR_OF_DAY>: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
-* <MINUTE_OF_HOUR>: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
+* *spec.dayOfMonth*: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to `monthly`.
+* *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `weekly`.
+* *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
+* *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
 +
 [source,yaml]
 ----
@@ -153,18 +151,18 @@ apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:
   namespace: trident-protect
-  name: <CR_NAME>
+  name: my-cr-name
 spec:
-  applicationRef: <APPLICATION_NAME>
-  appVaultRef: <APPVAULT_NAME>
-  backupRetention: "<BACKUPS_RETAINED>"
-  snapshotRetention: "<SNAPSHOTS_RETAINED>"
-  granularity: <GRANULARITY>
-  dayOfMonth: "<DAY_OF_MONTH>"
-  dayOfWeek: "<DAY_OF_WEEK>"
-  hour: "<HOUR_OF_DAY>"
-  minute: "<MINUTE_OF_HOUR>"
-
+  dataMover: Kopia
+  applicationRef: my-application
+  appVaultRef: appvault-name
+  backupRetention: "15"
+  snapshotRetention: "15"
+  granularity: <monthly>
+  dayOfMonth: "1"
+  dayOfWeek: "0"
+  hour: "0"
+  minute: "0"
 ----
 +
 

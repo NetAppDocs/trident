@@ -80,43 +80,43 @@ spec:
 ====
 .Restore the snapshot using a CR
 --
-. Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. Update the values in brackets <> to match your Trident protect environment and cluster configuration:
+. Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. 
+. In the file you created, configure the following attributes:
 +
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
-* *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents are stored.
-* <SNAPSHOT_PATH>: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
+* *spec.appArchivePath*: The path inside AppVault where the snapshot contents are stored. You can use the following command to find this path:
 +
 [source,console]
 -----
 kubectl get snapshots <SNAPHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 -----
 +
-* <SOURCE_NAMESPACE>: The source namespace of the restore operation.
-* <DESTINATION_NAMESPACE>: The destination namespace of the restore operation.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents are stored.
+* *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 [source,yaml]
 -------
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
-  name: <CR_NAME>
+  name: my-cr-name
   namespace: trident-protect
 spec:
-  appArchivePath: <SNAPSHOT_PATH>
-  appVaultRef: <APPVAULT_NAME>
-  namespaceMapping: [{"source": "<SOURCE_NAMESPACE>", "destination": "<DESTINATION_NAMESPACE>"}]
+  appArchivePath: my-snapshot-path
+  appVaultRef: appvault-name
+  namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
 -------
 +
 . (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
-* "<INCLUDE-EXCLUDE>": (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* "*resourceFilter.resourceSelectionCriteria*": (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 +
-* <GROUP>: (_Optional_) Group of the resource to be filtered.
-* <KIND>: (_Optional_) Kind of the resource to be filtered.
-* <VERSION>: (_Optional_) Version of the resource to be filtered.
-* <NAMES>: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
-* <NAMESPACES>: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-* <SELECTORS>: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. Example: `"trident.netapp.io/os=linux"`. 
+* *resourceMatchers.group*: (_Optional_) Group of the resource to be filtered.
+* *resourceMatchers.kind*: (_Optional_) Kind of the resource to be filtered.
+* *resourceMatchers.version*: (_Optional_) Version of the resource to be filtered.
+* *resourceMatchers.names*: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
+* *resourceMatchers.namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
+* *resourceMatchers.labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`. 
 +
 For example:
 +
@@ -124,14 +124,14 @@ For example:
 -------
 spec:    
   resourceFilter: 
-    resourceSelectionCriteria: "<INCLUDE-EXCLUDE>"
+    resourceSelectionCriteria: "include"
     resourceMatchers:
-      group: <GROUP>
-      kind: <KIND>
-      version: <VERSION>
-      names: <NAMES>
-      namespaces: <NAMESPACES>
-      labelSelectors: <SELECTORS>
+      group: my-resource-group
+      kind: my-resource-kind
+      version: my-resource-version
+      names: my-resource-names
+      namespaces: my-resource-namespaces
+      labelSelectors: "trident.netapp.io/os=linux"
 -------
 +
 . After you populate the `trident-protect-snapshot-restore-cr.yaml` file with the correct values, apply the CR:

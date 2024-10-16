@@ -23,8 +23,14 @@ Setting up a replication relationship involves the following:
 * Setting the time for the snapshot to be taken
 
 .Steps
-
 . Create an AppVault for the source application on the source cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Create an AppVault using a CR
+--
+
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-primary-source.yaml`).
 .. Configure the following attributes:
 +
@@ -53,6 +59,19 @@ The following installation options are available:
 ----
 kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-
 ----
+
+--
+.Create an AppVault using the CLI
+--
+.. Create the AppVault, replacing values in brackets with information from your environment:
++
+[source,console]
+----
+tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+----
+--
+====
+// end tabbed block
 +
 . Create the source application CR:
 +

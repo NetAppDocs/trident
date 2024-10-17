@@ -88,6 +88,10 @@ Astra Trident |
 
 |`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as `pod.spec.Tolerations`. |No default; optional
 
+|`nodePrep`
+|Allows Astra Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. Supported protocol: iscsi.
+|
+
 |===
 [NOTE] 
 For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].

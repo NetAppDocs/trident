@@ -235,6 +235,10 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
 
+|`nodePrep`
+|Allows Astra Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. Supported protocol: iscsi.
+|
+
 |===
 
 === Understanding controller pods and node pods

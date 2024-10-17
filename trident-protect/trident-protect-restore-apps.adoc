@@ -21,7 +21,7 @@ When you restore a backup to a different namespace using a BackupRestore CR, Tri
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Restore the backup using a CR
+.Use a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. 
 . In the file you created, configure the following attributes:
@@ -84,7 +84,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 -----
 
 --
-.Restore the backup using the CLI
+.Use the CLI
 --
 . Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. For example:
 +
@@ -101,7 +101,7 @@ tridentctl protect create backuprestore <my_restore_name> --backup <backup_to_re
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Restore the backup using a CR
+.Use a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-backup-ipr-cr.yaml`. 
 . In the file you created, configure the following attributes:
@@ -165,7 +165,7 @@ spec:
 kubectl apply -f trident-protect-backup-ipr-cr.yaml
 ------
 --
-.Restore the backup using the CLI
+.Use the CLI
 --
 . Restore the backup to the original namespace, replacing values in brackets with information from your environment. The `backup` argument uses a namespace and backup name in the format `<namespace>/<name>`. For example:
 +
@@ -184,7 +184,7 @@ You can restore data from a snapshot using a custom resource (CR) file either to
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Restore the snapshot using a CR
+.Use a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. 
 . In the file you created, configure the following attributes:
@@ -248,7 +248,7 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 -----
 
 --
-.Restore the snapshot using the CLI
+.Use the CLI
 --
 . Restore the snapshot to a different namespace, replacing values in brackets with information from your environment.
 +
@@ -271,7 +271,7 @@ tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespac
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Restore the snapshot using a CR
+.Use a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-ipr-cr.yaml`. 
 . In the file you created, configure the following attributes:
@@ -331,7 +331,7 @@ spec:
 kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 ------
 --
-.Restore the snapshot using the CLI
+.Use the CLI
 --
 
 . Restore the snapshot to the original namespace, replacing values in brackets with information from your environment. For example:

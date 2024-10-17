@@ -114,7 +114,7 @@ spec:
   providerType: AWS
 ----
 --
-.Example AppVault CR creation using the Trident protect CLI
+.Example AppVault creation with CLI
 --
 [source,console]
 ----
@@ -161,7 +161,7 @@ spec:
   providerType: Azure
 ----
 --
-.Example AppVault CR creation using the Trident protect CLI
+.Example AppVault creation with CLI
 --
 [source,console]
 ----
@@ -201,6 +201,6 @@ tridentctl protect get appvaultcontent gcp-vault --show-resources all
 +-------------+-------+----------+-----------------------------+---------------------------+ 
 ----
 
-. (Optional) To see the AppVaultPath for each resource, use the flag `--show-paths`.
+. Optionally, to see the AppVaultPath for each resource, use the flag `--show-paths`.
 +
 The cluster name in the first column of the table is only available if a cluster name was specified in the Trident protect helm installation. For example: `--set clusterName=production1`. 

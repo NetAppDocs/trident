@@ -122,7 +122,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 // begin tabbed block
 [role="tabbed-block"]
 ====
-.Create a protection schedule using a CR
+.Create a schedule using a CR
 --
 . Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. 
 . In the file you created, configure the following attributes:
@@ -173,7 +173,7 @@ spec:
 kubectl apply -f trident-protect-schedule-cr.yaml
 ----
 --
-.Create a protection schedule using the CLI
+.Create a schedule using the CLI
 --
 . Create the protection schedule, replacing values in brackets with information from your environment. For example:
 +

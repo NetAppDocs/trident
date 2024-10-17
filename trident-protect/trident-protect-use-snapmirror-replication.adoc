@@ -185,7 +185,7 @@ kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n my-app-n
 +
 [role="tabbed-block"]
 ====
-.Manually create the AppMirrorRelationship CR file
+.Create an AppMirrorRelationship using a CR
 --
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-relationship.yaml`).
 .. Configure the following attributes:
@@ -229,7 +229,7 @@ spec:
 kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 ----
 --
-.Create the AppMirrorRelationship CR file using the CLI
+.Create an AppMirrorRelationship using the CLI
 --
 . Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment. For example:
 +

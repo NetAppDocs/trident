@@ -88,7 +88,7 @@ spec:
 +
 [source,console]
 -----
-kubectl get snapshots <SNAPHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
+kubectl get snapshots <my-snapshot-name> -n trident-protect -o jsonpath='{.status.appArchivePath}'
 -----
 +
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents are stored.

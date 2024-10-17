@@ -75,7 +75,7 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 .. Configure the following attributes:
 +
 ** *metadata.name*: (_Required_) The name of the AppVault custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
-** *spec.includedNamespaces*: (_Required_) Use namespace names and optionally narrow the scope of the namespaces with labels to specify namespaces that the application resources exist in.
+** *spec.includedNamespaces*: (_Required_) Use namespace names and optionally narrow the scope of the namespaces with labels to specify namespaces that the application resources exist in. The application namespace must be part of this list.
 +
 *Example YAML*:
 +
@@ -85,7 +85,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: Application
 metadata:
   name: maria
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   includedNamespaces:
     labelSelector: {}
@@ -95,7 +95,7 @@ spec:
 +
 [source,console]
 -----
-kubectl apply -f trident-protect-app-source.yaml -n trident-protect
+kubectl apply -f trident-protect-app-source.yaml -n my-app-namespace
 -----
 --
 .Create the source application using the CLI
@@ -130,7 +130,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:
   name: appmirror-schedule-0e1f88ab-f013-4bce-8ae9-6afed9df59a1
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   appVaultRef: generic-s3-trident-protect-src-bucket-04b6b4ec-46a3-420a-b351-45795e1b5e34
   applicationRef: maria
@@ -146,14 +146,14 @@ spec:
 +
 [source,console]
 ----
-kubectl apply -f trident-protect-schedule.yaml -n trident-protect
+kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 ----
 . Create a source application AppVault CR on the destination cluster that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
 . Apply the CR:
 +
 [source,console]
 ----
-kubectl apply -f trident-protect-appvault-primary-destination.yaml -n trident-protect
+kubectl apply -f trident-protect-appvault-primary-destination.yaml -n my-app-namespace
 ----
 . Create an AppVault for the destination application on the destination cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-secondary-destination.yaml`).
@@ -178,7 +178,7 @@ kubectl apply -f trident-protect-appvault-primary-destination.yaml -n trident-pr
 +
 [source,console]
 ----
-kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n trident-protect
+kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n my-app-namespace
 ----
 
 . Create an AppMirrorRelationship CR file:
@@ -207,7 +207,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: AppMirrorRelationship
 metadata:
   name: amr-16061e80-1b05-4e80-9d26-d326dc1953d8
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   desiredState: established
   destinationAppVaultRef: generic-s3-trident-protect-dst-bucket-8fe0b902-f369-4317-93d1-ad7f2edc02b5
@@ -226,7 +226,7 @@ spec:
 +
 [source,console]
 ----
-kubectl apply -f trident-protect-relationship.yaml -n trident-protect
+kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 ----
 --
 .Create the AppMirrorRelationship CR file using the CLI
@@ -243,7 +243,7 @@ tridentctl protect create appmirrorelationship <name_of_appmirorrelationship> --
 +
 [source,console]
 ----
-kubectl get amr -n trident-protect <relationship name> -o=jsonpath='{.status}' | jq
+kubectl get amr -n my-app-namespace <relationship name> -o=jsonpath='{.status}' | jq
 ----
 
 === Fail over to destination cluster 
@@ -262,14 +262,14 @@ Using Trident protect, you can fail over replicated applications to a destinatio
 +
 [source,console]
 -----
-kubectl apply -f trident-protect-relationship.yaml -n trident-protect
+kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 -----
 . (_Optional_) Create any protection schedules that you need on the failed over application.
 . (_Optional_) Check the state and status of the replication relationship:
 +
 [source,console]
 ----
-kubectl get amr -n trident-protect <relationship name> -o=jsonpath='{.status}' | jq
+kubectl get amr -n my-app-namespace <relationship name> -o=jsonpath='{.status}' | jq
 ----
 
 === Resync a failed over replication
@@ -287,7 +287,7 @@ The process stops the app on the new destination cluster before re-establishing 
 +
 [source,console]
 -----
-kubectl apply -f trident-protect-relationship.yaml -n trident-protect
+kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 -----
 . If you created any protection schedules on the destination cluster to protect the failed over application, remove them. Any schedules that remain cause volume snapshot failures.
 
@@ -331,7 +331,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: ShutdownSnapshot
 metadata:
   name: replication-shutdown-snapshot-afc4c564-e700-4b72-86c3-c08a5dbe844e
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   appVaultRef: generic-s3-trident-protect-src-bucket-04b6b4ec-46a3-420a-b351-45795e1b5e34
   applicationRef: maria-8434b1cd-0a66-4048-8a28-ed5951a2c1d4
@@ -341,7 +341,7 @@ spec:
 +
 [source,console]
 ----
-kubectl apply -f trident-protect-shutdownsnapshot.yaml -n trident-protect
+kubectl apply -f trident-protect-shutdownsnapshot.yaml -n my-app-namespace
 ----
 
 --
@@ -359,14 +359,14 @@ tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my
 +
 [source,console]
 ----
-kubectl get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o yaml
+kubectl get shutdownsnapshot -n my-app-namespace <shutdown_snapshot_name> -o yaml
 ----
 
 . Find the value of *shutdownsnapshot.status.appArchivePath* using the following command, and record the last part of the file path (also called the basename; this will be everything after the last slash):
 +
 [source,console]
 ----
-k get shutdownsnapshot -n trident-protect <shutdown_snapshot_name> -o jsonpath='{.status.appArchivePath}'
+k get shutdownsnapshot -n my-app-namespace <shutdown_snapshot_name> -o jsonpath='{.status.appArchivePath}'
 ----
 . Perform a fail over from the destination cluster to the source cluster, with the following change:
 +
@@ -410,7 +410,7 @@ You can delete a replication relationship at any time. When you delete the appli
 +
 [source,console]
 ----
-kubectl delete -f trident-protect-relationship.yaml -n trident-protect
+kubectl delete -f trident-protect-relationship.yaml -n my-app-namespace
 ----
 
 

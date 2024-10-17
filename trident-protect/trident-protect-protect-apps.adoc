@@ -36,7 +36,7 @@ You can create an on-demand snapshot at any time.
 apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
 metadata:
-  namespace: trident-protect
+  namespace: my-app-namespace
   name: my-cr-name
 spec: 
   applicationRef: my-application
@@ -89,7 +89,7 @@ You can back up an app at any time.
 apiVersion: protect.trident.netapp.io/v1
 kind: Backup
 metadata:
-  namespace: trident-protect
+  namespace: my-app-namespace
   name: my-cr-name
 spec: 
   applicationRef: my-application
@@ -150,7 +150,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:
-  namespace: trident-protect
+  namespace: my-app-namespace
   name: my-cr-name
 spec:
   dataMover: Kopia
@@ -197,7 +197,7 @@ Delete the scheduled or on-demand snapshots that you no longer need.
 +
 [source,console]
 ----
-kubectl delete snapshot <snapshot_name> -n trident-protect
+kubectl delete snapshot <snapshot_name> -n my-app-namespace
 ----
 
 == Delete a backup
@@ -210,7 +210,7 @@ Delete the scheduled or on-demand backups that you no longer need.
 +
 [source,console]
 ----
-kubectl delete backup <backup_name> -n trident-protect
+kubectl delete backup <backup_name> -n my-app-namespace
 ----
 
 == Check the status of a backup operation

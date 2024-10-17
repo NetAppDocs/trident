@@ -77,6 +77,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: ExecHook
 metadata: 
   name: example-hook-cr
+  namespace: my-app-namespace
   annotations: 
     astra.netapp.io/astra-control-hook-source-id: /account/test/hookSource/id
 spec: 

@@ -31,7 +31,7 @@ When you restore a backup to a different namespace using a BackupRestore CR, Tri
 +
 [source,console]
 -----
-kubectl get backups <BACKUP_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
+kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
@@ -42,7 +42,7 @@ apiVersion: protect.trident.netapp.io/v1o
 kind: BackupRestore
 metadata:
   name: my-cr-name
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
@@ -111,7 +111,7 @@ tridentctl protect create backuprestore <my_restore_name> --backup <backup_to_re
 +
 [source,console]
 -----
-kubectl get backups <BACKUP_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
+kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
 
@@ -125,7 +125,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: BackupInplaceRestore
 metadata:
   name: my-cr-name
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
@@ -195,7 +195,7 @@ You can restore data from a snapshot using a custom resource (CR) file either to
 +
 [source,console]
 -----
-kubectl get snapshots <SNAPHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
+kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
@@ -206,7 +206,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
   name: my-cr-name
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   appVaultRef: appvault-name
   appArchivePath: my-snapshot-path
@@ -282,7 +282,7 @@ tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespac
 +
 [source,console]
 ------
-kubectl get snapshots <SNAPSHOT_NAME> -n trident-protect -o jsonpath='{.status.appArchivePath}'
+kubectl get snapshots <SNAPSHOT_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 ------
 +
 [source,yaml]
@@ -291,7 +291,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotInplaceRestore
 metadata:
   name: my-cr-name
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   appVaultRef: appvault-name
     appArchivePath: my-snapshot-path

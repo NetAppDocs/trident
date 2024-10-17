@@ -29,6 +29,7 @@ Get started by verifying the readiness of your operational environment, applicat
 * Ensure that you have the latest Astra Control Provisioner (installed and enabled by default as of Trident 24.06.1).
 * Ensure that you have a NetApp ONTAP storage backend.
 * Ensure that you have configured an object storage bucket for storing backups.
+* Create any application namespaces that you plan to use for applications or application data management operations. Trident protect does not create these namespaces for you; if you specify a nonexistent namespace in a custom resource, the operation will fail.
 
 == Requirements for SnapMirror replication
 NetApp SnapMirror is available for use with Trident protect for the following ONTAP solutions:

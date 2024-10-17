@@ -12,7 +12,7 @@ summary: The bucket custom resource (CR) for Trident protect is known as an AppV
 :imagesdir: ../media/
 
 [.lead]
-The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVaults are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication.
+The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVault objects are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication. Only administrators can create AppVaults.
 
 == Key generation and AppVault definition examples
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers, followed by example AppVault definitions for each provider.
@@ -32,7 +32,7 @@ Key generation example:
 
 [source,console]
 ----
-kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.json> -n trident-protect
+kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.json> -n trident-protect-system
 ----
 
 The following AppVault definition examples are provided as a CR that you can use and modify, or an example Trident protect CLI command that generates the AppVault CR for you:
@@ -48,7 +48,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
   name: gcp-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
-  namespace: trident-protect
+  namespace: trident-protect-system
 spec:
   providerConfig:
     gcp:
@@ -80,7 +80,7 @@ Key generation example:
 
 [source,console]
 ----
-kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<accesskey id> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
+kubectl create secret generic -n trident-protect-system s3 --from-literal=accessKeyID=<accesskey id> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
 
 The following AppVault definition examples are provided as a CR that you can use and modify, or an example Trident protect CLI command that generates the AppVault CR for you:
@@ -96,7 +96,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
   name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
-  namespace: trident-protect
+  namespace: trident-protect-system
 spec:
   providerConfig:
     s3:
@@ -130,7 +130,7 @@ Key generation example:
 
 [source,console]
 ----
-kubectl create secret generic <secret-name> --from-literal=accountKey=<accountKey> -n trident-protect
+kubectl create secret generic <secret-name> --from-literal=accountKey=<accountKey> -n trident-protect-system
 ----
 
 The following AppVault definition examples are provided as a CR that you can use and modify, or an example Trident protect CLI command that generates the AppVault CR for you:
@@ -146,7 +146,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
   name: azure-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
-  namespace: trident-protect
+  namespace: trident-protect-system
 spec:
   providerConfig:
     azure:

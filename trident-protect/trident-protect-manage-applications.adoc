@@ -29,7 +29,7 @@ You need to create an application CR to for each application that you want to ma
 .. Configure the following attributes:
 +
 * *metadata.name*: (_Required_) The name of the application custom resource. Note the name you choose because other CR files needed for protection operations refer to this value.
-* *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in.
+* *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in. The application namespace must be part of this list.
 +
 Example YAML:
 +
@@ -39,11 +39,11 @@ apiVersion: protect.trident.netapp.io/v1
 kind: Application
 metadata:
   name: maria
-  namespace: trident-protect
+  namespace: my-app-namespace
 spec:
   includedNamespaces:
     labelSelector: {}
-    namespace: maria
+    namespace: my-app-namespace
 ----
 --
 .Add an application using the Trident protect CLI

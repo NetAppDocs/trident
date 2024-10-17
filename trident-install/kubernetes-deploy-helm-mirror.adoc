@@ -142,7 +142,9 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |
 
 |`imageRegistry`
-|Identifies the registry for the `trident-operator`, `trident`, and other images.  Leave empty to accept the default.
+|Identifies the registry for the `trident-operator`, `trident`, and other images. Leave empty to accept the default.
+
+IMPORTANT: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
 |""
 
 |`imagePullPolicy`

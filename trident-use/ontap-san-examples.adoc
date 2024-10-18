@@ -105,6 +105,11 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
+|`formatOptions`
+a|Specify LUN formatting options. 
+*Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
+a|
+
 |===
 
 == Backend configuration options for provisioning volumes
@@ -350,6 +355,31 @@ defaults: {
     "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
 },
 "labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+----
+====
+
+
+.formatOptions example for `ontap-san-economy` driver
+[%collapsible%closed]
+====
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-san-economy",
+    "managementLIF": "",
+    "svm": "svm1",
+    "username": "",
+    "password": "!",
+    "storagePrefix": "whelk_",
+    "debugTraceFlags": {
+        "method": true,
+        "api": true
+    },
+    "defaults":{
+        "formatOptions": "-E lazy_itable_init=1,nodiscard -b 4096 -G 256"
+    }
+}
 ----
 ====
 

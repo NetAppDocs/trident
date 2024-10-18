@@ -192,12 +192,6 @@ a|`xfs`
 a|Tiering policy to use, default is `none`; `snapshot-only` for pre-ONTAP 9.5 SVM-DR configuration
 a|`none`
 
-|`formatOptions`
-a|Specify LUN formatting options. 
-*Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
-a|
-
-
 |===
 
 === Scaling options
@@ -341,30 +335,6 @@ To get advanced features and huge scale in the same environment, you can run mul
   "password":"password",
   "sanType": "nvme",
   "useREST": true
-}
-----
-====
-
-.formatOptions example for `ontap-san-economy` driver
-[%collapsible%closed]
-====
-
-----
-{
-    "version": 1,
-    "storageDriverName": "ontap-san-economy",
-    "managementLIF": "",
-    "svm": "svm1",
-    "username": "",
-    "password": "!",
-    "storagePrefix": "whelk_",
-    "debugTraceFlags": {
-        "method": true,
-        "api": true
-    },
-    "defaults":{
-        "formatOptions": "-E lazy_itable_init=1,nodiscard -b 4096 -G 256"
-    }
 }
 ----
 ====

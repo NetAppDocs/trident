@@ -47,7 +47,9 @@ tridentctl update volume <volume-UUID> --snapshot-dir=true --at-pool=true -n tri
 ----
 
 NOTE: Some applications are not compatible with volumes that use a snapshot directory. For these applications you need to hide the snapshot directory by running the following command on the ONTAP storage system:
++
 [source,console]
++
 ----
 nfs modify -vserver <svm> -v3-hide-snapshot enabled
 ----
@@ -60,7 +62,6 @@ Some applications are not compatible with volumes that use a snapshot directory.
 ----
 nfs modify -vserver <svm> -v3-hide-snapshot enabled
 ----
-
 ====
 
 NOTE: You can enable snapshot directories by default for new volumes by setting the Trident storage configuration option `config.ontap_config.default.snapshotDir` to `true`. Existing volumes are not affected.

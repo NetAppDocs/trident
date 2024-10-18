@@ -42,20 +42,20 @@ Trident protect supports backup and restore operations to nas-economy volumes. S
 
 [NOTE]
 ====
-Some applications are not compatible with volumes that use a snapshot directory. For these applications you need to hide the snapshot directory by running the following command on the ONTAP storage system:
+Some applications are not compatible with volumes that use a snapshot directory. For these applications, you need to hide the snapshot directory by running the following command on the ONTAP storage system:
 [source,console]
 ----
 nfs modify -vserver <svm> -v3-hide-snapshot enabled
 ----
 ====
 
-You can enable the snapshot directory by running the following command for each nas-economy volume:
+You can enable the snapshot directory by running the following command for each nas-economy volume, replacing `<volume-UUID>` with the UUID of the volume you want to change:
 [source,console]
 ----
 tridentctl update volume <volume-UUID> --snapshot-dir=true --at-pool=true -n trident-protect-system
 ----
 
-NOTE: You can enable snapshot directories by default for new volumes by setting the Trident storage configuration option `config.ontap_config.default.snapshotDir` to `true`. Existing volumes are not affected.
+NOTE: You can enable snapshot directories by default for new volumes by setting the Trident backend configuration option `snapshotDir` to `true`. Existing volumes are not affected.
 
 == Requirements for SnapMirror replication
 NetApp SnapMirror is available for use with Trident protect for the following ONTAP solutions:

@@ -87,7 +87,7 @@ a|`aggr1`
 
 *Does not apply to Amazon FSx for ONTAP* |"" (not enforced by default)
 
-|flexgroupAggregateList | Aggregate list used when created FlexGroups with the *ontap-nas-flexgroup* storage driver. |
+|flexgroupAggregateList | Aggregate for provisioning (optional; if set, must be assigned to the SVM). All aggregates assigned to the SVM are used to provision a FlexGroup Volume. Supported for *ontap-nas-flexgroup* storage driver. |
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
 

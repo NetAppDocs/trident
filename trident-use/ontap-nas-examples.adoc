@@ -76,9 +76,18 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 
 |`storagePrefix` |Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it |"trident"
 
+|`aggregate`
+a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. All aggregates assigned to the SVM are used to provision a FlexGroup Volume.
+
+NOTE: When the aggregate list is updated in ONTAP, the list is updated in Trident automatically by polling ONTAP without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is moved in ONTAP, the backend will move to failed state in Trident while polling ONTAP aggregate.
+
+a|`aggr1`
+
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
 *Does not apply to Amazon FSx for ONTAP* |"" (not enforced by default)
+
+|flexgroupAggregateList | Aggregate list used when created FlexGroups with the *ontap-nas-flexgroup* storage driver. |
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
 

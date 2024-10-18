@@ -38,26 +38,17 @@ Ensure that your storage backend meets the following requirements:
 * Create any application namespaces that you plan to use for applications or application data management operations. Trident protect does not create these namespaces for you; if you specify a nonexistent namespace in a custom resource, the operation will fail.
 
 == Requirements for nas-economy volumes
-Trident protect supports backup and restore operations to nas-economy volumes. Snapshots, clones, and SnapMirror replication to nas-economy volumes are not currently supported. You need to make specific configuration changes if you use nas-economy volumes.
+Trident protect supports backup and restore operations to nas-economy volumes. Snapshots, clones, and SnapMirror replication to nas-economy volumes are not currently supported. You need to enable a snapshot directory for each nas-economy volume you plan to use with Trident protect.
 
-Ensure that you enable the snapshot directory by running the following command for each nas-economy volume:
+You can enable the snapshot directory by running the following command for each nas-economy volume:
 [source,console]
 ----
 tridentctl update volume <volume-UUID> --snapshot-dir=true --at-pool=true -n trident-protect-system
 ----
 
-NOTE: Some applications are not compatible with volumes that use a snapshot directory. For these applications you need to hide the snapshot directory by running the following command on the ONTAP storage system:
-+
-[source,console]
-+
-----
-nfs modify -vserver <svm> -v3-hide-snapshot enabled
-----
-
 [NOTE]
 ====
 Some applications are not compatible with volumes that use a snapshot directory. For these applications you need to hide the snapshot directory by running the following command on the ONTAP storage system:
-
 [source,console]
 ----
 nfs modify -vserver <svm> -v3-hide-snapshot enabled

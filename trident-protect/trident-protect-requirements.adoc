@@ -16,7 +16,8 @@ Get started by verifying the readiness of your operational environment, applicat
 
 == Trident protect Kubernetes compatibility
 
-Trident protect is compatible with a wide range of fully managed and self-managed Kubernetes offerings, including: 
+Trident protect is compatible with a wide range of fully managed and self-managed Kubernetes offerings, including:
+
 * Google Kubernetes Engine (GKE)
 * Amazon Elastic Kubernetes Service (EKS)
 * Microsoft Azure Kubernetes Service (AKS)
@@ -44,7 +45,13 @@ Ensure that you enable the snapshot directory by running the following command f
 ----
 tridentctl update volume <volume-UUID> --snapshot-dir=true --at-pool=true -n trident-protect-system
 ----
-+
+
+NOTE: Some applications are not compatible with volumes that use a snapshot directory. For these applications you need to hide the snapshot directory by running the following command on the ONTAP storage system:
+[source,console]
+----
+nfs modify -vserver <svm> -v3-hide-snapshot enabled
+----
+
 [NOTE]
 ====
 Some applications are not compatible with volumes that use a snapshot directory. For these applications you need to hide the snapshot directory by running the following command on the ONTAP storage system:
@@ -55,7 +62,7 @@ nfs modify -vserver <svm> -v3-hide-snapshot enabled
 ----
 
 ====
-+
+
 NOTE: You can enable snapshot directories by default for new volumes by setting the Trident storage configuration option `config.ontap_config.default.snapshotDir` to `true`. Existing volumes are not affected.
 
 == Requirements for SnapMirror replication

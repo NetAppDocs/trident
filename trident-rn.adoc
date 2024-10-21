@@ -15,7 +15,42 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 24.06
+== What's new in 24.10
+
+=== Enhancements
+
+* Added new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
+Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes.
+* Added NFS support for Google Cloud Netapp Volumes driver.
+* Added support for Cloud Identity.
+** GKE with GCNV - GCP Workload identity will be used as Cloud Identity.
+* Added `formatOptions` configuration parameter to ONTAP-SAN and ONTAP-SAN-Economy drivers to allow users to specify LUN format options.
+* Reduced Azure Netapp Files minimum volumen size to 50 GiB.
+* Added `denyNewVolumePools` configuration paramet to restrict ONTAP-NAS-ECONOMY and ONTAP-SAN-ECONOMY drivers to preexisting Flexvol pools.
+* Added tech preview Fibre Channel support on ONTAP-SAN driver.
+
+
+==== Kubernetes
+
+* Added support for Kubernetes 1.31.
+* Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
+* All new ONTAP-NAS-Economy volumes will use per-qtree export policies. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads. 
+
+=== Fixes
+
+* Fixed Rancher admission webhook preventing Trident Helm installations (link:https://github.com/NetApp/trident/issues/839[Issue #839]).
+* Fixed Affinity key in helm chart values (link:https://github.com/NetApp/trident/issues/898[Issue #898]).
+* Fixed tridentControllerPluginNodeSelector/tridentNodePluginNodeSelector won't work with "true" value (link:https://github.com/NetApp/trident/issues/899[Issue #899]).
+* Kubernetes: Delete ephemeral snapshots created during cloning (link:https://github.com/NetApp/trident/issues/901[Issue #901]).
+
+=== Deprecations
+
+* *Kubernetes:*
+** Updated minimum supported Kubernetes to 1.25.
+** Removed support for POD Security Policy.
+** Backend-scoped export policies will no longer be created when configuring ONTAP-NAS-Economy driver.
+
+== Changes in 24.06
 
 === Enhancements
 

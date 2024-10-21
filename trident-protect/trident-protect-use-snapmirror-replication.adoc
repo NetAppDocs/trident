@@ -109,7 +109,7 @@ tridentctl protect create app maria --namespaces maria
 ====
 
 . Optionally, take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
-
++
 [role="tabbed-block"]
 ====
 .Take a snapshot using a CR
@@ -164,7 +164,6 @@ tridentctl protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 ----
 --
 ====
-
 
 . Create a source application AppVault CR on the destination cluster that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
 . Apply the CR:

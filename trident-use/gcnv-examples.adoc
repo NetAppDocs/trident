@@ -30,7 +30,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 
 |`projectNumber` |Google Cloud account project number. The value is found on the Google Cloud portal home page. |
 
-|`location` |The Google Cloud location where Astra Trident creates GCNV volumes. When creating cross-region Kubernetes clusters, volumes created in a `location` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
+|`location` |The Google Cloud location where Trident creates GCNV volumes. When creating cross-region Kubernetes clusters, volumes created in a `location` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
 
 Cross-region traffic incurs an additional cost.
 |
@@ -85,7 +85,7 @@ The following examples show basic configurations that leave most parameters to d
 .Minimal configuration
 [%collapsible%closed]
 ====
-This is the absolute minimum backend configuration. With this configuration, Astra Trident discovers all of your storage pools delegated to Google Cloud NetApp Volumes in the configured location, and places new volumes on one of those pools randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
+This is the absolute minimum backend configuration. With this configuration, Trident discovers all of your storage pools delegated to Google Cloud NetApp Volumes in the configured location, and places new volumes on one of those pools randomly. Because `nasType` is omitted, the `nfs` default applies and the backend will provision for NFS volumes. 
 
 This configuration is ideal when you are just getting started with Google Cloud NetApp Volumes and trying things out, but in practice you will most likely need to provide additional scoping for the volumes you provision. 
 

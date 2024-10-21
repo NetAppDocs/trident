@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/gcp.html
 keywords: trident backend, cloud volumes service for google cloud platform, google cloud platform, gcp, storage pool labels, storage pool, cvs, cvs-performance, service type, service level, cloud volumes service, cloud volumes, drivers, access modes, rwo, rwx, rwp, rwop, file system
-summary: Learn how to configure Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
+summary: Learn how to configure Cloud Volumes Service for Google Cloud as the backend for your Trident installation using the sample configurations provided.
 ---
 
 = Configure a Cloud Volumes Service for Google Cloud backend
@@ -11,10 +11,10 @@ summary: Learn how to configure Cloud Volumes Service for Google Cloud as the ba
 :imagesdir: ../media/
 
 [.lead]
-Learn how to configure NetApp Cloud Volumes Service for Google Cloud as the backend for your Astra Trident installation using the sample configurations provided.
+Learn how to configure NetApp Cloud Volumes Service for Google Cloud as the backend for your Trident installation using the sample configurations provided.
 
 == Google Cloud driver details
-Astra Trident provides the `gcp-cvs` driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+Trident provides the `gcp-cvs` driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
 [cols="1, 1, 1, 2, 2", options="header"]
 |===
@@ -32,10 +32,10 @@ a|`nfs`
 
 |===
 
-== Learn about Astra Trident support for Cloud Volumes Service for Google Cloud
-Astra Trident can create Cloud Volumes Service volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
+== Learn about Trident support for Cloud Volumes Service for Google Cloud
+Trident can create Cloud Volumes Service volumes in one of two link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-types[service types^]:
 
-* *CVS-Performance*: The default Astra Trident service type. This performance-optimized service type is best suited for production workloads that value performance. The CVS-Performance service type is a hardware option supporting volumes with a minimum 100 GiB size. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three  service levels^]: 
+* *CVS-Performance*: The default Trident service type. This performance-optimized service type is best suited for production workloads that value performance. The CVS-Performance service type is a hardware option supporting volumes with a minimum 100 GiB size. You can choose one of link:https://cloud.google.com/architecture/partners/netapp-cloud-volumes/service-levels#service_levels_for_the_cvs-performance_service_type[three  service levels^]: 
 
 ** `standard`
 ** `premium`
@@ -70,7 +70,7 @@ Each backend provisions volumes in a single Google Cloud region. To create volum
 
 |`storageClass` |Optional parameter used to specify the CVS service type. 
 
-Use `software` to select the CVS service type. Otherwise, Astra Trident assumes CVS-Performance service type (`hardware`). |
+Use `software` to select the CVS service type. Otherwise, Trident assumes CVS-Performance service type (`hardware`). |
 
 |`storagePools` | CVS service type only. Optional parameter used to specify storage pools for volume creation. |
 
@@ -78,7 +78,7 @@ Use `software` to select the CVS service type. Otherwise, Astra Trident assumes 
 
 |`hostProjectNumber` |Required if using a shared VPC network. In this scenario, `projectNumber` is the service project, and `hostProjectNumber` is the host project.|
 
-|`apiRegion` |The Google Cloud region where Astra Trident creates Cloud Volumes Service volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
+|`apiRegion` |The Google Cloud region where Trident creates Cloud Volumes Service volumes. When creating cross-region Kubernetes clusters, volumes created in an `apiRegion` can be used in workloads scheduled on nodes across multiple Google Cloud regions. 
 
 Cross-region traffic incurs an additional cost.|
 
@@ -418,7 +418,7 @@ allowVolumeExpansion: true
 ====
 
 * The first StorageClass (`cvs-extreme-extra-protection`) maps to the first virtual pool. This is the only pool offering extreme performance with a snapshot reserve of 10%. 
-* The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Astra Trident decides which virtual pool is selected and ensures that the snapshot reserve requirement is met.
+* The last StorageClass (`cvs-extra-protection`) calls out any storage pool which provides a snapshot reserve of 10%. Trident decides which virtual pool is selected and ensures that the snapshot reserve requirement is met.
 
 == CVS service type examples 
 The following examples provide sample configurations for the CVS service type.

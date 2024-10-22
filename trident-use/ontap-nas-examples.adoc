@@ -157,7 +157,8 @@ For more information, refer to: link:../trident-reco/security-reco.html[How Astr
 
 |`unixPermissions`	|Mode for new volumes	|"777" for NFS volumes; empty (not applicable) for SMB volumes
 
-|`snapshotDir` |Controls access to the `.snapshot` directory |"false"
+|`snapshotDir` |Controls access to the `.snapshot` directory |"true" for NFSv4
+"false" for NFSv3
 
 |`exportPolicy` |Export policy to use |"default"
 

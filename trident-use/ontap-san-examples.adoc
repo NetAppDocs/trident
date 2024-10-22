@@ -106,7 +106,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
 |`formatOptions`
-a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever the volume is formatted. This allows you to format the volume according to your preferences. Copy and paste the exact formatOptions you would use with the `mkfs` command without the device path.
+a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever the volume is formatted. This allows you to format the volume according to your preferences. Ensure that you specify the correct formatOptions with the `mkfs` command without the device path.
 
 *Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
 a|

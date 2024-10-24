@@ -106,12 +106,64 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
 |`formatOptions`
-a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Ensure that you specify the correct formatOptions with the `mkfs` command without the device path.
+a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Ensure that you specify the appropriate formatOptions with the `mkfs` command without the device path.
 
 *Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
 a|
 
 |===
+
+=== Recommendations while using formatOptions
+
+==== Recommended formatOptions
+
+Trident recommends the following options could expedite the formatting process:
+
+*Common to all (xfs, ext3, ext4):*
+*-K:*
+
+Formatting of XFS/EXT3/EXT4 on a disk of large size (e.g. 8 TB) using mkfs takes 15 minutes or more. It is low because mkfs discards (clears) all blocks in the format process. Even if file system has deleted its files, SSD needs update on a block-free event from the file system. Upon receiving TRIM event, SSD marks the block free in its block table.
+
+This is recommended only when you are sure that the disk contains blocks that are already zeroed out before or otherwise willing to take the performance hit later.
+
+*EXT3/ EXT4:*
+`lazy_itable_init[= <0 to disable, 1 to enable>]`
+
+Find more information about this flag link:https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfff68738f1cb5c93dab1114634cea02aae9e7ba[here].
+
+If enabled and the `uninit_bg` feature is enabled, the inode table will not be fully initialized by mke2fs. This speeds up filesystem initialization noticeably, but it requires the kernel to finish initializing the filesystem in the background when the filesystem is first mounted. If the option value is omitted, it defaults to 1 to enable lazy inode table initialization.
+
+Already enabled by default(2.6.37+), but if you can wait for the initialization and do not want to offload this process to the `ext4lazyinit` kernel thread, you can set `lazy_itable_init=0`. Or, if you want the thread to have more priority to the specific file system initialization request, then you can set `init_itable=0` (default is 10), during mounting.
+
+*EXT4:*
+`uninit_bg:`
+
+Create a filesystem without initializing all of the block groups. This feature also enables checksums and `highest-inode-used` statistics in each blockgroup. This feature can speed up filesystem creation time noticeably (if lazy_itable_init is enabled), and can also reduce e2fsck time dramatically. It is only supported by the ext4 filesystem in Linux Kernels that are either equal or greater than 2.6.28.
+
+*There are other options too which can save the time during formatting:*
+
+*sparse_super:* Create a filesystem with fewer superblock backup copies (saves space on large filesystems).
+*large_file:* Filesystem can contain files that are greater than 2GB.  (Modern kernels set this feature  automatically when a file greater than 2GB is created.)
+*-m 0:* Only says not to reserve 5% for root, which is acceptable for a data (not boot/root) filesystem.
+
+*stride=stride-size:* Configure the filesystem for a RAID array with stride-size filesystem blocks. This is the number of blocks read or written to disk before moving to the next disk, which is sometimes referred to as the chunk size. This mostly affects placement of filesystem metadata like bitmaps at mke2fs time to avoid placing them on a single disk, which can hurt performance. It may also be used by the block allocator.
+
+NOTE: Must be used only if you know the stride-size beforehand.
+
+*stripe-width=stripe-width:* Configure the filesystem for a RAID array with stripe-width filesystem blocks per stripe. This is typically stride-size * N, where N is the number of data-bearing disks in the RAID (e.g. for RAID 5 there is one parity disk, so N will be the number of disks in the array minus 1). This allows the block allocator to prevent read-modify-write of the parity in a RAID stripe if possible when the data is written
+
+NOTE: Must be used only if you know the RAID that is being used. Generally in ONTAP, RAID 5 is used.
+
+==== Not Recommended Options:
+
+Trident does not recommend using the following options:
+
+*-E test_fs:* Sets a flag in the filesystem superblock indicating that it may be mounted using experimental kernel.
+
+*-F:* Forces mkfs to create a filesystem, even if the specified device is not a partition on a block special device, or if other parameters do not make sense.
+
+*-g blocks-per-group:* Specifies the number of blocks in a block group. There is generally no reason to ever set this parameter because the default is optimal for the filesystem.
+*-n:* Causes mkfs to not actually create a filesystem, but display what it would do if it were to create a filesystem.
 
 == Backend configuration options for provisioning volumes
 
@@ -159,6 +211,8 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 | "" (not enforced by default)
 
 |===
+
+
 
 === Volume provisioning examples
 Here's an example with defaults defined:

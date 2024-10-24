@@ -152,6 +152,12 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 
 | "" (not enforced by default)
 
+|`denyNewVolumePools` |Restricts a backend from creating new Flexvols to contain their Qtrees and LUNs respectively. Only preexisting Flexvols are used for provisioning new PVs.
+
+*Supported for `ontap-san-economy` drivers only*.
+
+| 
+
 |===
 
 === Volume provisioning examples

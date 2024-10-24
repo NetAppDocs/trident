@@ -28,8 +28,8 @@ You can create an on-demand snapshot at any time.
 * *spec.applicationRef*: The Kubernetes name of the application to snapshot.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the snapshot contents (metadata) should be stored.
 * *spec.reclaimPolicy*: (_Optional_) Defines what happens to the AppArchive of a snapshot when the snapshot CR is deleted. This means that even when set to `Retain`, the snapshot will be deleted. Valid options:
-** `Retain`
-** `Delete` (default)
+** `Retain` (default)
+** `Delete`
 +
 [source,yaml]
 ----
@@ -80,8 +80,8 @@ You can back up an app at any time.
 ** `Restic`
 ** `Kopia` (default)
 * *spec.reclaimPolicy*: (_Optional_) Defines what happens to a backup when released from its claim. Possible values:
-** `Delete` (default)
-** `Retain`
+** `Delete`
+** `Retain` (default)
 * *Spec.snapshotRef*: (_Optional_): Name of the snapshot to use as the source of the backup. If not provided, a temporary snapshot will be created and backed up.
 +
 [source,yaml]

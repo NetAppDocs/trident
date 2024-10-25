@@ -83,11 +83,11 @@ Set to `true` for Astra Trident to configure and use bidirectional CHAP as the d
 Cannot be modified later. To update this parameter, you will need to create a new backend.|`trident`
 
 |`aggregate`
-a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. All aggregates assigned to the SVM are used to provision a FlexGroup Volume.
+a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. If not assigned, any of the available aggregates can be used to provision a FlexGroup Volume.
 
-NOTE: When the aggregate list is updated in ONTAP, the list is updated in Trident automatically by polling ONTAP without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved in ONTAP, the backend will move to failed state in Trident while polling the ONTAP aggregate.
+NOTE: When the aggregate list is updated in SVM, the list is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on SVM or remove it altogether to bring the backend back online.
 
-a|`aggr1`
+a|""
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 

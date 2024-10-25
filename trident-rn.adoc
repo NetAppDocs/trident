@@ -23,7 +23,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * GCP Workload Identity will be used as Cloud Identity for Google Cloud NetApp Volumes with GKE.
 * Added NFS support for Google Cloud Netapp Volumes driver.
 * Added `formatOptions` configuration parameter to ONTAP-SAN and ONTAP-SAN-Economy drivers to allow users to specify LUN format options.
-* Reduced Azure NetApp Files minimum volume size to 50 GiB. Azure new minimum size expected to GA in November.
+* Reduced Azure NetApp Files minimum volume size to 50 GiB. Azure new minimum size expected to be generally available in November.
 * Added `denyNewVolumePools` configuration parameter to restrict ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers to preexisting Flexvol pools.
 * Added detection for the addition or removal of aggregates from the SVM across all ONTAP drivers.
 * Added 18MiB overhead to LUKS LUNs to ensure reported PVC size is usable.
@@ -51,7 +51,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 ** Fixed Affinity key in helm chart values (link:https://github.com/NetApp/trident/issues/898[Issue #898]).
 ** Fixed tridentControllerPluginNodeSelector/tridentNodePluginNodeSelector won't work with "true" value (link:https://github.com/NetApp/trident/issues/899[Issue #899]).
 ** Deleted ephemeral snapshots created during cloning (link:https://github.com/NetApp/trident/issues/901[Issue #901]).
-* Added support for Windows SErver 2019.
+* Added support for Windows Server 2019.
 * Fixed `go mod tidy`in Trident repo (link:https://github.com/NetApp/trident/issues/767[Issue #767]).
 
 === Deprecations

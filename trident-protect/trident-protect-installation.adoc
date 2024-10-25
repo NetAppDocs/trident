@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-installation.html
 keywords: install, trident, protect, requirements, registry
 summary: If your environment meets the requirements, you can follow these steps to install Trident protect.
 ---
-= Install Trident protect
+= Install and configure Trident protect
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -43,3 +43,11 @@ helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-
 ----
 helm install -n trident-protect-system --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.11.0
 ----
+. ##Freeze SVMs. If you are using KubeVirt support for SnapMirror, freezing SVMs helps manage them effectively:##
++
+[source,console]
+----
+kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=true -n trident-protect
+----
++
+NOTE: ##You need to set up virtualization. SVMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].##

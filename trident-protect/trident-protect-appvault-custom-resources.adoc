@@ -1,0 +1,206 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-appvault-custom-resources.html
+keywords: trident. appvault, custom, protect, kubernetes
+summary: The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVaults are the declarative Kubernetes workflow representation of a storage bucket. 
+---
+= Use AppVault objects to manage buckets
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVault objects are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication. Only administrators can create AppVaults.
+
+== Key generation and AppVault definition examples
+When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers, followed by example AppVault definitions for each provider.
+
+The `ProviderType` field in an AppVault CR can be one of the following:
+
+* AWS
+* Azure
+* GCP
+* GenericS3
+* OntapS3
+* StorageGridS3
+
+=== Google Cloud
+
+Key generation example:
+
+[source,console]
+----
+kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.json> -n trident-protect-system
+----
+
+The following AppVault definition examples are provided as a CR that you can use and modify, or an example Trident protect CLI command that generates the AppVault CR for you:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Example AppVault CR
+--
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: gcp-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  namespace: trident-protect-system
+spec:
+  providerConfig:
+    gcp:
+      bucketName: trident-protect-src-bucket
+      projectID: project-id
+  providerCredentials:
+    credentials:
+      valueFromSecret:
+        key: keySecret 
+        name: gcp-trident-protect-src-bucket-secret
+  providerType: GCP
+----
+--
+.Example AppVault CR creation using the Trident protect CLI
+--
+[source,console]
+----
+tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
+----
+--
+====
+// end tabbed block
+
+
+
+=== Amazon S3
+
+Key generation example:
+
+[source,console]
+----
+kubectl create secret generic -n trident-protect-system s3 --from-literal=accessKeyID=<accesskey id> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
+----
+
+The following AppVault definition examples are provided as a CR that you can use and modify, or an example Trident protect CLI command that generates the AppVault CR for you:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Example AppVault CR
+--
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  namespace: trident-protect-system
+spec:
+  providerConfig:
+    s3:
+      bucketName: trident-protect-src-bucket
+      endpoint: s3.example.com
+  providerCredentials:
+    accessKeyID:
+      valueFromSecret:
+        key: accessKeyID
+        name: generic-s3-trident-protect-src-bucket-secret
+    secretAccessKey:
+      valueFromSecret:
+        key: secretAccessKey
+        name: generic-s3-trident-protect-src-bucket-secret
+  providerType: AWS
+----
+--
+.Example AppVault creation with CLI
+--
+[source,console]
+----
+tridentctl protect create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>
+----
+--
+====
+// end tabbed block
+
+=== Microsoft Azure
+
+Key generation example:
+
+[source,console]
+----
+kubectl create secret generic <secret-name> --from-literal=accountKey=<accountKey> -n trident-protect-system
+----
+
+The following AppVault definition examples are provided as a CR that you can use and modify, or an example Trident protect CLI command that generates the AppVault CR for you:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Example AppVault CR
+--
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: azure-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  namespace: trident-protect-system
+spec:
+  providerConfig:
+    azure:
+      accountName: account-name
+      bucketName: trident-protect-src-bucket
+      endpoint: endpoint.example.com
+  providerCredentials:
+    accountKey:
+      valueFromSecret:
+        key: accountKey
+        name: azure-trident-protect-src-bucket-secret
+  providerType: Azure
+----
+--
+.Example AppVault creation with CLI
+--
+[source,console]
+----
+tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+----
+--
+====
+// end tabbed block
+
+== Use the AppVault browser to view AppVault information
+You can use the Trident protect CLI plugin to view information about AppVault objects that have been created on the cluster.
+
+.Steps
+
+. View the contents of an AppVault object:
++
+[source,console]
+----
+tridentctl protect get appvaultcontent gcp-vault --show-resources all
+----
++
+*Example output*:
++
+----
++-------------+-------+----------+-----------------------------+---------------------------+
+|   CLUSTER   |  APP  |   TYPE   |            NAME             |         TIMESTAMP         |
++-------------+-------+----------+-----------------------------+---------------------------+
+|             | mysql | snapshot | mysnap                      | 2024-08-09 21:02:11 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815180300 | 2024-08-15 18:03:06 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815190300 | 2024-08-15 19:03:06 (UTC) |
+| production1 | mysql | snapshot | hourly-e7db6-20240815200300 | 2024-08-15 20:03:06 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815180300 | 2024-08-15 18:04:25 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815190300 | 2024-08-15 19:03:30 (UTC) |
+| production1 | mysql | backup   | hourly-e7db6-20240815200300 | 2024-08-15 20:04:21 (UTC) |
+| production1 | mysql | backup   | mybackup5                   | 2024-08-09 22:25:13 (UTC) |
+|             | mysql | backup   | mybackup                    | 2024-08-09 21:02:52 (UTC) |
++-------------+-------+----------+-----------------------------+---------------------------+ 
+----
+
+. Optionally, to see the AppVaultPath for each resource, use the flag `--show-paths`.
++
+The cluster name in the first column of the table is only available if a cluster name was specified in the Trident protect helm installation. For example: `--set clusterName=production1`. 

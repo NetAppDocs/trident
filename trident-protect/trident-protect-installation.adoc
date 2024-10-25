@@ -1,0 +1,45 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-installation.html
+keywords: install, trident, protect, requirements, registry
+summary: If your environment meets the requirements, you can follow these steps to install Trident protect.
+---
+= Install Trident protect
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+If your environment meets the requirements, you can follow these steps to install Trident protect.
+
+. Create the namespace:
++
+[source,console]
+----
+kubectl create ns trident-protect
+----
+. Log in to the registry:
++
+[source,console]
+----
+helm registry login cr.astra.netapp.io -u <account-id> -p <api-token>
+----
+. Create a pull secret:
++
+[source,console]
+----
+kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect-system --docker-server= cr.astra.netapp.io
+----
+. Use Helm to install Trident protect. If you are installing from a private registry, replace `cr.astra.netapp.io` with the name of the private registry:
++
+[source,console]
+----
+helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-crds oci://cr.astra.netapp.io/trident-protect-crds --version 24.11.0
+----
++
+[source,console]
+----
+helm install -n trident-protect-system --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.11.0
+----

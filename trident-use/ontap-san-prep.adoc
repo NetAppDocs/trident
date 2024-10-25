@@ -210,28 +210,25 @@ NOTE: Use this file <<Link>> to get the the list of ReST APIs and ZAPI commands 
 .Using System Manager
 --
 
+Perform the following steps in ONTAP System Manager:
 
-. Select *Cluster > Settings*.
-. Select image::../media/icon_arrow[Arrow icon] next to Users and Roles.
-
-Select Add icon under Users.
-
-Specify a user name, and select a role in the drop-down menu for Role.
-
-Specify a login method and password for the user.
-. On the storage system, create a new role using ONTAP System Manager or use the following command in the ONTAP CLI:.
+. *Create a custom role*:
+.. Select *Cluster > Settings*.
+.. Select the arrow icon (*-->*) next to *Users and Roles*.
+.. Select *+Add* under *Roles*.
+.. Define the rules for the role.
+.. Click *Save*.
+. *Map the role to the Trident user*:
++ Perform the following steps on the *Users and Roles* page:
+.. Select Add icon *+* under *Users*.
+.. Select the required user name, and select a role in the drop-down menu for *Role*.
+.. Click *Save*.
 
 NOTE: Use this file <<Link>> to get the the list of ReST APIs and ZAPI commands used by Trident.
-
-. Create a user in ONTAP System Manager or use this command to create a user name:+
-
-. Add the role to the user in ONTAP System Manager or use the following command:
 
 --
 
 ====
-
-.Steps
 
 NOTE: Refer the the Readme file <<link>> for detailed information about creating Trident role with.
 

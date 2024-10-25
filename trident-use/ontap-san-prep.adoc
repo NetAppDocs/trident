@@ -180,6 +180,34 @@ NOTE: When rotating passwords, the storage administrator must first update the p
 
 Updating a backend does not disrupt access to volumes that have already been created, nor impact volume connections made after. A successful backend update indicates that Astra Trident can communicate with the ONTAP backend and handle future volume operations.
 
+=== Create custom ONTAP role for Trident
+
+To access specific ONTAP APIs and ZAPI commands used by Trident, you can create a custom role in ONTAP with rule definitions and map the role to a Trident user (username). When the username is included in Trident a backend configuration, the user can access the ONTAP APIs and commands.
+
+.Steps
+
+. On the storage system, create a new role using ONTAP System Manager or use the following command in the ONTAP CLI:.
++
+`security login role create <role_name\> -cmddirname "command" -access all –vserver <svm_name\>`
+
++ 
+NOTE: Use this file <<Link>> to get the the list of ReST APIs and ZAPI commands used by Trident.
+
+. Create a user in ONTAP System Manager or use this command to create a user name:+
++
+`security login create -username <user_name\> -application ontapi -authmethod <password\> -role <name_of_role_in_step_1\> –vserver <svm_name\> -comment "user_description"`
+
+. Add the role to the user in ONTAP System Manager or use the following command:
++
+`security login modify username <user_name\> –vserver <svm_name\> -role <role_name\> -application ontapi -application console -authmethod <password\>`
+
+
+NOTE: Refer the the Readme file <<link>> for detailed information about creating Trident role with.
+
+
+Refer to link:https://docs.netapp.com/us-en/snapcenter/install/task_create_an_ontap_cluster_role_with_minimum_privileges.html#ontap-cli-commands-for-creating-roles-and-assigning-permissions[ONTAP CLI commands for creating cluster roles and assigning permissions].
+
+
 == Authenticate connections with bidirectional CHAP
 
 Astra Trident can authenticate iSCSI sessions with bidirectional CHAP for the `ontap-san` and `ontap-san-economy` drivers. This requires enabling the `useCHAP` option in your backend definition. When set to `true`, Astra Trident configures the SVM's default initiator security to bidirectional CHAP and set the username and secrets from the backend file. NetApp recommends using bidirectional CHAP to authenticate connections. See the following sample configuration:

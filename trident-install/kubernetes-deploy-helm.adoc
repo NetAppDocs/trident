@@ -13,15 +13,16 @@ summary: You can deploy the Trident operator and install Trident using Helm. Thi
 [.lead]
 You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Trident 24.06
+== Critical information about Trident 24.10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
 .*Critical information about Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.30 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
-* Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+=======
+* Kubernetes 1.31 is now supported in Astra Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
@@ -47,7 +48,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 . Use `helm install` and specify a name for your deployment as in the following example where `100.2404.0` is the version of Trident you are installing. 
 +
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2406.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2410.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -72,10 +73,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `100.2406.0` is the version of Trident you are installing:
+For example, to change the default value of `debug`, run the following `--set` command where `100.2410.0` is the version of Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2406.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2410.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options

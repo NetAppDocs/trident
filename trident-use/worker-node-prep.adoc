@@ -86,6 +86,12 @@ NOTE: For example, if CHAP secrets were rotated on the storage controller and th
 * Missing iSCSI sessions
 * Missing LUNs
 
+*Points to consider before upgrading Trident*
+
+ * If only per-node igroups (introduced in 23.04+) are in use, iSCSI self-healing will initiate SCSI rescans for all devices in the SCSI bus.
+ * If only backend-scoped igroups (deprecated as of 23.04) are in use, iSCSI self-healing will initiate SCSI rescans for exact LUN IDs in the SCSI bus. 
+ * If a mix of per-node igroups and backend-scoped igroups are in use, iSCSI self-healing will initiate SCSI rescans for exact LUN IDs in the SCSI bus. 
+
 === Install the iSCSI tools
 Install the iSCSI tools using the commands for your operating system.  
 
@@ -200,7 +206,7 @@ To configure or change iSCSI self-healing settings, pass the `iscsiSelfHealingIn
 
 The following example sets the iSCSI self-healing interval to 3 minutes and self-healing wait time to 6 minutes:
 ----
-helm install trident trident-operator-100.2406.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
+helm install trident trident-operator-100.2410.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
 ----
 --
 .tridentctl

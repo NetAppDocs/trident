@@ -79,7 +79,7 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Astra Trident can ma
 |`aggregate`
 a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. If not assigned, any of the available aggregates can be used to provision a FlexGroup Volume.
 
-NOTE: When the aggregate list is updated in SVM, the list is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on SVM or remove it altogether to bring the backend back online.
+NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on SVM or remove it altogether to bring the backend back online.
 
 a|""
 
@@ -89,7 +89,7 @@ a|""
 
 |flexgroupAggregateList a| List of aggregates for provisioning (optional; if set, must be assigned to the SVM). All aggregates assigned to the SVM are used to provision a FlexGroup Volume. Supported for *ontap-nas-flexgroup* storage driver. 
 
-NOTE: When the aggregate list is updated in SVM, the list is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on SVM or remove it altogether to bring the backend back online.
+NOTE: When the aggregate list is updated in SVM, the list is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate list in Trident to provision volumes, if the aggregate list is renamed or moved out of SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate list to one that is present on SVM or remove it altogether to bring the backend back online.
 
 | ""
 

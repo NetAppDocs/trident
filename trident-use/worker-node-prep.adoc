@@ -29,19 +29,19 @@ NOTE: We recommend ONTAP 9.12 or later for NVMe/TCP.
 
 == Node service discovery
 
-Astra Trident attempts to automatically detect if the node can run iSCSI or NFS services. 
+Trident attempts to automatically detect if the node can run iSCSI or NFS services. 
 
 NOTE: Node service discovery identifies discovered services but does not guarantee services are properly configured. Conversely, the absence of a discovered service does not guarantee the volume mount will fail.
 
 .Review events
-Astra Trident creates events for the node to identify the discovered services. To review these events, run:
+Trident creates events for the node to identify the discovered services. To review these events, run:
 
 ----
 kubectl get event -A --field-selector involvedObject.name=<Kubernetes node name>
 ----
 
 .Review discovered services
-Astra Trident identifies services enabled for each node on the Trident node CR. To view the discovered services, run: 
+Trident identifies services enabled for each node on the Trident node CR. To view the discovered services, run: 
 
 ----
 tridentctl get node -o wide -n <Trident namespace>
@@ -67,24 +67,30 @@ sudo apt-get install -y nfs-common
 WARNING: Reboot your worker nodes after installing the NFS tools to prevent failure when attaching volumes to containers.
 
 == iSCSI volumes
-Astra Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod. 
+Trident can automatically establish an iSCSI session, scan LUNs, and discover multipath devices, format them, and mount them to a pod. 
 
 === iSCSI self-healing capabilities
-For ONTAP systems, Astra Trident runs iSCSI self-healing every five minutes to:
+For ONTAP systems, Trident runs iSCSI self-healing every five minutes to:
 
 . *Identify* the desired iSCSI session state and the current iSCSI session state. 
-. *Compare* the desired state to the current state to identify needed repairs. Astra Trident determines repair priorities and when to preempt repairs. 
+. *Compare* the desired state to the current state to identify needed repairs. Trident determines repair priorities and when to preempt repairs. 
 . *Perform repairs* required to return the current iSCSI session state to the desired iSCSI session state. 
 
-NOTE: Logs of self-healing activity are located in the `trident-main` container on the respective Daemonset pod. To view logs, you must have set `debug` to "true" during Astra Trident installation.
+NOTE: Logs of self-healing activity are located in the `trident-main` container on the respective Daemonset pod. To view logs, you must have set `debug` to "true" during Trident installation.
 
-Astra Trident iSCSI self-healing capabilities can help prevent:
+Trident iSCSI self-healing capabilities can help prevent:
 
-* Stale or unhealthy iSCSI sessions that could occur after a network connectivity issue. In the case of a stale session, Astra Trident waits seven minutes before logging out to reestablish the connection with a portal.
+* Stale or unhealthy iSCSI sessions that could occur after a network connectivity issue. In the case of a stale session, Trident waits seven minutes before logging out to reestablish the connection with a portal.
 +
 NOTE: For example, if CHAP secrets were rotated on the storage controller and the network loses connectivity, the old (_stale_) CHAP secrets could persist. Self-healing can recognize this and automatically reestablish the session to apply the updated CHAP secrets. 
 * Missing iSCSI sessions
 * Missing LUNs
+
+*Points to consider before upgrading Trident*
+
+ * If only per-node igroups (introduced in 23.04+) are in use, iSCSI self-healing will initiate SCSI rescans for all devices in the SCSI bus.
+ * If only backend-scoped igroups (deprecated as of 23.04) are in use, iSCSI self-healing will initiate SCSI rescans for exact LUN IDs in the SCSI bus. 
+ * If a mix of per-node igroups and backend-scoped igroups are in use, iSCSI self-healing will initiate SCSI rescans for exact LUN IDs in the SCSI bus. 
 
 === Install the iSCSI tools
 Install the iSCSI tools using the commands for your operating system.  
@@ -181,7 +187,7 @@ NOTE: For Ubuntu 18.04, you must discover target ports with `iscsiadm` before st
 
 === Configure or disable iSCSI self healing
 
-You can configure the following Astra Trident iSCSI self-healing settings to fix stale sessions:
+You can configure the following Trident iSCSI self-healing settings to fix stale sessions:
 
 * *iSCSI self-healing interval*: Determines the frequency at which iSCSI self-healing is invoked (default: 5 minutes). You can configure it to run more frequently by setting a smaller number or less frequently by setting a larger number.
 
@@ -200,7 +206,7 @@ To configure or change iSCSI self-healing settings, pass the `iscsiSelfHealingIn
 
 The following example sets the iSCSI self-healing interval to 3 minutes and self-healing wait time to 6 minutes:
 ----
-helm install trident trident-operator-100.2406.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
+helm install trident trident-operator-100.2410.0.tgz --set iscsiSelfHealingInterval=3m0s --set iscsiSelfHealingWaitTime=6m0s -n trident
 ----
 --
 .tridentctl
@@ -248,4 +254,4 @@ After installation, verify that each node in the Kubernetes cluster has a unique
 cat /etc/nvme/hostnqn
 ----
 
-WARNING: Astra Trident modifies the `ctrl_device_tmo` value to ensure NVMe doesn't give up on the path if it goes down. Do not change this setting.
+WARNING: Trident modifies the `ctrl_device_tmo` value to ensure NVMe doesn't give up on the path if it goes down. Do not change this setting.

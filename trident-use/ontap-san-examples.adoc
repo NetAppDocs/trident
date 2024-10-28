@@ -103,7 +103,11 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST` is fully qualified for NVMe/TCP. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
-|`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
+a|`sanType` |
+
+Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibre Channel (FC).
+
+*'fcp' (SCSI over FC) is a tech preview feature in Trident 24.10 release.*| `iscsi` if blank
 
 |===
 

@@ -107,6 +107,8 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 |`formatOptions`
 a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Ensure that you specify the appropriate formatOptions with the `mkfs` command without the device path.
+*Example*: `-E nodiscard,lazy_itable_init=1 -O uninit_bg -m 0` 
+
 
 *Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
 a|

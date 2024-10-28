@@ -182,8 +182,7 @@ Updating a backend does not disrupt access to volumes that have already been cre
 
 === Create custom ONTAP role for Trident
 
-To access specific ONTAP APIs and ZAPI commands used by Trident, you can create a custom role in ONTAP with rule definitions and map the role to a Trident user (username). When the username is included in Trident a backend configuration, the user can access the ONTAP APIs and commands.
-
+You can create an ONTAP cluster role with minimum privileges so that you do not have to use the ONTAP admin role to perform operations in Trident. When the username is included in Trident a backend configuration, Trident will use the created role to perform the operations.
 
 [role="tabbed-block"]
 ====
@@ -230,11 +229,10 @@ NOTE: Use this file <<Link>> to get the the list of ReST APIs and ZAPI commands 
 
 ====
 
-NOTE: Refer the the Readme file <<link>> for detailed information about creating Trident role with.
+Refer to the following pages:
 
-
-Refer to link:https://docs.netapp.com/us-en/snapcenter/install/task_create_an_ontap_cluster_role_with_minimum_privileges.html#ontap-cli-commands-for-creating-roles-and-assigning-permissions[ONTAP CLI commands for creating cluster roles and assigning permissions].
-
+* link:https://docs.netapp.com/us-en/ontap/authentication/define-custom-roles-task.html[Define custom roles]
+* link:https://docs.netapp.com/us-en/ontap-automation/rest/rbac_roles_users.html#rest-api[Work with roles and users]
 
 == Authenticate connections with bidirectional CHAP
 

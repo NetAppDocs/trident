@@ -98,7 +98,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2406.0  --crea
 == Configuration options
 This table and the `values.yaml` file, which is part of the Helm chart, provide the list of keys and their default values.
 
-WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide custom affinity, extend the default affinity.
+WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide a custom affinity, extend the default affinity.
 
 [cols=3,options="header"]
 |===
@@ -142,7 +142,7 @@ affinity:
               - linux 
 ----
 
-WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide custom affinity, extend the default affinity.
+WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide a custom affinity, extend the default affinity.
 
 |`tridentControllerPluginNodeSelector`
 |Additional node selectors for pods. Refer to link:../trident-get-started/architecture.html#understanding-controller-pods-and-node-pods[Understanding controller pods and node pods] for details.

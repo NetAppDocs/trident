@@ -30,7 +30,7 @@ helm registry login cr.astra.netapp.io -u <account-id> -p <api-token>
 +
 [source,console]
 ----
-kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect-system --docker-server= cr.astra.netapp.io
+kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect --docker-server= cr.astra.netapp.io
 ----
 . Use Helm to install Trident protect. If you are installing from a private registry, replace `cr.astra.netapp.io` with the name of the private registry:
 +
@@ -41,5 +41,5 @@ helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-
 +
 [source,console]
 ----
-helm install -n trident-protect-system --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.11.0
+helm install -n trident-protect --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.11.0
 ----

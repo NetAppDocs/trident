@@ -11,9 +11,9 @@ summary: "Trident protect uses the Kubernetes model of role-based access control
 [.lead]
 Trident protect uses the Kubernetes model of role-based access control (RBAC). By default, Trident protect provides a single system namespace and its associated default service account. If you have an organization with many users or specific security needs, you can use the RBAC features of Trident protect to gain more granular control over access to resources and namespaces.
 
-With Trident protect, the cluster administrator always has access to resources in the default `trident-protect-system` namespace, and can also access resources in all other namespaces. To control access to resources and applications, you need to create additional namespaces and add resources and applications to those namespaces.
+With Trident protect, the cluster administrator always has access to resources in the default `trident-protect` namespace, and can also access resources in all other namespaces. To control access to resources and applications, you need to create additional namespaces and add resources and applications to those namespaces.
 
-Note that no users can create application data management CRs in the default `trident-protect-system` namespace. You need to create application data management CRs in other namespaces (as a best practice, create application data management CRs in the same namespace as their associated application).
+Note that no users can create application data management CRs in the default `trident-protect` namespace. You need to create application data management CRs in other namespaces (as a best practice, create application data management CRs in the same namespace as their associated application).
 
 [NOTE]
 ======

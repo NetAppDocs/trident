@@ -142,7 +142,7 @@ Already enabled by default(2.6.37+), but if you can wait for the initialization 
 
 Create a filesystem without initializing all of the block groups. This feature also enables checksums and `highest-inode-used` statistics in each blockgroup. This feature can speed up filesystem creation time noticeably (if lazy_itable_init is enabled), and can also reduce e2fsck time dramatically. It is only supported by the ext4 filesystem in Linux Kernels that are either equal or greater than 2.6.28.
 
-*There are other options too which can save the time during formatting:*
+*There are other options too which can save the formatting time:*
 
 *sparse_super:* Create a filesystem with fewer superblock backup copies (saves space on large filesystems).
 *large_file:* Filesystem can contain files that are greater than 2GB.  (Modern kernels set this feature  automatically when a file greater than 2GB is created.)
@@ -160,11 +160,11 @@ NOTE: Must be used only if you know the RAID that is being used. Generally in ON
 
 Trident does not recommend using the following options:
 
-*-E test_fs:* Sets a flag in the filesystem superblock indicating that it may be mounted using experimental kernel.
+*-E:* Sets a flag in the filesystem superblock indicating that it may be mounted using experimental kernel.
 
 *-F:* Forces mkfs to create a filesystem, even if the specified device is not a partition on a block special device, or if other parameters do not make sense.
 
-*-g blocks-per-group:* Specifies the number of blocks in a block group. There is generally no reason to ever set this parameter because the default is optimal for the filesystem.
+*-g:* Specifies the number of blocks in a block group. There is generally no reason to ever set this parameter because the default is optimal for the filesystem.
 *-n:* Causes mkfs to not actually create a filesystem, but display what it would do if it were to create a filesystem.
 
 == Backend configuration options for provisioning volumes

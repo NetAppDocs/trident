@@ -182,9 +182,9 @@ Updating a backend does not disrupt access to volumes that have already been cre
 
 === Create custom ONTAP role for Trident
 
-You can create an ONTAP cluster role with minimum privileges so that you do not have to use the ONTAP admin role to perform operations in Trident. When the username is included in Trident a backend configuration, Trident will use the created role to perform the operations.
+You can create an ONTAP cluster role with minimum privileges so that you do not have to use the ONTAP admin role to perform operations in Trident. When you include the username in a Trident backend configuration, Trident uses the ONTAP cluster role you created to perform the operations.
 
-Refer to link:https://github.com/NetApp/trident/tree/master/contrib/ontap/trident_role[Trident custom-role generator] for more information about creating Trident custom role.
+Refer to link:https://github.com/NetApp/trident/tree/master/contrib/ontap/trident_role[Trident custom-role generator] for more information about creating Trident custom roles.
 
 [role="tabbed-block"]
 ====
@@ -209,7 +209,7 @@ Refer to link:https://github.com/NetApp/trident/tree/master/contrib/ontap/triden
 Perform the following steps in ONTAP System Manager:
 
 . *Create a custom role*:
-.. Select *Cluster > Settings* to create a cluster-level custom role or.
+.. To create a custom role at the cluster-level, select *Cluster > Settings*.
 +
 (Or) To create a custom role at the SVM level, select *Storage > Storage VMs > `required SVM`> Settings > Users and Roles*.
 .. Select the arrow icon (*->*) next to *Users and Roles*.
@@ -227,8 +227,8 @@ Perform the following steps in ONTAP System Manager:
 
 Refer to the following pages for more information:
 
-* link:https://kb.netapp.com/on-prem/ontap/Ontap_OS/OS-KBs/FAQ__Custom_roles_for_administration_of_ONTAP[Custom roles for administration of ONTAP] or link:https://docs.netapp.com/us-en/ontap/authentication/define-custom-roles-task.html[Define custom roles]
-* link:https://docs.netapp.com/us-en/ontap-automation/rest/rbac_roles_users.html#rest-api[Work with roles and users]
+* link:https://kb.netapp.com/on-prem/ontap/Ontap_OS/OS-KBs/FAQ__Custom_roles_for_administration_of_ONTAP[Custom roles for administration of ONTAP^] or link:https://docs.netapp.com/us-en/ontap/authentication/define-custom-roles-task.html[Define custom roles^]
+* link:https://docs.netapp.com/us-en/ontap-automation/rest/rbac_roles_users.html#rest-api[Work with roles and users^]
 
 == Authenticate connections with bidirectional CHAP
 

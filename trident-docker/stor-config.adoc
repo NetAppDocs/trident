@@ -122,9 +122,11 @@ a|Maximum qtrees per FlexVol, must be in range [50, 300], default is 200.
 *For the `ontap-nas-economy` driver, this option allows customizing the maximum number of qtrees per FlexVol*.
 a|`300`
 
-|`sanType` |*Supported for `ontap-san` driver only.* 
+a|`sanType` |*Supported for `ontap-san` driver only.* 
 
-Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
+Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibre Channel (FC).
+
+*'fcp' (SCSI over FC) is a tech preview feature in the Trident 24.10 release.*| `iscsi` if blank
 
 |`limitVolumePoolSize` |*Supported for `ontap-san-economy` and `ontap-san-economy` drivers only.* 
 

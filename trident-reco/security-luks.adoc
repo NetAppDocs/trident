@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-reco/security-luks.html
 keywords: security, luks, linux unified key setup, encryption, key rotation, resizing, advanced encryption, rotation, key, import
-summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. Astra Trident supports volume resizing and key (passphrase) rotation for LUKS-encrypted volumes.
+summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Trident. Trident supports volume resizing and key (passphrase) rotation for LUKS-encrypted volumes.
 ---
 
 = Linux Unified Key Setup (LUKS)
@@ -11,9 +11,9 @@ summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and 
 :imagesdir: ../media/
 
 [.lead]
-You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Astra Trident. Astra Trident supports passphrase rotation and volume expansion for LUKS-encrypted volumes.
+You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Trident. Trident supports passphrase rotation and volume expansion for LUKS-encrypted volumes.
 
-In Astra Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
+In Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
 .Before you begin
 
@@ -85,7 +85,7 @@ stringData:
 LUKS-encrypted volumes cannot take advantage of ONTAP deduplication and compression. 
 
 == Backend configuration for importing LUKS volumes
-To import a LUKS volume, you must set `luksEncryption` to `true` on the backend. The `luksEncryption` option tells Astra Trident if the volume is LUKS-compliant (`true`) or not LUKS-compliant (`false`) as shown in the following example. 
+To import a LUKS volume, you must set `luksEncryption` to `true` on the backend. The `luksEncryption` option tells Trident if the volume is LUKS-compliant (`true`) or not LUKS-compliant (`false`) as shown in the following example. 
 
 ----
 version: 1
@@ -102,6 +102,27 @@ defaults:
   snapshotReserve: '10'
 ----
 
+== PVC configuration for importing LUKS volumes
+
+To import LUKS volumes dynamically, set the annotation `trident.netapp.io/luksEncryption` to `true` and include a LUKS-enabled storage class in the PVC as shown in this example.
+
+----
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: luks-pvc
+  namespace: trident
+  annotations:
+    trident.netapp.io/luksEncryption: "true"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: luks-sc
+----
+
 == Rotate a LUKS passphrase
 You can rotate the LUKS passphrase and confirm rotation. 
 
@@ -109,7 +130,7 @@ WARNING: Do not forget a passphrase until you have verified it is no longer refe
 
 .About this task
 
-LUKS passphrase rotation occurs when a pod that mounts the volume is created after a new LUKS passphrase is specified. When a new pod is created, Astra Trident compares the LUKS passphrase on the volume to the active passphrase in the secret. 
+LUKS passphrase rotation occurs when a pod that mounts the volume is created after a new LUKS passphrase is specified. When a new pod is created, Trident compares the LUKS passphrase on the volume to the active passphrase in the secret. 
 
 * If the passphrase on the volume does not match the active passphrase in the secret, rotation occurs. 
 * If the passphrase on the volume matches the active passphrase in the secret, the `previous-luks-passphrase` parameter is ignored.

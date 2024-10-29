@@ -2,25 +2,25 @@
 sidebar: sidebar
 permalink: trident-reference/rest-api.html
 keywords: rest api, get, post, json, object, backends
-summary: You can use the REST endpoint directly if you prefer to interact with Astra Trident's REST API.
+summary: You can use the REST endpoint directly if you prefer to interact with Trident's REST API.
 ---
 
-= Astra Trident REST API
+= Trident REST API
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-While link:tridentctl.html[tridentctl commands and options] are the easiest way to interact with the Astra Trident REST API, you can use the REST endpoint directly if you prefer.
+While link:tridentctl.html[tridentctl commands and options] are the easiest way to interact with the Trident REST API, you can use the REST endpoint directly if you prefer.
 
 == When to use the REST API
 
-REST API is useful for advanced installations that use Astra Trident as a standalone binary in non-Kubernetes deployments.
+REST API is useful for advanced installations that use Trident as a standalone binary in non-Kubernetes deployments.
 
-For better security, the Astra Trident `REST API` is restricted to localhost by default when running inside a pod. To change this behavior, you need to set Astra Trident's `-address` argument in its pod configuration.
+For better security, the Trident `REST API` is restricted to localhost by default when running inside a pod. To change this behavior, you need to set Trident's `-address` argument in its pod configuration.
 
 == Using REST API
-For examples of how these APIs are called, pass the debug (`-d`) flag. For more information, refer to link:../trident-managing-k8s/tridentctl.html[Manage Astra Trident using tridentctl].
+For examples of how these APIs are called, pass the debug (`-d`) flag. For more information, refer to link:../trident-managing-k8s/tridentctl.html[Manage Trident using tridentctl].
 
 The API works as follows:
 
@@ -31,12 +31,12 @@ The API works as follows:
 === POST
 `POST <trident-address>/trident/v1/<object-type>`:: Creates an object of the specified type.
 +
-* Requires a JSON configuration for the object to be created. For the specification of each object type, refer to link:../trident-managing-k8s/tridentctl.html[Manage Astra Trident using tridentctl].
+* Requires a JSON configuration for the object to be created. For the specification of each object type, refer to link:../trident-managing-k8s/tridentctl.html[Manage Trident using tridentctl].
 * If the object already exists, behavior varies: backends update the existing object, while all other object types will fail the operation.
 
 === DELETE
 `DELETE <trident-address>/trident/v1/<object-type>/<object-name>`:: Deletes the named resource.
 +
-NOTE: Volumes associated with backends or storage classes will continue to exist; these must be deleted separately. For more information, refer to link:../trident-managing-k8s/tridentctl.html[Manage Astra Trident using tridentctl].
+NOTE: Volumes associated with backends or storage classes will continue to exist; these must be deleted separately. For more information, refer to link:../trident-managing-k8s/tridentctl.html[Manage Trident using tridentctl].
 
 

@@ -29,7 +29,7 @@ After you identify and correct the problem with the configuration file, you can 
 
 == Delete a backend
 
-To delete a backend from Astra Trident, do the following:
+To delete a backend from Trident, do the following:
 
 . Retrieve the backend name:
 +
@@ -42,7 +42,7 @@ tridentctl get backend -n trident
 tridentctl delete backend <backend-name> -n trident
 ----
 
-NOTE: If Astra Trident has provisioned volumes and snapshots from this backend that still exist, deleting the backend prevents new volumes from being provisioned by it. The backend will continue to exist in a “Deleting” state and Trident will continue to manage those volumes and snapshots until they are deleted.
+NOTE: If Trident has provisioned volumes and snapshots from this backend that still exist, deleting the backend prevents new volumes from being provisioned by it. The backend will continue to exist in a “Deleting” state and Trident will continue to manage those volumes and snapshots until they are deleted.
 
 == View the existing backends
 

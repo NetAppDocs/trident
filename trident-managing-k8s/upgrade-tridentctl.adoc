@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-managing-k8s/upgrade-tridentctl.html
 keywords: upgrade, trident, methods, operator, tridentctl, helm
-summary: You can easily upgrade an existing Astra Trident installation by using `tridentctl`.
+summary: You can easily upgrade an existing Trident installation by using `tridentctl`.
 ---
 
 = Upgrade with tridentctl
@@ -11,21 +11,21 @@ summary: You can easily upgrade an existing Astra Trident installation by using 
 :imagesdir: ../media/
 
 [.lead]
-You can easily upgrade an existing Astra Trident installation using `tridentctl`.
+You can easily upgrade an existing Trident installation using `tridentctl`.
 
 .About this task
-Uninstalling and reinstalling Astra Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Astra Trident deployment are not deleted. PVs that have already been provisioned will remain available while Astra Trident is offline, and Astra Trident will provision volumes for any PVCs that are created in the interim once it is back online.
+Uninstalling and reinstalling Trident acts as an upgrade. When you uninstall Trident, the Persistent Volume Claim (PVC) and Persistent Volume (PV) used by the Trident deployment are not deleted. PVs that have already been provisioned will remain available while Trident is offline, and Trident will provision volumes for any PVCs that are created in the interim once it is back online.
 
 .Before you begin
 Review link:upgrade-trident.html#select-an-upgrade-method[Select an upgrade method] before upgrading using `tridentctl`. 
 
 .Steps
 
-. Run the uninstall command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects.
+. Run the uninstall command in `tridentctl` to remove all of the resources associated with Trident except for the CRDs and related objects.
 +
 ----
 ./tridentctl uninstall -n <namespace>
 ----
-. Reinstall Astra Trident. Refer to link:../trident-get-started/kubernetes-deploy-tridentctl.html[Install Astra Trident using tridentctl]. 
+. Reinstall Trident. Refer to link:../trident-get-started/kubernetes-deploy-tridentctl.html[Install Trident using tridentctl]. 
 
 IMPORTANT: Do not interrupt the upgrade process. Ensure the installer runs to completion.

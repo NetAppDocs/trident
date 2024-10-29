@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-docker/stor-config.html
 keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protocol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, storage pool, cvs, cvs-performance, service type, service level, cloud volumes service, cloud volumes
-summary: See the configuration options available for your Astra Trident configurations.
+summary: See the configuration options available for your Trident configurations.
 ---
 
 = Storage configuration options
@@ -11,11 +11,11 @@ summary: See the configuration options available for your Astra Trident configur
 :imagesdir: ../media/
 
 [.lead]
-See the configuration options available for your Astra Trident configurations.
+See the configuration options available for your Trident configurations.
 
 == Global configuration options
 
-These configuration options apply to all Astra Trident configurations, regardless of the storage platform being used.
+These configuration options apply to all Trident configurations, regardless of the storage platform being used.
 
 [%header,cols=3*]
 |===
@@ -75,9 +75,9 @@ a|`10.0.0.1`
 |`dataLIF`
 a|IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: We recommend specifying `dataLIF`. If not provided, Astra Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
+*ONTAP NAS drivers*: We recommend specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
 
-*ONTAP SAN drivers*: Do not specify for iSCSI.  Astra Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
+*ONTAP SAN drivers*: Do not specify for iSCSI.  Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 a|`10.0.0.2`
 
 |`svm`
@@ -105,7 +105,7 @@ a| Fine grained control of NFS mount options; defaults to “-o nfsvers=3”. *A
 a|`-o nfsvers=4`
 
 |`igroupName`
-a|Astra Trident creates and manages per-node `igroups` as `netappdvp`. 
+a|Trident creates and manages per-node `igroups` as `netappdvp`. 
 
 This value cannot be changed or omitted.
 
@@ -122,9 +122,11 @@ a|Maximum qtrees per FlexVol, must be in range [50, 300], default is 200.
 *For the `ontap-nas-economy` driver, this option allows customizing the maximum number of qtrees per FlexVol*.
 a|`300`
 
-|`sanType` |*Supported for `ontap-san` driver only.* 
+a|`sanType` |*Supported for `ontap-san` driver only.* 
 
-Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
+Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibre Channel (FC).
+
+*'fcp' (SCSI over FC) is a tech preview feature in the Trident 24.10 release.*| `iscsi` if blank
 
 |`limitVolumePoolSize` |*Supported for `ontap-san-economy` and `ontap-san-economy` drivers only.* 
 
@@ -160,9 +162,9 @@ a|`false`
 |`encryption`
 a|Enables NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
-If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
+If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
 
-For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE].
+For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE].
 a|true
 
 |`unixPermissions`

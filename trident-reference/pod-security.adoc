@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-reference/pod-security.html
 keywords: psp, pss, scc, pod security, pod security standards, pod security policies, security context constraints
-summary: Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Astra Trident enables certain permissions during installation. 
+summary: Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Trident enables certain permissions during installation. 
 ---
 
 = Pod Security Standards (PSS) and Security Context Constraints (SCC)
@@ -11,7 +11,7 @@ summary: Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP)
 :imagesdir: ../media/
 
 [.lead]
-Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Astra Trident enables certain permissions during installation. The following sections detail the permissions set by Astra Trident. 
+Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Trident enables certain permissions during installation. The following sections detail the permissions set by Trident. 
 
 NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes v1.21 and will be removed in v1.25. For more information, Refer to link:https://kubernetes.io/docs/concepts/security/[Kubernetes: Security].
 
@@ -40,7 +40,7 @@ NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes
 //row 
 |Host PID
 
-|Required to start `rpc-statd` for NFS. Astra Trident queries host processes to determine if `rpc-statd` is running before mounting NFS volumes.
+|Required to start `rpc-statd` for NFS. Trident queries host processes to determine if `rpc-statd` is running before mounting NFS volumes.
 
 //row 
 |Capabilities
@@ -52,12 +52,12 @@ NOTE: PSS replaces Pod Security Policies (PSP). PSP was deprecated in Kubernetes
 //row 
 |Seccomp
 
-|Seccomp profile is always "Unconfined" in privileged containers; therefore, it cannot be enabled in Astra Trident.
+|Seccomp profile is always "Unconfined" in privileged containers; therefore, it cannot be enabled in Trident.
 
 //row 
 |SELinux
 
-|On OpenShift, privileged containers are run in the `spc_t` ("Super Privileged Container") domain, and unprivileged containers are run in the `container_t` domain. On `containerd`, with `container-selinux` installed, all containers are run in the `spc_t` domain, which effectively disables SELinux. Therefore, Astra Trident does not add `seLinuxOptions` to containers. 
+|On OpenShift, privileged containers are run in the `spc_t` ("Super Privileged Container") domain, and unprivileged containers are run in the `container_t` domain. On `containerd`, with `container-selinux` installed, all containers are run in the `spc_t` domain, which effectively disables SELinux. Therefore, Trident does not add `seLinuxOptions` to containers. 
 
 //row 
 |DAC

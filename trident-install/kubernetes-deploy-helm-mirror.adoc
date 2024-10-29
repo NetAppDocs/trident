@@ -56,15 +56,14 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 .Images in one registry
 --
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
 ----
 --
 
 .Images in different registries
 --
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:24.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:24.10 --set tridentImage=<your-registry>/trident:24.10.0 --create-namespace --namespace <trident-namespace>
-=======
+helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:24.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:24.06 --set tridentImage=<your-registry>/trident:24.10.0 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
 ----
 --
 ====
@@ -92,10 +91,16 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `100.2410.0` is the version of Trident you are installing:
+For example, to change the default value of `debug`, run the following command where `100.2410.0` is the version of Trident you are installing:
 
 ----
 helm install <name> netapp-trident/trident-operator --version 100.2410.0  --create-namespace --namespace trident --set tridentDebug=true
+----
+
+To add the nodePrep value, run the following command: 
+
+----
+helm install <name> netapp-trident/trident-operator --version 100.2406.0  --create-namespace --namespace trident --set nodePrep={iscsi}
 ----
 
 == Configuration options
@@ -218,7 +223,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`<version>`
 
 |`tridentAutosupportProxy`
-|Allows Trident AutoSupport container to phone home via an HTTP proxy.
+|Enables Trident AutoSupport container to phone home via an HTTP proxy.
 |""
 
 |`tridentLogFormat`
@@ -258,7 +263,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |""
 
 |`windows`
-|Allows Trident to be installed on Windows worker node.
+|Enables Trident to be installed on Windows worker node.
 |`false`
 
 |`enableForceDetach`
@@ -268,5 +273,10 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`excludePodSecurityPolicy`
 |Excludes the operator pod security policy from creation.
 |`false`
+
+|`nodePrep`
+|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol.
+*Currently, `iscsi` is the only value supported.*
+|
 
 |===

@@ -88,6 +88,11 @@ Trident |
 
 |`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as `pod.spec.Tolerations`. |No default; optional
 
+|`nodePrep`
+|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+*Currently, `iscsi` is the only value supported.*
+|
+
 |===
 [NOTE] 
 For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].

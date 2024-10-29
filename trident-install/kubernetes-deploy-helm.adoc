@@ -73,7 +73,7 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `100.2410.0` is the version of Trident you are installing:
+For example, to change the default value of `debug`, run the following command where `100.2410.0` is the version of Trident you are installing:
 
 ----
 helm install <name> netapp-trident/trident-operator --version 100.2410.0  --create-namespace --namespace trident --set tridentDebug=true
@@ -196,7 +196,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`<version>`
 
 |`tridentAutosupportProxy`
-|Allows Trident AutoSupport container to phone home via an HTTP proxy.
+|Enables Trident AutoSupport container to phone home via an HTTP proxy.
 |`""`
 
 |`tridentLogFormat`
@@ -236,7 +236,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`""`
 
 |`windows`
-|Allows Trident to be installed on Windows worker node.
+|Enables Trident to be installed on Windows worker node.
 |`false`
 
 |`enableForceDetach`
@@ -254,6 +254,11 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`iscsiSelfHealingInterval` |The interval at which the iSCSI self-healing is invoked.|`5m0s`
 
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
+
+|`nodePrep`
+|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+*Currently, `iscsi` is the only value supported.*
+|
 
 |===
 

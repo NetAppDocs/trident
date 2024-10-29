@@ -16,7 +16,7 @@ Learn about configuring an ONTAP backend with ONTAP and Cloud Volumes ONTAP SAN 
 == ONTAP SAN driver details
 Trident provides the following SAN storage drivers to communicate with the ONTAP cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
-IMPORTANT: If you are using Astra Control for protection, recovery, and mobility, read <<Astra Control driver compatibility>>. 
+//IMPORTANT: If you are using Astra Control for protection, recovery, and mobility, read <<Astra Control driver compatibility>>. 
 
 [cols="2, 1, 1, 2, 2", options="header"]
 |===
@@ -74,8 +74,8 @@ a|`xfs`, `ext3`, `ext4`
 |===
 
 
-=== Astra Control driver compatibility
-Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. Refer to link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details. 
+//=== Astra Control driver compatibility
+//Astra Control provides seamless protection, disaster recovery, and mobility (moving volumes between Kubernetes clusters) for volumes created with the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers. Refer to link:https://docs.netapp.com/us-en/astra-control-center/use/replicate_snapmirror.html#replication-prerequisites[Astra Control replication prerequisites^] for details.
 
 [WARNING]
 ====

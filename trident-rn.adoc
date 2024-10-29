@@ -94,16 +94,16 @@ Added support for Kubernetes 1.28.
 * Added support for NVMe over TCP for the ONTAP-SAN driver.
 * Added ability to pause the provisioning of a volume when backend is set to suspended state by user (link:https://github.com/NetApp/trident/issues/558[Issue #558^]).
 
-=== Advanced features available in Astra Control
+//=== Advanced features available in Astra Control
 
-With Trident 23.10, a new software component called Astra Control Provisioner is available to licensed Astra Control users. This provisioner provides access to a superset of advanced management and storage provisioning features beyond those that Trident supports on its own. For the 23.10 release, these features include:
+//With Trident 23.10, a new software component called Astra Control Provisioner is available to licensed Astra Control users. This provisioner provides access to a superset of advanced management and storage provisioning features beyond those that Trident supports on its own. For the 23.10 release, these features include:
 
-* Backup and restore capabilities for applications with ontap-nas-economy driver-backed storage backends
-* Enhanced storage backend security with Kerberos 5 encryption
-* Data recovery using a snapshot
-* SnapMirror enhancements
+//* Backup and restore capabilities for applications with ontap-nas-economy driver-backed storage backends
+//* Enhanced storage backend security with Kerberos 5 encryption
+//* Data recovery using a snapshot
+//* SnapMirror enhancements
 
-link:https://docs.netapp.com/us-en/astra-control-center/release-notes/whats-new.html[Learn more about Astra Control Provisioner.^] 
+//link:https://docs.netapp.com/us-en/astra-control-center/release-notes/whats-new.html[Learn more about Astra Control Provisioner.^] 
 
 == Changes in 23.07.1
 *Kubernetes:* Fixed daemonset deletion to support zero-downtime upgrades (link:https://github.com/NetApp/trident/issues/740[Issue #740^]).

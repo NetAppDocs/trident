@@ -82,6 +82,13 @@ Set to `true` for Trident to configure and use bidirectional CHAP as the default
 
 Cannot be modified later. To update this parameter, you will need to create a new backend.|`trident`
 
+|`aggregate`
+a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. If not assigned, any of the available aggregates can be used to provision a FlexGroup volume.
+
+NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
+
+a|""
+
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
 If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.|"" (not enforced by default)

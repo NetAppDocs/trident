@@ -38,6 +38,8 @@ Review link:../trident-get-started/kubernetes-deploy.html[the installation overv
 
 In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you-deploy[deployment prerequisites] you need link:https://v3.helm.sh/[Helm version 3^].
 
+IMPORTANT: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
+
 .Steps
 
 . Add the Trident Helm repository:
@@ -60,9 +62,9 @@ helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set i
 
 .Images in different registries
 --
-You must append `sig-storage` to the `imageRegistry` to use different registry locations.
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set imageRegistry=<your-registry>/sig-storage --set operatorImage=<your-registry>/netapp/trident-operator:24.10.0 --set tridentAutosupportImage=<your-registry>/netapp/trident-autosupport:24.10 --set tridentImage=<your-registry>/netapp/trident:24.10.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2406.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:24.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:24.10 --set tridentImage=<your-registry>/trident:24.10.0 --create-namespace --namespace <trident-namespace>
+=======
 ----
 --
 ====
@@ -142,7 +144,9 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |
 
 |`imageRegistry`
-|Identifies the registry for the `trident-operator`, `trident`, and other images.  Leave empty to accept the default.
+|Identifies the registry for the `trident-operator`, `trident`, and other images. Leave empty to accept the default.
+
+IMPORTANT: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
 |""
 
 |`imagePullPolicy`

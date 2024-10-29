@@ -182,6 +182,56 @@ NOTE: When rotating passwords, the storage administrator must first update the p
 
 Updating a backend does not disrupt access to volumes that have already been created, nor impact volume connections made after. A successful backend update indicates that Trident can communicate with the ONTAP backend and handle future volume operations.
 
+=== Create custom ONTAP role for Trident
+
+You can create an ONTAP cluster role with minimum privileges so that you do not have to use the ONTAP admin role to perform operations in Trident. When you include the username in a Trident backend configuration, Trident uses the ONTAP cluster role you created to perform the operations.
+
+Refer to link:https://github.com/NetApp/trident/tree/master/contrib/ontap/trident_role[Trident custom-role generator] for more information about creating Trident custom roles.
+
+[role="tabbed-block"]
+====
+
+.Using ONTAP CLI
+--
+. Create a new role using the following command:
++
+`security login role create <role_name\> -cmddirname "command" -access all –vserver <svm_name\>`
+. Create a usename for the Trident user:
++
+`security login create -username <user_name\> -application ontapi -authmethod <password\> -role <name_of_role_in_step_1\> –vserver <svm_name\> -comment "user_description"`
+. Map the role to the user:
++
+`security login modify username <user_name\> –vserver <svm_name\> -role <role_name\> -application ontapi -application console -authmethod <password\>`
+
+--
+
+.Using System Manager
+--
+
+Perform the following steps in ONTAP System Manager:
+
+. *Create a custom role*:
+.. To create a custom role at the cluster-level, select *Cluster > Settings*.
++
+(Or) To create a custom role at the SVM level, select *Storage > Storage VMs > `required SVM`> Settings > Users and Roles*.
+.. Select the arrow icon (*->*) next to *Users and Roles*.
+.. Select *+Add* under *Roles*.
+.. Define the rules for the role and click *Save*.
+. *Map the role to the Trident user*:
++ Perform the following steps on the *Users and Roles* page:
+.. Select Add icon *+* under *Users*.
+.. Select the required username, and select a role in the drop-down menu for *Role*.
+.. Click *Save*.
+
+--
+
+====
+
+Refer to the following pages for more information:
+
+* link:https://kb.netapp.com/on-prem/ontap/Ontap_OS/OS-KBs/FAQ__Custom_roles_for_administration_of_ONTAP[Custom roles for administration of ONTAP^] or link:https://docs.netapp.com/us-en/ontap/authentication/define-custom-roles-task.html[Define custom roles^]
+* link:https://docs.netapp.com/us-en/ontap-automation/rest/rbac_roles_users.html#rest-api[Work with roles and users^]
+
 == Manage NFS export policies
 
 Trident uses NFS export policies to control access to the volumes that it provisions.

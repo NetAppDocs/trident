@@ -82,7 +82,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2410.0  --crea
 == Configuration options
 This table and the `values.yaml` file, which is part of the Helm chart, provide the list of keys and their default values. 
 
-[cols="1,2,1",options="header"]
+[cols="1,2,3",options="header"]
 |===
 |Option
 |Description
@@ -106,8 +106,25 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`affinity`
 |Affinity for pod assignment
-|
+a|
+----
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/arch
+              operator: In
+              values:
+              - arm64
+              - amd64
+            - key: kubernetes.io/os
+              operator: In
+              values:
+              - linux
+----
 
+WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide a custom affinity, extend the default affinity.
 |`tridentControllerPluginNodeSelector`
 |Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
 |

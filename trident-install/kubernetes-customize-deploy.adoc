@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-customize-deploy.html
 keywords: deploy, trident, methods, operator, tridentctl, helm, attributes, customize, tridentorchestrator, smb, windows
-summary: The Trident operator enables you to customize the manner in which Astra Trident is installed by using the attributes in the `TridentOrchestrator` spec.
+summary: The Trident operator enables you to customize the manner in which Trident is installed by using the attributes in the `TridentOrchestrator` spec.
 ---
 
 = Customize Trident operator installation
@@ -11,10 +11,10 @@ summary: The Trident operator enables you to customize the manner in which Astra
 :imagesdir: ../media/
 
 [.lead]
-The Trident operator allows you to customize Astra Trident installation using the attributes in the `TridentOrchestrator` spec. If you want to customize the installation beyond what `TridentOrchestrator` arguments allow, consider using `tridentctl` to generate custom YAML manifests to modify as needed.
+The Trident operator allows you to customize Trident installation using the attributes in the `TridentOrchestrator` spec. If you want to customize the installation beyond what `TridentOrchestrator` arguments allow, consider using `tridentctl` to generate custom YAML manifests to modify as needed.
 
 == Understanding controller pods and node pods
-Astra Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Astra Trident volume. 
+Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount a Trident volume. 
 
 Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. Using the`ControllerPlugin` and `NodePlugin`, you can specify constraints and overrides.
 
@@ -22,15 +22,15 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 * The node plugin handles attaching the storage to the node.
 
 == Configuration options
-WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify the namespace where Astra Trident is installed. This parameter *cannot be updated after Astra Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Astra Trident is not intended to be migrated across namespaces.
+WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify the namespace where Trident is installed. This parameter *cannot be updated after Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Trident is not intended to be migrated across namespaces.
 
 This table details `TridentOrchestrator` attributes.
 [cols="1,2,1",options="header"]
 |===
 |Parameter |Description |Default
-|`namespace` |Namespace to install Astra Trident in |`"default"`
+|`namespace` |Namespace to install Trident in |`"default"`
 
-|`debug` |Enable debugging for Astra Trident |`false`
+|`debug` |Enable debugging for Trident |`false`
 
 |`enableForceDetach` |`ontap-san` and `ontap-san-economy` only. 
 
@@ -40,9 +40,9 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 |`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
 
-|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role") when using cloud identity on an EKS cluster.|`""` 
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role") when using cloud identity on an EKS cluster.|`""` 
 
-|`IPv6` |Install Astra Trident over IPv6 |false
+|`IPv6` |Install Trident over IPv6 |false
 
 |`k8sTimeout` |Timeout for Kubernetes operations |`30sec`
 
@@ -50,25 +50,25 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:24.06"`
+|`"netapp/trident-autosupport:24.10"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
 
-|`uninstall` |A flag used to uninstall Astra Trident |`false`
+|`uninstall` |A flag used to uninstall Trident |`false`
 
-|`logFormat` |Astra Trident logging format to be used [text,json] |`"text"`
+|`logFormat` |Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Astra Trident image to install |`"netapp/trident:24.06"`
+|`tridentImage` |Trident image to install |`"netapp/trident:24.10"`
 
 |`imageRegistry` |Path to internal registry, of the format
-`<registry FQDN>[:port][/subpath]` |`"k8s.gcr.io/sig-storage"` (Kubernetes 1.19+)
+`<registry FQDN>[:port][/subpath]` |`"k8s.gcr.io"` (Kubernetes 1.19+)
 or `"quay.io/k8scsi"`
 
 |`kubeletDir` |Path to the kubelet directory on the host |`"/var/lib/kubelet"`
 
 |`wipeout` |A list of resources to delete to perform a complete removal of
-Astra Trident |
+Trident |
 
 |`imagePullSecrets` |Secrets to pull images from an internal registry |
 
@@ -100,19 +100,19 @@ For more information on formatting pod parameters, refer to link:https://kuberne
 === Details about force detach
 Force detach is available for `ontap-san` and `ontap-san-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. For more information, refer to link:https://kubernetes.io/docs/concepts/architecture/nodes/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
 
-WARNING: Because Astra Trident relies on Kubernetes NGNS, do not remove `out-of-service` taints from an unhealthy node until all non-tolerable workloads are rescheduled. Recklessly applying or removing the taint can jeopardize backend data protection.  
+WARNING: Because Trident relies on Kubernetes NGNS, do not remove `out-of-service` taints from an unhealthy node until all non-tolerable workloads are rescheduled. Recklessly applying or removing the taint can jeopardize backend data protection.  
 
-When the Kubernetes cluster administrator has applied the `node.kubernetes.io/out-of-service=nodeshutdown:NoExecute` taint to the node and `enableForceDetach` is set to `true`, Astra Trident will determine the node status and:
+When the Kubernetes cluster administrator has applied the `node.kubernetes.io/out-of-service=nodeshutdown:NoExecute` taint to the node and `enableForceDetach` is set to `true`, Trident will determine the node status and:
 
 . Cease backend I/O access for volumes mounted to that node.
-. Mark the Astra Trident node object as `dirty` (not safe for new publications).
+. Mark the Trident node object as `dirty` (not safe for new publications).
 +
-NOTE: The Trident controller will reject new publish volume requests until the node is re-qualified (after having been marked as `dirty`) by the Trident node pod. Any workloads scheduled with a mounted PVC (even after the cluster node is healthy and ready) will be not be accepted until Astra Trident can verify the node `clean` (safe for new publications).
+NOTE: The Trident controller will reject new publish volume requests until the node is re-qualified (after having been marked as `dirty`) by the Trident node pod. Any workloads scheduled with a mounted PVC (even after the cluster node is healthy and ready) will be not be accepted until Trident can verify the node `clean` (safe for new publications).
 
-When node health is restored and the taint is removed, Astra Trident will:
+When node health is restored and the taint is removed, Trident will:
 
 . Identify and clean stale published paths on the node.
-. If the node is in a `cleanable` state (the out-of-service taint has been removed and the node is in `Ready` state) and all stale, published paths are clean, Astra Trident will readmit the node as `clean` and allow new published volumes to the node.
+. If the node is in a `cleanable` state (the out-of-service taint has been removed and the node is in `Ready` state) and all stale, published paths are clean, Trident will readmit the node as `clean` and allow new published volumes to the node.
 
 == Sample configurations
 You can use the attributes in <<Configuration options>> when defining `TridentOrchestrator` to customize your installation. 
@@ -140,7 +140,7 @@ spec:
 [%collapsible%closed]
 ====
 
-This example installs Astra Trident with node selectors.
+This example installs Trident with node selectors.
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -159,7 +159,7 @@ spec:
 .Windows worker nodes
 [%collapsible%closed]
 ====
-This example installs Astra Trident on a Windows worker node.
+This example installs Trident on a Windows worker node.
 
 ----
 cat deploy/crds/tridentorchestrator_cr.yaml
@@ -177,7 +177,7 @@ spec:
 .Managed identities on an AKS cluster
 [%collapsible%closed]
 ====
-This example installs Astra Trident to enable managed identities on an AKS cluster. 
+This example installs Trident to enable managed identities on an AKS cluster. 
 
 ----
 apiVersion: trident.netapp.io/v1
@@ -194,7 +194,7 @@ spec:
 .Cloud identity on an AKS cluster
 [%collapsible%closed]
 ====
-This example installs Astra Trident for use with a cloud identity on an AKS cluster. 
+This example installs Trident for use with a cloud identity on an AKS cluster. 
 
 ----
 apiVersion: trident.netapp.io/v1
@@ -213,7 +213,7 @@ spec:
 .Cloud identity on an EKS cluster
 [%collapsible%closed]
 ====
-This example installs Astra Trident for use with a cloud identity on an AKS cluster. 
+This example installs Trident for use with a cloud identity on an AKS cluster. 
 
 ----
 apiVersion: trident.netapp.io/v1
@@ -224,6 +224,6 @@ spec:
   debug: true
   namespace: trident
   cloudProvider: "AWS"
-  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'"
+  cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'"
 ----
 ====

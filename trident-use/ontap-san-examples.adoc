@@ -109,7 +109,22 @@ Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibr
 
 *'fcp' (SCSI over FC) is a tech preview feature in the Trident 24.10 release.*| `iscsi` if blank
 
+|`formatOptions`
+a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
+Example: "-E nodiscard" 
+
+*Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
+a|
+
 |===
+
+=== Recommendations for using formatOptions
+
+Trident recommends the following option to expedite the formatting process:
+
+*-E nodiscard:*
+
+* Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage). This replaces the deprecated option “-K” and it is applicable to all the file systems (xfs, ext3, and ext4).
 
 == Backend configuration options for provisioning volumes
 
@@ -161,6 +176,8 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 | 
 
 |===
+
+
 
 === Volume provisioning examples
 Here's an example with defaults defined:
@@ -358,6 +375,27 @@ defaults: {
     "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
 },
 "labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+----
+====
+
+
+.formatOptions example for `ontap-san-economy` driver
+[%collapsible%closed]
+====
+
+----
+version: 1
+storageDriverName: ontap-san-economy
+managementLIF: ''
+svm: svm1
+username: ''
+password: "!"
+storagePrefix: whelk_
+debugTraceFlags:
+  method: true
+  api: true
+defaults:
+  formatOptions: "-E nodiscard"
 ----
 ====
 

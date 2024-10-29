@@ -118,10 +118,9 @@ a|
 
 Trident recommends the following option to expedite the formatting process:
 
-*-E nodiscard (previously -K):*
-*Common to all (xfs, ext3, ext4)*
+*-E nodiscard:*
 
-Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage).
+* Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage). This replaces the deprecated option “-K” and it is applicable to all the file systems (xfs, ext3, and ext4).
 
 == Backend configuration options for provisioning volumes
 

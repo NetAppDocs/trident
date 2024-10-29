@@ -95,7 +95,7 @@ For more information on formatting pod parameters, refer to link:https://kuberne
 === Details about force detach
 Force detach is available for `ontap-san`, `ontap-san-economy` and `onatp-nas-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. For more information, refer to link:https://kubernetes.io/docs/concepts/architecture/nodes/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
 
-NOTE: For `ontap-nas-economy`, the `autoExportPolicy` parameter in the backend configuration should be set to `true` so that Trident can restrict access from the Kubernetes node with the taint applied using managed export policies.
+NOTE: When using the `ontap-nas-economy` driver, you need to set the `autoExportPolicy` parameter in the backend configuration to `true` so that Trident can restrict access from the Kubernetes node with the taint applied using managed export policies.
 
 WARNING: Because Trident relies on Kubernetes NGNS, do not remove `out-of-service` taints from an unhealthy node until all non-tolerable workloads are rescheduled. Recklessly applying or removing the taint can jeopardize backend data protection.  
 

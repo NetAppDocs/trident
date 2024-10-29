@@ -21,8 +21,8 @@ You can manually deploy the Trident operator to install Trident. This process ap
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.31 is now supported in Astra Trident. Upgrade Trident prior to upgrading Kubernetes.
-* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+* Kubernetes 1.31 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
@@ -71,7 +71,7 @@ cd trident-installer
 ----
 
 === Step 2: Create the `TridentOrchestrator` CRD
-Create the `TridentOrchestrator` Custom Resource Definition (CRD). You will create a `TridentOrchestrator` Custom Resources later. Use the appropriate CRD YAML version in `deploy/crds` to create the `TridentOrchestrator` CRD. 
+Create the `TridentOrchestrator` Custom Resource Definition (CRD). You creates a `TridentOrchestrator` Custom Resources later. Use the appropriate CRD YAML version in `deploy/crds` to create the `TridentOrchestrator` CRD. 
 
 ----
 kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml

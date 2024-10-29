@@ -182,7 +182,7 @@ Individual Storage classes need to be configured and applied to create a Kuberne
 
 Filtering can be used within a specific storage class object to determine which storage pool or set of pools are to be used with that specific storage class. Three sets of filters can be set in the Storage Class: `storagePools`, `additionalStoragePools`, and/or `excludeStoragePools`.
 
-The `storagePools` parameter helps restrict storage to the set of pools that match any specified attributes. The `additionalStoragePools` parameter is used to extend the set of pools that Trident will use for provisioning along with the set of pools selected by the attributes and `storagePools` parameters. You can use either parameter alone or both together to make sure that the appropriate set of storage pools are selected.
+The `storagePools` parameter helps restrict storage to the set of pools that match any specified attributes. The `additionalStoragePools` parameter is used to extend the set of pools that Trident use for provisioning along with the set of pools selected by the attributes and `storagePools` parameters. You can use either parameter alone or both together to make sure that the appropriate set of storage pools are selected.
 
 The `excludeStoragePools` parameter is used to specifically exclude the listed set of pools that match the attributes.
 
@@ -373,6 +373,6 @@ If your OpenShift cluster is already running, and therefore Trident has been dep
 
 === Deploy the metrics service
 
-With the appropriate Ansible variables defined in your hosts/inventory file, deploy the service using Ansible. If you are deploying at OpenShift install time, then the PV will be created and used automatically. If you're deploying using the component playbooks, after OpenShift install, then Ansible will create any PVCs which are needed and, after Trident has provisioned storage for them, deploy the service.
+With the appropriate Ansible variables defined in your hosts/inventory file, deploy the service using Ansible. If you are deploying at OpenShift install time, then the PV will be created and used automatically. If you're deploying using the component playbooks, after OpenShift install, then Ansible creates any PVCs which are needed and, after Trident has provisioned storage for them, deploy the service.
 
 The variables above, and the process for deploying, may change with each version of OpenShift. Ensure you review and follow link:https://docs.openshift.com/container-platform/3.11/install_config/cluster_metrics.html[RedHat's OpenShift deployment guide^] for your version so that it is configured for your environment.

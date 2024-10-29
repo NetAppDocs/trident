@@ -48,9 +48,23 @@ kubectl create -f 24.10.0/trident-installer/deploy/<bundle.yaml> -n trident
 ----
 
 == Upgrade a Helm installation
-You can upgrade a Trident Helm installation.  
+You can upgrade a Trident Helm installation.
 
 WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Trident installed, you must update values.yaml to set `excludePodSecurityPolicy` to `true` or add `--set excludePodSecurityPolicy=true` to the `helm upgrade` command before you can upgrade the cluster.
+
+If you have already upgraded your Kubernetes cluster from 1.24 to 1.25 before upgrading the helm chart, the helm chart upgrade fails with an error. Perform these steps before upgrading the helm chart:
+
+. Install the helm-mapkubeapis plugin from https://github.com/helm/helm-mapkubeapis. 
+. Perform a dry run for the Trident release in the Trident namespace to check the change.
++ 
+----
+helm mapkubeapis --dry-run trident  --namespace trident 
+----
+. Perform a full run with helm.
++
+----
+helm mapkubeapis trident  --namespace trident
+----
 
 .Steps
 . If you link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-astra-trident-using-helm[installed Trident using Helm], you can use `helm upgrade trident netapp-trident/trident-operator --version 100.2410.0` to upgrade in one step. If you did not add the Helm repo or cannot use it to upgrade:

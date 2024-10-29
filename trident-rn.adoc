@@ -21,7 +21,6 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 * Google Cloud NetApp Volumes driver is now generally available for NFS volumes and supports zone-aware provisioning.
 * GCP Workload Identity will be used as Cloud Identity for Google Cloud NetApp Volumes with GKE.
-* Added NFS support for Google Cloud Netapp Volumes driver.
 * Added `formatOptions` configuration parameter to ONTAP-SAN and ONTAP-SAN-Economy drivers to allow users to specify LUN format options.
 * Reduced Azure NetApp Files minimum volume size to 50 GiB. Azure new minimum size expected to be generally available in November.
 * Added `denyNewVolumePools` configuration parameter to restrict ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers to preexisting Flexvol pools.
@@ -38,7 +37,6 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
 * New ONTAP-NAS-Economy NFS volumes will use per-qtree export policies when using `autoExportPolicy` backend option. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads.
 * Added support for Kubernetes 1.31. 
-
 
 ==== Experimental Enhancements
 

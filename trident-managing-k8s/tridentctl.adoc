@@ -144,10 +144,10 @@ Flags::
 `--image-registry string`: The address/port of an internal image registry.
 `--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
 `--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
-`--log-format string`: The Astra Trident logging format (text, json) (default "text").
-`--node-prep`: Allows Astra Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. *Currently, `iscsi` is the only value supported.*
-`--pv string`: The name of the legacy PV used by Astra Trident, makes sure this doesn't exist (default "trident").
-`--pvc string`: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
+`--log-format string`: The Trident logging format (text, json) (default "text").
+`--node-prep`: Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. *Currently, `iscsi` is the only value supported.*
+`--pv string`: The name of the legacy PV used by Trident, makes sure this doesn't exist (default "trident").
+`--pvc string`: The name of the legacy PVC used by Trident, makes sure this doesn't exist (default "trident").
 `--silence-autosupport`: Don't send autosupport bundles to NetApp automatically (default true).
 `--silent`: Disable most output during installation.
 `--trident-image string`: The Trident image to install.

@@ -21,8 +21,8 @@ Before installing Trident you should review these general system requirements. S
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.31 is now supported in Astra Trident. Upgrade Astra Trident prior to upgrading Kubernetes.
-* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+* Kubernetes 1.31 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====

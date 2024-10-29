@@ -122,7 +122,7 @@ You can control default provisioning using these options in the `defaults` secti
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
 
-Using QoS policy groups with Trident requires ONTAP 9.8 or later. We recommend using a non-shared QoS policy group and ensuring the policy group is applied to each constituent individually. A shared QoS policy group will enforce the ceiling for the total throughput of all workloads. |""
+Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use a non-shared QoS policy group and ensuring the policy group is applied to each constituent individually. A shared QoS policy group enforces the ceiling for the total throughput of all workloads. |""
 
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |""
 
@@ -152,7 +152,7 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 
 | "" (not enforced by default)
 
-|`denyNewVolumePools` |Restricts `ontap-san-economy` backends from creating new Flexvols to contain their LUNs. Only preexisting Flexvols are used for provisioning new PVs.
+|`denyNewVolumePools` |Restricts `ontap-san-economy` backends from creating new FlexVol volumes to contain their LUNs. Only preexisting Flexvols are used for provisioning new PVs.
 
 | 
 

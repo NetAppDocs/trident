@@ -205,7 +205,7 @@ From the output, it is seen that `TridentBackendConfig` was created successfully
 
 === Step 1: Confirm `deletionPolicy` is set to `retain`
 
-Let us take a look at the value of `deletionPolicy`. This needs to be set to `retain`. This will ensure that when a `TridentBackendConfig` CR is deleted, the backend definition will still be present and can be managed with `tridentctl`.
+Let us take a look at the value of `deletionPolicy`. This needs to be set to `retain`. This ensures that when a `TridentBackendConfig` CR is deleted, the backend definition will still be present and can be managed with `tridentctl`.
 ----
 kubectl get tbc backend-tbc-ontap-san -n trident -o wide
 NAME                    BACKEND NAME        BACKEND UUID                           PHASE   STATUS    STORAGE DRIVER   DELETION POLICY

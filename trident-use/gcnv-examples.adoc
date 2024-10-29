@@ -57,12 +57,11 @@ Do not use this unless you are troubleshooting and require a detailed log dump. 
 | `supportedTopologies` | Represents a list of regions and zones that are supported by this backend. 
 
 For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].  
-
 For example:
 `supportedTopologies:
-  - topology.kubernetes.io/region: europe-west6
-    topology.kubernetes.io/zone: europe-west6-b`
-|
+- topology.kubernetes.io/region: asia-east1
+  topology.kubernetes.io/zone: asia-east1-a` |
+
 |===
 
 == Volume provisioning options
@@ -318,6 +317,31 @@ spec:
       serviceLevel: standard
 ----
 ====
+
+.Supported topologies configuration
+[%collapsible%closed]
+====
+Trident facilitates provisioning of volumes for workloads based on regions and availability zones. The `supportedTopologies` block in this backend configuration is used to provide a list of regions and zones per backend. The region and zone values specified here must match the region and zone values from the labels on each Kubernetes cluster node. These regions and zones represent the list of permissible values that can be provided in a storage class. For storage classes that contain a subset of the regions and zones provided in a backend, Trident will create volumes in the mentioned region and zone.
+For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].
+
+----
+---
+version: 1
+storageDriverName: google-cloud-netapp-volumes
+subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
+tenantID: 68e4f836-edc1-fake-bff9-b2d865ee56cf
+clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
+clientSecret: SECRET
+location: asia-east1
+serviceLevel: flex
+supportedTopologies:
+- topology.kubernetes.io/region: asia-east1
+  topology.kubernetes.io/zone: asia-east1-a
+- topology.kubernetes.io/region: asia-east1
+  topology.kubernetes.io/zone: asia-east1-b
+----
+====
+
 
 == What's next?
 

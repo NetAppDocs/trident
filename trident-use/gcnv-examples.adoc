@@ -72,7 +72,8 @@ You can control default volume provisioning in the `defaults` section of the con
 |===
 |Parameter |Description |Default
 |`exportRule` |The export rules for new volumes. Must be a comma-separated list of any combination of IPv4 addresses. |"0.0.0.0/0"
-|`snapshotDir` |Access to the `.snapshot` directory | "false"
+|`snapshotDir` |Access to the `.snapshot` directory | "true" for NFSv4
+"false" for NFSv3
 |`snapshotReserve` |Percentage of volume reserved for snapshots |"" (accept default of 0)
 |`unixPermissions` |The unix permissions of new volumes (4 octal digits).| ""
 

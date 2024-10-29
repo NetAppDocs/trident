@@ -106,8 +106,8 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 |`sanType` |Use to select `iscsi` for iSCSI or `nvme` for NVMe/TCP. | `iscsi` if blank
 
 |`formatOptions`
-a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Ensure that you specify the appropriate formatOptions with the `mkfs` command without the device path.
-Example: `-E nodiscard` 
+a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
+Example: "-E nodiscard" 
 
 *Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
 a|
@@ -116,12 +116,12 @@ a|
 
 === Recommendations for using formatOptions
 
-Trident recommends the following options could expedite the formatting process:
+Trident recommends the following option to expedite the formatting process:
 
-*Common to all (xfs, ext3, ext4):*
-*-K: (Deprecated)*
+*-E nodiscard (previously -K):*
+*Common to all (xfs, ext3, ext4)*
 
-Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage)
+Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage).
 
 == Backend configuration options for provisioning volumes
 

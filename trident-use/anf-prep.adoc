@@ -33,7 +33,7 @@ To configure and use an https://azure.microsoft.com/en-us/services/netapp/[Azure
 
 **  The Owner or Contributor role link:https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles[predefined by Azure^]. 
 
-** A link:https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles-portal[custom Contributor role] at the subscription level (`assignableScopes`) with the following permissions that are limited to only what Astra Trident requires. After creating the custom role, link:https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal[assign the role using the Azure portal^].
+** A link:https://learn.microsoft.com/en-us/azure/role-based-access-control/custom-roles-portal[custom Contributor role] at the subscription level (`assignableScopes`) with the following permissions that are limited to only what Trident requires. After creating the custom role, link:https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal[assign the role using the Azure portal^].
 +
 .Custom contributor role
 [%collapsible%closed]
@@ -91,9 +91,9 @@ To create an SMB volume, you must have:
 
 * Active Directory configured and connected to Azure NetApp Files. Refer to link:https://learn.microsoft.com/en-us/azure/azure-netapp-files/create-active-directory-connections[Microsoft: Create and manage Active Directory connections for Azure NetApp Files^].
 
-* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2022. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2022. Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
-* At least one Astra Trident secret containing your Active Directory credentials so Azure NetApp Files can authenticate to Active Directory. To generate secret `smbcreds`:
+* At least one Trident secret containing your Active Directory credentials so Azure NetApp Files can authenticate to Active Directory. To generate secret `smbcreds`:
 +
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'

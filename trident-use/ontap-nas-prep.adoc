@@ -14,18 +14,18 @@ summary: Understand the requirements, authentication options, and export policie
 Understand the requirements, authentication options, and export policies for configuring an ONTAP backend with ONTAP NAS drivers.
 
 == Requirements
-* For all ONTAP backends, Astra Trident requires at least one aggregate assigned to the SVM.
+* For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
 * You can run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
 * All your Kubernetes worker nodes must have the appropriate NFS tools installed. Refer to link:worker-node-prep.html[here] for more details.
-* Astra Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details. 
+* Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details. 
 
 
 == Authenticate the ONTAP backend
 
-Astra Trident offers two modes of authenticating an ONTAP backend.
+Trident offers two modes of authenticating an ONTAP backend.
 
 * Credential-based: This mode requires sufficient permissions to the ONTAP backend. It is recommended to use an account associated with a pre-defined security login role, such as `admin` or `vsadmin` to ensure maximum compatibility with ONTAP versions.
-* Certificate-based: This mode requires a certificate installed on the backend for Astra Trident to communicate with an ONTAP cluster. Here, the backend definition must contain Base64-encoded values of the client certificate, key, and the trusted CA certificate if used (recommended).
+* Certificate-based: This mode requires a certificate installed on the backend for Trident to communicate with an ONTAP cluster. Here, the backend definition must contain Base64-encoded values of the client certificate, key, and the trusted CA certificate if used (recommended).
 
 You can update existing backends to move between credential-based and certificate-based methods. However, only one authentication method is supported at a time. To switch to a different authentication method, you must remove the existing method from the backend configuration.
 
@@ -33,7 +33,7 @@ WARNING: If you attempt to provide *both credentials and certificates*, backend 
 
 === Enable credential-based authentication
 
-Astra Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Astra Trident releases. A custom security login role can be created and used with Astra Trident, but is not recommended.
+Trident requires the credentials to an SVM-scoped/cluster-scoped admin to communicate with the ONTAP backend. It is recommended to make use of standard, pre-defined roles such as `admin` or `vsadmin`. This ensures forward compatibility with future ONTAP releases that might expose feature APIs to be used by future Trident releases. A custom security login role can be created and used with Trident, but is not recommended.
 
 A sample backend definition will look like this:
 
@@ -180,13 +180,13 @@ tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 
 NOTE: When rotating passwords, the storage administrator must first update the password for the user on ONTAP. This is followed by a backend update. When rotating certificates, multiple certificates can be added to the user. The backend is then updated to use the new certificate, following which the old certificate can be deleted from the ONTAP cluster.
 
-Updating a backend does not disrupt access to volumes that have already been created, nor impact volume connections made after. A successful backend update indicates that Astra Trident can communicate with the ONTAP backend and handle future volume operations.
+Updating a backend does not disrupt access to volumes that have already been created, nor impact volume connections made after. A successful backend update indicates that Trident can communicate with the ONTAP backend and handle future volume operations.
 
 == Manage NFS export policies
 
-Astra Trident uses NFS export policies to control access to the volumes that it provisions.
+Trident uses NFS export policies to control access to the volumes that it provisions.
 
-Astra Trident provides two options when working with export policies:
+Trident provides two options when working with export policies:
 
 * Astra Trident can dynamically manage the export policy itself; in this mode of operation, the storage administrator specifies a list of CIDR blocks that represent admissible IP addresses. Astra Trident adds applicable node IPs that fall in these ranges to the export policy automatically at publish time. Alternatively, when no CIDRs are specified, all global-scoped unicast IPs found on the node that the volume being published to will be added to the export policy.
 * Storage administrators can create an export policy and add rules manually. Astra Trident uses the default export policy unless a different export policy name is specified in the configuration.
@@ -216,7 +216,7 @@ autoExportCIDRs:
 autoExportPolicy: true
 ----
 
-NOTE: When using this feature, you must ensure that the root junction in your SVM has a previously created export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp recommended best practice to dedicate an SVM for Astra Trident.
+NOTE: When using this feature, you must ensure that the root junction in your SVM has a previously created export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp recommended best practice to dedicate an SVM for Trident.
 
 Here is an explanation of how this feature works using the example above:
 
@@ -235,7 +235,7 @@ In this example, the `192.168.0.0/24` address space is provided. This indicates 
 
 You can update `autoExportPolicy` and `autoExportCIDRs` for backends after you create them. You can append new CIDRs for a backend that is automatically managed or delete existing CIDRs. Exercise care when deleting CIDRs to ensure that existing connections are not dropped. You can also choose to disable `autoExportPolicy` for a backend and fall back to a manually created export policy. This will require setting the `exportPolicy` parameter in your backend config.
 
-After Astra Trident creates or updates a backend, you can check the backend using `tridentctl` or the corresponding `tridentbackend` CRD:
+After Trident creates or updates a backend, you can check the backend using `tridentctl` or the corresponding `tridentbackend` CRD:
 ----
 ./tridentctl get backends ontap_nas_auto_export -n trident -o yaml
 items:
@@ -265,7 +265,7 @@ For previously existing backends, updating the backend with `tridentctl update b
 
 NOTE: Deleting a backend with auto-managed export policies will delete the dynamically created export policy. If the backend is re-created, it is treated as a new backend and will result in the creation of a new export policy.
 
-If the IP address of a live node is updated, you must restart the Astra Trident pod on the node. Astra Trident will then update the export policy for backends it manages to reflect this IP change.
+If the IP address of a live node is updated, you must restart the Trident pod on the node. Trident will then update the export policy for backends it manages to reflect this IP change.
 
 == Prepare to provision SMB volumes
 With a little additional preparation, you can provision SMB volumes using `ontap-nas` drivers. 
@@ -277,9 +277,9 @@ NOTE: `autoExportPolicy` is not supported for SMB volumes.
 .Before you begin
 Before you can provision SMB volumes, you must have the following. 
 
-* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2022. Astra Trident supports SMB volumes mounted to pods running on Windows nodes only.
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2022. Trident supports SMB volumes mounted to pods running on Windows nodes only.
 
-* At least one Astra Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
+* At least one Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
 +
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
@@ -289,7 +289,7 @@ kubectl create secret generic smbcreds --from-literal username=user --from-liter
 
 .Steps
 
-. For on-premises ONTAP, you can optionally create an SMB share or Astra Trident can create one for you. 
+. For on-premises ONTAP, you can optionally create an SMB share or Trident can create one for you. 
 +
 NOTE: SMB shares are required for Amazon FSx for ONTAP. 
 +
@@ -320,7 +320,7 @@ NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-
 |Parameter |Description | Example
 
 |`smbShare`
-| You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Astra Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
+| You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
 
 This parameter is optional for on-premises ONTAP. 
 

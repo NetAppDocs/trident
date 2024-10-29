@@ -93,7 +93,7 @@ a|Password to connect to the storage device
 a|`secret`
 
 |`aggregate`
-a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. All aggregates assigned to the SVM are used to provision a FlexGroup Volume.
+a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. All aggregates assigned to the SVM are used to provision a FlexGroup volume.
 a|`aggr1`
 
 |`limitAggregateUsage`
@@ -206,15 +206,15 @@ NOTE: The `ontap-nas-economy` driver is not currently supported in Docker Swarm,
 
 The `ontap-san-economy` driver creates Docker volumes as ONTAP LUNs within a shared pool of automatically managed FlexVols. This way, each FlexVol is not restricted to only one LUN and it offers better scalability for SAN workloads. Depending on the storage array, ONTAP supports up to 16384 LUNs per cluster. Because the volumes are LUNs underneath, this driver supports Docker-volume-granular snapshots and cloning.
 
-Choose the `ontap-nas-flexgroup` driver to increase parallelism to a single volume that can grow into the petabyte range with billions of files. Some ideal use cases for FlexGroups include AI/ML/DL, big data and analytics, software builds, streaming, file repositories, and so on. Trident uses all aggregates assigned to an SVM when provisioning a FlexGroup Volume. FlexGroup support in Trident also has the following considerations:
+Choose the `ontap-nas-flexgroup` driver to increase parallelism to a single volume that can grow into the petabyte range with billions of files. Some ideal use cases for FlexGroups include AI/ML/DL, big data and analytics, software builds, streaming, file repositories, and so on. Trident uses all aggregates assigned to an SVM when provisioning a FlexGroup volume. FlexGroup support in Trident also has the following considerations:
 
 * Requires ONTAP version 9.2 or greater.
 * As of this writing, FlexGroups only support NFS v3.
 * Recommended to enable the 64-bit NFSv3 identifiers for the SVM.
 * The minimum recommended FlexGroup member/volume size is 100GiB.
-* Cloning is not supported for FlexGroup Volumes.
+* Cloning is not supported for FlexGroup volumes.
 
-For information about FlexGroups and workloads that are appropriate for FlexGroups see the https://www.netapp.com/pdf.html?item=/media/12385-tr4571pdf.pdf[NetApp FlexGroup Volume Best Practices and Implementation Guide^].
+For information about FlexGroups and workloads that are appropriate for FlexGroups see the https://www.netapp.com/pdf.html?item=/media/12385-tr4571pdf.pdf[NetApp FlexGroup volume Best Practices and Implementation Guide^].
 
 To get advanced features and huge scale in the same environment, you can run multiple instances of the Docker Volume Plugin, with one using `ontap-nas` and another using `ontap-nas-economy`.
 

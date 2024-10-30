@@ -52,15 +52,15 @@ You can upgrade a Trident Helm installation.
 
 WARNING: When upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Trident installed, you must update values.yaml to set `excludePodSecurityPolicy` to `true` or add `--set excludePodSecurityPolicy=true` to the `helm upgrade` command before you can upgrade the cluster.
 
-If you have already upgraded your Kubernetes cluster from 1.24 to 1.25 before upgrading the helm chart, the helm chart upgrade fails with an error. Perform these steps before upgrading the helm chart:
+If you have already upgraded your Kubernetes cluster from 1.24 to 1.25 without upgrading the Trident helm, the helm upgrade fails. For the helm upgrade to go through, perform these steps as pre-requisites:
 
 . Install the helm-mapkubeapis plugin from https://github.com/helm/helm-mapkubeapis. 
-. Perform a dry run for the Trident release in the Trident namespace to check the change.
+. Perform a dry run for the Trident release in the namespace where Trident is installed. This lists out the resources, which will be cleaned up.
 + 
 ----
 helm mapkubeapis --dry-run trident  --namespace trident 
 ----
-. Perform a full run with helm.
+. Perform a full run with helm to do the cleanup.
 +
 ----
 helm mapkubeapis trident  --namespace trident

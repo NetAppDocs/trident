@@ -54,9 +54,8 @@ You can use the built-in plugin help features to get detailed help on the capabi
 tridentctl protect help
 ----
 
-== Configure the Trident CLI plugin
-After you have installed the Trident protect CLI plugin, you can enable auto-completion for certain commands. For more information, use the `tridentctl protect completion --help` command. 
-
+== Enable command auto-completion
+After you have installed the Trident protect CLI plugin, you can enable auto-completion for certain commands. For more information, use the `tridentctl protect completion --help` command.
 
 .Steps
 
@@ -66,7 +65,7 @@ After you have installed the Trident protect CLI plugin, you can enable auto-com
 ----
 curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0-preview.1/tridentctl-completion.zsh
 ----
-. Move the file to the `/etc/profile.d/` directory (or a configuration directory of your choice):
+. Move the downloaded script to the `/etc/profile.d/` directory (or a configuration directory of your choice):
 +
 [source,console]
 ----
@@ -78,6 +77,9 @@ mv tridentctl-completion.zsh /etc/profile.d/
 ----
 source /etc/profile.d/tridentctl-completion.zsh
 ----
+
+.Result
+Upon your next shell login, command auto-completion should work for the tridentctl protect plugin.
 
 ////
 .Steps

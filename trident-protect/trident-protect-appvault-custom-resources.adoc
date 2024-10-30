@@ -172,6 +172,8 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 == Remove an AppVault
 You can remove an AppVault object at any time.
 
+NOTE: Do not remove the `finalizers` key in the AppVault CR before deleting the AppVault object. If you do so, it can result in residual data in the AppVault bucket and orphaned resources in the cluster.
+
 .Before you begin
 Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
 

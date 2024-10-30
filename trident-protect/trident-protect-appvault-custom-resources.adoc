@@ -17,32 +17,6 @@ The bucket custom resource (CR) for Trident protect is known as an AppVault. App
 == Key generation and AppVault definition examples
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers, followed by example AppVault definitions for each provider.
 
-The `providerType` and `providerConfig` keys in an AppVault CR require specific values. The following table lists supported values for the `providerType` key, and the associated `providerConfig` key that you need to use with each `providerType` value.
-
-[cols="2,2" options="header"]
-|===
-|Supported `providerType` value |Associated `providerConfig` key
-
-|AWS
-|s3
-
-|Azure
-|azure
-
-|GCP
-|gcp
-
-|GenericS3
-|s3
-
-|OntapS3
-|s3
-
-|StorageGridS3
-|s3
-
-|===
-
 === Google Cloud
 
 Key generation example:
@@ -67,6 +41,7 @@ metadata:
   name: gcp-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  providerType: GCP
   providerConfig:
     gcp:
       bucketName: trident-protect-src-bucket
@@ -76,7 +51,6 @@ spec:
       valueFromSecret:
         key: keySecret 
         name: gcp-trident-protect-src-bucket-secret
-  providerType: GCP
 ----
 --
 .Example AppVault CR creation using the Trident protect CLI
@@ -113,6 +87,7 @@ metadata:
   name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  providerType: AWS
   providerConfig:
     s3:
       bucketName: trident-protect-src-bucket
@@ -126,7 +101,6 @@ spec:
       valueFromSecret:
         key: secretAccessKey
         name: generic-s3-trident-protect-src-bucket-secret
-  providerType: AWS
 ----
 --
 .Example AppVault creation with CLI
@@ -163,6 +137,7 @@ metadata:
   name: azure-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  providerType: Azure
   providerConfig:
     azure:
       accountName: account-name
@@ -173,7 +148,6 @@ spec:
       valueFromSecret:
         key: accountKey
         name: azure-trident-protect-src-bucket-secret
-  providerType: Azure
 ----
 --
 .Example AppVault creation with CLI
@@ -185,6 +159,34 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 --
 ====
 // end tabbed block
+
+=== Supported values for providerType and providerConfig
+
+The `providerType` and `providerConfig` keys in an AppVault CR require specific values. The following table lists supported values for the `providerType` key, and the associated `providerConfig` key that you need to use with each `providerType` value.
+
+[cols="2,2" options="header"]
+|===
+|Supported `providerType` value |Associated `providerConfig` key
+
+|AWS
+|s3
+
+|Azure
+|azure
+
+|GCP
+|gcp
+
+|GenericS3
+|s3
+
+|OntapS3
+|s3
+
+|StorageGridS3
+|s3
+
+|===
 
 == Remove an AppVault
 You can remove an AppVault object at any time.

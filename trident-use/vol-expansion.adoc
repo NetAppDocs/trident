@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/vol-expansion.html
 keywords: volumes, on-demand volume snapshots, expand volumes, iscsci volumes, nfs volumes, expand, expansion
-summary: Astra Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI and NFS volumes.
+summary: Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI and NFS volumes.
 ---
 
 = Expand volumes
@@ -11,7 +11,7 @@ summary: Astra Trident provides Kubernetes users the ability to expand their vol
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI and NFS volumes.
+Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI and NFS volumes.
 
 == Expand an iSCSI volume
 
@@ -55,7 +55,7 @@ spec:
   storageClassName: ontap-san
 ----
 
-Astra Trident creates a Persistent Volume (PV) and associates it with this Persistent Volume Claim (PVC).
+Trident creates a Persistent Volume (PV) and associates it with this Persistent Volume Claim (PVC).
 
 ----
 kubectl get pvc
@@ -70,8 +70,8 @@ pvc-8a814d62-bd58-4253-b0d1-82f2885db671   1Gi        RWO            Delete     
 === Step 3: Define a pod that attaches the PVC
 Attach the PV to a pod for it to be resized. There are two scenarios when resizing an iSCSI PV:
 
-* If the PV is attached to a pod, Astra Trident expands the volume on the storage backend, rescans the device, and resizes the filesystem.
-* When attempting to resize an unattached PV, Astra Trident expands the volume on the storage backend. After the PVC is bound to a pod, Trident rescans the device and resizes the filesystem. Kubernetes then updates the PVC size after the expand operation has successfully completed.
+* If the PV is attached to a pod, Trident expands the volume on the storage backend, rescans the device, and resizes the filesystem.
+* When attempting to resize an unattached PV, Trident expands the volume on the storage backend. After the PVC is bound to a pod, Trident rescans the device and resizes the filesystem. Kubernetes then updates the PVC size after the expand operation has successfully completed.
 
 In this example, a pod is created that uses the `san-pvc`.
 
@@ -133,7 +133,7 @@ spec:
 
 === Step 5: Validate the expansion
 
-You can validate the expansion worked correctly by checking the size of the PVC, PV, and the Astra Trident volume:
+You can validate the expansion worked correctly by checking the size of the PVC, PV, and the Trident volume:
 
 ----
 kubectl get pvc san-pvc
@@ -152,7 +152,7 @@ tridentctl get volumes -n trident
 
 == Expand an NFS volume
 
-Astra Trident supports volume expansion for NFS PVs provisioned on `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `gcp-cvs`, and `azure-netapp-files` backends.
+Trident supports volume expansion for NFS PVs provisioned on `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `gcp-cvs`, and `azure-netapp-files` backends.
 
 === Step 1: Configure the StorageClass to support volume expansion
 
@@ -189,7 +189,7 @@ spec:
   storageClassName: ontapnas
 ----
 
-Astra Trident should create a 20MiB NFS PV for this PVC:
+Trident should create a 20MiB NFS PV for this PVC:
 
 ----
 kubectl get pvc
@@ -237,7 +237,7 @@ spec:
 
 === Step 4: Validate the expansion
 
-You can validate the resize worked correctly by checking the size of the PVC, PV, and the Astra Trident volume:
+You can validate the resize worked correctly by checking the size of the PVC, PV, and the Trident volume:
 
 ----
 kubectl get pvc ontapnas20mb

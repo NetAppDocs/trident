@@ -17,7 +17,7 @@ The bucket custom resource (CR) for Trident protect is known as an AppVault. App
 == Key generation and AppVault definition examples
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers, followed by example AppVault definitions for each provider.
 
-The `ProviderType` field in an AppVault CR can be one of the following:
+The `providerType` field in an AppVault CR can be one of the following:
 
 * AWS
 * Azure
@@ -25,6 +25,31 @@ The `ProviderType` field in an AppVault CR can be one of the following:
 * GenericS3
 * OntapS3
 * StorageGridS3
+
+|===
+|Supported `providerType` values |Associated `providerConfig` key
+
+|AWS
+|s3
+
+|Azure
+|azure
+
+|GCP
+|gcp
+
+|GenericS3
+|s3
+
+|OntapS3
+|s3
+
+|StorageGridS3
+|s3
+
+|===
+
+
 
 === Google Cloud
 

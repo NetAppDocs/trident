@@ -55,21 +55,43 @@ tridentctl protect help
 ----
 
 == Configure the Trident CLI plugin
-After you have installed the Trident protect CLI plugin, you can configure it. 
+After you have installed the Trident protect CLI plugin, you can enable auto-completion for certain commands. For more information, use the `tridentctl protect completion --help` command. 
+
 
 .Steps
 
-. To enable command auto-completion, append the following line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
+. Download the completion script:
 +
 [source,console]
 ----
-source <(tridentctl protect completion zsh)>
+curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0-preview.1/tridentctl-completion.zsh
+----
+. Move the file to the `/etc/profile.d/` directory (or a configuration directory of your choice):
++
+[source,console]
+----
+mv tridentctl-completion.zsh /etc/profile.d/
+----
+. Add the following line to the shell login file in your home directory (`~/.zprofile` or `~/.bashrc`). This example assumes you moved the file to the `/etc/profile.d/` directory:
++
+[source,console]
+----
+source /etc/profile.d/tridentctl-completion.zsh
+----
+
+////
+.Steps
+
+. Add the following line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
++
+[source,console]
+----
+source <(tridentctl completion zsh)>
 ----
 +
-To use auto-completion in the Bash shell you might need to first install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
-+
-For more information, use the `tridentctl protect completion --help` command.
+To use auto-completion in the Bash shell you need to install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
 
+////
 
 
 ////

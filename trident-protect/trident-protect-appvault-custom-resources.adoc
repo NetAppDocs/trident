@@ -173,12 +173,11 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 You can remove an AppVault object at any time.
 
 .Before you begin
-
-* Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
+Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
 
 [role="tabbed-block"]
 ====
-.Remove the AppVault using the Kubernetes CLI
+.Remove an AppVault using the Kubernetes CLI
 --
 . Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
 +
@@ -188,7 +187,7 @@ kubectl delete appvault <appvault_name> -n trident-protect
 ----
 
 --
-.Remove the AppVault using the Trident CLI
+.Remove an AppVault using the Trident CLI
 --
 . Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
 +

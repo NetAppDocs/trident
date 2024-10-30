@@ -55,9 +55,15 @@ tridentctl protect help
 ----
 
 == Enable command auto-completion
-After you have installed the Trident protect CLI plugin, you can enable auto-completion for certain commands. For more information, use the `tridentctl protect completion --help` command.
+After you have installed the Trident protect CLI plugin, you can enable auto-completion for certain commands. 
 
-.Steps
+// For more information, use the `tridentctl protect completion --help` command.
+
+
+[role="tabbed-block"]
+====
+.Enable auto-completion for the Bash shell
+--
 
 . Download the completion script:
 +
@@ -65,21 +71,58 @@ After you have installed the Trident protect CLI plugin, you can enable auto-com
 ----
 curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0-preview.1/tridentctl-completion.zsh
 ----
-. Move the downloaded script to the `/etc/profile.d/` directory (or a configuration directory of your choice):
+. Make a new directory in your home directory to contain the script:
 +
 [source,console]
 ----
-mv tridentctl-completion.zsh /etc/profile.d/
+md ~/.zsh/completions
 ----
-. Add the following line to the shell login file in your home directory (`~/.zprofile` or `~/.bashrc`). This example assumes you moved the file to the `/etc/profile.d/` directory:
+. Move the downloaded script to the `~/.zsh/completions` directory:
 +
 [source,console]
 ----
-source /etc/profile.d/tridentctl-completion.zsh
+mv tridentctl-completion.zsh ~/.zsh/completions/
 ----
+. Add the following line to the `~/.bashrc` file in your home directory:
++
+[source,console]
+----
+source ~/.zsh/completions/tridentctl-completion.zsh
+----
+
+--
+.Enable auto-completion for the Z shell
+--
+. Download the completion script:
++
+[source,console]
+----
+curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0-preview.1/tridentctl-completion.zsh
+----
+. Make a new directory in your home directory to contain the script:
++
+[source,console]
+----
+md ~/.zsh/completions
+----
+. Move the downloaded script to the `~/.zsh/completions` directory:
++
+[source,console]
+----
+mv tridentctl-completion.zsh ~/.zsh/completions/
+----
+. Add the following line to the `~/.zprofile` file in your home directory:
++
+[source,console]
+----
+source ~/.zsh/completions/tridentctl-completion.zsh
+----
+--
+====
 
 .Result
 Upon your next shell login, you can use command auto-completion with the tridentctl protect plugin.
+
 
 ////
 .Steps

@@ -188,37 +188,6 @@ The `providerType` and `providerConfig` keys in an AppVault CR require specific 
 
 |===
 
-== Remove an AppVault
-You can remove an AppVault object at any time.
-
-NOTE: Do not remove the `finalizers` key in the AppVault CR before deleting the AppVault object. If you do so, it can result in residual data in the AppVault bucket and orphaned resources in the cluster.
-
-.Before you begin
-Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
-
-[role="tabbed-block"]
-====
-.Remove an AppVault using the Kubernetes CLI
---
-. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
-+
-[source,console]
-----
-kubectl delete appvault <appvault_name> -n trident-protect
-----
-
---
-.Remove an AppVault using the Trident CLI
---
-. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
-+
-[source,console]
-----
-tridentctl protect delete appvault <appvault_name> -n trident-protect 
-----
---
-====
-
 == Use the AppVault browser to view AppVault information
 You can use the Trident protect CLI plugin to view information about AppVault objects that have been created on the cluster.
 
@@ -252,3 +221,34 @@ tridentctl protect get appvaultcontent gcp-vault --show-resources all
 . Optionally, to see the AppVaultPath for each resource, use the flag `--show-paths`.
 +
 The cluster name in the first column of the table is only available if a cluster name was specified in the Trident protect helm installation. For example: `--set clusterName=production1`. 
+
+== Remove an AppVault
+You can remove an AppVault object at any time.
+
+NOTE: Do not remove the `finalizers` key in the AppVault CR before deleting the AppVault object. If you do so, it can result in residual data in the AppVault bucket and orphaned resources in the cluster.
+
+.Before you begin
+Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
+
+[role="tabbed-block"]
+====
+.Remove an AppVault using the Kubernetes CLI
+--
+. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
++
+[source,console]
+----
+kubectl delete appvault <appvault_name> -n trident-protect
+----
+
+--
+.Remove an AppVault using the Trident CLI
+--
+. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
++
+[source,console]
+----
+tridentctl protect delete appvault <appvault_name> -n trident-protect 
+----
+--
+====

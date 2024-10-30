@@ -72,8 +72,6 @@ tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-
 ====
 // end tabbed block
 
-
-
 === Amazon S3
 
 Key generation example:
@@ -170,6 +168,36 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 --
 ====
 // end tabbed block
+
+== Remove an AppVault
+You can remove an AppVault object at any time.
+
+.Before you begin
+
+* Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
+
+[role="tabbed-block"]
+====
+.Remove the AppVault using the Kubernetes CLI
+--
+. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
++
+[source,console]
+----
+kubectl delete appvault <appvault_name> -n trident-protect
+----
+
+--
+.Remove the AppVault using the Trident CLI
+--
+. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
++
+[source,console]
+----
+tridentctl protect delete appvault <appvault_name> -n trident-protect 
+----
+--
+====
 
 == Use the AppVault browser to view AppVault information
 You can use the Trident protect CLI plugin to view information about AppVault objects that have been created on the cluster.

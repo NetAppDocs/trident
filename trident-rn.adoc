@@ -15,7 +15,54 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 24.06
+== What's new in 24.10
+
+=== Enhancements
+
+* Google Cloud NetApp Volumes driver is now generally available for NFS volumes and supports zone-aware provisioning.
+* GCP Workload Identity will be used as Cloud Identity for Google Cloud NetApp Volumes with GKE.
+* Added `formatOptions` configuration parameter to ONTAP-SAN and ONTAP-SAN-Economy drivers to allow users to specify LUN format options.
+* Reduced Azure NetApp Files minimum volume size to 50 GiB. Azure new minimum size expected to be generally available in November.
+* Added `denyNewVolumePools` configuration parameter to restrict ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers to preexisting Flexvol pools.
+* Added detection for the addition, removal, or renaming of aggregates from the SVM across all ONTAP drivers.
+* Added 18MiB overhead to LUKS LUNs to ensure reported PVC size is usable.
+* Improved ONTAP-SAN and ONTAP-SAN-Economy node stage and unstage error handling to allow unstage to remove devices after a failed stage.
+* Added a custom role generator allowing customers to create a minimalistic role for Trident in ONTAP.
+* Added additional logging for troubleshooting `lsscsi` (link:https://github.com/NetApp/trident/issues/792[Issue #792]).
+
+==== Kubernetes
+
+* Added a new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
+* Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
+* Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
+* New ONTAP-NAS-Economy NFS volumes will use per-qtree export policies when using `autoExportPolicy` backend option. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads.
+* Added support for Kubernetes 1.31. 
+
+==== Experimental Enhancements
+
+* Added tech preview for Fibre Channel support on ONTAP-SAN driver.
+
+=== Fixes
+
+* *Kubernetes*: 
+** Fixed Rancher admission webhook preventing Trident Helm installations (link:https://github.com/NetApp/trident/issues/839[Issue #839]).
+** Fixed Affinity key in helm chart values (link:https://github.com/NetApp/trident/issues/898[Issue #898]).
+** Fixed tridentControllerPluginNodeSelector/tridentNodePluginNodeSelector won't work with "true" value (link:https://github.com/NetApp/trident/issues/899[Issue #899]).
+** Deleted ephemeral snapshots created during cloning (link:https://github.com/NetApp/trident/issues/901[Issue #901]).
+* Added support for Windows Server 2019.
+* Fixed `go mod tidy`in Trident repo (link:https://github.com/NetApp/trident/issues/767[Issue #767]).
+
+=== Deprecations
+
+* *Kubernetes:*
+** Updated minimum supported Kubernetes to 1.25.
+** Removed support for POD Security Policy.
+
+=== Product rebranding
+
+Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp Trident). This rebranding does not affect any features, platforms supported, and interoperability for Trident.
+
+== Changes in 24.06
 
 === Enhancements
 

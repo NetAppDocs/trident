@@ -229,3 +229,24 @@ spec:
   cloudIdentity: "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'"
 ----
 ====
+
+.Cloud identity for GKE
+[%collapsible%closed]
+====
+
+This example installs Astra Trident for use with a cloud identity on a GKE cluster. 
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-gcp-gcnv
+spec:
+  version: 1
+  storageDriverName: google-cloud-netapp-volumes 
+  projectNumber: '012345678901'
+  network: gcnv-network
+  location: us-west2
+  serviceLevel: Premium
+  storagePool: pool-premium1
+----
+====

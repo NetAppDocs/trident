@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-get-started/kubernetes-deploy-helm.html
-keywords: deploy, astra trident, operator, helm, helm chart, configuration, values, standard, registry
-summary: You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are not stored in a private registry.
+keywords: deploy, Trident, operator, helm, helm chart, configuration, values, standard, registry
+summary: You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are not stored in a private registry.
 ---
 
 = Deploy Trident operator using Helm (Standard mode)
@@ -11,23 +11,24 @@ summary: You can deploy the Trident operator and install Astra Trident using Hel
 :imagesdir: ../media/
 
 [.lead]
-You can deploy the Trident operator and install Astra Trident using Helm. This process applies to installations where the container images required by Astra Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
+You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Astra Trident 24.06
-*You must read the following critical information about Astra Trident.*
+== Critical information about Trident 24.10
+*You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
-.*Critical information about Astra Trident*
+.*Critical information about Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.31 is now supported in Astra Trident. Upgrade Trident prior to upgrading Kubernetes.
-* Astra Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
+=======
+* Kubernetes 1.31 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
 ====
 // End snippet
 
-== Deploy the Trident operator and install Astra Trident using Helm
+== Deploy the Trident operator and install Trident using Helm
 Using the Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator[Helm Chart^] you can deploy the Trident operator and install Trident in one step. 
 
 Review link:../trident-get-started/kubernetes-deploy.html[the installation overview] to ensure you've met installation prerequisites and selected the correct installation option for your environment.
@@ -38,16 +39,16 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 
 .Steps
 
-. Add the Astra Trident Helm repository:
+. Add the Trident Helm repository:
 +
 ----
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `100.2404.0` is the version of Astra Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `100.2404.0` is the version of Trident you are installing. 
 +
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2406.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2410.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -72,16 +73,16 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following `--set` command where `100.2406.0` is the version of Astra Trident you are installing:
+For example, to change the default value of `debug`, run the following command where `100.2410.0` is the version of Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2406.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2410.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options
 This table and the `values.yaml` file, which is part of the Helm chart, provide the list of keys and their default values. 
 
-[cols="1,2,1",options="header"]
+[cols="1,2,3",options="header"]
 |===
 |Option
 |Description
@@ -105,8 +106,25 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`affinity`
 |Affinity for pod assignment
-|
+a|
+----
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/arch
+              operator: In
+              values:
+              - arm64
+              - amd64
+            - key: kubernetes.io/os
+              operator: In
+              values:
+              - linux
+----
 
+WARNING: Do not remove the default affinity from the values.yaml file. When you want to provide a custom affinity, extend the default affinity.
 |`tridentControllerPluginNodeSelector`
 |Additional node selectors for pods. Refer to <<Understanding controller pods and node pods>> for details. 
 |
@@ -124,7 +142,9 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |
 
 |`imageRegistry`
-|Identifies the registry for the `trident-operator`, `trident`, and other images.  Leave empty to accept the default.
+|Identifies the registry for the `trident-operator`, `trident`, and other images. Leave empty to accept the default.
+
+IMPORTANT: When installing Trident in a private repository, if you are using the `imageRegistry` switch to specify the repository location, do not use `/netapp/` in the repository path.
 |`""`
 
 |`imagePullPolicy`
@@ -156,7 +176,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |`""`
 
 |`tridentIPv6`
-|Allows enabling Astra Trident to work in IPv6 clusters.
+|Allows enabling Trident to work in IPv6 clusters.
 |`false`
 
 |`tridentK8sTimeout`
@@ -168,47 +188,47 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |`"90s"`
 
 |`tridentSilenceAutosupport`
-|Allows disabling Astra Trident periodic AutoSupport reporting.
+|Allows disabling Trident periodic AutoSupport reporting.
 |`false`
 
 |`tridentAutosupportImageTag`
-|Allows overriding the tag of the image for Astra Trident AutoSupport container.
+|Allows overriding the tag of the image for Trident AutoSupport container.
 |`<version>`
 
 |`tridentAutosupportProxy`
-|Allows Astra Trident AutoSupport container to phone home via an HTTP proxy.
+|Enables Trident AutoSupport container to phone home via an HTTP proxy.
 |`""`
 
 |`tridentLogFormat`
-|Sets the Astra Trident logging format (`text` or `json`).
+|Sets the Trident logging format (`text` or `json`).
 |`"text"`
 
 |`tridentDisableAuditLog`
-|Disables Astra Trident audit logger.
+|Disables Trident audit logger.
 |`true`
 
 |`tridentLogLevel`
-|Allows the log level of Astra Trident to be set to: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
+|Allows the log level of Trident to be set to: `trace`, `debug`, `info`, `warn`, `error`, or `fatal`.
 |`"info"`
 
 |`tridentDebug`
-|Allows the log level of Astra Trident to be set to `debug`.
+|Allows the log level of Trident to be set to `debug`.
 |`false`
 
 |`tridentLogWorkflows`
-|Allows specific Astra Trident workflows to be enabled for trace logging or log suppression.
+|Allows specific Trident workflows to be enabled for trace logging or log suppression.
 |`""`
 
 |`tridentLogLayers`
-|Allows specific Astra Trident layers to be enabled for trace logging or log suppression.
+|Allows specific Trident layers to be enabled for trace logging or log suppression.
 |`""`
 
 |`tridentImage`
-|Allows the complete override of the image for Astra Trident.
+|Allows the complete override of the image for Trident.
 |`""`
 
 |`tridentImageTag`
-|Allows overriding the tag of the image for Astra Trident.
+|Allows overriding the tag of the image for Trident.
 |`""`
 
 |`tridentProbePort`
@@ -216,7 +236,7 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 |`""`
 
 |`windows`
-|Allows Astra Trident to be installed on Windows worker node.
+|Enables Trident to be installed on Windows worker node.
 |`false`
 
 |`enableForceDetach`
@@ -229,16 +249,21 @@ This table and the `values.yaml` file, which is part of the Helm chart, provide 
 
 |`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
 
-|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'") when using cloud identity on an EKS cluster.|`""`
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'") when using cloud identity on an EKS cluster.|`""`
 
 |`iscsiSelfHealingInterval` |The interval at which the iSCSI self-healing is invoked.|`5m0s`
 
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
 
+|`nodePrep`
+|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+*Currently, `iscsi` is the only value supported.*
+|
+
 |===
 
 === Understanding controller pods and node pods
-Astra Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount an Astra Trident volume. 
+Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount a Trident volume. 
 
 Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. Using the`ControllerPlugin` and `NodePlugin`, you can specify constraints and overrides.
 

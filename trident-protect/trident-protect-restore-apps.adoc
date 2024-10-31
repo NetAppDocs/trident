@@ -90,7 +90,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create backuprestore <my_restore_name> --backup <backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
+tridentctl protect create backuprestore <my_restore_name> --backup <backup_namespace>/<backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
 -----
 --
 ====
@@ -114,8 +114,6 @@ tridentctl protect create backuprestore <my_restore_name> --backup <backup_to_re
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
-
-
 +
 For example:
 +

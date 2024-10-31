@@ -53,11 +53,13 @@ kubectl apply -f trident-protect-support-bundle.yaml
 --
 .Create a support bundle using the CLI
 --
-. Create the support bundle, replacing values in brackets with information from your environment. For example:
+. Create the support bundle, replacing values in brackets with information from your environment. The `trigger-type` determines whether the bundle is created immediately or if creation time is dictated by the schedule, and can be `Manual` or `Scheduled`. The default setting is `Manual`. 
++
+For example:
 +
 [source,console]
 ----
-tridentctl protect create autosupportbundle <my_bundle_name> 
+tridentctl protect create autosupportbundle <my_bundle_name> --trigger-type <trigger_type>
 ----
 --
 ====

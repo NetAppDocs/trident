@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/trident-fsx-storageclass-pvc.html
 keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident
-summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 ---
 
 = Configure a storage class and PVC
@@ -11,12 +11,12 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 :imagesdir: ../media/
 
 [.lead]
-Configure a Kubernetes StorageClass object and create the storage class to instruct Astra Trident how to provision volumes. Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
+Configure a Kubernetes StorageClass object and create the storage class to instruct Trident how to provision volumes. Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
 
 == Create a storage class
 
 === Configure a Kubernetes StorageClass object
-The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Astra Trident as the provisioner that is used for that class instructs Astra Trident how to provision a volume. For example:
+The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Trident as the provisioner that is used for that class instructs Trident how to provision a volume. For example:
 
 ----
 apiVersion: storage.k8s.io/v1
@@ -31,7 +31,7 @@ parameters:
   snapshots: "true"
 ----
 
-Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
+Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Trident provisions volumes. 
 
 === Create a storage class
 
@@ -42,7 +42,7 @@ Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] 
 kubectl create -f storage-class-ontapnas.yaml
 ----
 
-. You should now see a *basic-csi* storage class in both Kubernetes and Astra Trident, and Astra Trident should have discovered the pools on the backend.
+. You should now see a *basic-csi* storage class in both Kubernetes and Trident, and Trident should have discovered the pools on the backend.
 +
 ----
 kubectl get sc basic-csi
@@ -149,11 +149,11 @@ NAME        STATUS VOLUME     CAPACITY ACCESS MODES STORAGECLASS AGE
 pvc-storage Bound  pv-name 2Gi      RWO                       5m
 ----
 
-Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Astra Trident provisions volumes. 
+Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Trident provisions volumes. 
 
-== Astra Trident attributes
+== Trident attributes
 
-These parameters determine which Astra Trident-managed storage pools should be utilized to provision volumes of a given type.
+These parameters determine which Trident-managed storage pools should be utilized to provision volumes of a given type.
 
 [cols=",,,,,",options="header",]
 |===

@@ -29,6 +29,14 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Improved ONTAP-SAN and ONTAP-SAN-Economy node stage and unstage error handling to allow unstage to remove devices after a failed stage.
 * Added a custom role generator allowing customers to create a minimalistic role for Trident in ONTAP.
 * Added additional logging for troubleshooting `lsscsi` (link:https://github.com/NetApp/trident/issues/792[Issue #792]).
+
+=== Kubernetes
+
+* Added a new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
+* Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
+* Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
+* New ONTAP-NAS-Economy NFS volumes will use per-qtree export policies when using `autoExportPolicy` backend option. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads.
+* Added support for Kubernetes 1.31.
 * Added new Trident features for Kubernetes-native workflows:
 ** Data protection
 ** Disaster recovery
@@ -37,16 +45,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 +
 link:/trident-protect/learn-about-trident-protect.html[Learn more about Trident protect].
 
-
-==== Kubernetes
-
-* Added a new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
-* Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
-* Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
-* New ONTAP-NAS-Economy NFS volumes will use per-qtree export policies when using `autoExportPolicy` backend option. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads.
-* Added support for Kubernetes 1.31. 
-
-==== Experimental Enhancements
+=== Experimental Enhancements
 
 * Added tech preview for Fibre Channel support on ONTAP-SAN driver.
 
@@ -68,7 +67,7 @@ link:/trident-protect/learn-about-trident-protect.html[Learn more about Trident 
 
 === Product rebranding
 
-Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp Trident). This rebranding does not affect any features, platforms supported, and interoperability for Trident.
+Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp Trident). This rebranding does not affect any features, platforms supported, or interoperability for Trident.
 
 == Changes in 24.06
 

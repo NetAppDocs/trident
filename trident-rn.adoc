@@ -30,7 +30,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Added a custom role generator allowing customers to create a minimalistic role for Trident in ONTAP.
 * Added additional logging for troubleshooting `lsscsi` (link:https://github.com/NetApp/trident/issues/792[Issue #792]).
 
-=== Kubernetes
+==== Kubernetes
 
 * Added a new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
 * Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
@@ -39,13 +39,13 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 * Added support for Kubernetes 1.31.
 * Added new Trident features for Kubernetes-native workflows:
 ** Data protection
+** Data migration
 ** Disaster recovery
 ** Application mobility
-** data migration
 +
 link:/trident-protect/learn-about-trident-protect.html[Learn more about Trident protect].
 
-=== Experimental Enhancements
+==== Experimental Enhancements
 
 * Added tech preview for Fibre Channel support on ONTAP-SAN driver.
 

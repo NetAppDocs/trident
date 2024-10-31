@@ -162,14 +162,14 @@ Test that the permissions are correct.
 +
 [source,console]
 ----
-kubectl auth can-i --as=system:serviceaccount:eng-1:eng-user get applications.protect.trident.netapp.io -n engineering-ns
+kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get applications.protect.trident.netapp.io -n engineering-ns
 ----
 
 . Confirm that engineering users cannot access marketing resources:
 +
 [source,console]
 ----
-kubectl auth can-i --as=system:serviceaccount:eng-1:eng-user get applications.protect.trident.netapp.io -n marketing-ns
+kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get applications.protect.trident.netapp.io -n marketing-ns
 ----
 
 

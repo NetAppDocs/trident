@@ -15,7 +15,7 @@ summary: You can use the protectctl command to create and interact with Trident 
 You can use the Trident protect command line plugin, which is an extension of the Trident `tridentctl` utility, to create and interact with Trident protect custom resources (CRs). By default, if you use the plugin to create a CR, the plugin creates a temporary CR file and automatically applies it to the cluster.
 
 == Install the Trident protect CLI plugin
-Before using the command line utility, you need to install it on the machine you use to access your cluster.
+Before using the command line utility, you need to install it on the machine you use to access your cluster. Follow these steps, depending on if your machine uses an x64 or ARM CPU.
 
 .Steps
 //. Log in to the Docker registry:
@@ -24,19 +24,54 @@ Before using the command line utility, you need to install it on the machine you
 //----
 //docker login cr.astra.netapp.io -u <ACCOUNT_ID> -p <API_TOKEN>
 //----
+
+[role="tabbed-block"]
+====
+.Download plugin for Linux AMD64 CPUs
+--
 . Download the Trident protect CLI plugin:
 +
 [source,console]
 ----
-curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0/tridentctl-protect
+curl -O https://github.com/NetApp/tridentctl-protect/releases/v24.10.0/linux/amd64/tridentctl-protect
 ----
+--
+.Download plugin for Linux ARM64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -O https://github.com/NetApp/tridentctl-protect/releases/v24.10.0/linux/arm64/tridentctl-protect
+----
+--
+.Download plugin for Mac AMD64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -O https://github.com/NetApp/tridentctl-protect/releases/v24.10.0/darwin/amd64/tridentctl-protect
+----
+--
+.Download plugin for Mac ARM64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -O https://github.com/NetApp/tridentctl-protect/releases/v24.10.0/darwin/arm64/tridentctl-protect
+----
+--
+====
+
 . Enable execute permissions for the binary:
 +
 [source,console]
 ----
 chmod +x tridentctl-protect
 ----
-. Copy the plugin binary to the path of your choice.
+. Copy the plugin binary to the path of your choice:
 +
 [source,console]
 ----
@@ -48,6 +83,8 @@ cp ./tridentctl-protect ~/bin/
 ----
 cp ./tridentctl-protect /usr/local/bin/
 ----
+
+
 
 == View Trident CLI plugin help
 You can use the built-in plugin help features to get detailed help on the capabilities of the plugin:

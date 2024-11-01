@@ -17,14 +17,6 @@ You can use the Trident protect command line plugin, which is an extension of th
 == Install the Trident protect CLI plugin
 Before using the command line utility, you need to install it on the machine you use to access your cluster. Follow these steps, depending on if your machine uses an x64 or ARM CPU.
 
-.Steps
-//. Log in to the Docker registry:
-//+
-//[source,console]
-//----
-//docker login cr.astra.netapp.io -u <ACCOUNT_ID> -p <API_TOKEN>
-//----
-
 [role="tabbed-block"]
 ====
 .Download plugin for Linux AMD64 CPUs
@@ -64,7 +56,7 @@ curl -O https://github.com/NetApp/tridentctl-protect/releases/v24.10.0/darwin/ar
 ----
 --
 ====
-
++
 . Enable execute permissions for the binary:
 +
 [source,console]
@@ -83,8 +75,6 @@ cp ./tridentctl-protect ~/bin/
 ----
 cp ./tridentctl-protect /usr/local/bin/
 ----
-
-
 
 == View Trident CLI plugin help
 You can use the built-in plugin help features to get detailed help on the capabilities of the plugin:

@@ -28,13 +28,13 @@ docker login cr.astra.netapp.io -u <ACCOUNT_ID> -p <API_TOKEN>
 +
 [source,console]
 ----
-docker pull cr.astra.netapp.io/trident-protectctl:24.11.0
+docker pull cr.astra.netapp.io/trident-protectctl:24.10.0
 ----
 . Install the plugin on your local machine:
 +
 [source,console]
 ----
-docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.11.0 cp protectctl /pctl-tmp
+docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0 cp protectctl /pctl-tmp
 ----
 . Optionally, to install the plugin globally, copy the plugin binary to a global path, such as `/usr/bin` or `/usr/local/bin` (you might need elevated privileges). For example:
 +

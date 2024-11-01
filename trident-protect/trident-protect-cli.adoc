@@ -18,25 +18,31 @@ You can use the Trident protect command line plugin, which is an extension of th
 Before using the command line utility, you need to install it on the machine you use to access your cluster.
 
 .Steps
-. Log in to the Docker registry:
-+
-[source,console]
-----
-docker login cr.astra.netapp.io -u <ACCOUNT_ID> -p <API_TOKEN>
-----
+//. Log in to the Docker registry:
+//+
+//[source,console]
+//----
+//docker login cr.astra.netapp.io -u <ACCOUNT_ID> -p <API_TOKEN>
+//----
 . Download the Trident protect CLI plugin:
 +
 [source,console]
 ----
-docker pull cr.astra.netapp.io/trident-protectctl:24.10.0
+curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0/tridentctl-protect
 ----
-. Install the plugin on your local machine:
+. Enable execute permissions for the binary:
 +
 [source,console]
 ----
-docker run --rm -v $(pwd):/pctl-tmp cr.astra.netapp.io/trident-protectctl:24.10.0 cp protectctl /pctl-tmp
+chmod +x tridentctl-protect
 ----
-. Optionally, to install the plugin globally, copy the plugin binary to a global path, such as `/usr/bin` or `/usr/local/bin` (you might need elevated privileges). For example:
+. Copy the plugin binary to the path of your choice.
++
+[source,console]
+----
+cp ./tridentctl-protect ~/bin/
+----
+. Optionally, to install the binary globally, copy the plugin binary to a global path. For example: `/usr/bin` or `/usr/local/bin` (you might need elevated privileges):
 +
 [source,console]
 ----

@@ -18,11 +18,9 @@ Get started by verifying the readiness of your operational environment, applicat
 
 Trident protect is compatible with a wide range of fully managed and self-managed Kubernetes offerings, including:
 
-* Google Kubernetes Engine (GKE)
 * Amazon Elastic Kubernetes Service (EKS)
 * Microsoft Azure Kubernetes Service (AKS)
 * Red Hat OpenShift
-* Rancher
 * VMware Tanzu Portfolio
 * Upstream Kubernetes
 
@@ -52,7 +50,7 @@ nfs modify -vserver <svm> -v3-hide-snapshot enabled
 You can enable the snapshot directory by running the following command for each nas-economy volume, replacing `<volume-UUID>` with the UUID of the volume you want to change:
 [source,console]
 ----
-tridentctl update volume <volume-UUID> --snapshot-dir=true --at-pool=true -n trident-protect-system
+tridentctl update volume <volume-UUID> --snapshot-dir=true --pool-level=true -n trident
 ----
 
 NOTE: You can enable snapshot directories by default for new volumes by setting the Trident backend configuration option `snapshotDir` to `true`. Existing volumes are not affected.

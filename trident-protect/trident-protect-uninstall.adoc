@@ -27,11 +27,11 @@ helm uninstall trident-protect-crds
 +
 [source,console]
 ----
-helm uninstall -n trident-protect-system trident-protect
+helm uninstall -n trident-protect trident-protect
 ----
 . Remove the Trident protect namespace:
 +
 [source,console]
 ----
-kubectl delete ns trident-protect-system
+kubectl delete ns trident-protect
 ----

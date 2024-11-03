@@ -41,7 +41,7 @@ helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-
 +
 [source,console]
 ----
-helm install -n trident-protect-system --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.11.0
+helm install -n trident-protect --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.10.0
 ----
 . (_Optional_) Freeze SVMs. If you are using KubeVirt support for SnapMirror, freezing SVMs helps manage them effectively:
 +

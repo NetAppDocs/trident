@@ -51,5 +51,4 @@ kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=
 ----
 +
 NOTE: You need to set up virtualization for the freeze functionality to work. SVMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
-helm install -n trident-protect --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.10.0
 ----

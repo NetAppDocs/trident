@@ -101,6 +101,9 @@ tridentctl protect create backuprestore <my_restore_name> --backup <backup_names
 // end tabbed block
 
 == Restore from a backup to the original namespace
+You can restore a backup to the original namespace at any time.
+
+NOTE: Restoring a backup to a namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in a backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
 
 // begin tabbed block
 [role="tabbed-block"]

@@ -88,6 +88,6 @@ Ensure that the SVM names used in the replication relationship between two ONTAP
 === Trident / ONTAP configuration for SnapMirror replication
 Trident protect requires that you configure at least one storage backend that supports replication for both the source and destination clusters. If the source and destination clusters are the same, the destination application should use a different storage backend than the source application for the best resiliency.
 
-
-
+=== Considerations when using KubeVirt
+If you plan to use https://kubevirt.io/[KubeVirt^] virtual machines with SnapMirror replication, you need to set up virtualization so that you can freeze and unfreeze your SVMs. After you set up virtualization, SVMs you deploy will include the necessary tools to freeze and unfreeze. To learn more about setting up virtualization, refer to https://docs.openshift.com/container-platform/4.17/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
 

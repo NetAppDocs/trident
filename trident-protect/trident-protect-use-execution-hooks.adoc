@@ -116,10 +116,10 @@ metadata:
     astra.netapp.io/astra-control-hook-source-id: /account/test/hookSource/id
 spec: 
   applicationRef: my-app-name
-  stage: pre
-  action: snapshot
+  stage: Pre
+  action: Snapshot
   enabled: true
-  hookSource: IyEmlhookNoCmsourcegZmg85lcCAxCexamplekGZQo=
+  hookSource: IyEvYmluL2Jhc2gKZWNobyAiZXhhbXBsZSBzY3JpcHQiCg==
   timeout: 10
   arguments: 
     - FirstExampleArg
@@ -155,7 +155,7 @@ kubectl apply -f trident-protect-hook.yaml
 +
 [source,console]
 ----- 
-tridentctl protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage>
+tridentctl protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file>
 -----
 --
 ====

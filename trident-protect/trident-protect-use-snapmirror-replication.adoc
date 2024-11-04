@@ -74,7 +74,7 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 .. Configure the following attributes:
 +
 ** *metadata.name*: (_Required_) The name of the application custom resource. Make note of the name you choose, because other CR files needed for a replication relationship refer to this value.
-** *spec.includedNamespaces*: (_Required_) Use namespace names and optionally narrow the scope of the namespaces with labels to specify resources that exist in the namespaces listed here. The application namespace must be part of this list.
+** *spec.includedNamespaces*: (_Required_) An array of namespaces and associated labels. Use namespace names and optionally narrow the scope of the namespaces with labels to specify resources that exist in the namespaces listed here. The application namespace must be part of this array.
 +
 *Example YAML*:
 +
@@ -87,8 +87,8 @@ metadata:
   namespace: my-app-namespace
 spec:
   includedNamespaces:
-    labelSelector: {}
-    namespace: maria
+    - namespace: maria
+      labelSelector: {}
 ----
 .. After you populate the `trident-protect-app-source.yaml` file with the correct values, apply the CR:
 +
@@ -103,7 +103,7 @@ kubectl apply -f trident-protect-app-source.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create app maria --namespaces maria
+tridentctl protect create app maria --namespaces maria -n my-app-namespace
 ----
 --
 ====
@@ -252,7 +252,7 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create appmirrorelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> -- source-app-vault <my_source_app_vault>
+tridentctl protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> --source-app-vault <my_source_app_vault>
 ----
 --
 ====

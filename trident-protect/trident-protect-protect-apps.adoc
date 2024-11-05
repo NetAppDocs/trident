@@ -227,21 +227,21 @@ kubectl get backup -n <namespace_name> <my_backup_cr_name> -o jsonpath='{.status
 
 == Enable backup and restore for azure-netapp-files (ANF) operations
 
-If you have Trident Protect enabled, you can enable space-efficient backup and restore functionality for storage backends that use the azure-netapp-files storage class and were created prior to Trident 24.06. This funtionality works with NFSv4 volumes and does not consume additional space from the capacity pool.
+If you have installed Trident protect, you can enable space-efficient backup and restore functionality for storage backends that use the azure-netapp-files storage class and were created prior to Trident 24.06. This funtionality works with NFSv4 volumes and does not consume additional space from the capacity pool.
 
 .Before you begin
 
 Ensure the following:
 
-* You have enabled Trident Protect.
-* You have defined an application in Trident Protect. This application will have limited protection functionality until you complete this procedure.
+* You have installed Trident protect.
+* You have defined an application in Trident protect. This application will have limited protection functionality until you complete this procedure.
 * You have `azure-netapp-files` selected as the default storage class for your storage backend.
 
 .Expand for configuration steps
 
 [%collapsible]
 ====
-. Do the following in Trident if the ANF volume was created prior to upgrading to Trident 24.06:
+. Do the following in Trident if the ANF volume was created prior to upgrading to Trident 24.10:
 .. Enable the snapshot directory for each PV that is azure-netapp-files based and associated with the application:
 +
 [source,console]
@@ -260,10 +260,9 @@ Response:
 ----
 snapshotDirectory: "true"
 ----
-When the snapshot directory is not enabled, Trident Protect chooses the regular backup functionality, which temporarily consumes space in the capacity pool during the backup process. In this case, ensure that sufficient space is available in the capacity pool to create a temporary volume of the size of the volume being backed up.
-. In Trident Protect, refresh the application after enabling all associated snapshot directories so that Trident Protect recognizes the changed value.
+When the snapshot directory is not enabled, Trident protect chooses the regular backup functionality, which temporarily consumes space in the capacity pool during the backup process. In this case, ensure that sufficient space is available in the capacity pool to create a temporary volume of the size of the volume being backed up.
 
 .Result
-The application is ready for backup and restore using Trident Protect. Each PVC is also available to be used by other applications for backups and restores.
+The application is ready for backup and restore using Trident protect. Each PVC is also available to be used by other applications for backups and restores.
 ====
 

@@ -95,7 +95,7 @@ If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitA
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. 
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs.
+Also restricts the maximum size of the volumes it manages for LUNs.
 |""  (not enforced by default)
 
 |`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |`100`
@@ -122,6 +122,15 @@ Example: "-E nodiscard"
 
 *Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
 a|
+
+
+|`limitVolumePoolSize` |Maximum requestable FlexVol size when using LUNs in ontap-san-economy backend.
+
+| "" (not enforced by default)
+
+|`denyNewVolumePools` |Restricts `ontap-san-economy` backends from creating new FlexVol volumes to contain their LUNs. Only preexisting Flexvols are used for provisioning new PVs.
+
+| 
 
 |===
 
@@ -174,13 +183,6 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 
 |""
 
-|`limitVolumePoolSize` |Maximum requestable FlexVol size when using LUNs in ontap-san-economy backend.
-
-| "" (not enforced by default)
-
-|`denyNewVolumePools` |Restricts `ontap-san-economy` backends from creating new FlexVol volumes to contain their LUNs. Only preexisting Flexvols are used for provisioning new PVs.
-
-| 
 
 |===
 

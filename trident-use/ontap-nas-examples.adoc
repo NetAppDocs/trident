@@ -131,9 +131,13 @@ Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` i
 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
-|`limitVolumePoolSize` |Maximum requestable FlexVol size when using qtrees in ontap-nas-economy backend.
+|`limitVolumePoolSize` |Maximum requestable FlexVol size when using Qtrees in ontap-nas-economy backend.
 
 | "" (not enforced by default)
+
+|`denyNewVolumePools` |Restricts `ontap-nas-economy` backends from creating new FlexVol volumes to contain their Qtrees. Only preexisting Flexvols are used for provisioning new PVs.
+
+|
 
 |===
 
@@ -188,10 +192,6 @@ SMB default is `ntfs`.
 |`nameTemplate` | Template to create custom volume names.
 
 |""
-
-|`denyNewVolumePools` |Restricts `ontap-nas-economy` backends from creating new FlexVol volumes to contain their Qtrees. Only preexisting Flexvols are used for provisioning new PVs.
-
-|
 
 |===
 

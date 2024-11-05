@@ -14,6 +14,8 @@ summary: You can use Trident protect to restore your application from a snapshot
 [.lead]
 You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 
+NOTE: When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
+
 == Restore from a backup to a different namespace
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.

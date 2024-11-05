@@ -14,6 +14,8 @@ summary: You can restore your backup or snapshot data to a different cluster or 
 [.lead]
 You can migrate your applications between clusters or storage classes by restoring your backup or snapshot data to a different cluster or storage class.
 
+NOTE: When you migrate an application, all execution hooks configured for the application are migrated with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
+
 == Backup and restore operations
 
 To perform backup and restore operations for the following scenarios, you can automate specific backup and restore tasks.
@@ -107,7 +109,7 @@ spec:
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
+. Optionally, if you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
 * *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 +

@@ -95,9 +95,7 @@ NOTE: When the aggregate list is updated in SVM, the list is updated in Trident 
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. |""  (not enforced by default)
-
-|`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |"100"
+Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. |""  (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -148,7 +146,7 @@ You can control default provisioning using these options in the `defaults` secti
 [cols="1,3,2",options="header"]
 |===
 |Parameter |Description |Default
-|`spaceAllocation` |Space-allocation for LUNs |"true"
+|`spaceAllocation` |Space-allocation for Qtrees |"true"
 
 |`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick) |"none"
 

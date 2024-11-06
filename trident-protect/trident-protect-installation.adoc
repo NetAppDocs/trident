@@ -21,7 +21,7 @@ If your environment meets the requirements, you can follow these steps to instal
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
 
-. Use Helm to install Trident protect. If you are installing from a private registry, replace `cr.astra.netapp.io` with the name of the private registry:
+. Use Helm to install Trident protect. Replace `<name_of_cluster>` with the name that you want to give to the application cluster where you are installing Trident protect:
 +
 [source,console]
 ----
@@ -30,7 +30,7 @@ helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --
 +
 [source,console]
 ----
-helm install  trident-protect netapp-trident-protect/trident-protect --set clusterName=<NameOfYourCluster> --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +

@@ -265,7 +265,7 @@ kubectl get amr -n my-app-namespace <relationship name> -o=jsonpath='{.status}' 
 
 === Fail over to destination cluster 
 
-Using Trident protect, you can fail over replicated applications to a destination cluster. This procedure stops the replication relationship and brings the app online on the destination cluster. This procedure does not stop the app on the source cluster if it was operational.
+Using Trident protect, you can fail over replicated applications to a destination cluster. This procedure stops the replication relationship and brings the app online on the destination cluster. Trident protect does not stop the app on the source cluster if it was operational.
 
 .Steps
 
@@ -289,11 +289,11 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 kubectl get amr -n my-app-namespace <relationship name> -o=jsonpath='{.status}' | jq
 ----
 
-=== Resync a failed over replication
+=== Resync a failed over replication relationship
 
-The resync operation re-establishes the replication relationship; after a resync operation, the original source application becomes the running application. This operation re-establishes the SnapMirror relationships to start the volume replication in the direction of choice.
+The resync operation re-establishes the replication relationship. After you perform a resync operation, the original source application becomes the running application, and any changes made to the running application on the destination cluster are discarded.
 
-The process stops the app on the new destination cluster before re-establishing replication.
+The process stops the app on the destination cluster before re-establishing replication.
 
 IMPORTANT: Any data written to the destination application during failover will be lost. 
 
@@ -310,9 +310,9 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 -----
 . If you created any protection schedules on the destination cluster to protect the failed over application, remove them. Any schedules that remain cause volume snapshot failures.
 
-=== Reverse resync a failed over replication
+=== Reverse resync a failed over replication relationship
 
-When you reverse resync a failed over replication relationship, the destination application becomes the source application, and the source becomes the destination. Changes made to the destination application during failover are kept. You can choose the source of the relationship to retain the data on the source or destination cluster.
+When you reverse resync a failed over replication relationship, the destination application becomes the source application, and the source becomes the destination. Changes made to the destination application during failover are kept.
 
 .Steps
 
@@ -323,7 +323,7 @@ When you reverse resync a failed over replication relationship, the destination 
 
 == Reverse application replication direction
 
-This is the planned operation to move the application to the destination storage backend while continuing to replicate back to the original source storage backend. Trident protect stops the source application and replicates the data to the destination before failing over to the destination app.
+When you reverse replication direction, Trident protect moves the application to the destination storage backend while continuing to replicate back to the original source storage backend. Trident protect stops the source application and replicates the data to the destination before failing over to the destination app.
 
 In this situation, you are swapping the source and destination.
 

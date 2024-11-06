@@ -131,9 +131,9 @@ spec:
       group: my-resource-group
       kind: my-resource-kind
       version: my-resource-version
-      names: my-resource-names
-      namespaces: my-resource-namespaces
-      labelSelectors: "trident.netapp.io/os=linux"
+      names: ["my-resource-names"]
+      namespaces: ["my-resource-namespaces"]
+      labelSelectors: ["trident.netapp.io/os=linux"]
 -------
 +
 . After you populate the `trident-protect-snapshot-restore-cr.yaml` file with the correct values, apply the CR:

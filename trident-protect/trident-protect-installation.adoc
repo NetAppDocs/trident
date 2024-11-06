@@ -14,40 +14,46 @@ summary: If your environment meets the requirements, you can follow these steps 
 [.lead]
 If your environment meets the requirements, you can follow these steps to install Trident protect.
 
-. Create the namespace:
+. Add the Trident Helm repository:
 +
 [source,console]
 ----
-kubectl create ns trident-protect
+helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
-. Log in to the registry:
-+
-[source,console]
-----
-helm registry login cr.astra.netapp.io -u <account-id> -p <api-token>
-----
-. Create a pull secret:
-+
-[source,console]
-----
-kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect --docker-server= cr.astra.netapp.io
-----
+
 . Use Helm to install Trident protect. If you are installing from a private registry, replace `cr.astra.netapp.io` with the name of the private registry:
 +
 [source,console]
 ----
-helm install --set controller.image.registry=cr.astra.netapp.io trident-protect-crds oci://cr.astra.netapp.io/trident-protect-crds --version 24.10.0
+helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
 ----
 +
 [source,console]
 ----
-helm install -n trident-protect --set controller.image.registry=cr.astra.netapp.io --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://cr.astra.netapp.io/trident-protect --version 24.10.0
+helm install  trident-protect netapp-trident-protect/trident-protect --set clusterName=<NameOfYourCluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
-. (_Optional_) Freeze SVMs. If you are using KubeVirt support for SnapMirror, freezing SVMs helps manage them effectively:
+. Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +
 [source,console]
 ----
 kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=true -n trident-protect
 ----
 +
-NOTE: You need to set up virtualization for the freeze functionality to work. SVMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
+NOTE: You need to set up virtualization for the freeze functionality to work. VMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
+
+
+////
+. Log in to the registry:
++
+[source,console]
+----
+helm registry login cr.astra.netapp.io -u <account-id> -p <api-token>
+----
+
+. Create a pull secret:
++
+[source,console]
+----
+kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect --docker-server= cr.astra.netapp.io
+----
+////

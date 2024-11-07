@@ -14,6 +14,15 @@ summary: If your environment meets the requirements, you can follow these steps 
 [.lead]
 If your environment meets the requirements, you can follow these steps to install Trident protect.
 
+
+
+.Steps
+
+[role="tabbed-block"]
+====
+.Install Trident protect from NetApp
+--
+
 . Add the Trident Helm repository:
 +
 [source,console]
@@ -21,7 +30,7 @@ If your environment meets the requirements, you can follow these steps to instal
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
 
-. Use Helm to install Trident protect. Replace `<name_of_cluster>` with the name that you want to give to the application cluster where you are installing Trident protect:
+. Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify backups and snapshots from this cluster:
 +
 [source,console]
 ----
@@ -40,6 +49,57 @@ kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=
 ----
 +
 NOTE: You need to set up virtualization for the freeze functionality to work. VMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
+
+--
+.Install Trident protect from a private registry
+--
+You can install Trident protect from a private registry. In these examples, replace <private-registry-url> with the URL of your private registry:
+
+. Create the namespace:
++
+[source,console]
+----
+kubectl create ns trident-protect
+----
+. Log in to the registry:
++
+[source,console]
+----
+helm registry login <private-registry-url> -u <account-id> -p <api-token>
+----
+. Create a pull secret:
++
+[source,console]
+----
+kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect --docker-server=<private-registry-url>
+----
+. Use Helm to install Trident protect:
++
+[source,console]
+----
+helm install --set controller.image.registry=<private-registry-url> trident-protect-crds oci://<private-registry-url>/trident-protect-crds --version 24.10.0
+----
++
+[source,console]
+----
+helm install -n trident-protect --set controller.image.registry=<private-registry-url> --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://<private-registry-url>trident-protect --version 24.10.0
+----
+
+. Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
++
+[source,console]
+----
+kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=true -n trident-protect
+----
++
+NOTE: You need to set up virtualization for the freeze functionality to work. VMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
+
+--
+
+====
+
+
+
 
 
 ////

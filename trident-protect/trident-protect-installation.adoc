@@ -74,12 +74,12 @@ kubectl create secret docker-registry regcred --docker-username=<account-id> --d
 +
 [source,console]
 ----
-helm install --set controller.image.registry=<private-registry-url> trident-protect-crds oci://<private-registry-url>/trident-protect-crds --version 24.10.0
+helm install --set controller.image.registry=<private-registry-url> trident-protect-crds oci://<private-registry-url>/trident-protect-crds --version 100.2410.0
 ----
 +
 [source,console]
 ----
-helm install -n trident-protect --set controller.image.registry=<private-registry-url> --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://<private-registry-url>trident-protect --version 24.10.0
+helm install -n trident-protect --set controller.image.registry=<private-registry-url> --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://<private-registry-url>trident-protect --version 100.2410.0
 ----
 
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:

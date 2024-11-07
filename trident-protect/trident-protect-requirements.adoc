@@ -19,12 +19,22 @@ Get started by verifying the readiness of your operational environment, applicat
 Trident protect is compatible with a wide range of fully managed and self-managed Kubernetes offerings, including:
 
 * Amazon Elastic Kubernetes Service (EKS)
+* Google Kubernetes Engine (GKE)
 * Microsoft Azure Kubernetes Service (AKS)
 * Red Hat OpenShift
+* SUSE Rancher
 * VMware Tanzu Portfolio
 * Upstream Kubernetes
 
 == Trident protect storage backend compatibility
+Trident protect supports the following storage backends:
+
+* Amazon FSx for NetApp ONTAP
+* Cloud Volumes ONTAP
+* ONTAP storage arrays
+* Google Cloud NetApp Volumes
+* Azure NetApp Files
+
 Ensure that your storage backend meets the following requirements:
 
 * Ensure that NetApp storage connected to the cluster is using Astra Trident 24.02 or newer (Trident 24.10 is recommended). 

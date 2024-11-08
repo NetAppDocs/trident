@@ -12,7 +12,7 @@ summary: If your environment meets the requirements, you can follow these steps 
 :imagesdir: ../media/
 
 [.lead]
-If your environment meets the requirements for Trident protect, you can follow these steps to install Trident protect on your cluster. You can obtain Trident protect from NetApp, or install it from your own private registry.
+If your environment meets the requirements for Trident protect, you can follow these steps to install Trident protect on your cluster. You can obtain Trident protect from NetApp, or install it from your own private registry. Installing from a private registry is helpful if your cluster cannot access the Internet.
 
 
 [role="tabbed-block"]
@@ -50,9 +50,41 @@ NOTE: You need to set up virtualization for the freeze functionality to work. VM
 --
 .Install Trident protect from a private registry
 --
-You can install Trident protect from a private registry. In these examples, replace values in brackets with information from your environment:
+You can install Trident protect from a private image registry if your cluster is unable to access the Internet. In these examples, replace values in brackets with information from your environment:
 
-. Create the namespace:
+. Pull the following images to your local machine, and then push them to your private registry:
++
+[source,console]
+----
+netapp/controller:24.10.0
+netapp/restic:24.10.0
+netapp/kopia:24.10.0
+netapp/trident-autosupport:24.10.0
+netapp/exechook:24.10.0
+netapp/resourcebackup:24.10.0
+netapp/resourcerestore:24.10.0
+bitnami/kubectl:1.30.2
+kubebuilder/kube-rbac-proxy:v0.16.0
+----
++
+For example:
++
+[source,console]
+----
+docker pull netapp/controller:24.10.0
+----
++
+[source,console]
+----
+docker tag netapp/controller:24.10.0 <private-registry-url>/controller:24.10.0
+----
++
+[source,console]
+----
+docker push <private-registry-url>/controller:24.10.0
+----
+
+. Create the Trident protect system namespace:
 +
 [source,console]
 ----
@@ -64,22 +96,52 @@ kubectl create ns trident-protect
 ----
 helm registry login <private-registry-url> -u <account-id> -p <api-token>
 ----
-. Create a pull secret:
+. Create a pull secret to use for private registry authentication:
 +
 [source,console]
 ----
-kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect --docker-server=<private-registry-url>
+kubectl create secret docker-registry regcred --docker-username=<registry-username> --docker-password=<api-token> -n trident-protect --docker-server=<private-registry-url>
 ----
+
+. Add the private repository:
++
+[source,console]
+----
+helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
+----
+
+. Create a file named `protectValues.yaml` that contains the following Trident protect settings:
++
+[source,yaml]
+----
+image:
+  registry: <private-registry-url>
+imagePullSecrets:
+- name: regcred
+controller:
+  image:
+    registry: <private-registry-url>
+rbacProxy:
+  image:
+    registry: <private-registry-url>
+crCleanup:
+  imagePullSecrets:
+  - name: regcred
+webhooksCleanup:
+  imagePullSecrets:
+  - name: regcred
+----
+
 . Use Helm to install Trident protect:
 +
 [source,console]
 ----
-helm install --set controller.image.registry=<private-registry-url> trident-protect-crds oci://<private-registry-url>/trident-protect-crds --version 100.2410.0
+helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
 ----
 +
 [source,console]
 ----
-helm install -n trident-protect --set controller.image.registry=<private-registry-url> --set 'imagePullSecrets[0].name=regcred' trident-protect --set clusterName=production1 oci://<private-registry-url>trident-protect --version 100.2410.0
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
 
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:

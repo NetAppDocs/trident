@@ -32,11 +32,19 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 ==== Kubernetes
 
+* Added new Trident features for Kubernetes-native workflows:
+** Data protection
+** Data migration
+** Disaster recovery
+** Application mobility
++
+link:/trident-protect/learn-about-trident-protect.html[Learn more about Trident protect].
 * Added a new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
 * Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
 * Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
 * New ONTAP-NAS-Economy NFS volumes will use per-qtree export policies when using `autoExportPolicy` backend option. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads.
-* Added support for Kubernetes 1.31. 
+* Added support for Kubernetes 1.31.
+
 
 ==== Experimental Enhancements
 
@@ -60,7 +68,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 === Product rebranding
 
-Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp Trident). This rebranding does not affect any features, platforms supported, and interoperability for Trident.
+Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp Trident). This rebranding does not affect any features, platforms supported, or interoperability for Trident.
 
 == Changes in 24.06
 
@@ -75,6 +83,9 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 * Enhanced the `azure-netapp-files` (ANF) driver to automatically enable the snapshot directory by default when the NFS mount options are set to use NFS version 4.x.
 * Added Bottlerocket support for NFS volumes.
 * Added technical preview support for Google Cloud NetApp Volumes. 
+
+//=== Trident protect
+//* Added KubeVirt support for SnapMirror. link:https://kubevirt.io/[Learn more about KubeVirt^].
 
 ==== Kubernetes
 

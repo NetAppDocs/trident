@@ -1,0 +1,311 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-cli.html
+keywords: trident, protect, command line utility, cli, netapp, custom, resources
+summary: You can use the protectctl command to create and interact with Trident protect custom resources.
+---
+= Install the Trident protect CLI plugin
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+You can use the Trident protect command line plugin, which is an extension of the Trident `tridentctl` utility, to create and interact with Trident protect custom resources (CRs).
+
+== Install the Trident protect CLI plugin
+Before using the command line utility, you need to install it on the machine you use to access your cluster. Follow these steps, depending on if your machine uses an x64 or ARM CPU.
+
+[role="tabbed-block"]
+====
+.Download plugin for Linux AMD64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-linux-amd64
+----
+--
+.Download plugin for Linux ARM64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-linux-arm64
+----
+--
+.Download plugin for Mac AMD64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-macos-amd64
+----
+--
+.Download plugin for Mac ARM64 CPUs
+--
+. Download the Trident protect CLI plugin:
++
+[source,console]
+----
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-macos-arm64
+----
+--
+====
+
+. Enable execute permissions for the binary:
++
+[source,console]
+----
+chmod +x tridentctl-protect
+----
+. Copy the plugin binary to the path of your choice:
++
+[source,console]
+----
+cp ./tridentctl-protect ~/bin/
+----
+. Optionally, to install the binary globally, copy the plugin binary to a global path. For example: `/usr/bin` or `/usr/local/bin` (you might need elevated privileges):
++
+[source,console]
+----
+cp ./tridentctl-protect /usr/local/bin/
+----
+
+== View Trident CLI plugin help
+You can use the built-in plugin help features to get detailed help on the capabilities of the plugin:
+
+.Steps 
+. Use the help function to view usage guidance:
++
+[source,console]
+----
+tridentctl protect help
+----
+
+== Enable command auto-completion
+After you have installed the Trident protect CLI plugin, you can enable auto-completion for certain commands. 
+
+// For more information, use the `tridentctl protect completion --help` command.
+
+
+[role="tabbed-block"]
+====
+.Enable auto-completion for the Bash shell
+--
+
+. Download the completion script:
++
+[source,console]
+----
+curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-completion.bash
+----
+. Make a new directory in your home directory to contain the script:
++
+[source,console]
+----
+md ~/.bash/completions
+----
+. Move the downloaded script to the `~/.bash/completions` directory:
++
+[source,console]
+----
+mv tridentctl-completion.bash ~/.bash/completions/
+----
+. Add the following line to the `~/.bashrc` file in your home directory:
++
+[source,console]
+----
+source ~/.bash/completions/tridentctl-completion.bash
+----
+
+--
+.Enable auto-completion for the Z shell
+--
+. Download the completion script:
++
+[source,console]
+----
+curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-completion.zsh
+----
+. Make a new directory in your home directory to contain the script:
++
+[source,console]
+----
+md ~/.zsh/completions
+----
+. Move the downloaded script to the `~/.zsh/completions` directory:
++
+[source,console]
+----
+mv tridentctl-completion.zsh ~/.zsh/completions/
+----
+. Add the following line to the `~/.zprofile` file in your home directory:
++
+[source,console]
+----
+source ~/.zsh/completions/tridentctl-completion.zsh
+----
+--
+====
+
+.Result
+Upon your next shell login, you can use command auto-completion with the tridentctl protect plugin.
+
+
+////
+.Steps
+
+. Add the following line to your shell configuration file (`~/.zprofile , ~/.bashrc`):
++
+[source,console]
+----
+source <(tridentctl completion zsh)>
+----
++
+To use auto-completion in the Bash shell you need to install a bash-completion package and then also source the bash completion script. For example, use `source /etc/profile.d/bash_completion.sh` or `source /etc/bash-completion`, inside your `.bashrc` file.
+
+////
+
+
+////
+
+. Configure the trident-protect namespace:
++
+[source,console]
+----
+mkdir -p ~/.trident-protect
+----
+
+== Basic usage of the Trident protect CLI
+The plugin command syntax is similar to the Kubernetes `kubectl` utility. You can use the following top-level verbs:
+
+[cols="2,2a" options="header"]
+|===
+|Command
+|Description
+
+|`create`
+|Create a resource.
+
+|`delete`
+|Delete one or more resources.
+
+|`get`
+|Get one or more resources. For example, `tridentctl protect get all` gets all resources on the system. 
+
+|`wait` 
+|Wait for a resource to be in its final state (Possible states are `Ready`, `Complete`, `Available`, `Failed` or `Removed`).
+|===
+
+The typical structure of a command is:
+
+[source,console]
+----
+tridentctl protect <verb> <resource-type> [<name>]
+----
+
+The following are the supported resource types:
+
+* application
+* appvault
+* backup
+* backupinplacerestore
+* backuprestore
+* snapshot
+* snapshotinplacerestore
+* snapshotrestore
+* schedule
+
+These resource types correspond to the Trident protect custom resources, and you can use them to create the corresponding CRs. For example, to restore snapshots and backups, use the resources 
+`snapshotrestore`, `snapshotinplacerestore`, `backuprestore`, and `backupinplacerestore`.
+
+To get a list of all applications use:
+[source,console]
+----
+tridentctl protect get application
+----
+
+To get a list of all supported resources use:
+[source,console]
+----
+tridentctl protect get all
+----
+
+To delete a resource use:
+[source,console]
+----
+tridentctl protect delete application mysql
+----
+
+== Create application
+
+*Simple application:*
+----
+tridentctl protect create app minio --namespaces namespace1,namespace2
+----
+
+*Application with namespace label selector and cluster-scoped resources:*
+----
+tridentctl protect create app minio \
+--namespaces 'namespace1(key=value1),namespace2(environment in (production, qa))' 
+--csr 'rbac.authorization.k8s.io/v1/ClusterRole(key=value)'
+----
+
+== Create AppVault
+ 
+*GCP example:*
+----
+kubectl create secret generic gcp-creds --from-file=./gcp_credentials.json  -n trident-protect
+tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret gcp-creds/gcp_credentials.json
+----
+
+Use the following help command to get a list of supported providers and what arguments can be specified:
+----
+tridentctl protect create appvault -help
+tridentctl protect create appvault azure -help
+----
+
+Please see section link:trident-protect-appvault-custom-resources.html[AppVault custom resources] for examples for provider-specific secrets.
+
+== Create backup
+----
+tridentctl protect create backup mybackup --appvault my-new-vault --app minio
+----
+
+== Restore backup
+Restore backup using existing Backup CR:
+----
+tridentctl protect create backuprestore minio2 minio:minio2 -backup mybackup
+----
+
+Restore backup without existing Backup CR, e.g. in a disaster recovery scenario (AppVault pointing to the bucket must exist):
+----
+tridentctl protect create backuprestore minio2 minio:minio2 --path minio_c22fe644-2606-4630-93ab-6319e1640b18/backups/mybackup_42e753bd-47ec-4f92-9282-bd65910ac064 --appvault  my-new-vault 
+----
+
+[NOTE]
+====
+The value for the `--path` parameter can be found in the backup CR field `appArchivePath`, or using the AppVault browser.
+====
+
+Restoring a backup (in-place) with a resource filter would look like this:
+----
+tridentctl protect create backupinplacerestore restore1 --backup mybackup --resource-filter-include '[{"Kind":"PersistentVolumeClaim"}]'
+----
+
+The resource filter can be specified either as -include or -exclude filter, the argument is a list of resource matchers in JSON format. A full example of what a single resource matcher can look like:
+----
+{"Group":"apps","Kind":"Deployment","Version":"v1","Names":["my-deployment"],"Namespaces":["my-namespace"],"LabelSelectors":["app=my-app"]}
+----
+
+For normal restore (not in-place) a storage class mapping can be specified as a comma-separated list:
+----
+--storageclass-mapping source-class1:target-class1,source-class2:target-class2
+----
+
+////

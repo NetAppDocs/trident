@@ -43,13 +43,13 @@ To take advantage of cloud identity in Google Cloud, you must have:
 
 * A Kubernetes cluster deployed using GKE.
 * Workload identity and oidc-issuer configured on the GKE cluster.
-* Astra Trident installed that includes the `cloudProvider` to specify `"GCP"` and `cloudIdentity` specifying workload identity.
+* Trident installed that includes the `cloudProvider` to specify `"GCP"` and `cloudIdentity` specifying workload identity.
 +
 [role="tabbed-block"]
 ====
 .Trident operator
 --
-To install Astra Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"GCP"` and set `cloudIdentity` to `iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com`.
+To install Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"GCP"` and set `cloudIdentity` to `iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com`.
 
 For example:
 
@@ -74,7 +74,7 @@ Set the values for *cloud-provider (CP)* and *cloud-identity (CI)* flags using t
 `export CP="GCP"`
 `export ANNOTATION="iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"`
 
-The following example installs Astra Trident and sets `cloudProvider` to GCP using the environment variable `$CP` and sets the `cloudIdentity` using the environment variable `$ANNOTATION`:
+The following example installs Trident and sets `cloudProvider` to GCP using the environment variable `$CP` and sets the `cloudIdentity` using the environment variable `$ANNOTATION`:
 ----
 helm install trident trident-operator-100.2406.0.tgz --set cloudProvider=$CP --set cloudIdentity="$ANNOTATION"
 ----
@@ -87,7 +87,7 @@ Set the values for *cloud provider* and *cloud identity* flags using the followi
 `export CP="GCP"`
 `export ANNOTATION="iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"`
 
-The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$ANNOTATION`:
+The following example installs Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$ANNOTATION`:
 ----
 tridentctl install --cloud-provider=$CP --cloud-identity="$ANNOTATION" -n trident
 ----

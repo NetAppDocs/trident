@@ -12,7 +12,7 @@ summary: You can use the protectctl command to create and interact with Trident 
 :imagesdir: ../media/
 
 [.lead]
-You can use the Trident protect command line plugin, which is an extension of the Trident `tridentctl` utility, to create and interact with Trident protect custom resources (CRs). By default, if you use the plugin to create a CR, the plugin creates a temporary CR file and automatically applies it to the cluster.
+You can use the Trident protect command line plugin, which is an extension of the Trident `tridentctl` utility, to create and interact with Trident protect custom resources (CRs).
 
 == Install the Trident protect CLI plugin
 Before using the command line utility, you need to install it on the machine you use to access your cluster. Follow these steps, depending on if your machine uses an x64 or ARM CPU.
@@ -102,7 +102,7 @@ After you have installed the Trident protect CLI plugin, you can enable auto-com
 +
 [source,console]
 ----
-curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0-preview.1/tridentctl-completion.zsh
+curl -O https://github.com/NetApp/tridentctl-protect/releases/tag/24.10.0-preview.1/tridentctl-completion.bash
 ----
 . Make a new directory in your home directory to contain the script:
 +
@@ -114,13 +114,13 @@ md ~/.bash/completions
 +
 [source,console]
 ----
-mv tridentctl-completion.zsh ~/.bash/completions/
+mv tridentctl-completion.bash ~/.bash/completions/
 ----
 . Add the following line to the `~/.bashrc` file in your home directory:
 +
 [source,console]
 ----
-source ~/.zsh/completions/tridentctl-completion.zsh
+source ~/.bash/completions/tridentctl-completion.bash
 ----
 
 --

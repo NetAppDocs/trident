@@ -13,7 +13,7 @@ Trident protect uses the Kubernetes model of role-based access control (RBAC). B
 
 The cluster administrator always has access to resources in the default `trident-protect` namespace, and can also access resources in all other namespaces. To control access to resources and applications, you need to create additional namespaces and add resources and applications to those namespaces.
 
-Note that no users can create application data management CRs in the default `trident-protect` namespace. You need to create application data management CRs in other namespaces (as a best practice, create application data management CRs in the same namespace as their associated application).
+Note that no users can create application data management CRs in the default `trident-protect` namespace. You need to create application data management CRs in an application namespace (as a best practice, create application data management CRs in the same namespace as their associated application).
 
 [NOTE]
 ======

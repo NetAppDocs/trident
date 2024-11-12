@@ -1,0 +1,41 @@
+---
+sidebar: sidebar
+permalink: trident-use/fcp.html
+keywords: storage class, manage storage class, storage classes, kubernetes storage classes, worker node, iscsi, scsi, scsi over fc, fibre channel, fcp, kubernetes clusters, self-healing, healing.
+summary:  
+---
+
+= Fibre Channel (FC) support
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+
+[.lead]
+Fibre Channel support on ONTAP-SAN driver.
+
+
+*SCSI over Fibre Channel (FC) is a tech preview feature in the Trident 24.10 release.*
+
+
+=== Configure the backend
+
+Configure the Trident backend for `ontap-san` driver and `fcp` as the sanType.
+
+* `sanType` - Use to select `fcp` for SCSI over Fibre Channel (FC).
+
+For more information, refer to:
+
+* link:..trident-docker/stor-config.html[Storage configuration options]
+
+* link:..trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples]
+
+ 
+=== Install SCSI over FC tools
+
+Install the following tools if you are using `ontap-san` with sanType `fcp` (SCSI over FC):
+
+* link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#install-the-iscsi-tools[Install the iSCSI tools] 
+
+Refer to link:https://docs.netapp.com/us-en/ontap/san-config/configure-fc-nvme-hosts-ha-pairs-reference.html[Ways to configure FC & FC-NVMe SAN hosts] for more information.
+

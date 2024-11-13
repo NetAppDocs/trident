@@ -34,7 +34,7 @@ image::../media/aws-eks-01.png[]
 +
 image::../media/aws-eks-02.png[]
 +
-. Locate *AstraTrident by NetApp* and select the checkbox for the Astra Trident add-on.
+. Locate *NetApp Trident* and select the checkbox for the Astra Trident add-on.
 . Choose the desired version of the add-on.
 +
 image::../media/aws-eks-03.png[]
@@ -45,7 +45,7 @@ image::../media/aws-eks-04.png[]
 +
 . (Optional) Configure any Optional configuration settings as required and select *Next*.
 +
-follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`). If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
+Follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`). If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
 +
 image::../media/aws-eks-06.png[]
 +

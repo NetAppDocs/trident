@@ -188,7 +188,7 @@ data:
 kind: Secret
 metadata:
   name: appvault-for-eng-user-only-secret
-  namespace: trident-protect-system
+  namespace: trident-protect
 type: Opaque
 ---
 apiVersion: protect.trident.netapp.io/v1
@@ -230,7 +230,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: eng-user-appvault-reader
-  namespace: trident-protect-system
+  namespace: trident-protect
 rules:
 - apiGroups:
   - protect.trident.netapp.io
@@ -250,7 +250,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: eng-user-read-appvault-binding
-  namespace: trident-protect-system
+  namespace: trident-protect
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -261,90 +261,51 @@ subjects:
   namespace: engineering-ns
 ----
 
-. Verify that the permissions are correct:
+. Verify that the permissions are correct.
 +
+.. Attempt to retrieve AppVault object information for all namespaces:
 [source,console]
 ----
-kubectl get appvaults -n trident-protect-system --as=system:serviceaccount:engineering-ns:eng-user
+kubectl get appvaults -n trident-protect --as=system:serviceaccount:engineering-ns:eng-user
 ----
 +
 You should see output similar to the following:
 +
 ----
-Error from server (Forbidden): appvaults.protect.trident.netapp.io is forbidden: User "system:serviceaccount:engineering-ns:eng-user" cannot list resource "appvaults" in API group "protect.trident.netapp.io" in the namespace "trident-protect-system"
+Error from server (Forbidden): appvaults.protect.trident.netapp.io is forbidden: User "system:serviceaccount:engineering-ns:eng-user" cannot list resource "appvaults" in API group "protect.trident.netapp.io" in the namespace "trident-protect"
+----
+.. Test to see if the example user can list AppVault information for an authorized namespace:
+[source,console]
+----
+kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get appvaults.protect.trident.netapp.io/appvault-for-eng-user-only -n trident-protect
+----
++
+You should see output similar to the following:
++
+----
+yes
 ----
 
-=== Step 7: Prevent unauthorized AppVault creation
-You can prevent users from creating AppVault objects that they are not authorized for by using a ValidatingWebhookConfiguration CR. This causes resource creation requests to be validated before Trident protect acts on them.
+
+== Trident protect prevents unauthorized resource creation
+Trident protect prevents users from creating and accessing unauthorized resources by using a ValidatingWebhookConfiguration; resource creation requests are validated before Trident protect acts on them. You can verify this for specific users by following these example steps.
 
 .Steps
 
-. Create and apply a ValidatingWebhookConfiguration CR. For example:
-+
-[source,yaml]
-----
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingWebhookConfiguration
-metadata:
-  name: appvault-validating-webhook-configuration
-webhooks:
-- admissionReviewVersions:
-  - v1
-  clientConfig:
-    caBundle: <CA_BUNDLE>
-    service:
-      name: tp-webhook-service
-      namespace: astra-connector
-      path: /appvault-validator
-      port: 443
-  failurePolicy: Fail
-  matchPolicy: Equivalent
-  name: vappvault.protect.trident.netapp.io
-  namespaceSelector: {}
-  objectSelector: {}
-  rules:
-  - apiGroups:
-    - protect.trident.netapp.io
-    apiVersions:
-    - v1
-    operations:
-    - CREATE
-    resources:
-    - appmirrorrelationships
-    - backups
-    - backupinplacerestores
-    - backuprestores
-    - exechookruns
-    - kopiavolumebackups
-    - kopiavolumerestores
-    - resourcebackups
-    - resourcedeletes
-    - resticvolumebackups
-    - resticvolumerestores
-    - schedules
-    - shutdownsnapshots
-    - snapshots
-    - snapshotinplacerestores
-    - snapshotrestores
-    scope: '*'
-  sideEffects: None
-  timeoutSeconds: 10
-----
-
-. Create and apply a CR to verify that the user cannot create a CR using an unauthorized AppVault. For example:
+. Create a CR to verify that the user cannot create a new resource using an unauthorized AppVault, and name the file `unauth-snapshot.yaml`. For example:
 +
 [source,yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
 metadata:
-  namespace: engineering-ns # tenant eng-user namespace
+  namespace: engineering-ns
   name: eng-mysql-snapshot
 spec:
-  appVaultRef: appvault-not-for-eng-user # AppVault tenant eng-user doesn't have access to from the previous section
+  appVaultRef: appvault-not-for-eng-user
   applicationRef: eng-mysql-app
 ----
-. Apply the CR:
+. Attempt to apply the CR:
 +
 [source,console]
 ----
@@ -357,4 +318,4 @@ Error from server (Forbidden): error when creating "resourcebackup.yaml": admiss
 ----
 
 .Result
-The users you have granted AppVault permissions to should be able to use AppVault objects for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources using unauthorized AppVault objects.
+The users you have granted AppVault permissions to should be able to use AppVault objects for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources that they do not have access to.

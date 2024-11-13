@@ -275,7 +275,7 @@ You should see output similar to the following:
 ----
 Error from server (Forbidden): appvaults.protect.trident.netapp.io is forbidden: User "system:serviceaccount:engineering-ns:eng-user" cannot list resource "appvaults" in API group "protect.trident.netapp.io" in the namespace "trident-protect"
 ----
-.. Test to see if the example user can list AppVault information for an authorized namespace:
+.. Test to see if the user can list AppVault information for an authorized namespace:
 +
 [source,console]
 ----
@@ -315,6 +315,7 @@ kubectl apply -n engineering-ns -f unauth-snapshot.yaml --as=system:serviceaccou
 ----
 +
 You should see output similar to the following:
++
 ----
 Error from server (Forbidden): error when creating "resourcebackup.yaml": admission webhook "vappvault.protect.trident.netapp.io" denied the request: user does not have access to AppVault 'appvault-not-for-eng-user': no adequate policy found for user. Access denied:
 ----

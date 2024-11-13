@@ -26,15 +26,21 @@ If your environment meets the requirements for Trident protect, you can follow t
 ----
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
-
+. Install the Trident protect CRDs:
++
+[source,console]
+----
+helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
+----
 . Use Helm to install Trident protect using one of the following commands:
 +
 * Install Trident protect normally:
 +
 [source,console]
 ----
-helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
+helm install trident-protect netapp-trident-protect/trident-protect --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
++
 * Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
 +
 [source,console]

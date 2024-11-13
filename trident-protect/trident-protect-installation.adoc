@@ -32,26 +32,20 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 ----
 helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
 ----
-. Use Helm to install Trident protect using one of the following commands:
+. Use Helm to install Trident protect using one of the following commands. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify backups and snapshots from this cluster:
 +
 * Install Trident protect normally:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
 +
 * Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --version 100.2410.0 --create-namespace --namespace trident-protect
-----
-. Configure Trident protect installation settings. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify backups and snapshots from this cluster:
-+
-[source,console]
-----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +
@@ -148,27 +142,27 @@ webhooksCleanup:
   - name: regcred
 ----
 
-. Use Helm to install Trident protect using one of the following commands:
-+
-* Install Trident protect normally:
+. Install the Trident protect CRDs:
 +
 [source,console]
 ----
 helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
 ----
-* Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
+. Use Helm to install Trident protect using one of the following commands. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify backups and snapshots from this cluster: 
 +
-[source,console]
-----
-helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --version 100.2410.0 --create-namespace --namespace trident-protect
-----
-. Configure Trident protect installation settings. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify backups and snapshots from this cluster:
+* Install Trident protect normally:
 +
 [source,console]
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
-
++
+* Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+----
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +
 [source,console]

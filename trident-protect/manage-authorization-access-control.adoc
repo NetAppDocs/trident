@@ -288,6 +288,9 @@ You should see output similar to the following:
 yes
 ----
 
+.Result
+The users you have granted AppVault permissions to should be able to use AppVault objects for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources that they do not have access to.
+
 ////
 == Trident protect prevents unauthorized resource creation
 Trident protect prevents users from creating and accessing unauthorized resources by using a ValidatingWebhookConfiguration; resource creation requests are validated before Trident protect acts on them. You can verify this for specific users by following these example steps.

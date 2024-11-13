@@ -47,6 +47,8 @@ image::../media/aws-eks-04.png[]
 +
 Follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`). If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
 +
+NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `AWS` as the `cloudProvider` while installing Trident using the EKS add-on.
++
 image::../media/aws-eks-06.png[]
 +
 . Select *Create*.
@@ -60,6 +62,8 @@ image::../media/aws-eks-05.png[]
 The following example command installs the Astra Trident EKS add-on:
 `eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v24.6.1-eksbuild`
 `eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild.1` (with a dedicated version)
+
+NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
 
 .Uninstall the Astra Trident EKS add-on using CLI:
 The following command uninstalls the Astra Trident EKS add-on:

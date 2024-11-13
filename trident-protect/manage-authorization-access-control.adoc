@@ -264,6 +264,7 @@ subjects:
 . Verify that the permissions are correct.
 +
 .. Attempt to retrieve AppVault object information for all namespaces:
++
 [source,console]
 ----
 kubectl get appvaults -n trident-protect --as=system:serviceaccount:engineering-ns:eng-user
@@ -275,6 +276,7 @@ You should see output similar to the following:
 Error from server (Forbidden): appvaults.protect.trident.netapp.io is forbidden: User "system:serviceaccount:engineering-ns:eng-user" cannot list resource "appvaults" in API group "protect.trident.netapp.io" in the namespace "trident-protect"
 ----
 .. Test to see if the example user can list AppVault information for an authorized namespace:
++
 [source,console]
 ----
 kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get appvaults.protect.trident.netapp.io/appvault-for-eng-user-only -n trident-protect
@@ -309,7 +311,7 @@ spec:
 +
 [source,console]
 ----
-$ kubectl apply -n engineering-ns -f unauth-snapshot.yaml --as=system:serviceaccount:eng-1:eng-user
+kubectl apply -n engineering-ns -f unauth-snapshot.yaml --as=system:serviceaccount:eng-1:eng-user
 ----
 +
 You should see output similar to the following:

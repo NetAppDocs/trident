@@ -274,5 +274,87 @@ You should see output similar to the following:
 Error from server (Forbidden): appvaults.protect.trident.netapp.io is forbidden: User "system:serviceaccount:engineering-ns:eng-user" cannot list resource "appvaults" in API group "protect.trident.netapp.io" in the namespace "trident-protect-system"
 ----
 
+=== Step 7: Prevent unauthorized AppVault creation
+You can prevent users from creating AppVault objects that they are not authorized for by using a ValidatingWebhookConfiguration CR. This causes resource creation requests to be validated before Trident protect acts on them.
+
+.Steps
+
+. Create and apply a ValidatingWebhookConfiguration CR. For example:
++
+[source,yaml]
+----
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: appvault-validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: <CA_BUNDLE>
+    service:
+      name: tp-webhook-service
+      namespace: astra-connector
+      path: /appvault-validator
+      port: 443
+  failurePolicy: Fail
+  matchPolicy: Equivalent
+  name: vappvault.protect.trident.netapp.io
+  namespaceSelector: {}
+  objectSelector: {}
+  rules:
+  - apiGroups:
+    - protect.trident.netapp.io
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - appmirrorrelationships
+    - backups
+    - backupinplacerestores
+    - backuprestores
+    - exechookruns
+    - kopiavolumebackups
+    - kopiavolumerestores
+    - resourcebackups
+    - resourcedeletes
+    - resticvolumebackups
+    - resticvolumerestores
+    - schedules
+    - shutdownsnapshots
+    - snapshots
+    - snapshotinplacerestores
+    - snapshotrestores
+    scope: '*'
+  sideEffects: None
+  timeoutSeconds: 10
+----
+
+. Create and apply a CR to verify that the user cannot create a CR using an unauthorized AppVault. For example:
++
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Snapshot
+metadata:
+  namespace: engineering-ns # tenant eng-user namespace
+  name: eng-mysql-snapshot
+spec:
+  appVaultRef: appvault-not-for-eng-user # AppVault tenant eng-user doesn't have access to from the previous section
+  applicationRef: eng-mysql-app
+----
+. Apply the CR:
++
+[source,console]
+----
+$ kubectl apply -n engineering-ns -f unauth-snapshot.yaml --as=system:serviceaccount:eng-1:eng-user
+----
++
+You should see output similar to the following:
+----
+Error from server (Forbidden): error when creating "resourcebackup.yaml": admission webhook "vappvault.protect.trident.netapp.io" denied the request: user does not have access to AppVault 'appvault-not-for-eng-user': no adequate policy found for user. Access denied:
+----
+
 .Result
-The user you have granted AppVault permissions to should be able to use the AppVault for application data management operations, and should not be able to access any resources outside of the assigned namespaces.
+The user you have granted AppVault permissions to should be able to use the AppVault for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources using unauthorized AppVault objects.

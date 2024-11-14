@@ -413,15 +413,17 @@ Using Trident protect, you can achieve "fail back" after a failover operation by
 This process starts from a relationship that has completed a failover to a destination and involves the following steps:
 
 * Start with a failed over state.
-* Reverse resync the relationship.
+* Reverse resync the replication relationship.
 +
 CAUTION: Do not perform a normal resync operation, as this will discard data written to the destination cluster during the fail over procedure.
-* Reverse the replication.
+* Reverse the replication direction.
 
 .Steps
 
-. Perform the <<Resync a failed over replication relationship>> steps
-. Perform the <<Reverse resync a failed over replication relationship>> steps
+
+. Perform the <<Reverse resync a failed over replication relationship>> steps.
+. Perform the <<Reverse application replication direction>> steps.
+
 
 === Delete a replication relationship
 

@@ -393,7 +393,7 @@ k get shutdownsnapshot -n my-app-namespace <shutdown_snapshot_name> -o jsonpath=
 +
 NOTE: In step 2 of the fail over procedure, include the `spec.promotedSnapshot` field in the AppMirrorRelationship CR file, and set its value to the basename you recorded in step 3 above.
 
-. Perform the reverse resync steps in <<Reverse resync a failed over replication>>.
+. Perform the reverse resync steps in <<Reverse resync a failed over replication relationship>>.
 . Enable protection schedules on the new source cluster.
 
 === Result
@@ -413,13 +413,17 @@ Using Trident protect, you can achieve "fail back" after a failover operation by
 This process starts from a relationship that has completed a failover to a destination and involves the following steps:
 
 * Start with a failed over state.
-* Reverse resync the relationship.
-* Reverse the replication.
+* Reverse resync the replication relationship.
++
+CAUTION: Do not perform a normal resync operation, as this will discard data written to the destination cluster during the fail over procedure.
+* Reverse the replication direction.
 
 .Steps
 
-. Perform the <<Resync a failed over replication>> steps
-. Perform the <<Reverse resync a failed over replication>> steps
+
+. Perform the <<Reverse resync a failed over replication relationship>> steps.
+. Perform the <<Reverse application replication direction>> steps.
+
 
 === Delete a replication relationship
 

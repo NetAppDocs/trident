@@ -172,4 +172,158 @@ kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get applic
 kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get applications.protect.trident.netapp.io -n marketing-ns
 ----
 
+=== Step 6: Grant access to AppVault objects
+To perform data management tasks such as backups and snapshots, the cluster administrator needs to grant access to AppVault objects to individual users.
 
+.Steps
+
+. Create and apply an AppVault and secret combination YAML file that grants a user access to an AppVault. For example, the following CR grants access to an AppVault to the user `eng-user`:
++
+[source,yaml]
+----
+apiVersion: v1
+data:
+  accessKeyID: <ID_value>
+  secretAccessKey: <key_value>
+kind: Secret
+metadata:
+  name: appvault-for-eng-user-only-secret
+  namespace: trident-protect
+type: Opaque
+---
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: appvault-for-eng-user-only
+  namespace: trident-protect # Trident protect system namespace 
+spec:
+  providerConfig:
+    azure:
+      accountName: ""
+      bucketName: ""
+      endpoint: ""
+    gcp:
+      bucketName: ""
+      projectID: ""
+    s3:
+      bucketName: testbucket
+      endpoint: 192.168.0.1:30000
+      secure: "false"
+      skipCertValidation: "true"
+  providerCredentials:
+    accessKeyID:
+      valueFromSecret:
+        key: accessKeyID
+        name: appvault-for-eng-user-only-secret
+    secretAccessKey:
+      valueFromSecret:
+        key: secretAccessKey
+        name: appvault-for-eng-user-only-secret
+  providerType: GenericS3
+----
+
+. Create and apply a Role CR to enable cluster administrators to grant access to specific resources in a namespace. For example:
++
+[source,yaml]
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: eng-user-appvault-reader
+  namespace: trident-protect
+rules:
+- apiGroups:
+  - protect.trident.netapp.io
+  resourceNames:
+  - appvault-for-enguser-only
+  resources:
+  - appvaults
+  verbs:
+  - get
+----
+
+. Create and apply a RoleBinding CR to bind the permissions to the user eng-user. For example:
++
+[source,yaml]
+----
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: eng-user-read-appvault-binding
+  namespace: trident-protect
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: eng-user-appvault-reader
+subjects:
+- kind: ServiceAccount
+  name: eng-user
+  namespace: engineering-ns
+----
+
+. Verify that the permissions are correct.
++
+.. Attempt to retrieve AppVault object information for all namespaces:
++
+[source,console]
+----
+kubectl get appvaults -n trident-protect --as=system:serviceaccount:engineering-ns:eng-user
+----
++
+You should see output similar to the following:
++
+----
+Error from server (Forbidden): appvaults.protect.trident.netapp.io is forbidden: User "system:serviceaccount:engineering-ns:eng-user" cannot list resource "appvaults" in API group "protect.trident.netapp.io" in the namespace "trident-protect"
+----
+.. Test to see if the user can get the AppVault information that they now have permission to access:
++
+[source,console]
+----
+kubectl auth can-i --as=system:serviceaccount:engineering-ns:eng-user get appvaults.protect.trident.netapp.io/appvault-for-eng-user-only -n trident-protect
+----
++
+You should see output similar to the following:
++
+----
+yes
+----
+
+.Result
+The users you have granted AppVault permissions to should be able to use authorized AppVault objects for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources that they do not have access to.
+
+////
+== Trident protect prevents unauthorized resource creation
+Trident protect prevents users from creating and accessing unauthorized resources by using a ValidatingWebhookConfiguration; resource creation requests are validated before Trident protect acts on them. You can verify this for specific users by following these example steps.
+
+.Steps
+
+. Create a CR to verify that the user cannot create a new resource using an unauthorized AppVault, and name the file `unauth-snapshot.yaml`. For example:
++
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Snapshot
+metadata:
+  namespace: engineering-ns
+  name: eng-mysql-snapshot
+spec:
+  appVaultRef: appvault-not-for-eng-user
+  applicationRef: eng-mysql-app
+----
+. Attempt to apply the CR:
++
+[source,console]
+----
+kubectl apply -n engineering-ns -f unauth-snapshot.yaml --as=system:serviceaccount:eng-1:eng-user
+----
++
+You should see output similar to the following:
++
+----
+Error from server (Forbidden): error when creating "resourcebackup.yaml": admission webhook "vappvault.protect.trident.netapp.io" denied the request: user does not have access to AppVault 'appvault-not-for-eng-user': no adequate policy found for user. Access denied:
+----
+
+.Result
+The users you have granted AppVault permissions to should be able to use AppVault objects for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources that they do not have access to.
+
+////

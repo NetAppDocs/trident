@@ -17,10 +17,10 @@ You can now use the Fibre Channel (FC) protocol with Trident to provision and ma
 *SCSI over Fibre Channel (FC) is a tech preview feature in the Trident 24.10 release.*
 
 Fibre Channel is a widely adopted protocol in enterprise storage environments due to its high performance, reliability, and scalability. It provides a robust and efficient communication channel for storage devices, enabling fast and secure data transfers. 
-By using Fibre Channel over SCSI, you can leverage their existing SCSI-based storage infrastructure while benefiting from the high-performance and long-distance capabilities of Fibre Channel. It enables the consolidation of storage resources and the creation of scalable and efficient storage area networks (SANs) that can handle large amounts of data with low latency.
+By using SCSI over Fibre Channel, you can leverage their existing SCSI-based storage infrastructure while benefiting from the high-performance and long-distance capabilities of Fibre Channel. It enables the consolidation of storage resources and the creation of scalable and efficient storage area networks (SANs) that can handle large amounts of data with low latency.
 
 Using the FC feature with Trident, you can do the following:
-* Dynamically provision PVCs using a deployment spec, instead of creating a pvc and a pod separately.
+* Dynamically provision PVCs using a deployment spec.
 * Take volume snapshots and create a new volume from the snapshot.
 * Clone an existing FC-PVC.
 * Resize an already deployed volume.
@@ -54,13 +54,6 @@ All worker nodes in the Kubernetes cluster must be able to mount the volumes you
 
 Install the FC tools using the commands for your operating system.  
 
-.Before you begin
-* Each node in the Kubernetes cluster must have a unique IQN. *This is a necessary prerequisite*.
-* If using RHCOS version 4.5 or later, or other RHEL-compatible Linux distribution, with the `solidfire-san` driver and Element OS 12.5 or earlier, ensure that the CHAP authentication algorithm is set to MD5 in `/etc/iscsi/iscsid.conf`. Secure FIPS-compliant CHAP algorithms SHA1, SHA-256, and SHA3-256 are available with Element 12.7.
-+
-----
-sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf
-----
 * When using worker nodes that run RHEL/RedHat CoreOS with iSCSI PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. Refer to https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat documentation^].
 
 [role="tabbed-block"]
@@ -162,7 +155,6 @@ spec:
   storageDriverName: ontap-san
   managementLIF: 10.0.0.1
   sanType: fcp
-  dataLIF: 10.0.0.2
   svm: trident_svm
   credentials:
     name: backend-tbc-ontap-san-secret

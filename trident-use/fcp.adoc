@@ -168,4 +168,16 @@ For more information, refer to:
 
 .Storage class example
 
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fcp-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  protocol: "fcp"
+  storagePool: "aggr1"
+allowVolumeExpansion: True
+----
 

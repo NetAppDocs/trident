@@ -14,6 +14,7 @@ summary: If your environment meets the requirements, you can follow these steps 
 [.lead]
 If your environment meets the requirements for Trident protect, you can follow these steps to install Trident protect on your cluster. You can obtain Trident protect from NetApp, or install it from your own private registry. Installing from a private registry is helpful if your cluster cannot access the Internet.
 
+NOTE: By default, Trident protect collects support information that helps with any NetApp support cases that you might open, including logs, metrics, and topology information about clusters and managed applications. Trident protect sends these support bundles to NetApp on a daily schedule. You can optionally disable this support bundle collection when you install Trident protect. You can manually link:trident-protect-generate-support-bundle.html[generate a support bundle] at any time.
 
 [role="tabbed-block"]
 ====
@@ -26,17 +27,26 @@ If your environment meets the requirements for Trident protect, you can follow t
 ----
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
-
-. Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify backups and snapshots from this cluster:
+. Install the Trident protect CRDs:
 +
 [source,console]
 ----
 helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
 ----
+. Use Helm to install Trident protect using one of the following commands. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots:
++
+* Install Trident protect normally:
 +
 [source,console]
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
+----
++
+* Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +
@@ -133,18 +143,27 @@ webhooksCleanup:
   - name: regcred
 ----
 
-. Use Helm to install Trident protect:
+. Install the Trident protect CRDs:
 +
 [source,console]
 ----
 helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0
 ----
+. Use Helm to install Trident protect using one of the following commands. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
++
+* Install Trident protect normally:
 +
 [source,console]
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
-
++
+* Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+----
 . Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +
 [source,console]
@@ -153,14 +172,8 @@ kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=
 ----
 +
 NOTE: You need to set up virtualization for the freeze functionality to work. VMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
-
 --
-
 ====
-
-
-
-
 
 ////
 . Log in to the registry:

@@ -74,7 +74,9 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage e
 
 |`password` |Password to connect to the cluster/SVM. Used for credential-based auth |
 
-|`storagePrefix` |Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it |"trident"
+|`storagePrefix` a|Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it
+
+NOTE: When using ontap-nas-economy and a storagePrefix that is 24 or more characters, the qtrees will not have the storage prefix embedded, though it will be in the volume name. |"trident"
 
 |`aggregate`
 a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. If not assigned, any of the available aggregates can be used to provision a FlexGroup volume.

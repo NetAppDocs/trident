@@ -11,7 +11,7 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 :imagesdir: ../media/
 
 [.lead]
-All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install NFS, iSCSI, or NVMe/TCP tools based on your driver selection. 
+All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install NFS, iSCSI, NVMe/TCP, or FC tools based on your driver selection. 
 
 == Selecting the right tools 
 If you are using a combination of drivers, you should install all required tools for your drivers. Recent versions of RedHat CoreOS have the tools installed by default.  

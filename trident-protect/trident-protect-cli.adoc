@@ -64,17 +64,17 @@ curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/relea
 ----
 chmod +x tridentctl-protect
 ----
-. Copy the plugin binary to a location that is defined in your PATH:
-+
-[source,console]
-----
-cp ./tridentctl-protect ~/bin/
-----
-. Optionally, to install the binary globally, copy the plugin binary to a location that is defined in your global PATH variable. For example: `/usr/bin` or `/usr/local/bin` (you might need elevated privileges):
+. Copy the plugin binary to a location that is defined in your PATH variable. For example, `/usr/bin` or `/usr/local/bin` (you might need elevated privileges):
 +
 [source,console]
 ----
 cp ./tridentctl-protect /usr/local/bin/
+----
+. Optionally, you can copy the binary to a location in your home directory. In this case, you might need to add the location to your PATH variable:
++
+[source,console]
+----
+cp ./tridentctl-protect ~/bin/
 ----
 
 == View Trident CLI plugin help

@@ -20,6 +20,8 @@ NOTE: When you restore an application, all execution hooks configured for the ap
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
 
+NOTE: Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -104,8 +106,6 @@ tridentctl protect create backuprestore <my_restore_name> --backup <backup_names
 
 == Restore from a backup to the original namespace
 You can restore a backup to the original namespace at any time.
-
-NOTE: Restoring a backup to a namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in a backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
 
 // begin tabbed block
 [role="tabbed-block"]

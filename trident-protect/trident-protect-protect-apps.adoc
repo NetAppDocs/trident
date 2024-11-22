@@ -22,6 +22,7 @@ You can create an on-demand snapshot at any time.
 ====
 .Create a snapshot using a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-cr.yaml`. 
 . In the file you created, configure the following attributes:
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
@@ -53,6 +54,7 @@ kubectl apply -f trident-protect-snapshot-cr.yaml
 --
 .Create a snapshot using the CLI
 --
+.Steps
 . Create the snapshot, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
@@ -71,6 +73,7 @@ You can back up an app at any time.
 ====
 .Create a backup using a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-backup-cr.yaml`. 
 . In the file you created, configure the following attributes:
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
@@ -106,6 +109,7 @@ kubectl apply -f trident-protect-backup-cr.yaml
 --
 .Create a backup using the CLI
 --
+.Steps
 . Create the backup, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
@@ -124,6 +128,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 ====
 .Create a schedule using a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. 
 . In the file you created, configure the following attributes:
 
@@ -175,6 +180,7 @@ kubectl apply -f trident-protect-schedule-cr.yaml
 --
 .Create a schedule using the CLI
 --
+.Steps
 . Create the protection schedule, replacing values in brackets with information from your environment. For example:
 +
 NOTE: You can use `tridentctl protect create schedule --help` to view detailed help information for this command.

@@ -20,11 +20,15 @@ NOTE: When you restore an application, all execution hooks configured for the ap
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
 
+NOTE: Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
 .Use a CR
 --
+.Steps
+
 . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. 
 . In the file you created, configure the following attributes:
 +
@@ -92,6 +96,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 --
 .Use the CLI
 --
+.Steps
 . Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. For example:
 +
 [source,console]
@@ -105,13 +110,12 @@ tridentctl protect create backuprestore <my_restore_name> --backup <backup_names
 == Restore from a backup to the original namespace
 You can restore a backup to the original namespace at any time.
 
-NOTE: Restoring a backup to a namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in a backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
-
 // begin tabbed block
 [role="tabbed-block"]
 ====
 .Use a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-backup-ipr-cr.yaml`. 
 . In the file you created, configure the following attributes:
 +
@@ -174,6 +178,7 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 --
 .Use the CLI
 --
+.Steps
 . Restore the backup to the original namespace, replacing values in brackets with information from your environment. The `backup` argument uses a namespace and backup name in the format `<namespace>/<name>`. For example:
 +
 [source,console]
@@ -193,6 +198,7 @@ You can restore data from a snapshot using a custom resource (CR) file either to
 ====
 .Use a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. 
 . In the file you created, configure the following attributes:
 +
@@ -261,6 +267,7 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 --
 .Use the CLI
 --
+.Steps
 . Restore the snapshot to a different namespace, replacing values in brackets with information from your environment.
 +
 * The `snapshot` argument uses a namespace and snapshot name in the format `<namespace>/<name>`. 
@@ -285,6 +292,7 @@ You can restore a snapshot to the original namespace at any time.
 ====
 .Use a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-ipr-cr.yaml`. 
 . In the file you created, configure the following attributes:
 
@@ -345,7 +353,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 --
 .Use the CLI
 --
-
+.Steps
 . Restore the snapshot to the original namespace, replacing values in brackets with information from your environment. For example:
 +
 [source,console]

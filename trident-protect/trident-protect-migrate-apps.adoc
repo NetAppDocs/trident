@@ -82,6 +82,7 @@ spec:
 ====
 .Restore the snapshot using a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it `trident-protect-snapshot-restore-cr.yaml`. 
 . In the file you created, configure the following attributes:
 +
@@ -147,6 +148,7 @@ kubectl apply -f trident-protect-snapshot-restore-cr.yaml
 --
 .Restore the snapshot using the CLI
 --
+.Steps
 . Restore the snapshot to a different namespace, replacing values in brackets with information from your environment.
 +
 * The `snapshot` argument uses a namespace and snapshot name in the format `<namespace>/<name>`. 

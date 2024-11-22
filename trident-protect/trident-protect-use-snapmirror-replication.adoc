@@ -29,6 +29,7 @@ Setting up a replication relationship involves the following:
 ====
 .Create an AppVault using a CR
 --
+.Steps
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-primary-source.yaml`).
 .. Configure the following attributes:
 +
@@ -55,6 +56,7 @@ kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-protect
 --
 .Create an AppVault using the CLI
 --
+.Steps
 . Create the AppVault, replacing values in brackets with information from your environment:
 +
 [source,console]
@@ -70,6 +72,7 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 ====
 .Create the source application using a CR
 --
+.Steps
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-app-source.yaml`).
 .. Configure the following attributes:
 +
@@ -99,6 +102,7 @@ kubectl apply -f trident-protect-app-source.yaml -n my-app-namespace
 --
 .Create the source application using the CLI
 --
+.Steps
 . Create the source application. For example:
 +
 [source,console]
@@ -114,6 +118,7 @@ tridentctl protect create app maria --namespaces maria -n my-app-namespace
 ====
 .Take a snapshot using a CR
 --
+.Steps
 . Create a replication schedule for the source application:
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-schedule.yaml`).
 .. Configure the following attributes:
@@ -156,6 +161,7 @@ kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 --
 .Take a snapshot using the CLI
 --
+.Steps
 . Create the snapshot, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
@@ -204,6 +210,7 @@ kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n my-app-n
 ====
 .Create an AppMirrorRelationship using a CR
 --
+.Steps
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-relationship.yaml`).
 .. Configure the following attributes:
 +
@@ -248,6 +255,7 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 --
 .Create an AppMirrorRelationship using the CLI
 --
+.Steps
 . Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
@@ -327,14 +335,13 @@ When you reverse replication direction, Trident protect moves the application to
 
 In this situation, you are swapping the source and destination.
 
-.Steps 
-
 . Create a shutdown snapshot:
 +
 [role="tabbed-block"]
 ====
 .Create a shutdown snapshot using a CR
 --
+.Steps
 . Disable the protection policy schedules for the source application.
 . Create a ShutdownSnapshot CR file:
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-shutdownsnapshot.yaml`).
@@ -368,6 +375,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n my-app-namespace
 --
 .Create a shutdown snapshot using the CLI
 --
+.Steps
 . Create the shutdown snapshot, replacing values in brackets with information from your environment. For example:
 +
 [source,console]

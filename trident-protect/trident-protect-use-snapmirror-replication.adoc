@@ -251,7 +251,7 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 .Create an AppMirrorRelationship using the CLI
 --
 
-. Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment. For example:
+.. Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----
@@ -337,10 +337,10 @@ In this situation, you are swapping the source and destination.
 ====
 .Create a shutdown snapshot using a CR
 --
-. Disable the protection policy schedules for the source application.
-. Create a ShutdownSnapshot CR file:
-.. Create the custom resource (CR) file and name it (for example, `trident-protect-shutdownsnapshot.yaml`).
-.. Configure the following attributes:
+.. Disable the protection policy schedules for the source application.
+.. Create a ShutdownSnapshot CR file:
+... Create the custom resource (CR) file and name it (for example, `trident-protect-shutdownsnapshot.yaml`).
+... Configure the following attributes:
 +
 * *metadata.name*: (_Required_) The name of the custom resource.
 * *spec.AppVaultRef*: (_Required_) This value must match the metadata.name field of the AppVault for the source application.
@@ -360,7 +360,7 @@ spec:
   applicationRef: maria
 ----
 
-. After you populate the `trident-protect-shutdownsnapshot.yaml` file with the correct values, apply the CR:
+.. After you populate the `trident-protect-shutdownsnapshot.yaml` file with the correct values, apply the CR:
 +
 [source,console]
 ----
@@ -370,7 +370,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n my-app-namespace
 --
 .Create a shutdown snapshot using the CLI
 --
-. Create the shutdown snapshot, replacing values in brackets with information from your environment. For example:
+.. Create the shutdown snapshot, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----

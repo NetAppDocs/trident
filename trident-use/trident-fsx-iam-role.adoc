@@ -21,7 +21,7 @@ To authenticate using an AWS IAM role, you must have a Kubernetes cluster deploy
 
 This example creates an AWS Secret Manager secret to store Trident CSI credentials:
 
-`aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials" --secret-string "{"user":"vsadmin","password":"<svmpassword>"}"`
+`aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials" --secret-string "{\"username\":\"vsadmin\",\"password\":\"<svmpassword>\"}"`
 
 == Create IAM Policy
 

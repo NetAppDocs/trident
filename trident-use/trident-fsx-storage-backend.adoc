@@ -69,6 +69,29 @@ spec:
 
 ====
 
+Run the following commands to create and validate the Trident Backend Configuration (TBC):
+
+* Create trident backend configuration (TBC) from yaml file and run the following command:
++
+----
+kubectl create -f backendconfig.yaml -n trident 
+----
++
+----
+tridentbackendconfig.trident.netapp.io/backend-tbc-ontap-nas created
+----
+* Validate the trident backend configuration (TBC) was created successfully:
++
+---- 
+Kubectl get tbc -n trident
+----
++
+----
+NAME                         BACKEND NAME         BACKEND UUID                           PHASE   STATUS
+
+backend-tbc-ontap-nas        tbc-ontap-nas        933e0071-66ce-4324-b9ff-f96d916ac5e9   Bound   Success
+----
+
 For information about creating backends, refer to these pages:
 
 * link:ontap-nas.html[Configure a backend with ONTAP NAS drivers]

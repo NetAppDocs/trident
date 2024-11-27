@@ -19,6 +19,7 @@ Trident protect enables administrators to generate bundles that include informat
 ====
 .Create a support bundle using a CR
 --
+.Steps
 . Create the custom resource (CR) file and name it (for example, `trident-protect-support-bundle.yaml`).
 . Configure the following attributes:
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
@@ -53,6 +54,7 @@ kubectl apply -f trident-protect-support-bundle.yaml
 --
 .Create a support bundle using the CLI
 --
+.Steps
 . Create the support bundle, replacing values in brackets with information from your environment. The `trigger-type` determines whether the bundle is created immediately or if creation time is dictated by the schedule, and can be `Manual` or `Scheduled`. The default setting is `Manual`. 
 +
 For example:

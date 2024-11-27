@@ -1,8 +1,11 @@
 section: trident-use
-title: Use Astra Trident
+title: Use Trident
 entries:
   - title: Prepare the worker node
     url: /trident-use/worker-node-prep.html
+    entries:
+    - title: SCSI over Fibre Channel (FC) 
+      url: /trident-use/fcp.html
   - title: Configure and manage backends    
     entries:
     - title: Overview 
@@ -15,6 +18,14 @@ entries:
         url: /trident-use/anf-prep.html
       - title: Configuration options and examples
         url: /trident-use/anf-examples.html
+    - title: Google Cloud NetApp Volumes
+      entries:
+      - title: Overview
+        url: /trident-use/gcnv.html      
+      - title: Prepare to configure
+        url: /trident-use/gcnv-prep.html
+      - title: Configuration options and examples
+        url: /trident-use/gcnv-examples.html
     - title: Cloud Volumes Service for Google Cloud
       url: /trident-use/gcp.html
     - title: NetApp HCI or SolidFire
@@ -39,11 +50,17 @@ entries:
       entries:
       - title: Overview
         url: /trident-use/trident-fsx.html
-      - title: Integrate Amazon FSx for ONTAP
-        url: /trident-use/trident-fsx-prep.html
-      - title: Configuration options and examples
-        url: /trident-use/trident-fsx-examples.html
-      - title: Configure Astra Trident EKS add-on on EKS cluster
+      - title: Create an IAM role and AWS secret
+        url: /trident-use/trident-fsx-iam-role.html
+      - title: Install Trident
+        url: /trident-use/trident-fsx-install-trident.html
+      - title: Configure storage backend
+        url: /trident-use/trident-fsx-storage-backend.html
+      - title: Configure storage class and PVC
+        url: /trident-use/trident-fsx-storageclass-pvc.html
+      - title: Deploy sample application
+        url: /trident-use/trident-fsx-deploy-sample.html
+      - title: Configure Trident EKS add-on on EKS cluster
         url: /trident-use/trident-aws-addon.html
     - title: Create backends with kubectl
       url: /trident-use/backend-kubectl.html

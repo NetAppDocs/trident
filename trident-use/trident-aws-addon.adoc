@@ -5,7 +5,7 @@ keywords: Trident add-on, Astra Trident EKS add-on, Trident AWS EKS add-on, inte
 summary: Add Astra Trident EKS add-on to Kubernetes cluster.
 ---
 
-= Configure the Astra Trident EKS add-on version 23.10 on EKS cluster
+= Configure the Astra Trident EKS add-on on an EKS cluster
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -34,15 +34,22 @@ image::../media/aws-eks-01.png[]
 +
 image::../media/aws-eks-02.png[]
 +
-. Locate *AstraTrident by NetApp* and select the checkbox for the Astra Trident add-on.
+. Locate *NetApp Trident* and select the checkbox for the Astra Trident add-on.
 . Choose the desired version of the add-on.
 +
 image::../media/aws-eks-03.png[]
 +
 . Select the IAM role option to inherit from the node.
-. Configure any optional settings as required and select *Next*.
 +
 image::../media/aws-eks-04.png[]
++
+. (Optional) Configure any Optional configuration settings as required and select *Next*.
++
+Follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`). If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
++
+NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `AWS` as the `cloudProvider` while installing Trident using the EKS add-on.
++
+image::../media/aws-eks-06.png[]
 +
 . Select *Create*.
 . Verify that the status of the add-on is _Active_.
@@ -52,9 +59,11 @@ image::../media/aws-eks-05.png[]
 == Install/uninstall the Astra Trident EKS add-on using CLI
 
 .Install the Astra Trident EKS add-on using CLI:
-The following example commands install the Astra Trident EKS add-on:
-`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.`
-`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v23.10.0-eksbuild.1` (with a dedicated version)
+The following example command installs the Astra Trident EKS add-on:
+`eksctl create addon --cluster K8s-arm --name netapp_trident-operator --version v24.6.1-eksbuild`
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild.1` (with a dedicated version)
+
+NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
 
 .Uninstall the Astra Trident EKS add-on using CLI:
 The following command uninstalls the Astra Trident EKS add-on:

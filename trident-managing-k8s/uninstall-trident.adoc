@@ -1,41 +1,41 @@
 ---
 sidebar: sidebar
 permalink: trident-managing-k8s/uninstall-trident.html
-keywords: uninstall, astra trident, methods, operator, tridentctl, helm, downgrade, obliviate, crds, wipeout, downgrade
-summary: You should use the same method to uninstall Astra Trident that you used to install Astra Trident. If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should uninstall Astra Trident and reinstall the earlier version using the specific instructions for that version.  
+keywords: uninstall, Trident, methods, operator, tridentctl, helm, downgrade, obliviate, crds, wipeout, downgrade
+summary: You should use the same method to uninstall Trident that you used to install Trident. If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should uninstall Trident and reinstall the earlier version using the specific instructions for that version.  
 ---
 
-= Uninstall Astra Trident
+= Uninstall Trident
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-You should use the same method to uninstall Astra Trident that you used to install Astra Trident. 
+You should use the same method to uninstall Trident that you used to install Trident. 
 
 .About this task 
-* If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should uninstall Astra Trident and reinstall the earlier version using the specific instructions for that link:../earlier-versions.html[version]. This is the only recommended way to _downgrade_ to an earlier version.  
-* For easy upgrade and reinstallation, uninstalling Astra Trident does not remove the CRDs or related objects created by Astra Trident. If you need to completely remove Astra Trident and all of its data, refer to link:../troubleshooting.html#completely-remove-astra-trident-and-crds[Completely remove Astra Trident and CRDs].
+* If you need a fix for bugs observed after an upgrade, dependency issues, or an unsuccessful or incomplete upgrade, you should uninstall Trident and reinstall the earlier version using the specific instructions for that link:../earlier-versions.html[version]. This is the only recommended way to _downgrade_ to an earlier version.  
+* For easy upgrade and reinstallation, uninstalling Trident does not remove the CRDs or related objects created by Trident. If you need to completely remove Trident and all of its data, refer to link:../troubleshooting.html#completely-remove-trident-and-crds[Completely remove Trident and CRDs].
 
 
 .Before you begin
-If you are decommissioning Kubernetes clusters, you must delete all applications that use volumes created by Astra Trident prior to uninstalling. This ensures that PVCs are unpublished on Kubernetes nodes before they are deleted.
+If you are decommissioning Kubernetes clusters, you must delete all applications that use volumes created by Trident prior to uninstalling. This ensures that PVCs are unpublished on Kubernetes nodes before they are deleted.
 
 == Determine the original installation method
-You should use the same method to uninstall Astra Trident that you used to install it. Before uninstalling, verify which version you used to originally install Astra Trident. 
+You should use the same method to uninstall Trident that you used to install it. Before uninstalling, verify which version you used to originally install Trident. 
 
 . Use `kubectl get pods -n trident` to examine the pods. 
-* If there is no operator pod, Astra Trident was installed using `tridentctl`.
-* If there is an operator pod, Astra Trident was installed using the Trident operator either manually or using Helm. 
-. If there is an operator pod, use `kubectl describe tproc trident` to determine if Astra Trident was installed using Helm. 
-* If there is a Helm label, Astra Trident was installed using Helm. 
-* If there is no Helm label, Astra Trident was installed manually using the Trident operator. 
+* If there is no operator pod, Trident was installed using `tridentctl`.
+* If there is an operator pod, Trident was installed using the Trident operator either manually or using Helm. 
+. If there is an operator pod, use `kubectl describe tproc trident` to determine if Trident was installed using Helm. 
+* If there is a Helm label, Trident was installed using Helm. 
+* If there is no Helm label, Trident was installed manually using the Trident operator. 
 
 == Uninstall a Trident operator installation
 You can uninstall a trident operator installation manually or using Helm. 
 
 === Uninstall manual installation
-If you installed Astra Trident using the operator, you can uninstall it by doing one of the following:
+If you installed Trident using the operator, you can uninstall it by doing one of the following:
 
 . **Edit `TridentOrchestrator` CR and set the uninstall flag**: 
 +
@@ -45,17 +45,17 @@ kubectl patch torc <trident-orchestrator-name> --type=merge -p '{"spec":{"uninst
 +
 When the `uninstall` flag is set to `true`, the Trident operator uninstalls Trident, but does not remove the TridentOrchestrator itself. You should clean up the TridentOrchestrator and create a new one if you want to install Trident again.
 
-. **Delete `TridentOrchestrator`**: By removing the `TridentOrchestrator` CR that was used to deploy Astra Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Astra Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
+. **Delete `TridentOrchestrator`**: By removing the `TridentOrchestrator` CR that was used to deploy Trident, you instruct the operator to uninstall Trident. The operator processes the removal of `TridentOrchestrator` and proceeds to remove the Trident deployment and daemonset, deleting the Trident pods it had created as part of the installation.
 +
 ----
 kubectl delete -f deploy/<bundle.yaml> -n <namespace>
 ----
 
 === Uninstall Helm installation
-If you installed Astra Trident by using Helm, you can uninstall it by using `helm uninstall`.
+If you installed Trident by using Helm, you can uninstall it by using `helm uninstall`.
 
 ----
-#List the Helm release corresponding to the Astra Trident install.
+#List the Helm release corresponding to the Trident install.
 helm ls -n trident
 NAME          NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                           APP VERSION
 trident       trident         1               2021-04-20 00:26:42.417764794 +0000 UTC deployed        trident-operator-21.07.1        21.07.1
@@ -66,7 +66,7 @@ release "trident" uninstalled
 ----
 
 == Uninstall a `tridentctl` installation
-Use the `uninstall` command in `tridentctl` to remove all of the resources associated with Astra Trident except for the CRDs and related objects: 
+Use the `uninstall` command in `tridentctl` to remove all of the resources associated with Trident except for the CRDs and related objects: 
 
 ----
 ./tridentctl uninstall -n <namespace>

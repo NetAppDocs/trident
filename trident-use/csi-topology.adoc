@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/csi-topology.html
 keywords: volumes, csi topology, storage classes, backends, kubernetes
-summary: Astra Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the CSI Topology Feature.
+summary: Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the CSI Topology Feature.
 ---
 
 = Use CSI Topology
@@ -11,16 +11,16 @@ summary: Astra Trident can selectively create and attach volumes to nodes presen
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the https://kubernetes-csi.github.io/docs/topology.html[CSI Topology feature^]. 
+Trident can selectively create and attach volumes to nodes present in a Kubernetes cluster by making use of the https://kubernetes-csi.github.io/docs/topology.html[CSI Topology feature^]. 
 
 == Overview 
-Using the CSI Topology feature, access to volumes can be limited to a subset of nodes, based on regions and availability zones. Cloud providers today enable Kubernetes administrators to spawn nodes that are zone based. Nodes can be located in different availability zones within a region, or across various regions. To facilitate the provisioning of volumes for workloads in a multi-zone architecture, Astra Trident uses CSI Topology.
+Using the CSI Topology feature, access to volumes can be limited to a subset of nodes, based on regions and availability zones. Cloud providers today enable Kubernetes administrators to spawn nodes that are zone based. Nodes can be located in different availability zones within a region, or across various regions. To facilitate the provisioning of volumes for workloads in a multi-zone architecture, Trident uses CSI Topology.
 
 TIP: Learn more about the CSI Topology feature https://kubernetes.io/blog/2018/10/11/topology-aware-volume-provisioning-in-kubernetes/[here^].
 
 Kubernetes provides two unique volume binding modes:
 
-* With `VolumeBindingMode` set to `Immediate`, Astra Trident creates the volume without any topology awareness. Volume binding and dynamic provisioning are handled when the PVC is created. This is the default `VolumeBindingMode` and is suited for clusters that do not enforce topology constraints. Persistent Volumes are created without having any dependency on the requesting pod's scheduling requirements.
+* With `VolumeBindingMode` set to `Immediate`, Trident creates the volume without any topology awareness. Volume binding and dynamic provisioning are handled when the PVC is created. This is the default `VolumeBindingMode` and is suited for clusters that do not enforce topology constraints. Persistent Volumes are created without having any dependency on the requesting pod's scheduling requirements.
 * With `VolumeBindingMode` set to `WaitForFirstConsumer`, the creation and binding of a Persistent Volume for a PVC is delayed until a pod that uses the PVC is scheduled and created. This way, volumes are created to meet the scheduling constraints that are enforced by topology requirements.
 
 NOTE: The `WaitForFirstConsumer` binding mode does not require topology labels. This can be used independent of the CSI Topology feature.
@@ -36,7 +36,7 @@ kubectl version
 Client Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.3", GitCommit:"1e11e4a2108024935ecfcb2912226cedeafd99df", GitTreeState:"clean", BuildDate:"2020-10-14T12:50:19Z", GoVersion:"go1.15.2", Compiler:"gc", Platform:"linux/amd64"}
 Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.3", GitCommit:"1e11e4a2108024935ecfcb2912226cedeafd99df", GitTreeState:"clean", BuildDate:"2020-10-14T12:41:49Z", GoVersion:"go1.15.2", Compiler:"gc", Platform:"linux/amd64"}
 ----
-* Nodes in the cluster should have labels that introduce topology awareness (`topology.kubernetes.io/region` and `topology.kubernetes.io/zone`). These labels *should be present on nodes in the cluster* before Astra Trident is installed for Astra Trident to be topology aware.
+* Nodes in the cluster should have labels that introduce topology awareness (`topology.kubernetes.io/region` and `topology.kubernetes.io/zone`). These labels *should be present on nodes in the cluster* before Trident is installed for Trident to be topology aware.
 +
 ----
 kubectl get nodes -o=jsonpath='{range .items[*]}[{.metadata.name}, {.metadata.labels}]{"\n"}{end}' | grep --color "topology.kubernetes.io"
@@ -47,7 +47,7 @@ kubectl get nodes -o=jsonpath='{range .items[*]}[{.metadata.name}, {.metadata.la
 
 == Step 1: Create a topology-aware backend
 
-Astra Trident storage backends can be designed to selectively provision volumes based on availability zones. Each backend can carry an optional `supportedTopologies` block that represents a list of zones and regions that are supported. For StorageClasses that make use of such a backend, a volume would only be created if requested by an application that is scheduled in a supported region/zone.
+Trident storage backends can be designed to selectively provision volumes based on availability zones. Each backend can carry an optional `supportedTopologies` block that represents a list of zones and regions that are supported. For StorageClasses that make use of such a backend, a volume would only be created if requested by an application that is scheduled in a supported region/zone.
 
 Here is an example backend definition:
 // start tabbed area
@@ -97,7 +97,7 @@ supportedTopologies:
 // end tabbed area
 
 
-NOTE: `supportedTopologies` is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a StorageClass. For StorageClasses that contain a subset of the regions and zones provided in a backend, Astra Trident will create a volume on the backend.
+NOTE: `supportedTopologies` is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a StorageClass. For StorageClasses that contain a subset of the regions and zones provided in a backend, Trident creates a volume on the backend.
 
 You can define `supportedTopologies` per storage pool as well. See the following example:
 ----
@@ -152,7 +152,7 @@ allowedTopologies:
 parameters:
   fsType: "ext4"
 ----
-In the StorageClass definition provided above, `volumeBindingMode` is set to `WaitForFirstConsumer`. PVCs that are requested with this StorageClass will not be acted upon until they are referenced in a pod. And, `allowedTopologies` provides the zones and region to be used. The `netapp-san-us-east1` StorageClass will create PVCs on the `san-backend-us-east1` backend defined above.
+In the StorageClass definition provided above, `volumeBindingMode` is set to `WaitForFirstConsumer`. PVCs that are requested with this StorageClass will not be acted upon until they are referenced in a pod. And, `allowedTopologies` provides the zones and region to be used. The `netapp-san-us-east1` StorageClass creates PVCs on the `san-backend-us-east1` backend defined above.
 
 == Step 3: Create and use a PVC
 

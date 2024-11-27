@@ -1,6 +1,6 @@
 ---
 settings:
-  name: Astra Trident
+  name: Trident
   internal:
     pdf_enabled: true
   prod:
@@ -8,8 +8,10 @@ settings:
     harmony_enabled: true
   rss_page: "trident-rn.html"
   versions:
-    - version-number: "24.06"
+    - version-number: "24.10"
       url: /trident 
+    - version-number: "24.06"
+      url: /trident-2406 
     - version-number: "24.02"
       url: /trident-2402 
     - version-number: "23.10"
@@ -28,13 +30,10 @@ settings:
       url: /trident-2204
     - version-number: "22.01"
       url: /trident-2201
-    - version-number: "21.10"
-      url: /trident-2110      
-    - version-number: "21.07"
-      url: /trident-2107                        
+                        
 sidebar:
   entries:
-    - title: Astra Trident docs
+    - title: Trident docs
       url: /index.html
     - title: Release notes
       entries:
@@ -48,6 +47,7 @@ sidebar:
     - section: trident-managing-k8s    
     - section: trident-docker
     - section: trident-reco
+    - section: trident-protect    
     - title: Knowledge and support
       entries:
       - title: FAQs
@@ -60,5 +60,5 @@ sidebar:
     - title: Legal notices
       url: /legal-notices.html
 product-family:
-  name: Astra
+  name: Trident
   repo: astra-family

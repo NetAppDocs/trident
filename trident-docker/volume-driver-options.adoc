@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/volume-driver-options.html
-keywords: create volumes, astra trident, trident for docker, docker, docker volume, driver options, ontap, element volumes, cvs, cloud volumes service on gcp, azure netapp files
+keywords: create volumes, Trident, trident for docker, docker, docker volume, driver options, ontap, element volumes, cvs, cloud volumes service on gcp, azure netapp files
 summary: Each storage driver has a different set of options, which you can specify at volume creation time to customize the outcome. See below for options that apply to your configured storage system.
 ---
 
@@ -42,9 +42,9 @@ a|When cloning a volume, this will cause ONTAP to immediately split the clone fr
 |`encryption`
 a|Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
-If NAE is enabled on the backend, any volume provisioned in Astra Trident will be NAE enabled. 
+If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
 
-For more information, refer to: link:../trident-reco/security-reco.html[How Astra Trident works with NVE and NAE].
+For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE].
 
 |`tieringPolicy`
 a|Sets the tiering policy to be used for the volume. This decides whether data is moved to the cloud tier when it becomes inactive (cold).
@@ -109,7 +109,7 @@ docker volume create -d netapp --name demo -o unixPermissions=4755
 
 The minimum volume size is 20MiB.
 
-If the snapshot reserve is not specified and the snapshot policy is `none`, Trident will use a snapshot reserve of 0%.
+If the snapshot reserve is not specified and the snapshot policy is `none`, Trident use a snapshot reserve of 0%.
 
 * Create a volume with no snapshot policy and no snapshot reserve:
 +

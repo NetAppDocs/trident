@@ -16,18 +16,7 @@ You can use Trident protect to restore your application from a snapshot or backu
 
 NOTE: When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
 
-== Namespace annotations and labels
-
-During restore and failover operations, labels and annotations in the destination namespace are made to match the labels and annotations in the source namespace. Any labels or annotations from the source namespace that don't exist in the destination namespace are added, and any keys that already exist are overwritten.
-
-You can prevent specific annotations in the destination namespace from being overwritten by setting the Kubernetes environment variable `RESTORE_SKIP_NAMESPACE_ANNOTATIONS` before you perform the restore or failover operation. For example:
-
-[source,console]
------
-k set env deploy/trident-protect-controller-manager RESTORE_SKIP_NAMESPACE_ANNOTATIONS=<annotation_key_to skip_1>,<annotation_key_to skip_2>
------
-
-If you installed Trident protect using Helm with the `--create-namespace` flag, special treatment is given to the `name` label key. During the restore or failover process, Trident protect copies this label key to the destination namespace, but updates the value to the destination namespace value if the value from source matches the source namespace. If this value doesn't match the source namespace it is copied to the destination namespace with no changes. 
+include::../_include/namespace-anno-labels.adoc[]
 
 === Example
 In the following example, there are two namespaces with different annotations and labels. You can see the state of the destination namespace before and after the restore or failover operation.

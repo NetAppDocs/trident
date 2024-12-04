@@ -38,34 +38,21 @@ In the following example, there are two namespaces with different annotations an
 
 |===
 
-.Source namespace
-
-* Annotations:
-** annotation.one/key: "updatedvalue"
-** annotation.two/key: "true"
-* Labels:
-** environment=production
-** compliance=hipaa
-** name=ns-1
-
-.Destination namespace
-
-* Annotations:
-** annotation.one/key: "true"
-** annotation.three/key: "false"
-* Labels:
-** role=database
-
 ==== After the restore operation
 
-.Destination namespace
+[cols="1,2a,2a" options="header"]
+|===
+|Namespace |Annotations |Labels
 
-* Annotations:
-** annotation.one/key: "updatedvalue"
-** annotation.two/key: "true"
-** annotation.three/key: "false"
-* Labels:
-** name=ns-2
-** compliance=hipaa
-** environment=production
-** role=database
+|Destination
+|
+* annotation.one/key: "updatedvalue"
+* annotation.two/key: "true"
+* annotation.three/key: "false"
+|
+* name=ns-2
+* compliance=hipaa
+* environment=production
+* role=database
+
+|===

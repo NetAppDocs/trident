@@ -16,14 +16,15 @@ In the following example, there are two namespaces with different annotations an
 
 ==== Before the restore operation
 
+[cols="1,2a,2a" options="header"]
 |===
 |Namespace |Annotations |Labels
 
 |Source
-a|
+|
 * annotation.one/key: "updatedvalue"
 * annotation.two/key: "true"
-a|
+|
 * environment=production
 * compliance=hipaa
 * name=ns-1
@@ -32,7 +33,7 @@ a|
 |
 * annotation.one/key: "true"
 * annotation.three/key: "false"
-a|
+|
 * role=database
 
 |===

@@ -10,3 +10,40 @@ k set env deploy/trident-protect-controller-manager RESTORE_SKIP_NAMESPACE_ANNOT
 -----
 
 If you installed Trident protect using Helm with the `--create-namespace` flag, special treatment is given to the `name` label key. During the restore or failover process, Trident protect copies this label to the destination namespace, but updates the value to the destination namespace value if the value from source matches the source namespace. If this value doesn't match the source namespace it is copied to the destination namespace with no changes. 
+
+=== Example
+In the following example, there are two namespaces with different annotations and labels. You can see the state of the destination namespace before and after the restore or failover operation.
+
+==== Before the restore operation:
+
+Source namespace
+
+* Annotations:
+** annotation.one/key: "updatedvalue"
+** annotation.two/key: "true"
+* Labels:
+** environment=production
+** compliance=hipaa
+** name=ns-1
+
+Destination namespace
+
+* Annotations:
+** annotation.one/key: "true"
+** annotation.three/key: "false"
+* Labels:
+** role=database
+
+==== After the restore operation:
+
+Destination namespace
+
+* Annotations:
+** annotation.one/key: "updatedvalue"
+** annotation.two/key: "true"
+** annotation.three/key: "false"
+* Labels:
+** name=ns-2
+** compliance=hipaa
+** environment=production
+** role=database

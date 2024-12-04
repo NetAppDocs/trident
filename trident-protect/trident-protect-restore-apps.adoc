@@ -18,40 +18,6 @@ NOTE: When you restore an application, all execution hooks configured for the ap
 
 include::../_include/namespace-anno-labels.adoc[]
 
-=== Example
-In the following example, there are two namespaces with different annotations and labels. You can see the state of the destination namespace before and after the restore or failover operation.
-
-Before the restore operation:
-
-Source namespace
-* Annotations:
-** annotation.one/key: "updatedvalue"
-** annotation.two/key: "true"
-* Labels:
-** environment=production
-** compliance=hipaa
-** name=ns-1
-
-Destination namespace
-* Annotations:
-** annotation.one/key: "true"
-** annotation.three/key: "false"
-* Labels:
-** role=database
-
-After the restore operation:
-
-Destination namespace
-* Annotations:
-** annotation.one/key: "updatedvalue"
-** annotation.two/key: "true"
-** annotation.three/key: "false"
-* Labels:
-** name=ns-2
-** compliance=hipaa
-** environment=production
-** role=database
-
 == Restore from a backup to a different namespace
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.

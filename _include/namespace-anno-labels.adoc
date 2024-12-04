@@ -21,7 +21,7 @@ The following table illustrates the state of the example source and destination 
 |===
 |Namespace |Annotations |Labels
 
-|Source
+|Namespace ns-1 (source)
 |
 * annotation.one/key: "updatedvalue"
 * annotation.two/key: "true"
@@ -30,13 +30,12 @@ The following table illustrates the state of the example source and destination 
 * compliance=hipaa
 * name=ns-1
 
-|Destination
+|Namespace ns-2 (destination)
 |
 * annotation.one/key: "true"
 * annotation.three/key: "false"
 |
 * role=database
-
 |===
 
 ==== After the restore operation
@@ -46,7 +45,7 @@ The following table illustrates the state of the example destination namespace a
 |===
 |Namespace |Annotations |Labels
 
-|Destination
+|Namespace ns-2 (destination)
 |
 * annotation.one/key: "updatedvalue"
 * annotation.two/key: "true"
@@ -56,5 +55,4 @@ The following table illustrates the state of the example destination namespace a
 * compliance=hipaa
 * environment=production
 * role=database
-
 |===

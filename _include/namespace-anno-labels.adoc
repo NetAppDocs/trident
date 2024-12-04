@@ -14,9 +14,30 @@ If you installed Trident protect using Helm with the `--create-namespace` flag, 
 === Example
 In the following example, there are two namespaces with different annotations and labels. You can see the state of the destination namespace before and after the restore or failover operation.
 
-==== Before the restore operation:
+==== Before the restore operation
 
-Source namespace
+|===
+|Namespace |Annotations |Labels
+
+|Source
+a|
+* annotation.one/key: "updatedvalue"
+* annotation.two/key: "true"
+a|
+* environment=production
+* compliance=hipaa
+* name=ns-1
+
+|Destination
+|
+* annotation.one/key: "true"
+* annotation.three/key: "false"
+a|
+* role=database
+
+|===
+
+.Source namespace
 
 * Annotations:
 ** annotation.one/key: "updatedvalue"
@@ -26,7 +47,7 @@ Source namespace
 ** compliance=hipaa
 ** name=ns-1
 
-Destination namespace
+.Destination namespace
 
 * Annotations:
 ** annotation.one/key: "true"
@@ -34,9 +55,9 @@ Destination namespace
 * Labels:
 ** role=database
 
-==== After the restore operation:
+==== After the restore operation
 
-Destination namespace
+.Destination namespace
 
 * Annotations:
 ** annotation.one/key: "updatedvalue"

@@ -38,6 +38,8 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 |`dataLIF` |IP address of protocol LIF. 
 
+Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`. 
+
 *Do not specify for iSCSI.* Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 
 *Omit for Metrocluster.* See the <<mcc-best>>.

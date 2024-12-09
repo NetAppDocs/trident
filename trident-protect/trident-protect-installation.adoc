@@ -48,7 +48,7 @@ helm install trident-protect netapp-trident-protect/trident-protect --set cluste
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
-. Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
+. Optionally, unfreeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
 +
 [source,console]
 ----

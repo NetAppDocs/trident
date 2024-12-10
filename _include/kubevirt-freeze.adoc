@@ -1,4 +1,3 @@
-== Protecting data with KubeVirt VMs
 Trident protect 24.10 does not automatically ensure a consistent state for KubeVirt VM filesystems during data protection operations. If you want to protect your KubeVirt VM data using Trident protect 24.10, you need to manually enable the freeze/unfreeze functionality for the filesystems before the data protection operation. This ensures that the filesystems are in a consistent state. You can configure Trident protect to manage the freezing and unfreezing of the VM filesystem during data protection operations using the following steps:
 
 . link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Configure virtualization^].

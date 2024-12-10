@@ -48,15 +48,6 @@ helm install trident-protect netapp-trident-protect/trident-protect --set cluste
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
 ----
-. Optionally, unfreeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
-+
-[source,console]
-----
-kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=true -n trident-protect
-----
-+
-NOTE: You need to set up virtualization for the freeze functionality to work. VMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
-
 --
 .Install Trident protect from a private registry
 --
@@ -165,14 +156,6 @@ helm install trident-protect netapp-trident-protect/trident-protect --set cluste
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
-. Optionally, freeze your VMs. If you are using KubeVirt support for SnapMirror, freezing VMs helps you to manage them effectively:
-+
-[source,console]
-----
-kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=true -n trident-protect
-----
-+
-NOTE: You need to set up virtualization for the freeze functionality to work. VMs deployed after this setup include the necessary binaries to freeze and unfreeze. To learn more about setting up virtualization, refer to link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
 --
 ====
 

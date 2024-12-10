@@ -23,6 +23,7 @@ This example creates an AWS Secret Manager secret to store Trident CSI credentia
 
 `aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials" --secret-string "{\"username\":\"vsadmin\",\"password\":\"<svmpassword>\"}"`
 
+
 == Create IAM Policy
 
 The following examples creates an IAM policy using the AWS CLI:

@@ -52,7 +52,7 @@ policy.json:
         {
             "Action": "secretsmanager:GetSecretValue",
             "Effect": "Allow",
-            "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:<aws-secret-manager-name>"
+            "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:<aws-secret-manager-name>*"
         }
     ],
     "Version": "2012-10-17"
@@ -61,6 +61,53 @@ policy.json:
 
 == Create and IAM role for the service account
 
+[role="tabbed-block"]
+====
+
+.EKS cluster
+
+--
 The following example creates an IAM role for service account in EKS: 
 
 `eksctl create iamserviceaccount --name trident-controller --namespace trident --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonFSxNCSIDriverPolicy --approve`
+
+--
+
+NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
+
+.AWS CLI
+
+--
+`aws iam create-role --role-name trident-controller \ --assume-role-policy-document file://trust-relationship.json`
+
+--
+
+
+{ "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "Federated": "arn:aws:iam::<account_id>:oidc-provider/<oidc_provider>" }, "Action": "sts:AssumeRoleWithWebIdentity", "Condition": { "StringEquals": { "<oidc_provider>:aud": "sts.amazonaws.com", "<oidc_provider>:sub": "system:serviceaccount:trident:trident-controller" } } } ] }
+
+You will note two variables that need to be updated:
+
+You will note two variables that need to be updated:
+
+· <account_id> – Your AWS account ID
+
+· <oidc_provider> – The OIDC of your EKS cluster. You can obtain that by running:
+
+aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer" \ --output text | sed -e "s/^https:\/\///"
+
+Once the role has been created, the second step is to attach the policy that was created in the step above to the role using this command:
+
+aws iam attach-role-policy --role-name my-role \ --policy-arn=arn:aws:iam::<account_id>:policy/AmazonFSxNCSIDriverPolicy
+
+Of course, replace “<account_id>” with the AWS account ID. The above command assumes they used the policy name shown in the step above it: AmazonFSxNCSIDriverPolicy
+
+If you keep the eksctl command as a separate tab, please change the argument after “--attach-policy-arn” from:
+
+arn:aws:iam::aws:policy/service-role/AmazonFSxNCSIDriverPolicy
+
+to:
+
+<IAM-Policy>
+
+Where <IAM-Policy> is the ARN of the policy that was created in the step above.
+

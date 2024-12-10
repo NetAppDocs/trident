@@ -80,8 +80,7 @@ Ensure that you have the following before configuring the Astra Trident add-on f
 --
 The following example commands install the Astra Trident EKS add-on:
 
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild`
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild.1` (with a dedicated version)
+`eksctl create addon --name aws-ebs-csi-driver --cluster <cluster_name> \ --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force`
 --
 
 NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.

@@ -33,5 +33,5 @@ helm upgrade trident-protect-crds netapp-trident-protect/trident-protect-crds --
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect
+helm upgrade trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect
 ----

@@ -1,0 +1,37 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-upgrade.html
+keywords: trident, protect, netapp, uninstall, full version
+summary: You might need to remove Trident protect components if you are upgrading from a trial to a full version of the product. 
+---
+= Upgrade Trident protect
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+You can upgrade Trident protect to the latest version to take advantage of new features or bug fixes.
+
+To upgrade Trident protect, perform the following steps.
+
+.Steps
+. Update the Trident Helm repository:
++
+[source,console]
+----
+helm repo update
+----
+. Upgrade the Trident protect CRDs:
++
+[source,console]
+----
+helm upgrade trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.1  --namespace trident-protect
+----
+. Upgrade Trident protect:
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect
+----

@@ -65,6 +65,9 @@ tridentctl update volume <volume-UUID> --snapshot-dir=true --pool-level=true -n 
 
 NOTE: You can enable snapshot directories by default for new volumes by setting the Trident backend configuration option `snapshotDir` to `true`. Existing volumes are not affected.
 
+== Protecting data with KubeVirt VMs
+include::../_include/kubevirt-freeze.adoc[]
+
 == Requirements for SnapMirror replication
 NetApp SnapMirror is available for use with Trident protect for the following ONTAP solutions:
 
@@ -74,9 +77,6 @@ NetApp SnapMirror is available for use with Trident protect for the following ON
 * NetApp ONTAP Select
 * NetApp Cloud Volumes ONTAP
 * Amazon FSx for NetApp ONTAP
-
-== Protecting data with KubeVirt VMs
-include::../_include/kubevirt-freeze.adoc[]
 
 === ONTAP cluster requirements for SnapMirror replication
 Ensure your ONTAP cluster meets the following requirements if you plan to use SnapMirror replication:

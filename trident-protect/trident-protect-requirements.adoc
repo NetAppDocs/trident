@@ -75,6 +75,9 @@ NetApp SnapMirror is available for use with Trident protect for the following ON
 * NetApp Cloud Volumes ONTAP
 * Amazon FSx for NetApp ONTAP
 
+== Protecting data with KubeVirt VMs
+include::../_include/kubevirt-freeze.adoc[]
+
 === ONTAP cluster requirements for SnapMirror replication
 Ensure your ONTAP cluster meets the following requirements if you plan to use SnapMirror replication:
 
@@ -98,6 +101,4 @@ Ensure that the SVM names used in the replication relationship between two ONTAP
 === Trident / ONTAP configuration for SnapMirror replication
 Trident protect requires that you configure at least one storage backend that supports replication for both the source and destination clusters. If the source and destination clusters are the same, the destination application should use a different storage backend than the source application for the best resiliency.
 
-=== Protecting data with KubeVirt VMs
-include::../_include/kubevirt-freeze.adoc[]
 

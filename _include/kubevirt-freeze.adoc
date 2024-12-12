@@ -12,3 +12,9 @@ Beginning with Trident protect 24.10.1, Trident protect automatically freezes an
 ----
 kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=false -n trident-protect
 ----
+
+NOTE: To enable or disable automatic freeze functionality in OpenShift environments, you might need to grant Trident protect appropriate permissions. For example:
+[source,console]
+----
+oc adm policy add-scc-to-user privileged -z default -n <vm-namespace>
+----

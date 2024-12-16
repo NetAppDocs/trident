@@ -1,3 +1,15 @@
+Trident protect 24.10 and 24.10.1 and newer have different behavior when you protect applications running on KubeVirt VMs. For both versions, you can configure filesystem freezing and unfreezing during data protection operations.
+
+[NOTE]
+=====
+For all Trident protect versions, to enable or disable automatic freeze functionality in OpenShift environments, you might need to grant the application namespace privileged permissions. For example:
+[source,console]
+----
+oc adm policy add-scc-to-user privileged -z default -n <application-namespace>
+----
+=====
+
+.Trident protect 24.10
 Trident protect 24.10 does not automatically ensure a consistent state for KubeVirt VM filesystems during data protection operations. If you want to protect your KubeVirt VM data using Trident protect 24.10, you need to manually enable the freeze/unfreeze functionality for the filesystems before the data protection operation. This ensures that the filesystems are in a consistent state.
 
 You can configure Trident protect to manage the freezing and unfreezing of the VM filesystem during data protection operations by link:https://docs.openshift.com/container-platform/4.16/virt/install/installing-virt.html[configuring virtualization^] and then using the following command:
@@ -6,18 +18,10 @@ You can configure Trident protect to manage the freezing and unfreezing of the V
 kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=true -n trident-protect
 ----
 
+.Trident protect 24.10.1 and newer
 Beginning with Trident protect 24.10.1, Trident protect automatically freezes and unfreezes KubeVirt filesystems during data protection operations. Optionally, you can disable this automatic behavior using the following command:
 
 [source,console]
 ----
 kubectl set env deployment/trident-protect-controller-manager NEPTUNE_VM_FREEZE=false -n trident-protect
 ----
-
-[NOTE]
-=====
-To enable or disable automatic freeze functionality in OpenShift environments, you might need to grant the application namespace privileged permissions. For example:
-[source,console]
-----
-oc adm policy add-scc-to-user privileged -z default -n <application-namespace>
-----
-=====

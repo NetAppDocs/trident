@@ -51,7 +51,7 @@ apiVersion: protect.trident.netapp.io/v1o
 kind: BackupRestore
 metadata:
   name: my-cr-name
-  namespace: my-app-namespace
+  namespace: my-destination-namespace
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name

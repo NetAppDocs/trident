@@ -17,8 +17,8 @@ You can define an application that you want to manage with Trident protect by cr
 == Create an AppVault CR
 You need to create an AppVault CR that will be used when performing data protection operations on the application, and the AppVault CR needs to reside on the cluster where Trident protect is installed. The AppVault CR is specific to your environment; for examples of AppVault CRs, refer to link:trident-protect-appvault-custom-resources.html[AppVault custom resources.]
 
-== Create an application CR
-You need to create an application CR to for each application that you want to manage with Trident protect. You can add an application for management by manually creating an application CR or by using the Trident protect CLI to create the CR.
+== Define an application
+You need to define each application that you want to manage with Trident protect. You can define an application for management by either manually creating an application CR or by using the Trident protect CLI.
 
 [role="tabbed-block"]
 ====
@@ -43,8 +43,14 @@ metadata:
   namespace: my-app-namespace
 spec:
   includedNamespaces:
-    labelSelector: {}
-    namespace: my-app-namespace
+    - namespace: my-app-namespace
+----
++
+. After you create the application CR to match your environment, apply the CR. For example:
++
+[source,console]
+----
+kubectl apply -f maria-app.yaml
 ----
 --
 .Add an application using the CLI

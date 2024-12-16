@@ -70,7 +70,6 @@ policy.json:
 The following example creates an IAM role for service account in EKS: 
 
 `eksctl create iamserviceaccount --name trident-controller --namespace trident --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonFSxNCSIDriverPolicy --approve`
-
 --
 
 .AWS CLI
@@ -99,24 +98,17 @@ The following example creates an IAM role for service account in EKS:
     } 
    ] 
 }
-
 ----
 
 * <*account_id*> -  Your AWS account ID
 * <*oidc_provider*> - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
-+
-----
-aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer" \ --output text | sed -e "s/^https:\/\///"
-----
+`aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer" \ --output text | sed -e "s/^https:\/\///"`
 
 *Attach the IAM role with the IAM policy*:
 
 Once the role has been created, the second step is to attach the policy that was created in the step above to the role using this command:
 
-----
-aws iam attach-role-policy --role-name my-role \ --policy-arn=arn:aws:<IAM policy>
-----
-
+`aws iam attach-role-policy --role-name my-role \ --policy-arn=arn:aws:<IAM policy>`
 --
 
 ====

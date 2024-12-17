@@ -99,13 +99,13 @@ The following example creates an IAM role for service account in EKS:
 }
 ----
 
-* <*account_id*> -  Your AWS account ID
-* <*oidc_provider*> - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
+* *<account_id>* -  Your AWS account ID
+* *<oidc_provider>* - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
 `aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer" \ --output text | sed -e "s/^https:\/\///"`
 
 *Attach the IAM role with the IAM policy*:
 
-Once the role has been created, the second step is to attach the policy that was created in the step above to the role using this command:
+Once the role has been created, attach the policy (that was created in the step above) to the role using this command:
 
 `aws iam attach-role-policy --role-name my-role \ --policy-arn=arn:aws:<IAM policy>`
 --

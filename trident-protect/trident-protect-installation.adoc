@@ -31,7 +31,7 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 +
 [source,console]
 ----
-helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.1 --create-namespace --namespace trident-protect
 ----
 . Use Helm to install Trident protect using one of the following commands. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots:
 +
@@ -39,14 +39,14 @@ helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect
 ----
 +
 * Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect
 ----
 --
 .Install Trident protect from a private registry
@@ -58,14 +58,14 @@ You can install Trident protect from a private image registry if your Kubernetes
 +
 [source,console]
 ----
-netapp/controller:24.10.0
-netapp/restic:24.10.0
-netapp/kopia:24.10.0
+netapp/controller:24.10.1
+netapp/restic:24.10.1
+netapp/kopia:24.10.1
 netapp/trident-autosupport:24.10.0
-netapp/exechook:24.10.0
-netapp/resourcebackup:24.10.0
-netapp/resourcerestore:24.10.0
-netapp/resourcedelete:24.10.0
+netapp/exechook:24.10.1
+netapp/resourcebackup:24.10.1
+netapp/resourcerestore:24.10.1
+netapp/resourcedelete:24.10.1
 bitnami/kubectl:1.30.2
 kubebuilder/kube-rbac-proxy:v0.16.0
 ----
@@ -74,17 +74,17 @@ For example:
 +
 [source,console]
 ----
-docker pull netapp/controller:24.10.0
+docker pull netapp/controller:24.10.1
 ----
 +
 [source,console]
 ----
-docker tag netapp/controller:24.10.0 <private-registry-url>/controller:24.10.0
+docker tag netapp/controller:24.10.1 <private-registry-url>/controller:24.10.1
 ----
 +
 [source,console]
 ----
-docker push <private-registry-url>/controller:24.10.0
+docker push <private-registry-url>/controller:24.10.1
 ----
 
 . Create the Trident protect system namespace:
@@ -139,7 +139,7 @@ webhooksCleanup:
 +
 [source,console]
 ----
-helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.0 --create-namespace --namespace trident-protect
+helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2410.1 --create-namespace --namespace trident-protect
 ----
 . Use Helm to install Trident protect using one of the following commands. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
@@ -147,14 +147,14 @@ helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
 +
 * Install Trident protect and disable the scheduled daily Trident protect AutoSupport support bundle uploads:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+helm install trident-protect netapp-trident-protect/trident-protect --set autoSupport.enabled=false --set clusterName=<name_of_cluster> --version 100.2410.1 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
 --
 ====

@@ -80,8 +80,8 @@ Ensure that you have the following before configuring the Astra Trident add-on f
 --
 The following example commands install the Astra Trident EKS add-on:
 
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild`
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild.1` (with a dedicated version)
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild`
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
 --
 
 NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
@@ -125,9 +125,6 @@ add-on.json
    "cloudProvider": "AWS"}"
 }
 ----
-+
-NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `AWS` as the `cloudProvider` while installing Trident using the EKS add-on.
-+
 . Install the Astra Trident EKS add-on"
 
 +

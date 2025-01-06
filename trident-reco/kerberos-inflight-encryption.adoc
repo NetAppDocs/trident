@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-reco/kerberos-inflight-encryption.html
-keywords: astra control, acp, astra control provisioner, backend, storage, encryption, kerberos
-summary: You can configure encryption to protect the traffic between Astra Control and your storage backend.
+keywords: Trident, backend, storage, encryption, kerberos
+summary: You can configure encryption to protect the traffic between Trident and your storage backend.
 ---
 
 = Kerberos in-flight encryption
@@ -11,12 +11,11 @@ summary: You can configure encryption to protect the traffic between Astra Contr
 :imagesdir: ../media/use-acp/
 
 [.lead]
-Using Astra Control Provisioner, you can improve data access security by enabling encryption for the traffic between your managed cluster and the storage backend. 
+Using Kerberos in-flight encryption, you can improve data access security by enabling encryption for the traffic between your managed cluster and the storage backend. 
 
-Astra Control Provisioner supports Kerberos encryption for two types of storage backends:
+Trident supports Kerberos encryption for ONTAP as a storage backend:
 
-* *On-premise ONTAP* - Astra Control Provisioner supports Kerberos encryption over NFSv3 and NFSv4 connections from Red Hat OpenShift and upstream Kubernetes clusters to on-premise ONTAP volumes.
-* *Azure NetApp Files* - Astra Control Provisioner supports Kerberos encryption over NFSv4.1 connections from upstream Kubernetes clusters to Azure NetApp Files volumes.
+* *On-premise ONTAP* - Trident supports Kerberos encryption over NFSv3 and NFSv4 connections from Red Hat OpenShift and upstream Kubernetes clusters to on-premise ONTAP volumes.
 
 You can create, delete, resize, snapshot, clone, read-only clone, and import volumes that use NFS encryption.
 
@@ -233,7 +232,7 @@ At either level, you can specify one of three different versions of Kerberos enc
 apiVersion: v1
 kind: Secret
 metadata:
-  name: backend-tbc-anf-secret
+  name: backend-tbc-secret
 type: Opaque
 stringData:
   clientID: <CLIENT_ID>
@@ -242,7 +241,7 @@ stringData:
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  name: backend-tbc-anf
+  name: backend-tbc
 spec:
   version: 1
   storageDriverName: azure-netapp-files
@@ -259,7 +258,7 @@ spec:
   nasType: nfs
   kerberos: sec=krb5i #can be krb5, krb5i, or krb5p
   credentials:
-    name: backend-tbc-anf-secret
+    name: backend-tbc-secret
 ----
 --
 
@@ -270,7 +269,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: backend-tbc-anf-secret
+  name: backend-tbc-secret
 type: Opaque
 stringData:
   clientID: <CLIENT_ID>
@@ -279,7 +278,7 @@ stringData:
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  name: backend-tbc-anf
+  name: backend-tbc
 spec:
   version: 1
   storageDriverName: azure-netapp-files
@@ -299,7 +298,7 @@ spec:
         type: encryption
       kerberos: sec=krb5i #can be krb5, krb5i, or krb5p
   credentials:
-    name: backend-tbc-anf-secret
+    name: backend-tbc-secret
 ----
 --
 ====
@@ -332,7 +331,7 @@ You can create a storage class to provision volumes with Kerberos encryption.
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: anf-sc-nfs
+  name: sc-nfs
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "azure-netapp-files"
@@ -344,20 +343,20 @@ parameters:
 +
 [source,console]
 ----
-kubectl create -f sample-input/storage-class-anf-sc-nfs.yaml
+kubectl create -f sample-input/storage-class-sc-nfs.yaml
 ----
 . Make sure that the storage class has been created:
 +
 [source,console]
 ----
-kubectl get sc anf-sc-nfs
+kubectl get sc -sc-nfs
 ----
 +
 You should see output similar to the following:
 +
 ----
 NAME         PROVISIONER             AGE
-anf-sc-nfs    csi.trident.netapp.io   15h
+sc-nfs       csi.trident.netapp.io   15h
 ----
 
 === Provision volumes

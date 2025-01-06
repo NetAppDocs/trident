@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-use/vol-snap-restore.html
-keywords: snapshot restore, snapshot, astra control provisioner, TridentActionSnapshotRestore,
-summary: Astra Control Provisioner provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes. 
+keywords: snapshot restore, snapshot, TridentActionSnapshotRestore,
+summary: Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes. 
 ---
 
 = Recover volume data using a snapshot
@@ -11,9 +11,9 @@ summary: Astra Control Provisioner provides rapid, in-place volume restoration f
 :imagesdir: ../media/use/
 
 [.lead]
-Astra Control Provisioner provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes. 
+Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes. 
 
-Astra Control Provisioner supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, and `solidfire-san` drivers. 
+Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, and `solidfire-san` drivers. 
 
 .Before you begin
 You must have a bound PVC and available volume snapshot. 
@@ -56,7 +56,7 @@ tridentactionsnapshotrestore.trident.netapp.io/this-doesnt-matter created
 ----
 
 .Results 
-Astra Control Provisioner restores the data from the snapshot. You can verify the snapshot restore status.  
+Trident restores the data from the snapshot. You can verify the snapshot restore status.  
 ----
 kubectl get tasr -o yaml
 
@@ -85,6 +85,6 @@ metadata:
 
 [NOTE]
 ====
-* In most cases, Astra Control Provisioner will not automatically retry the operation in case of failure. You will need to perform the operation again. 
+* In most cases, Trident will not automatically retry the operation in case of failure. You will need to perform the operation again. 
 * Kubernetes users without admin access might have to be granted permission by the admin to create a TASR CR in their application namespace.
 ====

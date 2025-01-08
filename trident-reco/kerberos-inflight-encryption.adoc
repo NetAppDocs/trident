@@ -8,7 +8,7 @@ summary: You can configure encryption to protect the traffic between Trident and
 = Kerberos in-flight encryption
 :hardbreaks:
 :icons: font
-:imagesdir: ../media/use-acp/
+:imagesdir: ../media/
 
 [.lead]
 Using Kerberos in-flight encryption, you can improve data access security by enabling encryption for the traffic between your managed cluster and the storage backend. 
@@ -26,7 +26,6 @@ NOTE: Kerberos encryption for NFS traffic with on-premise ONTAP storage backends
 
 .Before you begin
 
-* Ensure that you have enabled Astra Control Provisioner on the managed cluster. Refer to link:../use/enable-acp.html[Enable Astra Control Provisioner^] for instructions.
 * Ensure that you have access to the `tridentctl` utility.
 * Ensure you have administrator access to the ONTAP storage backend.
 * Ensure you know the name of the volume or volumes you will be sharing from the ONTAP storage backend.
@@ -74,7 +73,7 @@ Refer to the following documentation for how to create ONTAP export policies and
 * https://docs.netapp.com/us-en/ontap/nfs-config/add-rule-export-policy-task.html[Add a rule to an export policy^]
 
 === Create a storage backend
-You can create an Astra Control Provisioner storage backend configuration that includes Kerberos encryption capability. 
+You can create a Trident storage backend configuration that includes Kerberos encryption capability. 
 
 .About this task
 When you create a storage backend configuration file that configures Kerberos encryption, you can specify one of three different versions of Kerberos encryption using the `spec.nfsMountOptions` parameter:
@@ -195,7 +194,7 @@ You can enable Kerberos encryption on the storage traffic between your managed c
 
 .Before you begin
 
-* Ensure that you have enabled Astra Control Provisioner on the managed Red Hat OpenShift cluster. Refer to link:../use/enable-acp.html[Enable Astra Control Provisioner^] for instructions.
+* Ensure that you have enabled Trident on the managed Red Hat OpenShift cluster.
 * Ensure that you have access to the `tridentctl` utility.
 * Ensure that you have prepared the Azure NetApp Files storage backend for Kerberos encryption by noting the requirements and following the instructions in https://learn.microsoft.com/en-us/azure/azure-netapp-files/configure-kerberos-encryption[Azure NetApp Files documentation^].
 * Ensure that any NFSv4 volumes you use with Kerberos encryption are configured correctly. Refer to the NetApp NFSv4 Domain Configuration section (page 13) of the https://www.netapp.com/media/16398-tr-3580.pdf[NetApp NFSv4 Enhancements and Best Practices Guide^]. 

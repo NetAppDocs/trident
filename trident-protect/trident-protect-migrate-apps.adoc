@@ -36,18 +36,18 @@ To clone an application to the same cluster, create a snapshot or backup and res
 
 === Clone to different cluster
 
-To clone an application to a different cluster (perform a cross-cluster clone), create a snapshot or backup and restore the data to a different cluster. Make sure that Trident protect is installed on the destination cluster.
+To clone an application to a different cluster (perform a cross-cluster clone), create a backup on the source cluster, and then restore the backup to a different cluster. Make sure that Trident protect is installed on the destination cluster.
+
+NOTE: You can replicate an application between different clusters using link:trident-protect-use-snapmirror-replication.html[SnapMirror replication].
 
 .Steps
 
-. Do one of the following:
-.. link:trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create a snapshot].
-.. link:trident-protect-protect-apps.html#create-an-on-demand-backup[Create a backup].
-
-. Ensure that the AppVault CR for the object storage bucket that contains the backup or snapshot has been configured on the destination cluster.
-. On the destination cluster, do one of the following, depending on if you created a snapshot or a backup:
-.. link:trident-protect-restore-apps.html#restore-from-a-snapshot-to-a-different-namespace[Restore your data from the snapshot].
-.. link:trident-protect-restore-apps.html#restore-from-a-backup-to-a-different-namespace[Restore your data from the backup].
+//. Do one of the following:
+//.. link:trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create a snapshot].
+. link:trident-protect-protect-apps.html#create-an-on-demand-backup[Create a backup].
+. Ensure that the AppVault CR for the object storage bucket that contains the backup has been configured on the destination cluster.
+. On the destination cluster, link:trident-protect-restore-apps.html#restore-from-a-backup-to-a-different-namespace[Restore your data from the backup].
+//.. link:trident-protect-restore-apps.html#restore-from-a-snapshot-to-a-different-namespace[Restore your data from the snapshot].
 
 == Migrate applications from one storage class to another storage class
 

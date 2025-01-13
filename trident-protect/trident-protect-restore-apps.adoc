@@ -63,7 +63,7 @@ spec:
 +
 . (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
 *** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
 *** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
@@ -78,7 +78,7 @@ For example:
 -------
 spec:    
   resourceFilter: 
-    resourceSelectionCriteria: "include"
+    resourceSelectionCriteria: "Include"
     resourceMatchers:
       - group: my-resource-group-1
         kind: my-resource-kind-1
@@ -152,7 +152,7 @@ spec:
 +
 . (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
 *** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
 *** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
@@ -167,7 +167,7 @@ For example:
 -------
 spec:    
   resourceFilter: 
-    resourceSelectionCriteria: "include"
+    resourceSelectionCriteria: "Include"
     resourceMatchers:
       - group: my-resource-group-1
         kind: my-resource-kind-1
@@ -246,7 +246,7 @@ spec:
 +
 . (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
 *** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
 *** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
@@ -261,7 +261,7 @@ For example:
 -------
 spec:    
   resourceFilter: 
-    resourceSelectionCriteria: "include"
+    resourceSelectionCriteria: "Include"
     resourceMatchers:
       - group: my-resource-group-1
         kind: my-resource-kind-1
@@ -339,7 +339,7 @@ spec:
 +
 . (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
 +
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `include or exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
+* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
 *** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
 *** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
@@ -354,7 +354,7 @@ For example:
 -------
 spec:    
   resourceFilter: 
-    resourceSelectionCriteria: "include"
+    resourceSelectionCriteria: "Include"
     resourceMatchers:
       - group: my-resource-group-1
         kind: my-resource-kind-1

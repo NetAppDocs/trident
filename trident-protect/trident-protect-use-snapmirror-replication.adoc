@@ -14,6 +14,10 @@ summary: Using Trident protect, you can use the asynchronous replication capabil
 [.lead]
 Using Trident protect, you can use the asynchronous replication capabilities of NetApp SnapMirror technology to replicate data and application changes from one storage backend to another, on the same cluster or between different clusters.
 
+include::../_include/namespace-anno-labels.adoc[]
+
+NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
+
 == Set up a replication relationship
 
 Setting up a replication relationship involves the following:
@@ -215,7 +219,7 @@ kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n my-app-n
 ** *spec.namespaceMapping*: (_Required_) The destination and source namespaces must match the application namespace defined in the respective application CR.
 ** *spec.sourceAppVaultRef*: (_Required_) This value must match the name of the AppVault for the source application.
 ** *spec.sourceApplicationName*: (_Required_) This value must match the name of the source application you defined in the source application CR.
-** *spec.storageClassName*: (_Required_) Choose the name of a valid storage class on the cluster. The storage class must be peered with the storage class that is in use on the source cluster where the source application is deployed.
+** *spec.storageClassName*: (_Required_) Choose the name of a valid storage class on the cluster. The storage class must be linked to an ONTAP storage VM that is peered with the source environment.
 ** *spec.recurrenceRule*: Define a start date in UTC time and a recurrence interval.
 +
 Example YAML:

@@ -56,24 +56,29 @@ For details on enabling authentication, refer to the authentication for your dri
 EKS cluster supports various operating systems, but AWS has optimized certain Amazon Machine Images (AMIs) for containers and EKS. The following AMIs have been tested with Trident 24.10.
 
 |===
-|AMI |NFSv3 |NFSv4 |iSCSI
-|AL2023_x86_64_STANDARD |Yes |Yes |Yes
-|AL2_x86_64 |Yes |Yes |No
-|BOTTLEROCKET_x86_64 |Yes |Yes |N/A
-|AL2023_ARM_64_STANDARD |Yes |Yes |Yes
-|AL2_ARM_64 |Yes |Yes |No
-|BOTTLEROCKET_ARM_64 |Yes |Yes |N/A
+| AMI | NAS | NAS-economy | SAN | SAN-economy
+| AL2023_x86_64_STANDARD | Yes | Yes | Yes | Yes
+| AL2_x86_64 | Yes | Yes | Yes** | Yes**
+| BOTTLEROCKET_x86_64 | Yes* | Yes | N/A | N/A
+| AL2023_ARM_64_STANDARD | Yes | Yes | Yes | Yes
+| AL2_ARM_64 | Yes | Yes | Yes** | Yes**
+| BOTTLEROCKET_ARM_64 | Yes* | Yes | N/A | N/A
 |===
+* *Must use “nolock” in mount options. 
+
+* ** Unable to delete the PV without restarting the node 
 
 NOTE: If your desired AMI is not listed here, it does not mean that it is not supported; it simply means it has not been tested. This list serves as a guide for AMIs known to work.
 
 *Tests performed with*:
+
 * EKS version: 1.30
 * Installation Method: Helm and as an AWS add-On
 
 *Tests performed*:
+
 * Create: Storage Class, pvc, pod
-* Delete: pod
+* Delete: pod, pvc (regular, qtree/lun – economy, NAS with AWS backup) 
 
 NOTE: `nfs-economy` and `san-economy` were not tested.
 

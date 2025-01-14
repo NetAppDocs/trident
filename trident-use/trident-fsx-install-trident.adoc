@@ -80,7 +80,8 @@ Ensure that you have the following before configuring the Astra Trident add-on f
 --
 The following example commands install the Astra Trident EKS add-on:
 
-`eksctl create addon --name aws-ebs-csi-driver --cluster <cluster_name> \ --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force`
+`eksctl create addon --name aws-ebs-csi-driver --cluster <cluster_name> \ 
+  --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force`
 --
 
 .Management console
@@ -120,8 +121,8 @@ add-on.json
    "clusterName": "<eks-cluster>",
    "addonName": "netapp_trident-operator",
    "addonVersion": "v24.6.1-eksbuild.1",
-   "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
-   "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'",
+   "serviceAccountRoleArn": "<arn:aws:iam::123456:role/astratrident-role>",
+   "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: <arn:aws:iam::123456:role/astratrident-role>'",
    "cloudProvider": "AWS"}"
 }
 ----

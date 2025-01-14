@@ -58,7 +58,8 @@ image::../media/aws-eks-05.png[]
 
 .Install the  NetApp Trident EKS add-on using CLI:
 The following example command installs the Astra Trident EKS add-on:
-`eksctl create addon --name aws-ebs-csi-driver --cluster <cluster_name> \ --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force`
+`eksctl create addon --name aws-ebs-csi-driver --cluster <cluster_name> 
+ --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force`
 
 
 .Uninstall the NetApp Trident EKS add-on using CLI:

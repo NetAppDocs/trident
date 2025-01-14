@@ -13,7 +13,7 @@ summary: Trident provides rapid, in-place volume restoration from a snapshot usi
 [.lead]
 Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes. 
 
-Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, and `solidfire-san` drivers. 
+Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, `google-cloud-netapp-volumes`, and `solidfire-san` drivers. 
 
 .Before you begin
 You must have a bound PVC and available volume snapshot. 
@@ -34,25 +34,26 @@ kubectl get vs
 
 . Create the TASR CR. This example creates a CR for PVC `pvc1` and volume snapshot `pvc1-snapshot`.
 +
+
+NOTE: The TASR CR must be in a namespace where the PVC & VS exist.
 ----
 cat tasr-pvc1-snapshot.yaml
 
 apiVersion: trident.netapp.io/v1
 kind: TridentActionSnapshotRestore
 metadata:
-  name: this-doesnt-matter
+  name: trident-snap
   namespace: trident
 spec:
   pvcName: pvc1
   volumeSnapshotName: pvc1-snapshot
 ----
-
 . Apply the CR to restore from the snapshot. This example restores from snapshot `pvc1`.
 +
 ----
 kubectl create -f tasr-pvc1-snapshot.yaml
 
-tridentactionsnapshotrestore.trident.netapp.io/this-doesnt-matter created
+tridentactionsnapshotrestore.trident.netapp.io/trident-snap created
 ----
 
 .Results 
@@ -67,7 +68,7 @@ items:
   metadata:
     creationTimestamp: "2023-04-14T00:20:33Z"
     generation: 3
-    name: this-doesnt-matter
+    name: trident-snap
     namespace: trident
     resourceVersion: "3453847"
     uid: <uid>

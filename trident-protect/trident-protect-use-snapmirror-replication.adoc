@@ -165,7 +165,7 @@ kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot>
+tridentctl protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> -n <application_namespace>
 ----
 --
 ====
@@ -378,7 +378,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot>
+tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot> -n <application_namespace>
 ----
 --
 ====

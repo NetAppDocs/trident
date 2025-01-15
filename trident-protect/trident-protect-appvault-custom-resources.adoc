@@ -76,70 +76,8 @@ kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<
 ====
 // end tabbed block
 
-
-
-=== AppVault creation examples using the Trident protect CLI
-You can use the following CLI command examples to create AppVault CRs for each provider.
-
-
-// begin tabbed block
-[role="tabbed-block"]
-====
-
-.Google Cloud
---
-[source,console]
-----
-tridentctl protect create vault GCP my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
-----
---
-
-.Amazon S3 (AWS)
---
-[source,console]
-----
-tridentctl protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
-----
---
-
-.Microsoft Azure
---
-[source,console]
-----
-tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
-----
---
-
-.Generic S3
---
-[source,console]
-----
-tridentctl protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
-----
---
-
-.ONTAP S3
---
-[source,console]
-----
-tridentctl protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
-----
---
-
-.StorageGrid S3
---
-[source,console]
-----
-tridentctl protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
-----
---
-
-====
-// end tabbed block
-
-
 === AppVault CR examples
-If you prefer to create AppVault CR objects manually, you can use the following CR examples to create AppVault objects for each cloud provider.
+You can use the following CR examples to create AppVault objects for each cloud provider.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -225,7 +163,7 @@ spec:
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
-  name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  name: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
   providerType: GenericS3
@@ -252,7 +190,7 @@ spec:
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
-  name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  name: ontap-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
   providerType: OntapS3
@@ -279,7 +217,7 @@ spec:
 apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
-  name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
+  name: storagegrid-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
   providerType: StorageGridS3
@@ -303,6 +241,64 @@ spec:
 ====
 // end tabbed block
 
+=== AppVault creation examples using the Trident protect CLI
+You can use the following CLI command examples to create AppVault CRs for each provider.
+
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+
+.Google Cloud
+--
+[source,console]
+----
+tridentctl protect create vault GCP my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
+----
+--
+
+.Amazon S3 (AWS)
+--
+[source,console]
+----
+tridentctl protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+----
+--
+
+.Microsoft Azure
+--
+[source,console]
+----
+tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+----
+--
+
+.Generic S3
+--
+[source,console]
+----
+tridentctl protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+----
+--
+
+.ONTAP S3
+--
+[source,console]
+----
+tridentctl protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+----
+--
+
+.StorageGrid S3
+--
+[source,console]
+----
+tridentctl protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+----
+--
+
+====
+// end tabbed block
 
 
 ////

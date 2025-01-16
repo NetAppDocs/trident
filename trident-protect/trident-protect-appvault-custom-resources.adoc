@@ -37,7 +37,7 @@ kubectl create secret generic gcp-creds --from-file=credentials=<mycreds-file.js
 --
 [source,console]
 ----
-kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<secret-name> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
+kubectl create secret generic -n trident-protect <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
 --
 
@@ -53,7 +53,7 @@ kubectl create secret generic <secret-name> --from-literal=accountKey=<secret-na
 --
 [source,console]
 ----
-kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<secret-name> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
+kubectl create secret generic -n trident-protect <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
 --
 
@@ -61,7 +61,7 @@ kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<
 --
 [source,console]
 ----
-kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<secret-name> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
+kubectl create secret generic -n trident-protect <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
 --
 
@@ -69,7 +69,7 @@ kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<
 --
 [source,console]
 ----
-kubectl create secret generic -n trident-protect s3 --from-literal=accessKeyID=<secret-name> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
+kubectl create secret generic -n trident-protect <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret>
 ----
 --
 

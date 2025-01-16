@@ -87,11 +87,11 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 apiVersion: protect.trident.netapp.io/v1
 kind: Application
 metadata:
-  name: maria
+  name: my-app-name
   namespace: my-app-namespace
 spec:
   includedNamespaces:
-    - namespace: maria
+    - namespace: my-app-namespace
       labelSelector: {}
 ----
 .. After you populate the `trident-protect-app-source.yaml` file with the correct values, apply the CR:
@@ -107,7 +107,7 @@ kubectl apply -f trident-protect-app-source.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create app maria --namespaces maria -n my-app-namespace
+tridentctl protect create app <my-app-name> --namespaces <namespaces-to-be-included> -n <my-app-namespace>
 ----
 --
 ====
@@ -143,7 +143,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: generic-s3-trident-protect-src-bucket-04b6b4ec-46a3-420a-b351-45795e1b5e34
-  applicationRef: maria
+  applicationRef: my-app-name
   backupRetention: "0"
   enabled: true
   granularity: custom
@@ -241,7 +241,7 @@ spec:
     DTSTART:20220101T000200Z
     RRULE:FREQ=MINUTELY;INTERVAL=5
   sourceAppVaultRef: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
-  sourceApplicationName: maria
+  sourceApplicationName: my-app-name
   sourceApplicationUID: 7498d32c-328e-4ddd-9029-122540866aeb
   storageClassName: sc-vsim-2
 ----
@@ -361,7 +361,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: generic-s3-trident-protect-src-bucket-04b6b4ec-46a3-420a-b351-45795e1b5e34
-  applicationRef: maria
+  applicationRef: my-app-name
 ----
 
 .. After you populate the `trident-protect-shutdownsnapshot.yaml` file with the correct values, apply the CR:

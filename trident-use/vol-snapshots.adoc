@@ -196,13 +196,21 @@ spec:
 
 == Recover volume data using snapshots
 
-Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes. 
-
-Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, `google-cloud-netapp-volumes`, and `solidfire-san` drivers.
-
 The snapshot directory is hidden by default to facilitate maximum compatibility of volumes provisioned using the `ontap-nas` and `ontap-nas-economy` drivers. Enable the `.snapshot` directory to recover data from snapshots directly.
 
+Use the volume snapshot restore ONTAP CLI to to restore a volume to a state recorded in a prior snapshot. 
+
+----
+cluster1::*> volume snapshot restore -vserver vs0 -volume vol3 -snapshot vol3_snap_archive
+----
+
 NOTE: When you restore a snapshot copy, the existing volume configuration is overwritten. Changes made to volume data after the snapshot copy was created are lost.
+
+== In-place volume restoration from a snapshot
+
+Trident provides rapid, in-place volume restoration from a snapshot using the `TridentActionSnapshotRestore` (TASR) CR. This CR functions as an imperative Kubernetes action and does not persist after the operation completes.
+
+Trident supports snapshot restore on the `ontap-san`, `ontap-san-economy`, `ontap-nas`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`, `google-cloud-netapp-volumes`, and `solidfire-san` drivers.
 
 .Before you begin
 You must have a bound PVC and available volume snapshot. 
@@ -278,12 +286,6 @@ metadata:
 * In most cases, Trident will not automatically retry the operation in case of failure. You will need to perform the operation again. 
 * Kubernetes users without admin access might have to be granted permission by the admin to create a TASR CR in their application namespace.
 ====
-
-Use the volume snapshot restore ONTAP CLI to to restore a volume to a state recorded in a prior snapshot. 
-
-----
-cluster1::*> volume snapshot restore -vserver vs0 -volume vol3 -snapshot vol3_snap_archive
-----
 
 == Delete a PV with associated snapshots
 

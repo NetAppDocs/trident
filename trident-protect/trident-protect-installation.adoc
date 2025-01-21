@@ -119,10 +119,11 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 +
 [source,yaml]
 ----
+---
 image:
   registry: <private-registry-url>
 imagePullSecrets:
-- name: regcred
+  - name: regcred
 controller:
   image:
     registry: <private-registry-url>
@@ -131,10 +132,10 @@ rbacProxy:
     registry: <private-registry-url>
 crCleanup:
   imagePullSecrets:
-  - name: regcred
+    - name: regcred
 webhooksCleanup:
   imagePullSecrets:
-  - name: regcred
+    - name: regcred
 ----
 
 . Install the Trident protect CRDs:

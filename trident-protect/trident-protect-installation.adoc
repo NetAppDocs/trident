@@ -167,27 +167,25 @@ You can use a configuration file to specify resource limits for Trident protect 
 .Steps
 
 . Create a file named `protectLimits.yaml`.
-. Populate the file with resource limit options for Trident protect containers according to the needs of your environment. For example:
+. Populate the file with resource limit options for Trident protect containers according to the needs of your environment. The following example configuration file shows the available settings and contains the default vaules for each resource limit:
 
 [source,yaml]
 ----
+---
 autoSupport:
   enabled: true
-
 customLabels:
-  group: "<example-group>"
-
+  group: <example-group>
 jobResources:
   defaults:
     limits:
-      cpu: "8000m"
-      memory: "10000Mi"
+      cpu: 8000m
+      memory: 10000Mi
       ephemeralStorage: ""
     requests:
-      cpu: "100m"
-      memory: "100Mi"
+      cpu: 100m
+      memory: 100Mi
       ephemeralStorage: ""
-
   resticVolumeBackup:
     limits:
       cpu: ""
@@ -197,7 +195,6 @@ jobResources:
       cpu: ""
       memory: ""
       ephemeralStorage: ""
-
   resticVolumeRestore:
     limits:
       cpu: ""
@@ -207,7 +204,6 @@ jobResources:
       cpu: ""
       memory: ""
       ephemeralStorage: ""
-
   kopiaVolumeBackup:
     limits:
       cpu: ""
@@ -217,7 +213,6 @@ jobResources:
       cpu: ""
       memory: ""
       ephemeralStorage: ""
-
   kopiaVolumeRestore:
     limits:
       cpu: ""
@@ -227,6 +222,7 @@ jobResources:
       cpu: ""
       memory: ""
       ephemeralStorage: ""
+
 ----
 
 . Apply the values from the `protectLimits.yaml` file:

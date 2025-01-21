@@ -223,11 +223,11 @@ jobResources:
       ephemeralStorage: ""
 ----
 
-. Apply the values from the `protectLimits.yaml` file:
+. Apply the values from the `resourceLimits.yaml` file:
 +
 [source,console]
 ----
-helm update trident-protect -n trident-protect -f <protectLimits.yaml>
+helm update trident-protect -n trident-protect -f <resourceLimits.yaml>
 ----
 
 //autoSupport:

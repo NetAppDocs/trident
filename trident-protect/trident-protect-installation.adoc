@@ -175,10 +175,6 @@ The following example configuration file shows the available settings and contai
 [source,yaml]
 ----
 ---
-autoSupport:
-  enabled: true
-customLabels:
-  group: <example-group>
 jobResources:
   defaults:
     limits:
@@ -225,7 +221,6 @@ jobResources:
       cpu: ""
       memory: ""
       ephemeralStorage: ""
-
 ----
 
 . Apply the values from the `protectLimits.yaml` file:
@@ -234,6 +229,11 @@ jobResources:
 ----
 helm update trident-protect -n trident-protect -f <protectLimits.yaml>
 ----
+
+//autoSupport:
+//  enabled: true
+//customLabels:
+//  group: <example-group>
 
 ////
 . Log in to the registry:

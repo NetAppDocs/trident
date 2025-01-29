@@ -253,7 +253,7 @@ You can use the following CLI command examples to create AppVault CRs for each p
 --
 [source,console]
 ----
-tridentctl protect create vault GCP my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
+tridentctl-protect create vault GCP my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
 ----
 --
 
@@ -261,7 +261,7 @@ tridentctl protect create vault GCP my-new-vault --bucket mybucket --project my-
 --
 [source,console]
 ----
-tridentctl protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
 ----
 --
 
@@ -269,7 +269,7 @@ tridentctl protect create vault AWS <vault-name> --bucket <bucket-name> --secret
 --
 [source,console]
 ----
-tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
 ----
 --
 
@@ -277,7 +277,7 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 --
 [source,console]
 ----
-tridentctl protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
 ----
 --
 
@@ -285,7 +285,7 @@ tridentctl protect create vault GenericS3 <vault-name> --bucket <bucket-name> --
 --
 [source,console]
 ----
-tridentctl protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
 ----
 --
 
@@ -293,7 +293,7 @@ tridentctl protect create vault OntapS3 <vault-name> --bucket <bucket-name> --se
 --
 [source,console]
 ----
-tridentctl protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
 ----
 --
 
@@ -341,7 +341,7 @@ You can use the Trident protect CLI plugin to view information about AppVault ob
 +
 [source,console]
 ----
-tridentctl protect get appvaultcontent gcp-vault --show-resources all
+tridentctl-protect get appvaultcontent gcp-vault --show-resources all
 ----
 +
 *Example output*:
@@ -386,13 +386,13 @@ kubectl delete appvault <appvault_name> -n trident-protect
 ----
 
 --
-.Remove an AppVault using the Trident CLI
+.Remove an AppVault using the Trident protect CLI
 --
 . Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
 +
 [source,console]
 ----
-tridentctl protect delete appvault <appvault_name> -n trident-protect 
+tridentctl-protect delete appvault <appvault_name> -n trident-protect 
 ----
 --
 ====
@@ -438,11 +438,11 @@ spec:
         name: gcp-trident-protect-src-bucket-secret
 ----
 --
-.Example AppVault CR creation using the Trident protect CLI
+.Example AppVault CR creation with CLI
 --
 [source,console]
 ----
-tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
+tridentctl-protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
 ----
 --
 ====
@@ -492,7 +492,7 @@ spec:
 --
 [source,console]
 ----
-tridentctl protect create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
 ----
 --
 ====
@@ -538,7 +538,7 @@ spec:
 --
 [source,console]
 ----
-tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
 ----
 --
 ====

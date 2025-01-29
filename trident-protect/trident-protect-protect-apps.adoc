@@ -36,6 +36,7 @@ You can create an on-demand snapshot at any time.
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
 metadata:
@@ -91,6 +92,7 @@ You can back up an app at any time.
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Backup
 metadata:
@@ -154,6 +156,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:

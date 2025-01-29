@@ -47,7 +47,8 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 +
 [source,yaml]
 -------
-apiVersion: protect.trident.netapp.io/v1o	
+---
+apiVersion: protect.trident.netapp.io/v1
 kind: BackupRestore
 metadata:
   name: my-cr-name
@@ -140,6 +141,7 @@ For example:
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: BackupInplaceRestore
 metadata:
@@ -230,6 +232,7 @@ kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.a
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
@@ -327,6 +330,7 @@ kubectl get snapshots <SNAPSHOT_NAME> -n my-app-namespace -o jsonpath='{.status.
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotInplaceRestore
 metadata:

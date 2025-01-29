@@ -109,7 +109,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create backuprestore <my_restore_name> --backup <backup_namespace>/<backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
+tridentctl-protect create backuprestore <my_restore_name> --backup <backup_namespace>/<backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
 -----
 --
 ====
@@ -197,7 +197,7 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create backupinplacerestore <my_restore_name> --backup <namespace/backup_to_restore> -n <application_namespace>
+tridentctl-protect create backupinplacerestore <my_restore_name> --backup <namespace/backup_to_restore> -n <application_namespace>
 -----
 --
 ====
@@ -297,7 +297,7 @@ For example:
 +
 [source,console]
 -----
-tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
+tridentctl-protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
 -----
 --
 ====
@@ -384,7 +384,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create snapshotinplacerestore <my_restore_name> --snapshot <snapshot_to_restore> -n <application_namespace>
+tridentctl-protect create snapshotinplacerestore <my_restore_name> --snapshot <snapshot_to_restore> -n <application_namespace>
 -----
 --
 ====

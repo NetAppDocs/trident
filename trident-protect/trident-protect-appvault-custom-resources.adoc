@@ -57,7 +57,7 @@ spec:
 --
 [source,console]
 ----
-tridentctl protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
+tridentctl-protect create vault gcp my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
 ----
 --
 ====
@@ -107,7 +107,7 @@ spec:
 --
 [source,console]
 ----
-tridentctl protect create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault GenericS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
 ----
 --
 ====
@@ -153,7 +153,7 @@ spec:
 --
 [source,console]
 ----
-tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
 ----
 --
 ====
@@ -196,7 +196,7 @@ You can use the Trident protect CLI plugin to view information about AppVault ob
 +
 [source,console]
 ----
-tridentctl protect get appvaultcontent gcp-vault --show-resources all
+tridentctl-protect get appvaultcontent gcp-vault --show-resources all
 ----
 +
 *Example output*:
@@ -247,7 +247,7 @@ kubectl delete appvault <appvault_name> -n trident-protect
 +
 [source,console]
 ----
-tridentctl protect delete appvault <appvault_name> -n trident-protect 
+tridentctl-protect delete appvault <appvault_name> -n trident-protect 
 ----
 --
 ====

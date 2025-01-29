@@ -63,7 +63,7 @@ kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-protect
 +
 [source,console]
 ----
-tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
 ----
 --
 ====
@@ -107,7 +107,7 @@ kubectl apply -f trident-protect-app-source.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create app <my-app-name> --namespaces <namespaces-to-be-included> -n <my-app-namespace>
+tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-included> -n <my-app-namespace>
 ----
 --
 ====
@@ -165,7 +165,7 @@ kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> -n <application_namespace>
+tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> -n <application_namespace>
 ----
 --
 ====
@@ -259,7 +259,7 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> --source-app-vault <my_source_app_vault> -n <application_namespace>
+tridentctl-protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> --source-app-vault <my_source_app_vault> -n <application_namespace>
 ----
 --
 ====
@@ -378,7 +378,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot> -n <application_namespace>
+tridentctl-protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot> -n <application_namespace>
 ----
 --
 ====

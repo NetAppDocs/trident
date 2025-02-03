@@ -213,7 +213,7 @@ You can restore a backup to a different cluster if the original cluster is destr
 
 Ensure the following prerequisites are met:
 
-* The destination cluster has Trident Protect installed.
+* The destination cluster has Trident protect installed.
 * The destination cluster has access to the backups stored in the object storage bucket.
 * The respective AppVault CR is defined in the destination cluster.
 
@@ -235,20 +235,19 @@ tridentctl-protect get appvaultcontent <appvault_name> --show-resources backup -
 +
 Running this command displays the available backups in the AppVault, including their originating clusters, corresponding application names, timestamps, and archive paths.
 +
-*Example output*
+*Example output:*
 +
 ----
-
-+---------------+-----------+--------+-------------------------+---------------------------+---------------------------------------------------------------------------------------------------------------------+
-|    CLUSTER    |    APP    |  TYPE  |          NAME           |         TIMESTAMP         |                                                        PATH                                                         |
-+---------------+-----------+--------+-------------------------+---------------------------+---------------------------------------------------------------------------------------------------------------------+
-| production 1 | wordpress | backup | wordpress-bkup-1        | 2024-10-30 08:37:40 (UTC) | backup path 1      |
-| production 1 | wordpress | backup | wordpress-bkup-2 | 2024-10-30 08:43:03 (UTC) | backup path 2|
-+---------------+-----------+--------+-------------------------+---------------------------+---------------------------------------------------------------------------------------------------------------------+
++---------------+-----------+--------+-------------------------+--------------------------+--------------------+
+|    CLUSTER    |    APP    |  TYPE  |          NAME           |         TIMESTAMP        |        PATH        |
++---------------+-----------+--------+-------------------------+--------------------------+--------------------+
+| production 1  | wordpress | backup | wordpress-bkup-1        | 2024-10-30 08:37:40 (UTC)| backup path 1      |
+| production 1  | wordpress | backup | wordpress-bkup-2        | 2024-10-30 08:37:40 (UTC)| backup path 2      |
++---------------+-----------+--------+-------------------------+--------------------------+--------------------+
 
 ----
 . Restore the application to the destination cluster using AppVault name and archive path:
-+
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -258,7 +257,7 @@ Running this command displays the available backups in the AppVault, including t
 . In the file you created, configure the following attributes:
 +
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
-* *spec.appVaultRef*: (_Required_) TThe name of the AppVault where the backup contents are stored.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
 * *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
 +
 [source,console]
@@ -267,6 +266,8 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 -----
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
++
+For example:
 +
 [source,yaml]
 -------

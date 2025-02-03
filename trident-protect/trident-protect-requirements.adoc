@@ -14,7 +14,7 @@ summary: Get started by verifying the readiness of your operational environment,
 [.lead]
 Get started by verifying the readiness of your operational environment, application clusters, applications, and licenses. Ensure that your environment meets these requirements to deploy and operate Trident protect.
 
-== Trident protect Kubernetes compatibility
+== Trident protect Kubernetes cluster compatibility
 
 Trident protect is compatible with a wide range of fully managed and self-managed Kubernetes offerings, including:
 
@@ -25,6 +25,8 @@ Trident protect is compatible with a wide range of fully managed and self-manage
 * SUSE Rancher
 * VMware Tanzu Portfolio
 * Upstream Kubernetes
+
+NOTE: Ensure that the cluster on which you install Trident protect is configured with a running snapshot controller and the related CRDs. To install a snapshot controller, refer to https://docs.netapp.com/us-en/trident/trident-use/vol-snapshots.html#deploy-a-volume-snapshot-controller[these instructions].
 
 == Trident protect storage backend compatibility
 Trident protect supports the following storage backends:
@@ -65,6 +67,9 @@ tridentctl update volume <volume-UUID> --snapshot-dir=true --pool-level=true -n 
 
 NOTE: You can enable snapshot directories by default for new volumes by setting the Trident backend configuration option `snapshotDir` to `true`. Existing volumes are not affected.
 
+== Protecting data with KubeVirt VMs
+include::../_include/kubevirt-freeze.adoc[]
+
 == Requirements for SnapMirror replication
 NetApp SnapMirror is available for use with Trident protect for the following ONTAP solutions:
 
@@ -98,6 +103,4 @@ Ensure that the SVM names used in the replication relationship between two ONTAP
 === Trident / ONTAP configuration for SnapMirror replication
 Trident protect requires that you configure at least one storage backend that supports replication for both the source and destination clusters. If the source and destination clusters are the same, the destination application should use a different storage backend than the source application for the best resiliency.
 
-=== Considerations when using KubeVirt
-If you plan to use https://kubevirt.io/[KubeVirt^] virtual machines with SnapMirror replication, you need to set up virtualization so that you can freeze and unfreeze your SVMs. After you set up virtualization, SVMs you deploy will include the necessary tools to freeze and unfreeze. To learn more about setting up virtualization, refer to https://docs.openshift.com/container-platform/4.17/virt/install/installing-virt.html[Installing OpenShift Virtualization^].
 

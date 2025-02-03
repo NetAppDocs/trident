@@ -12,7 +12,9 @@ summary: Protect all apps by taking snapshots and backups using an automated pro
 :imagesdir: ../media/
 
 [.lead]
-Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
+You can protect all apps managed by Trident protect by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
+
+NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
 
 == Create an on-demand snapshot
 You can create an on-demand snapshot at any time.
@@ -34,6 +36,7 @@ You can create an on-demand snapshot at any time.
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
 metadata:
@@ -59,7 +62,7 @@ kubectl apply -f trident-protect-snapshot-cr.yaml
 +
 [source,console]
 ----
-tridentctl protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot>
+tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> -n <application_namespace>
 ----
 --
 ====
@@ -89,6 +92,7 @@ You can back up an app at any time.
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Backup
 metadata:
@@ -114,7 +118,7 @@ kubectl apply -f trident-protect-backup-cr.yaml
 +
 [source,console]
 ----
-tridentctl protect create backup <my_backup_name> --appvault <my-vault-name> --app <name_of_app_to_back_up>
+tridentctl-protect create backup <my_backup_name> --appvault <my-vault-name> --app <name_of_app_to_back_up> -n <application_namespace>
 ----
 --
 ====
@@ -152,6 +156,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:
@@ -183,11 +188,11 @@ kubectl apply -f trident-protect-schedule-cr.yaml
 .Steps
 . Create the protection schedule, replacing values in brackets with information from your environment. For example:
 +
-NOTE: You can use `tridentctl protect create schedule --help` to view detailed help information for this command.
+NOTE: You can use `tridentctl-protect create schedule --help` to view detailed help information for this command.
 +
 [source,console]
 ----
-tridentctl protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <kopia_or_restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain>
+tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <kopia_or_restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace>
 ----
 --
 ====

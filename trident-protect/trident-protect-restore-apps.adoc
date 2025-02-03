@@ -238,55 +238,55 @@ Running this command displays the available backups in the AppVault, including t
 *Example output:*
 +
 ----
-+---------------+-----------+--------+-------------------------+--------------------------+--------------------+
-|    CLUSTER    |    APP    |  TYPE  |          NAME           |         TIMESTAMP        |        PATH        |
-+---------------+-----------+--------+-------------------------+--------------------------+--------------------+
-| production 1  | wordpress | backup | wordpress-bkup-1        | 2024-10-30 08:37:40 (UTC)| backup path 1      |
-| production 1  | wordpress | backup | wordpress-bkup-2        | 2024-10-30 08:37:40 (UTC)| backup path 2      |
-+---------------+-----------+--------+-------------------------+--------------------------+--------------------+
++-------------+-----------+--------+-----------------+--------------------------+-------------+
+|   CLUSTER   |    APP    |  TYPE  |      NAME       |        TIMESTAMP         |    PATH     |
++-------------+-----------+--------+-----------------+--------------------------+-------------+
+| production1 | wordpress | backup | wordpress-bkup-1| 2024-10-30 08:37:40 (UTC)| backuppath1 |
+| production1 | wordpress | backup | wordpress-bkup-2| 2024-10-30 08:37:40 (UTC)| backuppath2 |
++-------------+-----------+--------+-----------------+--------------------------+-------------+
 
 ----
 . Restore the application to the destination cluster using AppVault name and archive path:
 
-// begin tabbed block
-[role="tabbed-block"]
-====
-.Use a CR
---
-. Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. 
-. In the file you created, configure the following attributes:
-+
-* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
-* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
-* *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
-+
-[source,console]
------
-kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
------
-+
-* *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
-+
-For example:
-+
-[source,yaml]
--------
----
-apiVersion: protect.trident.netapp.io/v1
-kind: BackupRestore
-metadata:
-  name: my-cr-name
-spec:
-  appVaultRef: appvault-name
-  appArchivePath: my-backup-path
-  namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
--------
-. After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
-+
-[source,console]
------
-kubectl apply -f trident-protect-backup-restore-cr.yaml
------
+  // begin tabbed block
+  [role="tabbed-block"]
+  ====
+  .Use a CR
+  --
+  . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. 
+  . In the file you created, configure the following attributes:
+  +
+  * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+  * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
+  * *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
+  +
+  [source,console]
+  -----
+  kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
+  -----
+  +
+  * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
+  +
+  For example:
+  +
+  [source,yaml]
+  -------
+  ---
+  apiVersion: protect.trident.netapp.io/v1
+  kind: BackupRestore
+  metadata:
+    name: my-cr-name
+  spec:
+    appVaultRef: appvault-name
+    appArchivePath: my-backup-path
+    namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
+  -------
+  . After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
+  +
+  [source,console]
+  -----
+  kubectl apply -f trident-protect-backup-restore-cr.yaml
+  -----
 
 --
 .Use the CLI

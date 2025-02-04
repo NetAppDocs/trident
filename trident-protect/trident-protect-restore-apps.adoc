@@ -207,7 +207,7 @@ tridentctl-protect create backupinplacerestore <my_restore_name> --backup <names
 
 == Restore from a backup to a different cluster
 
-You can restore a backup to a different cluster if the original cluster is destroyed.
+You can restore a backup to a different cluster if there is an issue with the original cluster.
 
 *Before you begin*
 
@@ -218,7 +218,7 @@ Ensure the following prerequisites are met:
 * The respective AppVault CR is defined in the destination cluster.
 
 .Steps
-. Check the availability of AppVault CR on the destination cluster using Trident protect CLI plugin:
+. Check the availability of the AppVault CR on the destination cluster using Trident protect CLI plugin:
 +
 [source,console]
 -----
@@ -226,7 +226,7 @@ tridentctl-protect get appvault --context <destination_cluster_name>
 -----
 +
 NOTE: Ensure that the namespace intended for the application restore does not exist on the destination cluster.
-. View the backup contents of available AppVault from the destination cluster:
+. View the backup contents of the available AppVault from the destination cluster:
 +
 [source,console]
 -----
@@ -246,13 +246,14 @@ Running this command displays the available backups in the AppVault, including t
 +-------------+-----------+--------+-----------------+--------------------------+-------------+
 
 ----
-. Restore the application to the destination cluster using AppVault name and archive path:
+. Restore the application to the destination cluster using the AppVault name and archive path:
 
 // begin tabbed block
 [role="tabbed-block"]
 ====
 .Use a CR
 --
+[start=4]
 . Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. 
 . In the file you created, configure the following attributes:
 +
@@ -291,6 +292,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 --
 .Use the CLI
 --
+[start=4]
 . Use the following command to restore the application, replacing values in brackets with information from your environment. The namespace-mapping argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format source1:dest1,source2:dest2. For example:
 +
 [source,console]

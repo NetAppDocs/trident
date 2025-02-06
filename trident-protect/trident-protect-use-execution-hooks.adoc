@@ -163,5 +163,200 @@ tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --
 // end tabbed block
 
 
+== Manually run an execution hook
+You can manually run an execution hook for an app if you want to test it, or if you want to re-run the hook manually after a failure. You need to have Owner, Admin, or Member permissions to create execution hooks. To manually run an execution hook, you need to create a resource backup, then you need to request that an execution hook be run against the backup.
 
 
+.Step 1: Create a pods-only resource backup
+[%collapsible%closed]
+=====
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Use a CR
+--
+.Steps
+. Create the custom resource (CR) file and name it `trident-protect-hook.yaml`.
++
+. Configure the following attributes to match your Trident protect environment and cluster configuration:
++
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.applicationRef*: (_Required_) The Kubernetes name of the application for which to run the execution hook.
+* *spec.stage*: (_Required_) A string indicating which stage during the action that the execution hook should run. Possible values:
+** Pre
+** Post
+* *spec.action*: (_Required_) A string indicating which action the execution hook will take, assuming any execution hook filters specified are matched. Possible values:
+** Snapshot
+** Backup
+** Restore
+** Failover
+* *spec.enabled*: (_Optional_) Indicates whether this execution hook is enabled or disabled. If not specified, the default value is true.
+* *spec.hookSource*: (_Required_) A string containing the base64-encoded hook script.
+* *spec.timeout*: (_Optional_) A number defining how long in minutes that the execution hook is allowed to run. The minimum value is 1 minute, and the default value is 25 minutes if not specified.
+* *spec.arguments*: (_Optional_) A YAML list of arguments that you can specify for the execution hook.
+* *spec.matchingCriteria*: (_Optional_) An optional list of criteria key value pairs, each pair making up an execution hook filter. You can add up to 10 filters per execution hook.
+* *spec.matchingCriteria.type*: (_Optional_) A string identifying the execution hook filter type. Possible values:
+** ContainerImage
+** ContainerName
+** PodName
+** PodLabel
+** NamespaceName
+* *spec.matchingCriteria.value*: (_Optional_) A string or regular expression identifying the execution hook filter value.
++
+Example YAML:
++
+[source,yaml]
+-----
+apiVersion: protect.trident.netapp.io/v1
+kind: ExecHook
+metadata: 
+  name: example-hook-cr
+  namespace: my-app-namespace
+  annotations: 
+    astra.netapp.io/astra-control-hook-source-id: /account/test/hookSource/id
+spec: 
+  applicationRef: my-app-name
+  stage: Pre
+  action: Snapshot
+  enabled: true
+  hookSource: IyEvYmluL2Jhc2gKZWNobyAiZXhhbXBsZSBzY3JpcHQiCg==
+  timeout: 10
+  arguments: 
+    - FirstExampleArg
+    - SecondExampleArg
+  matchingCriteria: 
+    - type: containerName
+      value: mysql
+    - type: containerImage
+      value: bitnami/mysql
+    - type: podName
+      value: mysql
+    - type: namespaceName
+      value: mysql-a
+    - type: podLabel
+      value: app.kubernetes.io/component=primary
+    - type: podLabel
+      value: helm.sh/chart=mysql-10.1.0
+    - type: podLabel
+      value: deployment-type=production
+-----
++ 
+. After you populate the CR file with the correct values, apply the CR:
++
+[source,console]
+----- 
+kubectl apply -f trident-protect-hook.yaml
+-----
+
+--
+.Use the CLI
+--
+.Steps
+. Create the execution hook, replacing values in brackets with information from your environment. For example:
++
+[source,console]
+----- 
+tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file> -n <application_namespace>
+-----
+--
+====
+=====
+// end tabbed block
+
+.Step 2: Run the execution hook
+[%collapsible%closed]
+=====
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Use a CR
+--
+.Steps
+. Create the custom resource (CR) file and name it `trident-protect-hook.yaml`.
++
+. Configure the following attributes to match your Trident protect environment and cluster configuration:
++
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.applicationRef*: (_Required_) The Kubernetes name of the application for which to run the execution hook.
+* *spec.stage*: (_Required_) A string indicating which stage during the action that the execution hook should run. Possible values:
+** Pre
+** Post
+* *spec.action*: (_Required_) A string indicating which action the execution hook will take, assuming any execution hook filters specified are matched. Possible values:
+** Snapshot
+** Backup
+** Restore
+** Failover
+* *spec.enabled*: (_Optional_) Indicates whether this execution hook is enabled or disabled. If not specified, the default value is true.
+* *spec.hookSource*: (_Required_) A string containing the base64-encoded hook script.
+* *spec.timeout*: (_Optional_) A number defining how long in minutes that the execution hook is allowed to run. The minimum value is 1 minute, and the default value is 25 minutes if not specified.
+* *spec.arguments*: (_Optional_) A YAML list of arguments that you can specify for the execution hook.
+* *spec.matchingCriteria*: (_Optional_) An optional list of criteria key value pairs, each pair making up an execution hook filter. You can add up to 10 filters per execution hook.
+* *spec.matchingCriteria.type*: (_Optional_) A string identifying the execution hook filter type. Possible values:
+** ContainerImage
+** ContainerName
+** PodName
+** PodLabel
+** NamespaceName
+* *spec.matchingCriteria.value*: (_Optional_) A string or regular expression identifying the execution hook filter value.
++
+Example YAML:
++
+[source,yaml]
+-----
+apiVersion: protect.trident.netapp.io/v1
+kind: ExecHook
+metadata: 
+  name: example-hook-cr
+  namespace: my-app-namespace
+  annotations: 
+    astra.netapp.io/astra-control-hook-source-id: /account/test/hookSource/id
+spec: 
+  applicationRef: my-app-name
+  stage: Pre
+  action: Snapshot
+  enabled: true
+  hookSource: IyEvYmluL2Jhc2gKZWNobyAiZXhhbXBsZSBzY3JpcHQiCg==
+  timeout: 10
+  arguments: 
+    - FirstExampleArg
+    - SecondExampleArg
+  matchingCriteria: 
+    - type: containerName
+      value: mysql
+    - type: containerImage
+      value: bitnami/mysql
+    - type: podName
+      value: mysql
+    - type: namespaceName
+      value: mysql-a
+    - type: podLabel
+      value: app.kubernetes.io/component=primary
+    - type: podLabel
+      value: helm.sh/chart=mysql-10.1.0
+    - type: podLabel
+      value: deployment-type=production
+-----
++ 
+. After you populate the CR file with the correct values, apply the CR:
++
+[source,console]
+----- 
+kubectl apply -f trident-protect-hook.yaml
+-----
+
+--
+.Use the CLI
+--
+.Steps
+. Create the execution hook, replacing values in brackets with information from your environment. For example:
++
+[source,console]
+----- 
+tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file> -n <application_namespace>
+-----
+--
+====
+=====
+// end tabbed block

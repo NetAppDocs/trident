@@ -54,6 +54,10 @@ The values are `flex`, `standard`, `premium`, or `extreme`.|
 
 Do not use this unless you are troubleshooting and require a detailed log dump. |null
 
+| `nasType` | Configure NFS or SMB volumes creation. 
+
+Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
+
 | `supportedTopologies` | Represents a list of regions and zones that are supported by this backend. 
 
 For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].  
@@ -386,9 +390,7 @@ tridentctl logs
 
 After you identify and correct the problem with the configuration file, you can delete the backend and run the create command again.
 
-== More examples 
-
-=== Storage class definition examples
+== Storage class definitions
 
 The following is a basic `StorageClass` definition that refers to the backend above. 
 
@@ -438,6 +440,65 @@ parameters:
 ----
 
 For more details on storage classes, refer to link:../trident-use/create-stor-class.html[Create a storage class^].
+
+=== Example definitions for SMB volumes
+Using `nasType`, `node-stage-secret-name`, and  `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. 
+
+.Basic configuration on default namespace 
+[%collapsible%closed]
+====
+
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: anf-sc-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "google-cloud-netapp-volumes"
+  trident.netapp.io/nasType: "smb" 
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"  
+  csi.storage.k8s.io/node-stage-secret-namespace: "default"
+
+----
+====
+
+.Using different secrets per namespace
+[%collapsible%closed]
+====
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: anf-sc-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "google-cloud-netapp-volumes"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+----
+====
+
+.Using different secrets per volume
+[%collapsible%closed]
+====
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: anf-sc-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "google-cloud-netapp-volumes"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: ${pvc.name}
+  csi.storage.k8s.io/node-stage-secret-namespace: ${pvc.namespace}
+----
+====
+
+[NOTE]
+`nasType: smb` filters for pools which support SMB volumes. `nasType: nfs` or `nasType: null` filters for NFS pools.
 
 === PVC definition example
 

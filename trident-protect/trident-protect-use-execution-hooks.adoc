@@ -164,7 +164,9 @@ tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --
 
 
 == Manually run an execution hook
-You can manually run an execution hook for testing purposes or if you need to re-run the hook manually after a failure. Manually running an execution hook consists of two basic steps:
+You can manually run an execution hook for testing purposes or if you need to re-run the hook manually after a failure.
+
+Manually running an execution hook consists of two basic steps:
 
 * Create a resource backup, which determines where the hook will run 
 * Run the execution hook against the backup
@@ -259,7 +261,7 @@ kubectl apply -f trident-protect-hook.yaml
 +
 [source,console]
 ----- 
-tridentctl protect create resourcebackup <my_exec_hook_name> --app <my_app_name> --appvault <my_appvault_name> -n <my_app_namespace> --app-archive-path <app_archive_path>
+tridentctl protect create resourcebackup <my_backup_name> --app <my_app_name> --appvault <my_appvault_name> -n <my_app_namespace> --app-archive-path <app_archive_path>
 -----
 
 . View the status of the backup. You can use this example command repeatedly until the operation is complete:
@@ -269,7 +271,12 @@ tridentctl protect create resourcebackup <my_exec_hook_name> --app <my_app_name>
 tridentctl protect get resourcebackup -n <my_app_namespace>
 -----
 
-. Verify that the backup was successful.
+. Verify that the backup was successful:
++
+[source,console]
+-----
+kubectl describe resourcebackup <my_backup_name>
+-----
 --
 ====
 =====
@@ -365,21 +372,21 @@ kubectl apply -f trident-protect-hook.yaml
 +
 [source,console]
 ----- 
-tridentctl protect create exechooksrun <my_exec_hook_name> -n <my_app_namespace> --action snapshot --stage <pre_or_post> --app <my_app_name> --appvault <my_appvault_name> --path <app_archive_path>
+tridentctl protect create exechooksrun <my_exec_hook_run_name> -n <my_app_namespace> --action snapshot --stage <pre_or_post> --app <my_app_name> --appvault <my_appvault_name> --path <my_backup_name>
 -----
 
 . Check the status of the execution hook run. You can run this command repeatedly until the operation is complete:
 +
 [source,console]
 ----- 
-tridentctl protect get exechooksrun -n <my_app_namespace> <my_exec_hook_name>
+tridentctl protect get exechooksrun -n <my_app_namespace> <my_exec_hook_run_name>
 -----
 
 . Describe the exechooksrun object to see the final details and status:
 +
 [source,console]
 -----
-kubectl -n <my_app_namespace> describe exechooksrun <my_exec_hook_name> 
+kubectl -n <my_app_namespace> describe exechooksrun <my_exec_hook_run_name> 
 -----
 --
 ====

@@ -164,10 +164,12 @@ tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --
 
 
 == Manually run an execution hook
-You can manually run an execution hook for an app if you want to test it, or if you want to re-run the hook manually after a failure. You need to have Owner, Admin, or Member permissions to create execution hooks. To manually run an execution hook, you need to create a resource backup, then you need to request that an execution hook be run against the backup.
+You can manually run an execution hook for testing purposes or if you need to re-run the hook manually after a failure. Manually running an execution hook consists of two basic steps:
 
+* Create a resource backup, which determines where the hook will run 
+* Run the execution hook against the backup
 
-.Step 1: Create a pods-only resource backup
+.Step 1: Create a resource backup
 [%collapsible%closed]
 =====
 
@@ -253,12 +255,21 @@ kubectl apply -f trident-protect-hook.yaml
 .Use the CLI
 --
 .Steps
-. Create the execution hook, replacing values in brackets with information from your environment. For example:
+. Create the backup, replacing values in brackets with information from your environment. For example:
 +
 [source,console]
 ----- 
-tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file> -n <application_namespace>
+tridentctl protect create resourcebackup <my_exec_hook_name> --app <my_app_name> --appvault <my_appvault_name> -n <my_app_namespace> --app-archive-path <app_archive_path>
 -----
+
+. View the status of the backup. You can use this example command repeatedly until the operation is complete:
++
+[source,console]
+----- 
+tridentctl protect get resourcebackup -n <my_app_namespace>
+-----
+
+. Verify that the backup was successful.
 --
 ====
 =====
@@ -350,11 +361,25 @@ kubectl apply -f trident-protect-hook.yaml
 .Use the CLI
 --
 .Steps
-. Create the execution hook, replacing values in brackets with information from your environment. For example:
+. Create the manual execution hook run request:
 +
 [source,console]
 ----- 
-tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file> -n <application_namespace>
+tridentctl protect create exechooksrun <my_exec_hook_name> -n <my_app_namespace> --action snapshot --stage <pre_or_post> --app <my_app_name> --appvault <my_appvault_name> --path <app_archive_path>
+-----
+
+. Check the status of the execution hook run. You can run this command repeatedly until the operation is complete:
++
+[source,console]
+----- 
+tridentctl protect get exechooksrun -n <my_app_namespace> <my_exec_hook_name>
+-----
+
+. Describe the exechooksrun object to see the final details and status:
++
+[source,console]
+-----
+kubectl -n <my_app_namespace> describe exechooksrun <my_exec_hook_name> 
 -----
 --
 ====

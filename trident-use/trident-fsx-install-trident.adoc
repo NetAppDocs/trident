@@ -27,8 +27,8 @@ If you want to make use of the snapshot functionality, install the CSI snapshot 
 . Download the Astra Trident installer package
 +
 The Astra Trident installer package contains everything you need to deploy the Trident operator and install Astra Trident. Download and extract the latest version of the Astra Trident installer from the Assets section on GitHub.
-`wget https://github.com/NetApp/trident/releases/download/v24.10.0/trident-installer-24.10.0.tar.gz`
-`tar -xf trident-installer-24.10.0.tar.gz`
+`wget https://github.com/NetApp/trident/releases/download/v25.02.0/trident-installer-25.02.0.tar.gz`
+`tar -xf trident-installer-25.02.0.tar.gz`
 `cd trident-installer`
 +
 . Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
@@ -39,7 +39,7 @@ The Astra Trident installer package contains everything you need to deploy the T
 The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 +
 ----
-helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
+helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
 ----
 +
 
@@ -52,7 +52,7 @@ helm list -n trident
 ----
 NAME                NAMESPACE   REVISION    UPDATED                                 STATUS       CHART                          APP VERSION
 
-trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2410.0    24.10.0
+trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2502.0    25.02.0
 ----
 
 == Install Astra Trident via the EKS add-on 

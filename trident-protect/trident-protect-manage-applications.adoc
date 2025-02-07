@@ -33,12 +33,14 @@ You need to define each application that you want to manage with Trident protect
 * *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in. The application namespace must be part of this list.
 * *metadata.annotations.protect.trident.netapp.io/skip-vm-freeze*: (_Optional_) Specify whether this application does or does not write to the filesystem during a filesystem freeze. If set to `true`, the application ignores the global setting and can write to the filesystem during a freeze. If set to `false`, the application ignores the global setting and will not write to the filesystem during a freeze. This is useful for applications running in virtual machines, such as in KubeVirt environments, where filesystem freezes occur before operations like backups or snapshots. If not specified, the application follows the  link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[global Trident protect freeze setting].
 +
-NOTE: If you need to apply this annotation after an application has already been created, you can use the following command:
-+
+[NOTE]
+=====
+If you need to apply this annotation after an application has already been created, you can use the following command:
 [source,console]
 ----
 kubectl annotate application -n <application CR namespace> <application CR name> protect.trident.netapp.io/skip-vm-freeze="true"
 ----
+=====
 +
 Example YAML:
 +

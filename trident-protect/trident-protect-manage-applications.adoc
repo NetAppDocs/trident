@@ -76,12 +76,14 @@ kubectl apply -f maria-app.yaml
 You can optionally use an annotation when you create an app to specify whether the application writes to the filesystem during a filesystem freeze. If you set the annotation to `true`, the application ignores the global setting and can write to the filesystem during a freeze. If you set it to `false`, the application ignores the global setting and cannot write to the filesystem during a freeze. This is useful for applications running in virtual machines, such as in KubeVirt environments, where filesystem freezes can occur before backups and snapshots. To specify freeze behavior for an application when you use the CLI to create it, you can use the `--annotation` flag.
 +
 * Create the application and use the global setting for filesystem freeze behavior:
++
 [source,console]
 ----
 tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace>
 ----
-
++
 * Create the application and configure the local application setting for filesystem freeze behavior:
++
 [source,console]
 ----
 tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace> --annotation protect.trident.netapp.io/skip-vm-freeze=<"true"|"false">

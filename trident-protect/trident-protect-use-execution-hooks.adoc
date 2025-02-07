@@ -164,7 +164,7 @@ tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --
 
 
 == Manually run an execution hook
-You can manually run an execution hook for testing purposes or if you need to re-run the hook manually after a failure.
+You can manually run an execution hook for testing purposes or if you need to re-run the hook manually after a failure. You need to have Owner, Admin, or Member permissions to manually run execution hooks.
 
 Manually running an execution hook consists of two basic steps:
 
@@ -213,9 +213,9 @@ Example YAML:
 [source,yaml]
 -----
 apiVersion: protect.trident.netapp.io/v1
-kind: ExecHook
+kind: ResourceBackup
 metadata: 
-  name: example-hook-cr
+  name: example-resource-backup-cr
   namespace: my-app-namespace
   annotations: 
     astra.netapp.io/astra-control-hook-source-id: /account/test/hookSource/id
@@ -324,7 +324,7 @@ Example YAML:
 [source,yaml]
 -----
 apiVersion: protect.trident.netapp.io/v1
-kind: ExecHook
+kind: ExecHookRun
 metadata: 
   name: example-hook-cr
   namespace: my-app-namespace

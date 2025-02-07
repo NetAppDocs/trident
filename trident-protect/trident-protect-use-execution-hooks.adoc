@@ -222,28 +222,6 @@ metadata:
 spec: 
   applicationRef: my-app-name
   stage: Pre
-  action: Snapshot
-  enabled: true
-  hookSource: IyEvYmluL2Jhc2gKZWNobyAiZXhhbXBsZSBzY3JpcHQiCg==
-  timeout: 10
-  arguments: 
-    - FirstExampleArg
-    - SecondExampleArg
-  matchingCriteria: 
-    - type: containerName
-      value: mysql
-    - type: containerImage
-      value: bitnami/mysql
-    - type: podName
-      value: mysql
-    - type: namespaceName
-      value: mysql-a
-    - type: podLabel
-      value: app.kubernetes.io/component=primary
-    - type: podLabel
-      value: helm.sh/chart=mysql-10.1.0
-    - type: podLabel
-      value: deployment-type=production
 -----
 + 
 . After you populate the CR file with the correct values, apply the CR:
@@ -333,28 +311,6 @@ metadata:
 spec: 
   applicationRef: my-app-name
   stage: Pre
-  action: Snapshot
-  enabled: true
-  hookSource: IyEvYmluL2Jhc2gKZWNobyAiZXhhbXBsZSBzY3JpcHQiCg==
-  timeout: 10
-  arguments: 
-    - FirstExampleArg
-    - SecondExampleArg
-  matchingCriteria: 
-    - type: containerName
-      value: mysql
-    - type: containerImage
-      value: bitnami/mysql
-    - type: podName
-      value: mysql
-    - type: namespaceName
-      value: mysql-a
-    - type: podLabel
-      value: app.kubernetes.io/component=primary
-    - type: podLabel
-      value: helm.sh/chart=mysql-10.1.0
-    - type: podLabel
-      value: deployment-type=production
 -----
 + 
 . After you populate the CR file with the correct values, apply the CR:

@@ -59,7 +59,7 @@ spec:
   - labelSelector: {}
     namespace: namespace-2
 ----
-+
+
 . After you create the application CR to match your environment, apply the CR. For example:
 +
 [source,console]
@@ -78,13 +78,15 @@ tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespa
 ----
 
 +
-NOTE: You can optionally specify whether this application does or does not write to the filesystem during a filesystem freeze. If set to `true`, the application ignores the global setting and can write to the filesystem during a freeze. If set to `false`, the application ignores the global setting and will not write to the filesystem during a freeze. This is useful for applications running in virtual machines, such as in KubeVirt environments, where filesystem freezes occur before operations like backups or snapshots. To specify a freeze behavior for an application when you use the CLI to create it, you can use the following example:
-+
+[NOTE]
+=====
+You can optionally specify whether this application does or does not write to the filesystem during a filesystem freeze. If set to `true`, the application ignores the global setting and can write to the filesystem during a freeze. If set to `false`, the application ignores the global setting and will not write to the filesystem during a freeze. This is useful for applications running in virtual machines, such as in KubeVirt environments, where filesystem freezes occur before operations like backups or snapshots. To specify a freeze behavior for an application when you use the CLI to create it, you can use the following example:
+
 [source,console]
 ----
 tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace> --annotation protect.trident.netapp.io/skip-vm-freeze=<"true"|"false">
 ----
-
+=====
 
 --
 

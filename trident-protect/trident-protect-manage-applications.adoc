@@ -70,24 +70,21 @@ kubectl apply -f maria-app.yaml
 .Add an application using the CLI
 --
 .Steps
-. Create and apply the application definition, replacing values in brackets with information from your environment. You can include namespaces and resources in the application definition using comma-separated lists with the arguments shown in the following example:
+. Create and apply the application definition, replacing values in brackets with information from your environment. You can include namespaces and resources in the application definition using comma-separated lists with the arguments shown in the following examples.
 +
+You can optionally use an annotation when you create an app to specify whether the application writes to the filesystem during a filesystem freeze. If you set the annotation to `true`, the application ignores the global setting and can write to the filesystem during a freeze. If you set it to `false`, the application ignores the global setting and cannot write to the filesystem during a freeze. This is useful for applications running in virtual machines, such as in KubeVirt environments, where filesystem freezes can occur before backups and snapshots. To specify freeze behavior for an application when you use the CLI to create it, you can use the `--annotation` flag.
++
+* 
 [source,console]
 ----
 tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace>
 ----
 
-+
-[NOTE]
-=====
-You can optionally specify whether this application does or does not write to the filesystem during a filesystem freeze. If set to `true`, the application ignores the global setting and can write to the filesystem during a freeze. If set to `false`, the application ignores the global setting and will not write to the filesystem during a freeze. This is useful for applications running in virtual machines, such as in KubeVirt environments, where filesystem freezes occur before operations like backups or snapshots. To specify a freeze behavior for an application when you use the CLI to create it, you can use the following example:
-
+*
 [source,console]
 ----
 tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace> --annotation protect.trident.netapp.io/skip-vm-freeze=<"true"|"false">
 ----
-=====
-
 --
 
 ====

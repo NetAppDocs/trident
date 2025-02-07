@@ -39,12 +39,11 @@ NOTE: If you need to apply this annotation after an application has already been
 ----
 kubectl annotate application -n <application CR namespace> <application CR name> protect.trident.netapp.io/skip-vm-freeze="true"
 ----
-
 +
 Example YAML:
++
 [source,yaml]
 ----
----
 apiVersion: protect.trident.netapp.io/v1
 kind: Application
 metadata:

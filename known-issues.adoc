@@ -15,6 +15,6 @@ Known issues identify problems that might prevent you from using this release of
 
 The following known issues affect the current release:
 
-== Restoring backups of large files can fail
+== Restoring Restic backups of large files can fail
 When restoring 30GB or larger files from an Amazon S3 backup that was made using Restic, the restore operation can fail. As a workaround, back up the data using Kopia as the data mover (Kopia is the default data mover for backups). Refer to https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-protect-apps.html[Protect applications using Trident protect^] for instructions.
 

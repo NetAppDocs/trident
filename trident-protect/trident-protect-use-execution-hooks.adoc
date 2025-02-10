@@ -204,11 +204,11 @@ Example YAML:
 apiVersion: protect.trident.netapp.io/v1
 kind: ResourceBackup
 metadata:
-  name: example-resource-backup-cr
+  name: example-resource-backup
 spec:
   applicationRef: my-app-name
   appVaultRef: my-appvault-name
-  appArchivePath: example-resource-backup-cr
+  appArchivePath: example-resource-backup
 -----
 + 
 . After you populate the CR file with the correct values, apply the CR:
@@ -287,11 +287,11 @@ Example YAML:
 apiVersion: protect.trident.netapp.io/v1
 kind: ExecHooksRun
 metadata:
-  name: example-hook-run-cr
+  name: example-hook-run
 spec:
   applicationRef: my-app-name
   appVaultRef: my-appvault-name
-  appArchivePath: example-resource-backup-cr
+  appArchivePath: example-resource-backup
   stage: Post
   action: Failover
 -----

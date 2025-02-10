@@ -168,8 +168,8 @@ You can manually run an execution hook for testing purposes or if you need to re
 
 Manually running an execution hook consists of two basic steps:
 
-* Create a resource backup, which collects resources and creates a backup of them, determining where the hook will run 
-* Run the execution hook against the backup
+. Create a resource backup, which collects resources and creates a backup of them, determining where the hook will run 
+. Run the execution hook against the backup
 
 .Step 1: Create a resource backup
 
@@ -262,23 +262,22 @@ kubectl describe resourcebackup <my_backup_name>
 . Configure the following attributes to match your Trident protect environment and cluster configuration:
 +
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
-* *spec.applicationRef*: (_Required_) Ensure this value matches the application name from the CR you created in step 1.
-* *spec.appVaultRef*: (_Required_) Ensure this value matches the appVaultRef from the CR you created in step 1.
-* *spec.appArchivePath*: Ensure this value matches the appArchivePath from the CR you created in step 1.
+* *spec.applicationRef*: (_Required_) Ensure this value matches the application name from the ResourceBackup CR you created in step 1.
+* *spec.appVaultRef*: (_Required_) Ensure this value matches the appVaultRef from the ResourceBackup CR you created in step 1.
+* *spec.appArchivePath*: Ensure this value matches the appArchivePath from the ResourceBackup CR you created in step 1.
 +
 [source,console]
 -----
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
-* *spec.stage*: (_Required_) A string indicating which stage during the action that the execution hook should run. This hook run will not run hooks in any other stage. Possible values:
-** Pre
-** Post
 * *spec.action*: (_Required_) A string indicating which action the execution hook will take, assuming any execution hook filters specified are matched. Possible values:
 ** Snapshot
 ** Backup
 ** Restore
 ** Failover
-
+* *spec.stage*: (_Required_) A string indicating which stage during the action that the execution hook should run. This hook run will not run hooks in any other stage. Possible values:
+** Pre
+** Post
 +
 Example YAML:
 +

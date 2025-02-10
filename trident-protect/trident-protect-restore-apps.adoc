@@ -214,8 +214,7 @@ You can restore a backup to a different cluster if there is an issue with the or
 Ensure the following prerequisites are met:
 
 * The destination cluster has Trident protect installed.
-* The destination cluster has access to the backups stored in the object storage bucket.
-* The respective AppVault CR is defined in the destination cluster.
+* The destination cluster has access to the bucket path of the same AppVault as the source cluster, where the backup is stored.
 
 .Steps
 . Check the availability of the AppVault CR on the destination cluster using Trident protect CLI plugin:
@@ -225,7 +224,7 @@ Ensure the following prerequisites are met:
 tridentctl-protect get appvault --context <destination_cluster_name>
 -----
 +
-NOTE: Ensure that the namespace intended for the application restore does not exist on the destination cluster.
+NOTE: Ensure that the namespace intended for the application restore exists on the destination cluster.
 . View the backup contents of the available AppVault from the destination cluster:
 +
 [source,console]
@@ -254,7 +253,7 @@ Running this command displays the available backups in the AppVault, including t
 .Use a CR
 --
 [start=4]
-. Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`. 
+. Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`.
 . In the file you created, configure the following attributes:
 +
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
@@ -265,6 +264,8 @@ Running this command displays the available backups in the AppVault, including t
 -----
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
++
+NOTE: If BackupRestore CR is not available, you can use the command mentioned in step 2 to view the backup contents.
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
@@ -277,6 +278,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: BackupRestore
 metadata:
   name: my-cr-name
+  namespace: my-destination-namespace
 spec:
   appVaultRef: appvault-name
   appArchivePath: my-backup-path

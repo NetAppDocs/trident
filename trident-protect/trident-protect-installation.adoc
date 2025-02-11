@@ -240,6 +240,7 @@ You can configure Trident protect AutoSupport connection settings such as a prox
 .Configure a secure proxy connection
 --
 .Steps
+. Configure a proxy connection for Trident protect that uses TLS to secure the connection:
 +
 [source,console]
 ----
@@ -249,6 +250,7 @@ helm upgrade -n trident-protect trident-protect netapp/trident-protect --set aut
 .Configure an insecure proxy connection
 --
 .Steps
+. Configure a proxy connection for Trident protect that skips TLS verification for the connection:
 +
 [source,console]
 ----

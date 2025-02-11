@@ -232,8 +232,7 @@ helm upgrade trident-protect -n trident-protect -f <resourceLimits.yaml> --reuse
 
 == Configure NetApp AutoSupport connections for Trident protect
 
-You can configure Trident protect AutoSupport connection settings such as a proxy and TLS verification. This affects network connections from Trident protect creates to upload support bundles to NetApp. You can configure a proxy with or without TLS verification for the upload connection.
-
+You can change the way Trident protect connects to NetApp Support to upload support bundles by configuring a proxy for the connection. You can configure the proxy to use either a secure or an insecure connection based on your needs.
 
 [role="tabbed-block"]
 ====

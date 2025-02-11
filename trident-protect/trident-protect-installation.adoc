@@ -240,21 +240,21 @@ You can configure Trident protect AutoSupport connection settings such as a prox
 .Configure a secure proxy connection
 --
 .Steps
-. Configure a proxy connection for Trident protect that uses TLS to secure the connection:
+. Configure a secure proxy connection for Trident protect support bundle uploads:
 +
 [source,console]
 ----
-helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://myproxy.com
+helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://my.proxy.url
 ----
 --
 .Configure an insecure proxy connection
 --
 .Steps
-. Configure a proxy connection for Trident protect that skips TLS verification for the connection:
+. Configure an insecure proxy connection for Trident protect support bundle uploads that skips TLS verification:
 +
 [source,console]
 ----
-helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://myproxy.com --set autoSupport.insecure=true
+helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://my.proxy.url --set autoSupport.insecure=true
 ----
 --
 ====

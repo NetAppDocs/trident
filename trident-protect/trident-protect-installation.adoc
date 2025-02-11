@@ -230,23 +230,29 @@ jobResources:
 helm upgrade trident-protect -n trident-protect -f <resourceLimits.yaml> --reuse-values
 ----
 
-//autoSupport:
-//  enabled: true
-//customLabels:
-//  group: <example-group>
+== Configure NetApp AutoSupport connections for Trident protect
 
-////
-. Log in to the registry:
+You can configure Trident protect AutoSupport connection settings such as a proxy and TLS verification. This affects network connections from Trident protect creates to upload support bundles to NetApp. You can configure a proxy with or without TLS verification for the upload connection.
+
+
+[role="tabbed-block"]
+====
+.Configure a secure proxy connection
+--
+.Steps
 +
 [source,console]
 ----
-helm registry login cr.astra.netapp.io -u <account-id> -p <api-token>
+helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://myproxy.com
 ----
-
-. Create a pull secret:
+--
+.Configure an insecure proxy connection
+--
+.Steps
 +
 [source,console]
 ----
-kubectl create secret docker-registry regcred --docker-username=<account-id> --docker-password=<api-token> -n trident-protect --docker-server= cr.astra.netapp.io
+helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://myproxy.com --set autoSupport.insecure=true
 ----
-////
+--
+====

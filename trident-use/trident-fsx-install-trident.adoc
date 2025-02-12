@@ -52,7 +52,7 @@ helm list -n trident
 ----
 NAME                NAMESPACE   REVISION    UPDATED                                 STATUS       CHART                          APP VERSION
 
-trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2410.0    24.10.0
+trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2502.0    25.02.0
 ----
 
 == Install Trident via the EKS add-on 
@@ -80,11 +80,9 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 --
 The following example commands install the Trident EKS add-on:
 
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild`
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v25.02.0-eksbuild`
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v25.02.0-eksbuild.1` (with a dedicated version)
 --
-
-NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
 
 .Management console
 

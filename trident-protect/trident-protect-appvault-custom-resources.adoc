@@ -79,6 +79,18 @@ kubectl create secret generic  <secret-name> --from-literal=accessKeyID=<objects
 === AppVault CR examples
 You can use the following CR examples to create AppVault objects for each cloud provider.
 
+[NOTE]
+=====
+You can optionally use the *spec.properties.dataMoverPasswordSecretRef* field to specify a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. If you don't specify a secret, Trident protect uses `password` for both passwords.
+To define the secret, use the following example structure:
+----
+{
+ KOPIA_PASSWORD: <password>,
+ RESTIC_PASSWORD:<password>
+}
+----
+=====
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -93,6 +105,8 @@ metadata:
   name: gcp-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  properties:
+    dataMoverPasswordSecretRef: my-secret-name
   providerType: GCP
   providerConfig:
     gcp:
@@ -116,6 +130,8 @@ metadata:
   name: amazon-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  properties:
+    dataMoverPasswordSecretRef: my-secret-name
   providerType: AWS
   providerConfig:
     s3:
@@ -143,6 +159,8 @@ metadata:
   name: azure-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  properties:
+    dataMoverPasswordSecretRef: my-secret-name
   providerType: Azure
   providerConfig:
     azure:
@@ -166,6 +184,8 @@ metadata:
   name: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  properties:
+    dataMoverPasswordSecretRef: my-secret-name
   providerType: GenericS3
   providerConfig:
     s3:
@@ -193,6 +213,8 @@ metadata:
   name: ontap-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  properties:
+    dataMoverPasswordSecretRef: my-secret-name
   providerType: OntapS3
   providerConfig:
     s3:
@@ -220,6 +242,8 @@ metadata:
   name: storagegrid-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
   namespace: trident-protect
 spec:
+  properties:
+    dataMoverPasswordSecretRef: my-secret-name
   providerType: StorageGridS3
   providerConfig:
     s3:
@@ -244,6 +268,18 @@ spec:
 === AppVault creation examples using the Trident protect CLI
 You can use the following CLI command examples to create AppVault CRs for each provider.
 
+[NOTE]
+=====
+You can optionally use the `--data-mover-password-secret-ref <my-secret-name>` argument to specify a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. If you don't specify a secret, Trident protect uses `password` for both passwords.
+To define the secret, use the following example structure:
+----
+{
+ KOPIA_PASSWORD: <password>,
+ RESTIC_PASSWORD:<password>
+}
+----
+=====
+
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -253,7 +289,7 @@ You can use the following CLI command examples to create AppVault CRs for each p
 --
 [source,console]
 ----
-tridentctl-protect create vault GCP my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials>
+tridentctl-protect create vault GCP my-new-vault --bucket mybucket --project my-gcp-project --secret <gcp-creds>/<credentials> --data-mover-password-secret-ref my-secret-name
 ----
 --
 
@@ -261,7 +297,7 @@ tridentctl-protect create vault GCP my-new-vault --bucket mybucket --project my-
 --
 [source,console]
 ----
-tridentctl-protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-secret-name
 ----
 --
 
@@ -269,7 +305,7 @@ tridentctl-protect create vault AWS <vault-name> --bucket <bucket-name> --secret
 --
 [source,console]
 ----
-tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name> --data-mover-password-secret-ref my-secret-name
 ----
 --
 
@@ -277,7 +313,7 @@ tridentctl-protect create vault Azure <vault-name> --account <account-name> --bu
 --
 [source,console]
 ----
-tridentctl-protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-secret-name
 ----
 --
 
@@ -285,7 +321,7 @@ tridentctl-protect create vault GenericS3 <vault-name> --bucket <bucket-name> --
 --
 [source,console]
 ----
-tridentctl-protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-secret-name
 ----
 --
 
@@ -293,7 +329,7 @@ tridentctl-protect create vault OntapS3 <vault-name> --bucket <bucket-name> --se
 --
 [source,console]
 ----
-tridentctl-protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint>
+tridentctl-protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-secret-name
 ----
 --
 

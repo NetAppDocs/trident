@@ -243,7 +243,7 @@ You can change the way Trident protect connects to NetApp Support to upload supp
 +
 [source,console]
 ----
-helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://my.proxy.url
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect --set autoSupport.proxy=http://my.proxy.url
 ----
 --
 .Configure an insecure proxy connection
@@ -253,7 +253,7 @@ helm upgrade -n trident-protect trident-protect netapp/trident-protect --set aut
 +
 [source,console]
 ----
-helm upgrade -n trident-protect trident-protect netapp/trident-protect --set autoSupport.proxy=http://my.proxy.url --set autoSupport.insecure=true
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect --set autoSupport.proxy=http://my.proxy.url --set autoSupport.insecure=true
 ----
 --
 ====

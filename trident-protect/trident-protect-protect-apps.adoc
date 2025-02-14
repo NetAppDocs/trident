@@ -19,6 +19,8 @@ NOTE: You can configure Trident protect to freeze and unfreeze filesystems durin
 == Create an on-demand snapshot
 You can create an on-demand snapshot at any time.
 
+NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces. 
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -70,6 +72,8 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 
 == Create an on-demand backup
 You can back up an app at any time.
+
+NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -126,6 +130,8 @@ tridentctl-protect create backup <my_backup_name> --appvault <my-vault-name> --a
 
 == Create a data protection schedule
 A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
+
+NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
 
 // begin tabbed block
 [role="tabbed-block"]

@@ -33,8 +33,8 @@ Use the following examples to create the password secret. When you create AppVau
 ---
 apiVersion: v1
 data:
-  KOPIA_PASSWORD: a29waWExMjM=
-  RESTIC_PASSWORD: cmVzdGljNDU2
+  KOPIA_PASSWORD: <password>
+  RESTIC_PASSWORD: <password>
 kind: Secret
 metadata:
   name: data-mover-credentials
@@ -67,7 +67,9 @@ You can use the following examples to create keys for the credentials of each cl
 --
 [source,console]
 ----
-kubectl create secret generic <secret-name> --from-file=credentials=<mycreds-file.json> -n trident-protect
+kubectl create secret generic <secret-name> \
+--from-file=credentials=<mycreds-file.json> \
+-n trident-protect
 ----
 --
 
@@ -75,7 +77,10 @@ kubectl create secret generic <secret-name> --from-file=credentials=<mycreds-fil
 --
 [source,console]
 ----
-kubectl create secret generic <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> -n trident-protect
+kubectl create secret generic <secret-name> \
+--from-literal=accessKeyID=<objectstorage-accesskey> \
+--from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+-n trident-protect
 ----
 --
 
@@ -83,7 +88,9 @@ kubectl create secret generic <secret-name> --from-literal=accessKeyID=<objectst
 --
 [source,console]
 ----
-kubectl create secret generic <secret-name> --from-literal=accountKey=<secret-name> -n trident-protect
+kubectl create secret generic <secret-name> \
+--from-literal=accountKey=<secret-name> \
+-n trident-protect
 ----
 --
 
@@ -91,7 +98,10 @@ kubectl create secret generic <secret-name> --from-literal=accountKey=<secret-na
 --
 [source,console]
 ----
-kubectl create secret generic <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> -n trident-protect
+kubectl create secret generic <secret-name> \
+--from-literal=accessKeyID=<objectstorage-accesskey> \
+--from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+-n trident-protect
 ----
 --
 
@@ -99,7 +109,10 @@ kubectl create secret generic <secret-name> --from-literal=accessKeyID=<objectst
 --
 [source,console]
 ----
-kubectl create secret generic <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> -n trident-protect
+kubectl create secret generic <secret-name> \
+--from-literal=accessKeyID=<objectstorage-accesskey> \
+--from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+-n trident-protect
 ----
 --
 
@@ -107,7 +120,10 @@ kubectl create secret generic <secret-name> --from-literal=accessKeyID=<objectst
 --
 [source,console]
 ----
-kubectl create secret generic  <secret-name> --from-literal=accessKeyID=<objectstorage-accesskey> --from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> -n trident-protect
+kubectl create secret generic <secret-name> \
+--from-literal=accessKeyID=<objectstorage-accesskey> \
+--from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+-n trident-protect
 ----
 --
 
@@ -321,7 +337,11 @@ tridentctl-protect create vault GCP my-new-vault --bucket mybucket --project my-
 --
 [source,console]
 ----
-tridentctl-protect create vault AWS <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-optional-secret-name
+tridentctl-protect create vault AWS <vault-name> \
+--bucket <bucket-name> \
+--secret  <secret-name>  \
+--endpoint <s3-endpoint> \
+--data-mover-password-secret-ref my-optional-secret-name
 ----
 --
 
@@ -329,7 +349,11 @@ tridentctl-protect create vault AWS <vault-name> --bucket <bucket-name> --secret
 --
 [source,console]
 ----
-tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name> --data-mover-password-secret-ref my-optional-secret-name
+tridentctl-protect create vault Azure <vault-name> \
+--account <account-name> \
+--bucket <bucket-name> \
+--secret <secret-name> \
+--data-mover-password-secret-ref my-optional-secret-name
 ----
 --
 
@@ -337,7 +361,10 @@ tridentctl-protect create vault Azure <vault-name> --account <account-name> --bu
 --
 [source,console]
 ----
-tridentctl-protect create vault GenericS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-optional-secret-name
+tridentctl-protect create vault GenericS3 <vault-name> \
+--bucket <bucket-name> \
+--secret  <secret-name>  --endpoint <s3-endpoint> \
+--data-mover-password-secret-ref my-optional-secret-name
 ----
 --
 
@@ -345,7 +372,11 @@ tridentctl-protect create vault GenericS3 <vault-name> --bucket <bucket-name> --
 --
 [source,console]
 ----
-tridentctl-protect create vault OntapS3 <vault-name> --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-optional-secret-name
+tridentctl-protect create vault OntapS3 <vault-name> \
+--bucket <bucket-name> \
+--secret  <secret-name>  \
+--endpoint <s3-endpoint> \
+--data-mover-password-secret-ref my-optional-secret-name
 ----
 --
 
@@ -353,7 +384,11 @@ tridentctl-protect create vault OntapS3 <vault-name> --bucket <bucket-name> --se
 --
 [source,console]
 ----
-tridentctl-protect create vault StorageGridS3 s3vault --bucket <bucket-name> --secret  <secret-name>  --endpoint <s3-endpoint> --data-mover-password-secret-ref my-optional-secret-name
+tridentctl-protect create vault StorageGridS3 s3vault \
+--bucket <bucket-name> \
+--secret  <secret-name>  \
+--endpoint <s3-endpoint> \
+--data-mover-password-secret-ref my-optional-secret-name
 ----
 --
 

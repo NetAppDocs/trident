@@ -46,8 +46,8 @@ type: Opaque
 [source,console]
 ----
 kubectl create secret generic my-optional-data-mover-secret \
-  --from-literal=KOPIA_PASSWORD=<password> \
-  --from-literal=RESTIC_PASSWORD=<password>
+--from-literal=KOPIA_PASSWORD=<password> \
+--from-literal=RESTIC_PASSWORD=<password>
 ----
 --
 ====

@@ -163,5 +163,171 @@ tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --
 // end tabbed block
 
 
+== Manually run an execution hook
+You can manually run an execution hook for testing purposes or if you need to re-run the hook manually after a failure. You need to have Owner, Admin, or Member permissions to manually run execution hooks.
 
+Manually running an execution hook consists of two basic steps:
 
+. Create a resource backup, which collects resources and creates a backup of them, determining where the hook will run 
+. Run the execution hook against the backup
+
+.Step 1: Create a resource backup
+
+[%collapsible%closed]
+=====
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Use a CR
+--
+.Steps
+. Create the custom resource (CR) file and name it `trident-protect-resource-backup.yaml`.
++
+. Configure the following attributes to match your Trident protect environment and cluster configuration:
++
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.applicationRef*: (_Required_) The Kubernetes name of the application for which to create the resource backup.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
+* *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
++
+[source,console]
+-----
+kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
+-----
++
+Example YAML:
++
+[source,yaml]
+-----
+---
+apiVersion: protect.trident.netapp.io/v1
+kind: ResourceBackup
+metadata:
+  name: example-resource-backup
+spec:
+  applicationRef: my-app-name
+  appVaultRef: my-appvault-name
+  appArchivePath: example-resource-backup
+-----
++ 
+. After you populate the CR file with the correct values, apply the CR:
++
+[source,console]
+----- 
+kubectl apply -f trident-protect-resource-backup.yaml
+-----
+
+--
+.Use the CLI
+--
+.Steps
+. Create the backup, replacing values in brackets with information from your environment. For example:
++
+[source,console]
+----- 
+tridentctl protect create resourcebackup <my_backup_name> --app <my_app_name> --appvault <my_appvault_name> -n <my_app_namespace> --app-archive-path <app_archive_path>
+-----
+
+. View the status of the backup. You can use this example command repeatedly until the operation is complete:
++
+[source,console]
+----- 
+tridentctl protect get resourcebackup -n <my_app_namespace> <my_backup_name>
+-----
+
+. Verify that the backup was successful:
++
+[source,console]
+-----
+kubectl describe resourcebackup <my_backup_name>
+-----
+--
+====
+=====
+// end tabbed block
+
+.Step 2: Run the execution hook
+[%collapsible%closed]
+=====
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Use a CR
+--
+.Steps
+. Create the custom resource (CR) file and name it `trident-protect-hook-run.yaml`.
++
+. Configure the following attributes to match your Trident protect environment and cluster configuration:
++
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.applicationRef*: (_Required_) Ensure this value matches the application name from the ResourceBackup CR you created in step 1.
+* *spec.appVaultRef*: (_Required_) Ensure this value matches the appVaultRef from the ResourceBackup CR you created in step 1.
+* *spec.appArchivePath*: Ensure this value matches the appArchivePath from the ResourceBackup CR you created in step 1.
++
+[source,console]
+-----
+kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
+-----
+* *spec.action*: (_Required_) A string indicating which action the execution hook will take, assuming any execution hook filters specified are matched. Possible values:
+** Snapshot
+** Backup
+** Restore
+** Failover
+* *spec.stage*: (_Required_) A string indicating which stage during the action that the execution hook should run. This hook run will not run hooks in any other stage. Possible values:
+** Pre
+** Post
++
+Example YAML:
++
+[source,yaml]
+-----
+---
+apiVersion: protect.trident.netapp.io/v1
+kind: ExecHooksRun
+metadata:
+  name: example-hook-run
+spec:
+  applicationRef: my-app-name
+  appVaultRef: my-appvault-name
+  appArchivePath: example-resource-backup
+  stage: Post
+  action: Failover
+-----
++ 
+. After you populate the CR file with the correct values, apply the CR:
++
+[source,console]
+----- 
+kubectl apply -f trident-protect-hook-run.yaml
+-----
+
+--
+.Use the CLI
+--
+.Steps
+. Create the manual execution hook run request:
++
+[source,console]
+----- 
+tridentctl protect create exechooksrun <my_exec_hook_run_name> -n <my_app_namespace> --action snapshot --stage <pre_or_post> --app <my_app_name> --appvault <my_appvault_name> --path <my_backup_name>
+-----
+
+. Check the status of the execution hook run. You can run this command repeatedly until the operation is complete:
++
+[source,console]
+----- 
+tridentctl protect get exechooksrun -n <my_app_namespace> <my_exec_hook_run_name>
+-----
+
+. Describe the exechooksrun object to see the final details and status:
++
+[source,console]
+-----
+kubectl -n <my_app_namespace> describe exechooksrun <my_exec_hook_run_name> 
+-----
+--
+====
+=====
+// end tabbed block

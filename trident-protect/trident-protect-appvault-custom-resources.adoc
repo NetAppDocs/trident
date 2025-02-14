@@ -440,7 +440,8 @@ You can use the Trident protect CLI plugin to view information about AppVault ob
 +
 [source,console]
 ----
-tridentctl-protect get appvaultcontent gcp-vault --show-resources all
+tridentctl-protect get appvaultcontent gcp-vault \
+--show-resources all
 ----
 +
 *Example output*:
@@ -481,7 +482,8 @@ Ensure that you have deleted all snapshots and backups stored in the associated 
 +
 [source,console]
 ----
-kubectl delete appvault <appvault_name> -n trident-protect
+kubectl delete appvault <appvault_name> \
+-n trident-protect
 ----
 
 --
@@ -491,7 +493,8 @@ kubectl delete appvault <appvault_name> -n trident-protect
 +
 [source,console]
 ----
-tridentctl-protect delete appvault <appvault_name> -n trident-protect 
+tridentctl-protect delete appvault <appvault_name> \
+-n trident-protect 
 ----
 --
 ====

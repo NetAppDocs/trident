@@ -41,6 +41,11 @@ The following example installs Trident and sets the `cloud-provider` flag to `$C
 ----
 helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
 ----
+
+The following example enables the `ontapConfigurator` and specifies `authType`, `fsxnID`, `protocols` to create trident backends and storage classes: 
+----
+helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident --set ontapConfigurator.enabled=true  --set ontapConfigurator.svms[0].fsxnID="fs-0dfeaa884a68b1cab"  --set ontapConfigurator.svms[0].protocols[0]=iscsi  --set ontapConfigurator.svms[0].protocols[1]=nfs  --set ontapConfigurator.svms[0].authType="awsarn"
+----
 +
 
 You can use the `helm list` command to review installation details such as name, namespace, chart, status, app version, and revision number.
@@ -121,6 +126,29 @@ add-on.json
    "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
    "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'",
    "cloudProvider": "AWS"}"
+}
+----
+Enable the `ontapConfigurator` to and specify the `authType`, `fsxnID`, `protocols` to create trident backends and storage classes: 
+----
+{
+   "clusterName": "<eks-cluster>",
+   "addonName": "netapp_trident-operator",
+   "addonVersion": "v24.10.0-eksbuild.1",
+   "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
+   "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'",
+   "ontapConfigurator": {
+        "enabled": true,
+        "svms": [
+          {
+            "authType": "awsarn",
+            "fsxnID": "fs-0dfeaa884a68b1cab",
+            "protocols": [
+              "nfs",
+              "iscsi"
+            ]
+          }
+        ]
+      }}"
 }
 ----
 . Install the Trident EKS add-on"

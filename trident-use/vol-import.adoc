@@ -231,7 +231,7 @@ Trident supports volume import using the `google-cloud-netapp-volumes` driver.
 
 .Google Cloud NetApp Volumes example
 
-The following example imports a `google-cloud-netapp-volumes` volume: 
+The following example imports a `google-cloud-netapp-volumes` volume when two volumes are present in the same region: 
 
 ----
 tridentctl import volume backend-tbc-gcnv1 "projects/531265380079/locations/asia-east1-a/volumes/testvoleasiaeast1" -f /root/gke/manager-import-tcl.yaml -n trident

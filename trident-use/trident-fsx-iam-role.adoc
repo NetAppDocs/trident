@@ -121,7 +121,7 @@ aws iam attach-role-policy --role-name my-role --policy-arn <IAM policy ARN>
 
 Verify that your OIDC provider is associated with your cluster. You can verify it using this command: 
 
-`aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4 `
+`aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4`
 
 If there's no output, you can use the following command to associate IAM OIDC to your cluster: 
 

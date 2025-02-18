@@ -22,8 +22,8 @@ To authenticate using an AWS IAM role, you must have a Kubernetes cluster deploy
 This example creates an AWS Secret Manager secret to store Trident CSI credentials:
 
 ----
-`aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials"\ 
-  --secret-string "{\"username\":\"vsadmin\",\"password\":\"<svmpassword>\"}"`
+aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials"\ 
+  --secret-string "{\"username\":\"vsadmin\",\"password\":\"<svmpassword>\"}""
 ----
 
 == Create IAM Policy
@@ -31,8 +31,8 @@ This example creates an AWS Secret Manager secret to store Trident CSI credentia
 The following examples creates an IAM policy using the AWS CLI:
 
 ----
-`aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json 
-  --description "This policy grants access to Trident CSI to FSxN and Secret manager"`
+aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json 
+  --description "This policy grants access to Trident CSI to FSxN and Secret manager"
 ----
 
 *Policy JSON file*:
@@ -75,8 +75,8 @@ policy.json:
 --
 
 ----
-`aws iam create-role --role-name trident-controller \
-  --assume-role-policy-document file://trust-relationship.json`
+aws iam create-role --role-name trident-controller \
+  --assume-role-policy-document file://trust-relationship.json
 ----
 
 *trust-relationship.json file:*
@@ -105,8 +105,8 @@ Update the following values in the `trust-relationship.json` file:
 * *<account_id>* -  Your AWS account ID
 * *<oidc_provider>* - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
 ----
-`aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer"\ 
-  --output text | sed -e "s/^https:\/\///"`
+aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer"\ 
+  --output text | sed -e "s/^https:\/\///"
 ----
 
 *Attach the IAM role with the IAM policy*:
@@ -114,13 +114,12 @@ Update the following values in the `trust-relationship.json` file:
 Once the role has been created, attach the policy (that was created in the step above) to the role using this command:
 
 ----
-`aws iam attach-role-policy --role-name my-role --policy-arn <IAM policy ARN>`
+aws iam attach-role-policy --role-name my-role --policy-arn <IAM policy ARN>
 ----
 
 *Verify OICD provider is associated*:
 
 Verify that your OIDC provider is associated with your cluster. You can verify it using this command: 
-
 
 `aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4 `
 
@@ -136,9 +135,9 @@ If there's no output, you can use the following command to associate IAM OIDC to
 The following example creates an IAM role for service account in EKS: 
 
 ----
-`eksctl create iamserviceaccount --name trident-controller --namespace trident \
+eksctl create iamserviceaccount --name trident-controller --namespace trident \
   --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only \
-  --attach-policy-arn <IAM-Policy ARN> --approve`
+  --attach-policy-arn <IAM-Policy ARN> --approve
 ----
 --
 ====

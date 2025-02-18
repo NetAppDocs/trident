@@ -33,8 +33,8 @@ Use the following examples to create the password secret. When you create AppVau
 ---
 apiVersion: v1
 data:
-  KOPIA_PASSWORD: <password>
-  RESTIC_PASSWORD: <password>
+  KOPIA_PASSWORD: <plain-text-password>
+  RESTIC_PASSWORD: <plain-text-password>
 kind: Secret
 metadata:
   name: my-optional-data-mover-secret
@@ -46,8 +46,8 @@ type: Opaque
 [source,console]
 ----
 kubectl create secret generic my-optional-data-mover-secret \
---from-literal=KOPIA_PASSWORD=<password> \
---from-literal=RESTIC_PASSWORD=<password>
+--from-literal=KOPIA_PASSWORD=<plain-text-password> \
+--from-literal=RESTIC_PASSWORD=<plain-text-password>
 ----
 --
 ====
@@ -329,11 +329,11 @@ You can optionally specify a Kubernetes secret that contains custom passwords fo
 --
 [source,console]
 ----
-tridentctl-protect create vault GCP my-new-vault \
---bucket mybucket \
---project my-gcp-project \
+tridentctl-protect create vault GCP <vault-name> \
+--bucket <mybucket> \
+--project <my-gcp-project> \
 --secret <gcp-creds>/<credentials> \
---data-mover-password-secret-ref my-optional-data-mover-secret
+--data-mover-password-secret-ref <my-optional-data-mover-secret>
 ----
 --
 
@@ -345,7 +345,7 @@ tridentctl-protect create vault AWS <vault-name> \
 --bucket <bucket-name> \
 --secret  <secret-name>  \
 --endpoint <s3-endpoint> \
---data-mover-password-secret-ref my-optional-data-mover-secret
+--data-mover-password-secret-ref <my-optional-data-mover-secret>
 ----
 --
 
@@ -357,7 +357,7 @@ tridentctl-protect create vault Azure <vault-name> \
 --account <account-name> \
 --bucket <bucket-name> \
 --secret <secret-name> \
---data-mover-password-secret-ref my-optional-data-mover-secret
+--data-mover-password-secret-ref <my-optional-data-mover-secret>
 ----
 --
 
@@ -368,7 +368,7 @@ tridentctl-protect create vault Azure <vault-name> \
 tridentctl-protect create vault GenericS3 <vault-name> \
 --bucket <bucket-name> \
 --secret  <secret-name>  --endpoint <s3-endpoint> \
---data-mover-password-secret-ref my-optional-data-mover-secret
+--data-mover-password-secret-ref <my-optional-data-mover-secret>
 ----
 --
 
@@ -380,7 +380,7 @@ tridentctl-protect create vault OntapS3 <vault-name> \
 --bucket <bucket-name> \
 --secret  <secret-name>  \
 --endpoint <s3-endpoint> \
---data-mover-password-secret-ref my-optional-data-mover-secret
+--data-mover-password-secret-ref <my-optional-data-mover-secret>
 ----
 --
 
@@ -388,11 +388,11 @@ tridentctl-protect create vault OntapS3 <vault-name> \
 --
 [source,console]
 ----
-tridentctl-protect create vault StorageGridS3 s3vault \
+tridentctl-protect create vault StorageGridS3 <vault-name> \
 --bucket <bucket-name> \
 --secret  <secret-name>  \
 --endpoint <s3-endpoint> \
---data-mover-password-secret-ref my-optional-data-mover-secret
+--data-mover-password-secret-ref <my-optional-data-mover-secret>
 ----
 --
 

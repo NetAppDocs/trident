@@ -42,7 +42,7 @@ The following example installs Trident and sets the `cloud-provider` flag to `$C
 helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
 ----
 
-The following example enables the `ontapConfigurator` and specifies `authType`, `fsxnID`, `protocols` to create trident backends and storage classes: 
+The following example enables the `ontapConfigurator` and specifies `authType`, `fsxnID`, `protocols` to create Trident backend and storage classes soon after installation: 
 ----
 helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident --set ontapConfigurator.enabled=true  --set ontapConfigurator.svms[0].fsxnID="fs-0dfeaa884a68b1cab"  --set ontapConfigurator.svms[0].protocols[0]=iscsi  --set ontapConfigurator.svms[0].protocols[1]=nfs  --set ontapConfigurator.svms[0].authType="awsarn"
 ----
@@ -85,8 +85,8 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 --
 The following example commands install the Trident EKS add-on:
 
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v25.02.0-eksbuild`
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v25.02.0-eksbuild.1` (with a dedicated version)
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild`
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
 --
 
 .Management console
@@ -128,7 +128,7 @@ add-on.json
    "cloudProvider": "AWS"}"
 }
 ----
-Enable the `ontapConfigurator` to and specify the `authType`, `fsxnID`, `protocols` to create trident backends and storage classes: 
+Enable the `ontapConfigurator` to and specify the `authType`, `fsxnID`, `protocols` to create Trident backend and storage classes automatically soon after the Trident installation: 
 ----
 {
    "clusterName": "<eks-cluster>",

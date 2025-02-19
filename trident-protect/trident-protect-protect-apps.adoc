@@ -75,6 +75,12 @@ You can back up an app at any time.
 
 NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
 
+.Before you begin
+Ensure that the AWS session token expiration is sufficient for any long-running backups. If the token expires during the backup operation, the backup operation can fail.
+
+* Refer to the https://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html[AWS API documentation^] for more information about checking the current session token expiration.
+* Refer to the https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html[AWS documentation^] for more information about credentials with AWS resources.
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -132,6 +138,12 @@ tridentctl-protect create backup <my_backup_name> --appvault <my-vault-name> --a
 A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
 
 NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
+
+.Before you begin
+Ensure that the AWS session token expiration is sufficient for any long-running backups. If the token expires during the backup operation, the backup operation can fail.
+
+* Refer to the https://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html[AWS API documentation^] for more information about checking the current session token expiration.
+* Refer to the https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html[AWS documentation^] for more information about credentials with AWS resources.
 
 // begin tabbed block
 [role="tabbed-block"]

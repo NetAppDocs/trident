@@ -230,6 +230,59 @@ jobResources:
 helm upgrade trident-protect -n trident-protect -f <resourceLimits.yaml> --reuse-values
 ----
 
+== Customize security context constraints for Trident protect containers
+
+You can use a configuration file to modify OpenShift security context constraint (SCCs) for Trident protect containers after you install Trident protect. These constraints define security restrictions for pods in a Red Hat OpenShift cluster.
+
+.Steps
+. Create a file named `sccconfig.yaml`.
+. Add the SCC option to the file and modify the parameters according to the needs of your environment.
++
+The following example shows the default values of the parameters for the SCC option:
++
+[source,yaml]
+----
+scc:
+  create: true
+  name: trident-protect-job
+  priority: 1
+----
++
+This table describes the parameters for the SCC option:
++
+[options="header"]
+|===
+| Parameter | Description | Default 
+
+|create
+|Determines whether an SCC resource can be created. An SCC resource will be created only if `scc.create` is set to `true` and the Helm installation process identifies an OpenShift environment. If not operating on OpenShift, or if `scc.create`` is set to `false`, no SCC resource will be created.
+| true
+
+|name
+|Specifies the name of the SCC. | trident-protect-job
+
+| priority
+| Defines the priority of the SCC. SCCs with higher priority values are assessed before those with lower values. | 1
+|===
++
+. Apply the values from the `sccconfig.yaml` file using either the `helm install` or `helm upgrade` command:
++
+*Install command*:
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml
+----
++
+*Upgrade command*:
++
+[source,console]
+----
+helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml
+----  
++
+This will override the default values with the ones specified in the `sccconfig.yaml` file.
+
 == Configure NetApp AutoSupport connections for Trident protect
 
 You can change the way Trident protect connects to NetApp Support to upload support bundles by configuring a proxy for the connection. You can configure the proxy to use either a secure or an insecure connection based on your needs.

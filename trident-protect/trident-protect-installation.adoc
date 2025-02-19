@@ -170,7 +170,7 @@ You can use a configuration file to specify resource limits for Trident protect 
 . Create a file named `resourceLimits.yaml`.
 . Populate the file with resource limit options for Trident protect containers according to the needs of your environment. 
 +
-The following example configuration file shows the available settings and contains the default vaules for each resource limit:
+The following example configuration file shows the available settings and contains the default values for each resource limit:
 +
 [source,yaml]
 ----
@@ -230,7 +230,7 @@ jobResources:
 helm upgrade trident-protect -n trident-protect -f <resourceLimits.yaml> --reuse-values
 ----
 
-== Customize security context constraints for Trident protect containers
+== Customize security context constraints 
 
 You can use a configuration file to modify OpenShift security context constraint (SCCs) for Trident protect containers after you install Trident protect. These constraints define security restrictions for pods in a Red Hat OpenShift cluster.
 
@@ -253,16 +253,15 @@ This table describes the parameters for the SCC option:
 [options="header"]
 |===
 | Parameter | Description | Default 
-
 |create
-|Determines whether an SCC resource can be created. An SCC resource will be created only if `scc.create` is set to `true` and the Helm installation process identifies an OpenShift environment. If not operating on OpenShift, or if `scc.create`` is set to `false`, no SCC resource will be created.
+|Determines whether an SCC resource can be created. An SCC resource will be created only if `scc.create` is set to `true` and the Helm installation process identifies an OpenShift environment. If not operating on OpenShift, or if `scc.create` is set to `false`, no SCC resource will be created.
 | true
-
 |name
-|Specifies the name of the SCC. | trident-protect-job
-
-| priority
-| Defines the priority of the SCC. SCCs with higher priority values are assessed before those with lower values. | 1
+|Specifies the name of the SCC. 
+|trident-protect-job
+|priority
+|Defines the priority of the SCC. SCCs with higher priority values are assessed before those with lower values. 
+| 1
 |===
 +
 . Apply the values from the `sccconfig.yaml` file using either the `helm install` or `helm upgrade` command:

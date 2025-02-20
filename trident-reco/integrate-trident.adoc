@@ -45,9 +45,9 @@ Note that, in the tables below, not all of the capabilities are exposed through 
 |Resize
 |Replication
 | `ontap-nas` | Yes | Yes | Yesfootnote:5[] | Yes | Yesfootnote:1[] | Yes | Yesfootnote:1[]
-| `ontap-nas-economy` | Yesfootnote:3[]| Yesfootnote:3[] | Yesfootnote:5[]|
-Yes | Yesfootnote:3[]| Yes | Yesfootnote:3[]
-|`ontap-nas-flexgroup` | Yesfootnote:1[]| No | Yesfootnote:5[]| Yes |
+| `ontap-nas-economy` | NOfootnote:3[]| NOfootnote:3[] | Yesfootnote:5[]|
+Yes | NOfootnote:3[]| Yes | NOfootnote:3[]
+|`ontap-nas-flexgroup` | Yesfootnote:1[]| NO | Yesfootnote:5[]| Yes |
 Yesfootnote:1[]| Yes | Yesfootnote:1[]
 |===
 
@@ -65,8 +65,8 @@ Trident offers 2 SAN drivers for ONTAP, whose capabilities are shown below.
 |Replication
 | `ontap-san` | Yes | Yes | Yesfootnote:4[]| Yes | Yesfootnote:1[] | Yes |
 Yesfootnote:1[]
-|`ontap-san-economy` | Yes | Yes | Yesfootnote:4[]| Yes | Yesfootnote:3[]|
-Yes | Yesfootnote:3[]|
+|`ontap-san-economy` | Yes | Yes | Yesfootnote:4[]| Yes | NOfootnote:3[]|
+Yes | NOfootnote:3[]|
 |===
 
 [verse]
@@ -74,7 +74,7 @@ Yes | Yesfootnote:3[]|
 Footnote for the above tables:
 Yesfootnote:1[]: Not managed by Trident
 Yesfootnote:2[]: Managed by Trident, but not PV granular
-Yesfootnote:3[]: Not managed by Trident and not PV granular
+NOfootnote:3[]: Not managed by Trident and not PV granular
 Yesfootnote:4[]: Supported for raw-block volumes
 Yesfootnote:5[]: Supported by Trident
 --

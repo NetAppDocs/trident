@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/vol-clone-cross-namespace.html
-keywords: volref, volume reference, share, pvc, pv, nfs, namespace, cvna, cross-namespace, sharing, volumesnapshots
+keywords: volref, volume reference, clone, pvc, pv, nfs, namespace, cvna, cross-namespace, sharing, volumesnapshots
 summary: Using Trident, you can create new volumes using existing volumes or volumesnapshots from a different namespace inside the same K8s cluster.
 ---
 
@@ -15,10 +15,11 @@ Using Trident, you can create new volumes using existing volumes or volumesnapsh
 
 == Prerequisites
 
+Before cloning volumes, ensure that the source and destination backends are of the same type and have the same storage class.
 
 == Quick start
 
-You can set up NFS volume sharing in just a few steps. 
+You can set up NFS volume cloning in just a few steps. 
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png[One] Configure source PVC to clone the volume
 
@@ -35,7 +36,7 @@ The cluster administrator grants permission to the owner of the destination name
 [role="quick-margin-para"]
 The owner of the destination namespace creates the TridentVolumeReference CR to refer to the source PVC.
 
-.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create the subordinate PVC in the destination namespace
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png[Four] Create the clone PVC in the destination namespace
 
 [role="quick-margin-para"]
 The owner of the destination namespace creates PVC to clone the PVC from the source namespace.
@@ -65,6 +66,15 @@ spec:
 ----
 +
 Trident creates the PV and its backend NFS storage volume.
++
+[NOTE]
+====
+* You can share the PVC to multiple namespaces using a comma-delimited list. For example, `trident.netapp.io/cloneToNamespace: namespace2,namespace3,namespace4`. 
+
+* You can share to all namespaces using `*`. For example, `trident.netapp.io/clone: *`
+
+* You can update the PVC to include the `cloneToNamespace` annotation at any time. 
+====
 
 . *Cluster admin:* Create the custom role and kubeconfig to grant permission to the destination namespace owner to create the TridentVolumeReference CR in the destination namespace(`namespace2`). 
 
@@ -81,7 +91,7 @@ spec:
   pvcNamespace: namespace1
 ----
 
-. *Destination namespace owner:* Create a PVC (`pvc2`) in destination namespace (`namespace2`) using the `shareFromPVC` annotation to designate the source PVC.
+. *Destination namespace owner:* Create a PVC (`pvc2`) in destination namespace (`namespace2`) using the `cloneFromPVC` or `cloneFromSnapshot`, and `cloneFromNamespace` annotations to designate the source PVC.
 +
 ----
 kind: PersistentVolumeClaim
@@ -102,9 +112,6 @@ spec:
 ----
 +
 
-.Results
-
-
 == Limitations
 
-*  
+* For PVCs provisioned using ontap-nas drivers, read-only clones are not supported.

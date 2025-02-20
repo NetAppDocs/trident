@@ -1,0 +1,26 @@
+---
+sidebar: sidebar
+permalink: trident-reference/trident-virtualization.html
+keywords: psp, pss, scc, pod security, pod security standards, pod security policies, security context constraints
+summary: Kubernetes Pod Security Standards (PSS) and Pod Security Policies (PSP) define permission levels and restrict the behavior of pods. OpenShift Security Context Constraints (SCC) similarly define pod restriction specific to the OpenShift Kubernetes Engine. To provide this customization, Trident enables certain permissions during installation. 
+---
+
+= Trident support for KubeVirt and OpenShift Virtualization
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Kubernetes 
+
+== Storage drivers supported:
+ONTAP drivers:
+
+* ontap-nas
+* ontap-nas-economy
+* ontap-san(iSCSI, FCP, NVMe over TCP)
+* ontap-san-economy(iSCSI Only)
+
+== Points to consider
+* Update storage class to have fsType parameter(for example: `fsType: "ext4"`) in OpenShift virtualization environment. If needed, volume mode can be set to block explicitly via `volumeMode=Block` in the `dataVolumeTemplates` to inform CDI to create Block data volume.
+* RWX access mode for block-storage drivers: ontap-san (iSCSI, NVMe/TCP, FC) and ontap-san-economy (iSCSI) is only possible in “volumeMode: Block” (raw device). For these drivers, parameter fstype cannot be used, as the volumes are provided in raw device mode(For example: In Live-Migration workflow/s where RWX access mode is required and block storage driver is used, volumeMode=Block can be used.)

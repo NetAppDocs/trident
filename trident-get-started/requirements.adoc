@@ -21,7 +21,7 @@ Before installing Trident you should review these general system requirements. S
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.31 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.32 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -33,14 +33,14 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.25 - 1.31
+* Kubernetes 1.25 - 1.32
 * OpenShift 4.10 - 4.17
 * Rancher Kubernetes Engine 2 (RKE2) v1.28.5+rke2r1 
 
 The Trident operator is supported with these releases:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.25 - 1.31
+* Kubernetes 1.25 - 1.32
 * OpenShift 4.10 - 4.17
 * Rancher Kubernetes Engine 2 (RKE2) v1.28.5+rke2r1 
 
@@ -58,7 +58,7 @@ To use Trident, you need one or more of the following supported backends:
 * Azure NetApp Files
 * Cloud Volumes ONTAP
 * Google Cloud NetApp Volumes
-* FAS/AFF/Select 9.5 or later
+* FAS/AFF/Select
 * NetApp All SAN Array (ASA)
 * NetApp HCI/Element software 11 or above
 
@@ -74,35 +74,35 @@ The table below summarizes the features available with this release of Trident a
 
 |Trident
 
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |Volume Snapshots
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |PVC from Volume Snapshots
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |iSCSI PV resize
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |ONTAP Bidirectional CHAP
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |Dynamic Export Policies
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |Trident Operator
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |CSI Topology
-a|1.25 - 1.31
+a|1.25 - 1.32
 a|No
 
 |===
@@ -149,7 +149,7 @@ For air-gapped installations, the following list is a reference of container ima
 |Kubernetes versions
 |Container image
 
-|v1.25.0, v1.26.0, v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0
+|v1.25.0, v1.26.0, v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0
 a|
 * docker.io/netapp/trident:24.10.0                      
 * docker.io/netapp/trident-autosupport:24.10                   

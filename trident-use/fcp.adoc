@@ -32,7 +32,7 @@ Configure the required network and node settings for FC.
 
 === Network settings
 
-. Get the WWPN of the target interfaces. Refer to link:..https://docs.netapp.com/us-en/ontap-cli//network-interface-show.html[network interface show^] for more information.
+. Get the WWPN of the target interfaces. Refer to https://docs.netapp.com/us-en/ontap-cli//network-interface-show.html[network interface show^] for more information.
 . Get the WWPN for the interfaces on initiator (Host).
 +
 Refer to the corresponding host operating system utilities.
@@ -153,8 +153,8 @@ metadata:
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "ontap-san"
-  protocol: "fcp"
-  storagePool: "aggr1"
+  storagePools: "ontap-san-backend:.*"
+  fsType: "ext4"
 allowVolumeExpansion: True
 ----
 

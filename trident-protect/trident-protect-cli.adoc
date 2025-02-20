@@ -26,7 +26,7 @@ Before using the command line utility, you need to install it on the machine you
 +
 [source,console]
 ----
-curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-linux-amd64
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.1/tridentctl-protect-linux-amd64
 ----
 --
 .Download plugin for Linux ARM64 CPUs
@@ -36,7 +36,7 @@ curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/relea
 +
 [source,console]
 ----
-curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-linux-arm64
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.1/tridentctl-protect-linux-arm64
 ----
 --
 .Download plugin for Mac AMD64 CPUs
@@ -46,7 +46,7 @@ curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/relea
 +
 [source,console]
 ----
-curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-macos-amd64
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.1/tridentctl-protect-macos-amd64
 ----
 --
 .Download plugin for Mac ARM64 CPUs
@@ -56,13 +56,13 @@ curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/relea
 +
 [source,console]
 ----
-curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-protect-macos-arm64
+curl -L -o tridentctl-protect https://github.com/NetApp/tridentctl-protect/releases/download/24.10.1/tridentctl-protect-macos-arm64
 ----
 --
 ====
 
 [start=2]
-. Enable execute permissions for the binary:
+. Enable execute permissions for the plugin binary:
 +
 [source,console]
 ----
@@ -74,12 +74,14 @@ chmod +x tridentctl-protect
 ----
 cp ./tridentctl-protect /usr/local/bin/
 ----
-. Optionally, you can copy the binary to a location in your home directory. In this case, you might need to add the location to your PATH variable:
+. Optionally, you can copy the plugin binary to a location in your home directory. In this case, it is recommended to ensure the location is part of your PATH variable:
 +
 [source,console]
 ----
 cp ./tridentctl-protect ~/bin/
 ----
+
+NOTE: Copying the plugin to a location in your PATH variable enables you to use the plugin by typing `tridentctl-protect` or `tridentctl protect` from any location.
 
 == View Trident CLI plugin help
 You can use the built-in plugin help features to get detailed help on the capabilities of the plugin:
@@ -89,7 +91,7 @@ You can use the built-in plugin help features to get detailed help on the capabi
 +
 [source,console]
 ----
-tridentctl protect help
+tridentctl-protect help
 ----
 
 == Enable command auto-completion
@@ -107,7 +109,7 @@ After you have installed the Trident protect CLI plugin, you can enable auto-com
 +
 [source,console]
 ----
-curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-completion.bash
+curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/24.10.1/tridentctl-completion.bash
 ----
 . Make a new directory in your home directory to contain the script:
 +
@@ -136,7 +138,7 @@ source ~/.bash/completions/tridentctl-completion.bash
 +
 [source,console]
 ----
-curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/24.10.0/tridentctl-completion.zsh
+curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/24.10.1/tridentctl-completion.zsh
 ----
 . Make a new directory in your home directory to contain the script:
 +
@@ -160,7 +162,7 @@ source ~/.zsh/completions/tridentctl-completion.zsh
 ====
 
 .Result
-Upon your next shell login, you can use command auto-completion with the tridentctl protect plugin.
+Upon your next shell login, you can use command auto-completion with the tridentctl-protect plugin.
 
 
 ////

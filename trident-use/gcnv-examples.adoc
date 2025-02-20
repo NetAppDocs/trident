@@ -11,7 +11,7 @@ summary: Learn about NFS and NFS backend configuration options for Google Cloud 
 :imagesdir: ../media/
 
 [.lead]
-Learn about NFS backend configuration options for Google Cloud NetApp Volumes and review configuration examples. 
+Learn about backend configuration options for Google Cloud NetApp Volumes and review configuration examples. 
 
 == Backend configuration options
 
@@ -452,7 +452,7 @@ Using `nasType`, `node-stage-secret-name`, and  `node-stage-secret-namespace`, y
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: anf-sc-smb
+  name: gcnv-sc-smb
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "google-cloud-netapp-volumes"
@@ -470,7 +470,7 @@ parameters:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: anf-sc-smb
+  name: gcnv-sc-smb
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "google-cloud-netapp-volumes"
@@ -487,7 +487,7 @@ parameters:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: anf-sc-smb
+  name: gcnv-sc-smb
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "google-cloud-netapp-volumes"

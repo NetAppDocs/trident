@@ -1,0 +1,72 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-generate-support-bundle.html
+keywords: trident, protect, bundle, support, netapp, custom, resource, file
+summary: Trident protect enables administrators to generate bundles that include information useful to NetApp Support, including logs, metrics, and topology information about the clusters and apps under management. If you are connected to the Internet, you can upload support bundles to the NetApp Support Site (NSS) using a custom resource (CR) file.
+---
+= Generate a Trident protect support bundle
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+Trident protect enables administrators to generate bundles that include information useful to NetApp Support, including logs, metrics, and topology information about the clusters and apps under management. If you are connected to the Internet, you can upload support bundles to the NetApp Support Site (NSS) using a custom resource (CR) file.
+
+
+[role="tabbed-block"]
+====
+.Create a support bundle using a CR
+--
+.Steps
+. Create the custom resource (CR) file and name it (for example, `trident-protect-support-bundle.yaml`).
+. Configure the following attributes:
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.triggerType*: (_Required_) Determines whether the support bundle is generated immediately, or scheduled. Scheduled bundle generation happens at 12AM UTC. Possible values:
+** Scheduled
+** Manual
+* *spec.uploadEnabled*: (_Optional_) Controls whether the support bundle should be uploaded to the NetApp Support Site after it is generated. If not specified, defaults to `false`. Possible values:
+** true
+** false (default)
+* *spec.dataWindowStart*: (_Optional_) A date string in RFC 3339 format that specifies the date and time that the window of included data in the support bundle should begin. If not specified, defaults to 24 hours ago. The earliest window date you can specify is 7 days ago.
++
+Example YAML:
++
+[source,yaml]
+----
+---
+apiVersion: protect.trident.netapp.io/v1
+kind: AutoSupportBundle
+metadata:
+  name: trident-protect-support-bundle
+spec:
+  triggerType: Manual
+  uploadEnabled: true
+  dataWindowStart: 2024-05-05T12:30:00Z
+----
+. After you populate the `astra-support-bundle.yaml` file with the correct values, apply the CR:
++
+[source,console]
+----
+kubectl apply -f trident-protect-support-bundle.yaml
+----
+
+--
+.Create a support bundle using the CLI
+--
+.Steps
+. Create the support bundle, replacing values in brackets with information from your environment. The `trigger-type` determines whether the bundle is created immediately or if creation time is dictated by the schedule, and can be `Manual` or `Scheduled`. The default setting is `Manual`. 
++
+For example:
++
+[source,console]
+----
+tridentctl-protect create autosupportbundle <my_bundle_name> --trigger-type <trigger_type>
+----
+--
+====
+
+
+
+

@@ -1,8 +1,11 @@
 section: trident-use
-title: Use Astra Trident
+title: Use Trident
 entries:
   - title: Prepare the worker node
     url: /trident-use/worker-node-prep.html
+    entries:
+    - title: SCSI over Fibre Channel (FC) 
+      url: /trident-use/fcp.html
   - title: Configure and manage backends    
     entries:
     - title: Overview 
@@ -49,7 +52,7 @@ entries:
         url: /trident-use/trident-fsx.html
       - title: Create an IAM role and AWS secret
         url: /trident-use/trident-fsx-iam-role.html
-      - title: Install Astra Trident
+      - title: Install Trident
         url: /trident-use/trident-fsx-install-trident.html
       - title: Configure storage backend
         url: /trident-use/trident-fsx-storage-backend.html
@@ -57,7 +60,7 @@ entries:
         url: /trident-use/trident-fsx-storageclass-pvc.html
       - title: Deploy sample application
         url: /trident-use/trident-fsx-deploy-sample.html
-      - title: Configure Astra Trident EKS add-on on EKS cluster
+      - title: Configure Trident EKS add-on on EKS cluster
         url: /trident-use/trident-aws-addon.html
     - title: Create backends with kubectl
       url: /trident-use/backend-kubectl.html
@@ -87,6 +90,8 @@ entries:
       url: /trident-use/vol-custom-name.html
     - title: Share NFS volumes across namespaces
       url: /trident-use/volume-share.html
+    - title: Replicate volumes using SnapMirror
+      url: /trident-use/vol-volume-replicate.html
     - title: Use CSI Topology
       url: /trident-use/csi-topology.html
     - title: Use snapshots

@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/element.html
 keywords: trident backend, solidfire, netapp hci, drivers, access modes, rwo, rwx, rwp, rwop, file system
-summary: Learn about how to create and use an Element backend with your Astra Trident installation.
+summary: Learn about how to create and use an Element backend with your Trident installation.
 ---
 
 = Configure a NetApp HCI or SolidFire backend
@@ -11,12 +11,12 @@ summary: Learn about how to create and use an Element backend with your Astra Tr
 :imagesdir: ../media/
 
 [.lead]
-Learn how to create and use an Element backend with your Astra Trident installation.
+Learn how to create and use an Element backend with your Trident installation.
 
 == Element driver details
-Astra Trident provides the `solidfire-san` storage driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
+Trident provides the `solidfire-san` storage driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
 
-The `solidfire-san` storage driver supports _file_ and _block_ volume modes. For the `Filesystem` volumeMode, Astra Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
+The `solidfire-san` storage driver supports _file_ and _block_ volume modes. For the `Filesystem` volumeMode, Trident creates a volume and creates a filesystem. The filesystem type is specified by the StorageClass.
 
 [cols=5,options="header"]
 |===
@@ -71,7 +71,7 @@ See the following table for the backend configuration options:
 
 |`InitiatorIFace` |Restrict iSCSI traffic to a specific host interface |“default”
 
-|`UseCHAP` |Use CHAP to authenticate iSCSI. Astra Trident uses CHAP. |true
+|`UseCHAP` |Use CHAP to authenticate iSCSI. Trident uses CHAP. |true
 
 |`AccessGroups`  |List of Access Group IDs to use |Finds the ID of an access group named “trident”
 
@@ -123,7 +123,7 @@ Types:
 
 This example shows the backend definition file configured with virtual pools along with StorageClasses that refer back to them.
 
-Astra Trident copies labels present on a storage pool to the backend storage LUN at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
+Trident copies labels present on a storage pool to the backend storage LUN at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
 In the sample backend definition file shown below, specific defaults are set for all storage pools, which set the `type` at Silver. The virtual pools are defined in the `storage` section. In this example, some of the storage pools set their own type, and some pools override the default values set above.
 
@@ -181,7 +181,7 @@ storage:
 
 The following StorageClass definitions refer to the above virtual pools. Using the `parameters.selector` field, each StorageClass calls out which virtual pool(s) can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
 
-The first StorageClass (`solidfire-gold-four`) will map to the first virtual pool. This is the only pool offering gold performance with a `Volume Type QoS` of Gold. The last StorageClass (`solidfire-silver`) calls out any storage pool which offers a silver performance. Astra Trident will decide which virtual pool is selected and will ensure the storage requirement is met.
+The first StorageClass (`solidfire-gold-four`) will map to the first virtual pool. This is the only pool offering gold performance with a `Volume Type QoS` of Gold. The last StorageClass (`solidfire-silver`) calls out any storage pool which offers a silver performance. Trident will decide which virtual pool is selected and ensures the storage requirement is met.
 
 ----
 apiVersion: storage.k8s.io/v1

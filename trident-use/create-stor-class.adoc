@@ -91,3 +91,23 @@ cp sample-input/storage-class-csi.yaml.templ sample-input/storage-class-basic-cs
 # Modify __BACKEND_TYPE__ with the storage driver field above (e.g., ontap-nas)
 vi sample-input/storage-class-basic-csi.yaml
 ----
+
+== Storage class example
+
+.Storage class example for FC
+
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fcp-sc
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  storagePools: "ontap-san-backend:.*"
+  fsType: "ext4"
+allowVolumeExpansion: True
+----
+For more information, refer to:
+
+* link:..trident-docker/stor-config.html[Storage configuration options^]

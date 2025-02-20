@@ -392,6 +392,22 @@ Refer to the following pages for more information:
 ----
 ====
 
+.SCSI over FC example for `ontap-san` driver
+[%collapsible%closed]
+====
+
+----
+{
+  "version": 1,
+  "backendName": "ontap-san-backend",
+  "storageDriverName": "ontap-san",
+  "managementLIF": "10.0.0.1",
+  "sanType: fcp"
+  "svm": "trident_svm",
+}
+----
+====
+
 == Element software configuration
 
 In addition to the global configuration values, when using Element software (NetApp HCI/SolidFire), these options are available.

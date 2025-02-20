@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/volume-share.html
 keywords: volref, volume reference, share, pvc, pv, nfs, namespace, cvna, cross-namespace, sharing
-summary: Using Astra Trident, you can create a volume in a primary namespace and share it in one or more secondary namespaces.
+summary: Using Trident, you can create a volume in a primary namespace and share it in one or more secondary namespaces.
 ---
 
 = Share an NFS volume across namespaces
@@ -11,11 +11,11 @@ summary: Using Astra Trident, you can create a volume in a primary namespace and
 :imagesdir: ../media/
 
 [.lead]
-Using Astra Trident, you can create a volume in a primary namespace and share it in one or more secondary namespaces.
+Using Trident, you can create a volume in a primary namespace and share it in one or more secondary namespaces.
 
 == Features
 
-The Astra TridentVolumeReference CR allows you to securely share ReadWriteMany (RWX) NFS volumes across one or more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
+The TridentVolumeReference CR allows you to securely share ReadWriteMany (RWX) NFS volumes across one or more Kubernetes namespaces. This Kubernetes-native solution has the following benefits:
 
 * Multiple levels of access control to ensure security 
 * Works with all Trident NFS volume drivers
@@ -73,7 +73,7 @@ spec:
       storage: 100Gi
 ----
 +
-Astra Trident creates the PV and its backend NFS storage volume.
+Trident creates the PV and its backend NFS storage volume.
 +
 [NOTE]
 ====
@@ -121,10 +121,10 @@ spec:
 NOTE: The size of the destination PVC must be less than or equal than the source PVC.
 
 .Results
-Astra Trident reads the `shareFromPVC` annotation on the destination PVC and creates the destination PV as a subordinate volume with no storage resource of its own that points to the source PV and shares the source PV storage resource. The destination PVC and PV appear bound as normal. 
+Trident reads the `shareFromPVC` annotation on the destination PVC and creates the destination PV as a subordinate volume with no storage resource of its own that points to the source PV and shares the source PV storage resource. The destination PVC and PV appear bound as normal. 
 
 == Delete a shared volume
-You can delete a volume that is shared across multiple namespaces. Astra Trident will remove access to the volume on the source namespace and maintain access for other namespaces that share the volume. When all namespaces that reference the volume are removed, Astra Trident deletes the volume. 
+You can delete a volume that is shared across multiple namespaces. Trident will remove access to the volume on the source namespace and maintain access for other namespaces that share the volume. When all namespaces that reference the volume are removed, Trident deletes the volume. 
 
 == Use `tridentctl get` to query subordinate volumes
 Using the `tridentctl` utility, you can run the `get` command to get subordinate volumes. For more information, refer to link:../trident-reference/tridentctl.html[`tridentctl` commands and options].
@@ -142,7 +142,7 @@ Flags:
 
 == Limitations
 
-* Astra Trident cannot prevent destination namespaces from writing to the shared volume. You should use file locking or other processes to prevent overwriting shared volume data.
+* Trident cannot prevent destination namespaces from writing to the shared volume. You should use file locking or other processes to prevent overwriting shared volume data.
 
 * You cannot revoke access to the source PVC by removing the `shareToNamespace` or `shareFromNamespace` annotations or deleting the `TridentVolumeReference` CR. To revoke access, you must delete the subordinate PVC.
 
@@ -152,5 +152,5 @@ Flags:
 To learn more about cross-namespace volume access:
 
 * Visit link:https://cloud.netapp.com/blog/astra-blg-sharing-volumes-between-namespaces-say-hello-to-cross-namespace-volume-access[Sharing volumes between namespaces: Say hello to cross-namespace volume access^].
-* Watch the demo on link:http://netapp.tv/cloud/details/29594?playlist_id=81&mcid=63262890210074608700682715883688763007[NetAppTV^].
+* Watch the demo on link:https://media.netapp.com/page/9071d19d-1438-5ed3-a7aa-ea4d73c28b7f/solutions-products[NetAppTV^].
 

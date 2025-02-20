@@ -1,0 +1,37 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-uninstall.html
+keywords: trident, protect, netapp, uninstall, full version
+summary: You might need to remove Trident protect components if you are upgrading from a trial to a full version of the product. 
+---
+= Uninstall Trident protect
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+You might need to remove Trident protect components if you are upgrading from a trial to a full version of the product.
+
+To remove Trident protect, perform the following steps.
+
+.Steps
+. Remove the Trident protect CR files:
++
+[source,console]
+----
+helm uninstall -n trident-protect trident-protect-crds
+----
+. Remove Trident protect:
++
+[source,console]
+----
+helm uninstall -n trident-protect trident-protect
+----
+. Remove the Trident protect namespace:
++
+[source,console]
+----
+kubectl delete ns trident-protect
+----

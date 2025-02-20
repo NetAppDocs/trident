@@ -1,7 +1,7 @@
 # trident
-Astra Trident Documentation
+Trident Documentation
 
-Welcome to the documentation for the latest version of Astra Trident.
+Welcome to the documentation for the latest version of Trident.
 
 We appreciate your help to ensure the accuracy and usefulness of this content. If you see an error or if you have a recommendation, either open an issue in this repository or make the changes yourself and submit a pull request. For details about contributing, go to our [Contributor's Guide](https://docs.netapp.com/us-en/contribute/).
 

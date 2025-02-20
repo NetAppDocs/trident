@@ -5,39 +5,39 @@ keywords: tridentctl, trident, kubernetes, commands, options, usage, flags
 summary: Learn more about tridentctl, a command-line utility that provides simple access to Trident.
 ---
 
-= Manage Astra Trident using tridentctl
+= Manage Trident using tridentctl
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-The https://github.com/NetApp/trident/releases[Trident installer bundle^] includes the `tridentctl` command-line utility to provide simple access to Astra Trident. Kubernetes users with sufficient privileges can use it to install Astra Trident or manage the namespace that contains the Astra Trident pod.
+The https://github.com/NetApp/trident/releases[Trident installer bundle^] includes the `tridentctl` command-line utility to provide simple access to Trident. Kubernetes users with sufficient privileges can use it to install Trident or manage the namespace that contains the Trident pod.
 
 == Commands and global flags
 You can run `tridentctl help` to get a list of available commands for `tridentctl` or append the `--help` flag to any command to get a list of options and flags for that specific command.
 
 `tridentctl [command] [--optional-flag]`
 
-The Astra Trident `tridentctl` utility supports the following commands and global flags. 
+The Trident `tridentctl` utility supports the following commands and global flags. 
 
 .Commands
 [%collapsible%closed]
 ====
 
-`create`:: Add a resource to Astra Trident.
-`delete`:: Remove one or more resources from Astra Trident.
-`get`:: Get one or more resources from Astra Trident.
+`create`:: Add a resource to Trident.
+`delete`:: Remove one or more resources from Trident.
+`get`:: Get one or more resources from Trident.
 `help`:: Help about any command.
-`images`:: Print a table of the container images Astra Trident needs.
-`import`:: Import an existing resource to Astra Trident.
-`install`:: Install Astra Trident.
-`logs`:: Print the logs from Astra Trident.
-`send`:: Send a resource from Astra Trident.
-`uninstall`:: Uninstall Astra Trident.
-`update`:: Modify a resource in Astra Trident.
+`images`:: Print a table of the container images Trident needs.
+`import`:: Import an existing resource to Trident.
+`install`:: Install Trident.
+`logs`:: Print the logs from Trident.
+`send`:: Send a resource from Trident.
+`uninstall`:: Uninstall Trident.
+`update`:: Modify a resource in Trident.
 `update backend state`:: Temporarily suspend backend operations. 
-`upgrade`:: Upgrade a resource in Astra Trident.
-`version`:: Print the version of Astra Trident.
+`upgrade`:: Upgrade a resource in Trident.
+`version`:: Print the version of Trident.
 ====
 
 .Global flags
@@ -49,9 +49,9 @@ The Astra Trident `tridentctl` utility supports the following commands and globa
 +
 
 NOTE: Alternatively, you can export the `KUBECONFIG` variable to point to a specific Kubernetes cluster and issue `tridentctl` commands to that cluster.
-`-n`, `--namespace string`:: Namespace of Astra Trident deployment.
+`-n`, `--namespace string`:: Namespace of Trident deployment.
 `-o`, `--output string`:: Output format. One of json|yaml|name|wide|ps (default).
-`-s`, `--server string`:: Address/port of Astra Trident REST interface.
+`-s`, `--server string`:: Address/port of Trident REST interface.
 +
 
 WARNING: Trident REST interface can be configured to listen and serve at 127.0.0.1 (for IPv4) or [::1] (for IPv6) only.
@@ -62,39 +62,39 @@ WARNING: Trident REST interface can be configured to listen and serve at 127.0.0
 
 === create
 
-Use the `create` command to add a resource to Astra Trident.
+Use the `create` command to add a resource to Trident.
 
 `tridentctl create [option]`
 
 
 Options:: 
-`backend`: Add a backend to Astra Trident.
+`backend`: Add a backend to Trident.
 
 === delete
 
-Use the `delete` command to remove one or more resources from Astra Trident.
+Use the `delete` command to remove one or more resources from Trident.
 
 `tridentctl delete [option]`
 
 Options::
 
-`backend`: Delete one or more storage backends from Astra Trident.
-`snapshot`: Delete one or more volume snapshots from Astra Trident.
-`storageclass`: Delete one or more storage classes from Astra Trident.
-`volume`: Delete one or more storage volumes from Astra Trident.
+`backend`: Delete one or more storage backends from Trident.
+`snapshot`: Delete one or more volume snapshots from Trident.
+`storageclass`: Delete one or more storage classes from Trident.
+`volume`: Delete one or more storage volumes from Trident.
 
 === get
 
-Use the `get` command to get one or more resources from Astra Trident.
+Use the `get` command to get one or more resources from Trident.
 
 `tridentctl get [option]`
 
 Options:: 
 
-`backend`: Get one or more storage backends from Astra Trident.
-`snapshot`: Get one or more snapshots from Astra Trident.
-`storageclass`: Get one or more storage classes from Astra Trident.
-`volume`: Get one or more volumes from Astra Trident.
+`backend`: Get one or more storage backends from Trident.
+`snapshot`: Get one or more snapshots from Trident.
+`storageclass`: Get one or more storage classes from Trident.
+`volume`: Get one or more volumes from Trident.
 
 Flags::
 
@@ -104,7 +104,7 @@ Flags::
 
 === images
 
-Use `images` flags to print a table of the container images Astra Trident needs.
+Use `images` flags to print a table of the container images Trident needs.
 
 `tridentctl images [flags]`
 
@@ -115,7 +115,7 @@ Flags::
 
 === import volume
 
-Use the `import volume` command to import an existing volume to Astra Trident.
+Use the `import volume` command to import an existing volume to Trident.
 
 `tridentctl import volume <backendName> <volumeName> [flags]`
 
@@ -129,7 +129,7 @@ Flags::
 
 === install
 
-Use the `install` flags to install Astra Trident.
+Use the `install` flags to install Trident.
 
 `tridentctl install [flags]`
 
@@ -144,18 +144,19 @@ Flags::
 `--image-registry string`: The address/port of an internal image registry.
 `--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
 `--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
-`--log-format string`: The Astra Trident logging format (text, json) (default "text").
-`--pv string`: The name of the legacy PV used by Astra Trident, makes sure this doesn't exist (default "trident").
-`--pvc string`: The name of the legacy PVC used by Astra Trident, makes sure this doesn't exist (default "trident").
+`--log-format string`: The Trident logging format (text, json) (default "text").
+`--node-prep`: Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. *Currently, `iscsi` is the only value supported.*
+`--pv string`: The name of the legacy PV used by Trident, makes sure this doesn't exist (default "trident").
+`--pvc string`: The name of the legacy PVC used by Trident, makes sure this doesn't exist (default "trident").
 `--silence-autosupport`: Don't send autosupport bundles to NetApp automatically (default true).
 `--silent`: Disable most output during installation.
-`--trident-image string`: The Astra Trident image to install.
+`--trident-image string`: The Trident image to install.
 `--use-custom-yaml`: Use any existing YAML files that exist in setup directory.
-`--use-ipv6`: Use IPv6 for Astra Trident's communication.
+`--use-ipv6`: Use IPv6 for Trident's communication.
 
 === logs
 
-Use `logs` flags to print the logs from Astra Trident.
+Use `logs` flags to print the logs from Trident.
 
 `tridentctl logs [flags]`
 
@@ -163,14 +164,14 @@ Flags::
 
 `-a`, `--archive`: Create a support archive with all logs unless otherwise specified.
 `-h`, `--help`: Help for logs.
-`-l`, `--log string`: Astra Trident log to display. One of trident|auto|trident-operator|all (default "auto").
+`-l`, `--log string`: Trident log to display. One of trident|auto|trident-operator|all (default "auto").
 `--node string`: The Kubernetes node name from which to gather node pod logs.
 `-p`, `--previous`: Get the logs for the previous container instance if it exists.
 `--sidecars`: Get the logs for the sidecar containers.
 
 === send
 
-Use the `send` command to send a resource from Astra Trident.
+Use the `send` command to send a resource from Trident.
 
 `tridentctl send [option]`
 
@@ -180,7 +181,7 @@ Options::
 
 === uninstall
 
-Use `uninstall` flags to uninstall Astra Trident.
+Use `uninstall` flags to uninstall Trident.
 
 `tridentctl uninstall [flags]`
 
@@ -191,12 +192,12 @@ Flags::
 
 === update
 
-Use the `update` command to modify a resource in Astra Trident.
+Use the `update` command to modify a resource in Trident.
 
 `tridentctl update [option]`
 
 Options::
-`backend`: Update a backend in Astra Trident.
+`backend`: Update a backend in Trident.
 
 === update backend state
 
@@ -204,12 +205,73 @@ Use the `update backend state` command to suspend or resume backend operations.
 
 `tridentctl update backend state <backend-name> [flag]`
 
+.Points to consider
+
+* If a backend is created using a TridentBackendConfig (tbc), the backend cannot be updated using a `backend.json` file. 
+* If the `userState` has been set in a tbc, it cannot be modified using the `tridentctl update backend state <backend-name> --user-state suspended/normal` command.
+* To regain the ability to set the `userState` via tridentctl after it has been set via tbc, the `userState` field must be removed from the tbc. This can be done using the `kubectl edit tbc` command. After the `userState` field is removed, you can use the `tridentctl update backend state` command to change the `userState` of a backend.
+* Use the `tridentctl update backend state` to change the `userState`. You can also update the `userState` using `TridentBackendConfig` or `backend.json` file; this triggers a complete re-initialization of the backend and can be time-consuming. 
+
 Flags::
 `-h`, `--help`: Help for backend state. 
 `--user-state`: Set to `suspended` to pause backend operations. Set to `normal` to resume backend operations. When set to `suspended`:
 +
-* `AddVolume`, `CloneVolume`, `Import Volume`, `ResizeVolume` are paused.
-* `PublishVolume`, `UnPublishVolume`, `CreateSnapshot`, `GetSnapshot`, `RestoreSnapshot`, `DeleteSnapshot`, `RemoveVolume`, `GetVolumeExternal`, `ReconcileNodeAccess` remain available.
+* `AddVolume` and `Import Volume` are paused.
+* `CloneVolume`, `ResizeVolume`, `PublishVolume`, `UnPublishVolume`, `CreateSnapshot`, `GetSnapshot`, `RestoreSnapshot`, `DeleteSnapshot`, `RemoveVolume`, `GetVolumeExternal`, `ReconcileNodeAccess` remain available.
+
+You can also update the backend state using `userState` field in the backend configuration file `TridentBackendConfig` or `backend.json`.
+For more information, refer to link:../trident-use/backend_options.html[Options for managing backends] and link:../trident-use/backend_ops_kubectl.html[Perform backend management with kubectl].
+
+*Example:*
+
+[role="tabbed-block"]
+====
+
+.JSON
+--
+Follow these steps to update the `userState` using the `backend.json` file:
+
+. Edit the `backend.json` file to include the `userState` field with its value set to 'suspended'.
+. Update the backend using the `tridentctl backend update` command and the path to the updated `backend.json` file.
++
+*Example*: `tridentctl backend update -f /<path to backend JSON file>/backend.json`
+
+----
+{
+    "version": 1,
+    "storageDriverName": "ontap-nas",
+    "managementLIF": "<redacted>",
+    "svm": "nas-svm",
+    "backendName": "customBackend",
+    "username": "<redacted>",
+    "password": "<redacted>",
+    "userState": "suspended",
+}
+
+----
+--
+
+.YAML
+--
+You can edit the tbc after it has been applied using the `kubectl edit <tbc-name> -n <namespace>` command.
+The following example updates the backend state to suspend using the `userState: suspended` option:
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-ontap-nas
+spec:
+  version: 1
+  backendName: customBackend
+  storageDriverName: ontap-nas
+  managementLIF: <redacted>
+  svm: nas-svm
+userState: suspended
+  credentials:
+    name: backend-tbc-ontap-nas-secret
+----
+--
+====
 
 === version
 
@@ -221,3 +283,7 @@ Flags::
 
 `--client`: Client version only (no server required).
 `-h, --help`: Help for version.
+
+== Plugin support
+
+Tridentctl supports plugins similar to kubectl. Tridentctl detects a plugin if the plugin binary file name follows the scheme "tridentctl-<plugin>", and the binary is located in a folder listed the PATH environment variable. All the detected plugins are listed in the plugin section of the tridentctl help. Optionally, you can also limit the search by specifying a plugin folder in the the enviornment variable TRIDENTCTL_PLUGIN_PATH (Example: `TRIDENTCTL_PLUGIN_PATH=~/tridentctl-plugins/`). If the variable is used, tridenctl searches only in the specified folder. 

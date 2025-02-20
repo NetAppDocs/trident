@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/backends.html
 keywords: backends, storage system, anf, cvs for gcp, element, hci, solidfire, ontap, aff, fas, ontap select, configure backends, fsx
-summary: A backend defines the relationship between Astra Trident and a storage system. It tells Astra Trident how to communicate with that storage system and how Astra Trident should provision volumes from it. 
+summary: A backend defines the relationship between Trident and a storage system. It tells Trident how to communicate with that storage system and how Trident should provision volumes from it. 
 ---
 
 = Configure backends
@@ -11,13 +11,15 @@ summary: A backend defines the relationship between Astra Trident and a storage 
 :imagesdir: ../media/
 
 [.lead]
-A backend defines the relationship between Astra Trident and a storage system. It tells Astra Trident how to communicate with that storage system and how Astra Trident should provision volumes from it. 
+A backend defines the relationship between Trident and a storage system. It tells Trident how to communicate with that storage system and how Trident should provision volumes from it. 
 
-Astra Trident automatically offers up storage pools from backends that match the requirements defined by a storage class. Learn how to configure the backend for your storage system.
+Trident automatically offers up storage pools from backends that match the requirements defined by a storage class. Learn how to configure the backend for your storage system.
 
 * link:anf.html[Configure an Azure NetApp Files backend^]
+* link:gcnv.html[Configure a Google Cloud NetApp Volumes backend^]
 * link:gcp.html[Configure a Cloud Volumes Service for Google Cloud Platform backend^]
 * link:element.html[Configure a NetApp HCI or SolidFire backend^]
 * link:ontap-nas.html[Configure a backend with ONTAP or Cloud Volumes ONTAP NAS drivers^]
 * link:ontap-san.html[Configure a backend with ONTAP or Cloud Volumes ONTAP SAN drivers^]
-* link:trident-fsx.html[Use Astra Trident with Amazon FSx for NetApp ONTAP^]
+* link:trident-fsx.html[Use Trident with Amazon FSx for NetApp ONTAP^]
+

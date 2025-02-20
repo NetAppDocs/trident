@@ -64,6 +64,10 @@ To configure the maximum size for volumes that can be created by Trident, use th
 
 In addition to controlling the volume size at the storage array, you should also leverage Kubernetes capabilities.
 
+=== Limit the maximum size of FlexVols created by Trident
+
+To configure the maximum size for FlexVols used as pools for ontap-san-economy and ontap-nas-economy drivers, use the `limitVolumePoolSize` parameter in your `backend.json` definition.
+
 === Configure Trident to use bidirectional CHAP
 
 You can specify the CHAP initiator and target usernames and passwords in your backend definition and have Trident enable CHAP on the SVM. Using the `useCHAP` parameter in your backend configuration, Trident authenticates iSCSI connections for ONTAP backends with CHAP. 
@@ -232,7 +236,7 @@ Some of the best practices documentation is listed below. Search the https://www
 
 *ONTAP*
 
-* https://www.netapp.com/us/media/tr-4067.pdf[NFS Best Practice and Implementation Guide^]
+* https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf[NFS Best Practice and Implementation Guide^]
 * http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-sanag/home.html[SAN Administration Guide^] (for iSCSI)
 * http://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-iscsi-rhel-cg/home.html[iSCSI Express Configuration for RHEL^]
 
@@ -247,10 +251,10 @@ Some of the best practices documentation is listed below. Search the https://www
 
 *Application best practices information*
 
-* https://www.netapp.com/us/media/tr-4722.pdf[Best practices for MySQL on ONTAP^]
+* https://docs.netapp.com/us-en/ontap-apps-dbs/mysql/mysql-overview.html[Best practices for MySQL on ONTAP^]
 * https://www.netapp.com/pdf.html?item=/media/10510-tr-4605.pdf[Best practices for MySQL on SolidFire^]
-* http://www.netapp.com/us/media/tr-4635.pdf[NetApp SolidFire and Cassandra^]
-* http://www.netapp.com/us/media/tr-4606.pdf[Oracle best practices on SolidFire^]
-* http://www.netapp.com/us/media/tr-4610.pdf[PostgreSQL best practices on SolidFire^]
+* https://www.netapp.com/pdf.html?item=/media/10513-tr-4635pdf.pdf[NetApp SolidFire and Cassandra^]
+* https://www.netapp.com/pdf.html?item=/media/10511-tr4606pdf.pdf[Oracle best practices on SolidFire^]
+* https://www.netapp.com/pdf.html?item=/media/10512-tr-4610pdf.pdf[PostgreSQL best practices on SolidFire^]
 
 Not all applications have specific guidelines, it's important to work with your NetApp team and to use the https://www.netapp.com/search/[NetApp library^] to find the most up-to-date documentation.

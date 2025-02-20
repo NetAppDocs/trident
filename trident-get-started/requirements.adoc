@@ -62,6 +62,20 @@ To use Trident, you need one or more of the following supported backends:
 * NetApp All SAN Array (ASA)
 * NetApp HCI/Element software 11 or above
 
+== Trident support for KubeVirt and OpenShift virtualization
+
+.Storage drivers supported:
+Trident supports the following ONTAP drivers for KubeVirt and OpenShift virtualization:
+
+* ontap-nas
+* ontap-nas-economy
+* ontap-san(iSCSI, FCP, NVMe over TCP)
+* ontap-san-economy(iSCSI Only)
+
+.Points to consider
+* Update storage class to have fsType parameter(for example: `fsType: "ext4"`) in OpenShift virtualization environment. If needed, volume mode can be set to block explicitly via `volumeMode=Block` in the `dataVolumeTemplates` to inform CDI to create Block data volume.
+* RWX access mode for block-storage drivers: ontap-san (iSCSI, NVMe/TCP, FC) and ontap-san-economy (iSCSI) is only possible in “volumeMode: Block” (raw device). For these drivers, parameter fstype cannot be used, as the volumes are provided in raw device mode(For example: In Live-Migration workflow/s where RWX access mode is required and block storage driver is used, volumeMode=Block can be used.)
+
 == Feature requirements
 
 The table below summarizes the features available with this release of Trident and the versions of Kubernetes it supports.

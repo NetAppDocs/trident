@@ -252,6 +252,21 @@ labels:
 username: vsadmin
 password: <password>
 ----
+
+
+You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
+
+For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
+
+----
+---
+version: 1
+storageDriverName: ontap-san
+managementLIF: 192.168.1.66
+username: vsadmin
+password: password
+----
+
 ====
 
 .ONTAP SAN economy example
@@ -265,24 +280,6 @@ managementLIF: 10.0.0.1
 svm: svm_iscsi_eco
 username: vsadmin
 password: <password>
-----
-====
-
-[#mcc-best]
-. example
-[%collapsible%closed]
-====
-You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
-
-For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
-
-----
----
-version: 1
-storageDriverName: ontap-san
-managementLIF: 192.168.1.66
-username: vsadmin
-password: password
 ----
 ====
 
@@ -369,6 +366,24 @@ useREST: true
 ----
 ====
 
+.SCSI over FC (FCP) example
+[%collapsible%closed]
+====
+You must have an SVM configured with NVMe on your ONTAP backend. This is a basic backend configuration for NVMe/TCP.
+----
+---
+version: 1
+backendName: fcp-backend
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_fc
+username: vsadmin
+password: password
+sanType: fcp
+useREST: true
+----
+====
+
 .Backend configuration example with nameTemplate
 [%collapsible%closed]
 ====
@@ -390,7 +405,7 @@ defaults: {
 ====
 
 
-.formatOptions example for `ontap-san-economy` driver
+.formatOptions example for ontap-san-economy driver
 [%collapsible%closed]
 ====
 

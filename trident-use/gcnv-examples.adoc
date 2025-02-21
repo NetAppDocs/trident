@@ -159,6 +159,40 @@ spec:
 ----
 ====
 
+.Configuration for SMB volumes
+[%collapsible%closed]
+====
+----
+
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-gcnv1
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: google-cloud-netapp-volumes
+  projectNumber: '123456789'
+  location: asia-east1
+  serviceLevel: flex
+  nasType: smb
+  apiKey:
+    type: service_account
+    project_id: cloud-native-data
+    client_email: trident-sample@cloud-native-data.iam.gserviceaccount.com
+    client_id: '123456789737813416734'
+    auth_uri: https://accounts.google.com/o/oauth2/auth
+    token_uri: https://oauth2.googleapis.com/token
+    auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+    client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/trident-sample%40cloud-native-data.iam.gserviceaccount.com
+  credentials:
+    name: backend-tbc-gcnv-secret
+
+----
+
+====
+
+
 .Configuration with StoragePools filter
 [%collapsible%closed]
 ====

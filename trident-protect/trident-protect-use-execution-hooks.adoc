@@ -28,7 +28,9 @@ Trident protect supports the following types of execution hooks, based on when t
 When a data protection operation is run, execution hook events take place in the following order:
 
 . Any applicable custom pre-operation execution hooks are run on the appropriate containers. You can create and run as many custom pre-operation hooks as you need, but the order of execution of these hooks before the operation is neither guaranteed nor configurable.
+. Filesystem freezes occur, if applicable. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect]. 
 . The data protection operation is performed.
+. Frozen filesystems are unfrozen, if applicable.
 . Any applicable custom post-operation execution hooks are run on the appropriate containers. You can create and run as many custom post-operation hooks as you need, but the order of execution of these hooks after the operation is neither guaranteed nor configurable.
 
 If you create multiple execution hooks of the same type (for example, pre-snapshot), the order of execution of those hooks is not guaranteed. However, the order of execution of hooks of different types is guaranteed. For example, the following is the order of execution of a configuration that has all of the different types of hooks:
@@ -37,7 +39,7 @@ If you create multiple execution hooks of the same type (for example, pre-snapsh
 . Post-snapshot hooks executed
 . Pre-backup hooks executed
 . Post-backup hooks executed
-//. Post-restore hooks executed Removed at request of Kevin Hicks
+//. Post-restore hooks executed (Removed at request of Kevin Hicks)
 
 NOTE: The preceding order example only applies when you run a backup that does not use an existing snapshot.
 
@@ -49,11 +51,8 @@ NOTE: You should always test your execution hook scripts before enabling them in
 Consider the following when planning execution hooks for your apps.
 
 * An execution hook must use a script to perform actions. Many execution hooks can reference the same script.
-
 * Trident protect requires the scripts that execution hooks use to be written in the format of executable shell scripts.
-
 * Script size is limited to 96KB.
-
 * Trident protect uses execution hook settings and any matching criteria to determine which hooks are applicable to a snapshot, backup, or restore operation.
 
 NOTE: Because execution hooks often reduce or completely disable the functionality of the application they are running against, you should always try to minimize the time your custom execution hooks take to run. If you start a backup or snapshot operation with associated execution hooks but then cancel it, the hooks are still allowed to run if the backup or snapshot operation has already begun. This means that the logic used in a post-backup execution hook cannot assume that the backup was completed.
@@ -157,7 +156,7 @@ kubectl apply -f trident-protect-hook.yaml
 +
 [source,console]
 ----- 
-tridentctl protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file>
+tridentctl-protect create exechook <my_exec_hook_name> --action <action_type> --app <app_to_use_hook> --stage <pre_or_post_stage> --source-file <script-file> -n <application_namespace>
 -----
 --
 ====

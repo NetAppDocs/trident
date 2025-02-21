@@ -11,7 +11,7 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 :imagesdir: ../media/
 
 [.lead]
- Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment.
+Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment.
 
 You can install Trident using one of the following methods:
 
@@ -94,15 +94,12 @@ eksctl create addon --name netapp_trident-operator --cluster <cluster_name> \
 . Click the name of the cluster that you want to configure the NetApp Trident CSI add-on for.
 . Click *Add-ons* and then click *Get more add-ons*.
 . On the *Select add-ons* page, do the following:
-.. In the AWS Marketplace EKS-addons section, select the * Trident by NetApp* check box.
+.. In the AWS Marketplace EKS-addons section, select the *Trident by NetApp* check box.
 .. Click *Next*.
 . On the *Configure selected add-ons* settings page, do the following:
 .. Select the *Version* you would like to use.
 .. For *Select IAM role*, leave at *Not set*.
 .. Expand the *Optional configuration settings*, follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`). If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
-+
-NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
-+
 . Choose *Next*.
 . On the *Review and add* page, choose *Create*. 
 +
@@ -121,7 +118,7 @@ add-on.json
 
    "clusterName": "<eks-cluster>",
    "addonName": "netapp_trident-operator",
-   "addonVersion": "v24.6.1-eksbuild.1",
+   "addonVersion": "v24.10.0-eksbuild.1",
    "serviceAccountRoleArn": "<arn:aws:iam::123456:role/astratrident-role>",
    "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: <arn:aws:iam::123456:role/astratrident-role>'",
    "cloudProvider": "AWS"}"
@@ -152,11 +149,11 @@ add-on.json
 *Example output:*
 ----
 NAME                        VERSION             STATUS    ISSUES    IAMROLE    UPDATE AVAILABLE    CONFIGURATION VALUES
-netapp_trident-operator    v24.6.1-eksbuild.1    ACTIVE    0       {"cloudIdentity":"'eks.amazonaws.com/role-arn: arn:aws:iam::139763910815:role/AmazonEKS_FSXN_CSI_DriverRole'"}
+netapp_trident-operator    v24.10.0-eksbuild.1    ACTIVE    0       {"cloudIdentity":"'eks.amazonaws.com/role-arn: arn:aws:iam::139763910815:role/AmazonEKS_FSXN_CSI_DriverRole'"}
 ----
 
 * Update the add-on to the version returned under UPDATE AVAILABLE in the output of the previous step.
-`eksctl update addon --name netapp_trident-operator --version v24.6.1-eksbuild.1 --cluster my-cluster --force`
+`eksctl update addon --name netapp_trident-operator --version v24.10.0-eksbuild.1 --cluster my-cluster --force`
 +
 
 If you remove the `--force` option and any of the Amazon EKS add-on settings conflict with your existing settings, then updating the Amazon EKS add-on fails; you receive an error message to help you resolve the conflict. Before specifying this option, make sure that the Amazon EKS add-on does not manage settings that you need to manage, because those settings are overwritten with this option. 
@@ -175,7 +172,7 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 . Click *Trident by NetApp* and then click *Edit*.
 . On the *Configure Trident by NetApp* page, do the following:
 .. Select the *Version* you would like to use.
-.. (Optional) You can expand the *Optional configuration settings* and modify as needed.
+.. Expand the *Optional configuration settings* and modify as needed.
 .. Click *Save changes*.
 
 --

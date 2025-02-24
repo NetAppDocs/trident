@@ -237,7 +237,8 @@ Refer to link:https://github.com/NetApp/trident/tree/master/contrib/ontap/triden
 `security login role create <role_name\> -cmddirname "command" -access all –vserver <svm_name\>`
 . Create a usename for the Trident user:
 +
-`security login create -username <user_name\> -application ontapi -authmethod <password\> -role <name_of_role_in_step_1\> –vserver <svm_name\> -comment "user_description"`
+`security login create -username <user_name\> -application ontapi -authmethod password -role <name_of_role_in_step_1\> –vserver <svm_name\> -comment "user_description"`
+`security login create -username <user_name\> -application http -authmethod password -role <name_of_role_in_step_1\> –vserver <svm_name\> -comment "user_description"`
 . Map the role to the user:
 +
 `security login modify username <user_name\> –vserver <svm_name\> -role <role_name\> -application ontapi -application console -authmethod <password\>`

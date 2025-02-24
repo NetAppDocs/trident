@@ -47,6 +47,8 @@ NOTE: The preceding order example only applies when you run a backup that does n
 
 NOTE: You should always test your execution hook scripts before enabling them in a production environment. You can use the 'kubectl exec' command to conveniently test the scripts. After you enable the execution hooks in a production environment, test the resulting snapshots and backups to ensure they are consistent. You can do this by cloning the app to a temporary namespace, restoring the snapshot or backup, and then testing the app.
 
+NOTE: If a pre-snapshot execution hook adds, changes, or removes Kubernetes resources, those changes are included in the snapshot or backup and in any subsequent restore operation.
+
 == Important notes about custom execution hooks
 Consider the following when planning execution hooks for your apps.
 

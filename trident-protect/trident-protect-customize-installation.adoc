@@ -78,7 +78,7 @@ jobResources:
 +
 [source,console]
 ----
-helm upgrade trident-protect -n trident-protect -f <resourceLimits.yaml> --reuse-values
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f <resourceLimits.yaml> --reuse-values
 ----
 
 == Customize security context constraints 

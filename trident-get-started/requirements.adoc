@@ -33,14 +33,14 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.25 - 1.32
+* Kubernetes 1.26 - 1.32
 * OpenShift 4.10 - 4.17
 * Rancher Kubernetes Engine 2 (RKE2) v1.28.5+rke2r1 
 
 The Trident operator is supported with these releases:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.25 - 1.32
+* Kubernetes 1.26 - 1.32
 * OpenShift 4.10 - 4.17
 * Rancher Kubernetes Engine 2 (RKE2) v1.28.5+rke2r1 
 
@@ -48,7 +48,7 @@ Trident also works with a host of other fully-managed and self-managed Kubernete
 
 Trident and ONTAP can be used as a storage provider for link:https://kubevirt.io/[KubeVirt].
 
-WARNING: Before upgrading a Kubernetes cluster from 1.24 to 1.25 or later that has Trident installed, refer to link:../trident-managing-k8s/upgrade-operator.html#upgrade-a-helm-installation[Upgrade a Helm installation].
+WARNING: Before upgrading a Kubernetes cluster from 1.25 to 1.26 or later that has Trident installed, refer to link:../trident-managing-k8s/upgrade-operator.html#upgrade-a-helm-installation[Upgrade a Helm installation].
 
 == Supported backends (storage)
 
@@ -74,35 +74,35 @@ The table below summarizes the features available with this release of Trident a
 
 |Trident
 
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |Volume Snapshots
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |PVC from Volume Snapshots
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |iSCSI PV resize
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |ONTAP Bidirectional CHAP
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |Dynamic Export Policies
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |Trident Operator
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |CSI Topology
-a|1.25 - 1.32
+a|1.26 - 1.32
 a|No
 
 |===
@@ -149,7 +149,7 @@ For air-gapped installations, the following list is a reference of container ima
 |Kubernetes versions
 |Container image
 
-|v1.25.0, v1.26.0, v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0
+| v1.26.0, v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0
 a|
 * docker.io/netapp/trident:25.02.0                      
 * docker.io/netapp/trident-autosupport:25.02                   

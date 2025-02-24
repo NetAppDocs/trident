@@ -96,6 +96,7 @@ kubectl get snapshots <my-snapshot-name> -n trident-protect -o jsonpath='{.statu
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
@@ -161,7 +162,7 @@ For example:
 +
 [source,console]
 -----
-tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
+tridentctl-protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
 -----
 --
 ====

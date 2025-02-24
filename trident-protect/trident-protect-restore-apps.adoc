@@ -20,7 +20,7 @@ include::../_include/namespace-anno-labels.adoc[]
 
 == Restore from a backup to a different namespace
 
-When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
+When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
 NOTE: Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
 
@@ -47,6 +47,7 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: BackupRestore
 metadata:
@@ -109,7 +110,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create backuprestore <my_restore_name> --backup <backup_namespace>/<backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
+tridentctl-protect create backuprestore <my_restore_name> --backup <backup_namespace>/<backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
 -----
 --
 ====
@@ -140,6 +141,7 @@ For example:
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: BackupInplaceRestore
 metadata:
@@ -197,15 +199,117 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create backupinplacerestore <my_restore_name> --backup <namespace/backup_to_restore> 
+tridentctl-protect create backupinplacerestore <my_restore_name> --backup <namespace/backup_to_restore> -n <application_namespace>
 -----
 --
 ====
 // end tabbed block
 
+== Restore from a backup to a different cluster
+
+You can restore a backup to a different cluster if there is an issue with the original cluster.
+
+*Before you begin*
+
+Ensure the following prerequisites are met:
+
+* The destination cluster has Trident protect installed.
+* The destination cluster has access to the bucket path of the same AppVault as the source cluster, where the backup is stored.
+
+.Steps
+. Check the availability of the AppVault CR on the destination cluster using Trident protect CLI plugin:
++
+[source,console]
+-----
+tridentctl-protect get appvault --context <destination_cluster_name>
+-----
++
+NOTE: Ensure that the namespace intended for the application restore exists on the destination cluster.
+. View the backup contents of the available AppVault from the destination cluster:
++
+[source,console]
+-----
+tridentctl-protect get appvaultcontent <appvault_name> --show-resources backup --show-paths --context <destination_cluster_name>
+-----
++
+Running this command displays the available backups in the AppVault, including their originating clusters, corresponding application names, timestamps, and archive paths.
++
+*Example output:*
++
+----
++-------------+-----------+--------+-----------------+--------------------------+-------------+
+|   CLUSTER   |    APP    |  TYPE  |      NAME       |        TIMESTAMP         |    PATH     |
++-------------+-----------+--------+-----------------+--------------------------+-------------+
+| production1 | wordpress | backup | wordpress-bkup-1| 2024-10-30 08:37:40 (UTC)| backuppath1 |
+| production1 | wordpress | backup | wordpress-bkup-2| 2024-10-30 08:37:40 (UTC)| backuppath2 |
++-------------+-----------+--------+-----------------+--------------------------+-------------+
+
+----
+. Restore the application to the destination cluster using the AppVault name and archive path:
+
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Use a CR
+--
+[start=4]
+. Create the custom resource (CR) file and name it `trident-protect-backup-restore-cr.yaml`.
+. In the file you created, configure the following attributes:
++
+* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
+* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
+* *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
++
+[source,console]
+-----
+kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
+-----
++
+NOTE: If BackupRestore CR is not available, you can use the command mentioned in step 2 to view the backup contents.
++
+* *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
++
+For example:
++
+[source,yaml]
+-------
+apiVersion: protect.trident.netapp.io/v1
+kind: BackupRestore
+metadata:
+  name: my-cr-name
+  namespace: my-destination-namespace
+spec:
+  appVaultRef: appvault-name
+  appArchivePath: my-backup-path
+  namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
+-------
+. After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
++
+[source,console]
+-----
+kubectl apply -f trident-protect-backup-restore-cr.yaml
+-----
+
+--
+.Use the CLI
+--
+[start=4]
+. Use the following command to restore the application, replacing values in brackets with information from your environment. The namespace-mapping argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format source1:dest1,source2:dest2. For example:
++
+[source,console]
+-----
+tridentctl-protect create backuprestore <restore_name> --namespace-mapping <source_to_destination_namespace_mapping> --appvault <appvault_name> --path <backup_path> -n <application_namespace> --context <destination_cluster_name>
+-----
+--
+====
+// end tabbed block
+
+
+
+
 == Restore from a snapshot to a different namespace
 
-You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace, but the restored application is not automatically protected by Trident protect. To protect the restored application, you need to create an Application CR for the restored application so that it will be protected by Trident protect.
+You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -230,6 +334,7 @@ kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.a
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
@@ -297,7 +402,7 @@ For example:
 +
 [source,console]
 -----
-tridentctl protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping>
+tridentctl-protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
 -----
 --
 ====
@@ -327,6 +432,7 @@ kubectl get snapshots <SNAPSHOT_NAME> -n my-app-namespace -o jsonpath='{.status.
 +
 [source,yaml]
 -------
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotInplaceRestore
 metadata:
@@ -384,7 +490,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 +
 [source,console]
 -----
-tridentctl protect create snapshotinplacerestore <my_restore_name> --snapshot <snapshot_to_restore>
+tridentctl-protect create snapshotinplacerestore <my_restore_name> --snapshot <snapshot_to_restore> -n <application_namespace>
 -----
 --
 ====

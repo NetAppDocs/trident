@@ -21,7 +21,7 @@ You can deploy the Trident operator and install Trident using Helm. This process
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.31 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.32 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -63,7 +63,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set i
 .Images in different registries
 --
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:24.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:24.06 --set tridentImage=<your-registry>/trident:24.10.0 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
+helm install <name> netapp-trident/trident-operator --version 100.2410.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:24.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:24.10 --set tridentImage=<your-registry>/trident:24.10.0 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
 ----
 --
 ====

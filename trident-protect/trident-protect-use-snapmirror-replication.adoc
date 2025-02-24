@@ -63,7 +63,7 @@ kubectl apply -f trident-protect-appvault-primary-source.yaml -n trident-protect
 +
 [source,console]
 ----
-tridentctl protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
+tridentctl-protect create vault Azure <vault-name> --account <account-name> --bucket <bucket-name> --secret <secret-name>
 ----
 --
 ====
@@ -84,14 +84,15 @@ tridentctl protect create vault Azure <vault-name> --account <account-name> --bu
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Application
 metadata:
-  name: maria
+  name: my-app-name
   namespace: my-app-namespace
 spec:
   includedNamespaces:
-    - namespace: maria
+    - namespace: my-app-namespace
       labelSelector: {}
 ----
 .. After you populate the `trident-protect-app-source.yaml` file with the correct values, apply the CR:
@@ -107,7 +108,7 @@ kubectl apply -f trident-protect-app-source.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create app maria --namespaces maria -n my-app-namespace
+tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-included> -n <my-app-namespace>
 ----
 --
 ====
@@ -136,6 +137,7 @@ Example YAML:
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:
@@ -143,7 +145,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: generic-s3-trident-protect-src-bucket-04b6b4ec-46a3-420a-b351-45795e1b5e34
-  applicationRef: maria
+  applicationRef: my-app-name
   backupRetention: "0"
   enabled: true
   granularity: custom
@@ -165,7 +167,7 @@ kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot>
+tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> -n <application_namespace>
 ----
 --
 ====
@@ -226,6 +228,7 @@ Example YAML:
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: AppMirrorRelationship
 metadata:
@@ -241,7 +244,7 @@ spec:
     DTSTART:20220101T000200Z
     RRULE:FREQ=MINUTELY;INTERVAL=5
   sourceAppVaultRef: generic-s3-trident-protect-src-bucket-b643cc50-0429-4ad5-971f-ac4a83621922
-  sourceApplicationName: maria
+  sourceApplicationName: my-app-name
   sourceApplicationUID: 7498d32c-328e-4ddd-9029-122540866aeb
   storageClassName: sc-vsim-2
 ----
@@ -259,7 +262,7 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> --source-app-vault <my_source_app_vault>
+tridentctl-protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --recurrence-rule <rule> --source-app <my_source_app> --source-app-vault <my_source_app_vault> -n <application_namespace>
 ----
 --
 ====
@@ -354,6 +357,7 @@ Example YAML:
 +
 [source,yaml]
 ----
+---
 apiVersion: protect.trident.netapp.io/v1
 kind: ShutdownSnapshot
 metadata:
@@ -361,7 +365,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: generic-s3-trident-protect-src-bucket-04b6b4ec-46a3-420a-b351-45795e1b5e34
-  applicationRef: maria
+  applicationRef: my-app-name
 ----
 
 .. After you populate the `trident-protect-shutdownsnapshot.yaml` file with the correct values, apply the CR:
@@ -378,7 +382,7 @@ kubectl apply -f trident-protect-shutdownsnapshot.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot>
+tridentctl-protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my_vault> --app <app_to_snapshot> -n <application_namespace>
 ----
 --
 ====

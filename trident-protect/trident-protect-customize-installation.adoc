@@ -1,0 +1,153 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-customize-installation.html
+keywords: customize, trident protect, resource limits, security context constraints, SCC, NetApp AutoSupport, proxy connection, helm, helm chart, helm upgrade
+summary: Customize the default settings of Trident protect to meet your specific needs.
+---
+
+= Customize Trident protect installation
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+You can customize the default configuration of Trident protect to meet your specific requirements.
+
+== Specify Trident protect container resource limits
+You can use a configuration file to specify resource limits for Trident protect containers after you install Trident protect. Setting resource limits enables you to control how much of the cluster's resources are consumed by Trident protect operations.
+
+.Steps
+
+. Create a file named `resourceLimits.yaml`.
+. Populate the file with resource limit options for Trident protect containers according to the needs of your environment. 
++
+The following example configuration file shows the available settings and contains the default values for each resource limit:
++
+[source,yaml]
+----
+---
+jobResources:
+  defaults:
+    limits:
+      cpu: 8000m
+      memory: 10000Mi
+      ephemeralStorage: ""
+    requests:
+      cpu: 100m
+      memory: 100Mi
+      ephemeralStorage: ""
+  resticVolumeBackup:
+    limits:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+    requests:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+  resticVolumeRestore:
+    limits:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+    requests:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+  kopiaVolumeBackup:
+    limits:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+    requests:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+  kopiaVolumeRestore:
+    limits:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+    requests:
+      cpu: ""
+      memory: ""
+      ephemeralStorage: ""
+----
+
+. Apply the values from the `resourceLimits.yaml` file:
++
+[source,console]
+----
+helm upgrade trident-protect -n trident-protect -f <resourceLimits.yaml> --reuse-values
+----
+
+== Customize security context constraints 
+
+You can use a configuration file to modify OpenShift security context constraint (SCCs) for Trident protect containers after you install Trident protect. These constraints define security restrictions for pods in a Red Hat OpenShift cluster.
+
+.Steps
+. Create a file named `sccconfig.yaml`.
+. Add the SCC option to the file and modify the parameters according to the needs of your environment.
++
+The following example shows the default values of the parameters for the SCC option:
++
+[source,yaml]
+----
+scc:
+  create: true
+  name: trident-protect-job
+  priority: 1
+----
++
+This table describes the parameters for the SCC option:
++
+[options="header"]
+|===
+| Parameter | Description | Default 
+|create
+|Determines whether an SCC resource can be created. An SCC resource will be created only if `scc.create` is set to `true` and the Helm installation process identifies an OpenShift environment. If not operating on OpenShift, or if `scc.create` is set to `false`, no SCC resource will be created.
+| true
+|name
+|Specifies the name of the SCC. 
+|trident-protect-job
+|priority
+|Defines the priority of the SCC. SCCs with higher priority values are assessed before those with lower values. 
+| 1
+|===
++
+. Apply the values from the `sccconfig.yaml` file:
++
+[source,console]
+----
+helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml
+----  
++
+This will replace the default values with those specified in the `sccconfig.yaml` file.
+
+== Configure NetApp AutoSupport connections for Trident protect
+
+You can change the way Trident protect connects to NetApp Support to upload support bundles by configuring a proxy for the connection. You can configure the proxy to use either a secure or an insecure connection based on your needs.
+
+[role="tabbed-block"]
+====
+.Configure a secure proxy connection
+--
+.Steps
+. Configure a secure proxy connection for Trident protect support bundle uploads:
++
+[source,console]
+----
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect --set autoSupport.proxy=http://my.proxy.url
+----
+--
+.Configure an insecure proxy connection
+--
+.Steps
+. Configure an insecure proxy connection for Trident protect support bundle uploads that skips TLS verification:
++
+[source,console]
+----
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect --set autoSupport.proxy=http://my.proxy.url --set autoSupport.insecure=true
+----
+--
+====

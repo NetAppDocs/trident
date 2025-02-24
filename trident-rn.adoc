@@ -26,6 +26,15 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 ** Added support for force detach for ONTAP-NAS volumes during Non-Graceful Node Shutdown scenarios. All new ONTAP-NAS volumes will now use per-volume export policies while Trident manages them. Provided an upgrade path for existing volumes to be switched to the new export policy model on unpublish without impacting active workloads.
 ** Enhanced iSCSI self-healing scan remediations to initiate rescans by exact host, channel, target and LUN ID.
 ** Switched to scratch image for all base images.
+** *Trident protect*
+*** Added capability to control freeze behavior at application level for Kubevirt environments
+*** Added support for configuring AutoSupport proxy connections
+*** Added ability to define a secret for data mover encryption
+*** Added ability to manually run an execution hook
+*** Added ability to configure Security Context Constraints at install time
+*** Added ability to configure node selector and affinity rules at install time
+*** Added support for HTTP and HTTPS egress proxy for AppVault objects
+*** Added SESSION_TOKEN support to AWS S3 AppVault credentials
 * *Openshift*: Added support for automatic iSCSI node preparation for RHCOS on ROSA clusters.
 * Added image-pull secrets flag to tridentctl installer.
 * Added NVMe LUKS support.

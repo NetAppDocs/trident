@@ -154,7 +154,7 @@ tridentctl get volumes -n trident
 
 You can expand an FC Persistent Volume (PV) by using the CSI provisioner.
 
-NOTE: FC volume expansion is supported by the `ontap-san`, `ontap-san-economy`, `solidfire-san` drivers and requires Kubernetes 1.16 and later.
+NOTE: FC volume expansion is supported by the `ontap-san` driver and requires Kubernetes 1.16 and later.
 
 === Step 1: Configure the StorageClass to support volume expansion
 Edit the StorageClass definition to set the `allowVolumeExpansion` field to `true`.

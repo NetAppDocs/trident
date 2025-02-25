@@ -18,7 +18,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 == What's new in 25.02
 
 === Enhancements
-
+*Trident*:
 * *Kubernetes*: 
 ** Added support for Kubernetes 1.32.
 ** Added cloneFromSnapshot annotation.
@@ -26,17 +26,6 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 ** Added support for force detach for ONTAP-NAS volumes during Non-Graceful Node Shutdown scenarios. All new ONTAP-NAS volumes will now use per-volume export policies while Trident manages them. Provided an upgrade path for existing volumes to be switched to the new export policy model on unpublish without impacting active workloads.
 ** Enhanced iSCSI self-healing scan remediations to initiate rescans by exact host, channel, target and LUN ID.
 ** Switched to scratch image for all base images.
-** *Trident protect*
-*** Added capability to control freeze behavior at application level for Kubevirt environments
-*** Added support for configuring AutoSupport proxy connections
-*** Added ability to define a secret for data mover encryption
-*** Added ability to manually run an execution hook
-*** Added ability to configure Security Context Constraints at install time
-*** Added ability to configure node selector and affinity rules at install time
-*** Added support for HTTP and HTTPS egress proxy for AppVault objects
-*** Added SESSION_TOKEN support to AWS S3 AppVault credentials
-+
-link:./trident-protect/learn-about-trident-protect.html[Learn more about Trident protect].
 * *Openshift*: Added support for automatic iSCSI node preparation for RHCOS on ROSA clusters.
 * Added image-pull secrets flag to tridentctl installer.
 * Added NVMe LUKS support.
@@ -50,7 +39,27 @@ link:./trident-protect/learn-about-trident-protect.html[Learn more about Trident
 * Added automatic backend configuration for AWS FSxN.
 * Added support to override default images using SHAs instead of tags.
 
-== Fixes
+*Trident protect*:
+* Enhancements: 
+** Added Backup and Restore support for KubeVirt / OpenShift Virtualization VMs for both volumeMode: File and volumeMode: Block (raw device) storage, to already available storage replication through AppMirrorRelationship.
+** Added capability to control freeze behavior at application level for Kubevirt environments
+** Added support for configuring AutoSupport proxy connections
+** Added ability to define a secret for data mover encryption (Kopia / Restic)
+** Added ability to manually run an execution hook
+** Added ability to configure Security Context Constraints (SCCs) during Trident protect installation
+** Added support for configuring node selector and affinity rules during Trident protect installation
+** Added support for HTTP / HTTPS egress proxy for AppVault objects
+** Added SESSION_TOKEN support to AWS S3 AppVault credentials
+** Extended ResourceFilter to allow exclusion of Cluster Scoped Resources
+** Added support for AWS Session Token in S3 AppVault credentials
+** Added support for resource collection after pre-snapshot execution hook
+* Fixes:
+** Improved the management of temporary volumes to skip the ONTAP Volume Recovery Queue
+** SCC annotations are now restored to original values
+** Improved Restore efficiency with support for parallel operations
+** Enhanced support for Execution Hook timeouts for larger applications
+
+=== Fixes
 
 * *Kubernetes*:
 ** Fixed missing node IP addresses from automatic export policies (link:https://github.com/NetApp/trident/issues/965[Issue #965]).

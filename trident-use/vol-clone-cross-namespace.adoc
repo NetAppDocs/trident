@@ -71,7 +71,7 @@ Trident creates the PV and its backend NFS storage volume.
 ====
 * You can share the PVC to multiple namespaces using a comma-delimited list. For example, `trident.netapp.io/cloneToNamespace: namespace2,namespace3,namespace4`. 
 
-* You can share to all namespaces using `*`. For example, `trident.netapp.io/clone: *`
+* You can share to all namespaces using `*`. For example, `trident.netapp.io/cloneToNamespace: *`
 
 * You can update the PVC to include the `cloneToNamespace` annotation at any time. 
 ====
@@ -114,4 +114,4 @@ spec:
 
 == Limitations
 
-* For PVCs provisioned using ontap-nas drivers, read-only clones are not supported.
+* For PVCs provisioned using ontap-nas-economy drivers, read-only clones are not supported.

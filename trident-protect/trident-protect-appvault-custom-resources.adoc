@@ -14,13 +14,16 @@ summary: The bucket custom resource (CR) for Trident protect is known as an AppV
 [.lead]
 The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVault objects are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication. Only administrators can create AppVaults.
 
-== Data mover repository passwords
+== Configure AppVault authentication and passwords
+Before you create an AppVault object, you need to ensure the AppVault and the data mover you choose can authenticate with the provider and any related resources.
+
+=== Data mover repository passwords
 When you create AppVault objects using CRs or the Trident protect CLI plugin, you can optionally instruct Trident protect to use a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. If you don't specify a secret, Trident protect uses `password` for both passwords.
 
 * When manually creating AppVault CRs, you can use the *spec.properties.dataMoverPasswordSecretRef* field to specify the secret.
 * When creating AppVault objects using the Trident protect CLI, you can use the `--data-mover-password-secret-ref` argument to specify the secret.
 
-=== Create a data mover repository password secret
+==== Create a data mover repository password secret
 Use the following examples to create the password secret. When you create AppVault objects, you can instruct Trident protect to use this secret to authenticate with the data mover repository.
 
 // begin tabbed block
@@ -52,12 +55,8 @@ kubectl create secret generic my-optional-data-mover-secret \
 --
 ====
 
-== Key generation and AppVault definition examples
-When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers, followed by example AppVault definitions for each provider.
-
-=== Key generation examples
-
-You can use the following examples to create keys for the credentials of each cloud provider.
+=== AppVault key generation examples for cloud providers
+When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers. You can use the following examples to create keys for the credentials of each cloud provider.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -126,10 +125,11 @@ kubectl create secret generic <secret-name> \
 -n trident-protect
 ----
 --
-
 ====
 // end tabbed block
 
+== AppVault definition examples
+The following are example AppVault definitions for each provider.
 
 === AppVault CR examples
 You can use the following CR examples to create AppVault objects for each cloud provider.
@@ -325,8 +325,6 @@ spec:
         name: s3
 ----
 --
-
-
 ====
 // end tabbed block
 

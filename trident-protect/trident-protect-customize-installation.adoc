@@ -114,7 +114,7 @@ This table describes the parameters for the SCC option:
 |Defines the priority of the SCC. SCCs with higher priority values are assessed before those with lower values. 
 | 1
 |===
-+
+
 . Apply the values from the `sccconfig.yaml` file:
 +
 [source,console]
@@ -171,7 +171,7 @@ nodeSelector:
 +
 [source,console]
 ----
-helm upgrade trident-protect netapp-trident-protect/trident-protect -f nodeSelectorConfig.yaml
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f nodeSelectorConfig.yaml
 ----  
 +
 This replaces the default restrictions with those you specified in the `nodeSelectorConfig.yaml` file.

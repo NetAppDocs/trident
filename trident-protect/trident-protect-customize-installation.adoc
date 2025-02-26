@@ -152,7 +152,8 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 --
 ====
 
-== Control which nodes can run Trident protect pods
+== Restrict Trident protect pods to specific nodes
+
 You can use the Kubernetes nodeSelector node selection constraint to control which of your nodes are eligible to run Trident protect pods, based on node labels. By default, the Trident protect is restricted to nodes that are running Linux. You can further customize these constraints depending on your needs.
 
 .Steps

@@ -16,8 +16,22 @@ Configure a Kubernetes StorageClass object and create the storage class to instr
 == Create a storage class
 
 === Configure a Kubernetes StorageClass object
-The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Trident as the provisioner that is used for that class instructs Trident how to provision a volume. For example:
+The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Trident as the provisioner that is used for that class and instructs Trident how to provision a volume. For example:
 
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-gold
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-nas"
+  media: "ssd"
+  provisioningType: "thin"
+  snapshots: "true"
+----
+
+The following storage class example shows the configuration for NFSv3 volume on AWS Bottlerocket:
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

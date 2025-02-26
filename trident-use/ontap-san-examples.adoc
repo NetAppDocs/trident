@@ -33,6 +33,7 @@ A fully-qualified domain name (FQDN) can be specified.
 Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`.  
 
 For seamless MetroCluster switchover, see the <<mcc-best>>.
+NOTE: If you are using “vsadmin” credentials, `managementLIF` must be that of the SVM; if using “admin” credentials, `managementLIF` must be that of the cluster.
 
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
@@ -89,11 +90,15 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
+NOTE: While using “vsadmin” credentials, the aggregates must be delegated to the SVM. This action is only available using the ONTAP CLI in `diag` mode.
+
 a|""
+*Do not specify for ASA*.
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
 If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.|"" (not enforced by default)
+*Do not specify for ASA*.
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. 
 
@@ -101,6 +106,7 @@ Also restricts the maximum size of the volumes it manages for LUNs.
 |""  (not enforced by default)
 
 |`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |`100`
+Do not use for ASA.
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -111,6 +117,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.
 
 `useREST` is fully qualified for NVMe/TCP. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
+*Do not set to `false` for ASA*.
 
 a|`sanType` |
 
@@ -129,6 +136,7 @@ a|
 |`limitVolumePoolSize` |Maximum requestable FlexVol size when using LUNs in ontap-san-economy backend.
 
 | "" (not enforced by default)
+Do not use for ASA.
 
 |`denyNewVolumePools` |Restricts `ontap-san-economy` backends from creating new FlexVol volumes to contain their LUNs. Only preexisting Flexvols are used for provisioning new PVs.
 
@@ -152,10 +160,12 @@ You can control default provisioning using these options in the `defaults` secti
 |===
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |"true"
+*If specified, set to `true` for ASA*.
 
 |`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick) |"none"
 
 |`snapshotPolicy` |Snapshot policy to use |"none"
+*`none` for ASA*.
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
 
@@ -164,6 +174,7 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |""
 
 |`snapshotReserve` |Percentage of volume reserved for snapshots	|"0" if `snapshotPolicy` is "none", otherwise ""
+*Do not specify for ASA*.
 
 |`splitOnClone` |Split a clone from its parent upon creation |"false"
 
@@ -172,14 +183,18 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
+*If specified, set to `true` for ASA*.
 
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 LUKS encryption is not supported for NVMe/TCP.| ""
+Set to `false` for ASA.
 
 |`securityStyle` |Security style for new volumes |`unix`
+*Do not specify for ASA*.
 
-|`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
+|`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration.
+*Do not specify for ASA*.
 
 |`nameTemplate` | Template to create custom volume names.
 

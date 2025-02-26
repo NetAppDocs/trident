@@ -128,7 +128,8 @@ Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibr
 
 *'fcp' (SCSI over FC) is a tech preview feature in the Trident 24.10 release.*| `iscsi` if blank
 
-|`limitVolumePoolSize` |*Supported for `ontap-san-economy` and `ontap-san-economy` drivers only.* 
+|`limitVolumePoolSize` |*Supported for `ontap-san-economy` and `ontap-san-economy` drivers only.*
+*Do not use for ASA.* 
 
 Limits FlexVol sizes in ONTAP ontap-nas-economy and ontap-SAN-economy drivers.
 a|`300g`

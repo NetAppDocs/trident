@@ -47,9 +47,26 @@ image::../media/aws-eks-04.png[]
 +
 image::../media/aws-eks-06.png[]
 +
-Enable the `ontapConfigurator` and specifies `authType`, `fsxnID`, `protocols` to create Trident backend and storage classes automatically soon after Trident installation:
-+
-image::../media/aws-eks-07.png[]
+----
+Trident supports automatic configuration of backend configuration and creates the backend and storage classes seamlessly after Trident installation. To enable configuration of the backend and storage classes automatically, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
+
+Example:
+"ontapConfigurator": {
+        "enabled": true,
+        "svms": [
+          {
+            "authType": "awsarn",
+            "fsxnID": "fs-0dfeaa884a68b1cab",
+            "protocols": [
+              "nfs",
+              "iscsi"
+            ]
+          }
+        ]
+      }}"
+
+To disable automatic backend configuration, upgrade the Trident release version and set the ontapConfigurator to false. 
+----
 +
 . Select *Create*.
 . Verify that the status of the add-on is _Active_.

@@ -41,13 +41,6 @@ The following example installs Trident and sets the `cloud-provider` flag to `$C
 ----
 helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
 ----
-
-The following example enables the `ontapConfigurator` and specifies `authType`, `fsxnID`, `protocols` to create Trident backend and storage classes soon after installation: 
-----
-helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident --set ontapConfigurator.enabled=true  --set ontapConfigurator.svms[0].fsxnID="fs-0dfeaa884a68b1cab"  --set ontapConfigurator.svms[0].protocols[0]=iscsi  --set ontapConfigurator.svms[0].protocols[1]=nfs  --set ontapConfigurator.svms[0].authType="awsarn"
-----
-+
-
 You can use the `helm list` command to review installation details such as name, namespace, chart, status, app version, and revision number.
 +
 ----
@@ -58,6 +51,20 @@ helm list -n trident
 NAME                NAMESPACE   REVISION    UPDATED                                 STATUS       CHART                          APP VERSION
 
 trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2502.0    25.02.0
+----
++
+----
+Trident supports automatic configuration of backend configuration and creates the backend and storage classes seamlessly after Trident installation. To enable configuration of the backend and storage classes automatically, use the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
+Example:
+ 
+helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident\ 
+  --set ontapConfigurator.enabled=true\ 
+  --set ontapConfigurator.svms[0].fsxnID="fs-0dfeaa884a68b1cab"\
+  --set ontapConfigurator.svms[0].protocols[0]=iscsi \ 
+  --set ontapConfigurator.svms[0].protocols[1]=nfs \ 
+  --set ontapConfigurator.svms[0].authType="awsarn"
+
+To disable automatic backend configuration, upgrade the Trident release version and set the ontapConfigurator to false. 
 ----
 
 == Install Trident via the EKS add-on 
@@ -128,7 +135,8 @@ add-on.json
    "cloudProvider": "AWS"}"
 }
 ----
-Enable the `ontapConfigurator` to and specify the `authType`, `fsxnID`, `protocols` to create Trident backend and storage classes automatically soon after the Trident installation: 
+Trident supports automatic configuration of backend configuration and creates the backend and storage classes seamlessly after Trident installation. To enable configuration of the backend and storage classes automatically, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols`
+Example: 
 ----
 {
    "clusterName": "<eks-cluster>",
@@ -150,6 +158,8 @@ Enable the `ontapConfigurator` to and specify the `authType`, `fsxnID`, `protoco
         ]
       }}"
 }
+
+To disable automatic backend configuration, upgrade the Trident release version and set the ontapConfigurator to false. 
 ----
 . Install the Trident EKS add-on"
 

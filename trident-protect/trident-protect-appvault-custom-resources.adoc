@@ -191,15 +191,15 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3
+        name: s3_secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3
+        name: s3_secret
     sessionToken:
       valueFromSecret:
         key: sessionToken
-        name: s3
+        name: s3_secret
 ----
 --
 
@@ -249,15 +249,15 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3
+        name: s3_secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3
+        name: s3_secret
     sessionToken:
       valueFromSecret:
         key: sessionToken
-        name: s3
+        name: s3_secret
 ----
 --
 
@@ -282,15 +282,15 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3
+        name: s3_secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3
+        name: s3_secret
     sessionToken:
       valueFromSecret:
         key: sessionToken
-        name: s3
+        name: s3_secret
 ----
 --
 
@@ -315,15 +315,15 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3
+        name: s3_secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3
+        name: s3_secret
     sessionToken:
       valueFromSecret:
         key: sessionToken
-        name: s3
+        name: s3_secret
 ----
 --
 ====
@@ -447,7 +447,7 @@ The `providerType` and `providerConfig` keys in an AppVault CR require specific 
 
 ////
 
-== Use the AppVault browser to view AppVault information
+== View AppVault information
 You can use the Trident protect CLI plugin to view information about AppVault objects that you have created on the cluster.
 
 .Steps

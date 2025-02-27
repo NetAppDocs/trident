@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/ontap-san-prep.html
-keywords: trident backend, ontap san, ontap-san, ontap-san-economy
+keywords: trident backend, ontap san, ontap-san, ontap-san-economy, asa r2
 summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers.
 ---
 
@@ -13,12 +13,13 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN
 [.lead]
 Understand the requirements and authentication options for configuring an ONTAP backend with ONTAP SAN drivers.
 
+Beginning with the 25.02 release, Trident detects ASA r2g and invokes the latest ASA code automatically. Use the storageDriverName `ontap-san` and sanType `iscsi` for ASA.
+
+
 == Requirements
 For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
-
-Beginning with the 25.02 release, Trident detects ASA and invokes the latest ASA code automatically. Use the storageDriverName `ontap-san` and sanType `iscsi` for ASA.
 
 All your Kubernetes worker nodes must have the appropriate iSCSI tools installed. Refer to link:worker-node-prep.html[Prepare the worker node] for details.
 

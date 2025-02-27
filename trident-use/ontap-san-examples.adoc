@@ -90,7 +90,7 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
-NOTE: While using “vsadmin” credentials, the aggregates must be delegated to the SVM. This action is only available using the ONTAP CLI in `diag` mode.
+NOTE: While using “vsadmin” credentials, the aggregates must be delegated to the SVM. This action is only available using the ONTAP CLI in `diag` mode in ASA r2.
 
 a|""
 *Do not specify for ASA*.
@@ -106,7 +106,7 @@ Also restricts the maximum size of the volumes it manages for LUNs.
 |""  (not enforced by default)
 
 |`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |`100`
-Do not use for ASA.
+
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -116,8 +116,9 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.
 
-`useREST` is fully qualified for NVMe/TCP. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
-*Do not set to `false` for ASA*.
+`useREST` is fully qualified for NVMe/TCP. 
+*Do not set to `false` for ASA r2*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
+
 
 a|`sanType` |
 
@@ -159,7 +160,7 @@ You can control default provisioning using these options in the `defaults` secti
 |===
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |"true"
-*If specified, set to `true` for ASA*.
+*If specified, set to `true` for ASA r2*.
 
 |`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick) |"none"
 
@@ -182,12 +183,12 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
-*If specified, set to `true` for ASA*.
+*If specified, set to `true` for ASA r2*.
 
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 LUKS encryption is not supported for NVMe/TCP.| ""
-Set to `false` for ASA.
+Set to `false` for ASA r2.
 
 |`securityStyle` |Security style for new volumes |`unix`
 *Do not specify for ASA*.

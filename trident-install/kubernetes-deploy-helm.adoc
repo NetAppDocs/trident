@@ -260,6 +260,14 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 *Currently, `iscsi` is the only value supported.*
 |
 
+|`ontapConfigurator`
+|Enables automatic configuration of Trident backend and storage classes. Use the following parameters along with `ontapConfigurator`:
+- `authType`: Sets authentication type for SVM authentication. For AWS, arn-based authentication ("awsarn") is supported at present. 
+- `fsxnID`: Sets the filesytem ID of AWS FSx. Example: "fs-0dfeaa884a68b1cab".
+- `protocols` - Specifies the list of supported protocols for automatic backend configuration; "nfs", "iscsi" or both.
+
+|
+
 |===
 
 === Understanding controller pods and node pods

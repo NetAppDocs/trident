@@ -52,7 +52,9 @@ NAME                NAMESPACE   REVISION    UPDATED                             
 
 trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2502.0    25.02.0
 ----
-NOTE: Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
++
+Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
++
 ----
 helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident\ 
   --set ontapConfigurator.enabled=true\ 
@@ -61,7 +63,7 @@ helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --s
   --set ontapConfigurator.svms[0].protocols[1]=nfs \ 
   --set ontapConfigurator.svms[0].authType="awsarn"
 ----
-NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the ontapConfigurator to false. 
+NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the *ontapConfigurator* to *false*. 
 
 == Install Trident via the EKS add-on 
 The Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
@@ -130,7 +132,7 @@ add-on.json
    "cloudProvider": "AWS"}"
 }
 ----
-NOTE: Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
+Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
 +
 ----
 {
@@ -154,7 +156,9 @@ NOTE: Beginning with 25.02 release, Trident supports automatic backend configura
       }}"
 }
 ----
-NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the ontapConfigurator to `false`.
++
+NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the *ontapConfigurator* to *false*.
++
 . Install the Trident EKS add-on"
 +
 `aws eks create-addon --cli-input-json file://add-on.json`

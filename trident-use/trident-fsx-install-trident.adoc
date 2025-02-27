@@ -1,19 +1,19 @@
 ---
 sidebar: sidebar
 permalink: trident-use/trident-fsx-install-trident.html
-keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident add-on, Astra Trident EKS add-on, Trident AWS EKS add-on
+keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident add-on, Trident EKS add-on, Trident AWS EKS add-on
 summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 ---
 
-= Install Astra Trident
+= Install Trident
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Astra Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment.
+Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment.
 
-You can install Astra Trident using one of the following methods:
+You can installTrident using one of the following methods:
 
 * Helm
 * EKS add-on
@@ -22,11 +22,11 @@ You can install Astra Trident using one of the following methods:
 If you want to make use of the snapshot functionality, install the CSI snapshot controller add-on. Refer to https://docs.aws.amazon.com/eks/latest/userguide/csi-snapshot-controller.html.
 ----
 
-== Install Astra Trident via helm
+== Install Trident via helm
 
-. Download the Astra Trident installer package
+. Download the Trident installer package
 +
-The Astra Trident installer package contains everything you need to deploy the Trident operator and install Astra Trident. Download and extract the latest version of the Astra Trident installer from the Assets section on GitHub.
+The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from the Assets section on GitHub.
 `wget https://github.com/NetApp/trident/releases/download/v24.10.0/trident-installer-24.10.0.tar.gz`
 `tar -xf trident-installer-24.10.0.tar.gz`
 `cd trident-installer`
@@ -36,10 +36,10 @@ The Astra Trident installer package contains everything you need to deploy the T
 `export CP="AWS"`
 `export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::<accountID>:role/<AmazonEKS_FSxN_CSI_DriverRole>'"`
 +
-The following example installs Astra Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
+The following example installs Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 +
 ----
-helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
+helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
 ----
 +
 
@@ -52,14 +52,14 @@ helm list -n trident
 ----
 NAME                NAMESPACE   REVISION    UPDATED                                 STATUS       CHART                          APP VERSION
 
-trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2410.0    24.10.0
+trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2502.0    25.02.0
 ----
 
-== Install Astra Trident via the EKS add-on 
-The Astra Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
+== Install Trident via the EKS add-on 
+The Trident EKS add-on includes the latest security patches, bug fixes, and is validated by AWS to work with Amazon EKS. The EKS add-on enables you to consistently ensure that your Amazon EKS clusters are secure and stable and reduce the amount of work that you need to do in order to install, configure, and update add-ons.
 
 === Prerequisites
-Ensure that you have the following before configuring the Astra Trident add-on for AWS EKS:
+Ensure that you have the following before configuring the Trident add-on for AWS EKS:
 
 * An Amazon EKS cluster account with add-on subscription
 * AWS permissions to the AWS marketplace:
@@ -70,7 +70,7 @@ Ensure that you have the following before configuring the Astra Trident add-on f
 * Node type: AMD or ARM
 * An existing Amazon FSx for NetApp ONTAP file system
 
-=== Enable the Astra Trident add-on for AWS
+=== Enable the Trident add-on for AWS
 
 [role="tabbed-block"]
 ====
@@ -78,10 +78,10 @@ Ensure that you have the following before configuring the Astra Trident add-on f
 .EKS cluster
 
 --
-The following example commands install the Astra Trident EKS add-on:
+The following example commands install the Trident EKS add-on:
 
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild`
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.6.1-eksbuild.1` (with a dedicated version)
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild`
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
 --
 
 NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
@@ -94,16 +94,13 @@ NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you
 . On the left navigation pane, click *Clusters*.
 . Click the name of the cluster that you want to configure the NetApp Trident CSI add-on for.
 . Click *Add-ons* and then click *Get more add-ons*.
-. On the *S*elect add-ons* page, do the following:
-.. In the AWS Marketplace EKS-addons section, select the *Astra Trident by NetApp* check box.
+. On the *Select add-ons* page, do the following:
+.. In the AWS Marketplace EKS-addons section, select the *Netapp Trident* check box.
 .. Click *Next*.
 . On the *Configure selected add-ons* settings page, do the following:
 .. Select the *Version* you would like to use.
 .. For *Select IAM role*, leave at *Not set*.
 .. Expand the *Optional configuration settings*, follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`). If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
-+
-NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `cloudProvider` while installing Trident using the EKS add-on.
-+
 . Choose *Next*.
 . On the *Review and add* page, choose *Create*. 
 +
@@ -122,16 +119,13 @@ add-on.json
 
    "clusterName": "<eks-cluster>",
    "addonName": "netapp_trident-operator",
-   "addonVersion": "v24.6.1-eksbuild.1",
+   "addonVersion": "v24.10.0-eksbuild.1",
    "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
    "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'",
    "cloudProvider": "AWS"}"
 }
 ----
-+
-NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you specify `AWS` as the `cloudProvider` while installing Trident using the EKS add-on.
-+
-. Install the Astra Trident EKS add-on"
+. Install the Trident EKS add-on"
 
 +
 `aws eks create-addon --cli-input-json file://add-on.json`
@@ -140,7 +134,7 @@ NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you
 
 ====
 
-=== Update the Astra Trident EKS add-on
+=== Update the Trident EKS add-on
 
 
 [role="tabbed-block"]
@@ -156,11 +150,11 @@ NOTE: When you configure the optional parameter `cloudIdentity`, ensure that you
 *Example output:*
 ----
 NAME                        VERSION             STATUS    ISSUES    IAMROLE    UPDATE AVAILABLE    CONFIGURATION VALUES
-netapp_trident-operator    v24.6.1-eksbuild.1    ACTIVE    0       {"cloudIdentity":"'eks.amazonaws.com/role-arn: arn:aws:iam::139763910815:role/AmazonEKS_FSXN_CSI_DriverRole'"}
+netapp_trident-operator    v24.10.0-eksbuild.1    ACTIVE    0       {"cloudIdentity":"'eks.amazonaws.com/role-arn: arn:aws:iam::139763910815:role/AmazonEKS_FSXN_CSI_DriverRole'"}
 ----
 
 * Update the add-on to the version returned under UPDATE AVAILABLE in the output of the previous step.
-`eksctl update addon --name netapp_trident-operator --version v24.6.1-eksbuild.1 --cluster my-cluster --force`
+`eksctl update addon --name netapp_trident-operator --version v24.10.0-eksbuild.1 --cluster my-cluster --force`
 +
 
 If you remove the `--force` option and any of the Amazon EKS add-on settings conflict with your existing settings, then updating the Amazon EKS add-on fails; you receive an error message to help you resolve the conflict. Before specifying this option, make sure that the Amazon EKS add-on does not manage settings that you need to manage, because those settings are overwritten with this option. 
@@ -176,10 +170,10 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 . On the left navigation pane, click *Clusters*.
 . Click the name of the cluster that you want to update the NetApp Trident CSI add-on for.
 . Click the *Add-ons* tab.
-. Click *Astra Trident by NetApp* and then click *Edit*.
-. On the *Configure Astra Trident by NetApp* page, do the following:
+. Click *Netapp Trident* and then click *Edit*.
+. On the *Configure selected add-ons settings* page, do the following:
 .. Select the *Version* you would like to use.
-.. (Optional) You can expand the *Optional configuration settings* and modify as needed.
+.. Expand the *Optional configuration settings* and modify as needed.
 .. Click *Save changes*.
 
 --
@@ -190,13 +184,13 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 
 The following example updates the EKS add-on:
 
-`aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni --addon-version v24.6.1-eksbuild.1 \
+`aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni --addon-version v24.10.0-eksbuild.1 \
     --service-account-role-arn arn:aws:iam::111122223333:role/role-name --configuration-values '{}' --resolve-conflicts --preserve`
 
 --
 ====
 
-=== Uninstall/remove the Astra Trident EKS add-on
+=== Uninstall/remove the Trident EKS add-on
 
 You have two options for removing an Amazon EKS add-on:
 
@@ -215,7 +209,7 @@ If the add-on has an IAM account associated with it, the IAM account is not remo
 
 --
 
-The following command uninstalls the Astra Trident EKS add-on:
+The following command uninstalls the Trident EKS add-on:
 `eksctl delete addon --cluster K8s-arm --name netapp_trident-operator`
 
 --
@@ -227,7 +221,7 @@ The following command uninstalls the Astra Trident EKS add-on:
 . Open the Amazon EKS console at https://console.aws.amazon.com/eks/home#/clusters.
 . In the left navigation pane, click *Clusters*.
 . Click the name of the cluster that you want to remove the NetApp Trident CSI add-on for.
-. Click the *Add-ons* tab and then click *Astra Trident by NetApp*.*
+. Click the *Add-ons* tab and then click *Trident by NetApp*.*
 . Click *Remove*.
 . In the *Remove netapp_trident-operator confirmation* dialog, do the following:
 .. If you want Amazon EKS to stop managing settings for the add-on, select *Preserve on cluster*. Do this if you want to retain the add-on software on your cluster so that you can manage all of the settings of the add-on on your own.

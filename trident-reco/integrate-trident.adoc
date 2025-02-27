@@ -278,10 +278,6 @@ When the above command is executed, Trident will find the volume on the backend 
 
 If a container was deployed such that it required the specific imported PVC, it would remain in a pending state until the PVC/PV pair are bound via the volume import process. After the PVC/PV pair are bound, the container should come up, provided there are no other issues.
 
-== Deploy OpenShift services
-
-The OpenShift value-add cluster services provide important functionality to cluster administrators and the applications being hosted. The storage which these services use can be provisioned using the node-local resources, however, this often limits the capacity, performance, recoverability, and sustainability of the service. Leveraging an enterprise storage array to provide the capacity to these services can enable dramatically improved service, however, as with all applications, the OpenShift and storage administrators should work closely together to determine the best options for each. The Red Hat documentation should be leveraged heavily to determine the requirements and ensure that sizing and performance needs are met.
-
 === Registry service
 
 Deploying and managing storage for the registry has been documented on link:https://netapp.io/[netapp.io^] in the link:https://netapp.io/2017/08/24/deploying-the-openshift-registry-using-netapp-storage/[blog^].

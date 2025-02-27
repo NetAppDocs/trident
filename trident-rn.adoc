@@ -16,7 +16,7 @@ Release Notes provide information about new features, enhancements, and bug fixe
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
 == What's new in 25.02
-Beginning with Trident 25.02, the What’s New summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+Beginning with Trident 25.02, the What's New summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident
 
@@ -27,7 +27,7 @@ Beginning with Trident 25.02, the What’s New summary provides details about en
 ** Added support for force detach for ONTAP-NAS volumes during Non-Graceful Node Shutdown scenarios. New ONTAP-NAS volumes will now utilize per-volume export policies managed by Trident. Provided an upgrade path for existing volumes to transition to the new export policy model on unpublish without affecting active workloads.
 ** Added cloneFromSnapshot annotation.
 ** Added support for cross namespace volume cloning.
-** Added automatic backend configuration for EKS add-on and helm based installation for AWS FSxN.
+** Added automatic backend configuration for EKS add-on and helm based installation for Amazon FSx for NetApp ONTAP.
 ** Enhanced iSCSI self-healing scan remediations to initiate rescans by exact host, channel, target and LUN ID.
 ** Added support for Kubernetes 1.32.
 * *OpenShift*: 
@@ -53,6 +53,7 @@ Beginning with Trident 25.02, the What’s New summary provides details about en
 * Removed logouts for intermittently unhealthy non-CHAP portals during iSCSI self-healing (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
 
 === Trident protect
+NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
 
 ==== Enhancements
 
@@ -61,17 +62,16 @@ Beginning with Trident 25.02, the What’s New summary provides details about en
 * Added support for configuring AutoSupport proxy connections.
 * Added the ability to define a secret for data mover encryption (Kopia / Restic).
 * Added the ability to manually run an execution hook.
-* Added the ability to configure Security Context Constraints (SCCs) during Trident protect installation.
-* Added support for configuring node selector during Trident protect installation.
+* Added the ability to configure security context constraints (SCCs) during Trident protect installation.
+* Added support for configuring nodeSelector during Trident protect installation.
 * Added support for HTTP / HTTPS egress proxy for AppVault objects.
-* Added SESSION_TOKEN support to AWS S3 AppVault credentials.
-* Extended ResourceFilter to allow exclusion of Cluster Scoped Resources.
-* Added support for AWS Session Token in S3 AppVault credentials.
-* Added support for resource collection after pre-snapshot execution hook.
+* Extended ResourceFilter to enable exclusion of cluster-scoped resources.
+* Added support for the AWS session token in S3 AppVault credentials.
+* Added support for resource collection after pre-snapshot execution hooks.
 
 ==== Fixes
 
-* Improved the management of temporary volumes to skip the ONTAP Volume Recovery Queue.
+* Improved the management of temporary volumes to skip the ONTAP volume recovery queue.
 * SCC annotations are now restored to original values.
 * Improved restore efficiency with support for parallel operations.
 * Enhanced support for execution hook timeouts for larger applications.

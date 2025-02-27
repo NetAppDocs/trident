@@ -16,37 +16,38 @@ Release Notes provide information about new features, enhancements, and bug fixe
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
 == What's new in 25.02
+Beginning with Trident 25.02, the What’s New summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident
 
 ==== Enhancements
 
-* *Kubernetes*: 
-** Added support for Kubernetes 1.32.
+* *Kubernetes*:
+** Added support for ONTAP ASA r2 for iSCSI. 
+** Added support for force detach for ONTAP-NAS volumes during Non-Graceful Node Shutdown scenarios. New ONTAP-NAS volumes will now utilize per-volume export policies managed by Trident. Provided an upgrade path for existing volumes to transition to the new export policy model on unpublish without affecting active workloads.
 ** Added cloneFromSnapshot annotation.
 ** Added support for cross namespace volume cloning.
-** Added support for force detach for ONTAP-NAS volumes during Non-Graceful Node Shutdown scenarios. All new ONTAP-NAS volumes will now use per-volume export policies while Trident manages them. Provided an upgrade path for existing volumes to be switched to the new export policy model on unpublish without impacting active workloads.
+** Added automatic backend configuration for EKS add-on and helm based installation for AWS FSxN.
 ** Enhanced iSCSI self-healing scan remediations to initiate rescans by exact host, channel, target and LUN ID.
-** Switched to scratch image for all base images.
-* *Openshift*: Added support for automatic iSCSI node preparation for RHCOS on ROSA clusters.
-* Added image-pull secrets flag to tridentctl installer.
-* Added NVMe LUKS support.
+** Added support for Kubernetes 1.32.
+* *OpenShift*: 
+** Added support for automatic iSCSI node preparation for RHCOS on ROSA clusters.
+** Added support for Openshift Virtualization for ONTAP drivers.
 * Added Fibre Channel support on ONTAP-SAN driver.
-* Added host WWPN to igroup for Fibre Channel.
-* Added iSCSI connection state discovery and logging when iSCSI sessions should be logged in but are not (Issue #961).
-* Added support for GCNV SMB volumes.
-* Added support for ONTAP volumes to skip recovery queue on deletion.
-* Added support for ONTAP ASA R2 driver for iSCSI.
-* Added parallelism for ONTAP-NAS driver for Trident node.
-* Added automatic backend configuration for AWS FSxN.
+* Added NVMe LUKS support.
+* Switched to scratch image for all base images.
+* Added iSCSI connection state discovery and logging when iSCSI sessions should be logged in but are not (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
+* Added support for SMB volumes with google-cloud-netapp-volumes driver.
+* Added support to allow ONTAP volumes to skip recovery queue on deletion.
 * Added support to override default images using SHAs instead of tags.
+* Added image-pull-secrets flag to tridentctl installer.
 
 ==== Fixes
 
 * *Kubernetes*:
 ** Fixed missing node IP addresses from automatic export policies (link:https://github.com/NetApp/trident/issues/965[Issue #965]).
 ** Fixed automatic export policies switching to per volume policy prematurely for ONTAP-NAS-Economy.
-** Fixed TridentBackendConfig credentials to support AWS ARN partitions (link:https://github.com/NetApp/trident/issues/913[Issue #913]).
+** Fixed backend config credentials to support all available AWS ARN partitions (link:https://github.com/NetApp/trident/issues/913[Issue #913]).
 ** Added option to disable the auto configurator reconciliation in the Trident operator (link:https://github.com/NetApp/trident/issues/924[Issue #924]).
 ** Added securityContext for csi-resizer container (link:https://github.com/NetApp/trident/issues/976[Issue #976]).
 * Removed logouts for intermittently unhealthy non-CHAP portals during iSCSI self-healing (link:https://github.com/NetApp/trident/issues/961[Issue #961]).

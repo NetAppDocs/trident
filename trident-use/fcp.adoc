@@ -14,8 +14,6 @@ summary:
 [.lead]
 You can now use the Fibre Channel (FC) protocol with Trident to provision and manage storage resources on ONTAP system. 
 
-*SCSI over Fibre Channel (FC) is a tech preview feature in the Trident 24.10 release.*
-
 Fibre Channel is a widely adopted protocol in enterprise storage environments due to its high performance, reliability, and scalability. It provides a robust and efficient communication channel for storage devices, enabling fast and secure data transfers. 
 By using SCSI over Fibre Channel, you can leverage their existing SCSI-based storage infrastructure while benefiting from the high-performance and long-distance capabilities of Fibre Channel. It enables the consolidation of storage resources and the creation of scalable and efficient storage area networks (SANs) that can handle large amounts of data with low latency.
 
@@ -153,8 +151,8 @@ metadata:
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "ontap-san"
-  protocol: "fcp"
-  storagePool: "aggr1"
+  storagePools: "ontap-san-backend:.*"
+  fsType: "ext4"
 allowVolumeExpansion: True
 ----
 

@@ -53,7 +53,6 @@ NAME                NAMESPACE   REVISION    UPDATED                             
 trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT    deployed     trident-operator-100.2502.0    25.02.0
 ----
 NOTE: Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
-Example:
 ----
 helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident\ 
   --set ontapConfigurator.enabled=true\ 
@@ -131,7 +130,7 @@ add-on.json
    "cloudProvider": "AWS"}"
 }
 ----
-NOTE: Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation. Example: 
+NOTE: Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
 +
 ----
 {

@@ -176,3 +176,30 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 ----  
 +
 This replaces the default restrictions with those you specified in the `nodeSelectorConfig.yaml` file.
+
+== Disable daily Trident protect AutoSupport bundle uploads
+
+Optionally, you can disable the scheduled daily Trident protect AutoSupport support bundle uploads.
+
+NOTE: By default, Trident protect collects support information that helps with any NetApp support cases that you might open, including logs, metrics, and topology information about clusters and managed applications. Trident protect sends these support bundles to NetApp on a daily schedule. You can manually link:trident-protect-generate-support-bundle.html[generate a support bundle] at any time.
+
+Steps
+
+. Create a file named `autosupportconfig.yaml`.
+. Add the AutoSupport option to the file and modify the parameters according to the needs of your environment.
++
+The following example shows the default values of the parameters for the AutoSupport option:
++
+[source,yaml]
+----
+autoSupport:
+  enabled: true
+----
++
+When `autoSupport.enabled` is set to `false`, daily uploads of AutoSupport support bundles are disabled.
+. Apply the values from the `autosupportconfig.yaml` file:
++
+[source,console]
+----
+helm upgrade trident-protect netapp-trident-protect/trident-protect -f autosupportconfig.yaml
+----

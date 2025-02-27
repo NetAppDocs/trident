@@ -24,7 +24,7 @@ See the following table for the backend configuration options:
 
 |`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`
 
-|`backendName`  |Custom name or the storage backend |Driver name
+|`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
 |`managementLIF` |IP address of a cluster or SVM management LIF. 
 
@@ -36,7 +36,9 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
-|Derived by the SVM
+|`dataLIF`| IP address of protocol LIF.
+*Do not specify for iSCSI*. Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
+*Omit for Metrocluster*. See the <<mcc-best>>.|Derived by the SVM
 
 |`svm` |Storage virtual machine to use 
 

@@ -127,7 +127,7 @@ a|`sanType` |
 
 Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibre Channel (FC).
 
-*'fcp' (SCSI over FC) is a tech preview feature in the Trident 24.10 release.*| `iscsi` if blank
+| `iscsi` if blank
 
 |`formatOptions`
 a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
@@ -280,37 +280,38 @@ labels:
 username: vsadmin
 password: <password>
 ----
-====
 
-.ONTAP SAN economy example
-[%collapsible%closed]
-====
-----
----
-version: 1
-storageDriverName: ontap-san-economy
-managementLIF: 10.0.0.1
-svm: svm_iscsi_eco
-username: vsadmin
-password: <password>
-----
 ====
 
 [#mcc-best]
 .MetroCluster example
 [%collapsible%closed]
 ====
+
 You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
 
-For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
+For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `svm` parameters. For example:
 
 ----
----
 version: 1
 storageDriverName: ontap-san
 managementLIF: 192.168.1.66
 username: vsadmin
 password: password
+----
+
+====
+
+.ONTAP SAN economy example
+[%collapsible%closed]
+====
+----
+version: 1
+storageDriverName: ontap-san-economy
+managementLIF: 10.0.0.1
+svm: svm_iscsi_eco
+username: vsadmin
+password: <password>
 ----
 ====
 
@@ -397,6 +398,24 @@ useREST: true
 ----
 ====
 
+.SCSI over FC (FCP) example
+[%collapsible%closed]
+====
+You must have an SVM configured with FC on your ONTAP backend. This is a basic backend configuration for FC.
+----
+---
+version: 1
+backendName: fcp-backend
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_fc
+username: vsadmin
+password: password
+sanType: fcp
+useREST: true
+----
+====
+
 .Backend configuration example with nameTemplate
 [%collapsible%closed]
 ====
@@ -418,7 +437,7 @@ defaults: {
 ====
 
 
-.formatOptions example for `ontap-san-economy` driver
+.formatOptions example for ontap-san-economy driver
 [%collapsible%closed]
 ====
 

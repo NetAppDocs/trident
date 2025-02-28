@@ -32,7 +32,7 @@ This table details `TridentOrchestrator` attributes.
 
 |`debug` |Enable debugging for Trident |`false`
 
-|`enableForceDetach` |`ontap-san`, `ontap-san-economy`, and `ontap-nas-economy` only. 
+|`enableForceDetach` |`ontap-san`, `ontap-san-economy`, `ontap-nas`, and `ontap-nas-economy` only. 
 
 Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. |`false`
 
@@ -50,7 +50,7 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:24.10"`
+|`"netapp/trident-autosupport:25.02"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -59,7 +59,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Trident image to install |`"netapp/trident:24.10"`
+|`tridentImage` |Trident image to install |`"netapp/trident:25.02"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"k8s.gcr.io"` (Kubernetes 1.19+)
@@ -99,9 +99,9 @@ Trident |
 For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
 
 === Details about force detach
-Force detach is available for `ontap-san`, `ontap-san-economy` and `onatp-nas-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. For more information, refer to link:https://kubernetes.io/docs/concepts/architecture/nodes/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
+Force detach is available for `ontap-san`, `ontap-san-economy`, `onatp-nas`, and `onatp-nas-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. NGNS is enabled by default for Kubernetes 1.28 and above. For more information, refer to link:https://kubernetes.io/docs/concepts/cluster-administration/node-shutdown/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
 
-NOTE: When using the `ontap-nas-economy` driver, you need to set the `autoExportPolicy` parameter in the backend configuration to `true` so that Trident can restrict access from the Kubernetes node with the taint applied using managed export policies.
+NOTE: When using the `ontap-nas` or `ontap-nas-economy` driver, you need to set the `autoExportPolicy` parameter in the backend configuration to `true` so that Trident can restrict access from the Kubernetes node with the taint applied using managed export policies.
 
 WARNING: Because Trident relies on Kubernetes NGNS, do not remove `out-of-service` taints from an unhealthy node until all non-tolerable workloads are rescheduled. Recklessly applying or removing the taint can jeopardize backend data protection.  
 

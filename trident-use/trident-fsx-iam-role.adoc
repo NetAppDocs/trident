@@ -21,13 +21,19 @@ To authenticate using an AWS IAM role, you must have a Kubernetes cluster deploy
 
 This example creates an AWS Secret Manager secret to store Trident CSI credentials:
 
-`aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials" --secret-string "{"username":"vsadmin","password":"<svmpassword>"}"`
+----
+aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials"\ 
+  --secret-string "{\"username\":\"vsadmin\",\"password\":\"<svmpassword>\"}"
+----
 
 == Create IAM Policy
 
 The following examples creates an IAM policy using the AWS CLI:
 
-`aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json --description "This policy grants access to Trident CSI to FSxN and Secret manager"`
+----
+aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json 
+  --description "This policy grants access to Trident CSI to FSxN and Secret manager"
+----
 
 *Policy JSON example*:
 ----
@@ -52,7 +58,7 @@ policy.json:
         {
             "Action": "secretsmanager:GetSecretValue",
             "Effect": "Allow",
-            "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:<aws-secret-manager-name>"
+            "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:<aws-secret-manager-name>*"
         }
     ],
     "Version": "2012-10-17"
@@ -105,8 +111,82 @@ To enable automatic backend configuration for Amazon FSx, add the following acti
 }
 ----
 
-== Create and IAM role for the service account
+=== Create an IAM role for the service account
 
+[role="tabbed-block"]
+====
+
+.AWS CLI
+
+--
+
+----
+aws iam create-role --role-name trident-controller \
+  --assume-role-policy-document file://trust-relationship.json
+----
+
+*trust-relationship.json file:*
+----
+{ 
+    "Version": "2012-10-17", 
+    "Statement": [ 
+        { "Effect": "Allow", 
+        "Principal": { 
+            "Federated": "arn:aws:iam::<account_id>:oidc-provider/<oidc_provider>" 
+        }, 
+        "Action": "sts:AssumeRoleWithWebIdentity", 
+        "Condition": { 
+            "StringEquals": { 
+                "<oidc_provider>:aud": "sts.amazonaws.com", 
+                "<oidc_provider>:sub": "system:serviceaccount:trident:trident-controller" 
+            } 
+        } 
+    } 
+   ] 
+}
+----
+
+Update the following values in the `trust-relationship.json` file:
+
+* *<account_id>* -  Your AWS account ID
+* *<oidc_provider>* - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
+----
+aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer"\ 
+  --output text | sed -e "s/^https:\/\///"
+----
+
+*Attach the IAM role with the IAM policy*:
+
+Once the role has been created, attach the policy (that was created in the step above) to the role using this command:
+
+----
+aws iam attach-role-policy --role-name my-role --policy-arn <IAM policy ARN>
+----
+
+*Verify OICD provider is associated*:
+
+Verify that your OIDC provider is associated with your cluster. You can verify it using this command: 
+----
+aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4
+----
+
+Use the following command to associate IAM OIDC to your cluster: 
+
+----
+eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve
+----
+ 
+--
+
+.eksctl
+
+--
 The following example creates an IAM role for service account in EKS: 
 
-`eksctl create iamserviceaccount --name trident-controller --namespace trident --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonFSxNCSIDriverPolicy --approve`
+----
+eksctl create iamserviceaccount --name trident-controller --namespace trident \
+  --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only \
+  --attach-policy-arn <IAM-Policy ARN> --approve
+----
+--
+====

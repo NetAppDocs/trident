@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/trident-fsx-install-trident.html
 keywords: Amazon FSx for NetApp ONTAP, FSx for ONTAP, deploy Trident, integrate Trident, Trident add-on, Trident EKS add-on, Trident AWS EKS add-on
-summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
+summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that your Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 ---
 
 = Install Trident
@@ -13,33 +13,31 @@ summary: Using Astra Trident with Amazon FSx for NetApp ONTAP, you can ensure th
 [.lead]
 Trident streamlines Amazon FSx for NetApp ONTAP storage management in Kubernetes to enable your developers and administrators focus on application deployment.
 
-You can installTrident using one of the following methods:
+You can install Trident using one of the following methods:
 
 * Helm
 * EKS add-on
 
-----
-If you want to make use of the snapshot functionality, install the CSI snapshot controller add-on. Refer to https://docs.aws.amazon.com/eks/latest/userguide/csi-snapshot-controller.html.
-----
+If you want to make use of the snapshot functionality, install the CSI snapshot controller add-on. Refer to link:https://docs.aws.amazon.com/eks/latest/userguide/csi-snapshot-controller.html[Enable snapshot functionality for CSI volumes^] for more information.
 
 == Install Trident via helm
 
 . Download the Trident installer package
 +
 The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from the Assets section on GitHub.
-`wget https://github.com/NetApp/trident/releases/download/v24.10.0/trident-installer-24.10.0.tar.gz`
-`tar -xf trident-installer-24.10.0.tar.gz`
+`wget https://github.com/NetApp/trident/releases/download/v25.02.0/trident-installer-25.02.0.tar.gz`
+`tar -xf trident-installer-25.02.0.tar.gz`
 `cd trident-installer`
 +
 . Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 +
-`export CP="AWS"`
-`export CI="'eks.amazonaws.com/role-arn: arn:aws:iam::<accountID>:role/<AmazonEKS_FSxN_CSI_DriverRole>'"`
-+
 The following example installs Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 +
 ----
-helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity=$CI -–namespace trident
+helm install trident trident-operator-100.2502.0.tgz --set cloudProvider="AWS" \ 
+
+    --set cloudIdentity="'eks.amazonaws.com/role-arn: arn:aws:iam::<accountID>:role/<AmazonEKS_FSxN_CSI_DriverRole>'" \ 
+    -–namespace trident --create-namespace 
 ----
 You can use the `helm list` command to review installation details such as name, namespace, chart, status, app version, and revision number.
 +
@@ -85,13 +83,14 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 [role="tabbed-block"]
 ====
 
-.EKS cluster
+.eksctl
 
 --
-The following example commands install the Trident EKS add-on:
-
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild`
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
+The following example command installs the Trident EKS add-on:
+----
+eksctl create addon --name netapp_trident-operator --cluster <cluster_name> \ 
+    --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force
+----
 --
 
 .Management console
@@ -103,7 +102,7 @@ The following example commands install the Trident EKS add-on:
 . Click the name of the cluster that you want to configure the NetApp Trident CSI add-on for.
 . Click *Add-ons* and then click *Get more add-ons*.
 . On the *Select add-ons* page, do the following:
-.. In the AWS Marketplace EKS-addons section, select the *Netapp Trident* check box.
+.. In the AWS Marketplace EKS-addons section, select the *Trident by NetApp* check box.
 .. Click *Next*.
 . On the *Configure selected add-ons* settings page, do the following:
 .. Select the *Version* you would like to use.
@@ -127,8 +126,8 @@ add-on.json
    "clusterName": "<eks-cluster>",
    "addonName": "netapp_trident-operator",
    "addonVersion": "v24.10.0-eksbuild.1",
-   "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
-   "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'",
+   "serviceAccountRoleArn": "<arn:aws:iam::123456:role/astratrident-role>",
+   "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: <arn:aws:iam::123456:role/astratrident-role>'",
    "cloudProvider": "AWS"}"
 }
 ----
@@ -174,7 +173,7 @@ NOTE: To disable automatic backend configuration, upgrade the Trident release ve
 [role="tabbed-block"]
 ====
 
-.EKS cluster
+.eksctl
 
 --
 
@@ -204,8 +203,8 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 . On the left navigation pane, click *Clusters*.
 . Click the name of the cluster that you want to update the NetApp Trident CSI add-on for.
 . Click the *Add-ons* tab.
-. Click *Netapp Trident* and then click *Edit*.
-. On the *Configure selected add-ons settings* page, do the following:
+. Click *Trident by NetApp* and then click *Edit*.
+. On the *Configure Trident by NetApp* page, do the following:
 .. Select the *Version* you would like to use.
 .. Expand the *Optional configuration settings* and modify as needed.
 .. Click *Save changes*.
@@ -218,9 +217,11 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 
 The following example updates the EKS add-on:
 
-`aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni --addon-version v24.10.0-eksbuild.1 \
-    --service-account-role-arn arn:aws:iam::111122223333:role/role-name --configuration-values '{}' --resolve-conflicts --preserve`
+----
 
+aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni --addon-version v24.6.1-eksbuild.1 \
+    --service-account-role-arn arn:aws:iam::111122223333:role/role-name --configuration-values '{}' --resolve-conflicts --preserve
+----
 --
 ====
 
@@ -239,7 +240,7 @@ If the add-on has an IAM account associated with it, the IAM account is not remo
 ====
 
 
-.EKS cluster
+.eksctl
 
 --
 
@@ -255,7 +256,7 @@ The following command uninstalls the Trident EKS add-on:
 . Open the Amazon EKS console at https://console.aws.amazon.com/eks/home#/clusters.
 . In the left navigation pane, click *Clusters*.
 . Click the name of the cluster that you want to remove the NetApp Trident CSI add-on for.
-. Click the *Add-ons* tab and then click *Trident by NetApp*.*
+. Click the *Add-ons* tab and then click  *Trident by NetApp*.*
 . Click *Remove*.
 . In the *Remove netapp_trident-operator confirmation* dialog, do the following:
 .. If you want Amazon EKS to stop managing settings for the add-on, select *Preserve on cluster*. Do this if you want to retain the add-on software on your cluster so that you can manage all of the settings of the add-on on your own.

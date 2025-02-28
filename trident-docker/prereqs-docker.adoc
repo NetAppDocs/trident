@@ -153,3 +153,61 @@ sudo apt -y install linux-modules-extra-$(uname -r)
 sudo modprobe nvme-tcp
 ----
 ====
+
+== FC tools
+
+Install the FC tools using the commands for your operating system.  
+
+* When using worker nodes that run RHEL/RedHat CoreOS with FC PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. Refer to https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat documentation^].
+
+[role="tabbed-block"]
+====
+.RHEL 8+
+--
+. Install the following system packages:
++
+----
+sudo yum install -y lsscsi device-mapper-multipath
+----
+. Enable multipathing:
++
+----
+sudo mpathconf --enable --with_multipathd y --find_multipaths n
+----
++
+NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+
+. Ensure that `multipathd` is running:
++
+----
+sudo systemctl enable --now multipathd
+----
+--
+.Ubuntu
+--
+. Install the following system packages:
++
+----
+sudo apt-get install -y lsscsi sg3-utils multipath-tools scsitools
+----
+. Enable multipathing:
++
+----
+sudo tee /etc/multipath.conf <<-EOF
+defaults {
+    user_friendly_names yes
+    find_multipaths no
+}
+EOF
+sudo systemctl enable --now multipath-tools.service
+sudo service multipath-tools restart
+----
++
+NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+
+. Ensure that `multipath-tools` is enabled and running:
++
+----
+sudo systemctl status multipath-tools
+----
+====

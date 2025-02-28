@@ -35,7 +35,7 @@ aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document 
   --description "This policy grants access to Trident CSI to FSxN and Secret manager"
 ----
 
-*Policy JSON file*:
+*Policy JSON example*:
 ----
 policy.json:
 {
@@ -59,6 +59,52 @@ policy.json:
             "Action": "secretsmanager:GetSecretValue",
             "Effect": "Allow",
             "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:<aws-secret-manager-name>*"
+        }
+    ],
+    "Version": "2012-10-17"
+}
+----
+
+To enable automatic backend configuration for Amazon FSx, add the following actions to the `policy.json` file while creating an IAM policy:
+
+* `"fsx:CreateStorageVirtualMachine"`
+* `"fsx:DescribeStorageVirtualMachines"`
+* `"secretsmanager:CreateSecret"`
+* `"secretsmanager:DeleteSecret"`
+* `"secretsmanager:TagResource"`
+
+*Policy JSON file example for automatic backend configuration*:
+----
+
+ policy.json:
+{
+    "Statement": [
+        {
+            "Action": [
+                "fsx:CreateStorageVirtualMachine",
+                "fsx:DescribeFileSystems",
+                "fsx:DescribeStorageVirtualMachines",
+                "fsx:DescribeVolumes",
+                "fsx:CreateVolume",
+                "fsx:RestoreVolumeFromSnapshot",
+                "fsx:DescribeStorageVirtualMachines",
+                "fsx:UntagResource",
+                "fsx:UpdateVolume",
+                "fsx:TagResource",
+                "fsx:DeleteVolume"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:CreateSecret",
+                "secretsmanager:DeleteSecret",
+                "secretsmanager:TagResource"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:secretsmanager:<aws-region>:<aws-account-id>:secret:*"
         }
     ],
     "Version": "2012-10-17"

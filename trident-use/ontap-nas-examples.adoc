@@ -22,7 +22,7 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |"ontap-nas", "ontap-nas-economy", "ontap-nas-flexgroup", "ontap-san", "ontap-san-economy"
+|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
@@ -170,7 +170,7 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
 
-|`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
+|`tieringPolicy` |Tiering policy to use	"none" |
 
 |`unixPermissions`	|Mode for new volumes	|"777" for NFS volumes; empty (not applicable) for SMB volumes
 

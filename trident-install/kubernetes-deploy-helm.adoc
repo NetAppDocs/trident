@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Trident using Helm. Thi
 [.lead]
 You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Trident 24.10
+== Critical information about Trident 25.02
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -48,7 +48,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 . Use `helm install` and specify a name for your deployment as in the following example where `100.2404.0` is the version of Trident you are installing. 
 +
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2410.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2502.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -73,10 +73,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following command where `100.2410.0` is the version of Trident you are installing:
+For example, to change the default value of `debug`, run the following command where `100.2502.0` is the version of Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2410.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2502.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options
@@ -258,6 +258,16 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`nodePrep`
 |Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
 *Currently, `iscsi` is the only value supported.*
+|
+
+|`ontapConfigurator`
+a|Enables or disables automatic configuration of Trident backend and storage classes for Amazon FSx. Use the following parameters along with `ontapConfigurator` to enable automatic backend configuration:
+`enabled`: Set to `true` to enable automatic backend configuration.
+`svms`: Contains the list of file system IDs for which automatic backend configuration will be created.
+  - `authType`: Sets authentication type for SVM authentication. For AWS, arn-based authentication ("awsarn") is supported at present. 
+  - `fsxnID`: Sets the filesytem ID of AWS FSx. Example: "fs-0dfeaa884a68b1cab".
+- `protocols` - Specifies the list of supported protocols for automatic backend configuration; "nfs", "iscsi" or both.
+
 |
 
 |===

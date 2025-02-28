@@ -247,8 +247,6 @@ Trident provides the ability to dynamically manage export policies for ONTAP bac
 
 NOTE: Do not use Network Address Translation (NAT) when using dynamic export policies. With NAT, the storage controller sees the frontend NAT address and not the actual IP host address, so access will be denied when no match is found in the export rules.
 
-NOTE: In Trident 24.10, `ontap-nas` storage driver will continue to work as in the earlier releases; no change has been made for ontap-nas driver. Only the `ontap-nas-economy` storage driver will have volume based granular access control in Trident 24.10.
-
 ==== Example
 
 There are two configuration options that must be used. Here's an example backend definition:

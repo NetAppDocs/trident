@@ -51,6 +51,27 @@ NOTE: If you select Override for the Conflict resolution method, one or more of 
 +
 image::../media/aws-eks-06.png[]
 +
+* Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, and `protocols` in the Add-on configuration schema along with `cloudIdentity` during the installation.
++
+----
+"ontapConfigurator": {
+        "enabled": true,
+        "svms": [
+          {
+            "authType": "awsarn",
+            "fsxnID": "fs-0dfeaa884a68b1cab",
+            "protocols": [
+              "nfs",
+              "iscsi"
+            ]
+          }
+        ]
+      }}"
+
+----
++
+NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the *ontapConfigurator* to *false*. 
++
 . Select *Create*.
 . Verify that the status of the add-on is _Active_.
 +
@@ -67,10 +88,7 @@ kubectl get pods -n trident
 
 .Install the  NetApp Trident EKS add-on using CLI:
 The following example command installs the Trident EKS add-on:
-----
-eksctl create addon --name aws-ebs-csi-driver --cluster <cluster_name> --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force
-----
-
+`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
 
 .Uninstall the NetApp Trident EKS add-on using CLI:
 The following command uninstalls the Trident EKS add-on:

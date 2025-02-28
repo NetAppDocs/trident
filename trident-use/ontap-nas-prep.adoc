@@ -247,8 +247,6 @@ Trident provides the ability to dynamically manage export policies for ONTAP bac
 
 NOTE: Do not use Network Address Translation (NAT) when using dynamic export policies. With NAT, the storage controller sees the frontend NAT address and not the actual IP host address, so access will be denied when no match is found in the export rules.
 
-NOTE: In Trident 24.10, `ontap-nas` storage driver will continue to work as in the earlier releases; no change has been made for ontap-nas driver. Only the `ontap-nas-economy` storage driver will have volume based granular access control in Trident 24.10.
-
 ==== Example
 
 There are two configuration options that must be used. Here's an example backend definition:
@@ -270,7 +268,7 @@ NOTE: When using this feature, you must ensure that the root junction in your SV
 
 Here is an explanation of how this feature works using the example above:
 
-* `autoExportPolicy` is set to `true`. This indicates that Trident creates an export policy for each volume provisioned with this backend for the `svm1` SVM and handle the addition and deletion of rules using `autoexportCIDRs` address blocks. Until a volume is attached to a node, the volume uses an empty export policy with no rules to prevent unwanted access to that volume. When a volume is published to a node Trident creates an export policy with the same name as the underlying qtree containing the node IP within the specified CIDR block. These IPs will also be added to the export policy used by the parent FlexVol.
+* `autoExportPolicy` is set to `true`. This indicates that Trident creates an export policy for each volume provisioned with this backend for the `svm1` SVM and handle the addition and deletion of rules using `autoexportCIDRs` address blocks. Until a volume is attached to a node, the volume uses an empty export policy with no rules to prevent unwanted access to that volume. When a volume is published to a node Trident creates an export policy with the same name as the underlying qtree containing the node IP within the specified CIDR block. These IPs will also be added to the export policy used by the parent FlexVol volume
 ** For example:
 *** backend UUID 403b5326-8482-40db-96d0-d83fb3f4daec
 *** `autoExportPolicy` set to `true`
@@ -320,7 +318,7 @@ If the IP address of a live node is updated, you must restart the Trident pod on
 == Prepare to provision SMB volumes
 With a little additional preparation, you can provision SMB volumes using `ontap-nas` drivers. 
 
-WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises. Failure to configure either of these protocols will cause SMB volume creation to fail.
+WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises clusters. Failure to configure either of these protocols will cause SMB volume creation to fail.
 
 NOTE: `autoExportPolicy` is not supported for SMB volumes.
 

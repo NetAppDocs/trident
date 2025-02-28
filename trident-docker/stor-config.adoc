@@ -77,7 +77,7 @@ a|IP address of protocol LIF.
 
 *ONTAP NAS drivers*: We recommend specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
 
-*ONTAP SAN drivers*: Do not specify for iSCSI.  Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
+*ONTAP SAN drivers*: Do not specify for iSCSI or FC.  Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCSI or FC LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 a|`10.0.0.2`
 
 |`svm`
@@ -388,6 +388,25 @@ Refer to the following pages for more information:
   "username":"vsadmin",
   "password":"password",
   "sanType": "nvme",
+  "useREST": true
+}
+----
+====
+
+.SCSI over FC example for `ontap-san` driver
+[%collapsible%closed]
+====
+
+----
+{
+  "version": 1,
+  "backendName": "ontap-san-backend",
+  "storageDriverName": "ontap-san",
+  "managementLIF": "10.0.0.1",
+  "sanType": "fcp",
+  "svm": "trident_svm",
+  "username":"vsadmin",
+  "password":"password",
   "useREST": true
 }
 ----

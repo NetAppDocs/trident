@@ -36,15 +36,9 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
-|`dataLIF` |IP address of protocol LIF. 
-
-Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`. 
-
-*Do not specify for iSCSI.* Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
-
-*Omit for Metrocluster.* See the <<mcc-best>>.
-
-|Derived by the SVM
+|`dataLIF`| IP address of protocol LIF.
+*Do not specify for iSCSI*. Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
+*Omit for Metrocluster*. See the <<mcc-best>>.|Derived by the SVM
 
 |`svm` |Storage virtual machine to use 
 
@@ -252,6 +246,21 @@ labels:
 username: vsadmin
 password: <password>
 ----
+
+
+You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
+
+For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `svm` parameters. For example:
+
+----
+---
+version: 1
+storageDriverName: ontap-san
+managementLIF: 192.168.1.66
+username: vsadmin
+password: password
+----
+
 ====
 
 .ONTAP SAN economy example
@@ -265,24 +274,6 @@ managementLIF: 10.0.0.1
 svm: svm_iscsi_eco
 username: vsadmin
 password: <password>
-----
-====
-
-[#mcc-best]
-. example
-[%collapsible%closed]
-====
-You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
-
-For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
-
-----
----
-version: 1
-storageDriverName: ontap-san
-managementLIF: 192.168.1.66
-username: vsadmin
-password: password
 ----
 ====
 
@@ -369,6 +360,24 @@ useREST: true
 ----
 ====
 
+.SCSI over FC (FCP) example
+[%collapsible%closed]
+====
+You must have an SVM configured with FC on your ONTAP backend. This is a basic backend configuration for FC.
+----
+---
+version: 1
+backendName: fcp-backend
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_fc
+username: vsadmin
+password: password
+sanType: fcp
+useREST: true
+----
+====
+
 .Backend configuration example with nameTemplate
 [%collapsible%closed]
 ====
@@ -390,7 +399,7 @@ defaults: {
 ====
 
 
-.formatOptions example for `ontap-san-economy` driver
+.formatOptions example for ontap-san-economy driver
 [%collapsible%closed]
 ====
 

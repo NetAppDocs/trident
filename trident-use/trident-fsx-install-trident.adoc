@@ -229,7 +229,7 @@ You have two options for removing an Amazon EKS add-on:
 
 * *Preserve add-on software on your cluster* – This option removes Amazon EKS management of any settings. It also removes the ability for Amazon EKS to notify you of updates and automatically update the Amazon EKS add-on after you initiate an update. However, it preserves the add-on software on your cluster. This option makes the add-on a self-managed installation, rather than an Amazon EKS add-on. With this option, there's no downtime for the add-on. Retain the `--preserve` option in the command to preserve the add-on. 
 
-* *Remove add-on software entirely from your cluster* – We recommend that you remove the Amazon EKS add-on from your cluster only if there are no resources on your cluster that are dependent on it. Remove the `--preserve` option from the `delete` command to remove the add-on. 
+* *Remove add-on software entirely from your cluster* – NetApp recommends that you remove the Amazon EKS add-on from your cluster only if there are no resources on your cluster that are dependent on it. Remove the `--preserve` option from the `delete` command to remove the add-on. 
 
 [NOTE]
 If the add-on has an IAM account associated with it, the IAM account is not removed.

@@ -14,7 +14,8 @@ summary: Trident is a fully supported open source project maintained by NetApp. 
 Trident is a fully-supported open source project maintained by NetApp. It has been designed to help you meet your containerized application's persistence demands using industry-standard interfaces, such as the Container Storage Interface (CSI).
 
 == What is Trident?
-Netapp Trident enables consumption and management of storage resources across all popular NetApp storage platforms, in the public cloud or on premises, including ONTAP (AFF, FAS, Select, Cloud, Amazon FSx for NetApp ONTAP), Element software (NetApp HCI, SolidFire), Azure NetApp Files service, and Cloud Volumes Service on Google Cloud. 
+Netapp Trident enables consumption and management of storage resources across all popular NetApp storage platforms, in the public cloud or on premises, including on-premises ONTAP clusters (AFF, FAS, and ASA), ONTAP Select, Cloud Volumes ONTAP, Element software (NetApp HCI, SolidFire), Azure NetApp Files, Amazon FSx for
+NetApp ONTAP, and Cloud Volumes Service on Google Cloud. 
 
 Trident is a Container Storage Interface (CSI) compliant dynamic storage orchestrator that natively integrates with link:https://kubernetes.io/[Kubernetes^]. Trident runs as a single Controller Pod plus a Node Pod on each worker node in the cluster. Refer to link:../trident-get-started/architecture.html[Trident architecture] for details. 
 
@@ -75,5 +76,5 @@ Trident can provision and manage storage devices for containerized applications 
 
 link:https://docs.netapp.com/us-en/ontap/index.html[NetApp ONTAP^] is the NetApp multiprotocol, unified storage operating system that provides advanced data management capabilities for any application. 
 
-ONTAP systems have all-flash, hybrid, or all-HDD configurations and offer many different deployment models, including engineered hardware (FAS and AFF), white-box (ONTAP Select), and cloud-only (Cloud Volumes ONTAP). Trident supports these ONTAP deployment models.
+ONTAP systems have all-flash, hybrid, or all-HDD configurations and offer many different deployment models: on-premises FAS, AFA, and ASA clusters, ONTAP Select, and Cloud Volumes ONTAP. Trident supports these ONTAP deployment models.
 ====

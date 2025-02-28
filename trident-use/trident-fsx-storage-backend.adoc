@@ -155,7 +155,7 @@ If you provide the `fsxFilesystemID` under the `aws` field, you need not to prov
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: We recommend specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
 *ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 
@@ -218,12 +218,12 @@ The provided `fsxadmin` and `vsadmin` do not contain the permissions required to
 |`limitVolumeSize` 
 |Fail provisioning if requested volume size is above this value. 
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. 
+Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume 
 
 |“” (not enforced by default)
 
 |`lunsPerFlexvol` 
-|Maximum LUNs per Flexvol, must be in range [50, 200]. 
+|Maximum LUNs per Flexvol volume, must be in range [50, 200]. 
 
 SAN only. 
 |"`100`"
@@ -250,7 +250,7 @@ Options are `nfs`, `smb`, or null.
 |`nfs`
 
 |`qtreesPerFlexvol`	
-|Maximum Qtrees per FlexVol, must be in range [50, 300]	
+|Maximum Qtrees per FlexVol volume, must be in range [50, 300]	
 |`"200"`
 
 |`smbShare` 

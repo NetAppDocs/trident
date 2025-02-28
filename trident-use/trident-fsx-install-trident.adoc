@@ -27,8 +27,8 @@ If you want to make use of the snapshot functionality, install the CSI snapshot 
 . Download the Trident installer package
 +
 The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from the Assets section on GitHub.
-`wget https://github.com/NetApp/trident/releases/download/v24.10.0/trident-installer-24.10.0.tar.gz`
-`tar -xf trident-installer-24.10.0.tar.gz`
+`wget https://github.com/NetApp/trident/releases/download/v25.02.0/trident-installer-25.02.0.tar.gz`
+`tar -xf trident-installer-25.02.0.tar.gz`
 `cd trident-installer`
 +
 . Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
@@ -78,9 +78,8 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 .EKS cluster
 
 --
-The following example commands install the Trident EKS add-on:
+The following example command installs the Trident EKS add-on:
 
-`eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild`
 `eksctl create addon --cluster clusterName --name netapp_trident-operator --version v24.10.0-eksbuild.1` (with a dedicated version)
 --
 

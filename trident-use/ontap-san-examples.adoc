@@ -102,7 +102,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.
+`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.
 
 `useREST` is fully qualified for NVMe/TCP. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
@@ -228,7 +228,7 @@ Currently, resizing is the only way to use the new calculation for an existing v
 
 The following examples show basic configurations that leave most parameters to default. This is the easiest way to define a backend.
 
-NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, we recommend you specify DNS names for LIFs instead of IP addresses.
+NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, NetApp recommends you specify DNS names for LIFs instead of IP addresses.
 
 .ONTAP SAN example
 [%collapsible%closed]
@@ -423,7 +423,7 @@ defaults:
 
 In these sample backend definition files, specific defaults are set for all storage pools, such as `spaceReserve` at none, `spaceAllocation` at false, and `encryption` at false. The virtual pools are defined in the storage section.
 
-Trident sets provisioning labels in the "Comments" field. Comments are set on the FlexVol. Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
+Trident sets provisioning labels in the "Comments" field. Comments are set on the FlexVol volume Trident copies all labels present on a virtual pool to the storage volume at provisioning. For convenience, storage administrators can define labels per virtual pool and group volumes by label. 
 
 In these examples, some of the storage pools set their own `spaceReserve`, `spaceAllocation`, and `encryption` values, and some pools override the default values.
 

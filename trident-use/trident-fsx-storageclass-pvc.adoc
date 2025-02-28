@@ -31,7 +31,7 @@ parameters:
   snapshots: "true"
 ----
 
-The following storage class example shows the configuration for NFSv3 volume on AWS Bottlerocket:
+To provision NFSv3 volumes on AWS Bottlerocket, add the required `mountOptions` to the storage class:
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

@@ -15,6 +15,66 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 25.02
+Beginning with Trident 25.02, the What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+
+=== Trident
+
+==== Enhancements
+
+* *Kubernetes*:
+** Added support for ONTAP ASA r2 for iSCSI. 
+** Added support for force detach for ONTAP-NAS volumes during Non-Graceful Node Shutdown scenarios. New ONTAP-NAS volumes will now utilize per-volume export policies managed by Trident. Provided an upgrade path for existing volumes to transition to the new export policy model on unpublish without affecting active workloads.
+** Added cloneFromSnapshot annotation.
+** Added support for cross namespace volume cloning.
+** Added automatic backend configuration for EKS add-on and helm based installation for Amazon FSx for NetApp ONTAP.
+** Enhanced iSCSI self-healing scan remediations to initiate rescans by exact host, channel, target and LUN ID.
+** Added support for Kubernetes 1.32.
+* *OpenShift*: 
+** Added support for automatic iSCSI node preparation for RHCOS on ROSA clusters.
+** Added support for Openshift virtualization for ONTAP drivers.
+* Added Fibre Channel support on ONTAP-SAN driver.
+* Added NVMe LUKS support.
+* Switched to scratch image for all base images.
+* Added iSCSI connection state discovery and logging when iSCSI sessions should be logged in but are not (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
+* Added support for SMB volumes with google-cloud-netapp-volumes driver.
+* Added support to allow ONTAP volumes to skip recovery queue on deletion.
+* Added support to override default images using SHAs instead of tags.
+* Added image-pull-secrets flag to tridentctl installer.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed missing node IP addresses from automatic export policies (link:https://github.com/NetApp/trident/issues/965[Issue #965]).
+** Fixed automatic export policies switching to per volume policy prematurely for ONTAP-NAS-Economy.
+** Fixed backend config credentials to support all available AWS ARN partitions (link:https://github.com/NetApp/trident/issues/913[Issue #913]).
+** Added option to disable the auto configurator reconciliation in the Trident operator (link:https://github.com/NetApp/trident/issues/924[Issue #924]).
+** Added securityContext for csi-resizer container (link:https://github.com/NetApp/trident/issues/976[Issue #976]).
+** Removed logouts for intermittently unhealthy non-CHAP portals during iSCSI self-healing (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
+
+=== Trident protect
+NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+
+==== Enhancements
+
+* Added backup and restore support for KubeVirt / OpenShift Virtualization VMs for both volumeMode: File and volumeMode: Block (raw device) storage to already available storage replication through AppMirrorRelationship.
+* Added the capability to control freeze behavior at application level for Kubevirt environments.
+* Added support for configuring AutoSupport proxy connections.
+* Added the ability to define a secret for data mover encryption (Kopia / Restic).
+* Added the ability to manually run an execution hook.
+* Added the ability to configure security context constraints (SCCs) during Trident protect installation.
+* Added support for configuring nodeSelector during Trident protect installation.
+* Added support for HTTP / HTTPS egress proxy for AppVault objects.
+* Extended ResourceFilter to enable exclusion of cluster-scoped resources.
+* Added support for the AWS session token in S3 AppVault credentials.
+* Added support for resource collection after pre-snapshot execution hooks.
+
+==== Fixes
+
+* Improved the management of temporary volumes to skip the ONTAP volume recovery queue.
+* SCC annotations are now restored to original values.
+* Improved restore efficiency with support for parallel operations.
+* Enhanced support for execution hook timeouts for larger applications.
 
 == Changes in 24.10
 

@@ -226,3 +226,31 @@ tridentctl import volume azurenetappfiles_40517 importvol1 -f <path-to-pvc-file>
 +------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
 ----
 
+=== Google Cloud NetApp Volumes
+Trident supports volume import using the `google-cloud-netapp-volumes` driver.
+
+.Google Cloud NetApp Volumes example
+
+The following example imports an `google-cloud-netapp-volumes` volume on backend `backend-tbc-gcnv1` with the volume `testvoleasiaeast1`.
+
+----
+tridentctl import volume backend-tbc-gcnv1 "testvoleasiaeast1" -f < path-to-pvc> -n trident
+
++------------------------------------------+---------+----------------------+----------+--------------------------------------+--------+---------+
+|                   NAME                   |  SIZE   | STORAGE CLASS        | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
++------------------------------------------+---------+----------------------+----------+--------------------------------------+--------+---------+
+| pvc-a69cda19-218c-4ca9-a941-aea05dd13dc0 |  10 GiB | gcnv-nfs-sc-identity | file     | 8c18cdf1-0770-4bc0-bcc5-c6295fe6d837 | online | true    |
++------------------------------------------+---------+----------------------+----------+--------------------------------------+--------+---------+
+----
+
+The following example imports a `google-cloud-netapp-volumes` volume when two volumes are present in the same region: 
+
+----
+tridentctl import volume backend-tbc-gcnv1 "projects/123456789100/locations/asia-east1-a/volumes/testvoleasiaeast1" -f <path-to-pvc> -n trident
+
++------------------------------------------+---------+----------------------+----------+--------------------------------------+--------+---------+
+|                   NAME                   |  SIZE   | STORAGE CLASS        | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
++------------------------------------------+---------+----------------------+----------+--------------------------------------+--------+---------+
+| pvc-a69cda19-218c-4ca9-a941-aea05dd13dc0 |  10 GiB | gcnv-nfs-sc-identity | file     | 8c18cdf1-0770-4bc0-bcc5-c6295fe6d837 | online | true    |
++------------------------------------------+---------+----------------------+----------+--------------------------------------+--------+---------+
+----

@@ -22,11 +22,11 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`
+|`storageDriverName` | Name of the storage driver |`ontap-san` or `ontap-san-economy`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
-|`managementLIF` |IP address of a cluster or SVM management LIF. 
+|`managementLIF` a|IP address of a cluster or SVM management LIF. 
 
 A fully-qualified domain name (FQDN) can be specified.
 
@@ -34,13 +34,15 @@ Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. I
 
 For seamless MetroCluster switchover, see the <<mcc-best>>.
 
+NOTE: If you are using “vsadmin” credentials, `managementLIF` must be that of the SVM; if using “admin” credentials, `managementLIF` must be that of the cluster.
+
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
 |`dataLIF` |IP address of protocol LIF. 
 
 Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`. 
 
-*Do not specify for iSCSI.* Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
+*Do not specify for iSCSI.* Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCSI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 
 *Omit for Metrocluster.* See the <<mcc-best>>.
 
@@ -89,11 +91,16 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
+*Do not specify for ASA r2*.
+
 a|""
+
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
-If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.|"" (not enforced by default)
+If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.
+
+*Do not specify for ASA r2*.|"" (not enforced by default)
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. 
 
@@ -101,6 +108,7 @@ Also restricts the maximum size of the volumes it manages for LUNs.
 |""  (not enforced by default)
 
 |`lunsPerFlexvol` |Maximum LUNs per Flexvol, must be in range [50, 200] |`100`
+
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -110,13 +118,16 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.
 
-`useREST` is fully qualified for NVMe/TCP. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
+`useREST` is fully qualified for NVMe/TCP. 
+
+*If specified, always set to `true` for ASA r2*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
+
 
 a|`sanType` |
 
 Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibre Channel (FC).
 
-*'fcp' (SCSI over FC) is a tech preview feature in the Trident 24.10 release.*| `iscsi` if blank
+| `iscsi` if blank
 
 |`formatOptions`
 a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
@@ -152,10 +163,16 @@ You can control default provisioning using these options in the `defaults` secti
 |===
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |"true"
+*If specified, set to `true` for ASA r2*.
 
-|`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick) |"none"
+|`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick).
 
-|`snapshotPolicy` |Snapshot policy to use |"none"
+*Set to `none` for ASA r2*. |"none"
+
+|`snapshotPolicy` |Snapshot policy to use.
+
+*Set to `none` for ASA r2*. |"none"
+
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
 
@@ -163,7 +180,9 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |""
 
-|`snapshotReserve` |Percentage of volume reserved for snapshots	|"0" if `snapshotPolicy` is "none", otherwise ""
+|`snapshotReserve` |Percentage of volume reserved for snapshots.
+
+*Do not specify for ASA r2*.	|"0" if `snapshotPolicy` is "none", otherwise ""
 
 |`splitOnClone` |Split a clone from its parent upon creation |"false"
 
@@ -173,13 +192,17 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
 
+*If specified, set to `true` for ASA r2*.
+
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 LUKS encryption is not supported for NVMe/TCP.| ""
+Set to `false` for ASA r2.
 
-|`securityStyle` |Security style for new volumes |`unix`
+|`tieringPolicy` |Tiering policy to use	"none" 
 
-|`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
+*Do not specify for ASA r2*.|
+
 
 |`nameTemplate` | Template to create custom volume names.
 
@@ -234,7 +257,7 @@ Currently, resizing is the only way to use the new calculation for an existing v
 
 The following examples show basic configurations that leave most parameters to default. This is the easiest way to define a backend.
 
-NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, NetApp recommends you specify DNS names for LIFs instead of IP addresses.
+NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, NetApp recommends that you specify DNS names for LIFs instead of IP addresses.
 
 .ONTAP SAN example
 [%collapsible%closed]
@@ -252,37 +275,38 @@ labels:
 username: vsadmin
 password: <password>
 ----
+
+====
+
+[#mcc-best]
+.MetroCluster example
+[%collapsible%closed]
+====
+
+You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
+
+For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `svm` parameters. For example:
+
+----
+version: 1
+storageDriverName: ontap-san
+managementLIF: 192.168.1.66
+username: vsadmin
+password: password
+----
+
 ====
 
 .ONTAP SAN economy example
 [%collapsible%closed]
 ====
 ----
----
 version: 1
 storageDriverName: ontap-san-economy
 managementLIF: 10.0.0.1
 svm: svm_iscsi_eco
 username: vsadmin
 password: <password>
-----
-====
-
-[#mcc-best]
-. example
-[%collapsible%closed]
-====
-You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
-
-For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
-
-----
----
-version: 1
-storageDriverName: ontap-san
-managementLIF: 192.168.1.66
-username: vsadmin
-password: password
 ----
 ====
 
@@ -369,6 +393,24 @@ useREST: true
 ----
 ====
 
+.SCSI over FC (FCP) example
+[%collapsible%closed]
+====
+You must have an SVM configured with FC on your ONTAP backend. This is a basic backend configuration for FC.
+----
+---
+version: 1
+backendName: fcp-backend
+storageDriverName: ontap-san
+managementLIF: 10.0.0.1
+svm: svm_fc
+username: vsadmin
+password: password
+sanType: fcp
+useREST: true
+----
+====
+
 .Backend configuration example with nameTemplate
 [%collapsible%closed]
 ====
@@ -390,7 +432,7 @@ defaults: {
 ====
 
 
-.formatOptions example for `ontap-san-economy` driver
+.formatOptions example for ontap-san-economy driver
 [%collapsible%closed]
 ====
 

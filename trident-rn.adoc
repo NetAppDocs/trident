@@ -101,7 +101,7 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 * Fixed tridentctl to ignore warning messages from Kubernetes (link:https://github.com/NetApp/trident/issues/892[Issue #892]).
 * Changed Trident controller `SecurityContextConstraint` priority to `0` (link:https://github.com/NetApp/trident/issues/887[Issue #887]).
 * ONTAP drivers now accept volume sizes below 20MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
-* Fixed Trident to prevent shrinking of Flexvols during resize operation for the ONTAP-SAN driver.
+* Fixed Trident to prevent shrinking of FlexVol volumes during resize operation for the ONTAP-SAN driver.
 * Fixed ANF volume import failure with NFS v4.1.
 
 == Changes in 24.02
@@ -272,7 +272,7 @@ IMPORTANT: Kubernetes 1.27 is now supported in Trident. Please upgrade Trident p
 * Added support for NTFS permissions when using SMB volumes.
 * Added support for storage pools for GCP volumes with CVS service level.
 * Added support for optional use of flexgroupAggregateList when creating FlexGroups with the ontap-nas-flexgroup storage driver.
-* Improved performance for the ontap-nas-economy storage driver when managing multiple FlexVols.
+* Improved performance for the ontap-nas-economy storage driver when managing multiple FlexVol volumes
 * Enabled dataLIF updates for all ONTAP NAS storage drivers.
 * Updated the Trident Deployment and DaemonSet naming convention to reflect the host node OS.
 

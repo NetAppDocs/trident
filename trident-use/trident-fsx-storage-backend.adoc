@@ -218,12 +218,12 @@ The provided `fsxadmin` and `vsadmin` do not contain the permissions required to
 |`limitVolumeSize` 
 |Fail provisioning if requested volume size is above this value. 
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. 
+Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume 
 
 |“” (not enforced by default)
 
 |`lunsPerFlexvol` 
-|Maximum LUNs per Flexvol, must be in range [50, 200]. 
+|Maximum LUNs per Flexvol volume, must be in range [50, 200]. 
 
 SAN only. 
 |"`100`"
@@ -250,7 +250,7 @@ Options are `nfs`, `smb`, or null.
 |`nfs`
 
 |`qtreesPerFlexvol`	
-|Maximum Qtrees per FlexVol, must be in range [50, 300]	
+|Maximum Qtrees per FlexVol volume, must be in range [50, 300]	
 |`"200"`
 
 |`smbShare` 

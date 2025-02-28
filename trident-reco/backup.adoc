@@ -22,9 +22,9 @@ Trident uses Kubernetes CRDs to store and manage its own state and the Kubernete
 .Steps
 
 . Back up the Kubernetes cluster etcd using  link:https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster[Kubernetes: Backing up an etcd cluster^].
-. Place the backup artifacts on a FlexVol. 
+. Place the backup artifacts on a FlexVol volume 
 +
-NOTE: We recommend you protect the SVM where the FlexVol resides with a SnapMirror relationship to another SVM.
+NOTE: NetApp recommends you protect the SVM where the FlexVol resides with a SnapMirror relationship to another SVM.
 
 === Trident recovery
 Using Kubernetes CRDs and the Kubernetes cluster etcd snapshot, you can recover Trident.

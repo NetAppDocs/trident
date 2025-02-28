@@ -38,7 +38,7 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 |`dataLIF` |IP address of protocol LIF. 
 
-We recommend specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
+NetApp recommends specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
 
 Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
@@ -97,7 +97,7 @@ NOTE: When the aggregate list is updated in SVM, the list is updated in Trident 
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
 
-Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. |""  (not enforced by default)
+Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume |""  (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -126,8 +126,8 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
-Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.  
+`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
+Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.  
 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 

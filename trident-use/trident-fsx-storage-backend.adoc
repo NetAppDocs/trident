@@ -14,7 +14,7 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 
 == ONTAP SAN and NAS driver integration
 
-You can create a backend file using the SVM credentials (username and password) stored in AWS Secret Manager as shown in this example:
+To create a storage backend, you need to create a configuration file in either JSON or YAML format. The file needs to specify the type of storage you want (NAS or SAN), the file system, and SVM to get it from and how to authenticate with it. The following example shows how to define NAS-based storage and using an AWS secret to store the credentials to the SVM you want to use:
 
 [role="tabbed-block"]
 ====
@@ -26,6 +26,7 @@ apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
   name: backend-tbc-ontap-nas
+  namespace: trident
 spec:
   version: 1
   storageDriverName: ontap-nas
@@ -47,6 +48,7 @@ spec:
   "kind": "TridentBackendConfig",
   "metadata": {
     "name": "backend-tbc-ontap-nas"
+    "namespace": "trident"
   },
   "spec": {
     "version": 1,
@@ -69,10 +71,28 @@ spec:
 
 ====
 
-For information about creating backends, refer to these pages:
+Run the following commands to create and validate the Trident Backend Configuration (TBC):
 
-* link:ontap-nas.html[Configure a backend with ONTAP NAS drivers]
-* link:ontap-san.html[Configure a backend with ONTAP SAN drivers]
+* Create trident backend configuration (TBC) from yaml file and run the following command:
++
+----
+kubectl create -f backendconfig.yaml -n trident 
+----
++
+----
+tridentbackendconfig.trident.netapp.io/backend-tbc-ontap-nas created
+----
+* Validate the trident backend configuration (TBC) was created successfully:
++
+---- 
+Kubectl get tbc -n trident
+----
++
+----
+NAME                         BACKEND NAME         BACKEND UUID                           PHASE   STATUS
+
+backend-tbc-ontap-nas        tbc-ontap-nas        933e0071-66ce-4324-b9ff-f96d916ac5e9   Bound   Success
+----
 
 == FSx for ONTAP driver details
 
@@ -86,51 +106,21 @@ You can integrate Trident with Amazon FSx for NetApp ONTAP using the following d
 
 For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
 
+Once the configuration file has been created, run this command to create it within your EKS:
+----
+kubectl create -f configuration_file
+----
 
-== Example configurations
-
-.Configuration for AWS FSx for ONTAP with secret manager
-[%collapsible%closed]
-====
+To verify the status, run this command:
+----
+kubectl get tbc -n trident
+----
 
 ----
-apiVersion: trident.netapp.io/v1
-kind: TridentBackendConfig
-metadata:
-  name: backend-tbc-ontap-nas
-spec:
-  version: 1
-  storageDriverName: ontap-nas
-  backendName: tbc-ontap-nas
-  svm: svm-name
-  aws: 
-    fsxFilesystemID: fs-xxxxxxxxxx
-  managementLIF: 
-  credentials: 
-    name: "arn:aws:secretsmanager:us-west-2:xxxxxxxx:secret:secret-name"
-    type: awsarn
+NAME                    BACKEND NAME            BACKEND UUID                           PHASE   STATUS
+backend-fsx-ontap-nas   backend-fsx-ontap-nas   7a551921-997c-4c37-a1d1-f2f4c87fa629   Bound   Success
 ----
-====
 
-.Configuration of storage class for SMB volumes
-[%collapsible%closed]
-====
-
-Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
-
-----
-apiVersion: storage.k8s.io/v1 
-kind: StorageClass
-metadata:
-  name: nas-smb-sc
-provisioner: csi.trident.netapp.io
-parameters:
-  backendType: "ontap-nas"
-  trident.netapp.io/nasType: "smb"
-  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
-  csi.storage.k8s.io/node-stage-secret-namespace: "default"
-----
-====
 
 == Backend advanced configuration and examples
 
@@ -165,7 +155,7 @@ If you provide the `fsxFilesystemID` under the `aws` field, you need not to prov
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: We recommend specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
 *ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 
@@ -228,12 +218,12 @@ The provided `fsxadmin` and `vsadmin` do not contain the permissions required to
 |`limitVolumeSize` 
 |Fail provisioning if requested volume size is above this value. 
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. 
+Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume 
 
 |“” (not enforced by default)
 
 |`lunsPerFlexvol` 
-|Maximum LUNs per Flexvol, must be in range [50, 200]. 
+|Maximum LUNs per Flexvol volume, must be in range [50, 200]. 
 
 SAN only. 
 |"`100`"
@@ -260,7 +250,7 @@ Options are `nfs`, `smb`, or null.
 |`nfs`
 
 |`qtreesPerFlexvol`	
-|Maximum Qtrees per FlexVol, must be in range [50, 300]	
+|Maximum Qtrees per FlexVol volume, must be in range [50, 300]	
 |`"200"`
 
 |`smbShare` 

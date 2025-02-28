@@ -18,9 +18,9 @@ Beginning with the 25.02 release, Trident automatically detects ASA r2 personali
 == Requirements
 For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
 
-Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
+NOTE: If using "adming" credentials, an aggregate need not be assigned to the SVM. While using “vsadmin” credentials with ASA r2, the aggregates must be delegated to the SVM; this action is only available using the ONTAP CLI in `diag` mode in ASA r2.
 
-NOTE: While using “vsadmin” credentials, the aggregates must be delegated to the SVM. This action is only available using the ONTAP CLI in `diag` mode in ASA r2.
+Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 
 All your Kubernetes worker nodes must have the appropriate iSCSI tools installed. Refer to link:worker-node-prep.html[Prepare the worker node] for details.
 

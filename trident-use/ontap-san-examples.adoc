@@ -22,11 +22,11 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`
+|`storageDriverName` | Name of the storage driver |`ontap-san` or `ontap-san-economy`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
-|`managementLIF` |IP address of a cluster or SVM management LIF. 
+|`managementLIF` a|IP address of a cluster or SVM management LIF. 
 
 A fully-qualified domain name (FQDN) can be specified.
 
@@ -42,7 +42,7 @@ NOTE: If you are using “vsadmin” credentials, `managementLIF` must be that o
 
 Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`. 
 
-*Do not specify for iSCSI.* Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
+*Do not specify for iSCSI.* Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCSI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 
 *Omit for Metrocluster.* See the <<mcc-best>>.
 
@@ -120,7 +120,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST` is fully qualified for NVMe/TCP. 
 
-*Do not set to `false` for ASA r2*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
+*If specified, always set to `true` for ASA r2*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 
 a|`sanType` |

@@ -67,7 +67,7 @@ You can locally generate and modify the exact manifest files Trident uses for in
 
 === Can I share the same ONTAP backend SVM for two separate Trident instances for two separate Kubernetes clusters?
 
-Although it is not advised, you can use the same backend SVM for two Trident instances. Specify a unique volume name for each instance during installation and/or specify a unique `StoragePrefix` parameter in the `setup/backend.json` file. This is to ensure the same FlexVol is not used for both instances.
+Although it is not advised, you can use the same backend SVM for two Trident instances. Specify a unique volume name for each instance during installation and/or specify a unique `StoragePrefix` parameter in the `setup/backend.json` file. This is to ensure the same FlexVol volume is not used for both instances.
 
 === Is it possible to install Trident under ContainerLinux (formerly CoreOS)?
 
@@ -139,7 +139,7 @@ If you need a fix for bugs observed after an upgrade, dependency issues, or an u
 The management LIF is mandatory. Data LIF varies:
 
 * ONTAP SAN: Do not specify for iSCSI. Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined.  Refer to link:trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples] for details. 
-* ONTAP NAS: We recommend specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Refer to link:trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples] for details
+* ONTAP NAS: NetApp recommends specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Refer to link:trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples] for details
 
 === Can Trident configure CHAP for ONTAP backends?
 
@@ -196,7 +196,7 @@ Yes.
 
 === How does Trident deploy Qtrees on an ONTAP volume? How many Qtrees can be deployed on a single volume?
 
-The `ontap-nas-economy` driver creates up to 200 Qtrees in the same FlexVol (configurable between 50 and 300), 100,000 Qtrees per cluster node, and 2.4M per cluster. When you enter a new `PersistentVolumeClaim` that is serviced by the economy driver, the driver looks to see if a FlexVol already exists that can service the new Qtree. If the FlexVol does not exist that can service the Qtree, a new FlexVol is created.
+The `ontap-nas-economy` driver creates up to 200 Qtrees in the same FlexVol volume (configurable between 50 and 300), 100,000 Qtrees per cluster node, and 2.4M per cluster. When you enter a new `PersistentVolumeClaim` that is serviced by the economy driver, the driver looks to see if a FlexVol volume already exists that can service the new Qtree. If the FlexVol volume does not exist that can service the Qtree, a new FlexVol volume is created.
 
 === How can I set Unix permissions for volumes provisioned on ONTAP NAS?
 
@@ -266,7 +266,7 @@ As of today, on-demand snapshot support is available for our `ontap-nas`, `ontap
 
 This is available on `ontap-nas`, `ontap-san`, and `ontap-nas-flexgroup` drivers. You can also specify a `snapshotPolicy` for the `ontap-san-economy` driver at the FlexVol level.
 
-This is also available on the `ontap-nas-economy` drivers but on the FlexVol level granularity and not on the qtree level granularity. To enable the ability to snapshot volumes provisioned by Trident, set the backend parameter option `snapshotPolicy` to the desired snapshot policy as defined on the ONTAP backend. Any snapshots taken by the storage controller are not known by Trident.
+This is also available on the `ontap-nas-economy` drivers but on the FlexVol volume level granularity and not on the qtree level granularity. To enable the ability to snapshot volumes provisioned by Trident, set the backend parameter option `snapshotPolicy` to the desired snapshot policy as defined on the ONTAP backend. Any snapshots taken by the storage controller are not known by Trident.
 
 === Can I set a snapshot reserve percentage for a volume provisioned through Trident?
 

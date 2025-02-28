@@ -44,7 +44,7 @@ Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. I
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: We recommend specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
 *ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 
@@ -107,7 +107,7 @@ The provided `fsxadmin` and `vsadmin` do not contain the permissions required to
 |`limitVolumeSize` 
 |Fail provisioning if requested volume size is above this value. 
 
-Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. 
+Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume 
 
 |“” (not enforced by default)
 
@@ -153,8 +153,8 @@ This parameter is required for Amazon FSx for ONTAP backends.
 |`useREST` 
 |Boolean parameter to use ONTAP REST APIs.
 
-`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
-Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls. 
+`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
+Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls. 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 |`aws`| You can specify the following in the configuration file for AWS FSx for ONTAP:

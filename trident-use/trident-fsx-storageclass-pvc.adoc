@@ -26,7 +26,6 @@ metadata:
 provisioner: csi.trident.netapp.io
 parameters:
   backendType: "ontap-nas"
-  media: "ssd"
   provisioningType: "thin"
   snapshots: "true"
 ----
@@ -73,7 +72,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: basic-csi
+  storageClassName: ontap-gold
   capacity:
     storage: 10Gi
   accessModes:
@@ -88,7 +87,7 @@ spec:
 ====
 These examples show basic PVC configuration options. 
 
-.PVC with RWO access
+.PVC with RWX access
 This example shows a basic PVC with RWX access that is associated with a StorageClass named `basic-csi`.
 ----
 kind: PersistentVolumeClaim
@@ -101,11 +100,11 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: basic-csi
+  storageClassName: ontap-gold
 ----
 
 .PVC with NVMe/TCP
-This example shows a basic PVC for NVMe/TCP with RWO access that is associated with a StorageClass named `protection-gold`.
+This example shows a basic PVC for NVMe/TCP with RWX access that is associated with a StorageClass named `protection-gold`.
 ----
 ---
 kind: PersistentVolumeClaim
@@ -114,7 +113,7 @@ metadata:
 name: pvc-san-nvme
 spec:
 accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
 resources:
   requests:
     storage: 300Mi

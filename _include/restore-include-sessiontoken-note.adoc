@@ -1,0 +1,5 @@
+.Before you begin
+Ensure that the AWS session token expiration is sufficient for any long-running s3 restore operations. If the token expires during the restore operation, the operation can fail.
+
+* Refer to the https://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html[AWS API documentation^] for more information about checking the current session token expiration.
+* Refer to the https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html[AWS IAM documentation^] for more information about credentials with AWS resources.

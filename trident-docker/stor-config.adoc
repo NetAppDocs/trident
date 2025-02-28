@@ -42,7 +42,7 @@ a|`10g`
 
 |===
 
-TIP: Do not use `storagePrefix` (including the default) for Element backends. By default, the `solidfire-san` driver will ignore this setting and not use a prefix. We recommend using either a specific tenantID for Docker volume mapping or using the attribute data which is populated with the Docker version, driver info, and raw name from Docker in cases where any name munging may have been used.
+TIP: Do not use `storagePrefix` (including the default) for Element backends. By default, the `solidfire-san` driver will ignore this setting and not use a prefix. NetApp recommends using either a specific tenantID for Docker volume mapping or using the attribute data which is populated with the Docker version, driver info, and raw name from Docker in cases where any name munging may have been used.
 
 Default options are available to avoid having to specify them on every volume you create. The `size` option is available for all the controller types. See the ONTAP configuration section for an example of how to set the default volume size.
 
@@ -75,7 +75,7 @@ a|`10.0.0.1`
 |`dataLIF`
 a|IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: We recommend specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
+*ONTAP NAS drivers*: NetApp recommends specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
 
 *ONTAP SAN drivers*: Do not specify for iSCSI.  Trident uses link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html[ONTAP Selective LUN Map^] to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if `dataLIF` is explicitly defined. 
 a|`10.0.0.2`

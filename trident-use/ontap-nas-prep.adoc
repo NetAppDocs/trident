@@ -320,7 +320,7 @@ If the IP address of a live node is updated, you must restart the Trident pod on
 == Prepare to provision SMB volumes
 With a little additional preparation, you can provision SMB volumes using `ontap-nas` drivers. 
 
-WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises. Failure to configure either of these protocols will cause SMB volume creation to fail.
+WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises clusters. Failure to configure either of these protocols will cause SMB volume creation to fail.
 
 NOTE: `autoExportPolicy` is not supported for SMB volumes.
 

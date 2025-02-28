@@ -19,7 +19,7 @@ In Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as r
 
 * Worker nodes must have cryptsetup 2.1 or higher (but lower than 3.0) installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup^].
 
-* For performance reasons, we recommend that worker nodes support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
+* For performance reasons, NetApp recommends that worker nodes support Advanced Encryption Standard New Instructions (AES-NI). To verify AES-NI support, run the following command:
 +
 ----
 grep "aes" /proc/cpuinfo

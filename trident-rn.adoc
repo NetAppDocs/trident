@@ -78,7 +78,7 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 * Added ability for iSCSI self-healing to initiate SCSI scans by exact LUN ID if deprecated igroups are in use (link:https://github.com/NetApp/trident/issues/883[Issue #883]).
 * Added support for volume clone and resize operations to be allowed even when the backend is in suspended mode.
 * Added ability for user-configured log settings for the Trident controller to be propagated to Trident node pods.
-* Added support in Trident to use REST by default instead of ZAPI for ONTAP versions 9.15.1 and later.
+* Added support in Trident to use REST by default instead of ONTAPI (ZAPI) for ONTAP versions 9.15.1 and later.
 * Added support for custom volume names and metadata on the ONTAP storage backends for new persistent volumes.
 * Enhanced the `azure-netapp-files` (ANF) driver to automatically enable the snapshot directory by default when the NFS mount options are set to use NFS version 4.x.
 * Added Bottlerocket support for NFS volumes.
@@ -113,7 +113,7 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 ** EKS with FSxN - AWS IAM role will be used as Cloud identity.
 * Added support to install Trident as an add-on on EKS cluster from EKS console.
 * Added ability to configure and disable iSCSI self-healing (link:https://github.com/NetApp/trident/issues/864[Issue #864]).
-* Added FSx personality to ONTAP drivers to enable integration with AWS IAM and SecretsManager, and to enable Trident to delete FSx volumes with backups (link:https://github.com/NetApp/trident/issues/453[Issue #453]).
+* Added Amazon FSx personality to ONTAP drivers to enable integration with AWS IAM and SecretsManager, and to enable Trident to delete FSx volumes with backups (link:https://github.com/NetApp/trident/issues/453[Issue #453]).
 
 
 ==== Kubernetes
@@ -171,7 +171,7 @@ Added support for Kubernetes 1.28.
 ** Added toleration to "transient-trident-version-pod" definition (link:https://github.com/NetApp/trident/issues/795[Issue #795^]).
 
 ==== Trident
-* Fixed ONTAP ZAPI requests to ensure LUN serial numbers are queried when getting LUN attributes to identify and fix ghost iSCSI devices during Node Staging operations.
+* Fixed ONTAPI (ZAPI) requests to ensure LUN serial numbers are queried when getting LUN attributes to identify and fix ghost iSCSI devices during Node Staging operations.
 * Fixed error handling in storage driver code (link:https://github.com/NetApp/trident/issues/816[Issue #816^]).
 * Fixed quota resize when using ONTAP drivers with use-rest=true.
 * Fixed LUN clone creation in ontap-san-economy.
@@ -268,7 +268,7 @@ IMPORTANT: Kubernetes 1.27 is now supported in Trident. Please upgrade Trident p
 * Kubernetes: Added credential rotation support for LUKS encrypted volumes.
 
 .Trident
-* Added support for SMB volumes with Amazon FSx for ONTAP to the ontap-nas storage driver.
+* Added support for SMB volumes with Amazon FSx for NetApp ONTAP to the ontap-nas storage driver.
 * Added support for NTFS permissions when using SMB volumes.
 * Added support for storage pools for GCP volumes with CVS service level.
 * Added support for optional use of flexgroupAggregateList when creating FlexGroups with the ontap-nas-flexgroup storage driver.

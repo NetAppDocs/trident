@@ -33,7 +33,8 @@ A fully-qualified domain name (FQDN) can be specified.
 Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as `[28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]`.  
 
 For seamless MetroCluster switchover, see the <<mcc-best>>.
-NOTE: For ASA r2, if you are using “vsadmin” credentials, `managementLIF` must be that of the SVM; if using “admin” credentials, `managementLIF` must be that of the cluster.
+
+NOTE: If you are using “vsadmin” credentials, `managementLIF` must be that of the SVM; if using “admin” credentials, `managementLIF` must be that of the cluster.
 
 |“10.0.0.1”, “[2001:1234:abcd::fefe]”
 
@@ -90,8 +91,6 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
-NOTE: While using “vsadmin” credentials, the aggregates must be delegated to the SVM. This action is only available using the ONTAP CLI in `diag` mode in ASA r2.
-
 *Do not specify for ASA r2*.
 
 a|""
@@ -100,6 +99,7 @@ a|""
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
 If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.
+
 *Do not specify for ASA r2*.|"" (not enforced by default)
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. 
@@ -119,6 +119,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.
 
 `useREST` is fully qualified for NVMe/TCP. 
+
 *Do not set to `false` for ASA r2*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 
@@ -165,9 +166,11 @@ You can control default provisioning using these options in the `defaults` secti
 *If specified, set to `true` for ASA r2*.
 
 |`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick).
+
 *Set to `none` for ASA r2*. |"none"
 
 |`snapshotPolicy` |Snapshot policy to use.
+
 *Set to `none` for ASA r2*. |"none"
 
 
@@ -178,6 +181,7 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend |""
 
 |`snapshotReserve` |Percentage of volume reserved for snapshots.
+
 *Do not specify for ASA r2*.	|"0" if `snapshotPolicy` is "none", otherwise ""
 
 |`splitOnClone` |Split a clone from its parent upon creation |"false"
@@ -187,6 +191,7 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
+
 *If specified, set to `true` for ASA r2*.
 
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
@@ -195,10 +200,12 @@ LUKS encryption is not supported for NVMe/TCP.| ""
 Set to `false` for ASA r2.
 
 |`securityStyle` |Security style for new volumes. 
+
 *Do not specify for ASA r2*.|`unix`
 
 
 |`tieringPolicy` |Tiering policy to use	"none" 
+
 *Do not specify for ASA r2*.|"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration.
 
 

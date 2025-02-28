@@ -68,7 +68,7 @@ spec:
 --
 The following example installs Trident sets `cloudProvider` to Azure using the environment variable `$CP`:
 ----
-helm install trident trident-operator-100.2410.0.tgz --create-namespace --namespace <trident-namespace> --set cloudProvider=$CP
+helm install trident trident-operator-100.2502.0.tgz --create-namespace --namespace <trident-namespace> --set cloudProvider=$CP
 ----
 --
 
@@ -122,7 +122,7 @@ Set the values for *cloud-provider (CP)* and *cloud-identity (CI)* flags using t
 
 The following example installs Trident and sets `cloudProvider` to Azure using the environment variable `$CP` and sets the `cloudIdentity` using the environment variable `$CI`:
 ----
-helm install trident trident-operator-100.2410.0.tgz --set cloudProvider=$CP --set cloudIdentity="$CI"
+helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity="$CI"
 ----
 --
 

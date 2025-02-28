@@ -24,6 +24,8 @@ When you restore a backup to a different namespace using a BackupRestore CR, Tri
 
 NOTE: Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
 
+include::../_include/restore-include-sessiontoken-note.adoc[]
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -119,6 +121,8 @@ tridentctl-protect create backuprestore <my_restore_name> --backup <backup_names
 == Restore from a backup to the original namespace
 You can restore a backup to the original namespace at any time.
 
+include::../_include/restore-include-sessiontoken-note.adoc[]
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -209,28 +213,31 @@ tridentctl-protect create backupinplacerestore <my_restore_name> --backup <names
 
 You can restore a backup to a different cluster if there is an issue with the original cluster.
 
-*Before you begin*
+.Before you begin
 
 Ensure the following prerequisites are met:
 
 * The destination cluster has Trident protect installed.
 * The destination cluster has access to the bucket path of the same AppVault as the source cluster, where the backup is stored.
+* Ensure that the AWS session token expiration is sufficient for any long-running restore operations. If the token expires during the restore operation, the operation can fail.
+** Refer to the https://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html[AWS API documentation^] for more information about checking the current session token expiration.
+** Refer to the https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html[AWS documentation^] for more information about credentials with AWS resources.
 
 .Steps
 . Check the availability of the AppVault CR on the destination cluster using Trident protect CLI plugin:
 +
 [source,console]
------
+----
 tridentctl-protect get appvault --context <destination_cluster_name>
------
+----
 +
 NOTE: Ensure that the namespace intended for the application restore exists on the destination cluster.
 . View the backup contents of the available AppVault from the destination cluster:
 +
 [source,console]
------
+----
 tridentctl-protect get appvaultcontent <appvault_name> --show-resources backup --show-paths --context <destination_cluster_name>
------
+----
 +
 Running this command displays the available backups in the AppVault, including their originating clusters, corresponding application names, timestamps, and archive paths.
 +
@@ -243,7 +250,6 @@ Running this command displays the available backups in the AppVault, including t
 | production1 | wordpress | backup | wordpress-bkup-1| 2024-10-30 08:37:40 (UTC)| backuppath1 |
 | production1 | wordpress | backup | wordpress-bkup-2| 2024-10-30 08:37:40 (UTC)| backuppath2 |
 +-------------+-----------+--------+-----------------+--------------------------+-------------+
-
 ----
 . Restore the application to the destination cluster using the AppVault name and archive path:
 
@@ -261,18 +267,19 @@ Running this command displays the available backups in the AppVault, including t
 * *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
 +
 [source,console]
------
+----
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
------
+----
 +
 NOTE: If BackupRestore CR is not available, you can use the command mentioned in step 2 to view the backup contents.
+
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 For example:
 +
 [source,yaml]
--------
+----
 apiVersion: protect.trident.netapp.io/v1
 kind: BackupRestore
 metadata:
@@ -282,13 +289,13 @@ spec:
   appVaultRef: appvault-name
   appArchivePath: my-backup-path
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
--------
+----
 . After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
 +
 [source,console]
------
+----
 kubectl apply -f trident-protect-backup-restore-cr.yaml
------
+----
 
 --
 .Use the CLI
@@ -297,9 +304,9 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 . Use the following command to restore the application, replacing values in brackets with information from your environment. The namespace-mapping argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format source1:dest1,source2:dest2. For example:
 +
 [source,console]
------
+----
 tridentctl-protect create backuprestore <restore_name> --namespace-mapping <source_to_destination_namespace_mapping> --appvault <appvault_name> --path <backup_path> -n <application_namespace> --context <destination_cluster_name>
------
+----
 --
 ====
 // end tabbed block
@@ -310,6 +317,8 @@ tridentctl-protect create backuprestore <restore_name> --namespace-mapping <sour
 == Restore from a snapshot to a different namespace
 
 You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
+
+include::../_include/restore-include-sessiontoken-note.adoc[]
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -411,6 +420,8 @@ tridentctl-protect create snapshotrestore <my_restore_name> --snapshot <namespac
 
 == Restore from a snapshot to the original namespace
 You can restore a snapshot to the original namespace at any time.
+
+include::../_include/restore-include-sessiontoken-note.adoc[]
 
 // begin tabbed block
 [role="tabbed-block"]

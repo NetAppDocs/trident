@@ -11,7 +11,7 @@ summary:
 :imagesdir: ../media/
 
 [.lead]
-You can now configure Google Cloud NetApp Volumes as the backend for Trident. You can attach NFS volumes using a Google Cloud NetApp Volumes backend.
+You can now configure Google Cloud NetApp Volumes as the backend for Trident. You can attach NFS and SMB volumes using a Google Cloud NetApp Volumes backend.
 
 == Google Cloud NetApp Volumes driver details
 Trident provides the `google-cloud-netapp-volumes` driver to communicate with the cluster. Supported access modes are: _ReadWriteOnce_ (RWO), _ReadOnlyMany_ (ROX), _ReadWriteMany_ (RWX), _ReadWriteOncePod_ (RWOP).
@@ -25,9 +25,10 @@ Trident provides the `google-cloud-netapp-volumes` driver to communicate with th
 |File systems supported
 |`google-cloud-netapp-volumes`
 a|NFS
+SMB
 a|Filesystem
 a|RWO, ROX, RWX, RWOP
-a|`nfs`
+a|`nfs`, `smb`
 
 |===
 
@@ -38,8 +39,10 @@ Cloud identity enables Kubernetes pods to access Google Cloud resources by authe
 To take advantage of cloud identity in Google Cloud, you must have:
 
 * A Kubernetes cluster deployed using GKE.
-* Workload identity and oidc-issuer configured on the GKE cluster.
-* Trident installed that includes the `cloudProvider` to specify `"GCP"` and `cloudIdentity` specifying workload identity.
+* Workload identity configured on the GKE cluster and GKE MetaData Server configured on the node pools.
+* A GCP Service account with the Google Cloud NetApp Volumes Admin (roles/netapp.admin) role or a custom role.
+* Trident installed that includes the cloudProvider to specify "GCP" and cloudIdentity specifying the new GCP service account. An example is given below.
+
 +
 [role="tabbed-block"]
 ====

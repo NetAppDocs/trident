@@ -14,7 +14,7 @@ summary: Get started by verifying the readiness of your operational environment,
 [.lead]
 Get started by verifying the readiness of your operational environment, application clusters, applications, and licenses. Ensure that your environment meets these requirements to deploy and operate Trident protect.
 
-== Trident protect Kubernetes compatibility
+== Trident protect Kubernetes cluster compatibility
 
 Trident protect is compatible with a wide range of fully managed and self-managed Kubernetes offerings, including:
 
@@ -25,6 +25,8 @@ Trident protect is compatible with a wide range of fully managed and self-manage
 * SUSE Rancher
 * VMware Tanzu Portfolio
 * Upstream Kubernetes
+
+NOTE: Ensure that the cluster on which you install Trident protect is configured with a running snapshot controller and the related CRDs. To install a snapshot controller, refer to https://docs.netapp.com/us-en/trident/trident-use/vol-snapshots.html#deploy-a-volume-snapshot-controller[these instructions].
 
 == Trident protect storage backend compatibility
 Trident protect supports the following storage backends:

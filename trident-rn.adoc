@@ -50,7 +50,6 @@ Beginning with Trident 25.02, the What's new summary provides details about enha
 ** Fixed backend config credentials to support all available AWS ARN partitions (link:https://github.com/NetApp/trident/issues/913[Issue #913]).
 ** Added option to disable the auto configurator reconciliation in the Trident operator (link:https://github.com/NetApp/trident/issues/924[Issue #924]).
 ** Added securityContext for csi-resizer container (link:https://github.com/NetApp/trident/issues/976[Issue #976]).
-** Removed logouts for intermittently unhealthy non-CHAP portals during iSCSI self-healing (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
 
 === Trident protect
 NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
@@ -75,6 +74,19 @@ NetApp Trident protect provides advanced application data management capabilitie
 * SCC annotations are now restored to original values.
 * Improved restore efficiency with support for parallel operations.
 * Enhanced support for execution hook timeouts for larger applications.
+
+== Changes in 24.10.1
+
+=== Enhancements
+* *Kubernetes*: Added support for Kubernetes 1.32.
+* Added iSCSI connection state discovery and logging when iSCSI sessions should be logged in but are not (Issue #961).
+
+=== Fixes
+
+* Fixed missing node IP addresses from automatic export policies (Issue #965).
+* Fixed automatic export policies switching to per volume policy prematurely for ONTAP-NAS-Economy.
+* Updated Trident and Trident-ASUP dependencies to address CVE-2024-45337 and CVE-2024-45310.
+* Removed logouts for intermittently unhealthy non-CHAP portals during iSCSI self-healing (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
 
 == Changes in 24.10
 

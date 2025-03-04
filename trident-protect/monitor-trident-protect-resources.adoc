@@ -104,14 +104,8 @@ data:
         static_configs:
           - targets: ['kube-state-metrics.astra-connector.svc:8080']
 ----
-.Result 
-Prometheus now gathers metrics from kube-state-metrics, and creates alerts from the data. You can now configure when Prometheus should trigger alerts based on the metrics data.
 
-== Configure Prometheus alerts
-After you integrate kube-state-metrics with Prometheus, you are ready to define Prometheus alerting rules for custom resources. 
-
-.Steps
-. Edit the Prometheus configuration file (`prometheus.yml`) and add the following section to instruct Prometheus to send alerts to the Trident protect Alertmanager. For example:
+. Configure Prometheus to send alerts to the Trident protect Alertmanager. Edit the Prometheus configuration file (`prometheus.yml`) and add the following section:
 +
 .prometheus.yml: Send alerts to Alertmanager
 [source,yaml]
@@ -122,7 +116,10 @@ alerting:
         - targets: ['alertmanager.astra-connector.svc:9093']
 ----
 
-=== Send alerts to other channels
+.Result 
+Prometheus now gathers metrics from kube-state-metrics, and creates alerts from the data. You can now configure when Prometheus should trigger alerts based on the metrics data.
+
+== Send Prometheus alerts to other channels
 You can configure Alertmanager to send notifications to other channels, such as e-mail, PagerDuty, Microsoft Teams, or other notification services by specifying the respective configuration in the `alertmanager.yml` file.
 
 The following example configures Prometheus to send notifications to a Slack channel. To customize this example to your environment, replace the value of the `api_url` key with the Slack webhook URL used in your environment:

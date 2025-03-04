@@ -75,19 +75,6 @@ NetApp Trident protect provides advanced application data management capabilitie
 * Improved restore efficiency with support for parallel operations.
 * Enhanced support for execution hook timeouts for larger applications.
 
-== Changes in 24.10.1
-
-=== Enhancements
-* *Kubernetes*: Added support for Kubernetes 1.32.
-* Added iSCSI connection state discovery and logging when iSCSI sessions should be logged in but are not (Issue #961).
-
-=== Fixes
-
-* Fixed missing node IP addresses from automatic export policies (Issue #965).
-* Fixed automatic export policies switching to per volume policy prematurely for ONTAP-NAS-Economy.
-* Updated Trident and Trident-ASUP dependencies to address CVE-2024-45337 and CVE-2024-45310.
-* Removed logouts for intermittently unhealthy non-CHAP portals during iSCSI self-healing (link:https://github.com/NetApp/trident/issues/961[Issue #961]).
-
 == Changes in 24.10
 
 === Enhancements

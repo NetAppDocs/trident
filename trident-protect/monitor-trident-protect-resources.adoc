@@ -35,7 +35,7 @@ helm repo update
 
 . Create a configuration file for the Helm chart (for example, `metrics-config.yaml`). You can customize the following example configuration to match your environment:
 +
-.metrics-config.yaml
+.metrics-config.yaml: Helm chart configuration
 [source,yaml]
 ----
 ---
@@ -97,7 +97,7 @@ After you install kube-state-metrics and Prometheus, you can integrate them to s
 .Steps
 . Edit the Prometheus configuration file (`prometheus.yml`) and add the kube-state-metrics service information. For example:
 +
-.prometheus.yml
+.prometheus.yml: kube-state-metrics service integration
 [source,yaml]
 ----
 ---
@@ -122,7 +122,7 @@ After you integrate Prometheus, you are ready to define alerting rules for resou
 .Steps
 . Edit the Prometheus configuration file (`prometheus.yml`) and add the following section to instruct Prometheus to send alerts to the Trident protect Alertmanager. For example:
 +
-.prometheus.yml: Send alerts to alertmanager
+.prometheus.yml: Send alerts to Alertmanager
 [source,yaml]
 ----
 alerting:
@@ -134,9 +134,26 @@ alerting:
 === Send alerts to other channels
 You can configure Alertmanager to send notifications to other channels, such as e-mail, PagerDuty, Microsoft Teams, or other notification services by specifying the respective configuration in the `alertmanager.yml` file.
 
+The following example configures Prometheus to send notifications to a Slack channel. To customize this example to your environment, replace the value of the `api_url` key with the Slack webhook URL used in your environment:
+.alertmanager.yml: Send alerts to a Slack channel
+[source,yaml]
+----
+data:
+  alertmanager.yml: |
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: 'slack-notifications'
+    receivers:
+      - name: 'slack-notifications'
+        slack_configs:
+          - api_url: '<your-slack-webhook-url>'
+            channel: '#failed-backups-channel'
+            send_resolved: false
+----
+
 == Alert examples
 The following configuration examples cover common alerting scenarios that you can explore with Prometheus.
-
 
 === Backup alert example
 The following example defines a critical alert that is triggered when the status of the backup custom resource is set to `Error` for 5 seconds or longer.
@@ -157,5 +174,3 @@ rules.yml: |
               summary: "Backup Failed"
               description: "A Backup has failed."
 ----
-
-=== 

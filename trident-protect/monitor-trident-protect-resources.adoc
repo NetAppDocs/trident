@@ -117,7 +117,7 @@ alerting:
 ----
 
 .Result 
-Prometheus now gathers metrics from kube-state-metrics, and creates alerts from the data. You can now configure when Prometheus should trigger alerts based on the metrics data.
+Prometheus can now gather metrics from kube-state-metrics, and can send alerts. You are now ready to configure what conditions trigger an alert and where the alerts should be sent. 
 
 == Send Prometheus alerts to other channels
 You can configure Alertmanager to send notifications to other channels, such as e-mail, PagerDuty, Microsoft Teams, or other notification services by specifying the respective configuration in the `alertmanager.yml` file.

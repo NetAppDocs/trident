@@ -143,7 +143,7 @@ alerting:
 Prometheus can now gather metrics from kube-state-metrics, and can send alerts to Alertmanager. You are now ready to configure what conditions trigger an alert and where the alerts should be sent. 
 
 == Step 3: Configure alerts and alert destinations
-After you configure the tools to work together, you need to configure what information they should create alerts for, and where the alerts should be sent.
+After you configure the tools to work together, you need to configure what type of information triggers alerts, and where the alerts should be sent.
 
 === Alert example: backup failure
 The following example defines a critical alert that is triggered when the status of the backup custom resource is set to `Error` for 5 seconds or longer. You can customize this example to match your environment, and include this YAML snippet in your `prometheus.yml` configuration file:
@@ -169,6 +169,7 @@ rules.yml: |
 You can configure Alertmanager to send notifications to other channels, such as e-mail, PagerDuty, Microsoft Teams, or other notification services by specifying the respective configuration in the `alertmanager.yml` file.
 
 The following example configures Alertmanager to send notifications to a Slack channel. To customize this example to your environment, replace the value of the `api_url` key with the Slack webhook URL used in your environment:
+
 .alertmanager.yml: Send alerts to a Slack channel
 [source,yaml]
 ----

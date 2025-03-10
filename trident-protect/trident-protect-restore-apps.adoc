@@ -156,7 +156,7 @@ spec:
   appVaultRef: appvault-name
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
+. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels. This will also include any pods that own those resources:
 +
 * *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.

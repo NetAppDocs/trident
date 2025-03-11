@@ -82,7 +82,7 @@ kubectl create secret generic <secret-name> \
 ----
 kubectl create secret generic <secret-name> \
 --from-literal=accessKeyID=<objectstorage-accesskey> \
---from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+--from-literal=secretAccessKey=<amazon-s3-trident-protect-src-bucket-secret> \
 -n trident-protect
 ----
 --
@@ -114,7 +114,7 @@ kubectl create secret generic <secret-name> \
 ----
 kubectl create secret generic <secret-name> \
 --from-literal=accessKeyID=<objectstorage-accesskey> \
---from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+--from-literal=secretAccessKey=<ontap-s3-trident-protect-src-bucket-secret> \
 -n trident-protect
 ----
 --
@@ -125,7 +125,7 @@ kubectl create secret generic <secret-name> \
 ----
 kubectl create secret generic <secret-name> \
 --from-literal=accessKeyID=<objectstorage-accesskey> \
---from-literal=secretAccessKey=<generic-s3-trident-protect-src-bucket-secret> \
+--from-literal=secretAccessKey=<storagegrid-s3-trident-protect-src-bucket-secret> \
 -n trident-protect
 ----
 --
@@ -352,7 +352,7 @@ You can use the following CLI command examples to create AppVault CRs for each p
 tridentctl-protect create vault GCP <vault-name> \
 --bucket <mybucket> \
 --project <my-gcp-project> \
---secret <gcp-creds>/<credentials> \
+--secret <secret-name>/credentials \
 --data-mover-password-secret-ref <my-optional-data-mover-secret> \
 -n trident-protect
 
@@ -469,7 +469,8 @@ You can use the Trident protect CLI plugin to view information about AppVault ob
 [source,console]
 ----
 tridentctl-protect get appvaultcontent gcp-vault \
---show-resources all
+--show-resources all \
+--namespace trident-protect
 ----
 +
 *Example output*:
@@ -500,7 +501,7 @@ You can remove an AppVault object at any time.
 NOTE: Do not remove the `finalizers` key in the AppVault CR before deleting the AppVault object. If you do so, it can result in residual data in the AppVault bucket and orphaned resources in the cluster.
 
 .Before you begin
-Ensure that you have deleted all snapshots and backups stored in the associated bucket. 
+Ensure that you have deleted all snapshot and backup CRs being used by the AppVault you want to delete.
 
 [role="tabbed-block"]
 ====

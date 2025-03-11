@@ -96,6 +96,8 @@ prometheus:
 helm install custom-resource -f metrics-config.yaml prometheus-community/kube-state-metrics --version 5.21.0
 ----
 
+. Configure kube-state-metrics to gather metrics for the custom resources used by Trident protect by following the instructions in the https://github.com/kubernetes/kube-state-metrics/blob/main/docs/metrics/extend/customresourcestate-metrics.md#custom-resource-state-metrics[kube-state-metrics custom resource documentation^].
+
 === Install Prometheus
 You can install Prometheus by following the instructions in the https://prometheus.io/docs/prometheus/latest/installation/[Prometheus documentation^].
 

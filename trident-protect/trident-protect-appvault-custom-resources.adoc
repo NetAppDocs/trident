@@ -26,7 +26,7 @@ When you create AppVault objects using CRs or the Trident protect CLI plugin, yo
 ==== Create a data mover repository password secret
 Use the following examples to create the password secret. When you create AppVault objects, you can instruct Trident protect to use this secret to authenticate with the data mover repository. 
 
-NOTE: Depending on which data mover you are using, you only need to include the corresponding password for that data mover. For example, if you are using Restic, you only need to include the Restic password when you create the secret.
+NOTE: Depending on which data mover you are using, you only need to include the corresponding password for that data mover. For example, if you are using Restic and do not plan to use Kopia in the future, you can include only the Restic password when you create the secret.
 
 // begin tabbed block
 [role="tabbed-block"]

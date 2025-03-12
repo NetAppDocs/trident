@@ -47,6 +47,9 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 * *spec.storageClassMapping*: The mapping of the source storage class of the restore operation to the destination storage class. Replace `destinationStorageClass` and `sourceStorageClass` with information from your environment.
 +
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information.
+
++
 [source,yaml]
 -------
 ---
@@ -55,6 +58,10 @@ kind: BackupRestore
 metadata:
   name: my-cr-name
   namespace: my-destination-namespace
+  annotations: # Optional annotations for Kopia data mover
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000 # Hard limit
+    protect.trident.netapp.io/kopia-content-cache-size-mb: 500 # Soft limit
+    protect.trident.netapp.io/kopia-content-min-sweep-age-minutes: 1
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
@@ -140,6 +147,9 @@ include::../_include/restore-include-sessiontoken-note.adoc[]
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
++
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information.
+
 +
 For example:
 +
@@ -276,6 +286,9 @@ NOTE: If BackupRestore CR is not available, you can use the command mentioned in
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information.
+
++
 For example:
 +
 [source,yaml]
@@ -310,9 +323,6 @@ tridentctl-protect create backuprestore <restore_name> --namespace-mapping <sour
 --
 ====
 // end tabbed block
-
-
-
 
 == Restore from a snapshot to a different namespace
 

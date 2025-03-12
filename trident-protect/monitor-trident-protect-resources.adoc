@@ -138,7 +138,8 @@ data:
 alerting:
   alertmanagers:
     - static_configs:
-        - targets: ['alertmanager.astra-connector.svc:9093']
+        - targets:
+            - alertmanager.astra-connector.svc:9093
 ----
 
 .Result 

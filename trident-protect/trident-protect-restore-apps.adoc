@@ -156,7 +156,9 @@ spec:
   appVaultRef: appvault-name
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels. This will also include any pods that own those resources:
+. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
++
+NOTE: Some resources are selected automatically because of their relationship with resources that you select. For example, if you select a persistent volume claim resource and it has an associated pod, Trident protect will also restore the associated pod.
 +
 * *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.

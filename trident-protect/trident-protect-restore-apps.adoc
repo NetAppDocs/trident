@@ -64,38 +64,7 @@ spec:
     source: "${sourceStorageClass}"
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
-+
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
-** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
-*** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
-*** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
-*** *resourceMatchers[].version*: (_Optional_) Version of the resource to be filtered.
-*** *resourceMatchers[].names*: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`.
-+
-For example:
-+
-[source,yaml]
--------
-spec:    
-  resourceFilter: 
-    resourceSelectionCriteria: "Include"
-    resourceMatchers:
-      - group: my-resource-group-1
-        kind: my-resource-kind-1
-        version: my-resource-version-1
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
-      - group: my-resource-group-2
-        kind: my-resource-kind-2
-        version: my-resource-version-2
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
--------
+include::../_include/restore-include-selective-restore.adoc[]
 + 
 . After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
 +
@@ -156,40 +125,7 @@ spec:
   appVaultRef: appvault-name
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
-+
-NOTE: Some resources are selected automatically because of their relationship with resources that you select. For example, if you select a persistent volume claim resource and it has an associated pod, Trident protect will also restore the associated pod.
-+
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
-** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
-*** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
-*** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
-*** *resourceMatchers[].version*: (_Optional_) Version of the resource to be filtered.
-*** *resourceMatchers[].names*: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`.
-+
-For example:
-+
-[source,yaml]
--------
-spec:    
-  resourceFilter: 
-    resourceSelectionCriteria: "Include"
-    resourceMatchers:
-      - group: my-resource-group-1
-        kind: my-resource-kind-1
-        version: my-resource-version-1
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
-      - group: my-resource-group-2
-        kind: my-resource-kind-2
-        version: my-resource-version-2
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
--------
+include::../_include/restore-include-selective-restore.adoc[]
 +
 . After you populate the `trident-protect-backup-ipr-cr.yaml` file with the correct values, apply the CR:
 +
@@ -313,9 +249,6 @@ tridentctl-protect create backuprestore <restore_name> --namespace-mapping <sour
 ====
 // end tabbed block
 
-
-
-
 == Restore from a snapshot to a different namespace
 
 You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
@@ -360,38 +293,7 @@ spec:
     source: "${sourceStorageClass}"
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
-+
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
-** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
-*** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
-*** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
-*** *resourceMatchers[].version*: (_Optional_) Version of the resource to be filtered.
-*** *resourceMatchers[].names*: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`.
-+
-For example:
-+
-[source,yaml]
--------
-spec:    
-  resourceFilter: 
-    resourceSelectionCriteria: "Include"
-    resourceMatchers:
-      - group: my-resource-group-1
-        kind: my-resource-kind-1
-        version: my-resource-version-1
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
-      - group: my-resource-group-2
-        kind: my-resource-kind-2
-        version: my-resource-version-2
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
--------
+include::../_include/restore-include-selective-restore.adoc[]
 +
 . After you populate the `trident-protect-snapshot-restore-cr.yaml` file with the correct values, apply the CR:
 +
@@ -456,38 +358,7 @@ spec:
     appArchivePath: my-snapshot-path
 -------
 +
-. (_Optional_) If you need to select only certain resources of the application to restore, add filtering that includes or excludes resources marked with particular labels:
-+
-* *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
-** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
-*** *resourceMatchers[].group*: (_Optional_) Group of the resource to be filtered.
-*** *resourceMatchers[].kind*: (_Optional_) Kind of the resource to be filtered.
-*** *resourceMatchers[].version*: (_Optional_) Version of the resource to be filtered.
-*** *resourceMatchers[].names*: (_Optional_) Names in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
-*** *resourceMatchers[].labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`.
-+
-For example:
-+
-[source,yaml]
--------
-spec:    
-  resourceFilter: 
-    resourceSelectionCriteria: "Include"
-    resourceMatchers:
-      - group: my-resource-group-1
-        kind: my-resource-kind-1
-        version: my-resource-version-1
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
-      - group: my-resource-group-2
-        kind: my-resource-kind-2
-        version: my-resource-version-2
-        names: ["my-resource-names"]
-        namespaces: ["my-resource-namespaces"]
-        labelSelectors: ["trident.netapp.io/os=linux"]
--------
+include::../_include/restore-include-selective-restore.adoc[]
 +
 . After you populate the `trident-protect-snapshot-ipr-cr.yaml` file with the correct values, apply the CR:
 +

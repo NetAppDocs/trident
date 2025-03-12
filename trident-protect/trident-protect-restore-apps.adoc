@@ -58,8 +58,8 @@ metadata:
   name: my-cr-name
   namespace: my-destination-namespace
   annotations: # Optional annotations for Kopia data mover
-    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000 # Hard limit
-    protect.trident.netapp.io/kopia-content-cache-size-mb: 500 # Soft limit
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
+    protect.trident.netapp.io/kopia-content-cache-size-mb: 500
     protect.trident.netapp.io/kopia-content-min-sweep-age-minutes: 1
 spec:
   appArchivePath: my-backup-path
@@ -163,8 +163,8 @@ metadata:
   name: my-cr-name
   namespace: my-app-namespace
   annotations: # Optional annotations for Kopia data mover
-    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000 # Hard limit
-    protect.trident.netapp.io/kopia-content-cache-size-mb: 500 # Soft limit
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
+    protect.trident.netapp.io/kopia-content-cache-size-mb: 500
     protect.trident.netapp.io/kopia-content-min-sweep-age-minutes: 1  
 spec:
   appArchivePath: my-backup-path
@@ -311,8 +311,8 @@ metadata:
   name: my-cr-name
   namespace: my-destination-namespace
   annotations: # Optional annotations for Kopia data mover
-    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000 # Hard limit
-    protect.trident.netapp.io/kopia-content-cache-size-mb: 500 # Soft limit
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
+    protect.trident.netapp.io/kopia-content-cache-size-mb: 500
     protect.trident.netapp.io/kopia-content-min-sweep-age-minutes: 1
 spec:
   appVaultRef: appvault-name

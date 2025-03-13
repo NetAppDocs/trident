@@ -26,7 +26,7 @@ NOTE: Restoring a backup to a different namespace with existing resources will n
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -99,7 +99,7 @@ You can restore a backup to the original namespace at any time.
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -164,7 +164,7 @@ tridentctl-protect create backupinplacerestore <my_restore_name> \
 
 You can restore a backup to a different cluster if there is an issue with the original cluster.
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 .Before you begin
 

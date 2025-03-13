@@ -26,6 +26,8 @@ NOTE: Restoring a backup to a different namespace with existing resources will n
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -55,6 +57,8 @@ kind: BackupRestore
 metadata:
   name: my-cr-name
   namespace: my-destination-namespace
+  annotations: # Optional annotations for Kopia data mover
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
@@ -81,7 +85,10 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 +
 [source,console]
 -----
-tridentctl-protect create backuprestore <my_restore_name> --backup <backup_namespace>/<backup_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
+tridentctl-protect create backuprestore <my_restore_name> \
+--backup <backup_namespace>/<backup_to_restore> \
+--namespace-mapping <source_to_destination_namespace_mapping> \
+-n <application_namespace>
 -----
 --
 ====
@@ -91,6 +98,8 @@ tridentctl-protect create backuprestore <my_restore_name> --backup <backup_names
 You can restore a backup to the original namespace at any time.
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
+
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -120,6 +129,8 @@ kind: BackupInplaceRestore
 metadata:
   name: my-cr-name
   namespace: my-app-namespace
+  annotations: # Optional annotations for Kopia data mover
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
@@ -141,7 +152,9 @@ kubectl apply -f trident-protect-backup-ipr-cr.yaml
 +
 [source,console]
 -----
-tridentctl-protect create backupinplacerestore <my_restore_name> --backup <namespace/backup_to_restore> -n <application_namespace>
+tridentctl-protect create backupinplacerestore <my_restore_name> \
+--backup <namespace/backup_to_restore> \
+-n <application_namespace>
 -----
 --
 ====
@@ -150,6 +163,8 @@ tridentctl-protect create backupinplacerestore <my_restore_name> --backup <names
 == Restore from a backup to a different cluster
 
 You can restore a backup to a different cluster if there is an issue with the original cluster.
+
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 .Before you begin
 
@@ -174,7 +189,10 @@ NOTE: Ensure that the namespace intended for the application restore exists on t
 +
 [source,console]
 ----
-tridentctl-protect get appvaultcontent <appvault_name> --show-resources backup --show-paths --context <destination_cluster_name>
+tridentctl-protect get appvaultcontent <appvault_name> \
+--show-resources backup \
+--show-paths \
+--context <destination_cluster_name>
 ----
 +
 Running this command displays the available backups in the AppVault, including their originating clusters, corresponding application names, timestamps, and archive paths.
@@ -223,6 +241,8 @@ kind: BackupRestore
 metadata:
   name: my-cr-name
   namespace: my-destination-namespace
+  annotations: # Optional annotations for Kopia data mover
+    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
 spec:
   appVaultRef: appvault-name
   appArchivePath: my-backup-path
@@ -243,7 +263,12 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 +
 [source,console]
 ----
-tridentctl-protect create backuprestore <restore_name> --namespace-mapping <source_to_destination_namespace_mapping> --appvault <appvault_name> --path <backup_path> -n <application_namespace> --context <destination_cluster_name>
+tridentctl-protect create backuprestore <restore_name> \
+--namespace-mapping <source_to_destination_namespace_mapping> \
+--appvault <appvault_name> \
+--path <backup_path> \
+--context <destination_cluster_name> \
+-n <application_namespace>
 ----
 --
 ====
@@ -315,7 +340,10 @@ For example:
 +
 [source,console]
 -----
-tridentctl-protect create snapshotrestore <my_restore_name> --snapshot <namespace/snapshot_to_restore> --namespace-mapping <source_to_destination_namespace_mapping> -n <application_namespace>
+tridentctl-protect create snapshotrestore <my_restore_name> \
+--snapshot <namespace/snapshot_to_restore> \
+--namespace-mapping <source_to_destination_namespace_mapping> \
+-n <application_namespace>
 -----
 --
 ====
@@ -374,7 +402,9 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 +
 [source,console]
 -----
-tridentctl-protect create snapshotinplacerestore <my_restore_name> --snapshot <snapshot_to_restore> -n <application_namespace>
+tridentctl-protect create snapshotinplacerestore <my_restore_name> \
+--snapshot <snapshot_to_restore> \
+-n <application_namespace>
 -----
 --
 ====

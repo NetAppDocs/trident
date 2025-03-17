@@ -195,15 +195,15 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
+        name: s3-secret
     sessionToken:
       valueFromSecret:
         key: sessionToken
-        name: s3_secret
+        name: s3-secret
 ----
 --
 
@@ -252,11 +252,11 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
+        name: s3-secret
 ----
 --
 
@@ -281,11 +281,11 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
+        name: s3-secret
 ----
 --
 
@@ -310,11 +310,11 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
+        name: s3-secret
 ----
 --
 ====
@@ -495,22 +495,22 @@ Ensure that you have deleted all snapshot and backup CRs being used by the AppVa
 ====
 .Remove an AppVault using the Kubernetes CLI
 --
-. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
+. Remove the AppVault object, replacing `appvault-name` with the name of the AppVault object to remove:
 +
 [source,console]
 ----
-kubectl delete appvault <appvault_name> \
+kubectl delete appvault <appvault-name> \
 -n trident-protect
 ----
 
 --
 .Remove an AppVault using the Trident protect CLI
 --
-. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
+. Remove the AppVault object, replacing `appvault-name` with the name of the AppVault object to remove:
 +
 [source,console]
 ----
-tridentctl-protect delete appvault <appvault_name> \
+tridentctl-protect delete appvault <appvault-name> \
 -n trident-protect 
 ----
 --

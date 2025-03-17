@@ -141,7 +141,7 @@ You can use the following CR examples to create AppVault objects for each cloud 
 [NOTE]
 =====
 * You can optionally specify a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. Refer to <<Data mover repository passwords>> for more information.
-* For S3 AppVault objects, you can optionally specify a sessionToken, which is useful if you are using single sign-on (SSO) for authentication. This token is created when you generate keys for the provider in <<AppVault key generation examples for cloud providers>>.
+* For Amazon S3 (AWS) AppVault objects, you can optionally specify a sessionToken, which is useful if you are using single sign-on (SSO) for authentication. This token is created when you generate keys for the provider in <<AppVault key generation examples for cloud providers>>.
 * For S3 AppVault objects, you can optionally specify an egress proxy URL for outbound S3 traffic using the `spec.providerConfig.S3.proxyURL` key.
 =====
 
@@ -257,10 +257,6 @@ spec:
       valueFromSecret:
         key: secretAccessKey
         name: s3_secret
-    sessionToken:
-      valueFromSecret:
-        key: sessionToken
-        name: s3_secret
 ----
 --
 
@@ -290,10 +286,6 @@ spec:
       valueFromSecret:
         key: secretAccessKey
         name: s3_secret
-    sessionToken:
-      valueFromSecret:
-        key: sessionToken
-        name: s3_secret
 ----
 --
 
@@ -322,10 +314,6 @@ spec:
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
-    sessionToken:
-      valueFromSecret:
-        key: sessionToken
         name: s3_secret
 ----
 --

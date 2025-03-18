@@ -141,7 +141,7 @@ You can use the following CR examples to create AppVault objects for each cloud 
 [NOTE]
 =====
 * You can optionally specify a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. Refer to <<Data mover repository passwords>> for more information.
-* For S3 AppVault objects, you can optionally specify a sessionToken, which is useful if you are using single sign-on (SSO) for authentication. This token is created when you generate keys for the provider in <<AppVault key generation examples for cloud providers>>.
+* For Amazon S3 (AWS) AppVault objects, you can optionally specify a sessionToken, which is useful if you are using single sign-on (SSO) for authentication. This token is created when you generate keys for the provider in <<AppVault key generation examples for cloud providers>>.
 * For S3 AppVault objects, you can optionally specify an egress proxy URL for outbound S3 traffic using the `spec.providerConfig.S3.proxyURL` key.
 =====
 
@@ -195,15 +195,15 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
+        name: s3-secret
     sessionToken:
       valueFromSecret:
         key: sessionToken
-        name: s3_secret
+        name: s3-secret
 ----
 --
 
@@ -252,15 +252,11 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
-    sessionToken:
-      valueFromSecret:
-        key: sessionToken
-        name: s3_secret
+        name: s3-secret
 ----
 --
 
@@ -285,15 +281,11 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
-    sessionToken:
-      valueFromSecret:
-        key: sessionToken
-        name: s3_secret
+        name: s3-secret
 ----
 --
 
@@ -318,15 +310,11 @@ spec:
     accessKeyID:
       valueFromSecret:
         key: accessKeyID
-        name: s3_secret
+        name: s3-secret
     secretAccessKey:
       valueFromSecret:
         key: secretAccessKey
-        name: s3_secret
-    sessionToken:
-      valueFromSecret:
-        key: sessionToken
-        name: s3_secret
+        name: s3-secret
 ----
 --
 ====
@@ -507,22 +495,22 @@ Ensure that you have deleted all snapshot and backup CRs being used by the AppVa
 ====
 .Remove an AppVault using the Kubernetes CLI
 --
-. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
+. Remove the AppVault object, replacing `appvault-name` with the name of the AppVault object to remove:
 +
 [source,console]
 ----
-kubectl delete appvault <appvault_name> \
+kubectl delete appvault <appvault-name> \
 -n trident-protect
 ----
 
 --
 .Remove an AppVault using the Trident protect CLI
 --
-. Remove the AppVault object, replacing `appvault_name` with the name of the AppVault object to remove:
+. Remove the AppVault object, replacing `appvault-name` with the name of the AppVault object to remove:
 +
 [source,console]
 ----
-tridentctl-protect delete appvault <appvault_name> \
+tridentctl-protect delete appvault <appvault-name> \
 -n trident-protect 
 ----
 --

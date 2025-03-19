@@ -38,7 +38,7 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 |`dataLIF` |IP address of protocol LIF. 
 
-NetApp recommends specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
+NetApp recommends specifying `dataLIF`. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs.
 
 Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
@@ -662,10 +662,10 @@ parameters:
 Trident will decide which virtual pool is selected and ensures the storage requirement is met.
 
 == Update `dataLIF` after initial configuration
-You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
+You can change the dataLIF after initial configuration by running the following command to provide the new backend JSON file with updated dataLIF.
 
 ----
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
 
-NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 
+NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new dataLIF to take effect. 

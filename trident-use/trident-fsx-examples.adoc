@@ -44,7 +44,7 @@ Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. I
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
 *ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 
@@ -179,13 +179,13 @@ Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create
 |===
 
 === Update `dataLIF` after initial configuration
-You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
+You can change the dataLIF after initial configuration by running the following command to provide the new backend JSON file with updated dataLIF.
 
 ----
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
 
-NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 
+NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new dataLIF to take effect. 
 
 
 == Backend configuration options for provisioning volumes

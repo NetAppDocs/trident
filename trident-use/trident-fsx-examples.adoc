@@ -154,7 +154,7 @@ This parameter is required for Amazon FSx for ONTAP backends.
 |Boolean parameter to use ONTAP REST APIs.
 
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
-Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls. 
+Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls. 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 |`aws`| You can specify the following in the configuration file for AWS FSx for ONTAP:

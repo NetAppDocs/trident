@@ -71,11 +71,11 @@ spec:
 Set the values for *cloud-provider (CP)* and *cloud-identity (CI)* flags using the following environment variables:
 
 `export CP="GCP"`
-`export ANNOTATION="iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"`
+`export ANNOTATION="'iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com'"`
 
 The following example installs Trident and sets `cloudProvider` to GCP using the environment variable `$CP` and sets the `cloudIdentity` using the environment variable `$ANNOTATION`:
 ----
-helm install trident trident-operator-100.2406.0.tgz --set cloudProvider=$CP --set cloudIdentity="$ANNOTATION"
+helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --set cloudIdentity="$ANNOTATION"
 ----
 --
 
@@ -84,7 +84,7 @@ helm install trident trident-operator-100.2406.0.tgz --set cloudProvider=$CP --s
 Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
 
 `export CP="GCP"`
-`export ANNOTATION="iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"`
+`export ANNOTATION="'iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com'"`
 
 The following example installs Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$ANNOTATION`:
 ----

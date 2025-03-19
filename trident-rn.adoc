@@ -339,7 +339,7 @@ IMPORTANT: Kubernetes 1.27 is now supported in Trident. Please upgrade Trident p
 === Deprecations
 
 * Kubernetes: Updated minimum supported Kubernetes to 1.21.
-* Data LIFs should no longer be specified when configuring `ontap-san` or `ontap-san-economy` drivers.
+* DataLIFs should no longer be specified when configuring `ontap-san` or `ontap-san-economy` drivers.
 
 == Changes in 22.10
 *You must read the following critical information before upgrading to Trident 22.10.*
@@ -357,7 +357,7 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 * Fixed issue specific to ONTAP backend created using `credentials` field failing to come online during 22.07.0 upgrade (link:https://github.com/NetApp/trident/issues/759[Issue #759^]). 
 * **Docker:** Fixed an issue causing the Docker volume plugin to fail to start in some environments (link:https://github.com/NetApp/trident/issues/548[Issue #548^] and link:https://github.com/NetApp/trident/issues/760[Issue #760^]).
-* Fixed SLM issue specific to ONTAP SAN backends to ensure only subset of data LIFs belonging to reporting nodes are published.
+* Fixed SLM issue specific to ONTAP SAN backends to ensure only subset of dataLIFs belonging to reporting nodes are published.
 * Fixed performance issue where unnecessary scans for iSCSI LUNs happened when attaching a volume.
 * Removed granular retries within the Trident iSCSI workflow to fail fast and reduce external retry intervals.
 * Fixed issue where an error was returned when flushing an iSCSI device when the corresponding multipath device was already flushed.
@@ -473,7 +473,7 @@ E-Series driver (disabled since 20.07) has been removed.
 
 * *Kubernetes:* Increase node registration backoff retry time for large clusters.
 * Fixed issue where azure-netapp-files driver could be confused by multiple resources with the same name.
-* ONTAP SAN IPv6 Data LIFs now work if specified with brackets.
+* ONTAP SAN IPv6 DataLIFs now work if specified with brackets.
 * Fixed issue where attempting to import an already imported volume returns EOF leaving PVC in pending state. (link:https://github.com/NetApp/trident/issues/489[GitHub issue #489])
 * Fixed issue when Trident performance slows down when > 32 snapshots are created on a SolidFire volume.
 * Replaced SHA-1 with SHA-256 in SSL certificate creation.

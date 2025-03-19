@@ -307,7 +307,7 @@ The variables in the below table will result in the Ansible playbook creating a 
 |Details
 |`openshift_logging_storage_kind` | Set to `nfs` to have the installer create an NFS PV for the logging service.
 |`openshift_logging_storage_host` |
-The hostname or IP address of the NFS host. This should be set to the data LIF for your virtual machine.
+The hostname or IP address of the NFS host. This should be set to the dataLIF for your virtual machine.
 |`openshift_logging_storage_nfs_directory` | The mount path for the NFS export. For example, if the volume is junctioned as `/openshift_logging`, you would use that path for this variable.
 |`openshift_logging_storage_volume_name` | The name, e.g. `pv_ose_logs`, of the PV to create.
 |`openshift_logging_storage_volume_size` | The size of the NFS export, for example `100Gi`.
@@ -348,7 +348,7 @@ NOTE: The tables below only contain the variables which are relevant for storage
 |Variable
 |Details
 | `openshift_metrics_storage_kind` | Set to `nfs` to have the installer create an NFS PV for the logging service.
-|`openshift_metrics_storage_host` | The hostname or IP address of the NFS host. This should be set to the data LIF for your SVM.
+|`openshift_metrics_storage_host` | The hostname or IP address of the NFS host. This should be set to the dataLIF for your SVM.
 |`openshift_metrics_storage_nfs_directory` | The mount path for the NFS export. For example, if the volume is junctioned as `/openshift_metrics`, you would use that path for this variable.
 |`openshift_metrics_storage_volume_name` | The name,
 e.g. `pv_ose_metrics`, of the PV to create.

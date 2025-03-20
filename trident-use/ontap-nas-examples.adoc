@@ -126,7 +126,7 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
+`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontapi` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
 Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.  
 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
@@ -234,7 +234,7 @@ The calculation is as follows:
 ----
 Total volume size = (PVC requested size) / (1 - (snapshotReserve percentage) / 100)
 ----
-For snapshotReserve = 50%, and PVC request = 5GiB, the total volume size is 2/.5 = 10GiB and the available size is 5GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
+For snapshotReserve = 50%, and PVC request = 5GiB, the total volume size is 5/.5 = 10GiB and the available size is 5GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
 
 image::../media/volume-show-nas.png[Shows the output of the volume show command.]
 

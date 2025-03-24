@@ -30,7 +30,11 @@ You need to define each application that you want to manage with Trident protect
 .. Configure the following attributes:
 +
 * *metadata.name*: (_Required_) The name of the application custom resource. Note the name you choose because other CR files needed for protection operations refer to this value.
-* *spec.includedNamespaces*: (_Required_) Use namespace labels or a namespace name to specify namespaces that the application resources exist in. The application namespace must be part of this list.
+* ##*spec.includedNamespaces*: (_Required_) Use namespace and label selector to specify the namespaces and resources that the application uses. The application namespace must be part of this list. The label selector is optional and can be used to filter resources within each specified namespace.##
+* ##*spec.includedClusterScopedResources*: (_Optional_) Use this attribute to specify cluster-scoped resources to be included in the application definition. This attribute allows you to select these resources based on their group, version, kind, and labels.##
++
+** ##*groupVersionKind*: (_Required_) Specifies the API group, version, and kind of the cluster-scoped resource.##
+** ##*labelSelector*: (_Optional_)  Filters the cluster-scoped resources based on their labels.##
 * *metadata.annotations.protect.trident.netapp.io/skip-vm-freeze*: (_Optional_) This annotation is only applicable to applications defined from virtual machines, such as in KubeVirt environments, where filesystem freezes occur before snapshots. Specify whether this application can write to the filesystem during a snapshot. If set to true, the application ignores the global setting and can write to the filesystem during a snapshot. If set to false, the application ignores the global setting and the filesystem is frozen during a snapshot. If specified but the application has no virtual machines in the application definition, the annotation is ignored. If not specified, the application follows the link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[global Trident protect freeze setting].
 +
 [NOTE]
@@ -42,9 +46,9 @@ kubectl annotate application -n <application CR namespace> <application CR name>
 ----
 =====
 +
-Example YAML:
+##Example YAML:##
 +
-[source,yaml]
+[source, yaml]
 ----
 apiVersion: protect.trident.netapp.io/v1
 kind: Application
@@ -55,10 +59,23 @@ metadata:
   namespace: my-app-namespace
 spec:
   includedNamespaces:
-  - labelSelector: {}
-    namespace: namespace-1
-  - labelSelector: {}
-    namespace: namespace-2
+    - namespace: namespace-1
+      labelSelector:
+        matchLabels:
+          app: example-app
+    - namespace: namespace-2
+      labelSelector:
+        matchLabels:
+          app: another-example-app
+  includedClusterScopedResources:
+    - groupVersionKind:
+        group: rbac.authorization.k8s.io
+        kind: ClusterRole
+        version: v1
+      labelSelector:
+        matchLabels:
+          mylabel: test 
+
 ----
 
 . After you create the application CR to match your environment, apply the CR. For example:

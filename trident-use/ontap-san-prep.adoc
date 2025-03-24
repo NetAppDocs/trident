@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/ontap-san-prep.html
-keywords: trident backend, ontap san, ontap-san, ontap-san-economy
+keywords: trident backend, ontap san, ontap-san, ontap-san-economy, asa r2
 summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers.
 ---
 
@@ -13,8 +13,12 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN
 [.lead]
 Understand the requirements and authentication options for configuring an ONTAP backend with ONTAP SAN drivers.
 
+Beginning with the 25.02 release, Trident automatically detects ASA r2 personality of the ONTAP 9.16.1 or later, and enables provisioning and usage of storage on ASA r2 via the iSCSI protocol.
+
 == Requirements
 For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
+
+NOTE: Trident requires one or more aggregates be assigned to the SVM. When using ASA r2, this action is only available using the ONTAP CLI in `diag` mode.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 
@@ -269,7 +273,7 @@ After the backend is created, Trident creates a corresponding `tridentbackend` C
 
 You can update the CHAP credentials by updating the CHAP parameters in the `backend.json` file. This will require updating the CHAP secrets and using the `tridentctl update` command to reflect these changes.
 
-WARNING: When updating the CHAP secrets for a backend, you must use `tridentctl` to update the backend. Do not update the credentials on the storage cluster through the CLI/ONTAP UI as Trident will not be able to pick up these changes.
+WARNING: When updating the CHAP secrets for a backend, you must use `tridentctl` to update the backend. Do not update the credentials on the storage cluster using the ONTAP CLI or ONTAP System Manager as Trident will not be able to pick up these changes.
 
 ----
 cat backend-san.json

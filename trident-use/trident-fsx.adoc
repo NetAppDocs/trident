@@ -15,7 +15,7 @@ https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon 
 
 You can integrate your Amazon FSx for NetApp ONTAP file system with Trident to ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 
-A file system is the primary resource in Amazon FSx, analogous to an ONTAP cluster on premises. Within each SVM you can create one or multiple volumes, which are data containers that store the files and folders in your file system. With Amazon FSx for NetApp ONTAP, Data ONTAP will be provided as a managed file system in the cloud. The new file system type is called *NetApp ONTAP*.
+A file system is the primary resource in Amazon FSx, analogous to an ONTAP cluster on premises. Within each SVM you can create one or multiple volumes, which are data containers that store the files and folders in your file system. With Amazon FSx for NetApp ONTAP will be provided as a managed file system in the cloud. The new file system type is called *NetApp ONTAP*.
 
 Using Trident with Amazon FSx for NetApp ONTAP, you can ensure Kubernetes clusters running in Amazon Elastic Kubernetes Service (EKS) can provision block and file persistent volumes backed by ONTAP.
 
@@ -50,6 +50,37 @@ For details on enabling authentication, refer to the authentication for your dri
 
 * link:ontap-nas-prep.html[ONTAP NAS authentication]
 * link:ontap-san-prep.html[ONTAP SAN authentication]
+
+== Tested Amazon Machine Images (AMIs)
+
+EKS cluster supports various operating systems, but AWS has optimized certain Amazon Machine Images (AMIs) for containers and EKS. The following AMIs have been tested with Trident 24.10.
+
+|===
+| AMI | NAS | NAS-economy | SAN | SAN-economy
+| AL2023_x86_64_STANDARD | Yes | Yes | Yes | Yes
+| AL2_x86_64 | Yes | Yes | Yes** | Yes**
+| BOTTLEROCKET_x86_64 | Yes* | Yes | N/A | N/A
+| AL2023_ARM_64_STANDARD | Yes | Yes | Yes | Yes
+| AL2_ARM_64 | Yes | Yes | Yes** | Yes**
+| BOTTLEROCKET_ARM_64 | Yes* | Yes | N/A | N/A
+|===
+* *Must use “nolock” in mount options. 
+
+* ** Unable to delete the PV without restarting the node 
+
+NOTE: If your desired AMI is not listed here, it does not mean that it is not supported; it simply means it has not been tested. This list serves as a guide for AMIs known to work.
+
+*Tests performed with*:
+
+* EKS version: 1.30
+* Installation Method: Helm and as an AWS add-On
+* For NAS both NFSv3 and NFSv4.1 were tested. 
+* For SAN only iSCSI was tested, not NVMe-oF. 
+
+*Tests performed*:
+
+* Create: Storage Class, pvc, pod
+* Delete: pod, pvc (regular, qtree/lun – economy, NAS with AWS backup) 
 
 == Find more information
 * https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html[Amazon FSx for NetApp ONTAP documentation^]

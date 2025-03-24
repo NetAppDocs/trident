@@ -22,7 +22,7 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |"ontap-nas", "ontap-nas-economy", "ontap-nas-flexgroup", "ontap-san", "ontap-san-economy"
+|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
@@ -38,7 +38,7 @@ For seamless MetroCluster switchover, see the <<mcc-best>>.
 
 |`dataLIF` |IP address of protocol LIF. 
 
-We recommend specifying `dataLIF`. If not provided, Trident fetches data LIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple data LIFs.
+NetApp recommends specifying `dataLIF`. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs.
 
 Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
 
@@ -97,7 +97,7 @@ NOTE: When the aggregate list is updated in SVM, the list is updated in Trident 
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
 
-Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol. |""  (not enforced by default)
+Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume |""  (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -126,8 +126,8 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 
 |`useREST` |Boolean parameter to use ONTAP REST APIs.
 
-`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAP ZAPI calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontap` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
-Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `userREST` is set to `true` by default; change `useREST` to `false` to use ONTAP ZAPI calls.  
+`useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontapi` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
+Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.  
 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
@@ -170,7 +170,7 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
 
-|`tieringPolicy` |Tiering policy to use	"none" |"snapshot-only" for pre-ONTAP 9.5 SVM-DR configuration
+|`tieringPolicy` |Tiering policy to use	"none" |
 
 |`unixPermissions`	|Mode for new volumes	|"777" for NFS volumes; empty (not applicable) for SMB volumes
 
@@ -234,7 +234,7 @@ The calculation is as follows:
 ----
 Total volume size = (PVC requested size) / (1 - (snapshotReserve percentage) / 100)
 ----
-For snapshotReserve = 50%, and PVC request = 5GiB, the total volume size is 2/.5 = 10GiB and the available size is 5GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
+For snapshotReserve = 50%, and PVC request = 5GiB, the total volume size is 5/.5 = 10GiB and the available size is 5GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
 
 image::../media/volume-show-nas.png[Shows the output of the volume show command.]
 
@@ -662,10 +662,10 @@ parameters:
 Trident will decide which virtual pool is selected and ensures the storage requirement is met.
 
 == Update `dataLIF` after initial configuration
-You can change the data LIF after initial configuration by running the following command to provide the new backend JSON file with updated data LIF.
+You can change the dataLIF after initial configuration by running the following command to provide the new backend JSON file with updated dataLIF.
 
 ----
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
 
-NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new data LIF to take effect. 
+NOTE: If PVCs are attached to one or multiple pods, you must bring down all corresponding pods and then bring them back up in order to for the new dataLIF to take effect. 

@@ -46,8 +46,8 @@ NetApp ONTAP provides data-at-rest encryption to protect sensitive data in the e
 Volumes created in Trident on an NAE-enabled backend must be NVE or NAE encrypted.  
 
 * You can set the NVE encryption flag to `true` in the Trident backend configuration to override the NAE encryption and use a specific encryption key on a per volume basis.
-
 * Setting the NVE encryption flag to `false` on an NAE-enabled backend creates an NAE-enabled volume. You cannot disable NAE encryption by setting the NVE encryption flag to `false`.
+* You can set the NVE encryption flat to `""` to create NAE-enabled volumes. 
 
 ====
 

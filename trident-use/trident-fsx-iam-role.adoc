@@ -38,6 +38,7 @@ aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document 
 ----
 
 *Policy JSON example*:
+
 [source,JSON]
 ----
 policy.json:
@@ -157,6 +158,7 @@ Update the following values in the `trust-relationship.json` file:
 
 * *<account_id>* -  Your AWS account ID
 * *<oidc_provider>* - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
++
 [source,console]
 ----
 aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer"\ 

@@ -371,6 +371,7 @@ Before you can provision SMB volumes using the `ontap-nas` driver, you must have
 
 * At least one Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
 +
+[source,console]
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
 ----

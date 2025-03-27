@@ -33,6 +33,7 @@ The Trident installer package contains everything you need to deploy the Trident
 +
 The following example installs Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
 +
+[source,console]
 ----
 helm install trident trident-operator-100.2502.0.tgz --set cloudProvider="AWS" \ 
 
@@ -41,6 +42,7 @@ helm install trident trident-operator-100.2502.0.tgz --set cloudProvider="AWS" \
 ----
 You can use the `helm list` command to review installation details such as name, namespace, chart, status, app version, and revision number.
 +
+[source,console]
 ----
 helm list -n trident
 ----
@@ -88,6 +90,7 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 
 --
 The following example command installs the Trident EKS add-on:
+[source,console]
 ----
 eksctl create addon --name netapp_trident-operator --cluster <cluster_name> \ 
     --service-account-role-arn arn:aws:iam::<account_id>:role/<role_name> --force
@@ -180,7 +183,10 @@ NOTE: To disable automatic backend configuration, upgrade the Trident release ve
 --
 
 * Check the current version of your FSxN Trident CSI add-on. Replace `my-cluster` with your cluster name.
-`eksctl get addon --name netapp_trident-operator --cluster my-cluster` 
+[source,console]
+----
+eksctl get addon --name netapp_trident-operator --cluster my-cluster
+---- 
 +
 *Example output:*
 ----
@@ -189,7 +195,10 @@ netapp_trident-operator    v24.10.0-eksbuild.1    ACTIVE    0       {"cloudIdent
 ----
 
 * Update the add-on to the version returned under UPDATE AVAILABLE in the output of the previous step.
-`eksctl update addon --name netapp_trident-operator --version v24.10.0-eksbuild.1 --cluster my-cluster --force`
+[source,console]
+----
+eksctl update addon --name netapp_trident-operator --version v24.10.0-eksbuild.1 --cluster my-cluster --force
+----
 +
 
 If you remove the `--force` option and any of the Amazon EKS add-on settings conflict with your existing settings, then updating the Amazon EKS add-on fails; you receive an error message to help you resolve the conflict. Before specifying this option, make sure that the Amazon EKS add-on does not manage settings that you need to manage, because those settings are overwritten with this option. 
@@ -219,6 +228,7 @@ For more information about Amazon EKS Kubernetes field management, see link:http
 
 The following example updates the EKS add-on:
 
+[source,console]
 ----
 
 aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni --addon-version v24.6.1-eksbuild.1 \
@@ -247,7 +257,10 @@ If the add-on has an IAM account associated with it, the IAM account is not remo
 --
 
 The following command uninstalls the Trident EKS add-on:
-`eksctl delete addon --cluster K8s-arm --name netapp_trident-operator`
+[source,console]
+----
+eksctl delete addon --cluster K8s-arm --name netapp_trident-operator
+----
 
 --
 
@@ -274,7 +287,10 @@ The following command uninstalls the Trident EKS add-on:
 
 Replace `my-cluster` with the name of your cluster, and then run the following command.
 
-`aws eks delete-addon --cluster-name my-cluster --addon-name netapp_trident-operator --preserve`
+[source,console]
+----
+aws eks delete-addon --cluster-name my-cluster --addon-name netapp_trident-operator --preserve
+----
 
 --
 ====

@@ -21,6 +21,7 @@ To authenticate using an AWS IAM role, you must have a Kubernetes cluster deploy
 
 This example creates an AWS Secret Manager secret to store Trident CSI credentials:
 
+[source,console]
 ----
 aws secretsmanager create-secret --name trident-secret --description "Trident CSI credentials"\ 
   --secret-string "{\"username\":\"vsadmin\",\"password\":\"<svmpassword>\"}"
@@ -30,12 +31,14 @@ aws secretsmanager create-secret --name trident-secret --description "Trident CS
 
 The following examples creates an IAM policy using the AWS CLI:
 
+[source,console]
 ----
 aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json 
   --description "This policy grants access to Trident CSI to FSxN and Secret manager"
 ----
 
 *Policy JSON example*:
+[source,JSON]
 ----
 policy.json:
 {
@@ -65,6 +68,7 @@ policy.json:
 }
 ----
 
+////
 To enable automatic backend configuration for Amazon FSx, add the following actions to the `policy.json` file while creating an IAM policy:
 
 * `"fsx:CreateStorageVirtualMachine"`
@@ -110,6 +114,7 @@ To enable automatic backend configuration for Amazon FSx, add the following acti
     "Version": "2012-10-17"
 }
 ----
+////
 
 === Create an IAM role for the service account
 
@@ -126,6 +131,8 @@ aws iam create-role --role-name trident-controller \
 ----
 
 *trust-relationship.json file:*
+
+[source,JSON]
 ----
 { 
     "Version": "2012-10-17", 
@@ -150,6 +157,7 @@ Update the following values in the `trust-relationship.json` file:
 
 * *<account_id>* -  Your AWS account ID
 * *<oidc_provider>* - The OIDC of your EKS cluster. You can obtain the oidc_provider by running:
+[source,console]
 ----
 aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer"\ 
   --output text | sed -e "s/^https:\/\///"
@@ -159,19 +167,22 @@ aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer
 
 Once the role has been created, attach the policy (that was created in the step above) to the role using this command:
 
+[source,console]
 ----
 aws iam attach-role-policy --role-name my-role --policy-arn <IAM policy ARN>
 ----
 
 *Verify OICD provider is associated*:
 
-Verify that your OIDC provider is associated with your cluster. You can verify it using this command: 
+Verify that your OIDC provider is associated with your cluster. You can verify it using this command:
+[source,console] 
 ----
 aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4
 ----
 
 Use the following command to associate IAM OIDC to your cluster: 
 
+[source,console]
 ----
 eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve
 ----
@@ -183,6 +194,7 @@ eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve
 --
 The following example creates an IAM role for service account in EKS: 
 
+[source,console]
 ----
 eksctl create iamserviceaccount --name trident-controller --namespace trident \
   --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only \

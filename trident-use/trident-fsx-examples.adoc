@@ -181,6 +181,7 @@ Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create
 === Update `dataLIF` after initial configuration
 You can change the dataLIF after initial configuration by running the following command to provide the new backend JSON file with updated dataLIF.
 
+[source,console]
 ----
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
@@ -261,6 +262,7 @@ SMB default is `ntfs`.
 
 Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
 
+[source,console]
 ----
 apiVersion: storage.k8s.io/v1 
 kind: StorageClass
@@ -279,6 +281,7 @@ parameters:
 [%collapsible%closed]
 ====
 
+[source,console]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig

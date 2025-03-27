@@ -18,6 +18,7 @@ Configure a Kubernetes StorageClass object and create the storage class to instr
 === Configure a Kubernetes StorageClass object
 The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Trident as the provisioner that is used for that class and instructs Trident how to provision a volume. For example:
 
+[source,YAML]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -31,6 +32,8 @@ parameters:
 ----
 
 To provision NFSv3 volumes on AWS Bottlerocket, add the required `mountOptions` to the storage class:
+
+[source,YAML]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -54,14 +57,18 @@ Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] 
 .Steps
 . This is a Kubernetes object, so use `kubectl` to create it in Kubernetes.
 +
+[source,console]
 ----
 kubectl create -f storage-class-ontapnas.yaml
 ----
 
 . You should now see a *basic-csi* storage class in both Kubernetes and Trident, and Trident should have discovered the pools on the backend.
 +
+[source,console]
 ----
 kubectl get sc basic-csi
+----
+----
 NAME         PROVISIONER             AGE
 basic-csi    csi.trident.netapp.io   15h
 
@@ -81,6 +88,7 @@ After you create the PV and PVC, you can mount the volume in a pod.
 [%collapsible]
 ====
 This sample manifest shows a basic PV of 10Gi that is associated with StorageClass `basic-csi`.
+[source,YAML]
 ----
 apiVersion: v1
 kind: PersistentVolume
@@ -106,6 +114,7 @@ These examples show basic PVC configuration options.
 
 .PVC with RWX access
 This example shows a basic PVC with RWX access that is associated with a StorageClass named `basic-csi`.
+[source,YAML]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -122,8 +131,8 @@ spec:
 
 .PVC with NVMe/TCP
 This example shows a basic PVC for NVMe/TCP with RWX access that is associated with a StorageClass named `protection-gold`.
+[source,YAML]
 ----
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -142,11 +151,13 @@ storageClassName: protection-gold
 .Steps
 . Create the PV.
 +
+[source,console]
 ----
 kubectl create -f pv.yaml
 ----
 . Verify the PV status.
 +
+[source,console]
 ----
 kubectl get pv
 NAME        CAPACITY  ACCESS MODES  RECLAIM POLICY  STATUS    CLAIM  STORAGECLASS  REASON  AGE
@@ -154,11 +165,13 @@ pv-storage  4Gi       RWO           Retain          Available                   
 ----
 . Create the PVC.
 +
+[source,console]
 ----
 kubectl create -f pvc.yaml
 ----
 . Verify the PVC status.
 +
+[source,console]
 ----
 kubectl get pvc
 NAME        STATUS VOLUME     CAPACITY ACCESS MODES STORAGECLASS AGE

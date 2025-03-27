@@ -17,12 +17,14 @@ Deploy sample application.
 
 . Mount the volume in a pod.
 +
+[source,console]
 ----
 kubectl create -f pv-pod.yaml
 ----
 These examples show basic configurations to attach the PVC to a pod:
 *Basic configuration*:
 +
+[source,console]
 ----
 kind: Pod
 apiVersion: v1
@@ -47,6 +49,7 @@ NOTE: You can monitor the progress using `kubectl get pod --watch`.
 
 . Verify that the volume is mounted on `/my/mount/path`.
 +
+[source,console]
 ----
 kubectl exec -it pv-pod -- df -h /my/mount/path
 ----
@@ -55,8 +58,9 @@ Filesystem                                                        Size  Used  Av
 192.168.188.78:/trident_pvc_ae45ed05_3ace_4e7c_9080_d2a83ae03d06  1.1G  320K  1.0G   1%   /my/mount/path
 ----
 
-You can now delete the Pod. The Pod application will no longer exist, but the volume will remain. 
-
+You can now delete the Pod. The Pod application will no longer exist, but the volume will remain.
+ 
+[source,console]
 ----
 kubectl delete pod pv-pod
 ----

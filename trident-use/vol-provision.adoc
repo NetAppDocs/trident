@@ -11,14 +11,14 @@ summary: Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that u
 :imagesdir: ../media/
 
 [.lead]
-Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod. 
+Create a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod. 
 
 == Overview
-A link:https://kubernetes.io/docs/concepts/storage/persistent-volumes/[_PersistentVolume_^] (PV) is a physical storage resource provisioned by the cluster administrator on a Kubernetes cluster. The https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
+A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
 
 The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. 
 
-After you create the PVC (The PV is created at the backend.), you can mount the volume in a pod.
+After you create the PVC you can mount the volume in a pod.
 
 == Create the PVC
 
@@ -83,7 +83,6 @@ spec:
 .PVC with NVMe/TCP
 This example shows a basic PVC for NVMe/TCP with RWO access that is associated with a StorageClass named `protection-gold`.
 ----
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -111,9 +110,9 @@ metadata:
   name: pv-pod
 spec:
   volumes:
-    - name: pv-storage
+    - name: storage
       persistentVolumeClaim:
-       claimName: basic
+       claimName: pvc-storage
   containers:
     - name: pv-container
       image: nginx
@@ -122,33 +121,27 @@ spec:
           name: "http-server"
       volumeMounts:
         - mountPath: "/my/mount/path"
-          name: pv-storage
+          name: storage
 ----
+
 
 .Basic NVMe/TCP configuration
 ----
----
 apiVersion: v1
 kind: Pod
 metadata:
-  creationTimestamp: null
-  labels:
-    run: nginx
-  name: nginx
+  name: pod-nginx
 spec:
-  containers:
-    - image: nginx
-      name: nginx
-      resources: {}
-      volumeMounts:
-        - mountPath: "/usr/share/nginx/html"
-          name: task-pv-storage
-  dnsPolicy: ClusterFirst
-  restartPolicy: Always
   volumes:
-    - name: task-pv-storage
+    - name: basic-pvc
       persistentVolumeClaim:
-      claimName: pvc-san-nvme
+        claimName: pvc-san-nvme
+  containers:
+    - name: task-pv-container
+      image: nginx
+      volumeMounts:
+        - mountPath: "/my/mount/path"
+          name: basic-pvc
 ----
 ====
 

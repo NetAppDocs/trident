@@ -182,7 +182,7 @@ Verify that your OIDC provider is associated with your cluster. You can verify i
 aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4
 ----
 
-Use the following command to associate IAM OIDC to your cluster: 
+If the output is empty, use the following command to associate IAM OIDC to your cluster: 
 
 [source,console]
 ----

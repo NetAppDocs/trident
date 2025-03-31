@@ -14,8 +14,10 @@ summary: The bucket custom resource (CR) for Trident protect is known as an AppV
 [.lead]
 The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVault objects are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication. Only administrators can create AppVaults.
 
+You need to create an AppVault CR either manually or using the command line when you perform data protection operations on an application, and the AppVault CR needs to reside on the cluster where Trident protect is installed. The AppVault CR is specific to your environment; you can use the examples on this page as a guide when creating AppVault CRs.
+
 == Configure AppVault authentication and passwords
-Before you create an AppVault object, you need to ensure the AppVault and the data mover you choose can authenticate with the provider and any related resources.
+Before you create an AppVault CR, you need to ensure the AppVault and the data mover you choose can authenticate with the provider and any related resources.
 
 === Data mover repository passwords
 When you create AppVault objects using CRs or the Trident protect CLI plugin, you can optionally instruct Trident protect to use a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. If you don't specify a secret, Trident protect uses a default password.

@@ -37,7 +37,7 @@ The following example installs Trident and sets the `cloud-provider` flag to `$C
 helm install trident trident-operator-100.2502.0.tgz --set cloudProvider="AWS" \ 
 
     --set cloudIdentity="'eks.amazonaws.com/role-arn: arn:aws:iam::<accountID>:role/<AmazonEKS_FSxN_CSI_DriverRole>'" \ 
-    -–namespace trident --create-namespace 
+    --namespace trident --create-namespace 
 ----
 You can use the `helm list` command to review installation details such as name, namespace, chart, status, app version, and revision number.
 +
@@ -135,26 +135,29 @@ After the add-on installation is complete, you see your installed add-on.
 +
 * Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, `protocols` during the installation.
 +
+[source,json]
 ----
 {
-   "clusterName": "<eks-cluster>",
-   "addonName": "netapp_trident-operator",
-   "addonVersion": "v24.10.0-eksbuild.1",
-   "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
-   "configurationValues": "{"cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/astratrident-role'",
-   "ontapConfigurator": {
-        "enabled": true,
-        "svms": [
-          {
-            "authType": "awsarn",
-            "fsxnID": "fs-0dfeaa884a68b1cab",
-            "protocols": [
-              "nfs",
-              "iscsi"
-            ]
-          }
-        ]
-      }}"
+  "clusterName": "<eks-cluster>",
+  "addonName": "netapp_trident-operator",
+  "addonVersion": "v24.10.0-eksbuild.1",
+  "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
+  "configurationValues": {
+    "cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole'",
+    "ontapConfigurator": {
+      "enabled": true,
+      "svms": [
+        {
+          "authType": "awsarn",
+          "fsxnID": "fs-0dfeaa884a68b1cab",
+          "protocols": [
+            "nfs",
+            "iscsi"
+          ]
+        }
+      ]
+    }
+  }
 }
 ----
 +

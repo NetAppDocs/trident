@@ -11,7 +11,7 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 :imagesdir: ../media/
 
 [.lead]
-Configure a Kubernetes StorageClass object and create the storage class to instruct Trident how to provision volumes. Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
+Configure a Kubernetes StorageClass object and create the storage class to instruct Trident how to provision volumes. Create a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
 
 == Create a storage class
 
@@ -67,13 +67,13 @@ basic-csi    csi.trident.netapp.io   15h
 
 ----
 
-== Create the PV and PVC
+== Create the PVC
 
-A link:https://kubernetes.io/docs/concepts/storage/persistent-volumes/[_PersistentVolume_^] (PV) is a physical storage resource provisioned by the cluster administrator on a Kubernetes cluster. The https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
+A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
 
 The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. 
 
-After you create the PV and PVC, you can mount the volume in a pod.
+After you create the PVC, you can mount the volume in a pod.
 
 === Sample manifests
 
@@ -140,18 +140,7 @@ storageClassName: protection-gold
 
 === Create the PV and PVC
 .Steps
-. Create the PV.
-+
-----
-kubectl create -f pv.yaml
-----
-. Verify the PV status.
-+
-----
-kubectl get pv
-NAME        CAPACITY  ACCESS MODES  RECLAIM POLICY  STATUS    CLAIM  STORAGECLASS  REASON  AGE
-pv-storage  4Gi       RWO           Retain          Available                              7s
-----
+
 . Create the PVC.
 +
 ----
@@ -161,6 +150,8 @@ kubectl create -f pvc.yaml
 +
 ----
 kubectl get pvc
+----
+----
 NAME        STATUS VOLUME     CAPACITY ACCESS MODES STORAGECLASS AGE
 pvc-storage Bound  pv-name 2Gi      RWO                       5m
 ----

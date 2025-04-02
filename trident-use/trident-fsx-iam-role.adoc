@@ -17,9 +17,11 @@ You can configure Kubernetes pods to access AWS resources by authenticating as a
 [NOTE]
 To authenticate using an AWS IAM role, you must have a Kubernetes cluster deployed using EKS.
 
-== Create AWS Secret Manager secret
+== Create AWS Secrets Manager secret
 
-This example creates an AWS Secret Manager secret to store Trident CSI credentials:
+Since Trident will be issuing APIs against an FSx vserver to manage the storage for you, it will need credentials to do so. The secure way to pass those credentials is through an AWS Secrets Manager secret. Therefore, if you don’t already have one, you’ll need to create an AWS Secrets Manager secret that contains the credentials for the vsadmin account.
+
+This example creates an AWS Secrets Manager secret to store Trident CSI credentials:
 
 [source,console]
 ----
@@ -29,19 +31,20 @@ aws secretsmanager create-secret --name trident-secret --description "Trident CS
 
 == Create IAM Policy
 
+Trident also needs AWS permissions to run correctly. Therefore, you need to create a policy that gives Trident the permissions it needs.
+
 The following examples creates an IAM policy using the AWS CLI:
 
 [source,console]
 ----
 aws iam create-policy --policy-name AmazonFSxNCSIDriverPolicy --policy-document file://policy.json 
-  --description "This policy grants access to Trident CSI to FSxN and Secret manager"
+  --description "This policy grants access to Trident CSI to FSxN and Secrets manager"
 ----
 
 *Policy JSON example*:
 
 [source,JSON]
 ----
-policy.json:
 {
     "Statement": [
         {
@@ -81,7 +84,6 @@ To enable automatic backend configuration for Amazon FSx, add the following acti
 *Policy JSON file example for automatic backend configuration*:
 ----
 
- policy.json:
 {
     "Statement": [
         {
@@ -119,6 +121,8 @@ To enable automatic backend configuration for Amazon FSx, add the following acti
 
 === Create an IAM role for the service account
 
+Once you have the policy created, use it when creating the role that will be assigned to the service account that Trident will run under:
+
 [role="tabbed-block"]
 ====
 
@@ -127,7 +131,7 @@ To enable automatic backend configuration for Amazon FSx, add the following acti
 --
 
 ----
-aws iam create-role --role-name trident-controller \
+aws iam create-role --role-name AmazonEKS_FSxN_CSI_DriverRole \
   --assume-role-policy-document file://trust-relationship.json
 ----
 
@@ -199,7 +203,7 @@ The following example creates an IAM role for service account in EKS:
 [source,console]
 ----
 eksctl create iamserviceaccount --name trident-controller --namespace trident \
-  --cluster <my-cluster> --role-name <AmazonEKS_FSxN_CSI_DriverRole> --role-only \
+  --cluster <my-cluster> --role-name AmazonEKS_FSxN_CSI_DriverRole --role-only \
   --attach-policy-arn <IAM-Policy ARN> --approve
 ----
 --

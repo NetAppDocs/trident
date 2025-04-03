@@ -21,6 +21,7 @@ To create a storage backend, you need to create a configuration file in either J
 
 .YAML
 --
+[source,YAML]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -42,6 +43,7 @@ spec:
 
 .JSON
 --
+[source,JSON]
 ----
 {
   "apiVersion": "trident.netapp.io/v1",
@@ -75,6 +77,7 @@ Run the following commands to create and validate the Trident Backend Configurat
 
 * Create trident backend configuration (TBC) from yaml file and run the following command:
 +
+[source,console]
 ----
 kubectl create -f backendconfig.yaml -n trident 
 ----
@@ -84,6 +87,7 @@ tridentbackendconfig.trident.netapp.io/backend-tbc-ontap-nas created
 ----
 * Validate the trident backend configuration (TBC) was created successfully:
 +
+[source,console]
 ---- 
 Kubectl get tbc -n trident
 ----
@@ -107,11 +111,13 @@ You can integrate Trident with Amazon FSx for NetApp ONTAP using the following d
 For driver details, refer to link:../trident-use/ontap-nas.html[NAS drivers] and link:../trident-use/ontap-san.html[SAN drivers].
 
 Once the configuration file has been created, run this command to create it within your EKS:
+[source,console]
 ----
 kubectl create -f configuration_file
 ----
 
 To verify the status, run this command:
+[source,console]
 ----
 kubectl get tbc -n trident
 ----
@@ -283,7 +289,7 @@ This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role 
 `""`
 `""`
 
-|`credentials` |Specify the FSx SVM credentials to store in AWS Secret Manager.
+|`credentials` |Specify the FSx SVM credentials to store in AWS Secrets Manager.
 - `name`: Amazon Resource Name (ARN) of the secret, which contains the credentials of SVM.
 - `type`: Set to `awsarn`. 
 Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create_secret.html[Create an AWS Secrets Manager secret^] for more information.| 
@@ -365,6 +371,7 @@ Before you can provision SMB volumes using the `ontap-nas` driver, you must have
 
 * At least one Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
 +
+[source,console]
 ----
 kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
 ----
@@ -380,12 +387,14 @@ The `vserver cifs share create` command checks the path specified in the -path o
 
 .. Create an SMB share associated with the specified SVM:
 +
+[source,console]
 ----
 vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
 ----
 
 .. Verify that the share was created:
 +
+[source,console]
 ----
 vserver cifs share show -share-name share_name
 ----

@@ -11,13 +11,14 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 :imagesdir: ../media/
 
 [.lead]
-Configure a Kubernetes StorageClass object and create the storage class to instruct Trident how to provision volumes. Create a PersistentVolume (PV) and a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
+Configure a Kubernetes StorageClass object and create the storage class to instruct Trident how to provision volumes. Create a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
 
 == Create a storage class
 
 === Configure a Kubernetes StorageClass object
 The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies Trident as the provisioner that is used for that class and instructs Trident how to provision a volume. For example:
 
+[source,YAML]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -31,6 +32,8 @@ parameters:
 ----
 
 To provision NFSv3 volumes on AWS Bottlerocket, add the required `mountOptions` to the storage class:
+
+[source,YAML]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -54,26 +57,30 @@ Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] 
 .Steps
 . This is a Kubernetes object, so use `kubectl` to create it in Kubernetes.
 +
+[source,console]
 ----
 kubectl create -f storage-class-ontapnas.yaml
 ----
 
 . You should now see a *basic-csi* storage class in both Kubernetes and Trident, and Trident should have discovered the pools on the backend.
 +
+[source,console]
 ----
 kubectl get sc basic-csi
+----
+----
 NAME         PROVISIONER             AGE
 basic-csi    csi.trident.netapp.io   15h
 
 ----
 
-== Create the PV and PVC
+== Create the PVC
 
-A link:https://kubernetes.io/docs/concepts/storage/persistent-volumes/[_PersistentVolume_^] (PV) is a physical storage resource provisioned by the cluster administrator on a Kubernetes cluster. The https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
+A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. 
 
 The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. 
 
-After you create the PV and PVC, you can mount the volume in a pod.
+After you create the PVC, you can mount the volume in a pod.
 
 === Sample manifests
 
@@ -81,6 +88,7 @@ After you create the PV and PVC, you can mount the volume in a pod.
 [%collapsible]
 ====
 This sample manifest shows a basic PV of 10Gi that is associated with StorageClass `basic-csi`.
+[source,YAML]
 ----
 apiVersion: v1
 kind: PersistentVolume
@@ -106,6 +114,7 @@ These examples show basic PVC configuration options.
 
 .PVC with RWX access
 This example shows a basic PVC with RWX access that is associated with a StorageClass named `basic-csi`.
+[source,YAML]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -122,8 +131,8 @@ spec:
 
 .PVC with NVMe/TCP
 This example shows a basic PVC for NVMe/TCP with RWX access that is associated with a StorageClass named `protection-gold`.
+[source,YAML]
 ----
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -140,27 +149,20 @@ storageClassName: protection-gold
 
 === Create the PV and PVC
 .Steps
-. Create the PV.
-+
-----
-kubectl create -f pv.yaml
-----
-. Verify the PV status.
-+
-----
-kubectl get pv
-NAME        CAPACITY  ACCESS MODES  RECLAIM POLICY  STATUS    CLAIM  STORAGECLASS  REASON  AGE
-pv-storage  4Gi       RWO           Retain          Available                              7s
-----
+
 . Create the PVC.
 +
+[source,console]
 ----
 kubectl create -f pvc.yaml
 ----
 . Verify the PVC status.
 +
+[source,console]
 ----
 kubectl get pvc
+----
+----
 NAME        STATUS VOLUME     CAPACITY ACCESS MODES STORAGECLASS AGE
 pvc-storage Bound  pv-name 2Gi      RWO                       5m
 ----

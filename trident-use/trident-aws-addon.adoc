@@ -44,15 +44,19 @@ image::../media/aws-eks-03.png[]
 +
 image::../media/aws-eks-04.png[]
 +
-. Configure any Optional configuration settings as required and select *Next*.
+. Follow the *Add-on configuration schema* and set the Configuration Values parameter on the *Configuration values* section to the role-arn you created on the previous step(Step 1). 
 +
-Follow the *Add-on configuration schema* and set the Configuration Values parameter on the *Configuration values* section to the role-arn you created on the previous step(Step 1) (value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`).
+Value should be in the following format: `eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole`.
++
 NOTE: If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage. 
 +
 image::../media/aws-eks-06.png[]
 +
+//// 
++
 * Beginning with 25.02 release, Trident supports automatic backend configuration. Trident creates the backend and storage classes seamlessly after Trident installation. To enable automatic backend configuration, add the `ontapConfigurator` parameter and specify `authType`, `fsxnID`, and `protocols` in the Add-on configuration schema along with `cloudIdentity` during the installation.
 +
+[source,JSON]
 ----
 "ontapConfigurator": {
         "enabled": true,
@@ -71,7 +75,7 @@ image::../media/aws-eks-06.png[]
 ----
 +
 NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the *ontapConfigurator* to *false*. 
-+
+////
 . Select *Create*.
 . Verify that the status of the add-on is _Active_.
 +

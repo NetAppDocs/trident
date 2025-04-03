@@ -171,7 +171,7 @@ Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is
 `""`
 `""`
 
-|`credentials` |Specify the FSx SVM credentials to store in AWS Secret Manager.
+|`credentials` |Specify the FSx SVM credentials to store in AWS Secrets Manager.
 - `name`: Amazon Resource Name (ARN) of the secret, which contains the credentials of SVM.
 - `type`: Set to `awsarn`. 
 Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create_secret.html[Create an AWS Secrets Manager secret^] for more information.| 
@@ -181,6 +181,7 @@ Refer to link:https://docs.aws.amazon.com/secretsmanager/latest/userguide/create
 === Update `dataLIF` after initial configuration
 You can change the dataLIF after initial configuration by running the following command to provide the new backend JSON file with updated dataLIF.
 
+[source,console]
 ----
 tridentctl update backend <backend-name> -f <path-to-backend-json-file-with-updated-dataLIF>
 ----
@@ -261,6 +262,7 @@ SMB default is `ntfs`.
 
 Using `nasType`, `node-stage-secret-name`, and `node-stage-secret-namespace`, you can specify an SMB volume and provide the required Active Directory credentials. SMB volumes are supported using the `ontap-nas` driver only. 
 
+[source,console]
 ----
 apiVersion: storage.k8s.io/v1 
 kind: StorageClass
@@ -275,10 +277,11 @@ parameters:
 ----
 ====
 
-.Configuration for AWS FSx for ONTAP with secret manager
+.Configuration for AWS FSx for ONTAP with Secrets Manager
 [%collapsible%closed]
 ====
 
+[source,console]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig

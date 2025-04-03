@@ -85,6 +85,8 @@ a|`xfs`, `ext3`, `ext4`
 * Use `ontap-san-economy` only if persistent volume usage count is expected to be higher than link:https://docs.netapp.com/us-en/ontap/volumes/storage-limits-reference.html[supported ONTAP volume limits^]. 
 * Use `ontap-nas-economy` only if persistent volume usage count is expected to be  higher than link:https://docs.netapp.com/us-en/ontap/volumes/storage-limits-reference.html[supported ONTAP volume limits^] and the `ontap-san-economy` driver cannot be used. 
 * Do not use use `ontap-nas-economy` if you anticipate the need for data protection, disaster recovery, or mobility.
+* NetApp does not recommend using Flexvol autogrow in all ONTAP drivers, except ontap-san. As a workaround, Trident supports the use of snapshot reserve and scales Flexvol volumes accordingly.
+
 ====
 
 == User permissions

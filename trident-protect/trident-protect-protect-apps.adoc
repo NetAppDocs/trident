@@ -223,7 +223,7 @@ NOTE: You can use `tridentctl-protect create schedule --help` to view detailed h
 ----
 tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace> --full-backup-rule <string>
 ----
-##You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday Thursday"` to schedule full backup on Mondays and Thursdays.##
+##You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday, Thursday"` to schedule full backup on Mondays and Thursdays.##
 --
 ====
 //end tabbed block

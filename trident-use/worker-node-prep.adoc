@@ -28,9 +28,14 @@ link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#nvm
 NOTE: NetApp recommends ONTAP 9.12 or later for NVMe/TCP. 
 
 .SCSI over FC tools
-link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#install-the-fc-tools[Install the FC tools] if you are using `ontap-san` with sanType `fcp` (SCSI over FC). 
+Refer to link:https://docs.netapp.com/us-en/ontap/san-config/configure-fc-nvme-hosts-ha-pairs-reference.html[Ways to configure FC & FC-NVMe SAN hosts] for more information about configuring your FC and FC-NVMe SAN hosts.
 
-Refer to link:https://docs.netapp.com/us-en/ontap/san-config/configure-fc-nvme-hosts-ha-pairs-reference.html[Ways to configure FC & FC-NVMe SAN hosts] for more information.
+link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#install-the-fc-tools[Install the FC tools] if you are using `ontap-san` with sanType `fcp` (SCSI over FC).
+
+*Points to consider*:
+* SCSI over FC is supported on OpenShift and KubeVirt environments.
+* SCSI over FC is not supported on Docker.
+* iSCSI self healing is not applicable to SCSI over FC.
 
 == Node service discovery
 
@@ -129,7 +134,7 @@ rpm -q iscsi-initiator-utils
 sudo mpathconf --enable --with_multipathd y --find_multipaths n
 ----
 +
-NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+NOTE: Ensure `/etc/multipath.conf` contains `find_multipaths no` under `defaults`.
 
 . Ensure that `iscsid` and `multipathd` are running:
 +
@@ -172,7 +177,7 @@ sudo systemctl enable --now multipath-tools.service
 sudo service multipath-tools restart
 ----
 +
-NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+NOTE: Ensure `/etc/multipath.conf` contains `find_multipaths no` under `defaults`.
 
 . Ensure that `open-iscsi` and `multipath-tools` are enabled and running:
 +
@@ -302,7 +307,7 @@ sudo yum install -y lsscsi device-mapper-multipath
 sudo mpathconf --enable --with_multipathd y --find_multipaths n
 ----
 +
-NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+NOTE: Ensure `/etc/multipath.conf` contains `find_multipaths no` under `defaults`.
 
 . Ensure that `multipathd` is running:
 +
@@ -330,7 +335,7 @@ sudo systemctl enable --now multipath-tools.service
 sudo service multipath-tools restart
 ----
 +
-NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`.
+NOTE: Ensure `/etc/multipath.conf` contains `find_multipaths no` under `defaults`.
 
 . Ensure that `multipath-tools` is enabled and running:
 +

@@ -38,7 +38,7 @@ NOTE: The volumes that are created by Trident are not associated with any Volume
 NetApp ONTAP provides data-at-rest encryption to protect sensitive data in the event a disk is stolen, returned, or repurposed. For details, refer to link:https://docs.netapp.com/us-en/ontap/encryption-at-rest/configure-netapp-volume-encryption-concept.html[Configure NetApp Volume Encryption overview^].
 
 * If NAE is enabled on the backend, any volume provisioned in Trident will be NAE-enabled. 
-** You can set the NVE encryption flat to `""` to create NAE-enabled volumes. 
+** You can set the NVE encryption flag to `""` to create NAE-enabled volumes. 
 
 * If NAE is not enabled on the backend, any volume provisioned in Trident will be NVE-enabled unless you set the NVE encryption flag to `false` in the backend configuration. 
 

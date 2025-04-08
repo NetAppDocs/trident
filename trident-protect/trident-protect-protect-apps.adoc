@@ -180,7 +180,7 @@ include::../_include/backup-include-sessiontoken-note.adoc[]
 * *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `weekly`.
 * *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
 * *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
-* *metadata.annotations.protect.trident.netapp.io/full-backup-rule*: (_Required_) This annotation is used to specify the rule for scheduling full backup. You can set it to `always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur.
+* *metadata.annotations.protect.trident.netapp.io/full-backup-rule*: (_Optional_) This annotation is used to specify the rule for scheduling full backup. You can set it to `always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur.
 +
 [source,yaml]
 ----
@@ -223,7 +223,7 @@ NOTE: You can use `tridentctl-protect create schedule --help` to view detailed h
 ----
 tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace> --full-backup-rule <string>
 ----
-You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur.
+##You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday Thursday"` to schedule full backup on Mondays and Thursdays.##
 --
 ====
 //end tabbed block

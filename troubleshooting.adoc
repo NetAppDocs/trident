@@ -13,6 +13,8 @@ summary: Use the pointers provided here for troubleshooting issues you might enc
 [.lead]
 Use the pointers provided here for troubleshooting issues you might encounter while installing and using Trident.
 
+NOTE: For help with Trident, create a support bundle using `tridentctl logs -a -n trident` and send it to NetApp Support.
+
 == General troubleshooting
 
 * If the Trident pod fails to come up properly (for example, when the Trident pod is stuck in the `ContainerCreating` phase with fewer than two ready containers), running `kubectl -n trident describe deployment trident` and `kubectl -n trident describe pod trident-********-****` can provide additional insights. Obtaining kubelet logs (for example, via `journalctl -xeu kubelet`) can also be helpful.

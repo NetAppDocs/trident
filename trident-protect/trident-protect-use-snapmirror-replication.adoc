@@ -27,7 +27,7 @@ Setting up a replication relationship involves the following:
 * Setting the time for the snapshot to be taken
 
 .Steps
-. Create an AppVault for the source application on the source cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
+. On the source cluster, create an AppVault for the source application. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 +
 [role="tabbed-block"]
 ====
@@ -68,7 +68,7 @@ tridentctl-protect create vault Azure <vault-name> --account <account-name> --bu
 --
 ====
 
-. Create the source application CR:
+. On the source cluster, create the source application CR:
 +
 [role="tabbed-block"]
 ====
@@ -172,7 +172,7 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 --
 ====
 
-. Create a source application AppVault CR on the destination cluster that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
+. On the destination cluster, create a source application AppVault CR that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
 . Apply the CR:
 +
 [source,console]
@@ -205,7 +205,7 @@ kubectl apply -f trident-protect-appvault-primary-destination.yaml -n my-app-nam
 kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n my-app-namespace
 ----
 
-. Create an AppMirrorRelationship CR file:
+. On the source cluster, create an AppMirrorRelationship CR file:
 +
 [role="tabbed-block"]
 ====
@@ -281,7 +281,7 @@ Using Trident protect, you can fail over replicated applications to a destinatio
 
 //. (_Optional_) Create execution hooks on the destination cluster if you need them to run on the failed over application. You can create these execution hooks ahead of time if needed.
 
-. Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of *spec.desiredState* to `Promoted`.
+. On the destination cluster, edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of *spec.desiredState* to `Promoted`.
 
 . Save the CR file.
 
@@ -326,7 +326,7 @@ When you reverse resync a failed over replication relationship, the destination 
 
 .Steps
 
-. Delete the AppMirrorRelationship CR on the original destination cluster. This causes the destination to become the source. If there are any protection schedules remaining on the new destination cluster, remove them.
+. On the original destination cluster, delete the AppMirrorRelationship CR. This causes the destination to become the source. If there are any protection schedules remaining on the new destination cluster, remove them.
 . Set up a replication relationship by applying the CR files you originally used to set up the relationship to the opposite clusters.
 . Ensure the AppVault CRs are ready on each cluster.
 . Set up a replication relationship on the opposite cluster, configuring values for the reverse direction.

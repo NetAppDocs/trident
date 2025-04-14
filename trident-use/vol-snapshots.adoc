@@ -251,8 +251,8 @@ kubectl get vs
 . Create the TASR CR. This example creates a CR for PVC `pvc1` and volume snapshot `pvc1-snapshot`.
 +
 NOTE: The TASR CR must be in a namespace where the PVC & VS exist.
-
 +
+
 [source,console]
 ----
 cat tasr-pvc1-snapshot.yaml
@@ -282,7 +282,7 @@ tridentactionsnapshotrestore.trident.netapp.io/trident-snap created
 
 .Results 
 Trident restores the data from the snapshot. You can verify the snapshot restore status:
-+
+
 [source,console] 
 ----
 kubectl get tasr -o yaml

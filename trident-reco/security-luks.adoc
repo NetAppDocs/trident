@@ -34,27 +34,35 @@ You can enable per-volume, host-side encryption using Linux Unified Key Setup (L
 
 . Define LUKS encryption attributes in the backend configuration. For more information on backend configuration options for ONTAP SAN, refer to link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options].
 +
+[source,json]
 ----
-"storage": [
+{
+  "storage": [
     {
-        "labels":{"luks": "true"},
-        "zone":"us_east_1a",
-        "defaults": {
-            "luksEncryption": "true"
-        }
+      "labels": {
+        "luks": "true"
+      },
+      "zone": "us_east_1a",
+      "defaults": {
+        "luksEncryption": "true"
+      }
     },
     {
-        "labels":{"luks": "false"},
-        "zone":"us_east_1a",
-        "defaults": {
-            "luksEncryption": "false"
-        }
-    },
-]
+      "labels": {
+        "luks": "false"
+      },
+      "zone": "us_east_1a",
+      "defaults": {
+        "luksEncryption": "false"
+      }
+    }
+  ]
+}
 ----
 
 . Use `parameters.selector` to define the storage pools using LUKS encryption. For example:
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -69,6 +77,7 @@ parameters:
 
 . Create a secret that contains the LUKS passphrase. For example:
 +
+[source,yaml]
 ----
 kubectl -n trident create -f luks-pvc1.yaml
 apiVersion: v1
@@ -87,6 +96,7 @@ LUKS-encrypted volumes cannot take advantage of ONTAP deduplication and compress
 == Backend configuration for importing LUKS volumes
 To import a LUKS volume, you must set `luksEncryption` to `true` on the backend. The `luksEncryption` option tells Trident if the volume is LUKS-compliant (`true`) or not LUKS-compliant (`false`) as shown in the following example. 
 
+[source,yaml]
 ----
 version: 1
 storageDriverName: ontap-san
@@ -106,6 +116,7 @@ defaults:
 
 To import LUKS volumes dynamically, set the annotation `trident.netapp.io/luksEncryption` to `true` and include a LUKS-enabled storage class in the PVC as shown in this example.
 
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -139,6 +150,7 @@ LUKS passphrase rotation occurs when a pod that mounts the volume is created aft
 
 . Add the `node-publish-secret-name` and `node-publish-secret-namespace` StorageClass parameters. For example:
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -172,6 +184,7 @@ GET http://127.0.0.1:8000/trident/v1/volume/<volumeID>/<snapshotID>
 
 . Update the LUKS secret for the volume to specify the new and previous passphrases. Ensure  `previous-luke-passphrase-name` and `previous-luks-passphrase` match the previous passphrase.
 +
+[source,yaml]
 ----
 apiVersion: v1
 kind: Secret
@@ -216,6 +229,7 @@ You can enable volume expansion on a LUKS-encrypted volume.
 . Enable the `CSINodeExpandSecret` feature gate (beta 1.25+). Refer to link:https://kubernetes.io/blog/2022/09/21/kubernetes-1-25-use-secrets-while-expanding-csi-volumes-on-node-alpha/[Kubernetes 1.25: Use Secrets for Node-Driven Expansion of CSI Volumes^] for details. 
 . Add the `node-expand-secret-name` and `node-expand-secret-namespace` StorageClass parameters. For example:
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

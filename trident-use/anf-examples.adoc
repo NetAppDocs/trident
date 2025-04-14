@@ -140,13 +140,14 @@ This is the absolute minimum backend configuration. With this configuration, Tri
 
 This configuration is ideal when you are just getting started with Azure NetApp Files and trying things out, but in practice you are going to want to provide additional scoping for the volumes you provision. 
 
+[source,yaml]
 ----
 ---
-apiVersion: trident.netapp.io/v1 
-kind: TridentBackendConfig 
-metadata: 
-  name: backend-tbc-anf-1 
-  namespace: trident 
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-anf-1
+  namespace: trident
 spec:
   version: 1
   storageDriverName: azure-netapp-files
@@ -163,6 +164,7 @@ spec:
 ====
 This backend configuration omits `subscriptionID`, `tenantID`, `clientID`, and `clientSecret`, which are optional when using managed identities.
 
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -171,10 +173,13 @@ metadata:
   namespace: trident
 spec:
   version: 1
-  storageDriverName: azure-netapp-files 
-  capacityPools: ["ultra-pool"]
-  resourceGroups: ["aks-ami-eastus-rg"]
-  netappAccounts: ["smb-na"]
+  storageDriverName: azure-netapp-files
+  capacityPools:
+    - ultra-pool
+  resourceGroups:
+    - aks-ami-eastus-rg
+  netappAccounts:
+    - smb-na
   virtualNetwork: eastus-prod-vnet
   subnet: eastus-anf-subnet
 ----
@@ -185,6 +190,7 @@ spec:
 ====
 This backend configuration omits `tenantID`, `clientID`, and `clientSecret`, which are optional when using a cloud identity.
 
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -193,10 +199,13 @@ metadata:
   namespace: trident
 spec:
   version: 1
-  storageDriverName: azure-netapp-files 
-  capacityPools: ["ultra-pool"]
-  resourceGroups: ["aks-ami-eastus-rg"]
-  netappAccounts: ["smb-na"]
+  storageDriverName: azure-netapp-files
+  capacityPools:
+    - ultra-pool
+  resourceGroups:
+    - aks-ami-eastus-rg
+  netappAccounts:
+    - smb-na
   virtualNetwork: eastus-prod-vnet
   subnet: eastus-anf-subnet
   location: eastus
@@ -209,6 +218,7 @@ spec:
 ====
 This backend configuration places volumes in Azure's `eastus` location in an `Ultra` capacity pool. Trident automatically discovers all of the subnets delegated to Azure NetApp Files in that location and places a new volume on one of them randomly.
 
+[source,yaml]
 ----
 ---
 version: 1
@@ -220,8 +230,8 @@ clientSecret: SECRET
 location: eastus
 serviceLevel: Ultra
 capacityPools:
-- application-group-1/account-1/ultra-1
-- application-group-1/account-1/ultra-2
+  - application-group-1/account-1/ultra-1
+  - application-group-1/account-1/ultra-2
 ----
 ====
 
@@ -230,6 +240,7 @@ capacityPools:
 ====
 This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
 
+[source,yaml]
 ----
 ---
 version: 1
@@ -241,8 +252,8 @@ clientSecret: SECRET
 location: eastus
 serviceLevel: Ultra
 capacityPools:
-- application-group-1/account-1/ultra-1
-- application-group-1/account-1/ultra-2
+  - application-group-1/account-1/ultra-1
+  - application-group-1/account-1/ultra-2
 virtualNetwork: my-virtual-network
 subnet: my-subnet
 networkFeatures: Standard
@@ -250,9 +261,9 @@ nfsMountOptions: vers=3,proto=tcp,timeo=600
 limitVolumeSize: 500Gi
 defaults:
   exportRule: 10.0.0.0/24,10.0.1.0/24,10.0.2.100
-  snapshotDir: 'true'
+  snapshotDir: "true"
   size: 200Gi
-  unixPermissions: '0777'
+  unixPermissions: "0777"
 
 ----
 ====
@@ -262,6 +273,7 @@ defaults:
 ====
 This backend configuration defines multiple storage pools in a single file. This is useful when you have multiple capacity pools supporting different service levels and you want to create storage classes in Kubernetes that represent those. Virtual pool labels were used to differentiate the pools based on `performance`. 
 
+[source,yaml]
 ----
 ---
 version: 1
@@ -272,30 +284,30 @@ clientID: dd043f63-bf8e-fake-8076-8de91e5713aa
 clientSecret: SECRET
 location: eastus
 resourceGroups:
-- application-group-1
+  - application-group-1
 networkFeatures: Basic
 nfsMountOptions: vers=3,proto=tcp,timeo=600
 labels:
   cloud: azure
 storage:
-- labels:
-    performance: gold
-  serviceLevel: Ultra
-  capacityPools:
-  - ultra-1
-  - ultra-2
-  networkFeatures: Standard
-- labels:
-    performance: silver
-  serviceLevel: Premium
-  capacityPools:
-  - premium-1
-- labels:
-    performance: bronze
-  serviceLevel: Standard
-  capacityPools:
-  - standard-1
-  - standard-2
+  - labels:
+      performance: gold
+    serviceLevel: Ultra
+    capacityPools:
+      - ultra-1
+      - ultra-2
+    networkFeatures: Standard
+  - labels:
+      performance: silver
+    serviceLevel: Premium
+    capacityPools:
+      - premium-1
+  - labels:
+      performance: bronze
+    serviceLevel: Standard
+    capacityPools:
+      - standard-1
+      - standard-2
 
 ----
 ====
@@ -306,6 +318,7 @@ storage:
 Trident facilitates provisioning of volumes for workloads based on regions and availability zones. The `supportedTopologies` block in this backend configuration is used to provide a list of regions and zones per backend. The region and zone values specified here must match the region and zone values from the labels on each Kubernetes cluster node. These regions and zones represent the list of permissible values that can be provided in a storage class. For storage classes that contain a subset of the regions and zones provided in a backend, Trident creates volumes in the mentioned region and zone.
 For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology].
 
+[source,yaml]
 ----
 ---
 version: 1
@@ -317,13 +330,13 @@ clientSecret: SECRET
 location: eastus
 serviceLevel: Ultra
 capacityPools:
-- application-group-1/account-1/ultra-1
-- application-group-1/account-1/ultra-2
+  - application-group-1/account-1/ultra-1
+  - application-group-1/account-1/ultra-2
 supportedTopologies:
-- topology.kubernetes.io/region: eastus
-  topology.kubernetes.io/zone: eastus-1
-- topology.kubernetes.io/region: eastus
-  topology.kubernetes.io/zone: eastus-2
+  - topology.kubernetes.io/region: eastus
+    topology.kubernetes.io/zone: eastus-1
+  - topology.kubernetes.io/region: eastus
+    topology.kubernetes.io/zone: eastus-2
 ----
 ====
 
@@ -333,15 +346,18 @@ The following `StorageClass` definitions refer to the storage pools above.
 === Example definitions using `parameter.selector` field
 Using `parameter.selector` you can specify for each `StorageClass` the virtual pool that is used to host a volume. The volume will have the aspects defined in the chosen pool.
 
+[source,yaml]
 ----
+---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: gold
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=gold"
+  selector: performance=gold
 allowVolumeExpansion: true
+
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -349,8 +365,9 @@ metadata:
   name: silver
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=silver"
+  selector: performance=silver
 allowVolumeExpansion: true
+
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -358,7 +375,7 @@ metadata:
   name: bronze
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=bronze"
+  selector: performance=bronze
 allowVolumeExpansion: true
 ----
 
@@ -369,6 +386,7 @@ Using `nasType`, `node-stage-secret-name`, and  `node-stage-secret-namespace`, y
 [%collapsible%closed]
 ====
 
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -380,13 +398,13 @@ parameters:
   trident.netapp.io/nasType: "smb" 
   csi.storage.k8s.io/node-stage-secret-name: "smbcreds"  
   csi.storage.k8s.io/node-stage-secret-namespace: "default"
-
 ----
 ====
 
 .Using different secrets per namespace
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -404,6 +422,7 @@ parameters:
 .Using different secrets per volume
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

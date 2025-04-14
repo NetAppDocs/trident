@@ -101,6 +101,7 @@ It is one of two basic objects that need to be created and managed by the admini
 
 A Kubernetes `StorageClass` object that uses Trident looks like this:
 
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -108,8 +109,7 @@ metadata:
   name: <Name>
 provisioner: csi.trident.netapp.io
 mountOptions: <Mount Options>
-parameters:
-  <Trident Parameters>
+parameters: <Trident Parameters>
 allowVolumeExpansion: true
 volumeBindingMode: Immediate
 ----
@@ -208,6 +208,7 @@ Kubernetes `VolumeSnapshotClass` objects are analogous to `StorageClasses`. They
 
 A `VolumeSnapshotClass` should be defined by an administrator in order to create snapshots. A volume snapshot class is created with the following definition:
 
+[source,yaml]
 ----
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshotClass
@@ -371,6 +372,7 @@ If you need more control over the default Resource Quota and Priority Class, you
 
 The following is an example of a `ResourceQuota`object prioritizing the Trident daemonset. 
 
+[source,yaml]
 ----
 apiVersion: <version>
 kind: ResourceQuota
@@ -380,10 +382,11 @@ metadata:
     app: node.csi.trident.netapp.io
 spec:
   scopeSelector:
-     matchExpressions:
-       - operator : In
-         scopeName: PriorityClass
-         values: ["system-node-critical"]
+    matchExpressions:
+      - operator: In
+        scopeName: PriorityClass
+        values:
+          - system-node-critical
 ----
 
 For more information on Resource Quotas, refer to link:https://kubernetes.io/docs/concepts/policy/resource-quotas/[Kubernetes: Resource Quotas^].

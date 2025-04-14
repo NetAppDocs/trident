@@ -48,45 +48,56 @@ tridentctl get backend ontap-nas-backend -n trident
 +---------------------+----------------+--------------------------------------+--------+---------+
 | ontap-nas-backend   | ontap-nas      | 52f2eb10-e4c6-4160-99fc-96b3be5ab5d7 | online |      25 |
 +---------------------+----------------+--------------------------------------+--------+---------+
+----
 
+----
 cat ontap-nas-backend.json
-
+----
+[source,json]
+----
 {
-    "version": 1,
-    "storageDriverName": "ontap-nas",
-    "managementLIF": "10.10.10.1",
-    "dataLIF": "10.10.10.2",
-    "backendName": "ontap-nas-backend",
-    "svm": "trident_svm",
-    "username": "cluster-admin",
-    "password": "admin-password",
-
-    "defaults": {
-        "spaceReserve": "none",
-        "encryption": "false"
+  "version": 1,
+  "storageDriverName": "ontap-nas",
+  "managementLIF": "10.10.10.1",
+  "dataLIF": "10.10.10.2",
+  "backendName": "ontap-nas-backend",
+  "svm": "trident_svm",
+  "username": "cluster-admin",
+  "password": "admin-password",
+  "defaults": {
+    "spaceReserve": "none",
+    "encryption": "false"
+  },
+  "labels": {
+    "store": "nas_store"
+  },
+  "region": "us_east_1",
+  "storage": [
+    {
+      "labels": {
+        "app": "msoffice",
+        "cost": "100"
+      },
+      "zone": "us_east_1a",
+      "defaults": {
+        "spaceReserve": "volume",
+        "encryption": "true",
+        "unixPermissions": "0755"
+      }
     },
-    "labels":{"store":"nas_store"},
-    "region": "us_east_1",
-    "storage": [
-        {
-            "labels":{"app":"msoffice", "cost":"100"},
-            "zone":"us_east_1a",
-            "defaults": {
-                "spaceReserve": "volume",
-                "encryption": "true",
-                "unixPermissions": "0755"
-            }
-        },
-        {
-            "labels":{"app":"mysqldb", "cost":"25"},
-            "zone":"us_east_1d",
-            "defaults": {
-                "spaceReserve": "volume",
-                "encryption": "false",
-                "unixPermissions": "0775"
-            }
-        }
-    ]
+    {
+      "labels": {
+        "app": "mysqldb",
+        "cost": "25"
+      },
+      "zone": "us_east_1d",
+      "defaults": {
+        "spaceReserve": "volume",
+        "encryption": "false",
+        "unixPermissions": "0775"
+      }
+    }
+  ]
 }
 ----
 
@@ -95,7 +106,9 @@ cat ontap-nas-backend.json
 Create a Secret that contains the credentials for the backend, as shown in this example:
 ----
 cat tbc-ontap-nas-backend-secret.yaml
-
+----
+[source,yaml]
+----
 apiVersion: v1
 kind: Secret
 metadata:
@@ -104,7 +117,9 @@ type: Opaque
 stringData:
   username: cluster-admin
   password: admin-password
+----
 
+----
 kubectl create -f tbc-ontap-nas-backend-secret.yaml -n trident
 secret/backend-tbc-ontap-san-secret created
 ----
@@ -121,6 +136,9 @@ The next step is to create a `TridentBackendConfig` CR that will automatically b
 In this case, the `TridentBackendConfig` will look like this:
 ----
 cat backend-tbc-ontap-nas.yaml
+----
+[source,yaml]
+----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
@@ -157,7 +175,8 @@ spec:
       spaceReserve: volume
       encryption: 'false'
       unixPermissions: '0775'
-
+----
+----
 kubectl create -f backend-tbc-ontap-nas.yaml -n trident
 tridentbackendconfig.trident.netapp.io/tbc-ontap-nas-backend created
 ----

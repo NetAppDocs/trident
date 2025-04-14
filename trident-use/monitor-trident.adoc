@@ -36,6 +36,7 @@ You should define a Prometheus target to gather the metrics and obtain informati
 
 To consume the Trident metrics, you should create a Prometheus ServiceMonitor that watches the `trident-csi` service and listens on the `metrics` port. A sample ServiceMonitor looks like this:
 
+[source,yaml]
 ----
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -43,7 +44,7 @@ metadata:
   name: trident-sm
   namespace: monitoring
   labels:
-      release: prom-operator
+    release: prom-operator
 spec:
   jobLabel: trident
   selector:
@@ -51,10 +52,10 @@ spec:
       app: controller.csi.trident.netapp.io
   namespaceSelector:
     matchNames:
-    - trident
+      - trident
   endpoints:
-  - port: metrics
-    interval: 15s
+    - port: metrics
+      interval: 15s
 ----
 
 This ServiceMonitor definition retrieves metrics returned by the `trident-csi` service and specifically looks for the `metrics` endpoint of the service. As a result, Prometheus is now configured to understand Trident's
@@ -122,24 +123,23 @@ that is installed alongside Trident. You can obtain the container image at https
 * Trident AutoSupport does not gather or transmit Personally Identifiable Information (PII) or Personal Information. It comes with a https://www.netapp.com/us/media/enduser-license-agreement-worldwide.pdf[EULA^] that is not applicable to the Trident container image itself. You can learn more about NetApp's commitment to data security and trust https://www.netapp.com/pdf.html?item=/media/14114-enduserlicenseagreementworldwidepdf.pdf[here^].
 
 An example payload sent by Trident looks like this:
-
+[source,yaml]
 ----
 ---
 items:
-- backendUUID: ff3852e1-18a5-4df4-b2d3-f59f829627ed
-  protocol: file
-  config:
-    version: 1
-    storageDriverName: ontap-nas
-    debug: false
-    debugTraceFlags:
-    disableDelete: false
-    serialNumbers:
-    - nwkvzfanek_SN
-    limitVolumeSize: ''
-  state: online
-  online: true
-
+  - backendUUID: ff3852e1-18a5-4df4-b2d3-f59f829627ed
+    protocol: file
+    config:
+      version: 1
+      storageDriverName: ontap-nas
+      debug: false
+      debugTraceFlags: null
+      disableDelete: false
+      serialNumbers:
+        - nwkvzfanek_SN
+      limitVolumeSize: ""
+    state: online
+    online: true
 ----
 
 * The AutoSupport messages are sent to NetApp's AutoSupport endpoint. If you are using a private registry to store container images, you can use the `--image-registry` flag.

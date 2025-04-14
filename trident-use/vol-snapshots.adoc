@@ -28,13 +28,16 @@ NOTE: Don't create a snapshot controller if creating on-demand volume snapshots 
 
 .Steps
 . Create a `VolumeSnapshotClass`. For more information, refer to link:../trident-reference/objects.html#kubernetes-volumesnapshotclass-objects[VolumeSnapshotClass].
++
 * The `driver` points to the Trident CSI driver. 
 * `deletionPolicy` can be `Delete` or `Retain`. When set to `Retain`, the underlying physical snapshot on the storage cluster is retained even when the `VolumeSnapshot` object is deleted. 
 +
 .Example
++
 ----
 cat snap-sc.yaml
 ----
++
 [source,yaml]
 ----
 apiVersion: snapshot.storage.k8s.io/v1
@@ -48,11 +51,13 @@ deletionPolicy: Delete
 . Create a snapshot of an existing PVC.
 +
 .Examples
++
 * This example creates a snapshot of an existing PVC.
 +
 ----
 cat snap.yaml
 ----
++
 [source,yaml]
 ----
 apiVersion: snapshot.storage.k8s.io/v1
@@ -82,9 +87,7 @@ pvc1-snap              50s
 kubectl describe volumesnapshots pvc1-snap
 Name:         pvc1-snap
 Namespace:    default
-.
-.
-.
+...
 Spec:
   Snapshot Class Name:    pvc1-snap
   Snapshot Content Name:  snapcontent-e8d8a0ca-9826-11e9-9807-525400f3f660
@@ -96,8 +99,7 @@ Status:
   Creation Time:  2019-06-26T15:27:29Z
   Ready To Use:   true
   Restore Size:   3Gi
-.
-.
+...
 ----
 
 == Create a PVC from a volume snapshot
@@ -248,9 +250,9 @@ kubectl get vs
 
 . Create the TASR CR. This example creates a CR for PVC `pvc1` and volume snapshot `pvc1-snapshot`.
 +
-
 NOTE: The TASR CR must be in a namespace where the PVC & VS exist.
 
++
 [source,console]
 ----
 cat tasr-pvc1-snapshot.yaml
@@ -266,19 +268,21 @@ spec:
   pvcName: pvc1
   volumeSnapshotName: pvc1-snapshot
 ----
+
 . Apply the CR to restore from the snapshot. This example restores from snapshot `pvc1`.
 +
 [source,console]
 ----
 kubectl create -f tasr-pvc1-snapshot.yaml
 ----
-
++
 ----
 tridentactionsnapshotrestore.trident.netapp.io/trident-snap created
 ----
 
 .Results 
-Trident restores the data from the snapshot. You can verify the snapshot restore status. 
+Trident restores the data from the snapshot. You can verify the snapshot restore status:
++
 [source,console] 
 ----
 kubectl get tasr -o yaml
@@ -330,6 +334,7 @@ If your Kubernetes distribution does not include the snapshot controller and CRD
 ----
 cat snapshot-setup.sh
 ----
++
 [source,sh]
 ----
 #!/bin/bash
@@ -345,6 +350,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 ----
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/release-6.1/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
 ----
++
 [source,console]
 ----
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/release-6.1/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml

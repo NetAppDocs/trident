@@ -57,6 +57,7 @@ Here is an example backend definition:
 
 .YAML
 --
+[source,yaml]
 ----
 ---
 version: 1
@@ -67,28 +68,35 @@ svm: iscsi_svm
 username: admin
 password: password
 supportedTopologies:
-- topology.kubernetes.io/region: us-east1
-  topology.kubernetes.io/zone: us-east1-a
-- topology.kubernetes.io/region: us-east1
-  topology.kubernetes.io/zone: us-east1-b
+  - topology.kubernetes.io/region: us-east1
+    topology.kubernetes.io/zone: us-east1-a
+  - topology.kubernetes.io/region: us-east1
+    topology.kubernetes.io/zone: us-east1-b
 ----
 --
 
 .JSON
 --
+[source,json]
 ----
 {
- "version": 1,
- "storageDriverName": "ontap-san",
- "backendName": "san-backend-us-east1",
- "managementLIF": "192.168.27.5",
- "svm": "iscsi_svm",
- "username": "admin",
- "password": "password",
- "supportedTopologies": [
-{"topology.kubernetes.io/region": "us-east1", "topology.kubernetes.io/zone": "us-east1-a"},
-{"topology.kubernetes.io/region": "us-east1", "topology.kubernetes.io/zone": "us-east1-b"}
-]
+  "version": 1,
+  "storageDriverName": "ontap-san",
+  "backendName": "san-backend-us-east1",
+  "managementLIF": "192.168.27.5",
+  "svm": "iscsi_svm",
+  "username": "admin",
+  "password": "password",
+  "supportedTopologies": [
+    {
+      "topology.kubernetes.io/region": "us-east1",
+      "topology.kubernetes.io/zone": "us-east1-a"
+    },
+    {
+      "topology.kubernetes.io/region": "us-east1",
+      "topology.kubernetes.io/zone": "us-east1-b"
+    }
+  ]
 }
 ----
 --
@@ -100,6 +108,7 @@ supportedTopologies:
 NOTE: `supportedTopologies` is used to provide a list of regions and zones per backend. These regions and zones represent the list of permissible values that can be provided in a StorageClass. For StorageClasses that contain a subset of the regions and zones provided in a backend, Trident creates a volume on the backend.
 
 You can define `supportedTopologies` per storage pool as well. See the following example:
+[source,yaml]
 ----
 ---
 version: 1
@@ -110,21 +119,22 @@ svm: nfs_svm
 username: admin
 password: password
 supportedTopologies:
-- topology.kubernetes.io/region: us-central1
-  topology.kubernetes.io/zone: us-central1-a
-- topology.kubernetes.io/region: us-central1
-  topology.kubernetes.io/zone: us-central1-b
-storage:
-- labels:
-    workload: production
-  supportedTopologies:
   - topology.kubernetes.io/region: us-central1
     topology.kubernetes.io/zone: us-central1-a
-- labels:
-    workload: dev
-  supportedTopologies:
   - topology.kubernetes.io/region: us-central1
     topology.kubernetes.io/zone: us-central1-b
+storage:
+  - labels:
+      workload: production
+    supportedTopologies:
+      - topology.kubernetes.io/region: us-central1
+        topology.kubernetes.io/zone: us-central1-a
+  - labels:
+      workload: dev
+    supportedTopologies:
+      - topology.kubernetes.io/region: us-central1
+        topology.kubernetes.io/zone: us-central1-b
+
 ----
 In this example, the `region` and `zone` labels stand for the location of the storage pool. `topology.kubernetes.io/region` and `topology.kubernetes.io/zone` dictate where the storage pools can be consumed from.
 
@@ -133,24 +143,25 @@ In this example, the `region` and `zone` labels stand for the location of the st
 Based on the topology labels that are provided to the nodes in the cluster, StorageClasses can be defined to contain topology information. This will determine the storage pools that serve as candidates for PVC requests made, and the subset of nodes that can make use of the volumes provisioned by Trident.
 
 See the following example:
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
-metadata:
+metadata: null
 name: netapp-san-us-east1
 provisioner: csi.trident.netapp.io
 volumeBindingMode: WaitForFirstConsumer
 allowedTopologies:
-- matchLabelExpressions:
-- key: topology.kubernetes.io/zone
-  values:
-  - us-east1-a
-  - us-east1-b
-- key: topology.kubernetes.io/region
-  values:
-  - us-east1
+  - matchLabelExpressions: null
+  - key: topology.kubernetes.io/zone
+    values:
+      - us-east1-a
+      - us-east1-b
+  - key: topology.kubernetes.io/region
+    values:
+      - us-east1
 parameters:
-  fsType: "ext4"
+  fsType: ext4
 ----
 In the StorageClass definition provided above, `volumeBindingMode` is set to `WaitForFirstConsumer`. PVCs that are requested with this StorageClass will not be acted upon until they are referenced in a pod. And, `allowedTopologies` provides the zones and region to be used. The `netapp-san-us-east1` StorageClass creates PVCs on the `san-backend-us-east1` backend defined above.
 
@@ -159,13 +170,14 @@ In the StorageClass definition provided above, `volumeBindingMode` is set to `Wa
 With the StorageClass created and mapped to a backend, you can now create PVCs.
 
 See the example `spec` below:
+[source,yaml]
 ----
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
-metadata:
+metadata: null
 name: pvc-san
-spec:
+spec: null
 accessModes:
   - ReadWriteOnce
 resources:
@@ -175,6 +187,7 @@ storageClassName: netapp-san-us-east1
 ----
 
 Creating a PVC using this manifest would result in the following:
+
 ----
 kubectl create -f pvc.yaml
 persistentvolumeclaim/pvc-san created
@@ -201,6 +214,7 @@ Events:
 ----
 
 For Trident to create a volume and bind it to the PVC, use the PVC in a pod. See the following example:
+[source,yaml]
 ----
 apiVersion: v1
 kind: Pod

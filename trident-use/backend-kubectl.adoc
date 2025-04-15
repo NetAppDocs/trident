@@ -27,6 +27,7 @@ Each `TridentBackendConfig` maintains a one-to-one mapping with a `TridentBacken
 WARNING: `TridentBackend` CRs are created automatically by Trident. You *should not* modify them. If you want to make updates to backends, do this by modifying the `TridentBackendConfig` object.
 
 See the following example for the format of the `TridentBackendConfig` CR:
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -72,6 +73,9 @@ After you create a backend, you can observe its status by using `kubectl get tbc
 Create a Secret that contains the access credentials for the backend. This is unique to each storage service/platform. Here's an example:
 ----
 kubectl -n trident create -f backend-tbc-ontap-san-secret.yaml
+----
+[source,yaml]
+----
 apiVersion: v1
 kind: Secret
 metadata:
@@ -145,7 +149,7 @@ You are now ready to create your `TridentBackendConfig` CR. In this example, a b
 ----
 kubectl -n trident create -f backend-tbc-ontap-san.yaml
 ----
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -202,14 +206,14 @@ In addition, you can also obtain a YAML/JSON dump of `TridentBackendConfig`.
 ----
 kubectl -n trident get tbc backend-tbc-ontap-san -o yaml
 ----
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
 metadata:
-  creationTimestamp: "2021-04-21T20:45:11Z"
+  creationTimestamp: 2021-04-21T20:45:11Z
   finalizers:
-  - trident.netapp.io
+    - trident.netapp.io
   generation: 1
   name: backend-tbc-ontap-san
   namespace: trident

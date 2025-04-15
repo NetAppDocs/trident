@@ -34,7 +34,7 @@ Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. I
 
 For seamless MetroCluster switchover, see the <<mcc-best>>.
 
-|“10.0.0.1”, “[2001:1234:abcd::fefe]”
+|"10.0.0.1", "[2001:1234:abcd::fefe]"
 
 |`dataLIF` |IP address of protocol LIF. 
 
@@ -200,6 +200,7 @@ NOTE: Using QoS policy groups with Trident requires ONTAP 9.8 or later. You shou
 === Volume provisioning examples
 
 Here's an example with defaults defined:
+[source,yaml]
 ----
 ---
 version: 1
@@ -224,8 +225,7 @@ defaults:
   qosPolicy: premium
   exportPolicy: myk8scluster
   snapshotPolicy: default
-  snapshotReserve: '10'
-
+  snapshotReserve: "10"
 ----
 
 For `ontap-nas` and `ontap-nas-flexgroups`, Trident now uses a new calculation to ensure that the FlexVol is sized correctly with the snapshotReserve percentage and PVC. When the user requests a PVC, Trident creates the original FlexVol with more space by using the new calculation. This calculation ensures that the user receives the writable space they requested for in the PVC, and not lesser space than what they requested. Before v21.07, when the user requests a PVC (for example, 5GiB), with the snapshotReserve to 50 percent, they get only 2.5GiB of writeable space. This is because what the user requested for is the whole volume and `snapshotReserve` is a percentage of that. With Trident 21.07, what the user requests for is the writeable space and Trident defines the `snapshotReserve` number as the percentage of the whole volume. This does not apply to `ontap-nas-economy`. See the following example to see how this works:
@@ -250,6 +250,7 @@ NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, the recommendati
 .ONTAP NAS economy example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -265,6 +266,7 @@ password: password
 .ONTAP NAS Flexgroup example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -284,7 +286,7 @@ password: password
 You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
 
 For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `dataLIF` and `svm` parameters. For example:
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -299,8 +301,8 @@ password: password
 .SMB volumes example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
-
 ---
 version: 1
 backendName: ExampleBackend
@@ -319,6 +321,7 @@ password: password
 [%collapsible%closed]
 ====
 This is a minimal backend configuration example. `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
+[source,yaml]
 ----
 ---
 version: 1
@@ -337,6 +340,7 @@ storagePrefix: myPrefix_
 [%collapsible%closed]
 ====
 This example shows you how you can instruct Trident to use dynamic export policies to create and manage the export policy automatically. This works the same for the `ontap-nas-economy` and `ontap-nas-flexgroup` drivers.
+[source,yaml]
 ----
 ---
 version: 1
@@ -359,6 +363,7 @@ nfsMountOptions: nfsvers=4
 [%collapsible%closed]
 ====
 This example shows `managementLIF` using an IPv6 address.
+[source,yaml]
 ----
 ---
 version: 1
@@ -377,6 +382,7 @@ password: password
 [%collapsible%closed]
 ====
 The `smbShare` parameter is required for FSx for ONTAP using SMB volumes.
+[source,yaml]
 ----
 ---
 version: 1
@@ -397,7 +403,7 @@ storagePrefix: myPrefix_
 .Backend configuration example with nameTemplate
 [%collapsible%closed]
 ====
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -407,10 +413,12 @@ managementLIF: <ip address>
 svm: svm0
 username: <admin>
 password: <password>
-defaults: {
-    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-},
-"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+defaults:
+  nameTemplate: "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.vo\
+    lume.RequestName}}"
+labels:
+  cluster: ClusterA
+  PVC: "{{.volume.Namespace}}_{{.volume.RequestName}}"
 ----
 ====
 
@@ -425,6 +433,7 @@ In these examples, some of the storage pools set their own `spaceReserve`, `spac
 .ONTAP NAS example
 [%collapsible%open]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -436,60 +445,62 @@ password: <password>
 nfsMountOptions: nfsvers=4
 defaults:
   spaceReserve: none
-  encryption: 'false'
+  encryption: "false"
   qosPolicy: standard
 labels:
   store: nas_store
   k8scluster: prod-cluster-1
 region: us_east_1
 storage:
-- labels:
-    app: msoffice
-    cost: '100'
-  zone: us_east_1a
-  defaults:
-    spaceReserve: volume
-    encryption: 'true'
-    unixPermissions: '0755'
-    adaptiveQosPolicy: adaptive-premium
-- labels:
-    app: slack
-    cost: '75'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    department: legal
-    creditpoints: '5000'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    app: wordpress
-    cost: '50'
-  zone: us_east_1c
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0775'
-- labels:
-    app: mysqldb
-    cost: '25'
-  zone: us_east_1d
-  defaults:
-    spaceReserve: volume
-    encryption: 'false'
-    unixPermissions: '0775'
+  - labels:
+      app: msoffice
+      cost: "100"
+    zone: us_east_1a
+    defaults:
+      spaceReserve: volume
+      encryption: "true"
+      unixPermissions: "0755"
+      adaptiveQosPolicy: adaptive-premium
+  - labels:
+      app: slack
+      cost: "75"
+    zone: us_east_1b
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0755"
+  - labels:
+      department: legal
+      creditpoints: "5000"
+    zone: us_east_1b
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0755"
+  - labels:
+      app: wordpress
+      cost: "50"
+    zone: us_east_1c
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0775"
+  - labels:
+      app: mysqldb
+      cost: "25"
+    zone: us_east_1d
+    defaults:
+      spaceReserve: volume
+      encryption: "false"
+      unixPermissions: "0775"
+
 ----
 ====
 
 .ONTAP NAS FlexGroup example
 [%collapsible%open]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -500,50 +511,52 @@ username: vsadmin
 password: <password>
 defaults:
   spaceReserve: none
-  encryption: 'false'
+  encryption: "false"
 labels:
   store: flexgroup_store
   k8scluster: prod-cluster-1
 region: us_east_1
 storage:
-- labels:
-    protection: gold
-    creditpoints: '50000'
-  zone: us_east_1a
-  defaults:
-    spaceReserve: volume
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    protection: gold
-    creditpoints: '30000'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    protection: silver
-    creditpoints: '20000'
-  zone: us_east_1c
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0775'
-- labels:
-    protection: bronze
-    creditpoints: '10000'
-  zone: us_east_1d
-  defaults:
-    spaceReserve: volume
-    encryption: 'false'
-    unixPermissions: '0775'
+  - labels:
+      protection: gold
+      creditpoints: "50000"
+    zone: us_east_1a
+    defaults:
+      spaceReserve: volume
+      encryption: "true"
+      unixPermissions: "0755"
+  - labels:
+      protection: gold
+      creditpoints: "30000"
+    zone: us_east_1b
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0755"
+  - labels:
+      protection: silver
+      creditpoints: "20000"
+    zone: us_east_1c
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0775"
+  - labels:
+      protection: bronze
+      creditpoints: "10000"
+    zone: us_east_1d
+    defaults:
+      spaceReserve: volume
+      encryption: "false"
+      unixPermissions: "0775"
+
 ----
 ====
 
 .ONTAP NAS economy example
 [%collapsible%open]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -554,43 +567,44 @@ username: vsadmin
 password: <password>
 defaults:
   spaceReserve: none
-  encryption: 'false'
+  encryption: "false"
 labels:
   store: nas_economy_store
 region: us_east_1
 storage:
-- labels:
-    department: finance
-    creditpoints: '6000'
-  zone: us_east_1a
-  defaults:
-    spaceReserve: volume
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    protection: bronze
-    creditpoints: '5000'
-  zone: us_east_1b
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0755'
-- labels:
-    department: engineering
-    creditpoints: '3000'
-  zone: us_east_1c
-  defaults:
-    spaceReserve: none
-    encryption: 'true'
-    unixPermissions: '0775'
-- labels:
-    department: humanresource
-    creditpoints: '2000'
-  zone: us_east_1d
-  defaults:
-    spaceReserve: volume
-    encryption: 'false'
-    unixPermissions: '0775'
+  - labels:
+      department: finance
+      creditpoints: "6000"
+    zone: us_east_1a
+    defaults:
+      spaceReserve: volume
+      encryption: "true"
+      unixPermissions: "0755"
+  - labels:
+      protection: bronze
+      creditpoints: "5000"
+    zone: us_east_1b
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0755"
+  - labels:
+      department: engineering
+      creditpoints: "3000"
+    zone: us_east_1c
+    defaults:
+      spaceReserve: none
+      encryption: "true"
+      unixPermissions: "0775"
+  - labels:
+      department: humanresource
+      creditpoints: "2000"
+    zone: us_east_1d
+    defaults:
+      spaceReserve: volume
+      encryption: "false"
+      unixPermissions: "0775"
+
 ----
 ====
 
@@ -600,6 +614,7 @@ The following StorageClass definitions refer to <<Examples of backends with virt
 
 * The `protection-gold` StorageClass will map to the first and second virtual pool in the `ontap-nas-flexgroup` backend. These are the only pools offering gold level protection.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -612,6 +627,7 @@ parameters:
 ----
 * The `protection-not-gold` StorageClass will map to the third and fourth virtual pool in the `ontap-nas-flexgroup` backend. These are the only pools offering protection level other than gold.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -624,6 +640,7 @@ parameters:
 ----
 * The `app-mysqldb` StorageClass will map to the fourth virtual pool in the `ontap-nas` backend. This is the only pool offering storage pool configuration for mysqldb type app.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -636,6 +653,7 @@ parameters:
 ----
 * TThe `protection-silver-creditpoints-20k` StorageClass will map to the third virtual pool in the `ontap-nas-flexgroup` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -648,6 +666,7 @@ parameters:
 ----
 * The `creditpoints-5k` StorageClass will map to the third virtual pool in the `ontap-nas` backend and the second virtual pool in the `ontap-nas-economy` backend. These are the only pool offerings with 5000 creditpoints.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass

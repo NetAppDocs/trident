@@ -18,6 +18,7 @@ You have to install and configure the necessary protocol prerequisites on your h
 * Verify that your deployment meets all of the link:../trident-get-started/requirements.html[requirements].
 * Verify that you have a supported version of Docker installed. If your Docker version is out of date, https://docs.docker.com/engine/install/[install or update it^].
 +
+[source,console]
 ----
 docker --version
 ----
@@ -30,12 +31,14 @@ Install the NFS tools using the commands for your operating system.
 ====
 .RHEL 8+
 --
+[source,console]
 ----
 sudo yum install -y nfs-utils
 ----
 --
 .Ubuntu
 --
+[source,console]
 ----
 sudo apt-get install -y nfs-common
 ----
@@ -51,21 +54,25 @@ Install the iSCSI tools using the commands for your operating system.
 --
 . Install the following system packages:
 +
+[source,console]
 ----
 sudo yum install -y lsscsi iscsi-initiator-utils sg3_utils device-mapper-multipath
 ----
 . Check that iscsi-initiator-utils version is 6.2.0.874-2.el7 or later:
 +
+[source,console]
 ----
 rpm -q iscsi-initiator-utils
 ----
 . Set scanning to manual:
 +
+[source,console]
 ----
 sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf
 ----
 . Enable multipathing:
 +
+[source,console]
 ----
 sudo mpathconf --enable --with_multipathd y --find_multipaths n
 ----
@@ -74,11 +81,13 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 
 . Ensure that `iscsid` and `multipathd` are running:
 +
+[source,console]
 ----
 sudo systemctl enable --now iscsid multipathd
 ----
 . Enable and start `iscsi`:
 +
+[source,console]
 ----
 sudo systemctl enable --now iscsi
 ----
@@ -88,21 +97,25 @@ sudo systemctl enable --now iscsi
 --
 . Install the following system packages:
 +
+[source,console]
 ----
 sudo apt-get install -y open-iscsi lsscsi sg3-utils multipath-tools scsitools
 ----
 . Check that open-iscsi version is 2.0.874-5ubuntu2.10 or later (for bionic) or 2.0.874-7.1ubuntu6.1 or later (for focal):
 +
+[source,console]
 ----
 dpkg -l open-iscsi
 ----
 . Set scanning to manual:
 +
+[source,console]
 ----
 sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf
 ----
 . Enable multipathing:
 +
+[source,console]
 ----
 sudo tee /etc/multipath.conf <<-EOF
 defaults {
@@ -118,6 +131,7 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 
 . Ensure that `open-iscsi` and `multipath-tools` are enabled and running:
 +
+[source,console]
 ----
 sudo systemctl status multipath-tools
 sudo systemctl enable --now open-iscsi.service
@@ -139,6 +153,7 @@ Install the NVMe tools using the commands for your operating system.
 ====
 .RHEL 9
 --
+[source,console]
 ----
 sudo yum install nvme-cli
 sudo yum install linux-modules-extra-$(uname -r)
@@ -147,6 +162,7 @@ sudo modprobe nvme-tcp
 --
 .Ubuntu
 --
+[source,console]
 ----
 sudo apt install nvme-cli
 sudo apt -y install linux-modules-extra-$(uname -r)
@@ -166,11 +182,13 @@ Install the FC tools using the commands for your operating system.
 --
 . Install the following system packages:
 +
+[source,console]
 ----
 sudo yum install -y lsscsi device-mapper-multipath
 ----
 . Enable multipathing:
 +
+[source,console]
 ----
 sudo mpathconf --enable --with_multipathd y --find_multipaths n
 ----
@@ -179,6 +197,7 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 
 . Ensure that `multipathd` is running:
 +
+[source,console]
 ----
 sudo systemctl enable --now multipathd
 ----
@@ -187,11 +206,13 @@ sudo systemctl enable --now multipathd
 --
 . Install the following system packages:
 +
+[source,console]
 ----
 sudo apt-get install -y lsscsi sg3-utils multipath-tools scsitools
 ----
 . Enable multipathing:
 +
+[source,console]
 ----
 sudo tee /etc/multipath.conf <<-EOF
 defaults {
@@ -207,6 +228,7 @@ NOTE: Ensure `etc/multipath.conf` contains `find_multipaths no` under `defaults`
 
 . Ensure that `multipath-tools` is enabled and running:
 +
+[source,console]
 ----
 sudo systemctl status multipath-tools
 ----

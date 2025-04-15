@@ -14,6 +14,11 @@ summary: Using Trident protect, you can use the asynchronous replication capabil
 [.lead]
 Using Trident protect, you can use the asynchronous replication capabilities of NetApp SnapMirror technology to replicate data and application changes from one storage backend to another, on the same cluster or between different clusters.
 
+// Improve the topic with a diagram of cluster setup and buckets, similar to Rahul's blog PNGs.
+// Use Cluster A and Cluster B terminology instead of Source and Destination.
+// Explain the scenario near the image so customers know the layout.
+
+
 include::../_include/namespace-anno-labels.adoc[]
 
 NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
@@ -113,11 +118,14 @@ tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-inclu
 --
 ====
 
-. Optionally, take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
+// Improve this step with an example of a manual shutdown snapshot, and place it after the example of the schedule. This way, you can explain why a customer would need the extra manual step, which is to not have to wait for the schedule to kick off the first snapshot.
+// Explain what a shutdown snapshot actually is.
+// This needs to be two steps - manual immediate shutdown snapshot, and then creation of a snapshot schedule for future transfers. Because if you only did one snapshot, you would only ever get one transfer. See recording.
+. Optionally, on the source cluster, take a shutdown snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
 +
 [role="tabbed-block"]
 ====
-.Take a snapshot using a CR
+.Take a shutdown snapshot using a CR
 --
 
 .. Create a replication schedule for the source application:
@@ -161,7 +169,7 @@ spec:
 kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 ----
 --
-.Take a snapshot using the CLI
+.Take a shutdown snapshot using the CLI
 --
 .. Create the snapshot, replacing values in brackets with information from your environment. For example:
 +
@@ -171,7 +179,8 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 ----
 --
 ====
-
+// In the intro to this topic, explain a bit about what the setup is and why we need this. Why do we need 2 different appvaults? Why 2 appvaults on the destination cluster? Why do they have to be identical?
+// Also, we need an AppVault example here (can be same as identical one from before)
 . On the destination cluster, create a source application AppVault CR that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
 . Apply the CR:
 +
@@ -179,7 +188,7 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 ----
 kubectl apply -f trident-protect-appvault-primary-destination.yaml -n my-app-namespace
 ----
-. Create an AppVault for the destination application on the destination cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
+. Create a destination AppVault CR for the destination application on the destination cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-secondary-destination.yaml`).
 .. Configure the following attributes:
 +

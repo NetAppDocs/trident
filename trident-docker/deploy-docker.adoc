@@ -66,6 +66,10 @@ sudo mkdir -p /etc/netappdvp
 [source,console]
 ----
 cat << EOF > /etc/netappdvp/config.json
+----
++
+[source,json]
+----
 {
   "version": 1,
   "storageDriverName": "ontap-nas",
@@ -155,6 +159,10 @@ sudo mkdir -p /etc/netappdvp
 [source,console]
 ----
 cat << EOF > /etc/netappdvp/ontap-nas.json
+----
++
+[source,json]
+----
 {
   "version": 1,
   "storageDriverName": "ontap-nas",
@@ -195,6 +203,10 @@ docker run --rm -it --volume-driver netapp --volume trident_2:/my_vol alpine ash
 [source,console]
 ----
 docker volume rm trident_1
+----
++
+[source,console]
+----
 docker volume rm trident_2
 ----
 

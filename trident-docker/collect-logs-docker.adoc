@@ -19,8 +19,12 @@ You can collect logs for help with troubleshooting. The method you use to collec
 
 . If you are running Trident using the recommended managed plugin method (i.e., using `docker plugin` commands), view them as follows:
 +
+[source,console]
 ----
 docker plugin ls
+----
++
+----
 ID                  NAME                DESCRIPTION                          ENABLED
 4fb97d2b956b        netapp:latest       nDVP - NetApp Docker Volume Plugin   false
 journalctl -u docker | grep 4fb97d2b956b
@@ -30,15 +34,25 @@ The standard logging level should allow you to diagnose most issues. If you find
 
 . To enable debug logging, install the plugin with debug logging enabled:
 +
+[source,console]
 ----
 docker plugin install netapp/trident-plugin:<version> --alias <alias> debug=true
 ----
 +
 Or, enable debug logging when the plugin is already installed:
 +
+[source,console]
 ----
 docker plugin disable <plugin>
+----
++
+[source,console]
+----
 docker plugin set <plugin> debug=true
+----
++
+[source,console]
+----
 docker plugin enable <plugin>
 ----
 . If you are running the binary itself on the host, logs are available in the host's `/var/log/netappdvp` directory. To enable debug logging, specify `-debug` when you run the plugin.

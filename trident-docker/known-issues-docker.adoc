@@ -19,16 +19,19 @@ Find information about known issues and limitations when using Trident with Dock
 
 . Disable the plugin.
 +
+[source,console]
 ----
 docker plugin disable -f netapp:latest
 ----
 . Remove the plugin.
 +
+[source,console]
 ----
 docker plugin rm -f netapp:latest
 ----
 . Reinstall the plugin by providing the extra `config` parameter.
 +
+[source,console]
 ----
 docker plugin install netapp/trident-plugin:20.10 --alias netapp --grant-all-permissions config=config.json
 ----

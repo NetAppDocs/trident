@@ -56,6 +56,7 @@ To ensure security, cross namespace sharing requires collaboration and action by
 
 . *Source namespace owner:* Create the PVC (`pvc1`) in the source namespace that grants permission to share with the destination namespace (`namespace2`) using the `shareToNamespace` annotation. 
 +
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -88,6 +89,7 @@ Trident creates the PV and its backend NFS storage volume.
 
 . *Destination namespace owner:* Create a TridentVolumeReference CR in the destination namespace that refers to the source namespace `pvc1`.
 +
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentVolumeReference
@@ -101,6 +103,7 @@ spec:
 
 . *Destination namespace owner:* Create a PVC (`pvc2`) in destination namespace (`namespace2`) using the `shareFromPVC` annotation to designate the source PVC.
 +
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1

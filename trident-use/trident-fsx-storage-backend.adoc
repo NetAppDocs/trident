@@ -146,7 +146,7 @@ See the following table for the backend configuration options:
 
 |`backendName`  
 |Custom name or the storage backend 
-| Driver name + “_” + dataLIF
+| Driver name + "_" + dataLIF
 
 |`managementLIF` 
 |IP address of a cluster or SVM management LIF 
@@ -156,7 +156,7 @@ A fully-qualified domain name (FQDN) can be specified.
 Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. IPv6 addresses must be defined in square brackets, such as [28e8:d9fb:a825:b7bf:69a8:d02f:9e7b:3555]. 
 
 If you provide the `fsxFilesystemID` under the `aws` field, you need not to provide the `managementLIF` because Trident retrieves the SVM `managementLIF` information from AWS. So, you must provide credentials for a user under the SVM (For example: vsadmin) and the user must have the `vsadmin` role.
-|“10.0.0.1”, “[2001:1234:abcd::fefe]”
+|"10.0.0.1", "[2001:1234:abcd::fefe]"
 
 |`dataLIF` 
 |IP address of protocol LIF. 
@@ -179,7 +179,7 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage e
 |List of CIDRs to filter Kubernetes' node IPs against when `autoExportPolicy` is enabled. 
 
 Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage export policies automatically.	
-|"[“0.0.0.0/0”, “::/0”]"
+|"["0.0.0.0/0", "::/0"]"
 
 |`labels` 
 |Set of arbitrary JSON-formatted labels to apply on volumes 
@@ -226,7 +226,7 @@ The provided `fsxadmin` and `vsadmin` do not contain the permissions required to
 
 Also restricts the maximum size of the volumes it manages for qtrees and LUNs, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume 
 
-|“” (not enforced by default)
+|"" (not enforced by default)
 
 |`lunsPerFlexvol` 
 |Maximum LUNs per Flexvol volume, must be in range [50, 200]. 
@@ -235,7 +235,7 @@ SAN only.
 |"`100`"
 
 |`debugTraceFlags` 
-|Debug flags to use when troubleshooting. Example, {“api”:false, “method”:true} 
+|Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
 Do not use `debugTraceFlags` unless you are troubleshooting and require a detailed log dump.
 |null
@@ -305,7 +305,7 @@ You can control default provisioning using these options in the `defaults` secti
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |`true`
 
-|`spaceReserve` |Space reservation mode; “none” (thin) or “volume” (thick) |`none`
+|`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick) |`none`
 
 |`snapshotPolicy` |Snapshot policy to use |`none`
 
@@ -315,14 +315,14 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later.
 
 You should use a non-shared QoS policy group and ensuring the policy group is applied to each constituent individually. A shared QoS policy group enforces the ceiling for the total throughput of all workloads.
 
-|“”
+|""
 
 |`adaptiveQosPolicy` |Adaptive QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool or backend. 
 
 Not supported by ontap-nas-economy. 
-|“”
+|""
 
-|`snapshotReserve` |Percentage of volume reserved for snapshots	“0” |If `snapshotPolicy` is `none`, `else` “”
+|`snapshotReserve` |Percentage of volume reserved for snapshots	"0" |If `snapshotPolicy` is `none`, `else` ""
 
 |`splitOnClone` |Split a clone from its parent upon creation |`false`
 
@@ -346,7 +346,7 @@ SAN only.
 |`unixPermissions`	|Mode for new volumes. 
 
 *Leave empty for SMB volumes.*	
-|“"
+|""
 
 |`securityStyle` |Security style for new volumes. 
 

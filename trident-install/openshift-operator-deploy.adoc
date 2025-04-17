@@ -5,7 +5,7 @@ keywords: deploy, trident, methods, operator, openshift, operatorhub
 summary: If you use Red Hat OpenShift, you can install the Trident using an operator.
 ---
 
-= Customize Trident operator installation
+= Install Trident Using OpenShift OperatorHub
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
@@ -13,4 +13,21 @@ summary: If you use Red Hat OpenShift, you can install the Trident using an oper
 [.lead]
 If you use Red Hat OpenShift, you can install NetApp Trident using the Red Hat certified operator. Use this procedure to install Trident from the Red Hat OpenShift Container Platform.
 
-== 
+== Find and install the Trident operator
+
+. Navigate to OpenShift OperatorHub and search for NetApp Trident.
++ 
+image::..media/openshift-operator-01.png[Trident Operator]
++
+. Click *Install*.
+. Select the required options and lick *Install*.
++ 
+image::openshift-operator-02.png
+. Once the installation is complete, the operator is visible in the list of installed operators.
++ 
+image::openshift-operator-03.png
+. Create a TORC like the operator bundle install.
++ 
+image::openshift-operator-04.png
+
+== Install Trident

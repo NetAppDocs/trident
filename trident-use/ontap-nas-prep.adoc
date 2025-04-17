@@ -44,6 +44,7 @@ A sample backend definition will look like this:
 
 .YAML
 --
+[source,yaml]
 ----
 ---
 version: 1
@@ -59,6 +60,7 @@ password: password
 
 .JSON
 --
+[source,json]
 ----
 {
   "version": 1,
@@ -157,6 +159,9 @@ You can update an existing backend to use a different authentication method or t
 
 ----
 cat cert-backend-updated.json
+----
+[source,json]
+----
 {
 "version": 1,
 "storageDriverName": "ontap-nas",
@@ -168,7 +173,8 @@ cat cert-backend-updated.json
 "password": "password",
 "storagePrefix": "myPrefix_"
 }
-
+----
+----
 #Update backend with tridentctl
 tridentctl update backend NasBackend -f cert-backend-updated.json -n trident
 +------------+----------------+--------------------------------------+--------+---------+
@@ -250,6 +256,7 @@ NOTE: Do not use Network Address Translation (NAT) when using dynamic export pol
 ==== Example
 
 There are two configuration options that must be used. Here's an example backend definition:
+[source,yaml]
 ----
 ---
 version: 1
@@ -260,8 +267,9 @@ svm: svm1
 username: vsadmin
 password: password
 autoExportCIDRs:
-- 192.168.0.0/24
+  - 192.168.0.0/24
 autoExportPolicy: true
+
 ----
 
 NOTE: When using this feature, you must ensure that the root junction in your SVM has a previously created export policy with an export rule that permits the node CIDR block (such as the default export policy). Always follow NetApp recommended best practice to dedicate an SVM for Trident.

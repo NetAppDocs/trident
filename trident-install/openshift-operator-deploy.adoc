@@ -15,19 +15,36 @@ If you use Red Hat OpenShift, you can install NetApp Trident using the Red Hat c
 
 == Find and install the Trident operator
 
+.Steps
+
 . Navigate to OpenShift OperatorHub and search for NetApp Trident.
 + 
-image::..media/openshift-operator-01.png[Trident Operator]
+image::../media/openshift-operator-01.png[Trident Operator]
 +
 . Click *Install*.
++ 
+image::../media/openshift-operator-02.png[Install]
++
 . Select the required options and lick *Install*.
 + 
-image::openshift-operator-02.png
+image::../media/openshift-operator-03.png[Install]
++
 . Once the installation is complete, the operator is visible in the list of installed operators.
 + 
-image::openshift-operator-03.png
+image::../media/openshift-operator-04.png[Installed]
++
 . Create a TORC like the operator bundle install.
-+ 
-image::openshift-operator-04.png
 
-== Install Trident
+== Uninstall Trident operator
+
+.Steps
+
+. Select the Trident operator from the list of installed operator.
++ 
+image::../media/openshift-operator-05.png[Install]
++
+. Select if you want to delete all the operand instance from the operator.
++ 
+image::../media/openshift-operator-06.png[Installed]
++
+. Click *Uninstall*.

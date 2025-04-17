@@ -11,7 +11,7 @@ summary: Learn about backend configuration options for Amazon FSx for ONTAP. Thi
 :imagesdir: ../media/
 
 [.lead]
-Deploy sample application.
+When the storage class and PVC are created, you can mount the PV to a pod. This section lists the example command and configuration to attach the PV to a pod.
 
 .Steps
 
@@ -24,7 +24,7 @@ kubectl create -f pv-pod.yaml
 These examples show basic configurations to attach the PVC to a pod:
 *Basic configuration*:
 +
-[source,console]
+[source,yaml]
 ----
 kind: Pod
 apiVersion: v1

@@ -235,17 +235,17 @@ Follow these steps to update the `userState` using the `backend.json` file:
 . Update the backend using the `tridentctl backend update` command and the path to the updated `backend.json` file.
 +
 *Example*: `tridentctl backend update -f /<path to backend JSON file>/backend.json`
-
+[source,json]
 ----
 {
-    "version": 1,
-    "storageDriverName": "ontap-nas",
-    "managementLIF": "<redacted>",
-    "svm": "nas-svm",
-    "backendName": "customBackend",
-    "username": "<redacted>",
-    "password": "<redacted>",
-    "userState": "suspended",
+  "version": 1,
+  "storageDriverName": "ontap-nas",
+  "managementLIF": "<redacted>",
+  "svm": "nas-svm",
+  "backendName": "customBackend",
+  "username": "<redacted>",
+  "password": "<redacted>",
+  "userState": "suspended"
 }
 
 ----
@@ -255,6 +255,7 @@ Follow these steps to update the `userState` using the `backend.json` file:
 --
 You can edit the tbc after it has been applied using the `kubectl edit <tbc-name> -n <namespace>` command.
 The following example updates the backend state to suspend using the `userState: suspended` option:
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -266,7 +267,7 @@ spec:
   storageDriverName: ontap-nas
   managementLIF: <redacted>
   svm: nas-svm
-userState: suspended
+  userState: suspended
   credentials:
     name: backend-tbc-ontap-nas-secret
 ----

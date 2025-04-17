@@ -151,28 +151,27 @@ The following examples provide sample configurations for the CVS-Performance ser
 ====
 
 This is the minimum backend configuration using default CVS-Performance service type with the default "standard" service level. 
-
+[source,yaml]
 ----
 ---
 version: 1
 storageDriverName: gcp-cvs
-projectNumber: '012345678901'
+projectNumber: "012345678901"
 apiRegion: us-west2
 apiKey:
   type: service_account
   project_id: my-gcp-project
-  private_key_id: "<id_value>"
+  private_key_id: <id_value>
   private_key: |
     -----BEGIN PRIVATE KEY-----
     <key_value>
     -----END PRIVATE KEY-----
   client_email: cloudvolumes-admin-sa@my-gcp-project.iam.gserviceaccount.com
-  client_id: '123456789012345678901'
+  client_id: "123456789012345678901"
   auth_uri: https://accounts.google.com/o/oauth2/auth
   token_uri: https://oauth2.googleapis.com/token
   auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
   client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/cloudvolumes-admin-sa%40my-gcp-project.iam.gserviceaccount.com
-
 ----
 ====
 
@@ -181,7 +180,7 @@ apiKey:
 ====
 
 This sample illustrates backend configuration options, including service level, and volume defaults.
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -211,7 +210,6 @@ defaults:
   snapshotReserve: '5'
   exportRule: 10.0.0.0/24,10.0.1.0/24,10.0.2.100
   size: 5Ti
-
 ----
 ====
 
@@ -222,6 +220,7 @@ This sample uses `storage` to configure virtual pools and the `StorageClasses` t
 
 Here, specific defaults are set for all virtual pools, which set the `snapshotReserve` at 5% and the `exportRule` to 0.0.0.0/0. The virtual pools are defined in the `storage` section. Each individual virtual pool defines its own `serviceLevel`, and some pools overwrite the default values. Virtual pool labels were used to differentiate the pools based on `performance` and `protection`. 
 
+[source,yaml]
 ----
 ---
 version: 1
@@ -285,14 +284,16 @@ The following StorageClass definitions apply to the virtual pool configuration e
 .Storage class example
 [%collapsible%]
 ====
+[source,yaml]
 ----
+---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: cvs-extreme-extra-protection
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=extreme; protection=extra"
+  selector: performance=extreme; protection=extra
 allowVolumeExpansion: true
 ---
 apiVersion: storage.k8s.io/v1
@@ -301,7 +302,7 @@ metadata:
   name: cvs-extreme-standard-protection
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=premium; protection=standard"
+  selector: performance=premium; protection=standard
 allowVolumeExpansion: true
 ---
 apiVersion: storage.k8s.io/v1
@@ -310,7 +311,7 @@ metadata:
   name: cvs-premium-extra-protection
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=premium; protection=extra"
+  selector: performance=premium; protection=extra
 allowVolumeExpansion: true
 ---
 apiVersion: storage.k8s.io/v1
@@ -319,7 +320,7 @@ metadata:
   name: cvs-premium
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=premium; protection=standard"
+  selector: performance=premium; protection=standard
 allowVolumeExpansion: true
 ---
 apiVersion: storage.k8s.io/v1
@@ -328,7 +329,7 @@ metadata:
   name: cvs-standard
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "performance=standard"
+  selector: performance=standard
 allowVolumeExpansion: true
 ---
 apiVersion: storage.k8s.io/v1
@@ -337,8 +338,9 @@ metadata:
   name: cvs-extra-protection
 provisioner: csi.trident.netapp.io
 parameters:
-  selector: "protection=extra"
+  selector: protection=extra
 allowVolumeExpansion: true
+
 ----
 ====
 
@@ -352,7 +354,7 @@ The following examples provide sample configurations for the CVS service type.
 [%collapsible%]
 ====
 This is the minimum backend configuration using `storageClass` to specify the CVS service type and default `standardsw` service level. 
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -382,7 +384,7 @@ serviceLevel: standardsw
 [%collapsible%]
 ====
 This sample backend configuration uses `storagePools` to configure a storage pool.  
-
+[source,yaml]
 ----
 ---
 version: 1

@@ -126,9 +126,9 @@ You can use the attributes in <<Configuration options>> when defining `TridentOr
 .Basic custom configuration
 [%collapsible%closed]
 ====
-This is an example for a basic custom installation.
+This example, created after running the `cat deploy/crds/tridentorchestrator_cr_imagepullsecrets.yaml` command, represents a basic custom installation:
+[source,yaml]
 ----
-cat deploy/crds/tridentorchestrator_cr_imagepullsecrets.yaml
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
 metadata:
@@ -147,6 +147,7 @@ spec:
 ====
 
 This example installs Trident with node selectors.
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -165,10 +166,9 @@ spec:
 .Windows worker nodes
 [%collapsible%closed]
 ====
-This example installs Trident on a Windows worker node.
-
+This example, created after running the `cat deploy/crds/tridentorchestrator_cr.yaml` command, installs Trident on a Windows worker node.
+[source,yaml]
 ----
-cat deploy/crds/tridentorchestrator_cr.yaml
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
 metadata:
@@ -184,7 +184,7 @@ spec:
 [%collapsible%closed]
 ====
 This example installs Trident to enable managed identities on an AKS cluster. 
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -201,7 +201,7 @@ spec:
 [%collapsible%closed]
 ====
 This example installs Trident for use with a cloud identity on an AKS cluster. 
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -220,7 +220,7 @@ spec:
 [%collapsible%closed]
 ====
 This example installs Trident for use with a cloud identity on an AKS cluster. 
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -239,6 +239,7 @@ spec:
 ====
 
 This example installs Trident for use with a cloud identity on a GKE cluster. 
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig

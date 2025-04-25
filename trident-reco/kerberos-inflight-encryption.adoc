@@ -157,12 +157,14 @@ kind: StorageClass
 metadata:
   name: ontap-nas-sc
 provisioner: csi.trident.netapp.io
-mountOptions: ["sec=krb5i"] #can be krb5, krb5i, or krb5p
+mountOptions:
+  - sec=krb5i #can be krb5, krb5i, or krb5p
 parameters:
-  backendType: "ontap-nas"
-  storagePools: "ontapnas_pool"
-  trident.netapp.io/nasType: "nfs"
-allowVolumeExpansion: True                  
+  backendType: ontap-nas
+  storagePools: ontapnas_pool
+  trident.netapp.io/nasType: nfs
+allowVolumeExpansion: true
+           
 ----
 
 . Create the storage class:
@@ -236,6 +238,7 @@ type: Opaque
 stringData:
   clientID: <CLIENT_ID>
   clientSecret: <CLIENT_SECRET>
+
 ---
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -265,6 +268,7 @@ spec:
 --
 [source,yaml]
 ----
+---
 apiVersion: v1
 kind: Secret
 metadata:
@@ -273,6 +277,7 @@ type: Opaque
 stringData:
   clientID: <CLIENT_ID>
   clientSecret: <CLIENT_SECRET>
+
 ---
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -298,6 +303,7 @@ spec:
       kerberos: sec=krb5i #can be krb5, krb5i, or krb5p
   credentials:
     name: backend-tbc-secret
+
 ----
 --
 ====
@@ -333,9 +339,9 @@ metadata:
   name: sc-nfs
 provisioner: csi.trident.netapp.io
 parameters:
-  backendType: "azure-netapp-files"
-  trident.netapp.io/nasType: "nfs"
-  selector: "type=encryption"                   
+  backendType: azure-netapp-files
+  trident.netapp.io/nasType: nfs
+  selector: type=encryption     
 ----
 
 . Create the storage class:

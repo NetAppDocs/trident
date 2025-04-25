@@ -51,7 +51,7 @@ To take advantage of cloud identity in Google Cloud, you must have:
 To install Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"GCP"` and set `cloudIdentity` to `iam.gke.io/gcp-service-account: \cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com`.
 
 For example:
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator

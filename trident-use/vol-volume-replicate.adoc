@@ -50,6 +50,7 @@ Follow these steps and use the CRD examples to create mirror relationship betwee
 +
 .Example
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -66,6 +67,7 @@ parameters:
 +
 .Example
 +
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -84,6 +86,7 @@ spec:
 +
 .Example
 +
+[source,yaml]
 ----
 kind: TridentMirrorRelationship
 apiVersion: trident.netapp.io/v1
@@ -102,6 +105,7 @@ Trident fetches the internal information for the volume and the volume’s curre
 kubectl get tmr csi-nas
 ----
 +
+[source,yaml]
 ----
 kind: TridentMirrorRelationship
 apiVersion: trident.netapp.io/v1
@@ -124,6 +128,7 @@ status:
 +
 .Example
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -138,6 +143,7 @@ parameters:
 +
 .Example
 +
+[source,yaml]
 ----
 kind: TridentMirrorRelationship
 apiVersion: trident.netapp.io/v1
@@ -155,6 +161,7 @@ Trident will create a SnapMirror relationship with the configured relationship p
 +
 .Example
 +
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -201,6 +208,7 @@ During a planned failover (migration), perform the following steps to promote th
 +
 .Example
 +
+[source,yaml]
 ----
 kind: SnapshotInfo
 apiVersion: trident.netapp.io/v1
@@ -261,6 +269,7 @@ When promoting a destination volume to a regular ReadWrite volume, you can use _
 You can use a CRD to perform a SnapMirror update without Trident having direct connectivity to the ONTAP cluster. Refer to the following example format of the TridentActionMirrorUpdate:
 
 .Example
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentActionMirrorUpdate

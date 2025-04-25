@@ -34,9 +34,9 @@ Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. I
 
 For seamless MetroCluster switchover, see the <<mcc-best>>.
 
-NOTE: If you are using “vsadmin” credentials, `managementLIF` must be that of the SVM; if using “admin” credentials, `managementLIF` must be that of the cluster.
+NOTE: If you are using "vsadmin" credentials, `managementLIF` must be that of the SVM; if using "admin" credentials, `managementLIF` must be that of the cluster.
 
-|“10.0.0.1”, “[2001:1234:abcd::fefe]”
+|"10.0.0.1", "[2001:1234:abcd::fefe]"
 
 |`dataLIF` |IP address of protocol LIF. 
 
@@ -153,7 +153,7 @@ Trident recommends the following option to expedite the formatting process:
 
 *-E nodiscard:*
 
-* Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage). This replaces the deprecated option “-K” and it is applicable to all the file systems (xfs, ext3, and ext4).
+* Keep, do not attempt to discard blocks at mkfs time (discarding blocks initially is useful on solid state devices and sparse / thin-provisioned storage). This replaces the deprecated option "-K" and it is applicable to all the file systems (xfs, ext3, and ext4).
 
 == Backend configuration options for provisioning volumes
 
@@ -215,7 +215,7 @@ Set to `false` for ASA r2.
 
 === Volume provisioning examples
 Here's an example with defaults defined:
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -263,6 +263,7 @@ NOTE: If you are using Amazon FSx on NetApp ONTAP with Trident, NetApp recommend
 [%collapsible%closed]
 ====
 This is a basic configuration using the `ontap-san` driver.
+[source,yaml]
 ----
 ---
 version: 1
@@ -286,7 +287,7 @@ password: <password>
 You can configure the backend to avoid having to manually update the backend definition after switchover and switchback during link:../trident-reco/backup.html#svm-replication-and-recovery[SVM replication and recovery]. 
 
 For seamless switchover and switchback, specify the SVM using `managementLIF` and omit the `svm` parameters. For example:
-
+[source,yaml]
 ----
 version: 1
 storageDriverName: ontap-san
@@ -300,6 +301,7 @@ password: password
 .ONTAP SAN economy example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 version: 1
 storageDriverName: ontap-san-economy
@@ -315,7 +317,7 @@ password: <password>
 ====
 
 In this basic configuration example `clientCertificate`, `clientPrivateKey`, and `trustedCACertificate` (optional, if using trusted CA) are populated in `backend.json` and take the base64-encoded values of the client certificate, private key, and trusted CA certificate, respectively.
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -340,6 +342,7 @@ trustedCACertificate: zcyBbaG...b3Igb3duIGNsYXNz
 These examples create a backend with `useCHAP` set to `true`.
 
 .ONTAP SAN CHAP example
+[source,yaml]
 ----
 ---
 version: 1
@@ -359,6 +362,7 @@ password: <password>
 ----
 
 .ONTAP SAN economy CHAP example
+[source,yaml]
 ----
 ---
 version: 1
@@ -379,6 +383,7 @@ password: <password>
 [%collapsible%closed]
 ====
 You must have an SVM configured with NVMe on your ONTAP backend. This is a basic backend configuration for NVMe/TCP.
+[source,yaml]
 ----
 ---
 version: 1
@@ -397,6 +402,7 @@ useREST: true
 [%collapsible%closed]
 ====
 You must have an SVM configured with FC on your ONTAP backend. This is a basic backend configuration for FC.
+[source,yaml]
 ----
 ---
 version: 1
@@ -414,7 +420,7 @@ useREST: true
 .Backend configuration example with nameTemplate
 [%collapsible%closed]
 ====
-
+[source,yaml]
 ----
 ---
 version: 1
@@ -424,10 +430,12 @@ managementLIF: <ip address>
 svm: svm0
 username: <admin>
 password: <password>
-defaults: {
-    "nameTemplate": "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.volume.RequestName}}"
-},
-"labels": {"cluster": "ClusterA", "PVC": "{{.volume.Namespace}}_{{.volume.RequestName}}"}
+defaults:
+  nameTemplate: "{{.volume.Name}}_{{.labels.cluster}}_{{.volume.Namespace}}_{{.vo\
+    lume.RequestName}}"
+labels:
+  cluster: ClusterA
+  PVC: "{{.volume.Namespace}}_{{.volume.RequestName}}"
 ----
 ====
 
@@ -435,20 +443,21 @@ defaults: {
 .formatOptions example for ontap-san-economy driver
 [%collapsible%closed]
 ====
-
+[source,yaml]
 ----
+---
 version: 1
 storageDriverName: ontap-san-economy
-managementLIF: ''
+managementLIF: ""
 svm: svm1
-username: ''
+username: ""
 password: "!"
 storagePrefix: whelk_
 debugTraceFlags:
   method: true
   api: true
 defaults:
-  formatOptions: "-E nodiscard"
+  formatOptions: -E nodiscard
 ----
 ====
 
@@ -463,6 +472,7 @@ In these examples, some of the storage pools set their own `spaceReserve`, `spac
 .ONTAP SAN example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -477,43 +487,45 @@ chapUsername: uh2aNCLSd6cNwxyz
 username: vsadmin
 password: <password>
 defaults:
-  spaceAllocation: 'false'
-  encryption: 'false'
+  spaceAllocation: "false"
+  encryption: "false"
   qosPolicy: standard
 labels:
   store: san_store
   kubernetes-cluster: prod-cluster-1
 region: us_east_1
 storage:
-- labels:
-    protection: gold
-    creditpoints: '40000'
-  zone: us_east_1a
-  defaults:
-    spaceAllocation: 'true'
-    encryption: 'true'
-    adaptiveQosPolicy: adaptive-extreme
-- labels:
-    protection: silver
-    creditpoints: '20000'
-  zone: us_east_1b
-  defaults:
-    spaceAllocation: 'false'
-    encryption: 'true'
-    qosPolicy: premium
-- labels:
-    protection: bronze
-    creditpoints: '5000'
-  zone: us_east_1c
-  defaults:
-    spaceAllocation: 'true'
-    encryption: 'false'
+  - labels:
+      protection: gold
+      creditpoints: "40000"
+    zone: us_east_1a
+    defaults:
+      spaceAllocation: "true"
+      encryption: "true"
+      adaptiveQosPolicy: adaptive-extreme
+  - labels:
+      protection: silver
+      creditpoints: "20000"
+    zone: us_east_1b
+    defaults:
+      spaceAllocation: "false"
+      encryption: "true"
+      qosPolicy: premium
+  - labels:
+      protection: bronze
+      creditpoints: "5000"
+    zone: us_east_1c
+    defaults:
+      spaceAllocation: "true"
+      encryption: "false"
+
 ----
 ====
 
 .ONTAP SAN economy example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -528,46 +540,48 @@ chapUsername: uh2aNCLSd6cNwxyz
 username: vsadmin
 password: <password>
 defaults:
-  spaceAllocation: 'false'
-  encryption: 'false'
+  spaceAllocation: "false"
+  encryption: "false"
 labels:
   store: san_economy_store
 region: us_east_1
 storage:
-- labels:
-    app: oracledb
-    cost: '30'
-  zone: us_east_1a
-  defaults:
-    spaceAllocation: 'true'
-    encryption: 'true'
-- labels:
-    app: postgresdb
-    cost: '20'
-  zone: us_east_1b
-  defaults:
-    spaceAllocation: 'false'
-    encryption: 'true'
-- labels:
-    app: mysqldb
-    cost: '10'
-  zone: us_east_1c
-  defaults:
-    spaceAllocation: 'true'
-    encryption: 'false'
-- labels:
-    department: legal
-    creditpoints: '5000'
-  zone: us_east_1c
-  defaults:
-    spaceAllocation: 'true'
-    encryption: 'false'
+  - labels:
+      app: oracledb
+      cost: "30"
+    zone: us_east_1a
+    defaults:
+      spaceAllocation: "true"
+      encryption: "true"
+  - labels:
+      app: postgresdb
+      cost: "20"
+    zone: us_east_1b
+    defaults:
+      spaceAllocation: "false"
+      encryption: "true"
+  - labels:
+      app: mysqldb
+      cost: "10"
+    zone: us_east_1c
+    defaults:
+      spaceAllocation: "true"
+      encryption: "false"
+  - labels:
+      department: legal
+      creditpoints: "5000"
+    zone: us_east_1c
+    defaults:
+      spaceAllocation: "true"
+      encryption: "false"
+
 ----
 ====
 
 .NVMe/TCP example
 [%collapsible%closed]
 ====
+[source,yaml]
 ----
 ---
 version: 1
@@ -579,15 +593,16 @@ username: vsadmin
 password: <password>
 useREST: true
 defaults:
-  spaceAllocation: 'false'
-  encryption: 'true'
+  spaceAllocation: "false"
+  encryption: "true"
 storage:
-- labels:
-    app: testApp
-    cost: '20'
-  defaults:
-    spaceAllocation: 'false'
-    encryption: 'false'
+  - labels:
+      app: testApp
+      cost: "20"
+    defaults:
+      spaceAllocation: "false"
+      encryption: "false"
+
 ----
 ====
 
@@ -597,6 +612,7 @@ The following StorageClass definitions refer to the <<Examples of backends with 
 
 * The `protection-gold` StorageClass will map to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold-level protection.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -610,6 +626,7 @@ parameters:
 
 * The `protection-not-gold` StorageClass will map to the second and third virtual pool in `ontap-san` backend. These are the only pools offering a protection level other than gold.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -623,6 +640,7 @@ parameters:
 
 * The `app-mysqldb` StorageClass will map to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for the mysqldb type app.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -636,6 +654,7 @@ parameters:
 
 * The `protection-silver-creditpoints-20k` StorageClass will map to the second virtual pool in `ontap-san` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -648,6 +667,7 @@ parameters:
 ----
 * The `creditpoints-5k` StorageClass will map to the third virtual pool in `ontap-san` backend and the fourth virtual pool in the `ontap-san-economy` backend. These are the only pool offerings with 5000 creditpoints.
 +
+[source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -660,6 +680,7 @@ parameters:
 ----
 * The `my-test-app-sc` StorageClass will map to the `testAPP` virtual pool in the `ontap-san` driver with `sanType: nvme`. This is the only pool offering `testApp`. 
 +
+[source,yaml]
 ----
 ---
 apiVersion: storage.k8s.io/v1

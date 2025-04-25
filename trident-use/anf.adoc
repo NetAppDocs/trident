@@ -51,6 +51,7 @@ Trident supports link:https://learn.microsoft.com/en-us/azure/active-directory/m
 .Trident operator
 --
 To install Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"Azure"`. For example:
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -98,7 +99,7 @@ To take advantage of cloud identity in Azure, you must have:
 To install Trident using the Trident operator, edit `tridentorchestrator_cr.yaml` to set `cloudProvider` to `"Azure"` and set `cloudIdentity` to `azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx`.
 
 For example:
-
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentOrchestrator
@@ -109,7 +110,7 @@ spec:
   namespace: trident
   imagePullPolicy: IfNotPresent
   cloudProvider: "Azure"
-  *cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx'*
+  cloudIdentity: 'azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx' # Edit
 ----
 --
 

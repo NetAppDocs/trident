@@ -91,6 +91,8 @@ spec:
 *** *resourceMatchers[].namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
 *** *resourceMatchers[].labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`.
 +
+NOTE: ##When both `resourceFilter` and `labelSelector` are used, `resourceFilter` runs first, and then `labelSelector` is applied to the resulting resources.##
++
 For example:
 +
 [source,yaml]

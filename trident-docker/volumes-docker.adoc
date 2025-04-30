@@ -17,11 +17,13 @@ You can easily create, clone, and remove volumes using the standard `docker volu
 
 * Create a volume with a driver using the default name:
 +
+[source,console]
 ----
 docker volume create -d netapp --name firstVolume
 ----
 * Create a volume with a specific Trident instance:
 +
+[source,console]
 ----
 docker volume create -d ntap_bronze --name bronzeVolume
 ----
@@ -29,6 +31,7 @@ NOTE: If you do not specify any link:volume-driver-options.html[options^], the d
 
 * Override the default volume size. See the following example to create a 20GiB volume with a driver:
 +
+[source,console]
 ----
 docker volume create -d netapp --name my_vol --opt size=20G
 ----
@@ -38,6 +41,7 @@ TIP: Volume sizes are expressed as strings containing an integer value with opti
 
 * Remove the volume just like any other Docker volume:
 +
+[source,console]
 ----
 docker volume rm firstVolume
 ----
@@ -51,44 +55,48 @@ When using the `ontap-nas`, `ontap-san`, `solidfire-san`, and `gcp-cvs storage d
 
 * Inspect the volume to enumerate snapshots:
 +
+[source,console]
 ----
 docker volume inspect <volume_name>
 ----
 
 * Create a new volume from an existing volume. This will result in a new snapshot being created:
 +
+[source,console]
 ----
 docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_volume>
 ----
 
 * Create a new volume from an existing snapshot on a volume. This will not create a new snapshot:
 +
+[source,console]
 ----
 docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_volume> -o fromSnapshot=<source_snap_name>
 ----
 
 === Example
 
+[source,console]
 ----
 docker volume inspect firstVolume
 
 [
-    {
-        "Driver": "ontap-nas",
-        "Labels": null,
-        "Mountpoint": "/var/lib/docker-volumes/ontap-nas/netappdvp_firstVolume",
-        "Name": "firstVolume",
-        "Options": {},
-        "Scope": "global",
-        "Status": {
-            "Snapshots": [
-                {
-                    "Created": "2017-02-10T19:05:00Z",
-                    "Name": "hourly.2017-02-10_1505"
-                }
-            ]
+  {
+    "Driver": "ontap-nas",
+    "Labels": null,
+    "Mountpoint": "/var/lib/docker-volumes/ontap-nas/netappdvp_firstVolume",
+    "Name": "firstVolume",
+    "Options": {},
+    "Scope": "global",
+    "Status": {
+      "Snapshots": [
+        {
+          "Created": "2017-02-10T19:05:00Z",
+          "Name": "hourly.2017-02-10_1505"
         }
+      ]
     }
+  }
 ]
 
 docker volume create -d ontap-nas --name clonedVolume -o from=firstVolume

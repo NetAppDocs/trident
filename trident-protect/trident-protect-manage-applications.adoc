@@ -80,7 +80,7 @@ spec:
 
 ----
 
-. (_Optional_) ##Add filtering that includes or excludes resources marked with particular labels:##
+. (_Optional_) Add filtering that includes or excludes resources marked with particular labels:
 +
 * *resourceFilter.resourceSelectionCriteria*: (Required for filtering) Use `Include` or `Exclude` to include or exclude a resource defined in resourceMatchers. Add the following resourceMatchers parameters to define the resources to be included or excluded:
 ** *resourceFilter.resourceMatchers*: An array of resourceMatcher objects. If you define multiple elements in this array, they match as an OR operation, and the fields inside each element (group, kind, version) match as an AND operation.
@@ -91,7 +91,7 @@ spec:
 *** *resourceMatchers[].namespaces*: (_Optional_) Namespaces in the Kubernetes metadata.name field of the resource to be filtered.
 *** *resourceMatchers[].labelSelectors*: (_Optional_) Label selector string in the Kubernetes metadata.name field of the resource as defined in the https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors[Kubernetes documentation^]. For example: `"trident.netapp.io/os=linux"`.
 +
-NOTE: ##When both `resourceFilter` and `labelSelector` are used, `resourceFilter` runs first, and then `labelSelector` is applied to the resulting resources.##
+NOTE: When both `resourceFilter` and `labelSelector` are used, `resourceFilter` runs first, and then `labelSelector` is applied to the resulting resources.
 +
 For example:
 +
@@ -144,7 +144,7 @@ tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespa
 tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace> --annotation protect.trident.netapp.io/skip-vm-freeze=<"true"|"false">
 ----
 
-##You can use `--resource-filter-include` and `--resource-filter-exclude` flags to include or exclude resources based on `resourceSelectionCriteria` such as group, kind, version, labels, names, and namespaces, as shown in the following example:##
+You can use `--resource-filter-include` and `--resource-filter-exclude` flags to include or exclude resources based on `resourceSelectionCriteria` such as group, kind, version, labels, names, and namespaces, as shown in the following example:
 
 [source,console]
 ----

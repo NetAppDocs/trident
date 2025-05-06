@@ -18,6 +18,8 @@ NOTE: When you restore an application, all execution hooks configured for the ap
 
 include::../_include/namespace-anno-labels.adoc[]
 
+include::../_include/data-mover-timeout-annotation.adoc[]
+
 == Restore from a backup to a different namespace
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.

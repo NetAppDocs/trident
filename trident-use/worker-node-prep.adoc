@@ -14,7 +14,7 @@ summary: All of the worker nodes in the Kubernetes cluster need to be able to mo
 All worker nodes in the Kubernetes cluster must be able to mount the volumes you have provisioned for your pods. To prepare the worker nodes, you must install NFS, iSCSI, NVMe/TCP, or FC tools based on your driver selection. 
 
 == Selecting the right tools 
-If you are using a combination of drivers, you should install all required tools for your drivers. Recent versions of RedHat CoreOS have the tools installed by default.  
+If you are using a combination of drivers, you should install all required tools for your drivers. Recent versions of Red Hat Enterprise Linux CoreOS (RHCOS) have the tools installed by default.  
 
 .NFS tools
 link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#nfs-volumes[Install the NFS tools] if you are using: `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `azure-netapp-files`, `gcp-cvs`.
@@ -112,7 +112,7 @@ Install the iSCSI tools using the commands for your operating system.
 ----
 sudo sed -i 's/^\(node.session.auth.chap_algs\).*/\1 = MD5/' /etc/iscsi/iscsid.conf
 ----
-* When using worker nodes that run RHEL/RedHat CoreOS with iSCSI PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. Refer to https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat documentation^].
+* When using worker nodes that run RHEL/Red Hat Enterprise Linux CoreOS (RHCOS) with iSCSI PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. Refer to https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[Red Hat documentation^].
 
 [role="tabbed-block"]
 ====
@@ -290,7 +290,7 @@ Refer to the following ONTAP documentation for details:
 
 Install the FC tools using the commands for your operating system.  
 
-* When using worker nodes that run RHEL/RedHat CoreOS with FC PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. Refer to https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[RedHat documentation^].
+* When using worker nodes that run RHEL/Red Hat Enterprise Linux CoreOS (RHCOS) with FC PVs, specify the `discard` mountOption in the StorageClass to perform inline space reclamation. Refer to https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[Red Hat documentation^].
 
 [role="tabbed-block"]
 ====

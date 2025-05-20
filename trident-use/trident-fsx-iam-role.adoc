@@ -175,8 +175,8 @@ aws iam create-role \
 Attach the role policy from the previous step to the IAM role that was created:
 
 ----
-aws iam attach-role-policy
-  --policy-arn arn:aws:iam::aws:111122223333:policy/fsxn-csi-policy
+aws iam attach-role-policy \
+  --policy-arn arn:aws:iam::aws:111122223333:policy/fsxn-csi-policy \
   --role-name fsxn-csi-role
 ----
 
@@ -185,7 +185,10 @@ aws iam attach-role-policy
 Create a pod identity association between IAM role and the Trident service account(trident-controller)
 
 ----
-aws eks create-pod-identity-association --cluster-name $EKS_CLUSTER_NAME --role-arn arn:aws:iam::111122223333:role/fsxn-csi-role --namesp
+aws eks create-pod-identity-association \
+  --cluster-name $EKS_CLUSTER_NAME \
+  --role-arn arn:aws:iam::111122223333:role/fsxn-csi-role \
+  --namespace trident --service-account trident-controller
 ----
 
 --

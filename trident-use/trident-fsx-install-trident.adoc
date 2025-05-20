@@ -127,6 +127,21 @@ eksctl create addon --name netapp_trident-operator --cluster <cluster_name> \
 
 }
 ---- 
+If you are using Pod Identity, use the following json format:
++
+[source,JSON]
+----
+{
+
+{
+  "clusterName": "<eks-cluster>",
+  "addonName": "netapp_trident-operator",
+  "addonVersion": "v25.02.1-eksbuild.1",
+  "serviceAccountRoleArn": "<role ARN>"
+}
+
+}
+---- 
 If you select Override for the Conflict resolution method, one or more of the settings for the existing add-on can be overwritten with the Amazon EKS add-on settings. If you don't enable this option and there's a conflict with your existing settings, the operation fails. You can use the resulting error message to troubleshoot the conflict. Before selecting this option, make sure that the Amazon EKS add-on doesn't manage settings that you need to self-manage.
 +
 . Choose *Next*.

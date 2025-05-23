@@ -24,12 +24,12 @@ include::../_include/namespace-anno-labels.adoc[]
 NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
 
 == Execution hooks during failover and reverse operations
-##When using AppMirror relationship to protect your application, there are specific behaviors related to execution hooks that you should be aware of during failover and reverse operations.##
+When using AppMirror relationship to protect your application, there are specific behaviors related to execution hooks that you should be aware of during failover and reverse operations.
 
-* ##During failover, the execution hooks are automatically copied from the source cluster to the destination cluster. You do not need to manually recreate them. After failover, execution hooks are present on the application and will execute during any relevant actions.##
-* ##During reverse or reverse resync, any existing execution hooks on the application are removed. When the source application becomes the destination application, these execution hooks are not valid and are deleted to prevent their execution.##
+* During failover, the execution hooks are automatically copied from the source cluster to the destination cluster. You do not need to manually recreate them. After failover, execution hooks are present on the application and will execute during any relevant actions.
+* During reverse or reverse resync, any existing execution hooks on the application are removed. When the source application becomes the destination application, these execution hooks are not valid and are deleted to prevent their execution.
 
-##To learn more about execution hooks, refer to link:../trident-protect/trident-protect-use-execution-hooks.html[Manage Trident protect execution hooks].##
+To learn more about execution hooks, refer to link:../trident-protect/trident-protect-use-execution-hooks.html[Manage Trident protect execution hooks].
 
 == Set up a replication relationship
 

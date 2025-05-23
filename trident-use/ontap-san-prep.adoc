@@ -16,7 +16,7 @@ Understand the requirements and authentication options for configuring an ONTAP 
 == Requirements
 For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
 
-NOTE: Beginning with the 25.02 release, Trident supports provisioning of storage on NetApp ASA r2 systems using the iSCSI protocol. Because ASA r2 systems deliver a disaggregated ONTAP storage experience, you should contact NetApp Support to enable volume provisioning. When you contact NetApp Support refer to link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[the Knowledge Base article "Storage Unit create by SVM admin using CLI fails with error "No candidate aggregates are available for storage services""^].
+NOTE: Beginning with the 25.02 release, Trident supports provisioning of storage on NetApp ASA r2 systems using the iSCSI protocol. Because ASA r2 systems deliver a disaggregated ONTAP storage experience, you should contact NetApp Support to enable volume provisioning. When you contact NetApp Support, mention the following Knowledge Base article: link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[Storage Unit create by SVM admin using CLI fails with error "No candidate aggregates are available for storage services"^].
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 

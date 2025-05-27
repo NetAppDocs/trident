@@ -49,8 +49,6 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 * *spec.storageClassMapping*: The mapping of the source storage class of the restore operation to the destination storage class. Replace `destinationStorageClass` and `sourceStorageClass` with information from your environment.
 +
-NOTE: ##The `storageClassMapping` attribute works only when both the original and new `StorageClass` use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.##
-+
 [source,yaml]
 -------
 ---
@@ -302,6 +300,9 @@ kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.a
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 * *spec.storageClassMapping*: The mapping of the source storage class of the restore operation to the destination storage class. Replace `destinationStorageClass` and `sourceStorageClass` with information from your environment.
++
+NOTE: ##The `storageClassMapping` attribute works only when both the original and new `StorageClass` use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.##
++
 +
 [source,yaml]
 -------

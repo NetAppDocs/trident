@@ -18,7 +18,22 @@ NOTE: When you restore an application, all execution hooks configured for the ap
 
 include::../_include/namespace-anno-labels.adoc[]
 
-include::../_include/data-mover-timeout-annotation.adoc[]
+== Supported annotations
+This section lists the supported annotations for configuring various behaviors in the system. If an annotation is not explicitly set by the user, the system will use the default value.
+
+[cols="1,1,3,1", options="header"]
+|===
+| Annotation | Type | Description | Default value
+
+| protect.trident.netapp.io/data-mover-timeout-sec
+| string
+| The maximum time (in seconds) allowed for data mover operation to be stalled.
+| 300
+| protect.trident.netapp.io/kopia-content-cache-size-limit-mb
+| integer
+| The maximum size limit (in megabytes) for the Kopia content cache.
+| 1000
+|===
 
 == Restore from a backup to a different namespace
 

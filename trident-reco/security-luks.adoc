@@ -15,6 +15,8 @@ You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN
 
 In Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
+NOTE: LUKS encryption is not support for ASA r2 systems.
+
 .Before you begin
 
 * Worker nodes must have cryptsetup 2.1 or higher (but lower than 3.0) installed. For more information, visit link:https://gitlab.com/cryptsetup/cryptsetup[Gitlab: cryptsetup^].

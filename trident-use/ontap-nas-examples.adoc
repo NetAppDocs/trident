@@ -691,8 +691,66 @@ NOTE: If PVCs are attached to one or multiple pods, you must bring down all corr
 
 == Secure SMB examples
 
-Backend
+=== Backend configuration example
 
-Storage class
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: ontap-nas-eco
+  managementLIF: 10.0.0.1
+  svm: svm0
+  useREST: true
+  defaults:
+    smbAdminUser: tridentADtestuser
+  credentials:
+    name: backend-tbc-ontap-invest-secret
+----
 
-PVC
+==== Storage class example
+
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: test-sc-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-nas-economy"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: "trident"
+  smbUserPermission: full-control
+----
+
+==== PVC example
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-test-pvc
+  annotations:
+    trident.netapp.io/smbShareACLs: |
+      fullControl:
+        - tridentTestuser
+        - tridentuser
+      change:
+        - tridentADuser
+      readOnly:
+        - tridentTestuser2
+        - tridentTestuser3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+----

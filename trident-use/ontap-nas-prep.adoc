@@ -400,26 +400,24 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 |""
 |===
 
-
 === Enable secure SMB
 
-Beginning with the 25.06 release, NetAPP Trident supports seucure provisioning of SMB volumes created using `ontap-nas` and `ontap-nas-economy` backends using access control lists (ACLs) to contorl access to SMB shares.
+Beginning with the 25.06 release, NetAPP Trident supports seucure provisioning of SMB volumes created using `ontap-nas` and `ontap-nas-economy` backends. When secure SMB is enabled, you can provide controlled access to SMB shares for Active Directory (AD) users using Access Acontrol Lists (ACLs).
 
 .Points to remember
 
 * Volume import is not supported with secure SMB.
-* Only read-only clones are supported.
-If Secure SMB is enabled, Trident will always create SMB share per volume even if SMB share is mentioned in the backend
-Updation of PVC annotation for SMB share ACL is not supported
+* Only read-only clones are supported when secure SMB is enabled.
+* If Secure SMB is enabled, Trident will always create SMB share per volume even if SMB share is mentioned in the backend
+* Updating of PVC annotation for SMB share ACL is not supported.
+* SMB Share ACL specified in the Annotation of clone PVC will take precedence over the ones in source PVC.
+* Ensure that you provide valid AD users while enabling secure SMB.
 
-SMB Share ACL specified in the Annotation of clone PVC will take precedence compared to the ones in source PVC
+.Steps
 
-if they have provided the invalid AD user, then Trident would only log the warning message and not error out the API call. We would also want to say that providing the valid AD user is upon the customers
-
-Follow these steps to enable secure SMB: 
-
-1. Specify adAdmin in TridentBackendConfig as shown in the following example:
-
+. Specify smbAdminUser in TridentBackendConfig as shown in the following example:
++
+[source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentBackendConfig
@@ -437,15 +435,13 @@ spec:
   credentials:
     name: backend-tbc-ontap-invest-secret
 ----
+. Add the annotation in the Storage class.
++
+Add the `trident.netapp.io/smbShareAdUser` annotation in the storage class to enable secure SMB.
 
-2. Add the annotation in the Storage class.
-
-Add the following annotation in the storage class to enable Secure SMB - trident.netapp.io/smbShareAdUser
-
-The user value specified for the annotation trident.netapp.io/smbShareAdUser should be same as the username specified in the smbcreds secret.
-
+The user value specified for the annotation `trident.netapp.io/smbShareAdUser` should be same as the username specified in the `smbcreds` secret.
+[source,yaml]
 ----
-
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -456,28 +452,21 @@ parameters:
   trident.netapp.io/nasType: "smb"
   csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
   csi.storage.k8s.io/node-stage-secret-namespace: "trident"
-  smbUserPermission: "change" // user to specify the permission  if does not specify,  default the permission to Full control
+  smbUserPermission: full-control
 ----
-
-smbUserPermission:
-
-There are 4 permission
-full_control
-change
-read
-no_access
-11:24
-for storage class annotation, users can give 1st 3 permission, to enable mounting of k8s pod to the volume created
-
-
-3. PVC
-
+You can choose one of the following for `smbUserPermission`: `full_control`, `change`, or `read`. The default permission is `full-control`
++
+. Create a PVC.
++
+The following example creates a PVC:
+[source,yaml]
+----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: my-pvc
   annotations:
-    trident.netapp.io/smbShareACLs: |
+    trident.netapp.io/smbShareACLs:
       fullControl:
         - tridentTestuser
         - tridentuser
@@ -492,6 +481,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
-
-
-      For customers to provide multiple AD user access to the SMB shares, Trident can request for the AD username and the corresponding permission, this can be achieved by passing this information through the PVC annotation. Trident can handle this as part of getVolumeConfig() method where Trident can consolidate the AD username and permission request from both PVC and Storage Class and update this information in the VolumeConfig. The new annotation key can be trident.netapp.io/smbShareACLS . The PVC would look something like below.
+----

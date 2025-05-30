@@ -29,7 +29,7 @@ NOTE: Don't create a snapshot controller if creating on-demand volume group snap
 * Ensure that all PVCs/volumes are be on the same SVM to be able to create VolumeGroupSnapshot. 
 
 .Steps
-* Create a VolumeGroupSnapshotClass prior to creating a VolumeGroupSnapshot. For more information, refer to link:../trident-reference/objects.html[VolumeGroupSnapshotClass].
+* Create a VolumeGroupSnapshotClass prior to creating a VolumeGroupSnapshot. For more information, refer to link:../trident-reference/objects.html#kubernetes-volumegroupsnapshotclass-objects[VolumeGroupSnapshotClass].
 +
 [source,yaml]
 ----
@@ -63,7 +63,7 @@ spec:
 ----
 * Create a VolumeGroupSnapshot with the same label (`consistentGroupSnapshot: groupA`) specified in the PVC.
 +
-This example creates volume group snapshot:
+This example creates a volume group snapshot:
 [source,yaml]
 ----
 apiVersion: groupsnapshot.storage.k8s.io/v1beta1
@@ -78,87 +78,6 @@ spec:
       matchLabels:
         consistentGroupSnapshot: groupA
 ----
-
-== Import a volume group snapshot
-
-To import a pre-existing volume group snapshot into Kubernetes, you must also import the corresponding individual volume snapshots.
-
-Identify the individual volume snapshot handles, manually construct a VolumeSnapshotContent object first, then create a VolumeSnapshot object pointing to the VolumeSnapshotContent object. Repeat this for every individual volume snapshot.
-
-Then manually create a VolumeGroupSnapshotContent object, specifying the volumeGroupSnapshotHandle and individual volumeSnapshotHandles already existing on the storage system.
-
-.Before you begin 
-Trident must have created or imported the group snapshot's parent volume.
-
-.Steps
-. *Cluster admin:* Create a `VolumeGroupSnapshotContent` object specifying the `volumeGroupSnapshotHandle` and individual `volumeSnapshotHandles` already existing on the storage system.
-+
-The following example creates a `VolumeGroupSnapshotContent` object:
-+
-[source,yaml]
-----
-apiVersion: groupsnapshot.storage.k8s.io/v1beta1
-kind: VolumeGroupSnapshotContent
-metadata:
-  name: test-group-content
-spec:
-  deletionPolicy: Delete
-  driver: hostpath.csi.k8s.io
-  source:
-    groupSnapshotHandles:
-      volumeGroupSnapshotHandle: e8779136-a93e-11ef-9549-66940726f2fd
-      volumeSnapshotHandles:
-      - e8779147-a93e-11ef-9549-66940726f2fd
-      - e8783cd0-a93e-11ef-9549-66940726f2fd
-  volumeGroupSnapshotRef:
-    name: test-group-snapshot
-    namespace: test-namespace
-----
-. *Cluster admin:* Create the `VolumeGroupSnapshot` CR that references the `VolumeGroupSnapshotContent` object. This requests access to use the `VolumeGroupSnapshot` in a given namespace.
-+
-.Example
-The following example creates a `VolumeGroupSnapshot` CR named `test-group-snapshot` that references the `VolumeGroupSnapshotContent` named `test-group-content`.
-+
-[source,yaml]
-----
-apiVersion: groupsnapshot.storage.k8s.io/v1beta1
-kind: VolumeGroupSnapshot
-metadata:
-  name: test-group-snapshot
-  namespace: test-namespace
-spec:
-  source:
-    volumeGroupSnapshotContentName: test-group-content
-----
-. *Internal processing (no action required):* The external snapshotter recognizes the newly created `VolumeGroupSnapshotContent` and runs the `ListSnapshots` call. Trident creates the `TridentSnapshot`. 
-* The external snapshotter sets the `VolumeSnapshotContent` to `readyToUse` and the `VolumeSnapshot` to `true`. 
-* Trident returns `readyToUse=true`. 
-
-. *Any user:* Create a `PersistentVolumeClaim` from a new VolumeSnapshot object that is part of a VolumeGroupSnapshot.
-+
-.Example
-The following example creates a PVC referencing the `VolumeSnapshot` named `import-snap`. 
-+
-[source,yaml]
-----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: test-restored-snap
-  namespace: test-namespace
-spec:
-  storageClassName: test-snap-sc
-  dataSource:
-    name: snapshot-0962a745b2bf930bb385b7b50c9b08af471f1a16780726de19429dd9c94eaca0
-    kind: VolumeSnapshot
-    apiGroup: snapshot.storage.k8s.io
-  accessModes:
-    - ReadWriteOncePod
-  resources:
-    requests:
-      storage: 100Mi
-----
-
 == Recover volume data using a group snapshot
 
 Use the volume snapshot restore ONTAP CLI to to restore a volume to a state recorded in a prior snapshot. 
@@ -216,6 +135,5 @@ NOTE: If necessary, open `deploy/kubernetes/snapshot-controller/rbac-snapshot-co
 
 == Related links
 
-* link:../trident-concepts/vol-group-snapshots.html[Volume snapshots groups]
-* link:../trident-reference/objects.html[VolumeSnapshotClass]
+* link:../trident-reference/objects.html#kubernetes-volumegroupsnapshotclass-objects[VolumeGroupSnapshotClass]
 * link:../trident-concepts/snapshots.html[Volume snapshots]

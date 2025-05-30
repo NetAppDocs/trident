@@ -239,8 +239,6 @@ When a snapshot request comes in, Trident creates the snapshot on the backend. A
 
 NOTE: Typically, you do not need to manage the `VolumeSnapshotContent` object. An exception to this is when you want to link:../trident-use/vol-snapshots.html#import-a-volume-snapshot[import a volume snapshot] created outside of Trident. 
 
-////
-
 == Kubernetes `VolumeGroupSnapshotClass` objects
 
 Kubernetes `VolumeGroupSnapshotClass` objects are analogous to `StorageClasses`. They help define multiple classes of storage and are referenced by volume group snapshots to associate the snapshot with the required snapshot class. Each volume group snapshot is associated with a single volume group snapshot class.
@@ -276,8 +274,6 @@ A Kubernetes `VolumeGroupSnapshotContent` object represents a group snapshot tak
 The `VolumeGroupSnapshotContent` object contains details that identify the snapshot group, such as the `volumeGroupSnapshotHandle` and and individual volumeSnapshotHandles existing on the storage system.
 
 When a snapshot request comes in, Trident creates the volume group snapshot on the backend. After the volume group snapshot is created, Trident configures a `VolumeGroupSnapshotContent` object and thus exposes the snapshot to the Kubernetes API.
-
-////
 
 == Kubernetes `CustomResourceDefinition` objects
 

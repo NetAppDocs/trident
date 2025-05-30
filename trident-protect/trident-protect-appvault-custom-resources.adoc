@@ -62,7 +62,7 @@ kubectl create secret generic my-optional-data-mover-secret \
 ====
 
 === Amazon S3 IAM permissions
-When you create an AppVault CR for Amazon S3, you need to ensure that the user credentials you provide have the necessary permissions to access the S3 bucket. The following is an example of a policy that grants the required permissions.
+When you create an AppVault CR for Amazon S3, you need to ensure that the user credentials you provide have the necessary permissions to access the S3 bucket. The following is an example of a policy that grants the required permissions. You can apply this policy to the user that manages Amazon S3 CRs.
 
 [source,json]
 ----

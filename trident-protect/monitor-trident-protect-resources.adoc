@@ -58,7 +58,7 @@ customResourceState:
     spec:
       resources:
       - groupVersionKind:
-          group: astra.netapp.io
+          group: protect.trident.netapp.io
           kind: "Backup"
           version: "v1"
         labelsFromPath:
@@ -76,7 +76,7 @@ customResourceState:
                 appReference: ["spec", "applicationRef"]
 rbac:
   extraRules:
-  - apiGroups: ["backups.protect.trident.netapp.io"]
+  - apiGroups: ["protect.trident.netapp.io"]
     resources: ["backups"]
     verbs: ["list", "watch"]
  
@@ -109,9 +109,9 @@ After you install the monitoring tools, you need to configure them to work toget
 
 .Steps
 
-. Integrate kube-state-metrics with Prometheus. Edit the Prometheus configuration file (`prometheus.yml`) and add the kube-state-metrics service information. For example:
+. Integrate kube-state-metrics with Prometheus. Edit the Prometheus configuration file (`prometheus.yaml`) and add the kube-state-metrics service information. For example:
 +
-.prometheus.yml: kube-state-metrics service integration with Prometheus
+.prometheus.yaml: kube-state-metrics service integration with Prometheus
 [source,yaml]
 ----
 ---
@@ -119,27 +119,27 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: astra-connector
+  namespace: trident-protect
 data:
-  prometheus.yml: |
+  prometheus.yaml: |
     global:
       scrape_interval: 15s
     scrape_configs:
       - job_name: 'kube-state-metrics'
         static_configs:
-          - targets: ['kube-state-metrics.astra-connector.svc:8080']
+          - targets: ['kube-state-metrics.trident-protect.svc:8080']
 ----
 
-. Configure Prometheus to route alerts to Alertmanager. Edit the Prometheus configuration file (`prometheus.yml`) and add the following section:
+. Configure Prometheus to route alerts to Alertmanager. Edit the Prometheus configuration file (`prometheus.yaml`) and add the following section:
 +
-.prometheus.yml: Send alerts to Alertmanager
+.prometheus.yaml: Send alerts to Alertmanager
 [source,yaml]
 ----
 alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            - alertmanager.astra-connector.svc:9093
+            - alertmanager.trident-protect.svc:9093
 ----
 
 .Result 
@@ -149,13 +149,13 @@ Prometheus can now gather metrics from kube-state-metrics, and can send alerts t
 After you configure the tools to work together, you need to configure what type of information triggers alerts, and where the alerts should be sent.
 
 === Alert example: backup failure
-The following example defines a critical alert that is triggered when the status of the backup custom resource is set to `Error` for 5 seconds or longer. You can customize this example to match your environment, and include this YAML snippet in your `prometheus.yml` configuration file:
+The following example defines a critical alert that is triggered when the status of the backup custom resource is set to `Error` for 5 seconds or longer. You can customize this example to match your environment, and include this YAML snippet in your `prometheus.yaml` configuration file:
 
-.rules.yml: Define a Prometheus alert for failed backups
+.rules.yaml: Define a Prometheus alert for failed backups
 [source,yaml]
 ----
-rules.yml: |
-  groups:     
+rules.yaml: |
+  groups:
     - name: fail-backup
         rules:
           - alert: BackupFailed
@@ -169,15 +169,15 @@ rules.yml: |
 ----
 
 === Configure Alertmanager to send alerts to other channels
-You can configure Alertmanager to send notifications to other channels, such as e-mail, PagerDuty, Microsoft Teams, or other notification services by specifying the respective configuration in the `alertmanager.yml` file.
+You can configure Alertmanager to send notifications to other channels, such as e-mail, PagerDuty, Microsoft Teams, or other notification services by specifying the respective configuration in the `alertmanager.yaml` file.
 
 The following example configures Alertmanager to send notifications to a Slack channel. To customize this example to your environment, replace the value of the `api_url` key with the Slack webhook URL used in your environment:
 
-.alertmanager.yml: Send alerts to a Slack channel
+.alertmanager.yaml: Send alerts to a Slack channel
 [source,yaml]
 ----
 data:
-  alertmanager.yml: |
+  alertmanager.yaml: |
     global:
       resolve_timeout: 5m
     route:

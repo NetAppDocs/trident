@@ -14,6 +14,11 @@ summary: Using Trident protect, you can use the asynchronous replication capabil
 [.lead]
 Using Trident protect, you can use the asynchronous replication capabilities of NetApp SnapMirror technology to replicate data and application changes from one storage backend to another, on the same cluster or between different clusters.
 
+// Improve the topic with a diagram of cluster setup and buckets, similar to Rahul's blog PNGs.
+// Use Cluster A and Cluster B terminology instead of Source and Destination.
+// Explain the scenario near the image so customers know the layout.
+
+
 include::../_include/namespace-anno-labels.adoc[]
 
 NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
@@ -27,7 +32,7 @@ Setting up a replication relationship involves the following:
 * Setting the time for the snapshot to be taken
 
 .Steps
-. Create an AppVault for the source application on the source cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
+. On the source cluster, create an AppVault for the source application. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 +
 [role="tabbed-block"]
 ====
@@ -68,7 +73,7 @@ tridentctl-protect create vault Azure <vault-name> --account <account-name> --bu
 --
 ====
 
-. Create the source application CR:
+. On the source cluster, create the source application CR:
 +
 [role="tabbed-block"]
 ====
@@ -112,12 +117,14 @@ tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-inclu
 ----
 --
 ====
-
-. Optionally, take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
+// Improve this step with an example of a manual shutdown snapshot, and place it after the example of the schedule. This way, you can explain why a customer would need the extra manual step, which is to not have to wait for the schedule to kick off the first snapshot.
+// Explain what a shutdown snapshot actually is.
+// This needs to be two steps - manual immediate shutdown snapshot, and then creation of a snapshot schedule for future transfers. Because if you only did one snapshot, you would only ever get one transfer. See recording.
+. Optionally, on the source cluster, take a shutdown snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
 +
 [role="tabbed-block"]
 ====
-.Take a snapshot using a CR
+.Take a shutdown snapshot using a CR
 --
 
 .. Create a replication schedule for the source application:
@@ -161,7 +168,7 @@ spec:
 kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 ----
 --
-.Take a snapshot using the CLI
+.Take a shutdown snapshot using the CLI
 --
 .. Create the snapshot, replacing values in brackets with information from your environment. For example:
 +
@@ -171,15 +178,16 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 ----
 --
 ====
-
-. Create a source application AppVault CR on the destination cluster that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
+// In the intro to this topic, explain a bit about what the setup is and why we need this. Why do we need 2 different appvaults? Why 2 appvaults on the destination cluster? Why do they have to be identical?
+// Also, we need an AppVault example here (can be same as identical one from before)
+. On the destination cluster, create a source application AppVault CR that is identical to the AppVault CR you applied on the source cluster and name it (for example, `trident-protect-appvault-primary-destination.yaml`).
 . Apply the CR:
 +
 [source,console]
 ----
 kubectl apply -f trident-protect-appvault-primary-destination.yaml -n my-app-namespace
 ----
-. Create an AppVault for the destination application on the destination cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
+. Create a destination AppVault CR for the destination application on the destination cluster. Depending on your storage provider, modify an example in link:trident-protect-appvault-custom-resources.html[AppVault custom resources] to fit your environment:
 .. Create the custom resource (CR) file and name it (for example, `trident-protect-appvault-secondary-destination.yaml`).
 .. Configure the following attributes:
 +
@@ -205,7 +213,7 @@ kubectl apply -f trident-protect-appvault-primary-destination.yaml -n my-app-nam
 kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n my-app-namespace
 ----
 
-. Create an AppMirrorRelationship CR file:
+. On the destination cluster, create an AppMirrorRelationship CR file:
 +
 [role="tabbed-block"]
 ====
@@ -266,7 +274,7 @@ tridentctl-protect create appmirrorrelationship <name_of_appmirorrelationship> -
 ----
 --
 ====
-. (_Optional_) Check the state and status of the replication relationship:
+. (_Optional_) On the destination cluster, check the state and status of the replication relationship:
 +
 [source,console]
 ----
@@ -281,7 +289,7 @@ Using Trident protect, you can fail over replicated applications to a destinatio
 
 //. (_Optional_) Create execution hooks on the destination cluster if you need them to run on the failed over application. You can create these execution hooks ahead of time if needed.
 
-. Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of *spec.desiredState* to `Promoted`.
+. On the destination cluster, edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of *spec.desiredState* to `Promoted`.
 
 . Save the CR file.
 
@@ -309,8 +317,8 @@ IMPORTANT: Any data written to the destination application during failover will 
 
 .Steps
 
-. Create a snapshot of the source application.
-. Open the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of spec.desiredState to `Established`. 
+. Optional: On the source cluster, create a snapshot of the source application. This ensures that the latest changes from the source cluster are captured.
+. On the destination cluster, edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`) and change the value of spec.desiredState to `Established`. 
 . Save the CR file.
 . Apply the CR:
 +
@@ -326,9 +334,12 @@ When you reverse resync a failed over replication relationship, the destination 
 
 .Steps
 
-. Delete the AppMirrorRelationship CR on the original destination cluster. This causes the destination to become the source. If there are any protection schedules remaining on the new destination cluster, remove them.
+// This section needs rewording / diagram wording to make more clear. old destination vs. new destination, etc - this needs to be clearer.
+// Also explain why we are using two appvaults - this is a best practice to ensure that you storing your app 
+//  resources in multiple buckets to handle an outage of bucket or S3 instance. This is a DR best practice.
+. On the original destination cluster, delete the AppMirrorRelationship CR. This causes the destination to become the source. If there are any protection schedules remaining on the new destination cluster, remove them.
 . Set up a replication relationship by applying the CR files you originally used to set up the relationship to the opposite clusters.
-. Ensure the AppVault CRs are ready on each cluster.
+. Ensure the new destination (original source cluster) is configured with both AppVault CRs.
 . Set up a replication relationship on the opposite cluster, configuring values for the reverse direction.
 
 == Reverse application replication direction
@@ -337,8 +348,10 @@ When you reverse replication direction, Trident protect moves the application to
 
 In this situation, you are swapping the source and destination.
 
+// Explain more of why we are taking a shutdown snapshot. This is to capture the latest data going to the cluster in question.
+
 .Steps
-. Create a shutdown snapshot:
+. On the source cluster, create a shutdown snapshot:
 +
 [role="tabbed-block"]
 ====
@@ -386,20 +399,20 @@ tridentctl-protect create shutdownsnapshot <my_shutdown_snapshot> --appvault <my
 ----
 --
 ====
-. After the snapshot completes, get the status of the snapshot:
+. On the source cluster, after the shutdown snapshot completes, get the status of the shutdown snapshot:
 +
 [source,console]
 ----
 kubectl get shutdownsnapshot -n my-app-namespace <shutdown_snapshot_name> -o yaml
 ----
 
-. Find the value of *shutdownsnapshot.status.appArchivePath* using the following command, and record the last part of the file path (also called the basename; this will be everything after the last slash):
+. On the source cluster, find the value of *shutdownsnapshot.status.appArchivePath* using the following command, and record the last part of the file path (also called the basename; this will be everything after the last slash):
 +
 [source,console]
 ----
 k get shutdownsnapshot -n my-app-namespace <shutdown_snapshot_name> -o jsonpath='{.status.appArchivePath}'
 ----
-. Perform a fail over from the destination cluster to the source cluster, with the following change:
+. Perform a fail over from the new destination cluster to the new source cluster, with the following change:
 +
 NOTE: In step 2 of the fail over procedure, include the `spec.promotedSnapshot` field in the AppMirrorRelationship CR file, and set its value to the basename you recorded in step 3 above.
 
@@ -441,7 +454,7 @@ You can delete a replication relationship at any time. When you delete the appli
 
 .Steps
 
-. Delete the AppMirrorRelationship CR:
+. On the current desination cluster, delete the AppMirrorRelationship CR:
 +
 [source,console]
 ----

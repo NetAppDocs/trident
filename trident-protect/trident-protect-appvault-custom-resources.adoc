@@ -62,7 +62,7 @@ kubectl create secret generic my-optional-data-mover-secret \
 ====
 
 === S3-compatible bucket IAM permissions
-When you create an AppVault CR for any S3-compatible buckets such as Amazon S3, Generic S3, StorageGrid S3, or ONTAP S3, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident protect. You can apply this policy to the user that manages S3-compatible bucket policies.
+When you access S3-compatible buckets such as Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html[StorageGrid S3^], or https://docs.netapp.com/us-en/ontap/s3-config/[ONTAP S3^] using Trident protect, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident protect. You can apply this policy to the user that manages S3-compatible bucket policies.
 
 [source,json]
 ----
@@ -82,8 +82,6 @@ When you create an AppVault CR for any S3-compatible buckets such as Amazon S3, 
   ]
 }
 ----
-
-For more information, refer to to the examples in the https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-policies-s3.html[Amazon S3 documentation^].
 
 === AppVault key generation examples for cloud providers
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers. You can use the following examples to create keys for the credentials of each cloud provider.

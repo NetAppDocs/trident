@@ -61,8 +61,8 @@ kubectl create secret generic my-optional-data-mover-secret \
 --
 ====
 
-=== S3-compatible bucket IAM permissions
-When you access S3-compatible buckets such as Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html[StorageGrid S3^], or https://docs.netapp.com/us-en/ontap/s3-config/[ONTAP S3^] using Trident protect, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident protect. You can apply this policy to the user that manages S3-compatible bucket policies.
+=== S3-compatible storage IAM permissions
+When you access S3-compatible storage such as Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html[StorageGrid S3^], or https://docs.netapp.com/us-en/ontap/s3-config/[ONTAP S3^] using Trident protect, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident protect. You can apply this policy to the user that manages S3-compatible bucket policies.
 
 [source,json]
 ----

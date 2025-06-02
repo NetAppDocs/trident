@@ -117,11 +117,19 @@ tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-inclu
 ----
 --
 ====
-
 // Improve this step with an example of a manual shutdown snapshot, and place it after the example of the schedule. This way, you can explain why a customer would need the extra manual step, which is to not have to wait for the schedule to kick off the first snapshot.
 // Explain what a shutdown snapshot actually is.
 // This needs to be two steps - manual immediate shutdown snapshot, and then creation of a snapshot schedule for future transfers. Because if you only did one snapshot, you would only ever get one transfer. See recording.
 . Optionally, on the source cluster, take a shutdown snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
++
+[NOTE]
+====
+##Alongside the schedule provided below, it is recommended to create a separate daily snapshot schedule with a retention period of 7 days to maintain a common snapshot between peered ONTAP clusters. This ensures that snapshots are available for up to 7 days, but the retention period can be customized based on user requirements.##
+
+##If a failover happens, the system can use these snapshots for up to 7 days for reverse operations. This approach makes the reverse process faster and more efficient because only the changes made since the last snapshot will be transferred, not all the data.##
+
+##If an existing schedule for the application already meets the desired retention requirements, no additional schedules are required.##
+====
 +
 [role="tabbed-block"]
 ====

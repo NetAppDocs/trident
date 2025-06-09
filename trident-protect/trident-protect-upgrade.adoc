@@ -23,15 +23,17 @@ To upgrade Trident protect, perform the following steps.
 ----
 helm repo update
 ----
-. Upgrade the Trident protect CRDs:
+. Upgrade the Trident protect CRDs (required only if you are upgrading from a version earlier than 25.06.0)::
 +
 [source,console]
 ----
-helm upgrade trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2502.0  --namespace trident-protect
+kubectl get crd | grep protect.trident.netapp.io | awk '{print $1}' | xargs -I {} kubectl patch crd {} --type merge -p '{"metadata":{"annotations":{"meta.helm.sh/release-name": "trident-protect"}}}'
 ----
++
+NOTE: This step is not required for version 25.06.0 and later, as the CRDs are now included in the Helm chart.
 . Upgrade Trident protect:
 +
 [source,console]
 ----
-helm upgrade trident-protect netapp-trident-protect/trident-protect --version 100.2502.0 --namespace trident-protect
+helm upgrade trident-protect netapp-trident-protect/trident-protect --version 100.2506.0 --namespace trident-protect
 ----

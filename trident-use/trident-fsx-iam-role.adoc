@@ -135,7 +135,7 @@ Amazon EKS Pod Identity associations provide the ability to manage credentials f
 
 You can create Pod identity via the AWS console or using the following AWS CLI command:
 ----
-aws eks create-addon --cluster-name $EKS_CLUSTER_NAME --addon-name eks-pod-identity-agent
+aws eks create-addon --cluster-name <EKS_CLUSTER_NAME> --addon-name eks-pod-identity-agent
 ----
 For more information refer to link:https://docs.aws.amazon.com/eks/latest/userguide/pod-id-agent-setup.html[Set up the Amazon EKS Pod Identity Agent].
 
@@ -144,7 +144,7 @@ For more information refer to link:https://docs.aws.amazon.com/eks/latest/usergu
 Create trust-relationship.json to enable EKS Service Principal to assume this role for Pod Identity. Then create a role with this trust policy:
 ----
 aws iam create-role \
-  --role-name fsxn-csi-role \ --assume-role-policy-document file://trust-relationship.json \
+  --role-name fsxn-csi-role --assume-role-policy-document file://trust-relationship.json \
   --description "fsxn csi pod identity role"
 ----
 
@@ -186,7 +186,7 @@ Create a pod identity association between IAM role and the Trident service accou
 
 ----
 aws eks create-pod-identity-association \
-  --cluster-name $EKS_CLUSTER_NAME \
+  --cluster-name <EKS_CLUSTER_NAME> \
   --role-arn arn:aws:iam::111122223333:role/fsxn-csi-role \
   --namespace trident --service-account trident-controller
 ----

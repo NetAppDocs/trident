@@ -71,9 +71,7 @@ tar -xf trident-installer-25.02.0.tar.gz
 cd trident-installer
 ----
 
-. Set the values for *cloud provider* and *cloud identity* flags using the following environment variables:
-+
-The following example installs Trident and sets the `cloud-provider` flag to `$CP`, and `cloud-identity` to `$CI`:
+. Set the values for *cloud provider* and *cloud identity*:
 +
 [source,console]
 ----
@@ -253,6 +251,7 @@ NOTE: Replace `<role ARN>` with the ARN of the role that was created in the prev
 +
 NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the *ontapConfigurator* to *false*.
 ////
+
 . Install the Trident EKS add-on.
 +
 [source,console]

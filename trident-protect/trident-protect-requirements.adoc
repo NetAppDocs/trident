@@ -85,6 +85,8 @@ Ensure your ONTAP cluster meets the following requirements if you plan to use Sn
 ** `ontap-nas`
 ** `ontap-san`
 * *Licenses*: ONTAP SnapMirror asynchronous licenses using the Data Protection bundle must be enabled on both the source and destination ONTAP clusters. Refer to https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-licensing-concept.html[SnapMirror licensing overview in ONTAP^] for more information.
++
+NOTE: Only SnapMirror asynchronous protection is supported.
 
 === Peering considerations for SnapMirror replication
 Ensure your environment meets the following requirements if you plan to use storage backend peering:
@@ -96,7 +98,6 @@ Ensure that the SVM names used in the replication relationship between two ONTAP
 +
 * *Astra Control Provisioner or Trident and SVM*: The peered remote SVMs must be available to Astra Control Provisioner or Trident on the destination cluster.
 * *Managed backends*: You need to add and manage ONTAP storage backends in Trident protect to create a replication relationship.
-* *NVMe over TCP*: Trident protect does not support NetApp SnapMirror replication for storage backends that are using the NVMe over TCP protocol.
 
 === Trident / ONTAP configuration for SnapMirror replication
 Trident protect requires that you configure at least one storage backend that supports replication for both the source and destination clusters. If the source and destination clusters are the same, the destination application should use a different storage backend than the source application for the best resiliency.

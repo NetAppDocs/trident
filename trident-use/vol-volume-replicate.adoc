@@ -27,6 +27,8 @@ Ensure that the following prerequisites are met before you begin:
 .ONTAP clusters 
 * *Trident*: Trident version 22.10 or later must exist on both the source and destination Kubernetes clusters that utilize ONTAP as a backend.
 * *Licenses*: ONTAP SnapMirror asynchronous licenses using the Data Protection bundle must be enabled on both the source and destination ONTAP clusters. Refer to https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-licensing-concept.html[SnapMirror licensing overview in ONTAP^] for more information.
++
+NOTE: Only SnapMirror asynchronous protection is supported.
 
 .Peering 
 * *Cluster and SVM*: The ONTAP storage backends must be peered. Refer to https://docs.netapp.com/us-en/ontap-sm-classic/peering/index.html[Cluster and SVM peering overview^] for more information.
@@ -37,7 +39,7 @@ IMPORTANT: Ensure that the SVM names used in the replication relationship betwee
 
 .Supported drivers
 
-* Volume replication is supported for the ontap-nas and ontap-san drivers.
+* Volume replication is supported for the ontap-nas and ontap-san (iSCSI and NVMe/TCP) drivers.
 
 == Create a mirrored PVC
 

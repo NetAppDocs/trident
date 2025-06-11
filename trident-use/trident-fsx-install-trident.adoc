@@ -159,14 +159,15 @@ eksctl create addon --name netapp_trident-operator --cluster <cluster_name> \
 . On the left navigation pane, select *Clusters*.
 . Select the name of the cluster that you want to configure the NetApp Trident CSI add-on for.
 . Select *Add-ons* and then select *Get more add-ons*.
-. On the *Select add-ons* page, do the following:
-.. In the AWS Marketplace EKS-addons section, select the *Trident by NetApp* check box.
+. Follow these steps to select the add-on:
+.. Scroll down to the *AWS Marketplace add-ons* section and type *"Trident”* in the search box.
+.. Select the check box at the top right corner of the Trident by NetApp box.
 .. Select *Next*.
 . On the *Configure selected add-ons* settings page, do the following:
 .. Select the *Version* you would like to use.
-.. For *Select IAM role*, leave at *Not set*.
-.. Follow the *Add-on configuration schema* and set the configurationValues parameter on the *Configuration values* section to the role-arn you created on the previous step (value should be in the following format: 
+.. Follow the *Add-on configuration schema* and set the *Configuration Values* section based on the authentication method you are using. 
 +
+For IRSA, use this format:
 [source,JSON]
 ----
 {
@@ -175,7 +176,7 @@ eksctl create addon --name netapp_trident-operator --cluster <cluster_name> \
 
 }
 ---- 
-If you are using Pod Identity, use the following json format:
+For Pod Identity, use this format:
 +
 [source,JSON]
 ----

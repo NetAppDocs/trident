@@ -91,7 +91,7 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
-*Do not specify for ASA r2*. <check for 25.06>
+*Do not specify for ASA r2*.
 
 a|""
 
@@ -100,7 +100,7 @@ a|""
 
 If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.
 
-*Do not specify for ASA r2*.<check for 25.06>|"" (not enforced by default) 
+*Do not specify for ASA r2*.|"" (not enforced by default) 
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. 
 
@@ -164,15 +164,15 @@ You can control default provisioning using these options in the `defaults` secti
 |===
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |"true"
-*If specified, set to `true` for ASA r2*. <check for 25.06>
+*If specified, set to `true` for ASA r2*.
 
 |`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick).
 
-*Set to `none` for ASA r2*. <check for 25.06> |"none"
+*Set to `none` for ASA r2*.|"none"
 
 |`snapshotPolicy` |Snapshot policy to use.
 
-*Set to `none` for ASA r2*. <check for 25.06> |"none"
+*Set to `none` for ASA r2*.|"none"
 
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
@@ -183,7 +183,7 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 
 |`snapshotReserve` |Percentage of volume reserved for snapshots.
 
-*Do not specify for ASA r2*. <check for 25.06>	|"0" if `snapshotPolicy` is "none", otherwise ""
+*Do not specify for ASA r2*. |"0" if `snapshotPolicy` is "none", otherwise ""
 
 |`splitOnClone` |Split a clone from its parent upon creation |"false"
 
@@ -193,16 +193,16 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
 
-*If specified, set to `true` for ASA r2*. <check for 25.06>
+*If specified, set to `true` for ASA r2*.
 
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 LUKS encryption is not supported for NVMe/TCP.| ""
-Set to `false` for ASA r2. <check for 25.06>
+Set to `false` for ASA r2.
 
 |`tieringPolicy` |Tiering policy to use	"none" 
 
-*Do not specify for ASA r2*. <check for 25.06>|
+*Do not specify for ASA r2*.|
 
 
 |`nameTemplate` | Template to create custom volume names.

@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-use/ontap-san-prep.html
-keywords: trident backend, ontap san, ontap-san, ontap-san-economy, asa r2, iscsi, nvme/tcp
+keywords: trident backend, ontap san, ontap-san, ontap-san-economy, fcp, asa r2, iscsi, nvme/tcp
 summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN drivers.
 ---
 
@@ -14,9 +14,9 @@ summary: Learn about how to prepare to configure an ONTAP backend with ONTAP SAN
 Understand the requirements and authentication options for configuring an ONTAP backend with ONTAP SAN drivers.
 
 == Requirements
-For all ONTAP backends, Trident requires at least one aggregate be assigned to the SVM.
+For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
 
-Refer to this Knowledge Base article on how to assign aggregates to SVM in ASA r2 systems: link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[Storage Unit create by SVM admin using CLI fails with error "No candidate aggregates are available for storage services"^].
+NOTE: Refer to link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[this] Knowledge Base article on how to assign aggregates to SVM in ASA r2 systems.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 

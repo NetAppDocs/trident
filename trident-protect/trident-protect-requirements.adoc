@@ -83,7 +83,7 @@ Ensure your ONTAP cluster meets the following requirements if you plan to use Sn
 
 * *Astra Control Provisioner or Trident*: Astra Control Provisioner or Trident must exist on both the source and destination Kubernetes clusters that utilize ONTAP as a backend. Trident protect supports replication with NetApp SnapMirror technology using storage classes backed by the following drivers:
 ** `ontap-nas`
-** `ontap-san`
+** `ontap-san` (iSCSI and NVMe/TCP)
 * *Licenses*: ONTAP SnapMirror asynchronous licenses using the Data Protection bundle must be enabled on both the source and destination ONTAP clusters. Refer to https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-licensing-concept.html[SnapMirror licensing overview in ONTAP^] for more information.
 +
 NOTE: Only SnapMirror asynchronous protection is supported.

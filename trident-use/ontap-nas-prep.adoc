@@ -407,9 +407,9 @@ Beginning with the 25.06 release, NetAPP Trident supports secure provisioning of
 .Points to remember
 
 * Importing of `ontap-nas-economy` volumes is not supported with secure SMB.
-* Only read-only clones are supported for `ontap-nas-economy ` volumes when secure SMB is enabled.
+* Only read-only clones are supported for `ontap-nas-economy` volumes when secure SMB is enabled.
 * If Secure SMB is enabled, Trident will always create SMB share per volume even if SMB share is mentioned in the backend
-* Updating of PVC annotation for SMB share ACL is not supported.
+* Updating of PVC annotation, storage class annotation, and backend field for SMB share ACL is not supported.
 * SMB Share ACL specified in the Annotation of clone PVC will take precedence over the ones in source PVC.
 * Ensure that you provide valid AD users while enabling secure SMB. If you have provided an invalid AD user, Trident will only log a warning message and not error out the API call. We would also want to say that providing the valid AD user is upon the customers.
 * If you have provided the same AD user in backend, storage class, and PVC with different permissions, the user permission priority wiil be PVC, SC and then backend.

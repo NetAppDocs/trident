@@ -411,12 +411,13 @@ Beginning with the 25.06 release, NetAPP Trident supports secure provisioning of
 * If Secure SMB is enabled, Trident will always create SMB share per volume even if SMB share is mentioned in the backend
 * Updating of PVC annotation for SMB share ACL is not supported.
 * SMB Share ACL specified in the Annotation of clone PVC will take precedence over the ones in source PVC.
-* Ensure that you provide valid AD users while enabling secure SMB.
-* Secure SMB is not supported for unmanaged volume import with `ontap-nas` driver.
+* Ensure that you provide valid AD users while enabling secure SMB. If you have provided an invalid AD user, Trident will only log a warning message and not error out the API call. We would also want to say that providing the valid AD user is upon the customers.
+* If you have provided the same AD user in backend, storage class, and PVC with different permissions, the user permission priority wiil be PVC, SC and then backend.
+* When Secure SMB is enabled, unmanaged volume import is not supported for `ontap-nas` driver.
 
 .Steps
 
-. Specify smbAdminUser in TridentBackendConfig as shown in the following example:
+. Specify adAdminUser in TridentBackendConfig as shown in the following example:
 +
 [source,yaml]
 ----
@@ -432,7 +433,7 @@ spec:
   svm: svm0
   useREST: true
   defaults:
-    smbAdminUser: tridentADdev
+    adAdminUser: tridentADtest
   credentials:
     name: backend-tbc-ontap-invest-secret
 ----
@@ -451,9 +452,6 @@ provisioner: csi.trident.netapp.io
 parameters:
   backendType: "ontap-nas"
   trident.netapp.io/nasType: "smb"
-  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
-  csi.storage.k8s.io/node-stage-secret-namespace: "trident"
-  smbUserPermission: full-control
 ----
 You can choose one of the following for `smbUserPermission`: `full_control`, `change`, or `read`. The default permission is `full-control`
 +
@@ -462,24 +460,21 @@ You can choose one of the following for `smbUserPermission`: `full_control`, `ch
 The following example creates a PVC:
 [source,yaml]
 ----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: my-pvc
-  annotations:
-    trident.netapp.io/smbShareACLs:
-      full_control:
-        - tridentTestuser
-        - tridentuser
-      change:
-        - tridentADuser
-      read:
-        - tridentDevuser
-        - tridentNuser
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+apiVersion: v1  
+kind: PersistentVolumeClaim  
+metadata:  
+  name: my-pvc4  
+  namespace: trident  
+  annotations:  
+    trident.netapp.io/snapshotDirectory: "true"  
+    trident.netapp.io/smbShareAccessControl: |  
+      read:  
+        - tridentADtest  
+spec:  
+  accessModes:  
+    - ReadWriteOnce  
+  resources:  
+    requests:  
+      storage: 1Gi  
+  storageClassName: ontap-smb-sc  
 ----

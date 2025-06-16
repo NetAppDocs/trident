@@ -14,8 +14,11 @@ summary: You can use Trident protect to restore your application from a snapshot
 [.lead]
 You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 
-NOTE: When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
-
+[NOTE]
+====
+* When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
+* ##Restoring from a backup to a different namespace or to the original namespace is supported for qtree volumes. However, restoring from a snapshot to a different namespace or to the original namespace is not supported for qtree volumes.##
+====
 include::../_include/namespace-anno-labels.adoc[]
 
 == Supported annotations

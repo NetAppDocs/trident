@@ -21,7 +21,7 @@ Before installing Trident you should review these general system requirements. S
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.32 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.33 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -33,16 +33,16 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 Trident supports multiple container engines and orchestrators, including the following:
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.26 - 1.32
-* OpenShift 4.10 - 4.18
-* Rancher Kubernetes Engine 2 (RKE2) v1.26.7+rke2r1, v1.28.5+rke2r1
+* Kubernetes 1.26 <<check for 25.06>> - 1.33
+* OpenShift 4.10 - 4.18 <<check for 25.06>>
+* Rancher Kubernetes Engine 2 (RKE2) v1.26.7+rke2r1, v1.28.5+rke2r1 <<check for 25.06>>
 
 The Trident operator is supported with these releases:
 
-* Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.26 - 1.32
-* OpenShift 4.10 - 4.18
-* Rancher Kubernetes Engine 2 (RKE2) v1.26.7+rke2r1, v1.28.5+rke2r1
+* Anthos On-Prem (VMware) and Anthos on bare metal 1.16 <<check for 25.06>>
+* Kubernetes 1.26 - 1.33 <<check for 25.06>>
+* OpenShift 4.10 - 4.18 <<check for 25.06>>
+* Rancher Kubernetes Engine 2 (RKE2) v1.26.7+rke2r1, v1.28.5+rke2r1 <<check for 25.06>>
 
 Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Mirantis Kubernetes Engine (MKE), and VMWare Tanzu Portfolio. 
 
@@ -85,6 +85,8 @@ Trident supports the following ONTAP drivers for KubeVirt and OpenShift Virtuali
 
 The table below summarizes the features available with this release of Trident and the versions of Kubernetes it supports.
 
+<<check for 25.06>>
+
 [cols=3,options="header"]
 |===
 |Feature
@@ -93,35 +95,35 @@ The table below summarizes the features available with this release of Trident a
 
 |Trident
 
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |Volume Snapshots
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |PVC from Volume Snapshots
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |iSCSI PV resize
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |ONTAP Bidirectional CHAP
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |Dynamic Export Policies
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |Trident Operator
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |CSI Topology
-a|1.26 - 1.32
+a|1.26 - 1.33
 a|No
 
 |===
@@ -163,21 +165,23 @@ link:../trident-reference/ports.html[Trident ports]
 
 For air-gapped installations, the following list is a reference of container images needed to install Trident. Use the `tridentctl images` command to verify the list of needed container images.
 
+<<check for 25.06>>
+
 [cols=2,options="header"]
 |===
 |Kubernetes versions
 |Container image
 
-| v1.26.0, v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0
+| v1.26.0, v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0
 a|
-* docker.io/netapp/trident:25.02.0                      
-* docker.io/netapp/trident-autosupport:25.02                   
+* docker.io/netapp/trident:25.06.0                      
+* docker.io/netapp/trident-autosupport:25.06                   
 * registry.k8s.io/sig-storage/csi-provisioner:v5.2.0 
 * registry.k8s.io/sig-storage/csi-attacher:v4.8.0           
 * registry.k8s.io/sig-storage/csi-resizer:v1.13.1               
 * registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0           
 * registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0 
-* docker.io/netapp/trident-operator:25.02.0 (optional)  
+* docker.io/netapp/trident-operator:25.06.0 (optional)  
 
 |
 

@@ -13,6 +13,8 @@ summary: Kubernetes volume snapshots of Persistent Volumes (PVs) enable point-in
 [.lead]
 Kubernetes volume group snapshots of Persistent Volumes (PVs) NetApp Trident provides the ability to create snapshots of multiple volumes ( a group of volume snapshots). This volume group snapshot represents copies from multiple volumes that are taken at the same point-in-time. 
 
+NOTE: VolumeGroupSnapshot is a beta feature and has beta APIs.
+
 == Create volume group snapshots
 Volume group snapshot is supported with the `ontap-san` driver. *<<needs review>>*
 .Before you begin
@@ -25,8 +27,8 @@ If your Kubernetes distribution does not include the external snapshot controlle
 NOTE: Don't create a snapshot controller if creating on-demand volume group snapshots in a GKE environment. GKE uses a built-in, hidden snapshot controller.
 +
 * In the snapshot controller YAML, set the `CSIVolumeGroupSnapshot` feature gate to 'true' to ensure that volume group snapshot is enabled.
-* Create the required storage classes before creating a volume group snapshot.
-* Ensure that all PVCs/volumes are be on the same SVM to be able to create VolumeGroupSnapshot. 
+* Create the required volume group snapshot classes before creating a volume group snapshot.
+* Ensure that all PVCs/volumes are on the same SVM to be able to create VolumeGroupSnapshot. 
 
 .Steps
 * Create a VolumeGroupSnapshotClass prior to creating a VolumeGroupSnapshot. For more information, refer to link:../trident-reference/objects.html#kubernetes-volumegroupsnapshotclass-objects[VolumeGroupSnapshotClass].
@@ -42,9 +44,9 @@ metadata:
 driver: csi.trident.netapp.io
 deletionPolicy: Delete
 ----
-* Create a PVC with required label using existing storage classes.
+* Create PVCs with required labels using existing storage classes, or add these labels to existing PVCs. 
 +
-The following example creates the PVC using `pvc1-group-snap` as the data source and label `consistentGroupSnapshot: groupA`.
+The following example creates the PVC using `pvc1-group-snap` as the data source and label `consistentGroupSnapshot: groupA`. Define the label key and value based on your requirements.
 [source,yaml]
 ----
 kind: PersistentVolumeClaim
@@ -94,7 +96,11 @@ NOTE: When you restore a snapshot copy, the existing volume configuration is ove
 
 == Delete a PV with associated group snapshots
 
-When deleting a group volume snapshot, you can delete VolumeGroupSnapshots as a whole, not individual snapshots in the group.
+When deleting a group volume snapshot:
+
+* You can delete VolumeGroupSnapshots as a whole, not individual snapshots in the group.
+* If PersistentVolumes are deleted while a snapshot exists for that PersistentVolume, Trident will move that volume to a "deleting" state because the snapshot must be removed before the volume can be safely removed.
+* If a clone is made using a grouped snapshot and then the group is to be deleted, a split-on-clone operation will begin and the group cannot be deleted until the split is complete.
 
 == Deploy a volume snapshot controller
 
@@ -130,8 +136,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 ----
 +
 NOTE: If necessary, open `deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml` and update `namespace` to your namespace.
-+
-. In the `rbac-snapshot-controller.yaml` YAML in Trident, set the `CSIVolumeGroupSnapshot` feature gate to 'true' to ensure that volume group snapshot is enabled.
 
 == Related links
 

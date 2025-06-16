@@ -447,11 +447,18 @@ The user value specified for the annotation `trident.netapp.io/smbShareAdUser` s
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: trident-sc-smb
-provisioner: csi.trident.netapp.io
+  name: ontap-smb-sc
+  annotations:
+    trident.netapp.io/smbShareAdUserPermission: change (optional)
+    trident.netapp.io/smbShareAdUser: tridentADuser
 parameters:
-  backendType: "ontap-nas"
-  trident.netapp.io/nasType: "smb"
+  backendType: ontap-nas
+  csi.storage.k8s.io/node-stage-secret-name: smbcreds
+  csi.storage.k8s.io/node-stage-secret-namespace: trident
+  trident.netapp.io/nasType: smb
+provisioner: csi.trident.netapp.io
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
 ----
 You can choose one of the following for `smbUserPermission`: `full_control`, `change`, or `read`. The default permission is `full-control`
 +

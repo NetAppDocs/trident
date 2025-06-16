@@ -62,10 +62,10 @@ To use Trident, you need one or more of the following supported backends:
 * On-premises FAS, AFF, or ASA r2 cluster versions under NetApp's limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
 * NetApp HCI/Element software 11 or above
 
-== Trident support for KubeVirt and OpenShift virtualization
+== Trident support for KubeVirt and OpenShift Virtualization
 
 .Storage drivers supported:
-Trident supports the following ONTAP drivers for KubeVirt and OpenShift virtualization:
+Trident supports the following ONTAP drivers for KubeVirt and OpenShift Virtualization:
 
 * ontap-nas
 * ontap-nas-economy
@@ -73,7 +73,7 @@ Trident supports the following ONTAP drivers for KubeVirt and OpenShift virtuali
 * ontap-san-economy (iSCSI Only)
 
 .Points to consider:
-* Update storage class to have the `fsType` parameter (for example: `fsType: "ext4"`) in OpenShift virtualization environment. If needed, set the volume mode to block explicitly using the `volumeMode=Block` parameter in the `dataVolumeTemplates` to notify CDI to create Block data volumes.
+* Update storage class to have the `fsType` parameter (for example: `fsType: "ext4"`) in OpenShift Virtualization environment. If needed, set the volume mode to block explicitly using the `volumeMode=Block` parameter in the `dataVolumeTemplates` to notify CDI to create Block data volumes.
 * _RWX access mode for block-storage drivers_: ontap-san (iSCSI, NVMe/TCP, FC) and ontap-san-economy (iSCSI) drivers are supported only with "volumeMode: Block" (raw device). For these drivers, the `fstype` parameter cannot be used because the volumes are provided in raw device mode.
 * For live-migration workflow/s where RWX access mode is required, these combinations are supported:
 ** NFS + `volumeMode=Filesystem`
@@ -130,7 +130,7 @@ a|No
 
 Though Trident does not officially support specific operating systems, the following are known to work:
 
-* RedHat CoreOS (RHCOS) versions as supported by OpenShift Container Platform (AMD64 and ARM64)
+* Red Hat Enterprise Linux CoreOS (RHCOS) versions as supported by OpenShift Container Platform (AMD64 and ARM64)
 * RHEL 8+ (AMD64 and ARM64)
 +
 NOTE: NVMe/TCP requires RHEL 9 or later.
@@ -174,7 +174,7 @@ a|
 * docker.io/netapp/trident-autosupport:25.02                   
 * registry.k8s.io/sig-storage/csi-provisioner:v5.2.0 
 * registry.k8s.io/sig-storage/csi-attacher:v4.8.0           
-* registry.k8s.io/sig-storage/csi-resizer:v1.13.2               
+* registry.k8s.io/sig-storage/csi-resizer:v1.13.1               
 * registry.k8s.io/sig-storage/csi-snapshotter:v8.2.0           
 * registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0 
 * docker.io/netapp/trident-operator:25.02.0 (optional)  

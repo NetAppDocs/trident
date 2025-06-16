@@ -42,7 +42,7 @@ Beginning with Trident 25.02, the What's New summary provides details about enha
 ** Added support for Kubernetes 1.32.
 * *OpenShift*: 
 ** Added support for automatic iSCSI node preparation for RHCOS on ROSA clusters.
-** Added support for Openshift virtualization for ONTAP drivers.
+** Added support for OpenShift Virtualization for ONTAP drivers.
 * Added Fibre Channel support on ONTAP-SAN driver.
 * Added NVMe LUKS support.
 * Switched to scratch image for all base images.
@@ -572,7 +572,7 @@ Known issues identify problems that might prevent you from using the product suc
 
 * When installing Trident (using `tridentctl` or the Trident Operator) and using `tridentctl` to manage Trident, you should ensure the `KUBECONFIG` environment variable is set. This is necessary to indicate the Kubernetes cluster that `tridentctl` should work against. When working with multiple Kubernetes environments, you should ensure that the `KUBECONFIG` file is sourced accurately.
 
-* To perform online space reclamation for iSCSI PVs, the underlying OS on the worker node might require mount options to be passed to the volume. This is true for RHEL/RedHat CoreOS instances, which require the `discard` https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[mount option^]; ensure that the discard mountOption is included in your https://kubernetes.io/docs/concepts/storage/storage-classes/[`StorageClass`^] to support online block discard.
+* To perform online space reclamation for iSCSI PVs, the underlying OS on the worker node might require mount options to be passed to the volume. This is true for RHEL/Red Hat Enterprise Linux CoreOS (RHCOS) instances, which require the `discard` https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_file_systems/discarding-unused-blocks_managing-file-systems[mount option^]; ensure that the discard mountOption is included in your https://kubernetes.io/docs/concepts/storage/storage-classes/[`StorageClass`^] to support online block discard.
 
 * If you have more than one instance of Trident per Kubernetes cluster, Trident cannot communicate with other instances and cannot discover other volumes that they have created, which leads to unexpected and incorrect behavior if more than one instance runs within a cluster. There should be only one instance of Trident per Kubernetes cluster.
 

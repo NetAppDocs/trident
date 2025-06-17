@@ -745,7 +745,7 @@ metadata:
     trident.netapp.io/smbShareAdUserPermission: change
     trident.netapp.io/smbShareAdUser: tridentADtest
 parameters:
-  backendType: ontap-nas-economy
+  backendType: ontap-nas
   csi.storage.k8s.io/node-stage-secret-name: smbcreds
   csi.storage.k8s.io/node-stage-secret-namespace: trident
   trident.netapp.io/nasType: smb
@@ -766,13 +766,37 @@ metadata:
     trident.netapp.io/smbShareAdUserPermission: change (optional)
     trident.netapp.io/smbShareAdUser: tridentADuser3
 parameters:
-  backendType: ontap-nas
+  backendType: ontap-nas-economy
   csi.storage.k8s.io/node-stage-secret-name: smbcreds
   csi.storage.k8s.io/node-stage-secret-namespace: trident
   trident.netapp.io/nasType: smb
 provisioner: csi.trident.netapp.io
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
+----
+
+==== PVC example with a single AD user
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc4
+  namespace: trident
+  annotations:
+    trident.netapp.io/smbShareAccessControl:
+      change:
+        - tridentADtest
+      read:
+        - tridentADuser
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ontap-smb-sc
 ----
 
 ==== PVC example with multiple AD users
@@ -801,29 +825,7 @@ spec:
       storage: 1Gi
 ----
 
-==== PVC example with a single AD user
 
-[source,yaml]
-----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: my-pvc4
-  namespace: trident
-  annotations:
-    trident.netapp.io/smbShareAccessControl:
-      change:
-        - tridentADtest
-      read:
-        - tridentADuser
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: ontap-smb-sc
-----
 
 
 

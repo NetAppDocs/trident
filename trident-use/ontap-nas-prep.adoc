@@ -400,6 +400,7 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 |""
 |===
 
+// Secure SMB - Added for 25.06 (June 2025), Writer: Arul Deepa A
 === Enable secure SMB
 
 Beginning with the 25.06 release, NetAPP Trident supports secure provisioning of SMB volumes created using `ontap-nas` and `ontap-nas-economy` backends. When secure SMB is enabled, you can provide controlled access to SMB shares for Active Directory (AD) users using Access Control Lists (ACLs).
@@ -417,7 +418,7 @@ Beginning with the 25.06 release, NetAPP Trident supports secure provisioning of
 
 .Steps
 
-. Specify adAdminUser in TridentBackendConfig as shown in the following example:
+1.  Specify adAdminUser in TridentBackendConfig as shown in the following example:
 +
 [source,yaml]
 ----
@@ -437,11 +438,13 @@ spec:
   credentials:
     name: backend-tbc-ontap-invest-secret
 ----
-. Add the annotation in the Storage class.
-+
-Add the `trident.netapp.io/smbShareAdUser` annotation in the storage class to enable secure SMB.
 
+2.  Add the annotation in the Storage class.
++
+Add the `trident.netapp.io/smbShareAdUser` annotation to the storage class to enable secure SMB.
 The user value specified for the annotation `trident.netapp.io/smbShareAdUser` should be same as the username specified in the `smbcreds` secret.
+You can choose one of the following for `smbShareAdUserPermission`: `full_control`, `change`, or `read`. The default permission is `full-control`. 
+
 [source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
@@ -460,9 +463,8 @@ provisioner: csi.trident.netapp.io
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 ----
-You can choose one of the following for `smbUserPermission`: `full_control`, `change`, or `read`. The default permission is `full-control`
-+
-. Create a PVC.
+[start=3]
+3. Create a PVC.
 +
 The following example creates a PVC:
 [source,yaml]

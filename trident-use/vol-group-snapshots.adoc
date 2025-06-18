@@ -13,10 +13,10 @@ summary: Kubernetes volume snapshots of Persistent Volumes (PVs) enable point-in
 [.lead]
 Kubernetes volume group snapshots of Persistent Volumes (PVs) NetApp Trident provides the ability to create snapshots of multiple volumes ( a group of volume snapshots). This volume group snapshot represents copies from multiple volumes that are taken at the same point-in-time. 
 
-NOTE: VolumeGroupSnapshot is a beta feature and has beta APIs.
+NOTE: VolumeGroupSnapshot is a beta feature in Kubernetes with beta APIs. Kubernetes 1.32 is the minimum version required for VolumeGroupSnapshot.
 
 == Create volume group snapshots
-Volume group snapshot is supported with the `ontap-san` driver. *<<needs review>>*
+Volume group snapshot is supported with the `ontap-san` driver, not supported with fibre channel (fcp).
 .Before you begin
 
 * Ensure that your Kubernetes version is K8s 1.32 or higher.
@@ -100,7 +100,7 @@ When deleting a group volume snapshot:
 
 * You can delete VolumeGroupSnapshots as a whole, not individual snapshots in the group.
 * If PersistentVolumes are deleted while a snapshot exists for that PersistentVolume, Trident will move that volume to a "deleting" state because the snapshot must be removed before the volume can be safely removed.
-* If a clone is made using a grouped snapshot and then the group is to be deleted, a split-on-clone operation will begin and the group cannot be deleted until the split is complete.
+* If a clone has been created using a grouped snapshot and then the group is to be deleted, a split-on-clone operation will begin and the group cannot be deleted until the split is complete.
 
 == Deploy a volume snapshot controller
 

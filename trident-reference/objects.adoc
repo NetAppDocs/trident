@@ -241,7 +241,7 @@ NOTE: Typically, you do not need to manage the `VolumeSnapshotContent` object. A
 
 == Kubernetes `VolumeGroupSnapshotClass` objects
 
-Kubernetes `VolumeGroupSnapshotClass` objects are analogous to `StorageClasses`. They help define multiple classes of storage and are referenced by volume group snapshots to associate the snapshot with the required snapshot class. Each volume group snapshot is associated with a single volume group snapshot class.
+Kubernetes `VolumeGroupSnapshotClass` objects are analogous to `VolumeSnapshotClass`. They help define multiple classes of storage and are referenced by volume group snapshots to associate the snapshot with the required snapshot class. Each volume group snapshot is associated with a single volume group snapshot class.
 
 A `VolumeGroupSnapshotClass` should be defined by an administrator in order to create group of snapshots. A volume group snapshot class is created with the following definition:
 

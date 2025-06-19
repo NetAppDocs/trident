@@ -809,12 +809,12 @@ metadata:
   name: my-test-pvc
   annotations:
     trident.netapp.io/smbShareACLs: |
-      fullControl:
+      full_control:
         - tridentTestuser
         - tridentuser
       change:
         - tridentADuser
-      readOnly:
+      read:
         - tridentTestuser2
         - tridentTestuser3
 spec:

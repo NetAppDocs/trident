@@ -15,7 +15,52 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 25.02.1
+
+== What's new in 25.02
+The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+
+=== Trident
+
+==== Enhancements
+
+* *Kubernetes*:
+
+** Added support for CSI Volume Group Snapshots with v1beta Volume Group Snapshot Kubernetes APIs, for iSCSI volumes.
+** Added FSTRIM-support with LUKS-encrypted volumes, to reuse filesystem space properly. 
+** Enhanced LUKS-encrypted volumes formatting performance.
+** Enhanced LUKS cleanup for failed but partially formatted LUKS devices.
+** Enhanced Trident node idempotency for NVMe volume attach and detach.
+* Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes.
+* [Tech Preview] Added manual QoS support with the ANF driver.
+* Enhanced Trident node concurrency for iSCSI volumes.
+* Added NVMe/TCP protocol support for NetApp ASA (r2), in addition to iSCSI.
+
+==== Experimental Enhancements:
+* Added tech preview for Trident controller concurrency via the `--enable-concurrency` feature flag.
+This feature is currently experimental and may not support all workflows. At this time, it is only enabled with the ONTAP-SAN driver (for iSCSI and FC protocols). 
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed missing node IP addresses from automatic export policies (link:https://github.com/NetApp/trident/issues/965[Issue #965]).
+** Fixed CSI NodeExpandVolume issue where multipath devices could be left with incongruent sizes if a SCSI disk was unavailable.
+** Fixed failure to clean up duplicate export policies for ONTAP-NAS and ONTAP-NAS-Economy drivers.
+** Fixed GCNV dual protocols defaulting to a single protocol when no NFS mount options were specified in GCNV backend.
+* Fixed missing export policies for PVCs created from snapshots (link:https://github.com/NetApp/trident/issues/1016[Issue #1016]).
+* Fixed timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+
+=== Trident protect
+NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+
+==== Enhancements
+
+* Added backup and restore support for KubeVirt / OpenShift Virtualization VMs for both volumeMode: File and volumeMode: Block (raw device) storage. This support is compatible with all Trident drivers, and enhances the existing protection features when replicating storage using NetApp SnapMirror with Trident protect.
+
+==== Fixes
+
+* Improved the management of temporary volumes to skip the ONTAP volume recovery queue.
+
+== Changes in 25.02.1
 
 === Trident
 ==== Fixes

@@ -16,7 +16,7 @@ Release Notes provide information about new features, enhancements, and bug fixe
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
 
-== What's new in 25.02
+== What's new in 25.06
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident
@@ -24,7 +24,6 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 ==== Enhancements
 
 * *Kubernetes*:
-
 ** Added support for CSI Volume Group Snapshots with v1beta Volume Group Snapshot Kubernetes APIs, for iSCSI volumes.
 ** Added FSTRIM-support with LUKS-encrypted volumes, to reuse filesystem space properly. 
 ** Enhanced LUKS-encrypted volumes formatting performance.
@@ -42,7 +41,6 @@ This feature is currently experimental and may not support all workflows. At thi
 ==== Fixes
 
 * *Kubernetes*:
-** Fixed missing node IP addresses from automatic export policies (link:https://github.com/NetApp/trident/issues/965[Issue #965]).
 ** Fixed CSI NodeExpandVolume issue where multipath devices could be left with incongruent sizes if a SCSI disk was unavailable.
 ** Fixed failure to clean up duplicate export policies for ONTAP-NAS and ONTAP-NAS-Economy drivers.
 ** Fixed GCNV dual protocols defaulting to a single protocol when no NFS mount options were specified in GCNV backend.
@@ -54,11 +52,23 @@ NetApp Trident protect provides advanced application data management capabilitie
 
 ==== Enhancements
 
-* Added backup and restore support for KubeVirt / OpenShift Virtualization VMs for both volumeMode: File and volumeMode: Block (raw device) storage. This support is compatible with all Trident drivers, and enhances the existing protection features when replicating storage using NetApp SnapMirror with Trident protect.
+* Enhancing restore times, providing the option to do more frequent full backups. 
+* Improved granularity of application definition and selective restore with Group-Version-Kind (GVK) filtering. 
+* Efficient resync and reverse replication when using AppMirrorRelationship (AMR) with SnapMirror, to avoid full PVC replication. 
+* Added ability to use EKS Pod Identity to create AppVault buckets, removing the need to specify a secret with the bucket credentials for EKS clusters. 
+* Providing the ability to skip restoring labels and annotations in the restore namespace, if needed.
+* AppMirrorRelationship (AMR) will now check for source PVC expansion and perform the appropriate expansion on the destination PVC as needed.
 
 ==== Fixes
 
-* Improved the management of temporary volumes to skip the ONTAP volume recovery queue.
+* Fixed bug where snapshot annotation values from previous snapshots were being applied to newer snapshots.  All snapshot annotations are applied correctly now.
+* Defining by default a secret for data mover encryption (Kopia / Restic), if not is custom defined.
+* Added improved validation and error messages for S3 appvault creation.
+* AppMirrorRelationship (AMR) now only replicates PVs in the Bound state, to avoid failed attempts.
+* Fixed issue where errors were displayed when getting appvaultcontent on an appvault with large number of backups.
+* KubeVirt VMSnapshots are excluded from restore and failover operations to avoid failures.
+* Fixed issue with Kopia where snapshots were being removed prematurely due to Kopia default retention schedule overriding what was set by the user in the schedule.
+
 
 == Changes in 25.02.1
 

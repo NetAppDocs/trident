@@ -11,7 +11,7 @@ summary: NetApp is continually improving and enhancing its products and services
 :imagesdir: ../media/
 
 [.lead]
-Release Notes provide information about new features, enhancements, and bug fixes in the latest version of Trident.
+Release Notes provide information about new features, enhancements, and bug fixes in the latest version of NetApp Trident.
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
@@ -24,28 +24,45 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 ==== Enhancements
 
 * *Kubernetes*:
-** Added support for CSI Volume Group Snapshots with v1beta Volume Group Snapshot Kubernetes APIs, for iSCSI volumes.
-** Added FSTRIM-support with LUKS-encrypted volumes, to reuse filesystem space properly. 
+** Added support for CSI Volume Group Snapshots with v1beta Volume Group Snapshot Kubernetes APIs for ontap-san iSCSI driver.
+** Added support for ONTAP ASA r2 for NVMe/TCP in addition to iSCSI.
+** Added `--allow-discards` when opening LUKS volumes to enable filesystem space reclamation.
 ** Enhanced LUKS-encrypted volumes formatting performance.
 ** Enhanced LUKS cleanup for failed but partially formatted LUKS devices.
 ** Enhanced Trident node idempotency for NVMe volume attach and detach.
+* Added support to make FSGroup Policy configurable.
 * Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes.
-* [Tech Preview] Added manual QoS support with the ANF driver.
 * Enhanced Trident node concurrency for iSCSI volumes.
-* Added NVMe/TCP protocol support for NetApp ASA (r2), in addition to iSCSI.
+* Enhanced Trident node concurrency for higher scalability on node operations for NFS and SMB volumes.
+* Made split on clone operations asynchronous when creating volume clones.
+* Added internalID field to the Trident volume config for ontap-nas-economy driver.
+* Added option to add or override selectors via StorageClass annotations.
+* Added support for volume replication for NVMe backends.
 
 ==== Experimental Enhancements:
-* Added tech preview for Trident controller concurrency via the `--enable-concurrency` feature flag.
-This feature is currently experimental and may not support all workflows. At this time, it is only enabled with the ONTAP-SAN driver (for iSCSI and FC protocols). 
+NOTE: Not for use in production environments.
+
+* [Tech Preview] Enabled concurrent Trident controller operations via the --enable-concurrency feature flag for ONTAP-SAN driver (iSCSI and FC protocols).
++
+NOTE: This feature is experimental and does not support all workflows.
+
+* [Tech Preview] Added manual QOS support with the ANF driver.
+
+==== Deprecations:
+* *Kubernetes*: Updated minimum supported Kubernetes to v1.27.
 
 ==== Fixes
 
 * *Kubernetes*:
-** Fixed CSI NodeExpandVolume issue where multipath devices could be left with incongruent sizes if a SCSI disk was unavailable.
+** Fixed CSI NodeExpandVolume issue where multipath devices could be left with incorrect sizes when SCSI disk is unavailable.
 ** Fixed failure to clean up duplicate export policies for ONTAP-NAS and ONTAP-NAS-Economy drivers.
-** Fixed GCNV dual protocols defaulting to a single protocol when no NFS mount options were specified in GCNV backend.
+** Fixed GCNV volumes defaulting to NFSv3 only when nfsMountOptions is unset; now support both NFSv3 and NFSv4 protocols.
+** Fixed deployment issue when installing Trident using Kustomize (link:https://github.com/NetApp/trident/issues/831[Issue #831]).
 * Fixed missing export policies for PVCs created from snapshots (link:https://github.com/NetApp/trident/issues/1016[Issue #1016]).
 * Fixed timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+* Fixed issue when using NFSv3 with Bottlerocket.
+* Fixed issue where the ANF volume sizes are not automatically aligned to 1GiB increments.
+* Fixed issue with ONTAP-NAS-Economy volumes expanding up to 300 TB despite resize failures.
 
 === Trident protect
 NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.

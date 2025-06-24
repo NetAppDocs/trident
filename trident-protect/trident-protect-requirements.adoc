@@ -86,6 +86,8 @@ Ensure your ONTAP cluster meets the following requirements if you plan to use Sn
 ** `ontap-san` (iSCSI and NVMe/TCP)
 * *Licenses*: ONTAP SnapMirror asynchronous licenses using the Data Protection bundle must be enabled on both the source and destination ONTAP clusters. Refer to https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-licensing-concept.html[SnapMirror licensing overview in ONTAP^] for more information.
 +
+Beginning with ONTAP 9.10.1, all licenses are delivered as a NetApp license file (NLF), which is a single file that enables multiple features. Refer to link: https://docs.netapp.com/us-en/ontap/system-admin/manage-licenses-concept.html#licenses-included-with-ontap-one[Licenses included with ONTAP One^] for more information.
++
 NOTE: Only SnapMirror asynchronous protection is supported.
 
 === Peering considerations for SnapMirror replication

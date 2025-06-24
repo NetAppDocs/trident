@@ -733,6 +733,32 @@ spec:
     name: backend-tbc-ontap-invest-secret
 ----
 
+=== Backend configuration with storage pool
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nas
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  managementLIF: 10.0.0.1
+  svm: svm0
+  useREST: false
+  storage:
+  - labels:
+      app: msoffice
+    defaults:
+      adAdminUser: tridentADuser
+  nasType: smb
+  credentials: 
+    name: backend-tbc-ontap-invest-secret
+
+----
+
 === Storage class example with ontap-nas driver
 
 [source,yaml]
@@ -775,7 +801,7 @@ reclaimPolicy: Delete
 volumeBindingMode: Immediate
 ----
 
-==== PVC example with a single AD user
+=== PVC example with a single AD user
 
 [source,yaml]
 ----
@@ -799,7 +825,7 @@ spec:
   storageClassName: ontap-smb-sc
 ----
 
-==== PVC example with multiple AD users
+=== PVC example with multiple AD users
 
 [source,yaml]
 ----

@@ -66,20 +66,20 @@ NetApp Trident protect provides advanced application data management capabilitie
 
 ==== Enhancements
 
-* Enhancing restore times, providing the option to do more frequent full backups. 
+* Improved restore times, providing the option to do more frequent full backups. 
 * Improved granularity of application definition and selective restore with Group-Version-Kind (GVK) filtering. 
-* Efficient resync and reverse replication when using AppMirrorRelationship (AMR) with SnapMirror, to avoid full PVC replication. 
+* Efficient resync and reverse replication when using AppMirrorRelationship (AMR) with NetApp SnapMirror, to avoid full PVC replication. 
 * Added ability to use EKS Pod Identity to create AppVault buckets, removing the need to specify a secret with the bucket credentials for EKS clusters. 
-* Providing the ability to skip restoring labels and annotations in the restore namespace, if needed.
+* Added the ability to skip restoring labels and annotations in the restore namespace, if needed.
 * AppMirrorRelationship (AMR) will now check for source PVC expansion and perform the appropriate expansion on the destination PVC as needed.
 
 ==== Fixes
 
 * Fixed bug where snapshot annotation values from previous snapshots were being applied to newer snapshots.  All snapshot annotations are applied correctly now.
-* Defining by default a secret for data mover encryption (Kopia / Restic), if not is custom defined.
+* Defined a secret for data mover encryption (Kopia / Restic) by default, if not defined..
 * Added improved validation and error messages for S3 appvault creation.
 * AppMirrorRelationship (AMR) now only replicates PVs in the Bound state, to avoid failed attempts.
-* Fixed issue where errors were displayed when getting appvaultcontent on an appvault with large number of backups.
+* Fixed issue where errors were displayed when getting AppVaultContent on an AppVault with large number of backups.
 * KubeVirt VMSnapshots are excluded from restore and failover operations to avoid failures.
 * Fixed issue with Kopia where snapshots were being removed prematurely due to Kopia default retention schedule overriding what was set by the user in the schedule.
 

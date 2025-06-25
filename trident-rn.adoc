@@ -24,16 +24,16 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 ==== Enhancements
 
 * *Kubernetes*:
-** Added support for CSI Volume Group Snapshots with `v1beta1` Volume Group Snapshot Kubernetes APIs for ONTAP-SAN iSCSI driver. See 
-** Added support for ONTAP ASA r2 for NVMe/TCP in addition to iSCSI.
-** Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes. Active Directory users and groups may now be used with SMB volumes for enhanced security.
+** Added support for CSI Volume Group Snapshots with `v1beta1` Volume Group Snapshot Kubernetes APIs for ONTAP-SAN iSCSI driver. See link:../trident-use/vol-group-snapshots.html[Work with volume group snapshots^]. 
+** Added support for ONTAP ASA r2 for NVMe/TCP in addition to iSCSI. See link:../trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^].
+** Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes. Active Directory users and groups may now be used with SMB volumes for enhanced security. See link:../trident-use/ontap-nas-prep.html#enable-secure-smb[Enable secure SMB^].
 ** Enhanced Trident node concurrency for higher scalability on node operations for iSCSI volumes.
 ** Added `--allow-discards` when opening LUKS volumes to allow discard/TRIM commands for space reclamation.  
 ** Enhanced performance when formatting LUKS-encrypted volumes. 
 ** Enhanced LUKS cleanup for failed but partially formatted LUKS devices. 
 ** Enhanced Trident node idempotency for NVMe volume attach and detach.
 ** Added `internalID` field to the Trident volume config for ONTAP-SAN-Economy driver.
-** Added support for volume replication with SnapMirror for NVMe backends.
+** Added support for volume replication with SnapMirror for NVMe backends. See link:../trident-use/vol-volume-replicate.html[Replicate volumes using SnapMirror^].
 
 ==== Experimental Enhancements
 NOTE: Not for use in production environments.

@@ -24,47 +24,44 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 ==== Enhancements
 
 * *Kubernetes*:
-** Added support for CSI Volume Group Snapshots with v1beta Volume Group Snapshot Kubernetes APIs for ontap-san iSCSI driver.
+** Added support for CSI Volume Group Snapshots with `v1beta1` Volume Group Snapshot Kubernetes APIs for ONTAP-SAN iSCSI driver. See 
 ** Added support for ONTAP ASA r2 for NVMe/TCP in addition to iSCSI.
-** Added `--allow-discards` when opening LUKS volumes to enable filesystem space reclamation.
-** Enhanced LUKS-encrypted volumes formatting performance.
-** Enhanced LUKS cleanup for failed but partially formatted LUKS devices.
+** Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes. Active Directory users and groups may now be used with SMB volumes for enhanced security.
+** Enhanced Trident node concurrency for higher scalability on node operations for iSCSI volumes.
+** Added `--allow-discards` when opening LUKS volumes to allow discard/TRIM commands for space reclamation.  
+** Enhanced performance when formatting LUKS-encrypted volumes. 
+** Enhanced LUKS cleanup for failed but partially formatted LUKS devices. 
 ** Enhanced Trident node idempotency for NVMe volume attach and detach.
-* Added support to make FSGroup Policy configurable.
-* Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes.
-* Enhanced Trident node concurrency for iSCSI volumes.
-* Enhanced Trident node concurrency for higher scalability on node operations for NFS and SMB volumes.
-* Made split on clone operations asynchronous when creating volume clones.
-* Added internalID field to the Trident volume config for ontap-nas-economy driver.
-* Added option to add or override selectors via StorageClass annotations.
-* Added support for volume replication for NVMe backends.
+** Added `internalID` field to the Trident volume config for ONTAP-SAN-Economy driver.
+** Added support for volume replication with SnapMirror for NVMe backends.
 
-==== Experimental Enhancements:
+==== Experimental Enhancements
 NOTE: Not for use in production environments.
 
-* [Tech Preview] Enabled concurrent Trident controller operations via the --enable-concurrency feature flag for ONTAP-SAN driver (iSCSI and FC protocols).
+* [Tech Preview] Enabled concurrent Trident controller operations via the `--enable-concurrency` feature flag. This allows controller operations to run in parallel, improving performance for busy or large environments.
 +
-NOTE: This feature is experimental and does not support all workflows.
+NOTE: This feature is experimental and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
 
 * [Tech Preview] Added manual QOS support with the ANF driver.
-
-==== Deprecations:
-* *Kubernetes*: Updated minimum supported Kubernetes to v1.27.
 
 ==== Fixes
 
 * *Kubernetes*:
-** Fixed CSI NodeExpandVolume issue where multipath devices could be left with incorrect sizes when SCSI disk is unavailable.
+** Fixed an issue with CSI NodeExpandVolume where multipath devices could be left with incongruent sizes when underlying SCSI disk(s) are unavailable.
 ** Fixed failure to clean up duplicate export policies for ONTAP-NAS and ONTAP-NAS-Economy drivers.
-** Fixed GCNV volumes defaulting to NFSv3 only when nfsMountOptions is unset; now support both NFSv3 and NFSv4 protocols.
+** Fixed GCNV volumes defaulting to NFSv3 when `nfsMountOptions` is unset; now both NFSv3 and NFSv4 protocols are supported. If `nfsMountOptions` is not provided, the host’s default NFS version (NFSv3 or NFSv4) will be used.
 ** Fixed deployment issue when installing Trident using Kustomize (link:https://github.com/NetApp/trident/issues/831[Issue #831]).
-* Fixed missing export policies for PVCs created from snapshots (link:https://github.com/NetApp/trident/issues/1016[Issue #1016]).
+** Fixed missing export policies for PVCs created from snapshots (link:https://github.com/NetApp/trident/issues/1016[Issue #1016]).
+** Fixed issue where the ANF volume sizes are not automatically aligned to 1 GiB increments.
+** Fixed issue when using NFSv3 with Bottlerocket.
 * Fixed timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
-* Fixed issue when using NFSv3 with Bottlerocket.
-* Fixed issue where the ANF volume sizes are not automatically aligned to 1GiB increments.
 * Fixed issue with ONTAP-NAS-Economy volumes expanding up to 300 TB despite resize failures.
+* Fixed issue where clone split operations were being done synchronously when using ONTAP REST API.
 
-=== Trident protect
+==== Deprecations:
+* *Kubernetes*: Updated minimum supported Kubernetes to v1.27.
+
+=== Trident Protect
 NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
 
 ==== Enhancements

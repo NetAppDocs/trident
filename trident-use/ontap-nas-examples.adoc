@@ -811,7 +811,7 @@ metadata:
   name: my-pvc4
   namespace: trident
   annotations:
-    trident.netapp.io/smbShareAccessControl:
+    trident.netapp.io/smbShareAccessControl: |
       change:
         - tridentADtest
       read:
@@ -834,7 +834,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: my-test-pvc
   annotations:
-    trident.netapp.io/smbShareAccessControl:
+    trident.netapp.io/smbShareAccessControl: |
       full_control:
         - tridentTestuser
         - tridentuser

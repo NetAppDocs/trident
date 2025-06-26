@@ -121,12 +121,6 @@ webhooksCleanup:
     - name: regcred
 ----
 
-. Install the Trident protect CRDs:
-+
-[source,console]
-----
-helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2506.0 --create-namespace --namespace trident-protect
-----
 . Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
 [source,console]

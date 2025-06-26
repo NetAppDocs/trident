@@ -132,11 +132,11 @@ tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-inclu
 +
 [NOTE]
 ====
-##Alongside the schedule provided below, it is recommended to create a separate daily snapshot schedule with a retention period of 7 days to maintain a common snapshot between peered ONTAP clusters. This ensures that snapshots are available for up to 7 days, but the retention period can be customized based on user requirements.##
+Alongside the schedule provided below, it is recommended to create a separate daily snapshot schedule with a retention period of 7 days to maintain a common snapshot between peered ONTAP clusters. This ensures that snapshots are available for up to 7 days, but the retention period can be customized based on user requirements.
 
-##If a failover happens, the system can use these snapshots for up to 7 days for reverse operations. This approach makes the reverse process faster and more efficient because only the changes made since the last snapshot will be transferred, not all the data.##
+If a failover happens, the system can use these snapshots for up to 7 days for reverse operations. This approach makes the reverse process faster and more efficient because only the changes made since the last snapshot will be transferred, not all the data.
 
-##If an existing schedule for the application already meets the desired retention requirements, no additional schedules are required.##
+If an existing schedule for the application already meets the desired retention requirements, no additional schedules are required.
 ====
 +
 [role="tabbed-block"]

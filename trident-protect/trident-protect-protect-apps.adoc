@@ -323,7 +323,7 @@ kubectl delete snapshot <snapshot_name> -n my-app-namespace
 
 Delete the scheduled or on-demand backups that you no longer need.
 
-NOTE: ##Ensure the reclaim policy is set to `Delete` to remove all backup data from object storage. The default setting of the policy is `Retain` to avoid accidental data loss. If the policy is not changed to `Delete`, the backup data will remain in object storage and will require manual deletion.##
+NOTE: Ensure the reclaim policy is set to `Delete` to remove all backup data from object storage. The default setting of the policy is `Retain` to avoid accidental data loss. If the policy is not changed to `Delete`, the backup data will remain in object storage and will require manual deletion.
 
 .Steps
 

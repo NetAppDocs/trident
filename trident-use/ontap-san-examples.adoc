@@ -15,6 +15,10 @@ Learn how to create and use ONTAP SAN drivers with your Trident installation. Th
 
 link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] vary from other ONTAP systems (ASA, AFF, and FAS) in the implementation of its storage layer. These variations impact the usage of certain parameters as notated.  link:https://docs.netapp.com/us-en/asa-r2/learn-more/hardware-comparison.html[Learn more about the differences between ASA r2 systems and other ONTAP systems^].
 
+NOTE: Only the `ontap-san` driver (with iSCSI and NVMe/TCP protocols) is supported for ASA r2 systems. 
+
+In the Trident backend configuration, you need not specify that your system is ASA r2. When you select `ontap-san` as the `storageDriverName`, Trident detects automatically the ASA r2  or the traditional ONTAP system. Some backend configuration parameters are not applicable to ASA r2 systems as noted in the table below. 
+
 == Backend configuration options
 
 See the following table for the backend configuration options:

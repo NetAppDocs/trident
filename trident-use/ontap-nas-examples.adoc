@@ -86,6 +86,9 @@ NOTE: When the aggregate is updated in SVM, it is updated in Trident automatical
 a|""
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
+a|""
+
+|`adAdminUser` |Fail provisioning if usage is above this percentage.
 
 *Does not apply to Amazon FSx for ONTAP* |"" (not enforced by default)
 
@@ -779,6 +782,7 @@ provisioner: csi.trident.netapp.io
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 ----
+NOTE: Ensute that you add `annotations` to enable secure SMB. Secure SMB does not work without the annotations, irrespective of configurations set in the Backend or PVC.
 
 === Storage class example with ontap-nas-economy driver
 
@@ -789,7 +793,7 @@ kind: StorageClass
 metadata:
   name: ontap-smb-sc
   annotations:
-    trident.netapp.io/smbShareAdUserPermission: change (optional)
+    trident.netapp.io/smbShareAdUserPermission: change
     trident.netapp.io/smbShareAdUser: tridentADuser3
 parameters:
   backendType: ontap-nas-economy

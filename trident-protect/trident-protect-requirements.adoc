@@ -39,10 +39,10 @@ Trident protect supports the following storage backends:
 
 Ensure that your storage backend meets the following requirements:
 
-* Ensure that NetApp storage connected to the cluster is using Astra Trident 24.02 or newer (Trident 24.10 is recommended). 
-** If Astra Trident is older than version 24.06.1 and you plan to use NetApp SnapMirror disaster recovery functionality, you need to manually enable Astra Control Provisioner.
+* Ensure that NetApp storage connected to the cluster is using Trident 24.02 or newer (Trident 24.10 is recommended). 
+//** If NetApp Trident is older than version 24.06.1 and you plan to use NetApp SnapMirror disaster recovery functionality, you need to manually enable Astra Control Provisioner.
 
-* Ensure that you have the latest Astra Control Provisioner (installed and enabled by default as of Astra Trident 24.06.1).
+//* Ensure that you have the latest Astra Control Provisioner (installed and enabled by default as of Astra Trident 24.06.1).
 * Ensure that you have a NetApp ONTAP storage backend.
 * Ensure that you have configured an object storage bucket for storing backups.
 * Create any application namespaces that you plan to use for applications or application data management operations. Trident protect does not create these namespaces for you; if you specify a nonexistent namespace in a custom resource, the operation will fail.
@@ -81,9 +81,10 @@ NetApp SnapMirror replication is available for use with Trident protect for the 
 === ONTAP cluster requirements for SnapMirror replication
 Ensure your ONTAP cluster meets the following requirements if you plan to use SnapMirror replication:
 
-* *Astra Control Provisioner or Trident*: Astra Control Provisioner or Trident must exist on both the source and destination Kubernetes clusters that utilize ONTAP as a backend. Trident protect supports replication with NetApp SnapMirror technology using storage classes backed by the following drivers:
-** `ontap-nas`
-** `ontap-san` (iSCSI and NVMe/TCP)
+* *NetApp Trident*: NetApp Trident must exist on both the source and destination Kubernetes clusters that utilize ONTAP as a backend. Trident protect supports replication with NetApp SnapMirror technology using storage classes backed by the following drivers:
+** `ontap-nas`: NFS
+** `ontap-san`: iSCSI and FC
+** `ontap-san`: NVMe/TCP (requires minimum ONTAP version 9.15.1)
 * *Licenses*: ONTAP SnapMirror asynchronous licenses using the Data Protection bundle must be enabled on both the source and destination ONTAP clusters. Refer to https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-licensing-concept.html[SnapMirror licensing overview in ONTAP^] for more information.
 +
 Beginning with ONTAP 9.10.1, all licenses are delivered as a NetApp license file (NLF), which is a single file that enables multiple features. Refer to link:https://docs.netapp.com/us-en/ontap/system-admin/manage-licenses-concept.html#licenses-included-with-ontap-one[Licenses included with ONTAP One^] for more information.
@@ -98,7 +99,7 @@ Ensure your environment meets the following requirements if you plan to use stor
 [NOTE] 
 Ensure that the SVM names used in the replication relationship between two ONTAP clusters are unique.
 +
-* *Astra Control Provisioner or Trident and SVM*: The peered remote SVMs must be available to Astra Control Provisioner or Trident on the destination cluster.
+* *NetApp Trident and SVM*: The peered remote SVMs must be available to NetApp Trident on the destination cluster.
 * *Managed backends*: You need to add and manage ONTAP storage backends in Trident protect to create a replication relationship.
 
 === Trident / ONTAP configuration for SnapMirror replication

@@ -41,7 +41,10 @@ IMPORTANT: Ensure that the SVM names used in the replication relationship betwee
 
 .Supported drivers
 
-* Volume replication is supported for the ontap-nas and ontap-san (iSCSI and NVMe/TCP) drivers.
+NetApp Trident supports volume replication with NetApp SnapMirror technology using storage classes backed by the following drivers:
+** `ontap-nas`: NFS
+** `ontap-san`: iSCSI and FC
+** `ontap-san`: NVMe/TCP (requires minimum ONTAP version 9.15.1)
 
 == Create a mirrored PVC
 

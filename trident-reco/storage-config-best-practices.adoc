@@ -62,7 +62,7 @@ For example, a two-node ONTAP cluster has the ability to host a maximum of 2000 
 
 NetApp Trident supports cloning volumes when using the `ontap-nas`, `ontap-san`, `solidfire-san`, and `gcp-cvs` storage drivers. When using the `ontap-nas-flexgroup` or `ontap-nas-economy` drivers, cloning is not supported. Creating a new volume from an existing volume will result in a new snapshot being created.
 
-WARNING: Do not clone a PVC from a different storage driver.
+WARNING: Do not clone a PVC belonging to a different StorageClass.
 
 === Limit the maximum size of volumes created by Trident
 

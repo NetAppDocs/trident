@@ -95,14 +95,14 @@ include::../_include/backup-include-sessiontoken-note.adoc[]
 ** `Delete`
 ** `Retain` (default)
 * *spec.snapshotRef*: (_Optional_): Name of the snapshot to use as the source of the backup. If not provided, a temporary snapshot will be created and backed up.
-* *metadata.annotations.protect.trident.netapp.io/full-backup-rule* : (_Optional_) This annotation is used to specify whether a backup should be non-incremental. By default, all backups are incremental. However, if this annotation is set to `true`, the backup becomes non-incremental. If not specified, the backup follows the default incremental backup setting. It is best practice to perform a full backup periodically and then perform incremental backups in between full backups to minimize the risk associated with restores.
+* *metadata.annotations.protect.trident.netapp.io/full-backup* : (_Optional_) This annotation is used to specify whether a backup should be non-incremental. By default, all backups are incremental. However, if this annotation is set to `true`, the backup becomes non-incremental. If not specified, the backup follows the default incremental backup setting. It is best practice to perform a full backup periodically and then perform incremental backups in between full backups to minimize the risk associated with restores.
 +
 [NOTE]
 =====
 If you need to apply this annotation after an application has already been created, you can use the following command:
 [source,console]
 ----
-kubectl annotate backup -n <backup CR namespace> <backup CR name> protect.trident.netapp.io/full-backup-rule="true"
+kubectl annotate backup -n <backup CR namespace> <backup CR name> protect.trident.netapp.io/full-backup="true"
 ----
 =====
 +

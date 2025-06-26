@@ -83,7 +83,8 @@ Ensure your ONTAP cluster meets the following requirements if you plan to use Sn
 
 * *NetApp Trident*: NetApp Trident must exist on both the source and destination Kubernetes clusters that utilize ONTAP as a backend. Trident protect supports replication with NetApp SnapMirror technology using storage classes backed by the following drivers:
 ** `ontap-nas`: NFS
-** `ontap-san`: iSCSI and FC
+** `ontap-san`: iSCSI 
+** `ontap-san`: FC
 ** `ontap-san`: NVMe/TCP (requires minimum ONTAP version 9.15.1)
 * *Licenses*: ONTAP SnapMirror asynchronous licenses using the Data Protection bundle must be enabled on both the source and destination ONTAP clusters. Refer to https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-licensing-concept.html[SnapMirror licensing overview in ONTAP^] for more information.
 +

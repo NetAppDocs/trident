@@ -414,7 +414,7 @@ Beginning with the 25.06 release, NetApp Trident supports secure provisioning of
 * SMB Share ACL specified in the Annotation of clone PVC will take precedence over the ones in source PVC.
 * Ensure that you provide valid AD users while enabling secure SMB. Invalid users will not be added to the ACL.
 * If you have provided the same AD user in backend, storage class, and PVC with different permissions, the user permission priority will be PVC, SC and then backend.
-* Secure SMB is not applicable for unmanaged volume imports.
+* Secure SMB is supported for `ontap-nas` managed volume imports and not applicable to unmanaged volume imports.
 
 .Steps
 

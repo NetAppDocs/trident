@@ -834,15 +834,22 @@ kind: PersistentVolumeClaim
 metadata:
   name: my-test-pvc
   annotations:
-    trident.netapp.io/smbShareACLs: |
+    trident.netapp.io/smbShareAccessControl:
       full_control:
         - tridentTestuser
         - tridentuser
+        - tridentTestuser1
+        - tridentuser1
       change:
         - tridentADuser
+        - tridentADuser1
+        - tridentADuser4
+        - tridentTestuser2
       read:
         - tridentTestuser2
         - tridentTestuser3
+        - tridentADuser2
+        - tridentADuser3
 spec:
   accessModes:
     - ReadWriteOnce

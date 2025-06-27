@@ -86,11 +86,9 @@ NOTE: When the aggregate is updated in SVM, it is updated in Trident automatical
 a|""
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
-a|""
 
-|`adAdminUser` |Fail provisioning if usage is above this percentage.
 
-*Does not apply to Amazon FSx for ONTAP* |"" (not enforced by default)
+*Does not apply to Amazon FSx for ONTAP*. |"" (not enforced by default)
 
 |flexgroupAggregateList a| List of aggregates for provisioning (optional; if set, must be assigned to the SVM). All aggregates assigned to the SVM are used to provision a FlexGroup volume. Supported for the *ontap-nas-flexgroup* storage driver. 
 
@@ -141,6 +139,10 @@ Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is
 |`denyNewVolumePools` |Restricts `ontap-nas-economy` backends from creating new FlexVol volumes to contain their Qtrees. Only preexisting Flexvols are used for provisioning new PVs.
 
 |
+
+|`adAdminUser`
+
+| Active Directory admin user with full access to SMB shares. Use this parameter to enable secure SMB and restrict access to SMB shares using ACLs. |
 
 |===
 

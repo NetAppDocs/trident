@@ -1,5 +1,9 @@
 Trident protect 24.10 and 24.10.1 and newer have different behavior when you protect applications running on KubeVirt VMs. For both versions, you can enable or disable filesystem freezing and unfreezing during data protection operations.
 
+NOTE: During restore operations, any `VirtualMachineSnapshots` created for a virtual machine (VM) are not restored.
+
+//astractl-35903 update
+
 .Trident protect 24.10
 Trident protect 24.10 does not automatically ensure a consistent state for KubeVirt VM filesystems during data protection operations. If you want to protect your KubeVirt VM data using Trident protect 24.10, you need to manually enable the freeze/unfreeze functionality for the filesystems before the data protection operation. This ensures that the filesystems are in a consistent state.
 

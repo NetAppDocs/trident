@@ -407,13 +407,13 @@ Beginning with the 25.06 release, NetApp Trident supports secure provisioning of
 
 .Points to remember
 
-* Importing of `ontap-nas-economy` volumes is not supported.
+* Importing `ontap-nas-economy` volumes is not supported.
 * Only read-only clones are supported for `ontap-nas-economy` volumes.
 * If Secure SMB is enabled, Trident will ignore the SMB share mentioned in the backend.
 * Updating of  PVC annotation, storage class annotation, and backend field does not update the SMB share ACL.
 * SMB Share ACL specified in the Annotation of clone PVC will take precedence over the ones in source PVC.
 * Ensure that you provide valid AD users while enabling secure SMB. Invalid users will not be added to the ACL.
-* If you have provided the same AD user in backend, storage class, and PVC with different permissions, the user permission priority will be PVC, SC and then backend.
+* If you provide the same AD user in backend, storage class, and PVC with different permissions, the permission priority will be: PVC, storage class, and then backend.
 * Secure SMB is supported for `ontap-nas` managed volume imports and not applicable to unmanaged volume imports.
 
 .Steps
@@ -442,7 +442,7 @@ spec:
 2.  Add the annotation in the storage class.
 +
 Add the `trident.netapp.io/smbShareAdUser` annotation to the storage class to enable secure SMB without fail.
-The user value specified for the annotation `trident.netapp.io/smbShareAdUser` should be same as the username specified in the `smbcreds` secret.
+The user value specified for the annotation trident.netapp.io/smbShareAdUser should be the same as the username specified in the `smbcreds` secret.
 You can choose one of the following for `smbShareAdUserPermission`: `full_control`, `change`, or `read`. The default permission is `full_control`. 
 
 [source,yaml]

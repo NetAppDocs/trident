@@ -142,7 +142,7 @@ Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is
 
 |`adAdminUser`
 
-| Active Directory admin user or user group with full access to SMB shares. Use this parameter to enable secure SMB and restrict access to SMB shares using ACLs. |
+| Active Directory admin user or user group with full access to SMB shares. Use this parameter to provide admin rights to SMB share with full control access. |
 
 |===
 
@@ -784,7 +784,7 @@ provisioner: csi.trident.netapp.io
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
 ----
-NOTE: Ensute that you add `annotations` to enable secure SMB. Secure SMB does not work without the annotations, irrespective of configurations set in the Backend or PVC.
+NOTE: Ensure that you add `annotations` to enable secure SMB. Secure SMB does not work without the annotations, irrespective of configurations set in the Backend or PVC.
 
 === Storage class example with ontap-nas-economy driver
 

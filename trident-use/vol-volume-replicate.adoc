@@ -47,6 +47,8 @@ NetApp Trident supports volume replication with NetApp SnapMirror technology usi
 ** `ontap-san`: FC
 ** `ontap-san`: NVMe/TCP (requires minimum ONTAP version 9.15.1)
 
+NOTE: Volume replication using SnapMirror is not supported for ASA r2 systems. For information about ASA r2 systems, see link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[Learn about ASA r2 storage systems^].
+
 == Create a mirrored PVC
 
 Follow these steps and use the CRD examples to create mirror relationship between primary and secondary volumes.

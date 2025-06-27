@@ -28,8 +28,7 @@ If you want to make use of the snapshot functionality, install the CSI snapshot 
 .Pod Identity
 --
 
-. Download the Trident installer package
-The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from the Assets section on GitHub.
+. Add the NetApp Trident repo the helm configuration:
 +
 [source,console]
 ----
@@ -59,22 +58,17 @@ trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT
 .Service account association (IRSA)
 --
 
-. Download the Trident installer package
-+
-The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from the Assets section on GitHub.
+. Add the NetApp Trident repo the helm configuration:
 +
 [source,console]
 ----
-wget https://github.com/NetApp/trident/releases/download/v25.02.0/trident-installer-25.02.0.tar.gz
-tar -xf trident-installer-25.02.0.tar.gz
-cd trident-installer
+helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
-
 . Set the values for *cloud provider* and *cloud identity*:
 +
 [source,console]
 ----
-helm install trident trident-operator-100.2502.0.tgz \
+helm install trident-operator netapp-trident/trident-operator --version 100.2502.1  \
 --set cloudProvider="AWS" \
 --set cloudIdentity="'eks.amazonaws.com/role-arn: arn:aws:iam::<accountID>:role/<AmazonEKS_FSxN_CSI_DriverRole>'" \
 --namespace trident \
@@ -154,7 +148,11 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 .. Select *Next*.
 . On the *Configure selected add-ons* settings page, do the following:
 .. Select the *Version* you would like to use.
-.. If you are using IRSA authentication method, use the following JSON format in the Configuration schema:
+.. If you're using IRSA authentication, make sure to set configuration values available in the Optional configuration settings:
++
+* Select the *Version* you would like to use.
+* Follow the *Add-on configuration schema* and set the *configurationValues* parameter on the *Configuration values* section to the role-arn you created on the previous step ( Value should be in the following format):
+
 +
 [source,JSON]
 ----

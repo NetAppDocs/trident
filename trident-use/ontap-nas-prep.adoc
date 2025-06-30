@@ -14,7 +14,7 @@ summary: Understand the requirements, authentication options, and export policie
 Understand the requirements, authentication options, and export policies for configuring an ONTAP backend with ONTAP NAS drivers.
 
 == Requirements
-* For all ONTAP backends, Trident requires at least one aggregate assigned to the SVM.
+* For all ONTAP backends, Trident requires at least one aggregate be assigned to the SVM.
 * You can run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
 * All your Kubernetes worker nodes must have the appropriate NFS tools installed. Refer to link:worker-node-prep.html[here] for more details.
 * Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details. 
@@ -330,6 +330,7 @@ WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create
 
 NOTE: `autoExportPolicy` is not supported for SMB volumes.
 
+
 .Before you begin
 Before you can provision SMB volumes, you must have the following. 
 
@@ -398,3 +399,91 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 |Mode for new volumes. *Must be left empty for SMB volumes.*
 |""
 |===
+
+// Secure SMB - Added for 25.06 (June 2025), Writer: Arul Deepa A
+=== Enable secure SMB
+
+Beginning with the 25.06 release, NetApp Trident supports secure provisioning of SMB volumes created using `ontap-nas` and `ontap-nas-economy` backends. When secure SMB is enabled, you can provide controlled access to SMB the shares for Active Directory (AD) users and user groups using Access Control Lists (ACLs).
+
+.Points to remember
+
+* Importing `ontap-nas-economy` volumes is not supported.
+* Only read-only clones are supported for `ontap-nas-economy` volumes.
+* If Secure SMB is enabled, Trident will ignore the SMB share mentioned in the backend.
+* Updating the  PVC annotation, storage class annotation, and backend field does not update the SMB share ACL.
+* The SMB share ACL specified in the annotation of the clone PVC will take precedence over those in the source PVC.
+* Ensure that you provide valid AD users while enabling secure SMB. Invalid users will not be added to the ACL.
+* If you provide the same AD user in the backend, storage class, and PVC with different permissions, the permission priority will be: PVC, storage class, and then backend.
+* Secure SMB is supported for `ontap-nas` managed volume imports and not applicable to unmanaged volume imports.
+
+.Steps
+
+1.  Specify adAdminUser in TridentBackendConfig as shown in the following example:
++
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  managementLIF: 10.193.176.x
+  svm: svm0
+  useREST: true
+  defaults:
+    adAdminUser: tridentADtest
+  credentials:
+    name: backend-tbc-ontap-invest-secret
+----
+
+2.  Add the annotation in the storage class.
++
+Add the `trident.netapp.io/smbShareAdUser` annotation to the storage class to enable secure SMB without fail.
+The user value specified for the annotation `trident.netapp.io/smbShareAdUser` should be the same as the username specified in the `smbcreds` secret.
+You can choose one of the following for `smbShareAdUserPermission`: `full_control`, `change`, or `read`. The default permission is `full_control`. 
+
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-smb-sc
+  annotations:
+    trident.netapp.io/smbShareAdUserPermission: change
+    trident.netapp.io/smbShareAdUser: tridentADuser
+parameters:
+  backendType: ontap-nas
+  csi.storage.k8s.io/node-stage-secret-name: smbcreds
+  csi.storage.k8s.io/node-stage-secret-namespace: trident
+  trident.netapp.io/nasType: smb
+provisioner: csi.trident.netapp.io
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+----
+[start=3]
+3. Create a PVC.
++
+The following example creates a PVC:
+[source,yaml]
+----
+apiVersion: v1  
+kind: PersistentVolumeClaim  
+metadata:  
+  name: my-pvc4  
+  namespace: trident  
+  annotations:  
+    trident.netapp.io/snapshotDirectory: "true"  
+    trident.netapp.io/smbShareAccessControl: |  
+      read:  
+        - tridentADtest  
+spec:  
+  accessModes:  
+    - ReadWriteOnce  
+  resources:  
+    requests:  
+      storage: 1Gi  
+  storageClassName: ontap-smb-sc  
+----

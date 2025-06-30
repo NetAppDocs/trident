@@ -22,8 +22,8 @@ Before you create an AppVault CR, you need to ensure the AppVault and the data m
 === Data mover repository passwords
 When you create AppVault objects using CRs or the Trident protect CLI plugin, you can optionally instruct Trident protect to use a Kubernetes secret that contains custom passwords for the Restic and Kopia repository encryption. If you don't specify a secret, Trident protect uses a default password.
 
-* When manually creating AppVault CRs, you can use the *spec.dataMoverPasswordSecretRef* field to specify the secret.
-* When creating AppVault objects using the Trident protect CLI, you can use the `--data-mover-password-secret-ref` argument to specify the secret.
+* When manually creating AppVault CRs, use the *spec.dataMoverPasswordSecretRef* field to specify the secret.
+* When creating AppVault objects using the Trident protect CLI, use the `--data-mover-password-secret-ref` argument to specify the secret.
 
 ==== Create a data mover repository password secret
 Use the following examples to create the password secret. When you create AppVault objects, you can instruct Trident protect to use this secret to authenticate with the data mover repository. 
@@ -60,6 +60,30 @@ kubectl create secret generic my-optional-data-mover-secret \
 ----
 --
 ====
+
+=== S3-compatible storage IAM permissions
+When you access S3-compatible storage such as Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html[StorageGrid S3^], or https://docs.netapp.com/us-en/ontap/s3-config/[ONTAP S3^] using Trident protect, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident protect. You can apply this policy to the user that manages S3-compatible bucket policies.
+
+[source,json]
+----
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+----
+
+For more information about Amazon S3 policies, refer to the examples in the https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-policies-s3.html[Amazon S3 documentation^].
 
 === AppVault key generation examples for cloud providers
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers. You can use the following examples to create keys for the credentials of each cloud provider.

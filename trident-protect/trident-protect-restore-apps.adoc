@@ -14,9 +14,29 @@ summary: You can use Trident protect to restore your application from a snapshot
 [.lead]
 You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 
-NOTE: When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
-
+[NOTE]
+====
+* When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
+* Restoring from a backup to a different namespace or to the original namespace is supported for qtree volumes. However, restoring from a snapshot to a different namespace or to the original namespace is not supported for qtree volumes.
+====
 include::../_include/namespace-anno-labels.adoc[]
+
+== Supported annotations
+This section lists the supported annotations for configuring various behaviors in the system. If an annotation is not explicitly set by the user, the system will use the default value.
+
+[cols="1,1,3,1", options="header"]
+|===
+| Annotation | Type | Description | Default value
+
+| protect.trident.netapp.io/data-mover-timeout-sec
+| string
+| The maximum time (in seconds) allowed for data mover operation to be stalled.
+| 300
+| protect.trident.netapp.io/kopia-content-cache-size-limit-mb
+| integer
+| The maximum size limit (in megabytes) for the Kopia content cache.
+| 1000
+|===
 
 == Restore from a backup to a different namespace
 
@@ -300,6 +320,8 @@ kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.a
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 * *spec.storageClassMapping*: The mapping of the source storage class of the restore operation to the destination storage class. Replace `destinationStorageClass` and `sourceStorageClass` with information from your environment.
++
+NOTE: The `storageClassMapping` attribute works only when both the original and new `StorageClass` use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
 +
 [source,yaml]
 -------

@@ -1,0 +1,27 @@
+== Data mover timeout annotation
+During backup and restore operations, you can use the annotation `protect.trident.netapp.io/data-mover-timeout-sec` to configure the timeout for data movement operations. This annotation specifies the maximum time, in seconds, that a data mover should wait for a specific operation to complete before timing out. It is particularly useful in situations where network issues or other factors might cause data movement operations to stall. It helps detect and handle stalled operations, rather than setting a general timeout for the entire process. For example, if no progress is made in restoring volume data due to network issues, the operation will time out based on the specified duration. 
+
+You can use this annotation in your YAML file as shown below:
+
+[source,yaml]
+-------
+---
+apiVersion: protect.trident.netapp.io/v1
+kind: BackupRestore
+metadata:
+  name: bkp-restore-kopia
+  namespace: trident-protect
+  annotations: # Optional annotations to configure data movement timeout
+    protect.trident.netapp.io/data-mover-timeout-sec: "2"
+spec:
+  appVaultRef: appvault-name
+  appArchivePath: my-backup-path
+  namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
+  storageClassMapping:
+    destination: "${destinationStorageClass}"
+    source: "${sourceStorageClass}"
+-------
+
+In this example, the annotation fails the `BackupRestore` operation if no progress occurs within 2 seconds in the restore operation.
+
+NOTE: If the annotation value is less than or equal to 0, the operation will fail immediately.

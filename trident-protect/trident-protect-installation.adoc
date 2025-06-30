@@ -27,17 +27,11 @@ If your environment meets the requirements for Trident protect, you can follow t
 ----
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
-. Install the Trident protect CRDs:
-+
-[source,console]
-----
-helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2502.0 --create-namespace --namespace trident-protect
-----
 . Use Helm to install Trident protect. Replace `<name-of-cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --version 100.2502.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --version 100.2506.0 --create-namespace --namespace trident-protect
 ----
 --
 .Install Trident protect from a private registry
@@ -49,14 +43,14 @@ You can install Trident protect from a private image registry if your Kubernetes
 +
 [source,console]
 ----
-netapp/controller:25.02.0
-netapp/restic:25.02.0
-netapp/kopia:25.02.0
-netapp/trident-autosupport:25.02.0
-netapp/exechook:25.02.0
-netapp/resourcebackup:25.02.0
-netapp/resourcerestore:25.02.0
-netapp/resourcedelete:25.02.0
+netapp/controller:25.06.0
+netapp/restic:25.06.0
+netapp/kopia:25.06.0
+netapp/trident-autosupport:25.06.0
+netapp/exechook:25.06.0
+netapp/resourcebackup:25.06.0
+netapp/resourcerestore:25.06.0
+netapp/resourcedelete:25.06.0
 bitnami/kubectl:1.30.2
 kubebuilder/kube-rbac-proxy:v0.16.0
 ----
@@ -65,17 +59,17 @@ For example:
 +
 [source,console]
 ----
-docker pull netapp/controller:25.02.0
+docker pull netapp/controller:25.06.0
 ----
 +
 [source,console]
 ----
-docker tag netapp/controller:25.02.0 <private-registry-url>/controller:25.02.0
+docker tag netapp/controller:25.06.0 <private-registry-url>/controller:25.06.0
 ----
 +
 [source,console]
 ----
-docker push <private-registry-url>/controller:25.02.0
+docker push <private-registry-url>/controller:25.06.0
 ----
 
 . Create the Trident protect system namespace:
@@ -127,17 +121,11 @@ webhooksCleanup:
     - name: regcred
 ----
 
-. Install the Trident protect CRDs:
-+
-[source,console]
-----
-helm install trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2502.0 --create-namespace --namespace trident-protect
-----
 . Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2502.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2506.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
 --
 ====

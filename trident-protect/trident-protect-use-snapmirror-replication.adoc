@@ -23,6 +23,14 @@ include::../_include/namespace-anno-labels.adoc[]
 
 NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
 
+== Execution hooks during failover and reverse operations
+When using AppMirror relationship to protect your application, there are specific behaviors related to execution hooks that you should be aware of during failover and reverse operations.
+
+* During failover, the execution hooks are automatically copied from the source cluster to the destination cluster. You do not need to manually recreate them. After failover, execution hooks are present on the application and will execute during any relevant actions.
+* During reverse or reverse resync, any existing execution hooks on the application are removed. When the source application becomes the destination application, these execution hooks are not valid and are deleted to prevent their execution.
+
+To learn more about execution hooks, refer to link:../trident-protect/trident-protect-use-execution-hooks.html[Manage Trident protect execution hooks].
+
 == Set up a replication relationship
 
 Setting up a replication relationship involves the following:
@@ -120,11 +128,20 @@ tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-inclu
 // Improve this step with an example of a manual shutdown snapshot, and place it after the example of the schedule. This way, you can explain why a customer would need the extra manual step, which is to not have to wait for the schedule to kick off the first snapshot.
 // Explain what a shutdown snapshot actually is.
 // This needs to be two steps - manual immediate shutdown snapshot, and then creation of a snapshot schedule for future transfers. Because if you only did one snapshot, you would only ever get one transfer. See recording.
-. Optionally, on the source cluster, take a shutdown snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
+. Optionally, on the source cluster, take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot.
++
+[NOTE]
+====
+Alongside the schedule provided below, it is recommended to create a separate daily snapshot schedule with a retention period of 7 days to maintain a common snapshot between peered ONTAP clusters. This ensures that snapshots are available for up to 7 days, but the retention period can be customized based on user requirements.
+
+If a failover happens, the system can use these snapshots for up to 7 days for reverse operations. This approach makes the reverse process faster and more efficient because only the changes made since the last snapshot will be transferred, not all the data.
+
+If an existing schedule for the application already meets the desired retention requirements, no additional schedules are required.
+====
 +
 [role="tabbed-block"]
 ====
-.Take a shutdown snapshot using a CR
+.Take a snapshot using a CR
 --
 
 .. Create a replication schedule for the source application:
@@ -168,7 +185,7 @@ spec:
 kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
 ----
 --
-.Take a shutdown snapshot using the CLI
+.Take a snapshot using the CLI
 --
 .. Create the snapshot, replacing values in brackets with information from your environment. For example:
 +

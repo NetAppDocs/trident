@@ -13,6 +13,12 @@ summary: Learn about how to create and use ONTAP SAN drivers with your Trident i
 [.lead]
 Learn how to create and use ONTAP SAN drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses.
 
+link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] vary from other ONTAP systems (ASA, AFF, and FAS) in the implementation of its storage layer. These variations impact the usage of certain parameters as notated.  link:https://docs.netapp.com/us-en/asa-r2/learn-more/hardware-comparison.html[Learn more about the differences between ASA r2 systems and other ONTAP systems^].
+
+NOTE: Only the `ontap-san` driver (with iSCSI and NVMe/TCP protocols) is supported for ASA r2 systems. 
+
+In the Trident backend configuration, you need not specify that your system is ASA r2. When you select `ontap-san` as the `storageDriverName`, Trident detects automatically the ASA r2  or the traditional ONTAP system. Some backend configuration parameters are not applicable to ASA r2 systems as noted in the table below. 
+
 == Backend configuration options
 
 See the following table for the backend configuration options:
@@ -58,6 +64,8 @@ Can be set to use IPv6 addresses if Trident was installed using the IPv6 flag. I
 
 Set to `true` for Trident to configure and use bidirectional CHAP as the default authentication for the SVM given in the backend. Refer to link:ontap-san-prep.html[Prepare to configure backend with ONTAP SAN drivers] for details.
 
+*Not supported for FCP or NVMe/TCP.*
+
 |`false`
 
 |`chapInitiatorSecret` |CHAP initiator secret. Required if `useCHAP=true` |""
@@ -91,7 +99,7 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
-*Do not specify for ASA r2*.
+*Do not specify for ASA r2 systems*.
 
 a|""
 
@@ -100,7 +108,7 @@ a|""
 
 If you are using an Amazon FSx for NetApp ONTAP backend, do not specify  `limitAggregateUsage`. The provided `fsxadmin` and `vsadmin` do not contain the permissions required to retrieve aggregate usage and limit it using Trident.
 
-*Do not specify for ASA r2*.|"" (not enforced by default)
+*Do not specify for ASA r2 systems*.|"" (not enforced by default) 
 
 |`limitVolumeSize` |Fail provisioning if requested volume size is above this value. 
 
@@ -120,7 +128,7 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST` is fully qualified for NVMe/TCP. 
 
-*If specified, always set to `true` for ASA r2*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
+*If specified, always set to `true` for ASA r2 systems*. |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
 
 a|`sanType` |
@@ -133,7 +141,8 @@ Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibr
 a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
 Example: "-E nodiscard" 
 
-*Supported for `ontap-san` and `ontap-san-economy` drivers only.* 
+*Supported for `ontap-san` and `ontap-san-economy` drivers with iSCSI protocol.* 
+*Additionally, supported for ASA r2 systems when using iSCSI and NVMe/TCP protocols.*
 a|
 
 
@@ -163,15 +172,15 @@ You can control default provisioning using these options in the `defaults` secti
 |===
 |Parameter |Description |Default
 |`spaceAllocation` |Space-allocation for LUNs |"true"
-*If specified, set to `true` for ASA r2*.
+*If specified, set to `true` for ASA r2 systems*.
 
 |`spaceReserve` |Space reservation mode; "none" (thin) or "volume" (thick).
 
-*Set to `none` for ASA r2*. |"none"
+*Set to `none` for ASA r2* systems.|"none"
 
 |`snapshotPolicy` |Snapshot policy to use.
 
-*Set to `none` for ASA r2*. |"none"
+*Set to `none` for ASA r2 systems*.|"none"
 
 
 |`qosPolicy` |QoS policy group to assign for volumes created. Choose one of qosPolicy or adaptiveQosPolicy per storage pool/backend. 
@@ -182,7 +191,7 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 
 |`snapshotReserve` |Percentage of volume reserved for snapshots.
 
-*Do not specify for ASA r2*.	|"0" if `snapshotPolicy` is "none", otherwise ""
+*Do not specify for ASA r2 systems*. |"0" if `snapshotPolicy` is "none", otherwise ""
 
 |`splitOnClone` |Split a clone from its parent upon creation |"false"
 
@@ -192,16 +201,16 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
 
-*If specified, set to `true` for ASA r2*.
+*If specified, set to `true` for ASA r2 systems*.
 
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 LUKS encryption is not supported for NVMe/TCP.| ""
-Set to `false` for ASA r2.
+*Set to `false` for ASA r2 systems*.
 
 |`tieringPolicy` |Tiering policy to use	"none" 
 
-*Do not specify for ASA r2*.|
+*Do not specify for ASA r2 systems* .|
 
 
 |`nameTemplate` | Template to create custom volume names.

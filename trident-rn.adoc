@@ -8,14 +8,83 @@ summary: NetApp is continually improving and enhancing its products and services
 = What’s new
 :hardbreaks:
 :icons: font
-:imagesdir: ../media/
+:imagesdir: ./media/
 
 [.lead]
-Release Notes provide information about new features, enhancements, and bug fixes in the latest version of Trident.
+Release Notes provide information about new features, enhancements, and bug fixes in the latest version of NetApp Trident.
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 25.02.1
+
+== What's new in 25.06
+The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+
+=== Trident
+
+==== Enhancements
+
+* *Kubernetes*:
+** Added support for CSI Volume Group Snapshots with `v1beta1` Volume Group Snapshot Kubernetes APIs for ONTAP-SAN iSCSI driver. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^]. 
+** Added support for ONTAP ASA r2 for NVMe/TCP in addition to iSCSI. See link:link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^].
+** Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes. Active Directory users and groups may now be used with SMB volumes for enhanced security. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-prep.html#enable-secure-smb[Enable secure SMB^].
+** Enhanced Trident node concurrency for higher scalability on node operations for iSCSI volumes.
+** Added `--allow-discards` when opening LUKS volumes to allow discard/TRIM commands for space reclamation.  
+** Enhanced performance when formatting LUKS-encrypted volumes. 
+** Enhanced LUKS cleanup for failed but partially formatted LUKS devices. 
+** Enhanced Trident node idempotency for NVMe volume attach and detach.
+** Added `internalID` field to the Trident volume config for ONTAP-SAN-Economy driver.
+** Added support for volume replication with SnapMirror for NVMe backends. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-volume-replicate.html[Replicate volumes using SnapMirror^].
+
+==== Experimental Enhancements
+NOTE: Not for use in production environments.
+
+* [Tech Preview] Enabled concurrent Trident controller operations via the `--enable-concurrency` feature flag. This allows controller operations to run in parallel, improving performance for busy or large environments.
++
+NOTE: This feature is experimental and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
+
+* [Tech Preview] Added manual QOS support with the ANF driver.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed an issue with CSI NodeExpandVolume where multipath devices could be left with incongruent sizes when underlying SCSI disk(s) are unavailable.
+** Fixed failure to clean up duplicate export policies for ONTAP-NAS and ONTAP-NAS-Economy drivers.
+** Fixed GCNV volumes defaulting to NFSv3 when `nfsMountOptions` is unset; now both NFSv3 and NFSv4 protocols are supported. If `nfsMountOptions` is not provided, the host’s default NFS version (NFSv3 or NFSv4) will be used.
+** Fixed deployment issue when installing Trident using Kustomize (link:https://github.com/NetApp/trident/issues/831[Issue #831]).
+** Fixed missing export policies for PVCs created from snapshots (link:https://github.com/NetApp/trident/issues/1016[Issue #1016]).
+** Fixed issue where the ANF volume sizes are not automatically aligned to 1 GiB increments.
+** Fixed issue when using NFSv3 with Bottlerocket.
+* Fixed timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+* Fixed issue with ONTAP-NAS-Economy volumes expanding up to 300 TB despite resize failures.
+* Fixed issue where clone split operations were being done synchronously when using ONTAP REST API.
+
+==== Deprecations:
+* *Kubernetes*: Updated minimum supported Kubernetes to v1.27.
+
+=== Trident protect
+NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+
+==== Enhancements
+
+* Improved restore times, providing the option to do more frequent full backups. 
+* Improved granularity of application definition and selective restore with Group-Version-Kind (GVK) filtering. 
+* Efficient resync and reverse replication when using AppMirrorRelationship (AMR) with NetApp SnapMirror, to avoid full PVC replication. 
+* Added ability to use EKS Pod Identity to create AppVault buckets, removing the need to specify a secret with the bucket credentials for EKS clusters. 
+* Added the ability to skip restoring labels and annotations in the restore namespace, if needed.
+* AppMirrorRelationship (AMR) will now check for source PVC expansion and perform the appropriate expansion on the destination PVC as needed.
+
+==== Fixes
+
+* Fixed bug where snapshot annotation values from previous snapshots were being applied to newer snapshots.  All snapshot annotations are applied correctly now.
+* Defined a secret for data mover encryption (Kopia / Restic) by default, if not defined..
+* Added improved validation and error messages for S3 appvault creation.
+* AppMirrorRelationship (AMR) now only replicates PVs in the Bound state, to avoid failed attempts.
+* Fixed issue where errors were displayed when getting AppVaultContent on an AppVault with large number of backups.
+* KubeVirt VMSnapshots are excluded from restore and failover operations to avoid failures.
+* Fixed issue with Kopia where snapshots were being removed prematurely due to Kopia default retention schedule overriding what was set by the user in the schedule. 
+
+
+== Changes in 25.02.1
 
 === Trident
 ==== Fixes

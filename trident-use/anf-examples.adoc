@@ -16,7 +16,7 @@ Learn about NFS and SMB backend configuration options for Azure NetApp Files and
 == Backend configuration options
 Trident uses your backend configuration (subnet, virtual network, service level, and location), to create Azure NetApp Files volumes on capacity pools that are available in the requested location and match the requested service level and subnet.
 
-NOTE: Trident does not support Manual QoS capacity pools. *In NetApp Trident 25.06, manual QoS capacity pools is supported as a tech preview.*
+NOTE: * Beginning with NetApp Trident 25.06 release, manual QoS capacity pool are supported as a tech preview.*
 
 Azure NetApp Files backends provide these configuration options. 
 
@@ -86,10 +86,11 @@ Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nf
 For more information, refer to link:../trident-use/csi-topology.html[Use CSI Topology]. |  
 
 | `qosType` | Represents the QoS type. 
-*Tech preview for Trident 25.06*|  
+*Tech preview for Trident 25.06* |  
 
 | `maxThroughput` | Sets the maximum throughput allowed.
-*Tech preview for Trident 25.06* |  `4MiB/sec`
+Supported only for manual QoS capacity pools.
+*Tech preview for Trident 25.06* |  `4 MiB/sec`
 
 |===
 
@@ -241,10 +242,10 @@ capacityPools:
 ----
 ====
 
-.Specific service level configuration with capacity pool filters
+.Backend example with manual QoS capacity pools
 [%collapsible%closed]
 ====
-This backend configuration places volumes in Azure's `eastus` location with manual QoS.
+This backend configuration places volumes in Azure's `eastus` location with manual QoS capacity pools.
 *Tech preview in NetApp Trident 25.06*.
 
 [source,yaml]

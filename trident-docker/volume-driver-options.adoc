@@ -107,7 +107,7 @@ docker volume create -d netapp --name demo -o size=100G -o snapshotPolicy=defaul
 docker volume create -d netapp --name demo -o unixPermissions=4755
 ----
 
-The minimum volume size is 20MiB.
+The minimum volume size is 20 MiB.
 
 If the snapshot reserve is not specified and the snapshot policy is `none`, Trident use a snapshot reserve of 0%.
 

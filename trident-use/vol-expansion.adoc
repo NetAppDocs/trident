@@ -348,7 +348,7 @@ spec:
   storageClassName: ontapnas
 ----
 
-Trident should create a 20MiB NFS PV for this PVC:
+Trident should create a 20 MiB NFS PV for this PVC:
 
 ----
 kubectl get pvc
@@ -362,7 +362,7 @@ pvc-08f3d561-b199-11e9-8d9f-5254004dfdb7   20Mi       RWO            Delete     
 
 === Step 3: Expand the PV
 
-To resize the newly created 20MiB PV to 1GiB, edit the PVC and set `spec.resources.requests.storage` to 1GiB:
+To resize the newly created 20 MiB PV to 1GiB, edit the PVC and set `spec.resources.requests.storage` to 1GiB:
 
 ----
 kubectl edit pvc ontapnas20mb

@@ -180,7 +180,7 @@ NetApp Trident protect provides advanced application data management capabilitie
 * Reduced Azure NetApp Files minimum volume size to 50 GiB. Azure new minimum size expected to be generally available in November.
 * Added `denyNewVolumePools` configuration parameter to restrict ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers to preexisting Flexvol pools.
 * Added detection for the addition, removal, or renaming of aggregates from the SVM across all ONTAP drivers.
-* Added 18MiB overhead to LUKS LUNs to ensure reported PVC size is usable.
+* Added 18 MiB overhead to LUKS LUNs to ensure reported PVC size is usable.
 * Improved ONTAP-SAN and ONTAP-SAN-Economy node stage and unstage error handling to allow unstage to remove devices after a failed stage.
 * Added a custom role generator allowing customers to create a minimalistic role for Trident in ONTAP.
 * Added additional logging for troubleshooting `lsscsi` (link:https://github.com/NetApp/trident/issues/792[Issue #792]).
@@ -255,7 +255,7 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 * Fixed Trident installation failures due to stale transactions.
 * Fixed tridentctl to ignore warning messages from Kubernetes (link:https://github.com/NetApp/trident/issues/892[Issue #892]).
 * Changed Trident controller `SecurityContextConstraint` priority to `0` (link:https://github.com/NetApp/trident/issues/887[Issue #887]).
-* ONTAP drivers now accept volume sizes below 20MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
+* ONTAP drivers now accept volume sizes below 20 MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
 * Fixed Trident to prevent shrinking of FlexVol volumes during resize operation for the ONTAP-SAN driver.
 * Fixed ANF volume import failure with NFS v4.1.
 

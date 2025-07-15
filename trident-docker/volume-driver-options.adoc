@@ -89,13 +89,13 @@ The following additional options are for iSCSI *only*:
 
 See the examples below:
 
-* Create a 10GiB volume:
+* Create a 10 GiB volume:
 +
 ----
 docker volume create -d netapp --name demo -o size=10G -o encryption=true
 ----
 
-* Create a 100GiB volume with snapshots:
+* Create a 100 GiB volume with snapshots:
 +
 ----
 docker volume create -d netapp --name demo -o size=100G -o snapshotPolicy=default -o snapshotReserve=10
@@ -149,7 +149,7 @@ Other Element software volume create options include the following:
 |Description
 
 |`size`
-a|The size of the volume, defaults to 1GiB or config entry ... "defaults": {"size": "5G"}.
+a|The size of the volume, defaults to 1 GiB or config entry ... "defaults": {"size": "5G"}.
 
 |`blocksize`
 a|Use either 512 or 4096, defaults to 512 or config entry DefaultBlockSize.
@@ -193,13 +193,13 @@ See the following sample configuration file with QoS definitions:
 
 In the above configuration, we have three policy definitions: Bronze, Silver, and Gold. These names are arbitrary.
 
-* Create a 10GiB Gold volume:
+* Create a 10 GiB Gold volume:
 +
 ----
 docker volume create -d solidfire --name sfGold -o type=Gold -o size=10G
 ----
 
-* Create a 100GiB Bronze volume:
+* Create a 100 GiB Bronze volume:
 +
 ----
 docker volume create -d solidfire --name sfBronze -o type=Bronze -o size=100G

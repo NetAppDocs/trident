@@ -12,7 +12,7 @@ summary: You can restore your backup or snapshot data to a different cluster or 
 :imagesdir: ../media/
 
 [.lead]
-You can migrate your applications between clusters or storage classes by restoring your backup or snapshot data to a different cluster or storage class.
+##You can migrate your applications between clusters by restoring your backup data to a different cluster. You can also migrate applications between storage classes on the same cluster using snapshots, but only when both storage classes use the same storage backend.##
 
 NOTE: When you migrate an application, all execution hooks configured for the application are migrated with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
 

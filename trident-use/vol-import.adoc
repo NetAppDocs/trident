@@ -173,6 +173,60 @@ image:./san-import-igroup.png[Image of LUNS mapped to iqn and cluster iqn.]
 --
 ====
 
+.ONTAP SAN-ECONOMY examples
+The following show an example of a managed volume and an unmanaged volume import. 
+
+// start tabbed area
+
+[role="tabbed-block"]
+====
+
+.Managed volume
+--
+For managed volumes, Trident renames the FlexVol volume to the `pvc-<uuid>` format and the LUN within the FlexVol volume to `lun0`.
+
+The following example imports the `ontap-san-managed` FlexVol volume that is present on the `ontap_san_default` backend:
+----
+tridentctl import volume ontapsan_san_default ontap-san-managed -f pvc-basic-import.yaml -n trident -d
+
++------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
+|                   NAME                   |  SIZE  | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
++------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
+| pvc-d6ee4f54-4e40-4454-92fd-d00fc228d74a | 20 MiB | basic         | block    | cd394786-ddd5-4470-adc3-10c5ce4ca757 | online | true    |
++------------------------------------------+--------+---------------+----------+--------------------------------------+--------+---------+
+----
+
+For managed import(if lun is named lunFoo):
+trident import volume BackendForiSCSIEco toimport/lunFoo -f import1.yaml
+Note: Post first LUN inside toimport is imported the flexvol will be renamed and in the subsequent import LUNs(LUNs inside same flexvol) import statement should use the newly renamed flexvol name.
+For example, if the second lun say lunBar previously inside toimport
+which would be changed say trident_lun_pool_xyz import statement will change to:
+trident import volume BackendForiSCSIEco trident_lun_pool_xyz/lunBar -f import2.yaml
+Import of san-economy LUN/s are done one LUN at a time. which can be automated through a script.
+
+
+--
+.Unmanaged volume
+--
+The following example imports `unmanaged_example_volume` on the `ontap_san` backend:
+----
+tridentctl import volume -n trident san_blog unmanaged_example_volume -f pvc-import.yaml --no-manage
++------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
+|                   NAME                   |  SIZE   | STORAGE CLASS | PROTOCOL |             BACKEND UUID             | STATE  | MANAGED |
++------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
+| pvc-1fc999c9-ce8c-459c-82e4-ed4380a4b228 | 1.0 GiB | san-blog      | block    | e3275890-7d80-4af6-90cc-c7a0759f555a | online | false   |
++------------------------------------------+---------+---------------+----------+--------------------------------------+--------+---------+
+----
+[WARNING]
+=====
+If you have LUNS mapped to igroups that share an IQN with a Kubernetes node IQN, as shown in the following example, you will receive the error: `LUN already mapped to initiator(s) in this group`. You will need to remove the initiator or unmap the LUN to import the volume. 
+
+image:./san-import-igroup.png[Image of LUNS mapped to iqn and cluster iqn.]
+
+=====
+
+--
+====
 
 === Element
 Trident supports NetApp Element software and NetApp HCI volume import using the `solidfire-san` driver. 

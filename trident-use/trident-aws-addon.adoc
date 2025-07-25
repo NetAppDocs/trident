@@ -40,11 +40,13 @@ image::../media/aws-eks-02.png[]
 +
 image::../media/aws-eks-03.png[]
 +
-. Select the IAM role option to inherit from the node.
+. Configure the required add-on settings.
 +
 image::../media/aws-eks-04.png[]
 +
 . Follow the *Add-on configuration schema* and set the Configuration Values parameter on the *Configuration values* section to the role-arn you created on the previous step(Step 1). Value should be in the following format:
++
+NOTE: *Skip this step if you are using Pod Identity association*.
 +
 [source,JSON]
 ----

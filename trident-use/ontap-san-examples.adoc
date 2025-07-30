@@ -205,7 +205,7 @@ For more information, refer to: link:../trident-reco/security-reco.html[How Trid
 
 |`luksEncryption` | Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
-LUKS encryption is not supported for NVMe/TCP.| ""
+| ""
 *Set to `false` for ASA r2 systems*.
 
 |`tieringPolicy` |Tiering policy to use	"none" 
@@ -256,7 +256,7 @@ For backends that define `snapshotReserve`, Trident calculates the size of volum
 Total volume size = [(PVC requested size) / (1 - (snapshotReserve percentage) / 100)] * 1.1
 ----
 
-The 1.1 is the extra 10 percent Trident adds to the FlexVol to accommodate the LUN metadata. For `snapshotReserve` = 5%, and PVC request = 5GiB, the total volume size is 5.79GiB and the available size is 5.5GiB. The `volume show` command should show results similar to this example:
+The 1.1 is the extra 10 percent Trident adds to the FlexVol to accommodate the LUN metadata. For `snapshotReserve` = 5%, and PVC request = 5 GiB, the total volume size is 5.79 GiB and the available size is 5.5 GiB. The `volume show` command should show results similar to this example:
 
 image::../media/vol-show-san.png[Shows the output of the volume show command.]
 

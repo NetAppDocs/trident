@@ -28,6 +28,15 @@ Any aspect specified outside the virtual pools list is global to the backend and
 
 Most aspects are specified in backend-specific terms. Crucially, the aspect values are not exposed outside the backend's driver and are not available for matching in `StorageClasses`. Instead, the administrator defines one or more labels for each virtual pool. Each label is a key:value pair, and labels might be common across unique backends. Like aspects, labels can be specified per-pool or global to the backend. Unlike aspects, which have predefined names and values, the administrator has full discretion to define label keys and values as needed. For convenience, storage administrators can define labels per virtual pool and group volumes by label.
 
+The virtual pool labels can be defied using these characters:
+
+* uppercase letters `A-Z``
+* lowercase letters `a-z`
+* numbers 0-9,  
+* underscores `_`
+* hyphens  `-`.
+
+
 A `StorageClass` identifies which virtual pool to use by referencing the labels within a selector parameter.  Virtual pool selectors support the following operators:
 
 [width="100%",cols="14%,34%,52%",options="header",]

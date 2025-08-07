@@ -12,7 +12,7 @@ summary: You can restore your backup or snapshot data to a different cluster or 
 :imagesdir: ../media/
 
 [.lead]
-You can migrate your applications between clusters or storage classes by restoring your backup or snapshot data to a different cluster or storage class.
+You can migrate your applications between clusters or to different storage classes by restoring backup data.
 
 NOTE: When you migrate an application, all execution hooks configured for the application are migrated with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
 
@@ -48,7 +48,7 @@ NOTE: You can replicate an application between different clusters using link:tri
 
 == Migrate applications from one storage class to another storage class
 
-You can migrate applications from one storage class to a different storage class by restoring a snapshot to the different destination storage class.
+You can migrate applications from one storage class to a different storage class by restoring a backup to the destination storage class.
 
 For example (excluding the secrets from the restore CR):
 
@@ -62,11 +62,11 @@ spec:
   appArchivePath: "${snapshotArchivePath}"
   appVaultRef: "${appVaultCRName}"
   namespaceMapping:
-    destination: "${destinationNamespace}"
-    source: "${sourceNamespace}"
+    - destination: "${destinationNamespace}"
+      source: "${sourceNamespace}"
   storageClassMapping:
-    destination: "${destinationStorageClass}"
-    source: "${sourceStorageClass}"
+    - destination: "${destinationStorageClass}"
+      source: "${sourceStorageClass}"
   resourceFilter:
     resourceMatchers:
       kind: Secret

@@ -18,7 +18,7 @@ You can use Trident protect to restore your application from a snapshot or backu
 ====
 * When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
 * Restoring from a backup to a different namespace or to the original namespace is supported for qtree volumes. However, restoring from a snapshot to a different namespace or to the original namespace is not supported for qtree volumes.
-* ##You can use advanced settings to customize restore operations. To learn more, refer to link:../trident-protect/trident-protect-restore-settings.html[Use advanced Trident protect restore settings].##
+* You can use advanced settings to customize restore operations. To learn more, refer to link:../trident-protect/trident-protect-restore-settings.html[Use advanced Trident protect restore settings].
 ====
 
 == Restore from a backup to a different namespace
@@ -271,7 +271,7 @@ tridentctl-protect create backuprestore <restore_name> \
 
 You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
-NOTE: ##SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.##
+NOTE: SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 

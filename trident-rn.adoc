@@ -15,8 +15,24 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 25.06.1
+The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
-== What's new in 25.06
+=== Trident
+
+==== Enhancements
+
+* *Kubernetes*: Block cloning of volume across different storage classes.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed an issue where NQNs were not checked before they are unmapped from Subsystems.
+** Fixed an issue where multiple attempts to close a LUKS device resulted in failures to detach volumes.
+** Fixed iSCSI volume unstage when the device path has changed since its creation.
+** Increased when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]). Increased timeout???
+
+== Changes in 25.06
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident

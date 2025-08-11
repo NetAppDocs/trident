@@ -22,15 +22,16 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 
 ==== Enhancements
 
-* *Kubernetes*: Block cloning of volume across different storage classes.
+* *Kubernetes*: Block cloning of volumes across storage classes.
 
 ==== Fixes
 
 * *Kubernetes*:
-** Fixed an issue where NQNs were not checked before they are unmapped from Subsystems.
-** Fixed an issue where multiple attempts to close a LUKS device resulted in failures to detach volumes.
+** Fixed an issue where NQNs were not checked before being unmapped from Subsystems.
+** Fixed an issue where multiple attempts to close a LUKS device led to failures in detaching volumes.
 ** Fixed iSCSI volume unstage when the device path has changed since its creation.
-** Increased when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]). Increased timeout???
+** Increased the timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+* *OpenShift*: Fixed an issue where iSCSI node prep failed with OCP 4.19.
 
 == Changes in 25.06
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  

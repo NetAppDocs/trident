@@ -93,6 +93,30 @@ When you access S3-compatible storage such as Amazon S3, Generic S3, https://doc
 
 For more information about Amazon S3 policies, refer to the examples in the https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-policies-s3.html[Amazon S3 documentation^].
 
+=== ##EKS Pod Identity for AWS S3 authentication##
+
+##Trident protect supports AWS EKS Pod Identity for Kopia data mover operations. This feature enables secure access to S3 buckets without storing AWS credentials in Kubernetes secrets.##
+
+##When using EKS Pod Identity, configure your AppVault CR with the `useIAM: true` flag instead of explicit credentials:##
+
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: eks-protect-vault
+  namespace: trident-protect
+spec:
+  providerType: AWS
+  providerConfig:
+    s3:
+      bucketName: trident-protect-aws
+      endpoint: s3.example.com
+      useIAM: true
+----
+
+##To learn about configuring EKS Pod Identity, refer to the https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html[AWS EKS Pod Identity documentation^].##
+
 === AppVault key generation examples for cloud providers
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers. You can use the following examples to create keys for the credentials of each cloud provider.
 
@@ -239,6 +263,8 @@ spec:
         key: sessionToken
         name: s3-secret
 ----
+
+NOTE: ##For EKS environments using Pod Identity with Kopia data mover, you can remove the `providerCredentials` section and add `useIAM: true` under the `s3` configuration instead.##
 --
 
 .Microsoft Azure

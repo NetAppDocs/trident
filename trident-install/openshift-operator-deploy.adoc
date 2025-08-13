@@ -25,21 +25,22 @@ Before you begin the installation, link:../trident-get-started/requirements.html
 image::../media/openshift-operator-01.png[Trident Operator]
 +
 . Click *NetApp Trident* to open the installation settings.
+. Select the required options and click *Install* to open the Operator configuration.
 +
 image::../media/openshift-operator-02.png[Install]
 + 
 NOTE: Make sure that you select the most recent Operator version.
-. Select the required options and click *Install* to open the Operator configuration.
+. Retain all the parameters as they are and click *Install*. 
 + 
 image::../media/openshift-operator-03.png[Install]
 +
-. Retain all the parameters as they are and click *Install*. 
-+
-Once the installation is complete, the Operator is visible in the list of installed operators and Operator the is ready to use.
+Once the installation is complete, the Operator is visible in the list of installed operators and it is ready to use.
+. Click *View Operator* to view the details of the Operator.
 + 
 image::../media/openshift-operator-04.png[Installed]
-. Click *View Operator* to view the details of the Operator.
 . Under *Trident Orchestrator*, click *Create instance*.
++ 
+image::../media/openshift-operator-07.png[Installed]
 . Click *YAML view* and paste the following in the form:
 +
 [source,yaml]
@@ -60,14 +61,12 @@ spec:
   namespace: trident 
   silenceAutosupport: false 
 -------
++
 ====
 * Red Hat Enterprise Linux CoreOS (RHCOS)  does not have iSCSI enabled and configured.  
 * You can add the `nodePrep` parameter to configure and enable both iSCSI and Multipath services on all OpenShift worker nodes.
 ====
 . Click *Create*; the Trident Orchestrator will be fully installed.
-+ 
-image::../media/openshift-operator-07.png[Installed]
-. Click *View Operator* to view the installed Operators.
 + 
 image::../media/openshift-operator-08.png[Installed]
 

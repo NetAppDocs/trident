@@ -14,9 +14,12 @@ summary: You can use Trident protect to restore your application from a snapshot
 [.lead]
 You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 
-NOTE: When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
-
-include::../_include/namespace-anno-labels.adoc[]
+[NOTE]
+====
+* When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
+* Restoring from a backup to a different namespace or to the original namespace is supported for qtree volumes. However, restoring from a snapshot to a different namespace or to the original namespace is not supported for qtree volumes.
+* You can use advanced settings to customize restore operations. To learn more, refer to link:../trident-protect/trident-protect-restore-settings.html[Use advanced Trident protect restore settings].
+====
 
 == Restore from a backup to a different namespace
 
@@ -26,7 +29,7 @@ NOTE: Restoring a backup to a different namespace with existing resources will n
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -47,7 +50,6 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
-* *spec.storageClassMapping*: The mapping of the source storage class of the restore operation to the destination storage class. Replace `destinationStorageClass` and `sourceStorageClass` with information from your environment.
 +
 [source,yaml]
 -------
@@ -57,15 +59,10 @@ kind: BackupRestore
 metadata:
   name: my-cr-name
   namespace: my-destination-namespace
-  annotations: # Optional annotations for Kopia data mover
-    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
-  storageClassMapping:
-    destination: "${destinationStorageClass}"
-    source: "${sourceStorageClass}"
 -------
 +
 include::../_include/restore-include-selective-restore.adoc[]
@@ -99,7 +96,7 @@ You can restore a backup to the original namespace at any time.
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -129,8 +126,6 @@ kind: BackupInplaceRestore
 metadata:
   name: my-cr-name
   namespace: my-app-namespace
-  annotations: # Optional annotations for Kopia data mover
-    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
@@ -164,7 +159,7 @@ tridentctl-protect create backupinplacerestore <my_restore_name> \
 
 You can restore a backup to a different cluster if there is an issue with the original cluster.
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the emphemeral storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
 
 .Before you begin
 
@@ -241,8 +236,6 @@ kind: BackupRestore
 metadata:
   name: my-cr-name
   namespace: my-destination-namespace
-  annotations: # Optional annotations for Kopia data mover
-    protect.trident.netapp.io/kopia-content-cache-size-limit-mb: 1000
 spec:
   appVaultRef: appvault-name
   appArchivePath: my-backup-path
@@ -278,6 +271,8 @@ tridentctl-protect create backuprestore <restore_name> \
 
 You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
+NOTE: SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
+
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
 // begin tabbed block
@@ -299,9 +294,6 @@ kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.a
 -----
 +
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
-* *spec.storageClassMapping*: The mapping of the source storage class of the restore operation to the destination storage class. Replace `destinationStorageClass` and `sourceStorageClass` with information from your environment.
-+
-NOTE: The `storageClassMapping` attribute works only when both the original and new `StorageClass` use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
 +
 [source,yaml]
 -------
@@ -315,9 +307,6 @@ spec:
   appVaultRef: appvault-name
   appArchivePath: my-snapshot-path
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
-  storageClassMapping:
-    destination: "${destinationStorageClass}"
-    source: "${sourceStorageClass}"
 -------
 +
 include::../_include/restore-include-selective-restore.adoc[]

@@ -13,7 +13,7 @@ summary: You can install Trident using the Trident operator (manually or using H
 [.lead]
 To ensure Trident can be installed in a wide variety of environments and organizations, NetApp offers multiple installation options. You can install Trident using the Trident operator (manually or using Helm) or with `tridentctl`. This topic provides important information for selecting the right installation process for you. 
 
-== Critical information about Trident 25.02
+== Critical information about Trident 25.06
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -21,7 +21,7 @@ To ensure Trident can be installed in a wide variety of environments and organiz
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.32 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.33 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -39,6 +39,7 @@ Regardless of your installation path, you must have:
 * A Linux host with `kubectl` (or `oc`, if you are using OpenShift) installed and configured to manage the Kubernetes cluster that you want to use.
 * The `KUBECONFIG` environment variable set to point to your Kubernetes cluster configuration.
 * If you are using Kubernetes with Docker Enterprise, https://docs.docker.com/ee/ucp/user-access/cli/[follow their steps to enable CLI access^].
+* The cluster must support privileged workloads.
 
 TIP: If you have not familiarized yourself with the link:../trident-get-started/intro.html[basic concepts^], now is a great time to do that.
 
@@ -185,7 +186,6 @@ You can decide to change your installation method. Before doing so, consider the
 
 When installing Trident on VMWare Tanzu Portfolio products:
 
-* The cluster must support privileged workloads.
 * The `--kubelet-dir` flag should be set to the location of kubelet directory. By default, this is `/var/vcap/data/kubelet`.
 +
 Specifying the kubelet location using `--kubelet-dir` is known to work for Trident Operator, Helm, and `tridentctl` deployments.

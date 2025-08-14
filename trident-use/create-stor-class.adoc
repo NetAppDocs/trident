@@ -21,11 +21,14 @@ The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes Stor
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: <Name>
+  name: ontap-gold
 provisioner: csi.trident.netapp.io
-mountOptions: <Mount Options>
+mountOptions:
+  - nfsvers=3
+  - nolock
 parameters:
-  <Trident Parameters>
+  backendType: "ontap-nas"
+  media: "ssd"
 allowVolumeExpansion: true
 volumeBindingMode: Immediate
 ----

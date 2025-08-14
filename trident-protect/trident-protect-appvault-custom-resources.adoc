@@ -97,6 +97,21 @@ For more information about Amazon S3 policies, refer to the examples in the http
 
 ##Trident protect supports EKS Pod Identity for Kopia data mover operations. This feature enables secure access to S3 buckets without storing AWS credentials in Kubernetes secrets.##
 
+*Requirements for EKS Pod Identity with Trident protect*
+
+##Before using EKS Pod Identity with Trident protect, ensure the following:##
+
+* ##Your EKS cluster has Pod Identity enabled.##
+* ##You have created an IAM role with the necessary S3 bucket permissions. To learn more, refer to link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-appvault-custom-resources.html#s3-compatible-storage-iam-permissions[S3-compatible storage IAM permissions].##
+* ##The IAM role is associated with the following Trident protect service accounts:##
+** `<trident-protect>-controller-manager`
+** `<trident-protect>-resource-backup` 
+** `<trident-protect>-resource-restore`
+** `<trident-protect>-resource-delete`
+
+For detailed instructions on enabling Pod Identity and associating IAM roles with service accounts, refer to the https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html[AWS EKS Pod Identity documentation^].
+
+*AppVault Configuration*
 ##When using EKS Pod Identity, configure your AppVault CR with the `useIAM: true` flag instead of explicit credentials:##
 
 [source,yaml]
@@ -114,8 +129,6 @@ spec:
       endpoint: s3.example.com
       useIAM: true
 ----
-
-##For more information about configuring EKS Pod Identity, refer to the https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html[AWS EKS Pod Identity documentation^].##
 
 === AppVault key generation examples for cloud providers
 When defining an AppVault CR, you need to include credentials to access the resources hosted by the provider. How you generate the keys for the credentials will differ depending on the provider. The following are command line key generation examples for several providers. You can use the following examples to create keys for the credentials of each cloud provider.

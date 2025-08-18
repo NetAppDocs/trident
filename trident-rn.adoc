@@ -15,8 +15,24 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 25.06.1
+The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
-== What's new in 25.06
+=== Trident
+
+IMPORTANT: For customers using SolidFire, please do not upgrade to 25.06.1 due to a known issue when unpublishing volumes. 25.06.2 will be released soon to address this issue.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed an issue where NQNs were not checked before being unmapped from subsystems.
+** Fixed an issue where multiple attempts to close a LUKS device led to failures in detaching volumes.
+** Fixed iSCSI volume unstage when the device path has changed since its creation.
+** Block cloning of volumes across storage classes.
+* *OpenShift*: Fixed an issue where iSCSI node prep failed with OCP 4.19.
+* Increased the timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+
+== Changes in 25.06
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident

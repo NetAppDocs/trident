@@ -152,6 +152,19 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 --
 ====
 
+== ##Configure namespace filtering##
+
+##You can exclude specific namespace annotations and labels using `restoreSkipNamespaceAnnotations` and `restoreSkipNamespaceLabels`. This is useful if you want to exclude certain namespaces that are not relevant to your backup and restore operations.##
+
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect \
+  --set clusterName=<name_of_cluster> \
+  --set restoreSkipNamespaceAnnotations="{annotation1,annotation2}" \
+  --set restoreSkipNamespaceLabels="{label1,label2}" \
+  --version 100.2506.0 --create-namespace --namespace trident-protect 
+----
+
 == Restrict Trident protect pods to specific nodes
 
 You can use the Kubernetes nodeSelector node selection constraint to control which of your nodes are eligible to run Trident protect pods, based on node labels. By default, Trident protect is restricted to nodes that are running Linux. You can further customize these constraints depending on your needs.

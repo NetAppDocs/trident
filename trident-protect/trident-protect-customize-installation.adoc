@@ -133,7 +133,7 @@ You can customize AutoSupport settings and namespace filtering to meet your spec
 | Parameter | Type | Description 
 |autoSupport.proxy
 |string
-|Configures a proxy URL for NetApp AutoSupport connections. Use this to route support bundle uploads through a proxy server. Example: `http://my.proxy.url`
+|Configures a proxy URL for NetApp AutoSupport connections. Use this to route support bundle uploads through a proxy server. Example: `http://my.proxy.url`.
 |autoSupport.insecure
 |boolean
 |Skips TLS verification for AutoSupport proxy connections when set to `true`. Use only for insecure proxy connections. (default: `false`)
@@ -178,7 +178,8 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 --
 .Use the CLI
 --
-.Use the following command to customize the configuration options. You can also set individual parameters using the `--set` flag:
+.Steps
+. Use the following command to customize the configuration options. You can also set individual parameters using the `--set` flag:
 +
 [source,console]
 ----

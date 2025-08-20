@@ -124,46 +124,73 @@ helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig
 +
 This will replace the default values with those specified in the `sccconfig.yaml` file.
 
-== Configure NetApp AutoSupport connections for Trident protect
+== ##Configure AutoSupport and namespace filtering options##
 
-You can change the way Trident protect connects to NetApp Support to upload support bundles by configuring a proxy for the connection. You can configure the proxy to use either a secure or an insecure connection based on your needs.
+You can customize AutoSupport settings and namespace filtering to meet your specific requirements. The following table describes the available configuration parameters:
+
+[options="header"]
+|===
+| Parameter | Type | Description 
+|autoSupport.proxy
+|string
+|Configures a proxy URL for NetApp AutoSupport connections. Use this to route support bundle uploads through a proxy server. Example: `http://my.proxy.url`
+|autoSupport.insecure
+|boolean
+|Skips TLS verification for AutoSupport proxy connections when set to `true`. Use only for insecure proxy connections. (default: `false`)
+|autoSupport.enabled
+|boolean
+|Enables or disables daily Trident protect AutoSupport bundle uploads. When set to `false`, scheduled daily uploads are disabled, but you can still manually generate support bundles. (default: `true`)
+|restoreSkipNamespaceAnnotations
+|string
+|Comma-separated list of namespace annotations to exclude from backup and restore operations. Allows you to filter namespaces based on annotations.
+|restoreSkipNamespaceLabels
+|string
+|Comma-separated list of namespace labels to exclude from backup and restore operations. Allows you to filter namespaces based on labels.
+|===
+
+You can configure these options using either a YAML configuration file or command-line parameters:
+
+// begin tabbed block
 
 [role="tabbed-block"]
 ====
-.Configure a secure proxy connection
+.Use a CR
 --
 .Steps
-. Configure a secure proxy connection for Trident protect support bundle uploads:
+. Create the custom resource (CR) file and name it `values.yaml`.
+. In the file you created, add the configuration options you want to customize. 
 +
 [source,console]
 ----
-helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect --set autoSupport.proxy=http://my.proxy.url --reuse-values
+autoSupport:
+  enabled: false
+  proxy: http://my.proxy.url
+  insecure: true
+restoreSkipNamespaceAnnotations: "annotation1,annotation2"
+restoreSkipNamespaceLabels: "label1,label2"
 ----
---
-.Configure an insecure proxy connection
---
-.Steps
-. Configure an insecure proxy connection for Trident protect support bundle uploads that skips TLS verification:
+. After you populate the `values.yaml` file with the correct values, apply the CR::
 +
 [source,console]
 ----
-helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect --set autoSupport.proxy=http://my.proxy.url --set autoSupport.insecure=true --reuse-values
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f values.yaml --reuse-values
+----
+--
+.Use the CLI
+--
+.Use the following command to customize the configuration options. You can also set individual parameters using the `--set` flag:
++
+[source,console]
+----
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect \
+  --set autoSupport.enabled=false \
+  --set autoSupport.proxy=http://my.proxy.url \
+  --set restoreSkipNamespaceAnnotations="annotation1,annotation2" \
+  --set restoreSkipNamespaceLabels="label1,label2" \
+  --reuse-values
 ----
 --
 ====
-
-== ##Configure namespace filtering##
-
-##You can exclude specific namespace annotations and labels using `restoreSkipNamespaceAnnotations` and `restoreSkipNamespaceLabels`. This is useful if you want to exclude certain namespaces that are not relevant to your backup and restore operations.##
-
-[source,console]
-----
-helm install trident-protect netapp-trident-protect/trident-protect \
-  --set clusterName=<name_of_cluster> \
-  --set restoreSkipNamespaceAnnotations="{annotation1,annotation2}" \
-  --set restoreSkipNamespaceLabels="{label1,label2}" \
-  --version 100.2506.0 --create-namespace --namespace trident-protect 
-----
 
 == Restrict Trident protect pods to specific nodes
 
@@ -190,29 +217,3 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 +
 This replaces the default restrictions with those you specified in the `nodeSelectorConfig.yaml` file.
 
-== Disable daily Trident protect AutoSupport bundle uploads
-
-Optionally, you can disable the scheduled daily Trident protect AutoSupport support bundle uploads.
-
-NOTE: By default, Trident protect collects support information that helps with any NetApp support cases that you might open, including logs, metrics, and topology information about clusters and managed applications. Trident protect sends these support bundles to NetApp on a daily schedule. You can manually link:trident-protect-generate-support-bundle.html[generate a support bundle] at any time.
-
-.Steps
-
-. Create a file named `autosupportconfig.yaml`.
-. Add the AutoSupport option to the file and modify the parameters according to the needs of your environment.
-+
-The following example shows the default values of the parameters for the AutoSupport option:
-+
-[source,yaml]
-----
-autoSupport:
-  enabled: true
-----
-+
-When `autoSupport.enabled` is set to `false`, daily uploads of AutoSupport support bundles are disabled.
-. Apply the values from the `autosupportconfig.yaml` file:
-+
-[source,console]
-----
-helm upgrade trident-protect netapp-trident-protect/trident-protect -f autosupportconfig.yaml --reuse-values
-----

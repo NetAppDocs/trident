@@ -138,20 +138,21 @@ You can optionally use the `--full-backup` flag to specify whether a backup shou
 ====
 // end tabbed block
 
-== Create a backup schedule
-You can schedule a non-incremental full backup. By default, all backups are incremental. Performing a full backup periodically, along with incremental backups in between, helps reduce the risk associated with restores.
+== ##Create a data protection schedule##
+A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain. You can schedule a non-incremental full backup by using the full-backup-rule annotation. By default, all backups are incremental. Performing a full backup periodically, along with incremental backups in between, helps reduce the risk associated with restores.
 
-NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
+[NOTE] 
+====
+* You can create schedules for snapshots only by setting `backupRetention` to 0 and `snapshotRetention` to a value greater than 0. Setting `snapshotRetention` to 0 means any scheduled backups will still create snapshots, but those are temporary and get deleted immediately after the backup is completed.
+* Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
 
-include::../_include/backup-include-sessiontoken-note.adoc[]
-
-//begin tabbed block
+// begin tabbed block
 [role="tabbed-block"]
 ====
 .Create a schedule using a CR
 --
 .Steps
-. Create the custom resource (CR) file and name it `trident-backup-schedule-cr.yaml`. 
+. Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. 
 . In the file you created, configure the following attributes:
 
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
@@ -160,18 +161,21 @@ include::../_include/backup-include-sessiontoken-note.adoc[]
 ** `Kopia` (default)
 * *spec.applicationRef*: The Kubernetes name of the application to back up.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
-* *spec.backupRetention*: The number of backups to retain. Zero indicates that no backups should be created.
+* *spec.backupRetention*: The number of backups to retain. Zero indicates that no backups should be created (snapshots only).
 * *spec.snapshotRetention*: The number of snapshots to retain. Zero indicates that no snapshots should be created.
 * *spec.granularity*: The frequency at which the schedule should run. Possible values, along with required associated fields:
-** `hourly` (requires that you specify `spec.minute`)
-** `daily` (requires that you specify `spec.minute` and `spec.hour`)
-** `weekly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfWeek`)
-** `monthly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfMonth`)
-* *spec.dayOfMonth*: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to `monthly`.
-* *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `weekly`.
-* *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
-* *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
+** `Hourly` (requires that you specify `spec.minute`)
+** `Daily` (requires that you specify `spec.minute` and `spec.hour`)
+** `Weekly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfWeek`)
+** `Monthly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfMonth`)
+** `Custom`
+* *spec.dayOfMonth*: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to `Monthly`. The value must be provided as a string.
+* *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `Weekly`. The value must be provided as a string.
+* *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `Daily`, `Weekly`, or `Monthly`. The value must be provided as a string.
+* *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `Hourly`, `Daily`, `Weekly`, or `Monthly`. The value must be provided as a string.
 * *metadata.annotations.protect.trident.netapp.io/full-backup-rule*: (_Optional_) This annotation is used to specify the rule for scheduling full backup. You can set it to `always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur.
++
+Example YAML for backup and snapshot schedule:
 +
 [source,yaml]
 ----
@@ -189,69 +193,12 @@ spec:
   appVaultRef: appvault-name
   backupRetention: "15"
   snapshotRetention: "15"
-  granularity: daily
-  dayOfMonth: "1"
-  dayOfWeek: "0"
+  granularity: Daily
   hour: "0"
   minute: "0"
 ----
 +
-. After you populate the `trident-backup-schedule-cr.yaml` file with the correct values, apply the CR:
-+
-[source,console]
-----
-kubectl apply -f trident-backup-schedule-cr.yaml
-----
---
-.Create a schedule using the CLI
---
-.Steps
-. Create the backup schedule, replacing values in brackets with information from your environment. For example:
-+
-NOTE: You can use `tridentctl-protect create schedule --help` to view detailed help information for this command.
-+
-[source,console]
-----
-tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace> --full-backup-rule <string>
-----
-You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday,Thursday"` to schedule full backup on Mondays and Thursdays.
---
-====
-//end tabbed block
-
-== Create a data protection schedule
-A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain.
-
-NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
-
-include::../_include/backup-include-sessiontoken-note.adoc[]
-
-// begin tabbed block
-[role="tabbed-block"]
-====
-.Create a schedule using a CR
---
-.Steps
-. Create the custom resource (CR) file and name it `trident-protect-schedule-cr.yaml`. 
-. In the file you created, configure the following attributes:
-
-* *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
-* *spec.dataMover*: (_Optional_) A string indicating which backup tool to use for the backup operation. Possible values (case sensitive):
-** `Restic`
-** `Kopia` (default)
-* *spec.applicationRef*: The Kubernetes name of the application to back up.
-* *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
-* *spec.backupRetention*: The number of backups to retain. Zero indicates that no backups should be created.
-* *spec.snapshotRetention*: The number of snapshots to retain. Zero indicates that no snapshots should be created.
-* *spec.granularity*: The frequency at which the schedule should run. Possible values, along with required associated fields:
-** `hourly` (requires that you specify `spec.minute`)
-** `daily` (requires that you specify `spec.minute` and `spec.hour`)
-** `weekly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfWeek`)
-** `monthly` (requires that you specify `spec.minute, spec.hour`, and `spec.dayOfMonth`)
-* *spec.dayOfMonth*: (_Optional_) The day of the month (1 - 31) that the schedule should run. This field is required if the granularity is set to `monthly`.
-* *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `weekly`.
-* *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `daily`, `weekly`, or `monthly`.
-* *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `hourly`, `daily`, `weekly`, or `monthly`.
+Example YAML for snapshot-only schedule:
 +
 [source,yaml]
 ----
@@ -260,17 +207,14 @@ apiVersion: protect.trident.netapp.io/v1
 kind: Schedule
 metadata:
   namespace: my-app-namespace
-  name: my-cr-name
+  name: my-snapshot-schedule
 spec:
-  dataMover: Kopia
   applicationRef: my-application
   appVaultRef: appvault-name
-  backupRetention: "15"
+  backupRetention: "0"
   snapshotRetention: "15"
-  granularity: <monthly>
-  dayOfMonth: "1"
-  dayOfWeek: "0"
-  hour: "0"
+  granularity: Daily
+  hour: "2"
   minute: "0"
 ----
 +
@@ -291,11 +235,16 @@ NOTE: You can use `tridentctl-protect create schedule --help` to view detailed h
 +
 [source,console]
 ----
-tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace>
+tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace> --full-backup-rule <string>
 ----
++
+You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday,Thursday"` to schedule full backup on Mondays and Thursdays.
++
+For snapshot-only schedules, set `--backup-retention 0` and specify a value greater than 0 for `--snapshot-retention`.
 --
 ====
 // end tabbed block
+
 
 == Delete a snapshot
 
@@ -377,4 +326,5 @@ When the snapshot directory is not enabled, Trident protect chooses the regular 
 .Result
 The application is ready for backup and restore using Trident protect. Each PVC is also available to be used by other applications for backups and restores.
 ====
+
 

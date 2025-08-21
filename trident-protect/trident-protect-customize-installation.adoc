@@ -124,7 +124,7 @@ helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig
 +
 This will replace the default values with those specified in the `sccconfig.yaml` file.
 
-== ##Configure AutoSupport and namespace filtering options##
+== ##Configure additional Trident protect helm chart settings##
 
 You can customize AutoSupport settings and namespace filtering to meet your specific requirements. The following table describes the available configuration parameters:
 
@@ -148,16 +148,16 @@ You can customize AutoSupport settings and namespace filtering to meet your spec
 |Comma-separated list of namespace labels to exclude from backup and restore operations. Allows you to filter namespaces based on labels.
 |===
 
-You can configure these options using either a YAML configuration file or command-line parameters:
+You can configure these options using either a YAML configuration file or command-line flags:
 
 // begin tabbed block
 
 [role="tabbed-block"]
 ====
-.Use a CR
+.Use YAML file
 --
 .Steps
-. Create the custom resource (CR) file and name it `values.yaml`.
+. Create a configuration file and name it `values.yaml`.
 . In the file you created, add the configuration options you want to customize. 
 +
 [source,console]
@@ -169,17 +169,17 @@ autoSupport:
 restoreSkipNamespaceAnnotations: "annotation1,annotation2"
 restoreSkipNamespaceLabels: "label1,label2"
 ----
-. After you populate the `values.yaml` file with the correct values, apply the CR::
+. After you populate the `values.yaml` file with the correct values, apply the configuration file:
 +
 [source,console]
 ----
 helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f values.yaml --reuse-values
 ----
 --
-.Use the CLI
+.Use CLI flags
 --
 .Steps
-. Use the following command to customize the configuration options. You can also set individual parameters using the `--set` flag:
+. Use the following command with the `--set` flags to specify individual parameters:
 +
 [source,console]
 ----

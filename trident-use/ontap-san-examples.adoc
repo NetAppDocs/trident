@@ -126,7 +126,9 @@ Do not use unless you are troubleshooting and require a detailed log dump.|`null
 
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontapi` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.
 
-`useREST` is fully qualified for NVMe/TCP. 
+`useREST` is fully qualified for NVMe/TCP.
+
+NOTE: NVMe is supported only with ONTAP REST APIs and not supported with ONTAPI (ZAPI).
 
 NOTE: NVMe is supported only with ONTAP REST APIs and not supported with ONTAPI (ZAPI).
 

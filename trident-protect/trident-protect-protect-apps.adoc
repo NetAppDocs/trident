@@ -143,8 +143,9 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 
 [NOTE] 
 ====
-* You can create schedules for snapshots only by setting `backupRetention` to 0 and `snapshotRetention` to a value greater than 0. Setting `snapshotRetention` to 0 means any scheduled backups will still create snapshots, but those are temporary and get deleted immediately after the backup is completed.
+* You can create schedules for snapshots only by setting `backupRetention` to zero and `snapshotRetention` to a value greater than zero. Setting `snapshotRetention` to zero means any scheduled backups will still create snapshots, but those are temporary and get deleted immediately after the backup is completed.
 * Cluster-scoped resources are included in a backup, snapshot, or clone if they are explicitly referenced in the application definition or if they have references to any of the application namespaces.
+====
 
 // begin tabbed block
 [role="tabbed-block"]

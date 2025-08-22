@@ -129,6 +129,11 @@ sudo yum install -y lsscsi iscsi-initiator-utils device-mapper-multipath
 ----
 rpm -q iscsi-initiator-utils
 ----
+. Set scanning to manual:
++
+----
+sudo sed -i 's/^\(node.session.scan\).*/\1 = manual/' /etc/iscsi/iscsid.conf
+----
 . Enable multipathing:
 +
 ----

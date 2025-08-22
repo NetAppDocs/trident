@@ -158,7 +158,8 @@ Ensure that you have the following before configuring the Trident add-on for AWS
 ----
 {
 
-  "cloudIdentity": "'eks.amazonaws.com/role-arn: <role ARN>'"
+  "cloudIdentity": "'eks.amazonaws.com/role-arn: <role ARN>'",
+  "cloudProvider": "AWS"
 
 }
 ----
@@ -181,7 +182,7 @@ After the add-on installation is complete, you see your installed add-on.
 {
   "clusterName": "<eks-cluster>",
   "addonName": "netapp_trident-operator",
-  "addonVersion": "v25.02.1-eksbuild.1",
+  "addonVersion": "v25.6.0-eksbuild.1",
 }
 ----
 *For IRSA authentication, use the following format*:
@@ -190,7 +191,7 @@ After the add-on installation is complete, you see your installed add-on.
 {
   "clusterName": "<eks-cluster>",
   "addonName": "netapp_trident-operator",
-  "addonVersion": "v25.02.1-eksbuild.1",
+  "addonVersion": "v25.6.0-eksbuild.1",
   "serviceAccountRoleArn": "<role ARN>",
   "configurationValues": {
     "cloudIdentity": "'eks.amazonaws.com/role-arn: <role ARN>'",
@@ -207,7 +208,7 @@ NOTE: Replace `<role ARN>` with the ARN of the role that was created in the prev
 {
   "clusterName": "<eks-cluster>",
   "addonName": "netapp_trident-operator",
-  "addonVersion": "v25.02.1-eksbuild.1",
+  "addonVersion": "v25.6.0-eksbuild.1",
   "serviceAccountRoleArn": "arn:aws:iam::123456:role/astratrident-role",
   "configurationValues": {
     "cloudIdentity": "'eks.amazonaws.com/role-arn: arn:aws:iam::464262061435:role/AmazonEKS_FSXN_CSI_DriverRole'",
@@ -278,7 +279,7 @@ The following example updates the EKS add-on:
 
 [source,console]
 ----
-aws eks update-addon --cluster-name <eks_cluster_name> --addon-name netapp_trident-operator --addon-version v25.02.1-eksbuild.1 \
+aws eks update-addon --cluster-name <eks_cluster_name> --addon-name netapp_trident-operator --addon-version v25.6.0-eksbuild.1 \
   --service-account-role-arn <role-ARN> --resolve-conflict preserve \
   --configuration-values “{\"cloudIdentity\": \"'eks.amazonaws.com/role-arn: <role ARN>'\"}"
 ----
@@ -296,13 +297,13 @@ eksctl get addon --name netapp_trident-operator --cluster my-cluster
 *Example output:*
 ----
 NAME                        VERSION             STATUS    ISSUES    IAMROLE    UPDATE AVAILABLE    CONFIGURATION VALUES
-netapp_trident-operator    v25.02.1-eksbuild.1    ACTIVE    0       {"cloudIdentity":"'eks.amazonaws.com/role-arn: arn:aws:iam::139763910815:role/AmazonEKS_FSXN_CSI_DriverRole'"}
+netapp_trident-operator    v25.6.0-eksbuild.1    ACTIVE    0       {"cloudIdentity":"'eks.amazonaws.com/role-arn: arn:aws:iam::139763910815:role/AmazonEKS_FSXN_CSI_DriverRole'"}
 ----
 * Update the add-on to the version returned under UPDATE AVAILABLE in the output of the previous step.
 +
 [source,console]
 ----
-eksctl update addon --name netapp_trident-operator --version v25.02.1-eksbuild.1 --cluster my-cluster --force
+eksctl update addon --name netapp_trident-operator --version v25.6.0-eksbuild.1 --cluster my-cluster --force
 ----
 
 If you remove the `--force` option and any of the Amazon EKS add-on settings conflict with your existing settings, then updating the Amazon EKS add-on fails; you receive an error message to help you resolve the conflict. Before specifying this option, make sure that the Amazon EKS add-on does not manage settings that you need to manage, because those settings are overwritten with this option. 

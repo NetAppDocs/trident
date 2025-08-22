@@ -39,7 +39,7 @@ NOTE: If you are specifying an IAM role to Trident, then you can omit specifying
 
 === Parallel usage of Trident SAN/iSCSI and EBS-CSI driver
 
-If you plan to use `ontap-san` drivers (e.g., iSCSI), the multipath configuration required on the nodes might conflict with the Amazon Elastic Block Store (EBS) CSI driver. To ensure that multipathing functions without interfering with EBS disks on the same node, you need to exclude EBS in your multipathing setup. This example shows a `multipath.conf` file that includes the required Trident settings while excluding EBS disks from multipathing:
+If you plan to use ontap-san drivers (e.g., iSCSI) with Amazon Elastic Kubernetes Service (EKS) or Red Hat OpenShift on AWS (ROSA), the multipath configuration required on the nodes might conflict with the Amazon Elastic Block Store (EBS) CSI driver. To ensure that multipathing functions without interfering with EBS disks on the same node, you need to exclude EBS in your multipathing setup. This example shows a `multipath.conf` file that includes the required Trident settings while excluding EBS disks from multipathing:
 
 ----
 defaults {

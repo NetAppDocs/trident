@@ -145,7 +145,7 @@ Flags::
 `--k8s-timeout duration`: The timeout for all Kubernetes operations (default 3m0s).
 `--kubelet-dir string`: The host location of kubelet's internal state (default "/var/lib/kubelet").
 `--log-format string`: The Trident logging format (text, json) (default "text").
-`--node-prep`: Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. *Currently, `iscsi` is the only value supported.*
+`--node-prep`: Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. *Currently, `iscsi` is the only value supported. Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.*
 `--pv string`: The name of the legacy PV used by Trident, makes sure this doesn't exist (default "trident").
 `--pvc string`: The name of the legacy PVC used by Trident, makes sure this doesn't exist (default "trident").
 `--silence-autosupport`: Don't send autosupport bundles to NetApp automatically (default true).
@@ -232,9 +232,9 @@ For more information, refer to link:../trident-use/backend_options.html[Options 
 Follow these steps to update the `userState` using the `backend.json` file:
 
 . Edit the `backend.json` file to include the `userState` field with its value set to 'suspended'.
-. Update the backend using the `tridentctl backend update` command and the path to the updated `backend.json` file.
+. Update the backend using the `tridentctl update backend` command and the path to the updated `backend.json` file.
 +
-*Example*: `tridentctl backend update -f /<path to backend JSON file>/backend.json`
+*Example*: `tridentctl update backend  -f /<path to backend JSON file>/backend.json -n trident`
 [source,json]
 ----
 {

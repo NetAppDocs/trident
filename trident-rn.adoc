@@ -15,8 +15,24 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 25.06.1
+The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
-== What's new in 25.06
+=== Trident
+
+IMPORTANT: For customers using SolidFire, please do not upgrade to 25.06.1 due to a known issue when unpublishing volumes. 25.06.2 will be released soon to address this issue.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed an issue where NQNs were not checked before being unmapped from subsystems.
+** Fixed an issue where multiple attempts to close a LUKS device led to failures in detaching volumes.
+** Fixed iSCSI volume unstage when the device path has changed since its creation.
+** Block cloning of volumes across storage classes.
+* *OpenShift*: Fixed an issue where iSCSI node prep failed with OCP 4.19.
+* Increased the timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+
+== Changes in 25.06
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident
@@ -183,7 +199,7 @@ NetApp Trident protect provides advanced application data management capabilitie
 * Reduced Azure NetApp Files minimum volume size to 50 GiB. Azure new minimum size expected to be generally available in November.
 * Added `denyNewVolumePools` configuration parameter to restrict ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers to preexisting Flexvol pools.
 * Added detection for the addition, removal, or renaming of aggregates from the SVM across all ONTAP drivers.
-* Added 18MiB overhead to LUKS LUNs to ensure reported PVC size is usable.
+* Added 18 MiB overhead to LUKS LUNs to ensure reported PVC size is usable.
 * Improved ONTAP-SAN and ONTAP-SAN-Economy node stage and unstage error handling to allow unstage to remove devices after a failed stage.
 * Added a custom role generator allowing customers to create a minimalistic role for Trident in ONTAP.
 * Added additional logging for troubleshooting `lsscsi` (link:https://github.com/NetApp/trident/issues/792[Issue #792]).
@@ -258,7 +274,7 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 * Fixed Trident installation failures due to stale transactions.
 * Fixed tridentctl to ignore warning messages from Kubernetes (link:https://github.com/NetApp/trident/issues/892[Issue #892]).
 * Changed Trident controller `SecurityContextConstraint` priority to `0` (link:https://github.com/NetApp/trident/issues/887[Issue #887]).
-* ONTAP drivers now accept volume sizes below 20MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
+* ONTAP drivers now accept volume sizes below 20 MiB (link:https://github.com/NetApp/trident/issues/885[Issue[#885]).
 * Fixed Trident to prevent shrinking of FlexVol volumes during resize operation for the ONTAP-SAN driver.
 * Fixed ANF volume import failure with NFS v4.1.
 

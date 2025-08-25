@@ -31,6 +31,21 @@ parameters:
   snapshots: "true"
 ----
 
+Use this example to setup Storageclass for volumes using iSCSI:
+
+[source,YAML]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-gold
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  provisioningType: "thin"
+  snapshots: "true"
+----
+
 To provision NFSv3 volumes on AWS Bottlerocket, add the required `mountOptions` to the storage class:
 
 [source,YAML]
@@ -124,7 +139,7 @@ storageClassName: protection-gold
 ----
 ====
 
-=== Create the PV and PVC
+=== Create PVC
 .Steps
 
 . Create the PVC.

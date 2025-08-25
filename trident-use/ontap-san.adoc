@@ -109,6 +109,8 @@ Trident supports the non-volatile memory express (NVMe) protocol using the `onta
 
 Trident does not support:
 
-* DH-HMAC-CHAP that is supported by natively by NVMe
+* DH-HMAC-CHAP that is natively supported by NVMe
 * Device mapper (DM) multipathing
 * LUKS encryption
+
+NOTE: NVMe is supported only with ONTAP REST APIs and not supported with ONTAPI (ZAPI).

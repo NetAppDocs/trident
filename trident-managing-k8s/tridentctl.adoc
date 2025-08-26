@@ -232,9 +232,9 @@ For more information, refer to link:../trident-use/backend_options.html[Options 
 Follow these steps to update the `userState` using the `backend.json` file:
 
 . Edit the `backend.json` file to include the `userState` field with its value set to 'suspended'.
-. Update the backend using the `tridentctl backend update` command and the path to the updated `backend.json` file.
+. Update the backend using the `tridentctl update backend` command and the path to the updated `backend.json` file.
 +
-*Example*: `tridentctl backend update -f /<path to backend JSON file>/backend.json`
+*Example*: `tridentctl update backend  -f /<path to backend JSON file>/backend.json -n trident`
 [source,json]
 ----
 {

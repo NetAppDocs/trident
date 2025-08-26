@@ -77,7 +77,7 @@ Trident creates the PV and its backend storage volume.
 * You can update the PVC to include the `cloneToNamespace` annotation at any time. 
 ====
 
-. *Cluster admin:* Ensure that proper RBAC is in place to grant permission to the destination namespace owner to create the TridentVolumeReference CR in the destination namespace (`namespace2`). 
+. *Cluster admin:* Create the custom role and kubeconfig to grant permission to the destination namespace owner to create the TridentVolumeReference CR in the destination namespace(`namespace2`). 
 
 . *Destination namespace owner:* Create a TridentVolumeReference CR in the destination namespace that refers to the source namespace `pvc1`.
 +

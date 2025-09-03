@@ -99,7 +99,7 @@ a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volum
 
 NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
 |
-|`enableAutoBackendConfig`|Enables automatic backend configuration, which seamlessly creates backend and storage classes based on input parameters.| No default; optional
+|`TridentOrchestrator`|The QPS used by the controller to communicate with the Kubernetes API server. The Burst value is automatically set as a function of the QPS value. A value of `0` indicates no throttling.| `100`; optional
 
 |===
 [NOTE] 

@@ -100,6 +100,8 @@ a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volum
 NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
 |
 
+|`k8sAPIQPS` a|The queries per second (QPS) used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. A value of `0` means no throttling. |`100`; optional
+
 |===
 [NOTE] 
 For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].

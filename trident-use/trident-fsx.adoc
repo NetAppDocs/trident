@@ -37,7 +37,7 @@ NOTE: Ensure you follow the node preparation steps required for Amazon Linux and
 + 
 NOTE: If you are specifying an IAM role to Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
 
-=== Parallel usage of Trident SAN/iSCSI and EBS-CSI driver
+=== Simultaneous usage of Trident SAN/iSCSI and EBS-CSI driver
 
 If you plan to use ontap-san drivers (e.g., iSCSI) with AWS (EKS, ROSA, EC2, or any other instance), the multipath configuration required on the nodes might conflict with the Amazon Elastic Block Store (EBS) CSI driver. To ensure that multipathing functions without interfering with EBS disks on the same node, you need to exclude EBS in your multipathing setup. This example shows a `multipath.conf` file that includes the required Trident settings while excluding EBS disks from multipathing:
 

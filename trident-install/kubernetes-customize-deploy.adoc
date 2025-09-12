@@ -48,7 +48,9 @@ Set to cloud identity ("'iam.gke.io/gcp-service-account: xxxx@mygcpproject.iam.g
 
 |`IPv6` |Install Trident over IPv6 |false
 
-|`k8sTimeout` |Timeout for Kubernetes operations |`30sec`
+|`k8sTimeout` a|Timeout for Kubernetes operations.
+
+NOTE: The `k8sTimeout` parameter is applicable only for Trident installation.  |`180sec`
 
 |`silenceAutosupport` |Don't send autosupport bundles to NetApp
 automatically |`false`
@@ -92,10 +94,13 @@ Trident |
 |`nodePluginTolerations` |Overrides Kubernetes tolerations for pods. Follows the same format as `pod.spec.Tolerations`. |No default; optional
 
 |`nodePrep`
-|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
 *Currently, `iscsi` is the only value supported.*
+
+NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
 |
-|`enableAutoBackendConfig`|Enables automatic backend configuration, which seamlessly creates backend and storage classes based on input parameters.| No default; optional
+
+|`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value.|`100`; optional
 
 |`enableConcurrency` a|Enables concurrent Trident controller operations for improved throughput.
 

@@ -30,7 +30,7 @@ Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_
 
 == Deploy the Trident operator and install Trident using Helm
 
-Using the Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator[Helm Chart^] you can deploy the Trident operator and install Trident in one step.  
+Using the Trident link:https://netapp.github.io/trident-helm-chart[Helm Chart^] you can deploy the Trident operator and install Trident in one step.  
 
 Review link:../trident-get-started/kubernetes-deploy.html[the installation overview] to ensure you've met installation prerequisites and selected the correct installation option for your environment.
 
@@ -46,7 +46,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 +
 [source,console]
 ----
-helm repo add netapp-trident https://artifacthub.io/packages/helm/netapp-trident/trident-operator
+helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
 . Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `100.2506.0` is the version of Trident you are installing. 
@@ -210,8 +210,10 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`false`
 
 |`tridentK8sTimeout`
-|Overrides the default 30-second timeout for most Kubernetes API operations (if non-zero, in seconds).
-|`0`
+a|Overrides the default 180-second timeout for most Kubernetes API operations (if non-zero, in seconds).
+
+NOTE: The `tridentK8sTimeout` parameter is applicable only for Trident installation. 
+|`180`
 
 |`tridentHttpRequestTimeout`
 |Overrides the default 90-second timeout for the HTTP requests, with `0s` being an infinite duration for the timeout. Negative values are not allowed.
@@ -278,8 +280,10 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`false`
 
 |`nodePrep`
-|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol.
+a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol.
 *Currently, `iscsi` is the only value supported.*
+
+NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
 |
 
 |===

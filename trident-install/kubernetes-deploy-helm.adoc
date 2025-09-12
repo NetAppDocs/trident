@@ -256,11 +256,20 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
 
 |`nodePrep`
-a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
-*Currently, `iscsi` is the only value supported.*
 
-NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
-|
+|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+*Currently, `iscsi` is the only value supported.* 
+NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1. |
+
+| `enableConcurrency`
+
+a| Enables concurrent Trident controller operations for improved throughput. 
+
+NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
+|false
+
+
+|`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 

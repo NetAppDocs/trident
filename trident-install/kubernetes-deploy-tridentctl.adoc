@@ -170,3 +170,17 @@ For more information about force detach, refer to link:..trident-get-started/kub
 tridentctl install --enable-force-detach=true -n trident
 ----
 ====
+
+.Enable concurrent Trident controller operations
+[%collapsible%closed]
+====
+To enable concurrent Trident controller operations for improved throughput, add the `--enable-concurrency` option during the installation as shown in this example. 
+
+NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
+
+----
+tridentctl install --enable-concurrency -n trident
+----
+====
+
+

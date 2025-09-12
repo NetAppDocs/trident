@@ -148,7 +148,7 @@ You can use `--resource-filter-include` and `--resource-filter-exclude` flags to
 +
 [source,console]
 ----
-tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace> --resource-filter-include "group=my-resource-group,kind=my-resource-kind,version=my-resource-version,names=my-resource-names,namespaces=my-resource-namespaces,labelSelectors=trident.netapp.io/os=linux"
+tridentctl-protect create application <my_new_app_cr_name> --namespaces <namespaces_to_include> --csr <cluster_scoped_resources_to_include> --namespace <my-app-namespace> --resource-filter-include '[{"Group":"apps","Kind":"Deployment","Version":"v1","Names":["my-deployment"],"Namespaces":["my-namespace"],"LabelSelectors":["app=my-app"]}]'
 ----
 
 --

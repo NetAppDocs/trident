@@ -84,9 +84,12 @@ Set to `true` for Trident to configure and use bidirectional CHAP as the default
 
 |`trustedCACertificate` |Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based authentication. |""
 
-|`username` |Username needed to communicate with the ONTAP cluster. Used for credential-based authentication. |""
+|`username` |Username needed to communicate with the ONTAP cluster. Used for credential-based authentication. 
+For Active Directory authentication, see link:../trident-use/ontap-san-examples.html#authenticate-trident-to-a-backend-svm-using-active-directory-credentials[Authenticate Trident to a backend SVM using Active Directory credentials]. |""
 
-|`password` |Password needed to communicate with the ONTAP cluster. Used for credential-based authentication. |""
+|`password` |Password needed to communicate with the ONTAP cluster. Used for credential-based authentication.
+For Active Directory authentication, see link:../trident-use/ontap-san-examples.html#authenticate-trident-to-a-backend-svm-using-active-directory-credentials[Authenticate Trident to a backend SVM using Active Directory credentials].
+ |""
 
 |`svm` |Storage virtual machine to use |Derived if an SVM `managementLIF` is specified
 

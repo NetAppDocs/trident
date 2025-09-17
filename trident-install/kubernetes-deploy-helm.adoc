@@ -268,9 +268,6 @@ a| Enables concurrent Trident controller operations for improved throughput.
 NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
 |false
 
-
-|`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
-
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 
 |===

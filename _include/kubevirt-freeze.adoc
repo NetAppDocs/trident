@@ -7,7 +7,7 @@ NOTE: During restore operations, any `VirtualMachineSnapshots` created for a vir
 .##Trident protect 25.10 and newer##
 [%collapsible%open]
 ====
-Trident protect automatically freezes and unfreezes KubeVirt filesystems during data protection operations to ensure consistency. Beginning with Trident protect 25.10, you can configure this behavior using the `vm.freeze` parameter during Helm chart installation. The parameter is enabled by default.
+Trident protect automatically freezes and unfreezes KubeVirt filesystems during data protection operations to ensure consistency. Beginning with Trident protect 25.10, you can disable this behavior using the `vm.freeze` parameter during Helm chart installation. The parameter is enabled by default.
 
 [source,console]
 ----

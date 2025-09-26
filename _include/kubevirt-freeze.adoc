@@ -11,7 +11,7 @@ Trident protect automatically freezes and unfreezes KubeVirt filesystems during 
 
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set vm.freeze=false --version 100.2510.0 --create-namespace --namespace trident-protect
+helm install ... --set vm.freeze=false ...
 ----
 //ASTRACTL-36239 update: Added --set vm.freeze=false to the helm install command above.
 ====

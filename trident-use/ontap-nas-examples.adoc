@@ -15,7 +15,7 @@ Learn to create and use ONTAP NAS drivers with your Trident installation. This s
 
 link:https://docs.netapp.com/us-en/ontap-afx/index.html[ONTAP AFX storage systems^] vary from other ONTAP systems (ASA, AFF, and FAS) in the implementation of its storage layer. 
 
-NOTE: Only the `ontap-nas` driver is supported for ONTAP AFX systems; the `ontap-nas-economy` and `ontap-nas-flexgroup` drivers are not supported. 
+NOTE: Only the `ontap-nas` driver is supported for ONTAP AFX systems. 
 
 In the Trident backend configuration, you need not specify that your system is ONTAP AFX. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the ONTAP AFX or other ONTAP systems. Some backend configuration parameters are not applicable to ONTAP AFX systems as noted in the table below.
 

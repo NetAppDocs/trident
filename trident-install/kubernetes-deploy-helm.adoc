@@ -42,7 +42,7 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 . Add the Trident Helm repository:
 +
 ----
-helm repo add netapp-trident https://artifacthub.io/packages/helm/netapp-trident/trident-operator
+helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
 . Use `helm install` and specify a name for your deployment as in the following example where `100.2506.0` is the version of Trident you are installing. 
@@ -256,19 +256,19 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
 
 |`nodePrep`
+
 |Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
-*Currently, `iscsi` is the only value supported.*
-|
+*Currently, `iscsi` is the only value supported.* 
+NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1. |
 
-|`ontapConfigurator`
-a|Enables or disables automatic configuration of Trident backend and storage classes for Amazon FSx. Use the following parameters along with `ontapConfigurator` to enable automatic backend configuration:
-`enabled`: Set to `true` to enable automatic backend configuration.
-`svms`: Contains the list of file system IDs for which automatic backend configuration will be created.
-  - `authType`: Sets authentication type for SVM authentication. For AWS, arn-based authentication ("awsarn") is supported at present. 
-  - `fsxnID`: Sets the filesytem ID of AWS FSx. Example: "fs-0dfeaa884a68b1cab".
-- `protocols` - Specifies the list of supported protocols for automatic backend configuration; "nfs", "iscsi" or both.
+| `enableConcurrency`
 
-|
+a| Enables concurrent Trident controller operations for improved throughput. 
+
+NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
+|false
+
+|`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 
 |===
 

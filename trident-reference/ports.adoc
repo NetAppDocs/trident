@@ -14,7 +14,8 @@ summary: Learn more about the ports that Trident communicates over.
 Learn more about the ports that Trident uses for communication. 
 
 == Trident ports
-Trident communicates over the following ports:
+
+Trident uses the following ports for communication inside Kubernetes:
 
 [cols="2,4" options="header"]
 |===
@@ -25,5 +26,5 @@ Trident communicates over the following ports:
 |17546 |Liveness/readiness probe port used by Trident daemonset pods
 |===
 
-[NOTE]
+[NOTE] 
 The liveness/readiness probe port can be changed during installation using the `--probe-port` flag. It is important to make sure this port isn't being used by another process on the worker nodes.

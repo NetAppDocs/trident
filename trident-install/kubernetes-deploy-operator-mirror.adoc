@@ -13,7 +13,7 @@ summary: You can manually deploy the Trident operator to install Trident. This p
 [.lead]
 You can manually deploy the Trident operator to install Trident. This process applies to installations where the container images required by Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-operator.html[process for standard deployment].
 
-== Critical information about Trident 25.05
+== Critical information about Trident 25.06
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -71,7 +71,7 @@ cd trident-installer
 ----
 
 === Step 2: Create the `TridentOrchestrator` CRD
-Create the `TridentOrchestrator` Custom Resource Definition (CRD). You creates a `TridentOrchestrator` Custom Resources later. Use the appropriate CRD YAML version in `deploy/crds` to create the `TridentOrchestrator` CRD:
+Create the `TridentOrchestrator` Custom Resource Definition (CRD). You will create a `TridentOrchestrator` Custom Resources later. Use the appropriate CRD YAML version in `deploy/crds` to create the `TridentOrchestrator` CRD:
 
 ----
 kubectl create -f deploy/crds/<VERSION>.yaml

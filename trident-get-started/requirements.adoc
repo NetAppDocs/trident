@@ -34,15 +34,12 @@ Trident supports multiple container engines and orchestrators, including the fol
 
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
 * Kubernetes 1.27 - 1.33
-* OpenShift 4.10 - 4.18
-* Rancher Kubernetes Engine 2 (RKE2) v1.26.7+rke2r1, v1.28.5+rke2r1
-
-The Trident operator is supported with these releases:
-
-* Anthos On-Prem (VMware) and Anthos on bare metal 1.16
-* Kubernetes 1.27 - 1.33
-* OpenShift 4.10 - 4.18
-* Rancher Kubernetes Engine 2 (RKE2) v1.26.7+rke2r1, v1.28.5+rke2r1
+* OpenShift 4.12, 4.14 - 4.19 (If you plan to use iSCSI node preparation with OpenShift 4.19, the minimum Trident version supported is 25.06.1.)
++
+NOTE: Trident continues to support older OpenShift versions in alignment with the link:https://access.redhat.com/support/policy/updates/openshift[Red Hat Extended Update Support (EUS) release lifecycle], even if they rely on Kubernetes versions that are no longer officially supported upstream. While installing Trident in such cases, you can safely ignore any warning messages about the Kubernetes version.
+* Rancher Kubernetes Engine 2 (RKE2) v1.27.x - 1.33.x
++
+NOTE: _While Trident is supported on Rancher Kubernetes Engine 2 (RKE2) versions 1.27.x - 1.33.x, Trident has currently been qualified on RKE2 v1.28.5+rke2r1 only._
 
 Trident also works with a host of other fully-managed and self-managed Kubernetes offerings, including Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Services (EKS), Azure Kubernetes Service (AKS), Mirantis Kubernetes Engine (MKE), and VMWare Tanzu Portfolio. 
 
@@ -84,8 +81,6 @@ Trident supports the following ONTAP drivers for KubeVirt and OpenShift Virtuali
 == Feature requirements
 
 The table below summarizes the features available with this release of Trident and the versions of Kubernetes it supports.
-
-<<check for 25.06>>
 
 [cols=3,options="header"]
 |===
@@ -165,7 +160,30 @@ link:../trident-reference/ports.html[Trident ports]
 
 For air-gapped installations, the following list is a reference of container images needed to install Trident. Use the `tridentctl images` command to verify the list of needed container images.
 
-<<check for 25.06>>
+
+=== Container images required for Trident 25.06.2
+
+[cols=2,options="header"]
+|===
+|Kubernetes versions
+|Container image
+
+| v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0
+a|
+* docker.io/netapp/trident:25.06.2                      
+* docker.io/netapp/trident-autosupport:25.06                   
+* registry.k8s.io/sig-storage/csi-provisioner:v5.2.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.8.1           
+* registry.k8s.io/sig-storage/csi-resizer:v1.13.2               
+* registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0 
+* docker.io/netapp/trident-operator:25.06.2 (optional)  
+
+|
+
+|===
+
+=== Container images required for Trident 25.06
 
 [cols=2,options="header"]
 |===

@@ -15,9 +15,32 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-
-== What's new in 25.06
+== What's new in 25.06.2
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+
+=== Trident
+
+
+==== Fixes
+* *Kubernetes*: Fixed critical issue where incorrect iSCSI devices were discovered when detaching volumes from Kubernetes nodes.
+
+== Changes in 25.06.1
+
+=== Trident
+
+IMPORTANT: For customers using SolidFire, please do not upgrade to 25.06.1 due to a known issue when unpublishing volumes. 25.06.2 will be released soon to address this issue.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed an issue where NQNs were not checked before being unmapped from subsystems.
+** Fixed an issue where multiple attempts to close a LUKS device led to failures in detaching volumes.
+** Fixed iSCSI volume unstage when the device path has changed since its creation.
+** Block cloning of volumes across storage classes.
+* *OpenShift*: Fixed an issue where iSCSI node prep failed with OCP 4.19.
+* Increased the timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+
+== Changes in 25.06
 
 === Trident
 
@@ -25,6 +48,9 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 
 * *Kubernetes*:
 ** Added support for CSI Volume Group Snapshots with `v1beta1` Volume Group Snapshot Kubernetes APIs for ONTAP-SAN iSCSI driver. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^]. 
++
+NOTE: VolumeGroupSnapshot is a beta feature in Kubernetes with beta APIs. Kubernetes 1.32 is the minimum version required for VolumeGroupSnapshot.
++
 ** Added support for ONTAP ASA r2 for NVMe/TCP in addition to iSCSI. See link:link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^].
 ** Added secure SMB support for ONTAP-NAS and ONTAP-NAS-Economy volumes. Active Directory users and groups may now be used with SMB volumes for enhanced security. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-prep.html#enable-secure-smb[Enable secure SMB^].
 ** Enhanced Trident node concurrency for higher scalability on node operations for iSCSI volumes.
@@ -194,7 +220,7 @@ NetApp Trident protect provides advanced application data management capabilitie
 ** Application mobility
 +
 link:./trident-protect/learn-about-trident-protect.html[Learn more about Trident protect].
-* Added a new flag `--k8s_api_qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
+* Added a new flag `--k8s-api-qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
 * Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
 * Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
 * New ONTAP-NAS-Economy NFS volumes will use per-qtree export policies when using `autoExportPolicy` backend option. Qtrees will only be mapped to node restrictive export policies at time of publish to improve access control and security. Existing qtrees will be switched to the new export policy model when Trident unpublishes the volume from all nodes to do so without impacting active workloads.

@@ -37,6 +37,22 @@ NOTE: Ensure you follow the node preparation steps required for Amazon Linux and
 + 
 NOTE: If you are specifying an IAM role to Trident, then you can omit specifying the `apiRegion`, `apiKey`, and `secretKey` fields to Trident explicitly. For more information, refer to link:../trident-use/trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
 
+=== Simultaneous usage of Trident SAN/iSCSI and EBS-CSI driver
+
+If you plan to use ontap-san drivers (e.g., iSCSI) with AWS (EKS, ROSA, EC2, or any other instance), the multipath configuration required on the nodes might conflict with the Amazon Elastic Block Store (EBS) CSI driver. To ensure that multipathing functions without interfering with EBS disks on the same node, you need to exclude EBS in your multipathing setup. This example shows a `multipath.conf` file that includes the required Trident settings while excluding EBS disks from multipathing:
+
+----
+defaults {
+    find_multipaths no
+}
+blacklist {
+    device {
+        vendor "NVME"
+        product "Amazon Elastic Block Store"
+    }
+}
+----
+
 == Authentication
 
 Trident offers two modes of authentication. 
@@ -56,24 +72,23 @@ For details on enabling authentication, refer to the authentication for your dri
 EKS cluster supports various operating systems, but AWS has optimized certain Amazon Machine Images (AMIs) for containers and EKS. The following AMIs have been tested with NetApp Trident 25.02.
 
 |===
-| AMI | NAS | NAS-economy | SAN | SAN-economy
-| AL2023_x86_64_STANDARD | Yes | Yes | Yes* | Yes*
-| AL2_x86_64 | Yes | Yes | Yes** | Yes**
-| BOTTLEROCKET_x86_64 | Yes*** | Yes | N/A | N/A
-| AL2023_ARM_64_STANDARD | Yes | Yes | Yes* | Yes*
-| AL2_ARM_64 | Yes | Yes | Yes** | Yes**
-| BOTTLEROCKET_ARM_64 | Yes*** | Yes | N/A | N/A
+| AMI | NAS | NAS-economy | iSCSI | iSCSI-economy
+| AL2023_x86_64_STANDARD | Yes | Yes | Yes | Yes
+| AL2_x86_64 | Yes | Yes | Yes* | Yes*
+| BOTTLEROCKET_x86_64 | Yes** | Yes | N/A | N/A
+| AL2023_ARM_64_STANDARD | Yes | Yes | Yes | Yes
+| AL2_ARM_64 | Yes | Yes | Yes* | Yes*
+| BOTTLEROCKET_ARM_64 | Yes** | Yes | N/A | N/A
 |===
-* * Supports nodePrep with iSCSI only.
-* ** Unable to delete the PV without restarting the node 
-* *** Doesn’t work with NFSv3 with Trident version 25.02, but does with version 24.10. Works with NFSv4.1 with both the versions.
+* * Unable to delete the PV without restarting the node 
+* ** Doesn’t work with NFSv3 with Trident version 25.02.
 
 NOTE: If your desired AMI is not listed here, it does not mean that it is not supported; it simply means it has not been tested. This list serves as a guide for AMIs are known to work.
 
 *Tests performed with*:
 
-* EKS version: 1.31
-* Installation Method: Helm and as an AWS add-On
+* EKS version: 1.32
+* Installation Method: Helm 25.06 and as an AWS add-On 25.06
 * For NAS both NFSv3 and NFSv4.1 were tested. 
 * For SAN only iSCSI was tested, not NVMe-oF. 
 

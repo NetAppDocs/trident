@@ -33,6 +33,15 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --version 100.2510.0 --create-namespace --namespace trident-protect
 ----
++
+. ##Optionally, to enable debug logging (recommended for troubleshooting), use:##
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set logLevel=debug --version 100.2510.0 --create-namespace --namespace trident-protect
+----
++
+##Debug logging helps NetApp support troubleshoot issues without requiring log level changes or problem reproduction.##
 --
 .Install Trident protect from a private registry
 --
@@ -123,5 +132,14 @@ webhooksCleanup:
 ----
 helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2510.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
++
+. ##Optionally, to enable debug logging (recommended for troubleshooting), use:##
++
+[source,console]
+----
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set logLevel=debug --version 100.2510.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+----
++
+##Debug logging helps NetApp support troubleshoot issues without requiring log level changes or problem reproduction.##
 --
 ====

@@ -5,17 +5,15 @@ keywords: asar2, trident, fcp, nvme, tcp, nvme/tcp, fibre channel
 summary: NetApp Trident supports ONTAP ASA r2 for iSCSI and NVMe/TCP.
 ---
 
-= What’s new
+= NetApp Trident supports ONTAP ASA R2 storage systems
 :hardbreaks:
 :icons: font
 :imagesdir: ./media/
 
 [.lead]
-Release Notes provide information about new features, enhancements, and bug fixes in the latest version of NetApp Trident.
+Beginning with the 25.02 release, NetApp Trident supports NetApp ASA r2 systems as storage backends. Learn more about link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^]. 
 
-== NetApp Trident supports ONTAP ASA R2 storage systems
-Beginning with the 25.02 release, NetApp Trident supports NetApp ASA r2 systems as storage backends. The only storage driver supported for ASA r2 systems is the `ontap-san` driver. The `ontap-san-economy` driver is not supported. Learn more about link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^]. 
-
+The only storage driver supported for ASA r2 systems is the `ontap-san` driver. The `ontap-san-economy` driver is not supported. 
 When you select `ontap-san` as the storageDriverName in the Trident backend configuration, Trident automatically detects the ASA r2 storage system.
 
 Trident provides limited data protection for ASA r2 systems with Trident Protect.
@@ -27,7 +25,7 @@ The SAN protocols supported with Trident for ASA r2 system backends depend on yo
 
 With all ONTAP backend storage, Trident requires at least one aggregate be assigned to the SVM. Refer to this link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[Knowledge Base article^] for information on how to assign aggregates to SVMs in ASA r2 systems.
 
-=== Operations supported by Trident for ASA r2 systems: 
+== Operations supported by Trident for ASA r2 systems: 
 
 * Provisioning persistent volumes (PVs) 
 * Dynamic provisioning of volumes
@@ -36,7 +34,7 @@ With all ONTAP backend storage, Trident requires at least one aggregate be assig
 * Expanding volumes
 * Storage class management 
 
-=== Operations not supported by Trident for ASA r2 systems: 
+== Operations not supported by Trident for ASA r2 systems: 
 
 * LUKS encryption 
 * Volume replication using SnapMirror 

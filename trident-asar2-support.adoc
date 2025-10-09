@@ -18,31 +18,32 @@ Beginning with the 25.02 release, NetApp Trident supports NetApp ASA r2 systems 
 
 When you select `ontap-san` as the storageDriverName in the Trident backend configuration, Trident automatically detects the ASA r2 storage system.
 
-rident provides limited data protection for ASA r2 systems with Trident protect. Learn more about Trident protect support for ASA r2 systems [link]…. 
+Trident provides limited data protection for ASA r2 systems with Trident Protect.
 
 The SAN protocols supported with Trident for ASA r2 system backends depend on your version of Trident:
 
-* Trident 25.02 and later supports the iSCSI protocol . 
-* Trident 25.06 and later supports the NVMe/TCP protocol in addition to iSCSI . 
+* Trident 25.02 and later supports the iSCSI protocol. 
+* Trident 25.06 and later supports the NVMe/TCP protocol in addition to iSCSI.
 
 With all ONTAP backend storage, Trident requires at least one aggregate be assigned to the SVM. Refer to this link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[Knowledge Base article^] for information on how to assign aggregates to SVMs in ASA r2 systems.
 
 === Operations supported by Trident for ASA r2 systems: 
 
 * Provisioning persistent volumes (PVs) 
-* Dynamic provisioning 
+* Dynamic provisioning of volumes
+* Creating and deleting volumes
 * Cloning volumes 
-* Volume expansion 
-* Volume deletion 
+* Expanding volumes
 * Storage class management 
 
 === Operations not supported by Trident for ASA r2 systems: 
 
-* Limiting aggregate usage 
-* Space reservation mode 
-* Snapshot policy (Snapshots) 
-* Tiering policy (Tiering) 
 * LUKS encryption 
 * Volume replication using SnapMirror 
+* Limiting aggregate usage
+* Space reservation mode
+* Snapshots
+* Tiering
+
 
 For more information, see link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^].

@@ -111,19 +111,9 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 [source,yaml]
 ----
 ---
-image:
-  registry: <private-registry-url>
+imageRegistry: <private-registry-url>
 imagePullSecrets:
   - name: regcred
-controller:
-  image:
-    registry: <private-registry-url>
-crCleanup:
-  imagePullSecrets:
-    - name: regcred
-webhooksCleanup:
-  imagePullSecrets:
-    - name: regcred
 ----
 
 . Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 

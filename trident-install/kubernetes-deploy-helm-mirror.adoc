@@ -287,3 +287,113 @@ NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for t
 |
 
 |===
+
+
+*Need to review this section with Shashank* 
+
+.Kubernetes resource limits and requests
+[%collapsible%closed]
+====
+
+This example  shows how to set Kubernetes resource limits and requests for the Trident controller, node, and operator pods. 
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-gcp-gcnv
+resources:
+  controller:
+    trident-main:
+      requests:
+        cpu: 10m
+        memory: 80Mi
+      limits:
+        cpu:
+        memory:
+      # sidecars
+    csi-provisioner:
+      requests:
+        cpu: # 2m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    csi-attacher:
+      requests:
+        cpu: # 2m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    csi-resizer:
+      requests:
+        cpu: # 3m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    csi-snapshotter:
+      requests:
+        cpu: # 2m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    trident-autosupport:
+      requests:
+        cpu: # 1m
+        memory: # 30Mi
+      limits:
+        cpu:
+        memory:
+  node:
+    linux:
+      trident-main:
+        requests:
+          cpu: # 10m
+          memory: # 60Mi
+        limits:
+          cpu:
+          memory:
+      # sidecars
+      node-driver-registrar:
+        requests:
+          cpu: # 1m
+          memory: # 10Mi
+        limits:
+          cpu:
+          memory:
+    windows:
+      trident-main:
+        requests:
+          cpu: # 6m
+          memory: # 40Mi
+        limits:
+          cpu:
+          memory:
+      # sidecars
+      node-driver-registrar:
+        requests:
+          cpu: # 6m
+          memory: # 40Mi
+        limits:
+          cpu:
+          memory:
+      liveness-probe:
+        requests:
+          cpu: # 2m
+          memory: # 40Mi
+        limits:
+          cpu:
+          memory:
+  operator:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      cpu:
+      memory:
+----
+====

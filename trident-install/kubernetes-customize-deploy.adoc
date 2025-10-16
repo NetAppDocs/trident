@@ -21,6 +21,124 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 * The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
 * The node plugin handles attaching the storage to the node.
 
+=== Configuring Kubernetes resource limits and requests
+You can set Kubernetes resource limits and requests for the Trident controller, node, and operator pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
+
+For more information about configuring resource requests and limits, refer to link:https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Resource Management for Pods and Containers^].
+
+*Points to consider*:
+* DO NOT change the names of any containers or fields.
+* DO NOT change the indentation - YAML indentation is critical for proper parsing.
+* Default values for controller/node are shown in comments (e.g., # 10m) and are applied automatically if not specified.
+* Default values for operator are directly specified in the configuration (not in comments) and will be applied.
+* No limits are applied by default - only requests have default values
+* Container names are listed as they appear in the pod specifications
+* Sidecars are listed under each main container
+
+
+.Kubernetes resource limits and requests
+[%collapsible%closed]
+====
+
+This example  shows how to set Kubernetes resource limits and requests for the Trident controller, node, and operator pods. 
+
+[source,yaml]
+----
+resources:
+  controller:
+    trident-main:
+      requests:
+        cpu: 10m
+        memory: 80Mi
+      limits:
+        cpu:
+        memory:
+      # sidecars
+    csi-provisioner:
+      requests:
+        cpu: # 2m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    csi-attacher:
+      requests:
+        cpu: # 2m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    csi-resizer:
+      requests:
+        cpu: # 3m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    csi-snapshotter:
+      requests:
+        cpu: # 2m
+        memory: # 20Mi
+      limits:
+        cpu:
+        memory:
+    trident-autosupport:
+      requests:
+        cpu: # 1m
+        memory: # 30Mi
+      limits:
+        cpu:
+        memory:
+  node:
+    linux:
+      trident-main:
+        requests:
+          cpu: # 10m
+          memory: # 60Mi
+        limits:
+          cpu:
+          memory:
+      # sidecars
+      node-driver-registrar:
+        requests:
+          cpu: # 1m
+          memory: # 10Mi
+        limits:
+          cpu:
+          memory:
+    windows:
+      trident-main:
+        requests:
+          cpu: # 6m
+          memory: # 40Mi
+        limits:
+          cpu:
+          memory:
+      # sidecars
+      node-driver-registrar:
+        requests:
+          cpu: # 6m
+          memory: # 40Mi
+        limits:
+          cpu:
+          memory:
+      liveness-probe:
+        requests:
+          cpu: # 2m
+          memory: # 40Mi
+        limits:
+          cpu:
+          memory:
+  operator:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      cpu:
+      memory:
+----
+====
+
 == Configuration options
 WARNING: `spec.namespace` is specified in `TridentOrchestrator` to signify the namespace where Trident is installed. This parameter *cannot be updated after Trident is installed*. Attempting to do so causes the `TridentOrchestrator` status to change to `Failed`. Trident is not intended to be migrated across namespaces.
 

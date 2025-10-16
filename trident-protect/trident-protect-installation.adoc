@@ -43,16 +43,17 @@ You can install Trident protect from a private image registry if your Kubernetes
 +
 [source,console]
 ----
-netapp/controller:25.06.0
-netapp/restic:25.06.0
-netapp/kopia:25.06.0
-netapp/trident-autosupport:25.06.0
-netapp/exechook:25.06.0
-netapp/resourcebackup:25.06.0
-netapp/resourcerestore:25.06.0
-netapp/resourcedelete:25.06.0
-bitnami/kubectl:1.30.2
-kubebuilder/kube-rbac-proxy:v0.16.0
+docker.io/netapp/controller:25.06.0
+docker.io/netapp/restic:25.06.0
+docker.io/netapp/kopia:25.06.0
+docker.io/kopiablockrestore:25.06.0
+docker.io/netapp/trident-autosupport:25.06.0
+docker.io/netapp/exechook:25.06.0
+docker.io/netapp/resourcebackup:25.06.0
+docker.io/netapp/resourcerestore:25.06.0
+docker.io/netapp/resourcedelete:25.06.0
+docker.io/bitnami/kubectl:1.30.2
+docker.io/kubebuilder/kube-rbac-proxy:v0.16.0
 ----
 +
 For example:
@@ -79,7 +80,7 @@ docker push <private-registry-url>/controller:25.06.0
 kubectl create ns trident-protect
 ----
 +
-NOTE: ##To retrieve the Helm chart for offline installation, first pull the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.##
+NOTE: ##To retrieve the Helm chart, first pull the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.##
 . Log in to the registry:
 +
 [source,console]

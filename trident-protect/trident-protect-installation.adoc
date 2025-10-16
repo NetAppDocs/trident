@@ -72,15 +72,14 @@ docker tag netapp/controller:25.06.0 <private-registry-url>/controller:25.06.0
 ----
 docker push <private-registry-url>/controller:25.06.0
 ----
-
++
+NOTE: ##To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.##
 . Create the Trident protect system namespace:
 +
 [source,console]
 ----
 kubectl create ns trident-protect
 ----
-+
-NOTE: ##To retrieve the Helm chart, first pull the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.##
 . Log in to the registry:
 +
 [source,console]

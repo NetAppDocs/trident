@@ -268,6 +268,8 @@ NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and c
 
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 
+|`httpsMetrics`|Enable HTTPS for Prometheus metrics endpoint. |false
+
 |===
 
 === Understanding controller pods and node pods

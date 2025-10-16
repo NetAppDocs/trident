@@ -78,6 +78,8 @@ docker push <private-registry-url>/controller:25.06.0
 ----
 kubectl create ns trident-protect
 ----
++
+NOTE: ##To retrieve the Helm chart for offline installation, first pull the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.##
 . Log in to the registry:
 +
 [source,console]

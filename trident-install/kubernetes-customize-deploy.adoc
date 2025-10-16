@@ -248,6 +248,87 @@ When node health is restored and the taint is removed, Trident will:
 . Identify and clean stale published paths on the node.
 . If the node is in a `cleanable` state (the out-of-service taint has been removed and the node is in `Ready` state) and all stale, published paths are clean, Trident will readmit the node as `clean` and allow new published volumes to the node.
 
+=== Enable automated failover
+
+The automated-failover features automates the force-detach process through integration with Node Health Check (NHC) operator. When a node failure occurs, NHC triggers Trident node remediation (TNR) and force-detach automatically by creating a TridentNodeRemediation  CR in Trident's namespace defining the failed node.
+
+TNR is created only upon node failure, and removed by NHC once the node comes back online or the node is deleted.
+
+*Prerequisites*:
+
+* Ensure that force detach is enabled before enabling automated-failover. For more information, refer to <<Details about force detach>>.
+* Install node health check (NHC) in the Kubernetes cluster.
+
+*K8s Cluster Upgrades and Maintenance*:
+Automated-failover should be paused to prevent unnecessary failovers during K8s maintenance or upgrades, where the nodes are expected to go down or reboot.
+
+The NHC CR (described above) can be paused by patching its CR:
+kubectl patch NodeHealthCheck <cr-name> --patch '{"spec":{"pauseRequests":["<description-for-reason-of-pause>"]}}' --type=merge
+
+This will pause automated-failover. pauseRequests can be removed from the spec after maintenance is complete to re-enable automated-failover.
+
+
+Failed Node Pod Removal Process
+Automated-failover is selective in what workloads are removed from the failed node. 
+
+When a TNR is created, the TNR Controller marks the node as dirty (preventing any new volume publications) and begins removing force-detach supported pods and their volume attachments.
+
+
+
+Force-Detach Supported Pods and Volumes
+
+A pod is supported by force-detach if:
+
+All volumes/PVCs used by the pod are supported by force-detach.
+Volumes supported by force detach:
+
+NAS, and NAS-economy volumes using auto-export policies.
+SAN, and SAN-economy volumes. 
+(Arulappan, Arul Deepa Add link to force-detach documentation?)
+
+
+
+Default Behavior
+
+Pods using volumes all supported by force-detach are removed from the failed node. Kubernetes will reschedule these onto a healthy node. 
+
+Pods using a volume not supported by force-detach, including non-Trident volumes, will not be removed from the failed node.
+
+Stateless pods (no PVCs) will not be removed from the failed node. 
+
+
+
+Overriding Pod Removal Behavior
+
+Pod removal behavior can be customized using pod annotation: trident.netapp.io/podRemediationPolicy: [retain, delete].
+
+These annotations are examined and used when a failover occurs.
+
+Apply annotations to the Kubernetes deployment/replicaset pod spec to prevent the annotation from disappearing after a failover. 
+
+retain - Pod WILL NOT be removed from the failed node during an automated-failover. 
+
+delete - Pod WILL be removed from the failed node during an automated-failover.
+
+These annotations can be applied to any pod.
+
+
+
+WARNING: 
+I/O operations will be blocked only on failed nodes for volumes that support force-detach.
+For volumes that do not support force-detach, there is a risk of data corruption and multi-attach issues.
+
+
+
+
+*Limitations*:
+
+I/O operations will only be prevented on the failed nodes for volumes supported by force-detach. Only pods using volumes/PVCs supported by force-detach will automatically be removed. 
+Automatic-failover and force-detach run inside the trident-controller pod. If the node hosting trident-controller fails, automated-failover will be delayed until K8s moves the pod to a healthy node.
+
+
+
+
 == Sample configurations
 You can use the attributes in <<Configuration options>> when defining `TridentOrchestrator` to customize your installation. 
 

@@ -46,14 +46,14 @@ You can install Trident protect from a private image registry if your Kubernetes
 docker.io/netapp/controller:25.06.0
 docker.io/netapp/restic:25.06.0
 docker.io/netapp/kopia:25.06.0
-docker.io/kopiablockrestore:25.06.0
+docker.io/netapp/kopiablockrestore:25.06.0
 docker.io/netapp/trident-autosupport:25.06.0
 docker.io/netapp/exechook:25.06.0
 docker.io/netapp/resourcebackup:25.06.0
 docker.io/netapp/resourcerestore:25.06.0
 docker.io/netapp/resourcedelete:25.06.0
 docker.io/bitnami/kubectl:1.30.2
-docker.io/kubebuilder/kube-rbac-proxy:v0.16.0
+gcr.io/kubebuilder/kube-rbac-proxy:v0.16.0
 ----
 +
 For example:
@@ -105,10 +105,7 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 [source,yaml]
 ----
 ---
-image:
-  registry: <private-registry-url>
-imagePullSecrets:
-  - name: regcred
+
 controller:
   image:
     registry: <private-registry-url>
@@ -122,7 +119,8 @@ webhooksCleanup:
   imagePullSecrets:
     - name: regcred
 ----
-
++
+NOTE: The `controller.image.registry` setting applies to all component images including `resourcebackup` and `resourcerestore`. If you push images to a specific repository path within your registry (for example, `example.com:443/my-repo`), include the full path in the registry field. This will ensure that all images are pulled from `<private-registry-url>/<image-name>:<tag>`.
 . Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
 [source,console]

@@ -70,6 +70,28 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 ====
 // end tabbed block
 
+=== Supported snapshot annotations
+
+You can use the following annotations on Snapshot CRs to configure timeout settings:
+
+[cols="3,1,4,2",options="header"]
+|===
+|Annotation |Type |Description |Default value
+
+|protect.trident.netapp.io/snapshot-completion-timeout
+|string
+|The maximum time (in minutes) allowed for snapshot completion operations.
+|"60"
+|protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout
+|string
+|The maximum time (in minutes) allowed for volume snapshots to become ready to use.
+|"30"
+|protect.trident.netapp.io/volume-snapshots-created-timeout
+|string
+|The maximum time (in minutes) allowed for volume snapshot creation.
+|"5"
+|===
+
 == Create an on-demand backup
 You can back up an app at any time.
 

@@ -117,6 +117,8 @@ imageRegistry: <private-registry-url>
 imagePullSecrets:
   - name: regcred
 ----
++
+NOTE: ##The `imageRegistry` setting applies to all component images including `resourcebackup` and `resourcerestore`. If you push images to a specific repository path within your registry (for example, `example.com:443/my-repo`), include the full path in the registry field. This will ensure that all images are pulled from `<private-registry-url>/<image-name>:<tag>`.##
 
 . Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
@@ -135,3 +137,6 @@ helm install trident-protect netapp-trident-protect/trident-protect --set cluste
 ##Debug logging helps NetApp support troubleshoot issues without requiring log level changes or problem reproduction.##
 --
 ====
+
+NOTE: For additional Helm chart configuration options, including AutoSupport settings and namespace filtering, refer to link:trident-protect-customize-installation.html#configure-additional-trident-protect-helm-chart-settings[Customize Trident protect installation].
+

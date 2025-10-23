@@ -70,9 +70,11 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage e
 
 |`trustedCACertificate` |Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth |""
 
-|`username` |Username to connect to the cluster/SVM. Used for credential-based auth |
+|`username` |Username to connect to the cluster/SVM. Used for credential-based auth.
+For Active Directory authentication, see link:../trident-use/ontap-san-examples.html#authenticate-trident-to-a-backend-svm-using-active-directory-credentials[Authenticate Trident to a backend SVM using Active Directory credentials]. |
 
-|`password` |Password to connect to the cluster/SVM. Used for credential-based auth |
+|`password` |Password to connect to the cluster/SVM. Used for credential-based auth.
+For Active Directory authentication, see link:../trident-use/ontap-san-examples.html#authenticate-trident-to-a-backend-svm-using-active-directory-credentials[Authenticate Trident to a backend SVM using Active Directory credentials]. |
 
 |`storagePrefix` a|Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it
 

@@ -21,7 +21,7 @@ You can deploy the Trident operator and install Trident using Helm. This process
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.33 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.34 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -255,7 +255,9 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
 
-|`nodePrep` |Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+|`nodePrep`
+
+|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
 *Currently, `iscsi` is the only value supported.* 
 NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1. |
 

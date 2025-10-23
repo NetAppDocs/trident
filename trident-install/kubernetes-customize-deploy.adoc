@@ -27,6 +27,7 @@ You can set Kubernetes resource limits and requests for the Trident controller, 
 For more information about configuring resource requests and limits, refer to link:https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Resource Management for Pods and Containers^].
 
 *Points to consider*:
+
 * DO NOT change the names of any containers or fields.
 * DO NOT change the indentation - YAML indentation is critical for proper parsing.
 * Default values for controller/node are shown in comments (e.g., # 10m) and are applied automatically if not specified.
@@ -36,7 +37,7 @@ For more information about configuring resource requests and limits, refer to li
 * Sidecars are listed under each main container
 
 
-.Kubernetes resource limits and requests
+.Kubernetes resource limits and requests example
 [%collapsible%closed]
 ====
 

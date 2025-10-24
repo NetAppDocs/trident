@@ -92,6 +92,8 @@ For more information, refer to link:../trident-use/csi-topology.html[Use CSI Top
 Supported only for manual QoS capacity pools.
 *Tech preview for Trident 25.06* |  `4 MiB/sec`
 
+| `cloudConfiguration` | Specifies named cloud environments or custom cloud URLs. |  `AzurePublic`
+
 |===
 
 [NOTE]
@@ -279,6 +281,29 @@ storage:
       maxThroughput: 3
 ----
 ====
+
+[[cloud-configuration]]
+.Cloud configuration examples
+[%collapsible%closed]
+====
+This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
+
+[source,yaml]
+----
+---
+
+----
+
+
+[source,yaml]
+----
+---
+
+----
+
+
+====
+
 
 .Advanced configuration
 [%collapsible%closed]

@@ -73,7 +73,7 @@ docker tag docker.io/netapp/controller:25.06.0 <private-registry-url>/controller
 docker push <private-registry-url>/controller:25.06.0
 ----
 +
-NOTE: ##To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.##
+NOTE: To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2506.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2506.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2506.0.tgz` instead of the repository reference in the final step.
 . Create the Trident protect system namespace:
 +
 [source,console]
@@ -119,7 +119,7 @@ webhooksCleanup:
     - name: regcred
 ----
 +
-NOTE: ##The `controller.image.registry` setting applies to all component images including `resourcebackup` and `resourcerestore`. If you push images to a specific repository path within your registry (for example, `example.com:443/my-repo`), include the full path in the registry field. This will ensure that all images are pulled from `<private-registry-url>/<image-name>:<tag>`.##
+NOTE: The `controller.image.registry` setting applies to all component images including `resourcebackup` and `resourcerestore`. If you push images to a specific repository path within your registry (for example, `example.com:443/my-repo`), include the full path in the registry field. This will ensure that all images are pulled from `<private-registry-url>/<image-name>:<tag>`.
 . Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
 [source,console]
@@ -128,3 +128,5 @@ helm install trident-protect netapp-trident-protect/trident-protect --set cluste
 ----
 --
 ====
+
+NOTE: For additional Helm chart configuration options, including AutoSupport settings and namespace filtering, refer to link:trident-protect-customize-installation.html#configure-additional-trident-protect-helm-chart-settings[Customize Trident protect installation].

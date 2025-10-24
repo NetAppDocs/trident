@@ -56,7 +56,7 @@ NOTE: The `k8sTimeout` parameter is applicable only for Trident installation.  |
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:25.06"`
+|`"netapp/trident-autosupport10"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -65,7 +65,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Trident image to install |`"netapp/trident:25.06"`
+|`tridentImage` |Trident image to install |`"netapp/trident:25.10"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"registry.k8s.io"`

@@ -38,7 +38,6 @@ NOTE: Cluster-scoped resources are included in a backup, snapshot, or clone if t
 +
 [source,yaml]
 ----
----
 apiVersion: protect.trident.netapp.io/v1
 kind: Snapshot
 metadata:
@@ -70,28 +69,6 @@ tridentctl-protect create snapshot <my_snapshot_name> --appvault <my_appvault_na
 ====
 // end tabbed block
 
-=== Supported snapshot annotations
-
-You can use the following annotations on Snapshot CRs to configure timeout settings:
-
-[cols="3,1,4,2",options="header"]
-|===
-|Annotation |Type |Description |Default value
-
-|protect.trident.netapp.io/snapshot-completion-timeout
-|string
-|The maximum time (in minutes) allowed for snapshot completion operations.
-|"60"
-|protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout
-|string
-|The maximum time (in minutes) allowed for volume snapshots to become ready to use.
-|"30"
-|protect.trident.netapp.io/volume-snapshots-created-timeout
-|string
-|The maximum time (in minutes) allowed for volume snapshot creation.
-|"5"
-|===
-
 == Create an on-demand backup
 You can back up an app at any time.
 
@@ -117,7 +94,6 @@ include::../_include/backup-include-sessiontoken-note.adoc[]
 ** `Delete`
 ** `Retain` (default)
 * *spec.snapshotRef*: (_Optional_): Name of the snapshot to use as the source of the backup. If not provided, a temporary snapshot will be created and backed up.
-* *metadata.annotations.protect.trident.netapp.io/full-backup* : (_Optional_) This annotation is used to specify whether a backup should be non-incremental. By default, all backups are incremental. However, if this annotation is set to `true`, the backup becomes non-incremental. If not specified, the backup follows the default incremental backup setting. It is best practice to perform a full backup periodically and then perform incremental backups in between full backups to minimize the risk associated with restores.
 +
 Example YAML:
 +
@@ -129,8 +105,6 @@ kind: Backup
 metadata:
   namespace: my-app-namespace
   name: my-cr-name
-  annotations:
-    protect.trident.netapp.io/full-backup: "true"
 spec: 
   applicationRef: my-application
   appVaultRef: appvault-name
@@ -156,9 +130,36 @@ tridentctl-protect create backup <my_backup_name> --appvault <my-vault-name> --a
 +
 You can optionally use the `--full-backup` flag to specify whether a backup should be non-incremental. By default, all backups are incremental. When this flag is used, the backup becomes non-incremental. It is best practice to perform a full backup periodically and then perform incremental backups in between full backups to minimize the risk associated with restores.
 --
-
 ====
 // end tabbed block
+
+=== Supported backup annotations
+The following table describes the annotations you can use when creating a backup CR:
+
+[cols="2,1,3,1",options="header"]
+|===
+|Annotation
+|Type
+|Description
+|Default value
+|protect.trident.netapp.io/full-backup
+|string
+|Specifies whether a backup should be non-incremental. Set to `true` to create a non-incremental backup. It is best practice to perform a full backup periodically and then perform incremental backups in between full backups to minimize the risk associated with restores.
+|"false"
+|protect.trident.netapp.io/snapshot-completion-timeout
+|string
+|The maximum time allowed for the overall snapshot operation to complete.
+|"60m"
+|protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout`
+|string
+|The maximum time allowed for volume snapshots to reach the ready-to-use state.
+|"30m"
+|protect.trident.netapp.io/volume-snapshots-created-timeout
+|string
+|The maximum time allowed for volume snapshots to be created.
+|"5m"
+
+|===
 
 == Create a data protection schedule
 A protection policy protects an app by creating snapshots, backups, or both at a defined schedule. You can choose to create snapshots and backups hourly, daily, weekly, and monthly, and you can specify the number of copies to retain. You can schedule a non-incremental full backup by using the full-backup-rule annotation. By default, all backups are incremental. Performing a full backup periodically, along with incremental backups in between, helps reduce the risk associated with restores.
@@ -196,7 +197,6 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 * *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `Weekly`. The value must be provided as a string.
 * *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `Daily`, `Weekly`, or `Monthly`. The value must be provided as a string.
 * *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `Hourly`, `Daily`, `Weekly`, or `Monthly`. The value must be provided as a string.
-* *metadata.annotations.protect.trident.netapp.io/full-backup-rule*: (_Optional_) This annotation is used to specify the rule for scheduling full backup. You can set it to `always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur.
 +
 Example YAML for backup and snapshot schedule:
 +
@@ -208,8 +208,6 @@ kind: Schedule
 metadata:
   namespace: my-app-namespace
   name: my-cr-name
-  annotations:
-    protect.trident.netapp.io/full-backup-rule: "Monday,Thursday"
 spec:
   dataMover: Kopia
   applicationRef: my-application
@@ -267,6 +265,35 @@ For snapshot-only schedules, set `--backup-retention 0` and specify a value grea
 --
 ====
 // end tabbed block
+
+=== Supported schedule annotations
+
+The following table describes the annotations you can use when creating a schedule CR:
+
+[cols="2,1,3,1",options="header"]
+|===
+|Annotation
+|Type
+|Description
+|Default value
+|protect.trident.netapp.io/full-backup-rule
+|string
+|Specifies the rule for scheduling full backups. You can set it to `always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur (for example, `"Monday,Thursday"`).
+|Not set (all backups are incremental)
+|protect.trident.netapp.io/snapshot-completion-timeout
+|string
+|The maximum time allowed for the overall snapshot operation to complete.
+|"60m"
+|protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout
+|string
+|The maximum time allowed for volume snapshots to reach the ready-to-use state.
+|"30m"
+|protect.trident.netapp.io/volume-snapshots-created-timeout
+|string
+|The maximum time allowed for volume snapshots to be created.
+|"5m"
+|===
+
 
 
 == Delete a snapshot

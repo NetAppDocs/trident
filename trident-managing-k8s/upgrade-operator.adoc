@@ -14,7 +14,7 @@ summary: You can easily upgrade an existing Trident installation by using the op
 You can upgrade Trident using the Trident operator either manually or using Helm. You can upgrade from a Trident operator installation to another Trident operator installation or upgrade from a `tridentctl` installation to a Trident operator version. Review link:upgrade-trident.html#select-an-upgrade-method[Select an upgrade method] before upgrading a Trident operator installation.  
 
 == Upgrade a manual installation
-You can upgrade from a cluster-scoped Trident operator installation to another cluster-scoped Trident operator installation. All Trident versions 21.01 and above use a cluster-scoped operator.
+You can upgrade from a cluster-scoped Trident operator installation to another cluster-scoped Trident operator installation. All Trident versions use a cluster-scoped operator.
 
 NOTE: To upgrade from Trident that was installed using the namespace-scoped operator (versions 20.07 through 20.10), use the upgrade instructions for link:../earlier-versions.html[your installed version] of Trident.
 
@@ -34,18 +34,20 @@ Ensure you are using a Kubernetes cluster running link:../trident-get-started/re
 ----
 ./tridentctl -n trident version
 ----
-. Delete the Trident operator that was used to install the current Trident instance. For example, if you are upgrading from 23.07, run the following command:
+. Update the `operator.yaml`, `tridentorchestrator_cr.yaml`, and `post_1_25_bundle.yaml` with the registry and imagepaths for the version you are upgrading to (e.g.25.06), and the correct secret.
+. Delete the Trident operator that was used to install the current Trident instance. For example, if you are upgrading from 25.02, run the following command:
 +
 ----
-kubectl delete -f 23.07.0/trident-installer/deploy/<bundle.yaml> -n trident
+kubectl delete -f 25.02.0/trident-installer/deploy/<bundle.yaml> -n trident
 ----
 . If you customized your initial installation using `TridentOrchestrator` attributes, you can edit the `TridentOrchestrator` object to modify the installation parameters. This might include changes made to specify mirrored Trident and CSI image registries for offline mode, enable debug logs, or specify image pull secrets.
 . Install Trident using the correct bundle YAML file for your environment, where _<bundle.yaml>_ is
-`bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. For example, if you are installing Trident 25.10, run the following command:
+`bundle_pre_1_25.yaml` or `bundle_post_1_25.yaml` based on your Kubernetes version. For example, if you are installing Trident 25.06.0, run the following command:
 +
 ----
-kubectl create -f 25.10.0/trident-installer/deploy/<bundle.yaml> -n trident
+kubectl create -f 25.06.0/trident-installer/deploy/<bundle.yaml> -n trident
 ----
+. Edit the trident torc to include the image 25.06.0.
 
 == Upgrade a Helm installation
 You can upgrade a Trident Helm installation.

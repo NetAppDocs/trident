@@ -64,6 +64,10 @@ ontap-nas-economy, ontap-nas-flexgroup
 ontap-nas-economy, ontap-nas-flexgroup
 
 |trident.netapp.io/blockSize |blockSize |solidfire-san
+
+|trident.netapp.io/skipRecoveryQueue |skipRecoveryQueue |ontap-nas,
+ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy
+
 |===
 
 If the created PV has the `Delete` reclaim policy, Trident deletes both the PV and the backing volume when the PV becomes released (that is, when the user deletes the PVC). Should the delete action fail, Trident marks the PV as such and periodically retries the operation until it succeeds or the PV is manually deleted. If the PV uses the `+Retain+` policy, Trident ignores it and assumes the administrator will clean it up from Kubernetes and the backend, allowing the volume to be backed up or inspected before its removal. Note that deleting the PV does not cause Trident to delete the backing volume. You should remove it using the REST API (`tridentctl`).
@@ -358,6 +362,8 @@ A volume configuration defines the properties that a provisioned volume should h
 |blockSize |string |no |solidfire-*: Block/sector size
 
 |fileSystem |string |no |File system type
+
+|skipRecoveryQueue |string |no |Whether to skip the volume recovery queue: `true` or `false`
 
 |===
 

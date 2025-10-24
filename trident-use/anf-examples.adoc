@@ -92,7 +92,14 @@ For more information, refer to link:../trident-use/csi-topology.html[Use CSI Top
 Supported only for manual QoS capacity pools.
 *Tech preview for Trident 25.06* |  `4 MiB/sec`
 
-| `cloudConfiguration` | Specifies named cloud environments or custom cloud URLs. |  `AzurePublic`
+| `cloudConfiguration` | Optional. Specifies named cloud environments or custom cloud URLs. 
+  - `cloudName`: Specify a named cloud environment. Supported values: `AzurePublic` (default),  `AzureChina`, or `AzureGovernment`
+  (OR) 
+  - `custom`: Specify a custom cloud environment with the following parameters:
+    - `adAuthorityHost`: The Azure Active Directory (AAD) authority host.
+    - `audience`: The audience for the AAD token.
+    - `endpoint`: The endpoint for the custom cloud.
+  | `AzurePublic`
 
 |===
 
@@ -282,25 +289,72 @@ storage:
 ----
 ====
 
-[[cloud-configuration]]
 .Cloud configuration examples
 [%collapsible%closed]
 ====
-This backend configuration further reduces the scope of volume placement to a single subnet, and also modifies some volume provisioning defaults.
+The `cloudConfiguration` parameter can be used to specify named cloud environments or custom cloud URLs.
 
+*Backend configuration example for a named cloud environment*:
 [source,yaml]
 ----
 ---
-
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-anf-cloud-secret
+type: Opaque
+stringData:
+  clientID: abcde356-bf8e-fake-c111-abcde35613aa
+  clientSecret: rR0rUmWXfNioN1KhtHisiSAnoTherboGuskey6pU
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-anf-cloud
+spec:
+  version: 1
+  storageDriverName: azure-netapp-files
+  subscriptionID: 12abc678-4774-fake-a1b2-a7abcde39312
+  tenantID: a7abcde3-edc1-fake-b111-a7abcde356cf
+  location: usgovvirginia
+  serviceLevel: Premium
+  cloudConfiguration:
+    cloudName: AzureGovernment
+  credentials:
+    name: backend-tbc-anf-cloud-secret
 ----
 
-
+*Backend configuration example for a custom cloud environment*:
 [source,yaml]
 ----
 ---
-
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-anf-cloud-custom-secret
+type: Opaque
+stringData:
+  clientID: abcde356-bf8e-fake-c111-abcde35613aa
+  clientSecret: rR0rUmWXfNioN1KhtHisiSAnoTherboGuskey6pU
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-anf-cloud-custom
+spec:
+  version: 1
+  storageDriverName: azure-netapp-files
+  subscriptionID: 12abc678-4774-fake-a1b2-a7abcde39312
+  tenantID: a7abcde3-edc1-fake-b111-a7abcde356cf
+  location: eastus
+  serviceLevel: Premium
+  cloudConfiguration:
+    adAuthorityHost: https://login.microsoftonline.azurestack.contoso.com/
+    audience: https://management.azurestack.contoso.com
+    endpoint: https://management.azurestack.contoso.com
+  credentials:
+    name: backend-tbc-anf-cloud-custom-secret
 ----
-
 
 ====
 

@@ -280,7 +280,6 @@ For more information about configuring resource requests and limits, refer to li
 
 [NOTE]
 =====
-* Default values for controller/node are shown in comments (e.g., # 10m) and are applied automatically if not specified.
 * No limits are applied by default - only requests have default values.
 * Container names are listed as they appear in the pod specifications.
 * Sidecars are listed under each main container.
@@ -335,7 +334,7 @@ resources:
         requests:
           cpu: 2m
           memory: 40Mi
-    operator:
+  operator:
     requests:
       cpu: 10m
       memory: 40Mi

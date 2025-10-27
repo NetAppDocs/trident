@@ -15,11 +15,57 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 25.06.2
+
+== What's new in 25.10
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident
 
+==== Enhancements
+
+* *Kubernetes*:
+** Added support for CSI Volume Group Snapshots with v1beta1 Volume Group Snapshot Kubernetes APIs for ONTAP-NAS NFS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^].
+** Enhanced qualification for vanilla KubeVirt for ONTAP drivers.
+** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. 
+** Enhanced Trident node concurrency for higher scalability on node operations for FCP volumes.
+** Added ONTAP AFX support for ONTAP NAS driver.
+** Kubernetes: Added support for configuring CPU and memory resource requests and limits for Trident containers via TridentOrchestrator CR and Helm chart values. (link:https://github.com/NetApp/trident/issues/1000[Issue #1000], link:https://github.com/NetApp/trident/issues/927[Issue #927], link:https://github.com/NetApp/trident/issues/853[Issue #853], link:https://github.com/NetApp/trident/issues/592[Issue #592], link:https://github.com/NetApp/trident/issues/110[Issue #110]).
+** Added support for custom cloud configuration in azure-netapp-files (ANF) backend. Use the new cloudConfiguration parameter to specify named cloud environments or custom cloud URLs for private Azure deployments. (link:https://github.com/NetApp/trident/issues/632[Issue #632])
+**  Added FC support for ASAr2 personality.
+** Added option to serve Prometheus metrics with HTTPS.
+** Added option to keep original imported volume name but manage lifecycle with Trident.
+* *KubeVirt*: Enhanced qualification for vanilla KubeVirt for ONTAP drivers.
+* Added option for Trident controller to use host networking via helm, operator and tridentctl (link:https://github.com/NetApp/trident/issues/858[Issue #858]).
+
+==== Experimental Enhancements
+NOTE: Not for use in production environments.
+
+* Tech Preview: Added support for concurrency to ONTAP-SAN FC and ONTAP-NAS drivers.
+
+==== Fixes
+
+* *Kubernetes*:
+** Fixed an issue where multiple attempts to close a LUKS device resulted in failures to detach volumes.
+** Fixed CSI node-driver-registrar container name inconsistency by standardizing Linux DaemonSet to `node-driver-registrar` to match Windows DaemonSet and container image naming.
+** Fixed Trident node pod not starting on Windows under Openshift due to SCC having `allowHostDirVolumePlugin` set to false (link:https://github.com/NetApp/trident/issues/950[Issue #950])
+** Fixed an issue where export policies for legacy qtrees were not properly upgraded
+* Fixed timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+* Fixed Kubernetes API QPS not being set via Helm (link:https://github.com/NetApp/trident/issues/975[Issue #975]).
+* Fixed inability to mount a Persistent Volume Claim (PVC) based on a snapshot of an XFS filesystem PVC on the same Kubernetes node.
+* Fixed UUID change issue after host/Docker restart in NDVP mode by adding unique/shared subsystem names per backend (e.g., `netappdvp_subsystem`).
+* Fixed mount errors for iSCSI volumes during Trident upgrade from versions prior to 23.10 to 24.10 and above, resolving "invalid SANType" issue.
+
+=== Trident protect
+NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+
+==== Enhancements
+
+==== Fixes
+
+
+== Changes in 25.06.2
+
+=== Trident
 
 ==== Fixes
 * *Kubernetes*: Fixed critical issue where incorrect iSCSI devices were discovered when detaching volumes from Kubernetes nodes.

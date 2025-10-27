@@ -35,7 +35,7 @@ WARNING: This is especially important for block volumes as Kubernetes would be u
 ** If the reclaim policy of the Storage Class is `delete`, the storage volume will be deleted when the PV is deleted.
 * By default, Trident manages the PVC and renames the FlexVol volume and LUN on the backend. You can pass the `--no-manage` flag to import an unmanaged volume and the `--no-rename` flag to retain the volume name. 
 ** *`--no-manage`* - If you use `--no-manage`, Trident does not perform any additional operations on the PVC or PV for the lifecycle of the objects. The storage volume is not deleted when the PV is deleted and other operations such as volume clone and volume resize are also ignored. 
-** *`--no-rename`* - If you use `--no-rename`, Trident retains the existing volume name while importing volumes. This option is only supported for the `ontap-nas`, `ontap-nas-flexgroup`, and `ontap-san` drivers.
+** *`--no-rename`* - If you use `--no-rename`, Trident retains the existing volume name while importing volumes. This option is supported only for the `ontap-nas`, `ontap-san` (including ASA r2 systems), and `ontap-san-economy` drivers.
 +
 TIP: These options are useful if you want to use Kubernetes for containerized workloads but otherwise want to manage the lifecycle of the storage volume outside of Kubernetes.
 * An annotation is added to the PVC and PV that serves a dual purpose of indicating that the volume was imported and if the PVC and PV are managed. This annotation should not be modified or removed.

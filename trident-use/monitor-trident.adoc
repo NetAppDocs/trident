@@ -107,9 +107,11 @@ spec:
         serverName: trident-csi
 ----
 
-Trident support HTTPS metrics in all the installation methods: tridentctl, Helm chart, and Operator.
+Trident support HTTPS metrics in all the installation methods: tridentctl, Helm chart, and Operator:
 
-If you are using the `tridentctl install` command, you can pass the `--metrics-https` flag to enable HTTPS metrics. If you are using YAML files, you can add the `--metrics-https` flag to the `trident-main` container in the `trident-deployment.yaml` file.
+* If you are using the `tridentctl install` command, you can pass the `--https-metrics` flag to enable HTTPS metrics.
+* If you are using the Helm chart, you can set the `httpsMetrics` parameter to enable HTTPS metrics.
+* If you are using YAML files, you can add the `--https-metrics` flag to the `trident-main` container in the `trident-deployment.yaml` file.
 
 == Step 3: Query Trident metrics with PromQL
 

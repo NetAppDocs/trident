@@ -34,7 +34,9 @@ This table details `TridentOrchestrator` attributes.
 
 |`enableForceDetach` |`ontap-san`, `ontap-san-economy`, `ontap-nas`, and `ontap-nas-economy` only. 
 
-Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. |`false`
+Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
+
+For information about force detach and automated failover, see https://review.docs.netapp.com/us-en/trident_rn-trident-2510/trident-get-started/kubernetes-customize-deploy.html#details-about-force-detach[Details about force detach^].|`false`
 
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
@@ -238,6 +240,31 @@ rules:
   - patch
   - delete
 ----
+
+*TNR states*:
+Use the following commands to view the status of TNRs:
+`kubectl get tnr <name> -n <trident-namespace>`
+
+TNRs can be in one of the following states:
+
+* _Remediating_:
+
+* Cease backend I/O access for volumes supported by force-detach mounted to that node.
+* The Trident node object is marked dirty (not safe for new publications).
+* Remove pods and volume attachments from the node
+
+* _NodeRecoveryPending_:
+
+* The controller is waiting for the node to come back online.
+* Once the node is online, publish-enforcement will ensure the node is clean and ready for new volume publications.
+* If the node is deleted from K8s, the TNR controller will remove the TNR and cease reconciliation.
+
+* _Succeeded_:
+* All remediation and node recovery steps completed successfully. The node is clean and ready for new volume publications.
+
+* _Failed_:
+* Unrecoverable error. Error reasons are set in the status.message field of the CR.
+
 
 *K8s Cluster Upgrades and Maintenance*:
 

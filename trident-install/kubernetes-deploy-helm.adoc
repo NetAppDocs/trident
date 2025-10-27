@@ -268,6 +268,79 @@ NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and c
 
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 
+|`resources` a|Sets Kubernetes resource limits and requests for the Trident controller, node, and operator pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
+
+For more information about configuring resource requests and limits, refer to link:https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Resource Management for Pods and Containers^].
+
+[WARNING] 
+====
+* DO NOT change the names of any containers or fields.
+* DO NOT change the indentation - YAML indentation is critical for proper parsing.
+====
+
+[NOTE]
+=====
+* Default values for controller/node are shown in comments (e.g., # 10m) and are applied automatically if not specified.
+* No limits are applied by default - only requests have default values.
+* Container names are listed as they appear in the pod specifications.
+* Sidecars are listed under each main container.
+=====  a|[source,yaml]
+----
+resources:
+  controller:
+    trident-main:
+      requests:
+        cpu: 10m
+        memory: 80Mi
+    csi-provisioner:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+    csi-attacher:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+    csi-resizer:
+      requests:
+        cpu: 3m
+        memory: 20Mi
+    csi-snapshotter:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+    trident-autosupport:
+      requests:
+        cpu: 1m
+        memory: 30Mi
+  node:
+    linux:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 60Mi
+      node-driver-registrar:
+        requests:
+          cpu: 1m
+          memory: 10Mi
+    windows:
+      trident-main:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        node-driver-registrar:
+          requests:
+            cpu: 6m
+            memory: 40Mi
+      liveness-probe:
+        requests:
+          cpu: 2m
+          memory: 40Mi
+    operator:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+----
+
 |===
 
 === Understanding controller pods and node pods

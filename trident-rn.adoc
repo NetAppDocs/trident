@@ -26,14 +26,14 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 * *Kubernetes*:
 ** Added support for CSI Volume Group Snapshots with v1beta1 Volume Group Snapshot Kubernetes APIs for ONTAP-NAS NFS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^].
 ** Enhanced qualification for vanilla KubeVirt for ONTAP drivers.
-** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. 
+** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. See https://review.docs.netapp.com/us-en/trident_main/trident-get-started/kubernetes-customize-deploy.html#details-about-force-detach[Details about force detach^].
 ** Enhanced Trident node concurrency for higher scalability on node operations for FCP volumes.
-** Added ONTAP AFX support for ONTAP NAS driver.
-** Kubernetes: Added support for configuring CPU and memory resource requests and limits for Trident containers via TridentOrchestrator CR and Helm chart values. (link:https://github.com/NetApp/trident/issues/1000[Issue #1000], link:https://github.com/NetApp/trident/issues/927[Issue #927], link:https://github.com/NetApp/trident/issues/853[Issue #853], link:https://github.com/NetApp/trident/issues/592[Issue #592], link:https://github.com/NetApp/trident/issues/110[Issue #110]).
+** Added ONTAP AFX support for ONTAP NAS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples^].
+** Added support for configuring CPU and memory resource requests and limits for Trident containers via TridentOrchestrator CR and Helm chart values. (link:https://github.com/NetApp/trident/issues/1000[Issue #1000], link:https://github.com/NetApp/trident/issues/927[Issue #927], link:https://github.com/NetApp/trident/issues/853[Issue #853], link:https://github.com/NetApp/trident/issues/592[Issue #592], link:https://github.com/NetApp/trident/issues/110[Issue #110]). 
 ** Added support for custom cloud configuration in azure-netapp-files (ANF) backend. Use the new cloudConfiguration parameter to specify named cloud environments or custom cloud URLs for private Azure deployments. (link:https://github.com/NetApp/trident/issues/632[Issue #632])
-**  Added FC support for ASAr2 personality.
-** Added option to serve Prometheus metrics with HTTPS.
-** Added option to keep original imported volume name but manage lifecycle with Trident.
+**  Added FC support for ASAr2 personality. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^].
+** Added option to serve Prometheus metrics with HTTPS. See link:../trident-use/monitor-trident.html[Monitor Trident^]
+** Added option to keep original imported volume name but manage lifecycle with Trident. See link:../trident-use/vol-import.html[Import volumes^]
 * *KubeVirt*: Enhanced qualification for vanilla KubeVirt for ONTAP drivers.
 * Added option for Trident controller to use host networking via helm, operator and tridentctl (link:https://github.com/NetApp/trident/issues/858[Issue #858]).
 

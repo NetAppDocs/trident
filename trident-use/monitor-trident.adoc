@@ -21,7 +21,7 @@ The metrics provided by Trident enable you to do the following:
 * Maintain a mapping of the amount of volumes provisioned on available backends.
 * Track performance. You can take a look at how long it takes for Trident to communicate to backends and perform operations.
 
-NOTE: By default, Trident's metrics are exposed on the target port `8001` at the `/metrics` endpoint. These metrics are *enabled by default* when Trident is installed.
+NOTE: By default, Trident's metrics are exposed on the target port `8001` at the `/metrics` endpoint. These metrics are *enabled by default* when Trident is installed. You can configure to consume Trident metrics over HTTPS on port `8444` as well. See link:..https://docs.netapp.com/us-en/trident/trident-use/monitor-trident.html#step-2-create-a-prometheus-servicemonitor[Step 2: Create a Prometheus ServiceMonitor^] for more information.
 
 .What you'll need
 

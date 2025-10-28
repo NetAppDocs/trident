@@ -24,7 +24,7 @@ The What's new summary provides details about enhancements, fixes, and deprecati
 ==== Enhancements
 
 * *Kubernetes*:
-** Added support for CSI Volume Group Snapshots with v1beta1 Volume Group Snapshot Kubernetes APIs for ONTAP-NAS NFS and ONTAP-SAN (NVMe/TCP) drivers. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^].
+** Added support for CSI Volume Group Snapshots with v1beta1 Volume Group Snapshot Kubernetes APIs for the ONTAP-NAS NFS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^].
 ** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. See https://review.docs.netapp.com/us-en/trident_main/trident-get-started/kubernetes-customize-deploy.html#details-about-force-detach[Details about force detach^].
 ** Enhanced Trident node concurrency for higher scalability on node operations for FCP volumes.
 ** Added ONTAP AFX support for the ONTAP NAS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples^].
@@ -63,6 +63,10 @@ NOTE: This feature is experimental. Adding the ONTAP-SAN driver (NVMe/TCP protoc
 NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
 
 ==== Enhancements
+
+* Added annotations to Schedule and Backup CR's to control various Snapshot CR timeouts: `protect.trident.netapp.io/snapshot-completion-timeout`, `protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout`, and `protect.trident.netapp.io/volume-snapshots-created-timeout`
+* Added annotation to Schedule CR to configure PVC bind timeout, which will be used by Backup CR: `protect.trident.netapp.io/pvc-bind-timeout-sec`
+* Improved tridentctl-protect backup and snapshot listings to add a new field to indicate execution hook failures.
 
 ==== Fixes
 

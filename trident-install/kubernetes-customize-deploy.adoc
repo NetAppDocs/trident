@@ -351,68 +351,68 @@ spec:
   namespace: trident
   imagePullSecrets:
   - thisisasecret
-    resources:
-      controller:
+  resources:
+    controller:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 80Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+      # sidecars
+      csi-provisioner:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-attacher:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-resizer:
+        requests:
+          cpu: 3m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-snapshotter:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      trident-autosupport:
+        requests:
+          cpu: 1m
+          memory: 30Mi
+        limits:
+          cpu: 50m
+          memory: 128Mi
+    node:
+      linux:
         trident-main:
           requests:
             cpu: 10m
-            memory: 80Mi
+            memory: 60Mi
           limits:
             cpu: 200m
             memory: 256Mi
         # sidecars
-        csi-provisioner:
-          requests:
-            cpu: 2m
-            memory: 20Mi
-          limits:
-            cpu: 100m
-            memory: 64Mi
-        csi-attacher:
-          requests:
-            cpu: 2m
-            memory: 20Mi
-          limits:
-            cpu: 100m
-            memory: 64Mi
-        csi-resizer:
-          requests:
-            cpu: 3m
-            memory: 20Mi
-          limits:
-            cpu: 100m
-            memory: 64Mi
-        csi-snapshotter:
-          requests:
-            cpu: 2m
-            memory: 20Mi
-          limits:
-            cpu: 100m
-            memory: 64Mi
-        trident-autosupport:
+        node-driver-registrar:
           requests:
             cpu: 1m
-            memory: 30Mi
+            memory: 10Mi
           limits:
             cpu: 50m
-            memory: 128Mi
-      node:
-        linux:
-          trident-main:
-            requests:
-              cpu: 10m
-              memory: 60Mi
-            limits:
-              cpu: 200m
-              memory: 256Mi
-          # sidecars
-          node-driver-registrar:
-            requests:
-              cpu: 1m
-              memory: 10Mi
-            limits:
-              cpu: 50m
-              memory: 32Mi
+            memory: 32Mi
 
 ----
 ====

@@ -134,9 +134,7 @@ When node health is restored and the taint is removed, Trident will:
 
 === Details about automated failover
 
-You can automates the force-detach process through integration with node health check (NHC) operator. When a node failure occurs, NHC triggers Trident node remediation (TNR) and force-detach automatically by creating a TridentNodeRemediation  CR in Trident's namespace defining the failed node. TNR is created only upon node failure, and removed by NHC once the node comes back online or the node is deleted.
-
-*Pods and volume supported by automated-failover*: 
+You can automate the force-detach process through integration with node health check (NHC) operator. When a node failure occurs, NHC triggers Trident node remediation (TNR) and force-detach automatically by creating a TridentNodeRemediation  CR in Trident's namespace defining the failed node. TNR is created only upon node failure, and removed by NHC once the node comes back online or the node is deleted.
 
 All volumes/PVCs supported by force-detach are supported by automated-failover:
 
@@ -191,11 +189,11 @@ The above CR is configured to watch K8s worker nodes for node conditions Ready: 
 
 The `unhealthyConditions` in the CR uses a 0 second grace period. This causes automated-failover to trigger immediately upon K8s setting node condition Ready: false, which is set after K8s loses the heartbeat from a node. K8s has a default of 40sec wait after the last heartbeat before setting Ready: false. This grace-period can be customized in K8s deployment options.
 
-For additional configuration options, refer to link:https://github.com/medik8s/node-healthcheck-operator/blob/main/docs/configuration.md[can be found in Node-Healthcheck-Operator documentation^].
+For additional configuration options, refer to link:https://github.com/medik8s/node-healthcheck-operator/blob/main/docs/configuration.md[Node-Healthcheck-Operator documentation^].
 
 *Additional Setup Information*:
 
-When Trident is installed with force-detach enabled, two additional resources are created in the Trident namespace to facilitate integration with NHC.
+When Trident is installed with force-detach enabled, two additional resources are automatically created in the Trident namespace to facilitate integration with NHC.
 
 *TridentNodeRemediationTemplate (TNRT)*:
 
@@ -248,22 +246,20 @@ Use the following commands to view the status of TNRs:
 TNRs can be in one of the following states:
 
 * _Remediating_:
-
-* Cease backend I/O access for volumes supported by force-detach mounted to that node.
-* The Trident node object is marked dirty (not safe for new publications).
-* Remove pods and volume attachments from the node
+** Cease backend I/O access for volumes supported by force-detach mounted to that node.
+** The Trident node object is marked dirty (not safe for new publications).
+** Remove pods and volume attachments from the node
 
 * _NodeRecoveryPending_:
-
-* The controller is waiting for the node to come back online.
-* Once the node is online, publish-enforcement will ensure the node is clean and ready for new volume publications.
+** The controller is waiting for the node to come back online.
+** Once the node is online, publish-enforcement will ensure the node is clean and ready for new volume publications.
 * If the node is deleted from K8s, the TNR controller will remove the TNR and cease reconciliation.
 
 * _Succeeded_:
-* All remediation and node recovery steps completed successfully. The node is clean and ready for new volume publications.
+** All remediation and node recovery steps completed successfully. The node is clean and ready for new volume publications.
 
 * _Failed_:
-* Unrecoverable error. Error reasons are set in the status.message field of the CR.
+** Unrecoverable error. Error reasons are set in the status.message field of the CR.
 
 
 *K8s Cluster Upgrades and Maintenance*:
@@ -286,7 +282,7 @@ Automated-failover selects which workloads to remove from the failed node. When 
 
 *Overriding Pod Removal Behavior*:
 
-Pod removal behavior can be customized using a pod annotation: `trident.netapp.io/podRemediationPolicy`: [retain, delete]. These annotations are examined and used when a failover occurs. 
+Pod removal behavior can be customized using a pod annotation: `trident.netapp.io/podRemediationPolicy`[retain, delete]`. These annotations are examined and used when a failover occurs. 
 Apply annotations to the Kubernetes deployment/replicaset pod spec to prevent the annotation from disappearing after a failover:
 * `retain` - Pod WILL NOT be removed from the failed node during an automated-failover. 
 * `delete` - Pod WILL be removed from the failed node during an automated-failover.
@@ -302,7 +298,7 @@ These annotations can be applied to any pod.
 *Limitations*:
 
 * I/O operations will only be prevented on the failed nodes for volumes supported by force-detach. Only pods using volumes/PVCs supported by force-detach will automatically be removed. 
-Automatic-failover and force-detach run inside the trident-controller pod. If the node hosting trident-controller fails, automated-failover will be delayed until K8s moves the pod to a healthy node.
+* Automatic-failover and force-detach run inside the trident-controller pod. If the node hosting trident-controller fails, automated-failover will be delayed until K8s moves the pod to a healthy node.
 
 *Integrating Custom Node Health Check Solutions*:
 You can replace Node-Healthcheck-Operator with alternative node failure detection tools to trigger automatic-failover. 

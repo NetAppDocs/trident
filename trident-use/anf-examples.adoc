@@ -92,13 +92,15 @@ For more information, refer to link:../trident-use/csi-topology.html[Use CSI Top
 Supported only for manual QoS capacity pools.
 *Tech preview for Trident 25.06* |  `4 MiB/sec`
 
-| `cloudConfiguration` | Optional. Specifies a named or a custom cloud environment: 
+| `cloudConfiguration` a| Optional. Specifies a named or a custom cloud environment: 
   - `cloudName`: Specify a named cloud environment. Supported values: `AzurePublic` (default),  `AzureChina`, or `AzureGovernment`
   (OR) 
   - `custom`: Specify a custom cloud environment with the following parameters:
     - `adAuthorityHost`: The Azure Active Directory (AAD) authority host.
     - `audience`: The audience for the AAD token.
     - `endpoint`: The endpoint for the custom cloud.
+
+IMPORTANT: You can specify either a named cloud environment (`cloudName`) OR a custom cloud environment (`custom`), but NOT both.
   | `AzurePublic`
 
 |===

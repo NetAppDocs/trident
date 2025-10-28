@@ -13,11 +13,11 @@ summary: Learn how to create and use ONTAP NAS drivers with your Trident install
 [.lead]
 Learn to create and use ONTAP NAS drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses.
 
-Beginning with the 25.10 release, NetApp Trident supports link:https://docs.netapp.com/us-en/ontap-afx/index.html[ONTAP AFX storage systems^]. ONTAP AFX systems differ from other ONTAP systems (ASA, AFF, and FAS) in the implementation of their storage layer.
+Beginning with the 25.10 release, NetApp Trident supports link:https://docs.netapp.com/us-en/ontap-afx/index.html[NetApp AFX storage systems^]. NetApp AFX storage systems differ from other ONTAP-based systems (ASA, AFF, and FAS) in the implementation of their storage layer.
 
-NOTE: Only the `ontap-nas` driver (with NFS protocol) is supported for ONTAP AFX systems; SMB protocol is not supported.
+NOTE: Only the `ontap-nas` driver (with NFS protocol) is supported for NetApp AFX systems; SMB protocol is not supported.
 
-In the Trident backend configuration, you need not specify that your system is ONTAP AFX. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the ONTAP AFX systems. Some backend configuration parameters are not applicable to ONTAP AFX systems as noted in the table below.
+In the Trident backend configuration, you need not specify that your system is an NetApp AFX storage system. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the AFX storage system. Some backend configuration parameters are not applicable to AFX storage systems as noted in the table below.
 
 == Backend configuration options
 
@@ -28,7 +28,8 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
+|`storageDriverName` a| Name of the storage driver
+NOTE: For NetApp AFX systems, only `ontap-nas` can be used.  |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
@@ -89,7 +90,7 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
-*Do not specify for ONTAP AFX storage systems.*
+*Do not specify for AFX storage systems.*
 
 a|""
 
@@ -97,7 +98,7 @@ a|""
 
 
 *Does not apply to Amazon FSx for ONTAP*. 
-*Do not specify for ONTAP AFX storage systems.*|"" (not enforced by default)
+*Do not specify for AFX storage systems.*|"" (not enforced by default)
 
 |flexgroupAggregateList a| List of aggregates for provisioning (optional; if set, must be assigned to the SVM). All aggregates assigned to the SVM are used to provision a FlexGroup volume. Supported for the *ontap-nas-flexgroup* storage driver. 
 
@@ -116,7 +117,7 @@ Do not use `debugTraceFlags` unless you are troubleshooting and require a detail
 | `nasType` | Configure NFS or SMB volumes creation. 
 
 Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. 
-*If specified, always set to `nfs` for ONTAP AFX storage systems*.| `nfs` 
+*If specified, always set to `nfs` for AFX storage systems*.| `nfs` 
 
 |`nfsMountOptions`	|Comma-separated list of NFS mount options. 
 
@@ -140,7 +141,7 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontapi` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
 Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.
 
-*If specified, always set to `true` for ONTAP AFX storage systems*.
+*If specified, always set to `true` for AFX storage systems*.
 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 

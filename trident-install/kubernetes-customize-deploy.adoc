@@ -334,3 +334,191 @@ spec:
   storagePool: pool-premium1
 ----
 ====
+
+.Kubernetes resource requests and limits configuration for Trident controller and Trident Linux node pods
+[%collapsible%closed]
+====
+
+This example configures Kubernetes resource requests and limits for Trident controller and Trident Linux node pods.
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullSecrets:
+  - thisisasecret
+    resources:
+      controller:
+        trident-main:
+          requests:
+            cpu: 10m
+            memory: 80Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        # sidecars
+        csi-provisioner:
+          requests:
+            cpu: 2m
+            memory: 20Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        csi-attacher:
+          requests:
+            cpu: 2m
+            memory: 20Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        csi-resizer:
+          requests:
+            cpu: 3m
+            memory: 20Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        csi-snapshotter:
+          requests:
+            cpu: 2m
+            memory: 20Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+        trident-autosupport:
+          requests:
+            cpu: 1m
+            memory: 30Mi
+          limits:
+            cpu: 50m
+            memory: 128Mi
+      node:
+        linux:
+          trident-main:
+            requests:
+              cpu: 10m
+              memory: 60Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          # sidecars
+          node-driver-registrar:
+            requests:
+              cpu: 1m
+              memory: 10Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
+
+----
+====
+
+.Kubernetes resource requests and limits configuration for Trident controller and Trident Windows and Linux node pods
+[%collapsible%closed]
+====
+
+This example configures Kubernetes resource requests and limits for Trident controller and Trident Windows and Linux node pods.
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullSecrets:
+  - thisisasecret
+  windows: true
+  resources:
+    controller:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 80Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        # sidecars
+      csi-provisioner:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-attacher:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-resizer:
+        requests:
+          cpu: 3m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-snapshotter:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      trident-autosupport:
+        requests:
+          cpu: 1m
+          memory: 30Mi
+        limits:
+          cpu: 50m
+          memory: 128Mi
+    node:
+      linux:
+        trident-main:
+          requests:
+            cpu: 10m
+            memory: 60Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        # sidecars
+        node-driver-registrar:
+          requests:
+            cpu: 1m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+      windows:
+        trident-main:
+          requests:
+            cpu: 6m
+            memory: 40Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        # sidecars
+        node-driver-registrar:
+          requests:
+            cpu: 6m
+            memory: 40Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        liveness-probe:
+          requests:
+            cpu: 2m
+            memory: 40Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+
+----
+====

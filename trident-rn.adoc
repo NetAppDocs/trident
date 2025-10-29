@@ -61,12 +61,15 @@ NetApp Trident protect provides advanced application data management capabilitie
 
 ==== Enhancements
 
-* Added annotations to Schedule and Backup CR's to control various Snapshot CR timeouts: `protect.trident.netapp.io/snapshot-completion-timeout`, `protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout`, and `protect.trident.netapp.io/volume-snapshots-created-timeout`
-* Added annotation to Schedule CR to configure PVC bind timeout, which will be used by Backup CR: `protect.trident.netapp.io/pvc-bind-timeout-sec`
-* Improved tridentctl-protect backup and snapshot listings to add a new field to indicate execution hook failures.
-
-==== Fixes
-
+* Added annotations to control snapshot CR timeouts for schedule and backup CR: 
++
+** `protect.trident.netapp.io/snapshot-completion-timeout`
+** `protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout`
+** `protect.trident.netapp.io/volume-snapshots-created-timeout`
++
+See link:trident-protect-protect-apps.html[Supported backup and schedule annotations].
+* Added `protect.trident.netapp.io/pvc-bind-timeout-sec` annotation to schedule CR for configuring PVC bind timeout, which will be used by backup CR. See link:trident-protect-protect-apps.html[Supported backup and schedule annotations].
+* Enhanced `tridentctl-protect` backup and snapshot listings with a new field that indicates execution hook failures. 
 
 == Changes in 25.06.2
 

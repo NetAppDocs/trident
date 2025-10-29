@@ -118,9 +118,10 @@ For more information about configuring resource requests and limits, refer to li
 
 [NOTE]
 =====
-* No limits are applied by default - only requests have default values.
+* No limits are applied by default - only requests have default values and are applied automatically if not specified.
 * Container names are listed as they appear in the pod specifications.
 * Sidecars are listed under each main container.
+* Check the TORC's `status.CurrentInstallationParams` field to view the values currently applied.
 =====
 
 a| [source,yaml]
@@ -425,6 +426,9 @@ spec:
 ====
 
 This example configures Kubernetes resource requests and limits for Trident controller and Trident Windows and Linux node pods.
+
+WARNING: *Disclaimer*: The limit values provided in this example are for demonstration purposes only. Adjust these values based on your environment and workload requirements.
+
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1

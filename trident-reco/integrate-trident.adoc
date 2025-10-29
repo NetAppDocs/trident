@@ -142,38 +142,6 @@ Footnote:
 Yesfootnote:1[]: Not managed by Trident
 --
 
-=== Cloud Volumes Service on Google Cloud backend driver
-
-Trident uses the `gcp-cvs` driver to link with the Cloud Volumes Service on Google Cloud. 
-
-The `gcp-cvs` driver uses virtual pools to abstract the backend and allow Trident to determine volume placement. The administrator defines the virtual pools in the `backend.json` files. Storage classes use selectors to identify virtual pools by label. 
-
-* If virtual pools are defined in the backend, Trident will try to create a volume in the Google Cloud storage pools to which those virtual pools are limited.
-* If virtual pools are not defined in the backend, Trident will select a Google Cloud storage pool from the available storage pools in the region.
-
-To configure the Google Cloud backend on Trident, you must specify `projectNumber`, `apiRegion`, and `apiKey` in the backend file. You can find the project number in the Google Cloud console. The API key is taken from the service account private key file you created when setting up API access for Cloud Volumes Service on Google Cloud. 
-
-For details on Cloud Volumes Service on Google Cloud service types and service levels, refer to link:../trident-use/gcp.html[Learn about Trident support for CVS for GCP].
-
-[cols=7*,options="header",cols="20,10,10,10,10,10,10"]
-|===
-|Cloud Volumes Service for Google Cloud driver
-|Snapshots
-|Clones
-|Multi-attach
-|QoS
-|Expand
-|Replication
-| `gcp-cvs` | Yes | Yes | Yes | Yes | Yes | Available on CVS-Performance service type only.|
-|===
-
-[NOTE]
-====
-.Replication notes
-* Replication is not managed by Trident.
-* The clone will be created in the same storage pool as the source volume. 
-====
-
 == Storage class design
 
 Individual Storage classes need to be configured and applied to create a Kubernetes Storage Class object. This section discusses how to design a storage class for your application.

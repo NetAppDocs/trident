@@ -93,14 +93,14 @@ Supported only for manual QoS capacity pools.
 *Tech preview for Trident 25.06* |  `4 MiB/sec`
 
 | `cloudConfiguration` a| Optional. Specifies a named or a custom cloud environment: 
-  - `cloudName`: Specify a named cloud environment. Supported values: `AzurePublic` (default),  `AzureChina`, or `AzureGovernment`
+  - Specify a named cloud environment using the `cloudName` parameter. Supported values: `AzurePublic` (default),  `AzureChina`, or `AzureGovernment`
   (OR) 
   - Specify a custom Azure cloud environment with the following parameters:
     - `adAuthorityHost`: The Azure Active Directory (AAD) authority host.
     - `audience`: The audience for the AAD token.
     - `endpoint`: The endpoint for the custom cloud.
 
-IMPORTANT: You can specify either a named cloud environment (`cloudName`) OR a custom cloud environment ( using `adAuthorityHost`, `audience`, and `endpoint`), but NOT both.
+IMPORTANT: You can specify either a named cloud environment (`cloudName`) OR a custom Azure cloud environment ( using `adAuthorityHost`, `audience`, and `endpoint`), but NOT both.
   | `AzurePublic`
 
 |===

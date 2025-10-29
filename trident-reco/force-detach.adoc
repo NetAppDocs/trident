@@ -43,8 +43,8 @@ Automated-failover selects the workloads to remove from the failed node. When a 
 
 All volumes/PVCs supported by force-detach are supported by automated-failover:
 
-* NAS, and NAS-economy volumes using auto-export policies.
-* SAN, and SAN-economy volumes (SMB is not yet supported).
+* NAS, and NAS-economy volumes using auto-export policies (SMB is not yet supported).
+* SAN, and SAN-economy volumes.
 
 Refer to <<Details about force detach>>.
 
@@ -58,6 +58,7 @@ Refer to <<Details about force detach>>.
 
 Pod removal behavior can be customized using a pod annotation: `trident.netapp.io/podRemediationPolicy[retain, delete]`. These annotations are examined and used when a failover occurs. 
 Apply annotations to the Kubernetes deployment/replicaset pod spec to prevent the annotation from disappearing after a failover:
+
 * `retain` - Pod WILL NOT be removed from the failed node during an automated-failover. 
 * `delete` - Pod WILL be removed from the failed node during an automated-failover.
 

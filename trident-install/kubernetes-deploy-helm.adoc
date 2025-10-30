@@ -284,7 +284,10 @@ For more information about configuring resource requests and limits, refer to li
 * Container names are listed as they appear in the pod specifications.
 * Sidecars are listed under each main container.
 * Check the TORC's `status.CurrentInstallationParams` field to view the values currently applied.
-=====  a|[source,yaml]
+=====  a|
+
+
+[source,yaml]
 ----
 resources:
   controller:
@@ -292,53 +295,89 @@ resources:
       requests:
         cpu: 10m
         memory: 80Mi
+      limits:
+          cpu: 
+          memory:
     csi-provisioner:
       requests:
         cpu: 2m
         memory: 20Mi
+      limits:
+        cpu: 
+        memory:
     csi-attacher:
       requests:
         cpu: 2m
         memory: 20Mi
+      limits:
+        cpu: 
+        memory:
     csi-resizer:
       requests:
         cpu: 3m
         memory: 20Mi
+      limits:
+        cpu: 
+        memory:
     csi-snapshotter:
       requests:
         cpu: 2m
         memory: 20Mi
+      limits:
+        cpu: 
+        memory:
     trident-autosupport:
       requests:
         cpu: 1m
         memory: 30Mi
+      limits:
+        cpu: 
+        memory:
   node:
     linux:
       trident-main:
         requests:
           cpu: 10m
           memory: 60Mi
+        limits:
+          cpu: 
+          memory:
       node-driver-registrar:
         requests:
           cpu: 1m
           memory: 10Mi
+        limits:
+          cpu: 
+          memory:
     windows:
       trident-main:
         requests:
           cpu: 6m
           memory: 40Mi
+        limits:
+          cpu: 
+          memory:
       node-driver-registrar:
         requests:
           cpu: 6m
           memory: 40Mi
+        limits:
+          cpu:
+          memory:
       liveness-probe:
         requests:
           cpu: 2m
           memory: 40Mi
+        limits:
+          cpu:
+          memory:
   operator:
     requests:
       cpu: 10m
       memory: 40Mi
+    limits:
+      cpu:
+      memory:
 ----
 
 |===

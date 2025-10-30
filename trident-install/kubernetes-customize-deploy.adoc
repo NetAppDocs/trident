@@ -56,7 +56,7 @@ NOTE: The `k8sTimeout` parameter is applicable only for Trident installation.  |
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:25.06"`
+|`"netapp/trident-autosupport10"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -65,7 +65,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Trident image to install |`"netapp/trident:25.06"`
+|`tridentImage` |Trident image to install |`"netapp/trident:25.10"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"registry.k8s.io"`
@@ -104,7 +104,7 @@ NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for t
 
 |`enableConcurrency` a|Enables concurrent Trident controller operations for improved throughput.
 
-NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).|false
+NOTE: *Tech Preview*: This feature is experimental and currently supports limited parallel workflows with the ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9) drivers, in addition to the existing tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9).|false
 
 |`resources` a|Sets Kubernetes resource limits and requests for the Trident controller and node pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
 
@@ -211,6 +211,7 @@ resources:
           cpu:
           memory:
 ----
+|`hostNetwork` a|Enables host networking for the Trident controller. This is useful when you want to separate the frontend and backend traffic in a multi-home network. |false
 
 |===
 [NOTE] 

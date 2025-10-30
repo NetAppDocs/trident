@@ -13,6 +13,12 @@ summary: Learn how to create and use ONTAP NAS drivers with your Trident install
 [.lead]
 Learn to create and use ONTAP NAS drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses.
 
+Beginning with the 25.10 release, NetApp Trident supports link:https://docs.netapp.com/us-en/ontap-afx/index.html[NetApp AFX storage systems^]. NetApp AFX storage systems differ from other ONTAP-based systems (ASA, AFF, and FAS) in the implementation of their storage layer.
+
+NOTE: Only the `ontap-nas` driver (with NFS protocol) is supported for NetApp AFX systems; SMB protocol is not supported.
+
+In the Trident backend configuration, you need not specify that your system is an NetApp AFX storage system. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the AFX storage system. Some backend configuration parameters are not applicable to AFX storage systems as noted in the table below.
+
 == Backend configuration options
 
 See the following table for the backend configuration options:
@@ -22,7 +28,9 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
+|`storageDriverName` a| Name of the storage driver
+
+NOTE: For NetApp AFX systems, only `ontap-nas` is supported.  |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 
@@ -85,12 +93,15 @@ a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). Fo
 
 NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
+*Do not specify for AFX storage systems.*
+
 a|""
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
 
-*Does not apply to Amazon FSx for ONTAP*. |"" (not enforced by default)
+*Does not apply to Amazon FSx for ONTAP*. 
+*Do not specify for AFX storage systems.*|"" (not enforced by default)
 
 |flexgroupAggregateList a| List of aggregates for provisioning (optional; if set, must be assigned to the SVM). All aggregates assigned to the SVM are used to provision a FlexGroup volume. Supported for the *ontap-nas-flexgroup* storage driver. 
 
@@ -98,9 +109,7 @@ NOTE: When the aggregate list is updated in SVM, the list is updated in Trident 
 
 | ""
 
-|`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
-
-Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume |""  (not enforced by default)
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |""  (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -108,7 +117,8 @@ Do not use `debugTraceFlags` unless you are troubleshooting and require a detail
 
 | `nasType` | Configure NFS or SMB volumes creation. 
 
-Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. | `nfs` 
+Options are `nfs`, `smb` or null. Setting to null defaults to NFS volumes. 
+*If specified, always set to `nfs` for AFX storage systems*.| `nfs` 
 
 |`nfsMountOptions`	|Comma-separated list of NFS mount options. 
 
@@ -130,7 +140,9 @@ This parameter is required for Amazon FSx for ONTAP backends and cannot be blank
 |`useREST` |Boolean parameter to use ONTAP REST APIs.
 
 `useREST`  When set to `true`, Trident uses ONTAP REST APIs to communicate with the backend; when set to `false`, Trident uses ONTAPI (ZAPI) calls to communicate with the backend. This feature requires ONTAP 9.11.1 and later. In addition, the ONTAP login role used must have access to the `ontapi` application. This is satisfied by the pre-defined `vsadmin` and `cluster-admin` roles. 
-Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.  
+Beginning with the Trident 24.06 release and ONTAP 9.15.1 or later, `useREST` is set to `true` by default; change `useREST` to `false` to use ONTAPI (ZAPI) calls.
+
+*If specified, always set to `true` for AFX storage systems*.
 
 |`true` for ONTAP 9.15.1 or later, otherwise `false`.
 
@@ -235,11 +247,11 @@ defaults:
   snapshotReserve: "10"
 ----
 
-For `ontap-nas` and `ontap-nas-flexgroups`, Trident now uses a new calculation to ensure that the FlexVol is sized correctly with the snapshotReserve percentage and PVC. When the user requests a PVC, Trident creates the original FlexVol with more space by using the new calculation. This calculation ensures that the user receives the writable space they requested for in the PVC, and not lesser space than what they requested. Before v21.07, when the user requests a PVC (for example, 5 GiB), with the snapshotReserve to 50 percent, they get only 2.5 GiB of writeable space. This is because what the user requested for is the whole volume and `snapshotReserve` is a percentage of that. With Trident 21.07, what the user requests for is the writeable space and Trident defines the `snapshotReserve` number as the percentage of the whole volume. This does not apply to `ontap-nas-economy`. See the following example to see how this works:
+For `ontap-nas` and `ontap-nas-flexgroups`, Trident now uses a new calculation to ensure that the FlexVol is sized correctly with the snapshotReserve percentage and PVC. When the user requests a PVC, Trident creates the original FlexVol with more space by using the new calculation. This calculation ensures that the user receives the writable space they requested for in the PVC, and not less space than what they requested. Before v21.07, when the user requests a PVC (for example, 5 GiB), with the snapshotReserve to 50 percent, they get only 2.5 GiB of writeable space. This is because what the user requested for is the whole volume and `snapshotReserve` is a percentage of that. With Trident 21.07, what the user requests for is the writeable space and Trident defines the `snapshotReserve` number as the percentage of the whole volume. This does not apply to `ontap-nas-economy`. See the following example to see how this works:
 
 The calculation is as follows:
 ----
-Total volume size = (PVC requested size) / (1 - (snapshotReserve percentage) / 100)
+Total volume size = <PVC requested size> / (1 - (<snapshotReserve percentage> / 100))
 ----
 For snapshotReserve = 50%, and PVC request = 5 GiB, the total volume size is 5/.5 = 10 GiB and the available size is 5 GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
 

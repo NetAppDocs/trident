@@ -263,7 +263,7 @@ NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for t
 
 a| Enables concurrent Trident controller operations for improved throughput. 
 
-NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).
+NOTE: *Tech Preview*: This feature is experimental and currently supports limited parallel workflows with the ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9) drivers, in addition to the existing tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9).
 |false
 
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional

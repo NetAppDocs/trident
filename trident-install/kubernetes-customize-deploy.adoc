@@ -104,7 +104,7 @@ NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for t
 
 |`enableConcurrency` a|Enables concurrent Trident controller operations for improved throughput.
 
-NOTE: *Tech Preview*: This feature is experimental in NetApp Trident 25.06 and currently supports limited parallel workflows with the ONTAP-SAN driver (iSCSI and FCP protocols).|false
+NOTE: *Tech Preview*: This feature is experimental and currently supports limited parallel workflows with the ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9) drivers, in addition to the existing tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9).|false
 
 |`hostNetwork` a|Enables host networking for the Trident controller. This is useful when you want to separate the frontend and backend traffic in a multi-home network. |false
 

@@ -70,9 +70,11 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage e
 
 |`trustedCACertificate` |Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth |""
 
-|`username` |Username to connect to the cluster/SVM. Used for credential-based auth |
+|`username` |Username to connect to the cluster/SVM. Used for credential-based auth.
+For Active Directory authentication, see link:../trident-use/ontap-san-examples.html#authenticate-trident-to-a-backend-svm-using-active-directory-credentials[Authenticate Trident to a backend SVM using Active Directory credentials]. |
 
-|`password` |Password to connect to the cluster/SVM. Used for credential-based auth |
+|`password` |Password to connect to the cluster/SVM. Used for credential-based auth.
+For Active Directory authentication, see link:../trident-use/ontap-san-examples.html#authenticate-trident-to-a-backend-svm-using-active-directory-credentials[Authenticate Trident to a backend SVM using Active Directory credentials]. |
 
 |`storagePrefix` a|Prefix used when provisioning new volumes in the SVM. Cannot be updated after you set it
 
@@ -96,9 +98,7 @@ NOTE: When the aggregate list is updated in SVM, the list is updated in Trident 
 
 | ""
 
-|`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
-
-Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume |""  (not enforced by default)
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |""  (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -237,7 +237,7 @@ For `ontap-nas` and `ontap-nas-flexgroups`, Trident now uses a new calculation t
 
 The calculation is as follows:
 ----
-Total volume size = (PVC requested size) / (1 - (snapshotReserve percentage) / 100)
+Total volume size = <PVC requested size> / (1 - (<snapshotReserve percentage> / 100))
 ----
 For snapshotReserve = 50%, and PVC request = 5 GiB, the total volume size is 5/.5 = 10 GiB and the available size is 5 GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
 

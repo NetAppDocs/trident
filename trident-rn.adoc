@@ -25,36 +25,48 @@ Learn what's new in Trident and Trident protect, including enhancements, fixes, 
 
 * *Kubernetes*:
 ** Added support for CSI Volume Group Snapshots with v1beta1 Volume Group Snapshot Kubernetes APIs for the ONTAP-NAS NFS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^].
-** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. See https://review.docs.netapp.com/us-en/trident_main/trident-get-started/kubernetes-customize-deploy.html#details-about-force-detach[Details about force detach^].
+** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. See link:../trident-reco/force-detach.html[Details about force detach^].
 ** Enhanced Trident node concurrency for higher scalability on node operations for FCP volumes.
 ** Added ONTAP AFX support for the ONTAP NAS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples^].
 ** Added support for configuring CPU and memory resource requests and limits for Trident containers via TridentOrchestrator CR and Helm chart values. (link:https://github.com/NetApp/trident/issues/1000[Issue #1000], link:https://github.com/NetApp/trident/issues/927[Issue #927], link:https://github.com/NetApp/trident/issues/853[Issue #853], link:https://github.com/NetApp/trident/issues/592[Issue #592], link:https://github.com/NetApp/trident/issues/110[Issue #110]). 
-** Added support for custom cloud configuration in azure-netapp-files (ANF) backend. Use the new `cloudConfiguration` parameter to specify named cloud environments, like Azure Government, or custom cloud URLs for private Azure deployments. (link:https://github.com/NetApp/trident/issues/632[Issue #632])
+** Added support for custom cloud configuration in azure-netapp-files (ANF) backend. Use the new `cloudConfiguration` parameter to specify named cloud environments or custom cloud URLs for private Azure deployments. (link:https://github.com/NetApp/trident/issues/632[Issue #632])
 **  Added FC support for ASAr2 personality. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^].
 ** Added an option to serve Prometheus metrics with HTTPS, instead of HTTP. See link:../trident-use/monitor-trident.html[Monitor Trident^]
 ** Added an option `--no-rename` when importing a volume to retain the original name but let Trident manage the volume's lifecycle. See link:../trident-use/vol-import.html[Import volumes^]
 ** Trident deployment now runs at the system-cluster-critical priority class. 
-* Added an option for Trident controller to use host networking via helm, operator and tridentctl (link:https://github.com/NetApp/trident/issues/858[Issue #858]).
+* Added an option for Trident controller to use host networking via helm, operator, and tridentctl (link:https://github.com/NetApp/trident/issues/858[Issue #858]).
 * Added manual QoS support with the ANF driver, making this experimental enhancement production-ready. 
 
 ==== Experimental Enhancements
 NOTE: Not for use in production environments.
 
-* *[Tech Preview]*: Enabled concurrent Trident controller operations via the `--enable-concurrency` feature flag. This allows controller operations to run in parallel, improving performance for busy or large environments. NOTE: This feature is experimental. Adding the ONTAP-SAN driver (NVMe/TCP protocol) and ONTAP-NAS driver support to the existing support for the ONTAP-SAN driver (iSCSI and FCP protocols). 
+* *[Tech preview]*: Added support for concurrency for ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9), in addition to the existing Tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9). 
 
 ==== Fixes
-
-* *Kubernetes*:
+* **Kubernetes**: 
 ** Fixed an issue where multiple attempts to close a LUKS device resulted in failures to detach volumes.
-** Fixed the CSI node-driver-registrar container name inconsistency by standardizing Linux DaemonSet to `node-driver-registrar` to match Windows DaemonSet and container image naming.
-** Fixed Trident node pod not starting on Windows nodes in Openshift due to SCC having `allowHostDirVolumePlugin` set to false (link:https://github.com/NetApp/trident/issues/950[Issue #950])
-** Fixed an issue where export policies for legacy qtrees were not properly upgraded
-* Fixed the timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
+** Fixed the CSI node-driver-registrar container name inconsistency by standardizing Linux DaemonSet to node-driver-registrar to match Windows DaemonSet and container image naming.
+** Fixed an issue where export policies for legacy qtrees were not properly upgraded.
+** Fixed a critical issue where incorrect iSCSI devices were discovered when detaching volumes from Kubernetes nodes.
+** Fixed an issue where NQNs were not checked before they are unmapped from Subsystems.
+** Fixed an issue where multiple attempts to close a LUKS device resulted in failures to detach volumes.
+** Fixed iSCSI volume unstage when the device path has changed since its creation.
+** Blocked cloning of volume across different storage classes.
+* *Openshift*:
+** Fixed Trident node pod not starting on Windows nodes in Openshift due to SCC having allowHostDirVolumePlugin set to false (link:https://github.com/NetApp/trident/issues/950[Issue #950]).
+** Fixed an issue where iSCSI node prep failed with OCP 4.19.
+* Increased timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
 * Fixed Kubernetes API QPS not being set via Helm (link:https://github.com/NetApp/trident/issues/975[Issue #975]).
-* Fixed the inability to mount a Persistent Volume Claim (PVC) based on a snapshot of an XFS filesystem PVC on the same Kubernetes node.
-* Fixed the UUID change issue after host/Docker restart in NDVP mode by adding unique/shared subsystem names per backend (e.g., `netappdvp_subsystem`).
-* Fixed mount errors with iSCSI volumes during Trident upgrade from versions prior to 23.10 to 24.10 and above, resolving "invalid SANType" issue.
-* Fixed the Trident backend state not transitioning to online/offline. 
+* Fixed inability to mount a Persistent Volume Claim (PVC) based on a snapshot of an NVMe based XFS filesystem PVC on the same Kubernetes node.
+* Fixed UUID change issue after host/Docker restart in NDVP mode by adding unique/shared subsystem names per backend (e.g., netappdvp_subsystem).
+* Fixed mount errors for iSCSI volumes during Trident upgrade from versions prior to 23.10 to 24.10 and above, resolving "invalid SANType" issue.
+* Fixed issue where Trident backend state was not transitioning to online/offline without restarting the Trident controller.
+* Fixed intermittent race condition causing slow PVC resize.
+* Fixed snapshots not being cleaned up on volume clone failures.
+* Fixed failure to unstage volume when its device path was changed by the kernel.
+* Fixed failure to unstage volume due to LUKS device already closed.
+* Fixed issue where slow storage operations were leading to ContextDeadline errors.
+* Trident Operator will wait for configurable k8s-timeout to check Trident version.
 
 === Trident protect
 NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.

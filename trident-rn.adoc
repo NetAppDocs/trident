@@ -15,8 +15,16 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
-== What's new in 25.06.1
+== What's new in 25.06.2
 The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+
+=== Trident
+
+
+==== Fixes
+* *Kubernetes*: Fixed critical issue where incorrect iSCSI devices were discovered when detaching volumes from Kubernetes nodes.
+
+== Changes in 25.06.1
 
 === Trident
 
@@ -33,7 +41,6 @@ IMPORTANT: For customers using SolidFire, please do not upgrade to 25.06.1 due t
 * Increased the timeout when cloning a volume using SolidFire backends (link:https://github.com/NetApp/trident/issues/1008[Issue #1008]).
 
 == Changes in 25.06
-The What's new summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
 
 === Trident
 

@@ -16,7 +16,7 @@ Understand the requirements and authentication options for configuring an ONTAP 
 == Requirements
 For all ONTAP backends, Trident requires at least one aggregate be assigned to the SVM.
 
-NOTE: link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] vary from other ONTAP systems (ASA, AFF, and FAS) in the implementation of their storage layer.  In ASA r2 systems, storage availability zones are used instead of aggregates. Refer to link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[this^] Knowledge Base article on how to assign aggregates to SVMs in ASA r2 systems.
+NOTE: link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] differ from other ONTAP systems (ASA, AFF, and FAS) in the implementation of their storage layer. In ASA r2 systems, storage availability zones are used instead of aggregates. Refer to link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[this^] Knowledge Base article on how to assign aggregates to SVMs in ASA r2 systems.
 
 Remember that you can also run more than one driver, and create storage classes that point to one or the other. For example, you could configure a `san-dev` class that uses the `ontap-san` driver and a `san-default` class that uses the `ontap-san-economy` one.
 

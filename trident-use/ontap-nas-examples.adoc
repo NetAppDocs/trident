@@ -109,9 +109,7 @@ NOTE: When the aggregate list is updated in SVM, the list is updated in Trident 
 
 | ""
 
-|`limitVolumeSize` |Fail provisioning if requested volume size is above this value.  
-
-Also restricts the maximum size of the volumes it manages for qtrees, and the `qtreesPerFlexvol` option allows customizing the maximum number of qtrees per FlexVol volume |""  (not enforced by default)
+|`limitVolumeSize` |Fail provisioning if requested volume size is above this value. |""  (not enforced by default)
 
 |`debugTraceFlags` |Debug flags to use when troubleshooting. Example, {"api":false, "method":true} 
 
@@ -253,7 +251,7 @@ For `ontap-nas` and `ontap-nas-flexgroups`, Trident now uses a new calculation t
 
 The calculation is as follows:
 ----
-Total volume size = (PVC requested size) / (1 - (snapshotReserve percentage) / 100)
+Total volume size = <PVC requested size> / (1 - (<snapshotReserve percentage> / 100))
 ----
 For snapshotReserve = 50%, and PVC request = 5 GiB, the total volume size is 5/.5 = 10 GiB and the available size is 5 GiB, which is what the user requested in the PVC request. The `volume show` command should show results similar to this example:
 

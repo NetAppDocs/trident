@@ -20,7 +20,7 @@ You can upgrade Trident protect to the latest version to take advantage of new f
 +
 To avoid potential failures, you can disable all snapshot schedules before the upgrade and re-enable them afterward. However, this results in missing any scheduled snapshots during the upgrade period.
 
-* ##For private registry installations, ensure the required Helm chart and images for the target version are available in your private registry, and verify your custom Helm values are compatible with the new chart version. For more information, refer to link:trident-protect-installation.html[Install Trident protect from a private registry].##
+* For private registry installations, ensure the required Helm chart and images for the target version are available in your private registry, and verify your custom Helm values are compatible with the new chart version. For more information, refer to link:trident-protect-installation.html[Install Trident protect from a private registry].
 
 ====
 
@@ -60,5 +60,5 @@ kubectl delete secret -n trident-protect -l name=trident-protect-crds,owner=helm
 helm upgrade trident-protect netapp-trident-protect/trident-protect --version 100.2510.0 --namespace trident-protect
 ----
 +
-NOTE: ##You can configure the logging level during upgrade by adding `--set logLevel=debug` to the upgrade command. The default logging level is `warn`. Debug logging is recommended for troubleshooting as it helps NetApp support diagnose issues without requiring log level changes or problem reproduction.##
+NOTE: You can configure the logging level during upgrade by adding `--set logLevel=debug` to the upgrade command. The default logging level is `warn`. Debug logging is recommended for troubleshooting as it helps NetApp support diagnose issues without requiring log level changes or problem reproduction.
 

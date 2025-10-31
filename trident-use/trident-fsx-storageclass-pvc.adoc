@@ -171,11 +171,11 @@ These parameters determine which Trident-managed storage pools should be utilize
 
 |provisioningType |string |thin, thick |Pool supports this provisioning method |Provisioning method specified |thick: all ontap; thin: all ontap & solidfire-san
 
-|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
+|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, gcp-cvs, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
 
-|snapshots |bool |true, false |Pool supports volumes with snapshots |Volume with snapshots enabled |ontap-nas, ontap-san, solidfire-san
+|snapshots |bool |true, false |Pool supports volumes with snapshots |Volume with snapshots enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
 
-|clones |bool |true, false |Pool supports cloning volumes |Volume with clones enabled |ontap-nas, ontap-san, solidfire-san
+|clones |bool |true, false |Pool supports cloning volumes |Volume with clones enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
 
 |encryption |bool |true, false |Pool supports encrypted volumes |Volume with encryption enabled |ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, ontap-san
 

@@ -47,8 +47,4 @@ This section lists the supported annotations for configuring various behaviors i
 | string
 | The maximum size limit (in megabytes) for the Kopia content cache.
 | "1000"
-|protect.trident.netapp.io/pvc-bind-timeout-sec
-|string
-|Maximum time (in seconds) to wait for any newly created PersistentVolumeClaims (PVCs) to reach the `Bound` phase before the operations fails. Applies to all restore CR types (BackupRestore, BackupInplaceRestore, SnapshotRestore, SnapshotInplaceRestore). Use a higher value if your storage backend or cluster often requires more time.
-|"1200" (20 minutes)
 |===

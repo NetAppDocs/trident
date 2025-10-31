@@ -269,6 +269,117 @@ NOTE: *Tech Preview*: This feature is experimental and currently supports limite
 
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
 
+|`resources` a|Sets Kubernetes resource limits and requests for the Trident controller, node, and operator pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
+
+For more information about configuring resource requests and limits, refer to link:https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Resource Management for Pods and Containers^].
+
+[WARNING] 
+====
+* DO NOT change the names of any containers or fields.
+* DO NOT change the indentation - YAML indentation is critical for proper parsing.
+====
+
+[NOTE]
+=====
+* No limits are applied by default - only requests have default values and are automatically applied if not specified.
+* Container names are listed as they appear in the pod specifications.
+* Sidecars are listed under each main container.
+* Check the TORC's `status.CurrentInstallationParams` field to view the values currently applied.
+=====  a|
+
+
+[source,yaml]
+----
+resources:
+  controller:
+    trident-main:
+      requests:
+        cpu: 10m
+        memory: 80Mi
+      limits:
+          cpu: 
+          memory:
+    csi-provisioner:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-attacher:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-resizer:
+      requests:
+        cpu: 3m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-snapshotter:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    trident-autosupport:
+      requests:
+        cpu: 1m
+        memory: 30Mi
+      limits:
+        cpu: 
+        memory:
+  node:
+    linux:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 60Mi
+        limits:
+          cpu: 
+          memory:
+      node-driver-registrar:
+        requests:
+          cpu: 1m
+          memory: 10Mi
+        limits:
+          cpu: 
+          memory:
+    windows:
+      trident-main:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        limits:
+          cpu: 
+          memory:
+      node-driver-registrar:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        limits:
+          cpu:
+          memory:
+      liveness-probe:
+        requests:
+          cpu: 2m
+          memory: 40Mi
+        limits:
+          cpu:
+          memory:
+  operator:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      cpu:
+      memory:
+----
 |`httpsMetrics`|Enable HTTPS for Prometheus metrics endpoint. |false
 |`hostNetwork` a|Enables host networking for the Trident controller. This is useful when you want to separate the frontend and backend traffic in a multi-home network. |false
 
@@ -281,3 +392,4 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 
 * The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
 * The node plugin handles attaching the storage to the node.
+

@@ -88,6 +88,17 @@ For more information, refer to link:../trident-use/csi-topology.html[Use CSI Top
 | `maxThroughput` | Sets the maximum throughput allowed in MiB/sec.
 Supported only for manual QoS capacity pools. |  `4 MiB/sec`
 
+| `cloudConfiguration` a| Optional. Specifies a named or a custom cloud environment: 
+  - Specify a named cloud environment using the `cloudName` parameter. Supported values: `AzurePublic` (default),  `AzureChina`, or `AzureGovernment`
+  (OR) 
+  - Specify a custom Azure cloud environment with the following parameters:
+    - `adAuthorityHost`: The Azure Active Directory (AAD) authority host.
+    - `audience`: The audience for the AAD token.
+    - `endpoint`: The endpoint for the custom cloud.
+
+IMPORTANT: You can specify either a named cloud environment (`cloudName`) OR a custom Azure cloud environment ( using `adAuthorityHost`, `audience`, and `endpoint`), but NOT both.
+  | `AzurePublic`
+
 |===
 
 [NOTE]
@@ -274,6 +285,48 @@ storage:
       maxThroughput: 3
 ----
 ====
+
+.Cloud configuration examples
+[%collapsible%closed]
+====
+The `cloudConfiguration` parameter can be used to specify named cloud environments or custom cloud URLs.
+
+*Backend configuration example for a named cloud environment*:
+[source,yaml]
+----
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 12abc678-4774-fake-a1b2-a7abcde39312
+tenantID: a7abcde3-edc1-fake-b111-a7abcde356cf
+location: usgovvirginia
+serviceLevel: Premium
+cloudConfiguration:
+  cloudName: AzureGovernment
+credentials:
+  name: backend-tbc-anf-cloud-secret
+----
+
+*Backend configuration example for a custom cloud environment*:
+[source,yaml]
+----
+---
+version: 1
+storageDriverName: azure-netapp-files
+subscriptionID: 12abc678-4774-fake-a1b2-a7abcde39312
+tenantID: a7abcde3-edc1-fake-b111-a7abcde356cf
+location: eastus
+serviceLevel: Premium
+cloudConfiguration:
+  adAuthorityHost: https://login.microsoftonline.azurestack.contoso.com/
+  audience: https://management.azurestack.contoso.com
+  endpoint: https://management.azurestack.contoso.com
+credentials:
+  name: backend-tbc-anf-cloud-custom-secret
+----
+
+====
+
 
 .Advanced configuration
 [%collapsible%closed]

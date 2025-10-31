@@ -56,7 +56,7 @@ To use Trident, you need one or more of the following supported backends:
 * Cloud Volumes ONTAP
 * Google Cloud NetApp Volumes
 * NetApp All SAN Array (ASA)
-* On-premises FAS, AFF, or ASA r2 (iSCSI, NVMe/TCP, and FC) cluster versions under NetApp's limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
+* On-premises FAS, AFF, Select, or ASA r2 (iSCSI and NVMe/TCP) cluster versions under NetApp's limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
 * NetApp HCI/Element software 11 or above
 
 == Trident support for KubeVirt and OpenShift Virtualization
@@ -160,7 +160,8 @@ link:../trident-reference/ports.html[Trident ports]
 
 For air-gapped installations, the following list is a reference of container images needed to install Trident. Use the `tridentctl images` command to verify the list of needed container images.
 
-=== Container images required for Trident 25.10
+
+=== Container images required for Trident 25.06.2
 
 [cols=2,options="header"]
 |===
@@ -169,14 +170,36 @@ For air-gapped installations, the following list is a reference of container ima
 
 | v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0, v1.34.0
 a|
-* docker.io/netapp/trident:25.10.0                      
-* docker.io/netapp/trident-autosupport:25.10                   
-* registry.k8s.io/sig-storage/csi-provisioner:v5.3.0 
-* registry.k8s.io/sig-storage/csi-attacher:v4.10.0           
-* registry.k8s.io/sig-storage/csi-resizer:v1.14.0               
-* registry.k8s.io/sig-storage/csi-snapshotter:v8.3.1           
-* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.15.0 
-* docker.io/netapp/trident-operator:25.10.0 (optional)  
+* docker.io/netapp/trident:25.06.2                      
+* docker.io/netapp/trident-autosupport:25.06                   
+* registry.k8s.io/sig-storage/csi-provisioner:v5.2.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.8.1           
+* registry.k8s.io/sig-storage/csi-resizer:v1.13.2               
+* registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0 
+* docker.io/netapp/trident-operator:25.06.2 (optional)  
+
+|
+
+|===
+
+=== Container images required for Trident 25.06
+
+[cols=2,options="header"]
+|===
+|Kubernetes versions
+|Container image
+
+| v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0, v1.34.0
+a|
+* docker.io/netapp/trident:25.06.0                      
+* docker.io/netapp/trident-autosupport:25.06                   
+* registry.k8s.io/sig-storage/csi-provisioner:v5.2.0 
+* registry.k8s.io/sig-storage/csi-attacher:v4.8.1           
+* registry.k8s.io/sig-storage/csi-resizer:v1.13.2               
+* registry.k8s.io/sig-storage/csi-snapshotter:v8.2.1           
+* registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0 
+* docker.io/netapp/trident-operator:25.06.0 (optional)  
 
 |
 

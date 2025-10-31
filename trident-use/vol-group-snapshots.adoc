@@ -16,14 +16,7 @@ Kubernetes volume group snapshots of Persistent Volumes (PVs) NetApp Trident pro
 NOTE: VolumeGroupSnapshot is a beta feature in Kubernetes with beta APIs. Kubernetes 1.32 is the minimum version required for VolumeGroupSnapshot.
 
 == Create volume group snapshots
-Volume group snapshot is supported with the following storage drivers:
-
-* `ontap-san` driver - only for the iSCSI and FC protocols, not for the NVMe/TCP protocol. 
-* `ontap-san-economy` 
-* `ontap-nas`
-
-NOTE: Volume group snapshot is not supported for NetApp AFX storage systems.
-
+Volume group snapshot is supported with the `ontap-san` driver, only for iSCSI protocol, not yet supported with Fibre Channel (FCP) nor NVMe/TCP. 
 .Before you begin
 
 * Ensure that your Kubernetes version is K8s 1.32 or higher.

@@ -41,7 +41,7 @@ In addition to the standard specification, Trident allows users to specify the f
 |trident.netapp.io/fileSystem |fileSystem |ontap-san, solidfire-san,ontap-san-economy
 
 |trident.netapp.io/cloneFromPVC |cloneSourceVolume |ontap-nas,
-ontap-san, solidfire-san, azure-netapp-files, gcp-cvs,
+ontap-san, solidfire-san, azure-netapp-files,
 ontap-san-economy
 
 |trident.netapp.io/splitOnClone |splitOnClone |ontap-nas, ontap-san
@@ -55,7 +55,7 @@ ontap-nas-economy, ontap-nas-flexgroup
 ontap-nas-economy, ontap-nas-flexgroup, ontap-san
 
 |trident.netapp.io/snapshotReserve |snapshotReserve |ontap-nas,
-ontap-nas-flexgroup, ontap-san, gcp-cvs
+ontap-nas-flexgroup, ontap-san
 
 |trident.netapp.io/snapshotDirectory |snapshotDirectory |ontap-nas,
 ontap-nas-economy, ontap-nas-flexgroup
@@ -149,11 +149,11 @@ These parameters determine which Trident-managed storage pools should be utilize
 
 |provisioningType |string |thin, thick |Pool supports this provisioning method |Provisioning method specified |thick: all ontap; thin: all ontap & solidfire-san
 
-|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, gcp-cvs, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
+|backendType |string a| ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, solidfire-san, azure-netapp-files, ontap-san-economy |Pool belongs to this type of backend |Backend specified |All drivers
 
-|snapshots |bool |true, false |Pool supports volumes with snapshots |Volume with snapshots enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
+|snapshots |bool |true, false |Pool supports volumes with snapshots |Volume with snapshots enabled |ontap-nas, ontap-san, solidfire-san
 
-|clones |bool |true, false |Pool supports cloning volumes |Volume with clones enabled |ontap-nas, ontap-san, solidfire-san, gcp-cvs
+|clones |bool |true, false |Pool supports cloning volumes |Volume with clones enabled |ontap-nas, ontap-san, solidfire-san
 
 |encryption |bool |true, false |Pool supports encrypted volumes |Volume with encryption enabled |ontap-nas, ontap-nas-economy, ontap-nas-flexgroups, ontap-san
 
@@ -187,7 +187,7 @@ These attributes have no impact on the selection of storage pools/backends by Tr
 Version
 |fsType |string |ext4, ext3, xfs |The file system type for block
 volumes |solidfire-san, ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy |All
-|allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy, solidfire-san, gcp-cvs, azure-netapp-files |1.11+
+|allowVolumeExpansion |boolean |true, false |Enable or disable support for growing the PVC size |ontap-nas, ontap-nas-economy, ontap-nas-flexgroup, ontap-san, ontap-san-economy, solidfire-san, azure-netapp-files |1.11+
 |volumeBindingMode |string |Immediate, WaitForFirstConsumer |Choose when volume binding and dynamic provisioning occurs |All |1.19 - 1.26
 |===
 
@@ -314,7 +314,7 @@ For more information about how to construct these objects, refer to link:../trid
 
 == Trident `StoragePool` objects
 
-Storage pools represent the distinct locations available for provisioning on each backend. For ONTAP, these correspond to aggregates in SVMs. For NetApp HCI/SolidFire, these correspond to administrator-specified QoS bands. For Cloud Volumes Service, these correspond to cloud provider regions. Each storage pool has a set of distinct storage attributes, which define its performance characteristics and data protection characteristics.
+Storage pools represent the distinct locations available for provisioning on each backend. For ONTAP, these correspond to aggregates in SVMs. For NetApp HCI/SolidFire, these correspond to administrator-specified QoS bands. Each storage pool has a set of distinct storage attributes, which define its performance characteristics and data protection characteristics.
 
 Unlike the other objects here, storage pool candidates are always discovered and managed automatically.
 

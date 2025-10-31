@@ -25,7 +25,7 @@ Learn what's new in Trident and Trident protect, including enhancements, fixes, 
 
 * *Kubernetes*:
 ** Added support for CSI Volume Group Snapshots with v1beta1 Volume Group Snapshot Kubernetes APIs for ONTAP-NAS NFS and ONTAP-SAN-Economy drivers, in addition to ONTAP-SAN (iSCSI and FC). See link:https://docs.netapp.com/us-en/trident/trident-use/vol-group-snapshots.html[Work with volume group snapshots^].
-** Added support for automated workload failover with force volume detach for the ONTAP-NAS* (excluding SMB) and ONTAP-SAN* storage drivers. See link:../trident-reco/force-detach.html[Details about force detach^].
+** Added support for automated workload failover with force volume detach for the ONTAP-NAS and ONTAP-NAS-Economy (excluding SMB in both the NAS drivers), and the ONTAP-SAN and ONTAP-SAN-Economy drivers. See link:../trident-reco/force-detach.html[Details about force detach^].
 ** Enhanced Trident node concurrency for higher scalability on node operations for FCP volumes.
 ** Added ONTAP AFX support for the ONTAP NAS driver. See link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-examples.html[ONTAP NAS configuration options and examples^].
 ** Added support for configuring CPU and memory resource requests and limits for Trident containers via TridentOrchestrator CR and Helm chart values. (link:https://github.com/NetApp/trident/issues/1000[Issue #1000], link:https://github.com/NetApp/trident/issues/927[Issue #927], link:https://github.com/NetApp/trident/issues/853[Issue #853], link:https://github.com/NetApp/trident/issues/592[Issue #592], link:https://github.com/NetApp/trident/issues/110[Issue #110]). 

@@ -21,7 +21,7 @@ The metrics provided by Trident enable you to do the following:
 * Maintain a mapping of the amount of volumes provisioned on available backends.
 * Track performance. You can take a look at how long it takes for Trident to communicate to backends and perform operations.
 
-NOTE: By default, Trident's metrics are exposed on the target port `8001` at the `/metrics` endpoint. These metrics are *enabled by default* when Trident is installed. You can configure to consume Trident metrics over HTTPS on port `8444` as well. See link:..https://docs.netapp.com/us-en/trident/trident-use/monitor-trident.html#step-2-create-a-prometheus-servicemonitor[Step 2: Create a Prometheus ServiceMonitor^] for more information.
+NOTE: By default, Trident's metrics are exposed on the target port `8001` at the `/metrics` endpoint. These metrics are *enabled by default* when Trident is installed. You can configure to consume Trident metrics over HTTPS on port `8444` as well.
 
 .What you'll need
 
@@ -30,7 +30,7 @@ NOTE: By default, Trident's metrics are exposed on the target port `8001` at the
 
 == Step 1: Define a Prometheus target
 
-You should define a Prometheus target to gather the metrics and obtain information about the backends Trident manages, the volumes it creates, and so on. This https://netapp.io/2020/02/20/prometheus-and-trident/[blog^] explains how you can use Prometheus and Grafana with Trident to retrieve metrics. The blog explains how you can run Prometheus as an operator in your Kubernetes cluster and the creation of a ServiceMonitor to obtain Trident metrics.
+You should define a Prometheus target to gather the metrics and obtain information about the backends Trident manages, the volumes it creates, and so on. See link:https://prometheus-operator.dev/docs/developer/getting-started/[Prometheus Operator documentation^].
 
 == Step 2: Create a Prometheus ServiceMonitor
 

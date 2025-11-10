@@ -105,11 +105,11 @@ After you have installed the Trident protect CLI plugin, you can enable auto-com
 .Enable auto-completion for the Bash shell
 --
 .Steps
-. Download the completion script:
+. ##Create the completion script:##
 +
 [source,console]
 ----
-curl -L -O https://github.com/NetApp/tridentctl-protect/releases/download/25.10.0/tridentctl-completion.bash
+tridentctl-protect completion bash > tridentctl-completion.bash
 ----
 . Make a new directory in your home directory to contain the script:
 +

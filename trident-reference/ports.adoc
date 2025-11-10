@@ -28,3 +28,150 @@ Trident uses the following ports for communication inside Kubernetes:
 
 [NOTE] 
 The liveness/readiness probe port can be changed during installation using the `--probe-port` flag. It is important to make sure this port isn't being used by another process on the worker nodes.
+
+- **Outbound focus**: Kubernetes nodes (controller and worker) primarily initiate traffic to storage LIFs/IPs, so iptables rules should allow outbound from node IPs to specific storage IPs on these ports. Avoid broad "any-to-any" rules.
+- **Inbound restrictions**: Limit internal Trident ports to cluster-internal traffic (e.g., via CNI like Calico). No unnecessary inbound exposure on host firewalls.
+- **Protocol security**: Use TCP where possible (more reliable); enable CHAP/IPsec for iSCSI if sensitive; TLS/HTTPS for management (port 443/8443). For NFSv4 (default in Trident), prune UDP/older NFSv3 ports (e.g., 4045-4049) if not needed. Restrict to trusted subnets; monitor with tools like Prometheus (optional port 8001).
+
+
+Ports for Controller Nodes
+Primarily for Trident operator (backend management). All internal ports are pod-level; allow on nodes only if host firewall interferes with CNI.
+[cols="1,1,2,1,2", options="header"]
+|===
+| Port/Protocol | Direction | Purpose | Driver/Protocol | Security Notes
+
+| TCP 8000
+| Inbound/Outbound (cluster-internal)
+| Trident REST server (operator-controller comms)
+| All
+| Restrict to pod CIDRs; no external exposure.
+
+| TCP 8443
+| Inbound/Outbound (cluster-internal)
+| Backchannel HTTPS (secure internal API)
+| All
+| TLS-encrypted; limit to Kubernetes service mesh if used.
+
+| TCP 8001
+| Inbound (cluster-internal, optional)
+| Prometheus metrics
+| All
+| Expose only to monitoring tools (e.g., via RBAC); disable if unused.
+
+| TCP 443
+| Outbound
+| HTTPS to ONTAP SVM/cluster mgmt LIF
+| ONTAP (all), ANF
+| Require TLS cert validation; restrict to mgmt LIF IPs only.
+
+| TCP 8443
+| Outbound
+| HTTPS to E-Series Web Services Proxy
+| E-Series (iSCSI)
+| Default REST API; use certs; configurable in backend YAML.
+|===
+
+Updated Ports for Worker Nodes
+For CSI node daemonsets and pod mounts. Data ports are outbound to storage data LIFs; include NFSv3 extras if using v3 (optional for v4).
+
+
+[cols="1,1,2,1,2", options="header"]
+|===
+| Port/Protocol | Direction | Purpose | Driver/Protocol | Security Notes
+
+| TCP 17546
+| Inbound (local to pod)
+| CSI node liveness/readiness probes
+| All
+| Configurable (--probe-port); ensure no host conflicts; local-only.
+
+| TCP 8000
+| Inbound/Outbound (cluster-internal)
+| Trident REST server
+| All
+| As above; pod-internal.
+
+| TCP 8443
+| Inbound/Outbound (cluster-internal)
+| Backchannel HTTPS
+| All
+| As above.
+
+| TCP 8001
+| Inbound (cluster-internal, optional)
+| Prometheus metrics
+| All
+| As above.
+
+| TCP 443
+| Outbound
+| HTTPS to ONTAP SVM/cluster mgmt LIF
+| ONTAP (all), ANF
+| As above; used for discovery.
+
+| TCP 8443
+| Outbound
+| HTTPS to E-Series Web Services Proxy
+| E-Series (iSCSI)
+| As above.
+
+| TCP/UDP 111
+| Outbound
+| RPCBIND/portmapper
+| ONTAP-NAS (NFSv3/v4), ANF (NFS)
+| Required for v3; optional for v4 (firewall offload); restrict if using NFSv4-only.
+
+| TCP/UDP 2049
+| Outbound
+| NFS daemon
+| ONTAP-NAS (NFSv3/v4), ANF (NFS)
+| Core data; well-known; use TCP for reliability.
+
+| TCP/UDP 635
+| Outbound
+| Mount daemon
+| ONTAP-NAS (NFSv3/v4), ANF (NFS)
+| Mounting; bidirectional callbacks possible (allow inbound ephemeral if needed).
+
+| UDP 4045
+| Outbound
+| NFS lock manager (nlockmgr)
+| ONTAP-NAS (NFSv3)
+| File locking; skip for v4 (pNFS handles); UDP-only.
+
+| UDP 4046
+| Outbound
+| NFS status monitor (statd)
+| ONTAP-NAS (NFSv3)
+| Notifications; may need inbound ephemeral ports (1024-65535) for callbacks.
+
+| UDP 4049
+| Outbound
+| NFS quota daemon (rquotad)
+| ONTAP-NAS (NFSv3)
+| Quotas; skip for v4.
+
+| TCP 3260
+| Outbound
+| iSCSI target (discovery/data/CHAP)
+| ONTAP-SAN (iSCSI), E-Series (iSCSI)
+| Well-known; CHAP auth over this port; enable mutual CHAP for security.
+
+| TCP 445
+| Outbound
+| SMB/CIFS
+| ONTAP-NAS (SMB), ANF (SMB)
+| Well-known; use SMB3 with encryption (Trident annotation netapp.io/smb-encryption=true).
+
+| TCP/UDP 88 (optional)
+| Outbound
+| Kerberos auth
+| ONTAP (NFS/SMB/iSCSI with Kerb)
+| If using Kerberos (not default); to AD servers, not storage.
+
+| TCP/UDP 389 (optional)
+| Outbound
+| LDAP
+| ONTAP (NFS/SMB with LDAP)
+| Similar; for name resolution/auth; restrict to AD.
+|===

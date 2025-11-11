@@ -15,27 +15,21 @@ Learn more about the ports that Trident uses for communication.
 
 == Trident ports
 
-Trident uses the following ports for communication inside Kubernetes:
+Trident uses various ports for communication inside Kubernetes clusters and with storage backends. Below is a summary of key ports, their purposes, and security considerations.
 
-[cols="2,4" options="header"]
-|===
-|Port |Purpose
-|8443 |Backchannel HTTPS
-|8001 |Prometheus metrics endpoint
-|8000 |Trident REST server
-|17546 |Liveness/readiness probe port used by Trident daemonset pods
-|===
-
-[NOTE] 
-The liveness/readiness probe port can be changed during installation using the `--probe-port` flag. It is important to make sure this port isn't being used by another process on the worker nodes.
-
-- **Outbound focus**: Kubernetes nodes (controller and worker) primarily initiate traffic to storage LIFs/IPs, so iptables rules should allow outbound from node IPs to specific storage IPs on these ports. Avoid broad "any-to-any" rules.
-- **Inbound restrictions**: Limit internal Trident ports to cluster-internal traffic (e.g., via CNI like Calico). No unnecessary inbound exposure on host firewalls.
-- **Protocol security**: Use TCP where possible (more reliable); enable CHAP/IPsec for iSCSI if sensitive; TLS/HTTPS for management (port 443/8443). For NFSv4 (default in Trident), prune UDP/older NFSv3 ports (e.g., 4045-4049) if not needed. Restrict to trusted subnets; monitor with tools like Prometheus (optional port 8001).
+* **Outbound focus**: Kubernetes nodes (controller and worker) primarily initiate traffic to storage LIFs/IPs, so iptables rules should allow outbound from node IPs to specific storage IPs on these ports. Avoid broad "any-to-any" rules.
+* **Inbound restrictions**: Limit internal Trident ports to cluster-internal traffic (e.g., via CNI like Calico). No unnecessary inbound exposure on host firewalls.
+* **Protocol security**: 
+** Use TCP where possible (more reliable). 
+** Enable CHAP/IPsec for iSCSI if sensitive; TLS/HTTPS for management (port 443/8443). 
+** For NFSv4 (default in Trident), prune UDP/older NFSv3 ports (e.g., 4045-4049) if not needed. 
+** Restrict to trusted subnets; monitor with tools like Prometheus (optional port 8001).
 
 
-Ports for Controller Nodes
-Primarily for Trident operator (backend management). All internal ports are pod-level; allow on nodes only if host firewall interferes with CNI.
+=== Ports for controller nodes
+
+These ports are primarily for Trident operator (backend management). All internal ports are pod-level; allow on nodes only if host firewall interferes with CNI.
+
 [cols="1,1,2,1,2", options="header"]
 |===
 | Port/Protocol | Direction | Purpose | Driver/Protocol | Security Notes
@@ -71,8 +65,11 @@ Primarily for Trident operator (backend management). All internal ports are pod-
 | Default REST API; use certs; configurable in backend YAML.
 |===
 
-Updated Ports for Worker Nodes
-For CSI node daemonsets and pod mounts. Data ports are outbound to storage data LIFs; include NFSv3 extras if using v3 (optional for v4).
+
+
+=== Ports for worker nodes
+
+These ports are for CSI node daemonsets and pod mounts. Data ports are outbound to storage data LIFs; include NFSv3 extras if using NFSv3 (optional for NFSv4).
 
 
 [cols="1,1,2,1,2", options="header"]
@@ -175,3 +172,6 @@ For CSI node daemonsets and pod mounts. Data ports are outbound to storage data 
 | ONTAP (NFS/SMB with LDAP)
 | Similar; for name resolution/auth; restrict to AD.
 |===
+
+[NOTE] 
+The liveness/readiness probe port can be changed during installation using the `--probe-port` flag. It is important to make sure this port isn't being used by another process on the worker nodes.

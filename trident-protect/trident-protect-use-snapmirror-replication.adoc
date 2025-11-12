@@ -128,8 +128,8 @@ tridentctl-protect create app <my-app-name> --namespaces <namespaces-to-be-inclu
 // Improve this step with an example of a manual shutdown snapshot, and place it after the example of the schedule. This way, you can explain why a customer would need the extra manual step, which is to not have to wait for the schedule to kick off the first snapshot.
 // Explain what a shutdown snapshot actually is.
 // This needs to be two steps - manual immediate shutdown snapshot, and then creation of a snapshot schedule for future transfers. Because if you only did one snapshot, you would only ever get one transfer. See recording.
-. Optionally, on the source cluster, take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot. ##To create an on-demand snapshot, refer to link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create an on-demand snapshot^].##
-. ##On the source cluster, create the replication schedule CR:##
+. Optionally, on the source cluster, take a snapshot of the source application. This snapshot is used as the basis for the application on the destination cluster. If you skip this step, you'll need to wait for the next scheduled snapshot to run so that you have a recent snapshot. To create an on-demand snapshot, refer to link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-protect-apps.html#create-an-on-demand-snapshot[Create an on-demand snapshot^].
+. On the source cluster, create the replication schedule CR:
 +
 [NOTE]
 ====
@@ -254,8 +254,8 @@ kubectl apply -f trident-protect-appvault-secondary-destination.yaml -n trident-
 ** *spec.namespaceMapping*: (_Required_) The destination and source namespaces must match the application namespace defined in the respective application CR.
 ** *spec.sourceAppVaultRef*: (_Required_) This value must match the name of the AppVault for the source application.
 ** *spec.sourceApplicationName*: (_Required_) This value must match the name of the source application you defined in the source application CR.
-** *spec.sourceApplicationUID*: (Required) ##This value must match the UID of the source application you defined in the source application CR.##
-** *spec.storageClassName*: ##(_Optional_) Choose the name of a valid storage class on the cluster. The storage class must be linked to an ONTAP storage VM that is peered with the source environment. If the storage class is not provided, the default storage class on the cluster will be used by default.##
+** *spec.sourceApplicationUID*: (Required) This value must match the UID of the source application you defined in the source application CR.
+** *spec.storageClassName*: (_Optional_) Choose the name of a valid storage class on the cluster. The storage class must be linked to an ONTAP storage VM that is peered with the source environment. If the storage class is not provided, the default storage class on the cluster will be used by default.
 ** *spec.recurrenceRule*: Define a start date in UTC time and a recurrence interval.
 +
 Example YAML:
@@ -292,7 +292,7 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 .Create an AppMirrorRelationship using the CLI
 --
 
-.. ##Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment:##
+.. Create and apply the AppMirrorRelationship object, replacing values in brackets with information from your environment:
 +
 [source,console]
 ----

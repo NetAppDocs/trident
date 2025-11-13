@@ -206,13 +206,13 @@ spec:
   version: 1
   storageDriverName: azure-netapp-files
   capacityPools:
-    - resource-group-1/netapp-account-1/ultra-pool
+    - ultra-pool
   resourceGroups:
-    - resource-group-1
+    - aks-ami-eastus-rg
   netappAccounts:
-    - resource-group-1/netapp-account-1
-  virtualNetwork: resource-group-1/eastus-prod-vnet
-  subnet: resource-group-1/eastus-prod-vnet/eastus-anf-subnet
+    - smb-na
+  virtualNetwork: eastus-prod-vnet
+  subnet: eastus-anf-subnet
   location: eastus
   subscriptionID: 9f87c765-4774-fake-ae98-a721add45451
 ----

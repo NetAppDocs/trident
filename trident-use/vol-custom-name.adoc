@@ -17,19 +17,20 @@ With Trident, you can assign meaningful names and labels to volumes you create. 
 
 Customizable volume names and labels support:
 
-. Volume create, import, and clone operations.
-. In the case of ontap-nas-economy driver, only the name of the Qtree volume complies with the name template.
-. In the case of ontap-san-economy driver, only the LUN name complies with the name template.
+* Volume create, import, and clone operations.
+* In the case of the `ontap-nas-economy` driver, only the name of the Qtree volume complies with the name template.
+* In the case of the `ontap-san-economy` driver, only the LUN name complies with the name template.
 
 == Limitations
 
-. Customizable volume names are compatible with ONTAP on-premises drivers only.
-. Customizable volume names do not apply to existing volumes.
+* Custom volume names are compatible with ONTAP on-premises drivers only.
+* Custom labels are supported only for `ontap-san`, `ontap-nas`, and `ontap-nas-flexgroup` drivers. 
+* Custom volume names do not apply to existing volumes.
 
 == Key behaviors of customizable volume names
 
-. If a failure occurs due to invalid syntax in a name template, the backend creation fails. However, if the template application fails, the volume will be named according to existing naming convention.
-. Storage prefix is not applicable when a volume is named using a name template from the backend configuration. Any desired prefix value may be directly added to the template.
+* If a failure occurs due to invalid syntax in a name template, the backend creation fails. However, if the template application fails, the volume will be named according to existing naming convention.
+* Storage prefix is not applicable when a volume is named using a name template from the backend configuration. Any desired prefix value may be directly added to the template.
 
 == Backend configuration examples with name template and labels
 

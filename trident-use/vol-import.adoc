@@ -132,7 +132,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 
 .Managed volume
 --
-The following example imports 1Gi ontap-nas volume `<ontap-volume-name>` on backend `<backend-uuid>` using PVC annotations:
+The following example imports 1Gi ontap-nas volume `ontap_volume1` on backend `81abcb27-ea63-49bb-b606-0a5315ac5f21` using PVC annotations:
 
 [source,json]
 ----
@@ -141,8 +141,8 @@ apiVersion: v1
 metadata:
   name: <PVC-name>
   annotations:
-    trident.netapp.io/importOriginalName: "<ontap-volume-name>"
-    trident.netapp.io/importBackendUUID: "<backend-uuid>"
+    trident.netapp.io/importOriginalName: "ontap_volume1"
+    trident.netapp.io/importBackendUUID: "81abcb27-ea63-49bb-b606-0a5315ac5f21"
 spec:
   accessModes:
     - ReadWriteOnce
@@ -156,7 +156,7 @@ spec:
 
 .Unmanaged volume
 --
-The following example imports 1Gi `ontap-nas` volume `<ontap-volume-name>` on backend `<backend-uuid>` as an unmanaged volume using PVC annotations:
+The following example imports 1Gi `ontap-nas` volume `<nas-volume2>` on backend `34abcb27-ea63-49bb-b606-0a5315ac5f34` as an unmanaged volume using PVC annotations:
 
 [source,json]
 ----
@@ -165,8 +165,8 @@ apiVersion: v1
 metadata:
   name: <PVC-name>
   annotations:
-    trident.netapp.io/importOriginalName: "<ontap-volume-name>"
-    trident.netapp.io/importBackendUUID: "<backend-uuid>"
+    trident.netapp.io/importOriginalName: "<nas-volume2>"
+    trident.netapp.io/importBackendUUID: "34abcb27-ea63-49bb-b606-0a5315ac5f34"
     trident.netapp.io/notManaged: "true"
 spec:
   accessModes:

@@ -126,7 +126,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 
 *Examples for importing volumes using PVC annotations*:
 
-// start tabbed area
+
 [role="tabbed-block"]
 ====
 
@@ -134,7 +134,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 --
 The following example imports 1Gi ontap-nas volume `ontap_volume1` on backend `81abcb27-ea63-49bb-b606-0a5315ac5f21` using PVC annotations:
 
-[source,json]
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -158,7 +158,7 @@ spec:
 --
 The following example imports 1Gi `ontap-nas` volume `<nas-volume2>` on backend `34abcb27-ea63-49bb-b606-0a5315ac5f34` as an unmanaged volume using PVC annotations:
 
-[source,json]
+[source,yaml]
 ----
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -178,8 +178,6 @@ spec:
 ----
 --
 ====
-
-// end tabbed area
 
 === ONTAP SAN
 Trident supports volume import using the `ontap-san` (iSCSI, NVMe/TCP, and FC) and `ontap-san-economy` drivers.

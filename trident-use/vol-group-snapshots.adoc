@@ -19,10 +19,10 @@ NOTE: VolumeGroupSnapshot is a beta feature in Kubernetes with beta APIs. Kubern
 Volume group snapshot is supported with the following storage drivers:
 
 * `ontap-san` driver - only for the iSCSI and FC protocols, not for the NVMe/TCP protocol. 
-* `ontap-san-economy` 
+* `ontap-san-economy` - only for the iSCSI protocol.
 * `ontap-nas`
 
-NOTE: Volume group snapshot is not supported for NetApp AFX storage systems.
+NOTE: Volume group snapshot is not supported for NetApp ASA r2 or AFX storage systems.
 
 .Before you begin
 

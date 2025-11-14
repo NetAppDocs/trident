@@ -132,7 +132,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 
 .Managed volume
 --
-The following example imports 1Gi ontap-nas volume `ontap_volume1` on backend with uuid `81abcb27-ea63-49bb-b606-0a5315ac5f21` using PVC annotations:
+The following example imports 1Gi ontap-nas volume `ontap_volume1` on backend with uuid `81abcb27-ea63-49bb-b606-0a5315ac5f21` and RWO mode set using PVC annotations:
 
 [source,yaml]
 ----
@@ -156,7 +156,7 @@ spec:
 
 .Unmanaged volume
 --
-The following example imports 1Gi `ontap-nas` volume `<nas-volume2>` on backend with uuid `34abcb27-ea63-49bb-b606-0a5315ac5f34` as an unmanaged volume using PVC annotations:
+The following example imports 1Gi `ontap-nas` volume `<nas-volume2>` on backend with uuid `34abcb27-ea63-49bb-b606-0a5315ac5f34` and RWO mode setas an unmanaged volume using PVC annotations:
 
 [source,yaml]
 ----

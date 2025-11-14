@@ -37,6 +37,9 @@ link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#ins
 * SCSI over FC is not supported on Docker.
 * iSCSI self healing is not applicable to SCSI over FC.
 
+.SMB tools
+link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes] if you are using: `ontap-nas` to provision SMB volumes.
+
 == Node service discovery
 
 Trident attempts to automatically detect if the node can run iSCSI or NFS services. 
@@ -349,3 +352,80 @@ NOTE: Ensure `/etc/multipath.conf` contains `find_multipaths no` under `defaults
 sudo systemctl status multipath-tools
 ----
 ====
+
+== Prepare to provision SMB volumes
+You can provision SMB volumes using `ontap-nas` drivers. 
+
+WARNING: You must configure both NFS and SMB/CIFS protocols on the SVM to create an `ontap-nas-economy` SMB volume for ONTAP on-premises clusters. Failure to configure either of these protocols will cause SMB volume creation to fail.
+
+NOTE: `autoExportPolicy` is not supported for SMB volumes.
+
+
+.Before you begin
+Before you can provision SMB volumes, you must have the following. 
+
+* A Kubernetes cluster with a Linux controller node and at least one Windows worker node running Windows Server 2022. Trident supports SMB volumes mounted to pods running on Windows nodes only.
+
+* At least one Trident secret containing your Active Directory credentials. To generate secret `smbcreds`:
++
+----
+kubectl create secret generic smbcreds --from-literal username=user --from-literal password='password'
+----
+
+* A CSI proxy configured as a Windows service. To configure a `csi-proxy`, refer to link:https://github.com/kubernetes-csi/csi-proxy[GitHub: CSI Proxy^] or link:https://github.com/Azure/aks-engine/blob/master/docs/topics/csi-proxy-windows.md[GitHub: CSI Proxy for Windows^] for Kubernetes nodes running on Windows.
+
+.Steps
+
+. For on-premises ONTAP, you can optionally create an SMB share or Trident can create one for you. 
++
+NOTE: SMB shares are required for Amazon FSx for ONTAP. 
++
+You can create the SMB admin shares in one of two ways either using the link:https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/what-is-microsoft-management-console[Microsoft Management Console^] Shared Folders snap-in or using the ONTAP CLI. To create the SMB shares using the ONTAP CLI:
++
+.. If necessary, create the directory path structure for the share.
++
+The `vserver cifs share create` command checks the path specified in the -path option during share creation. If the specified path does not exist, the command fails.
+
+.. Create an SMB share associated with the specified SVM:
++
+----
+vserver cifs share create -vserver vserver_name -share-name share_name -path path [-share-properties share_properties,...] [other_attributes] [-comment text]
+----
+
+.. Verify that the share was created:
++
+----
+vserver cifs share show -share-name share_name
+----
++
+NOTE: Refer to link:https://docs.netapp.com/us-en/ontap/smb-config/create-share-task.html[Create an SMB share^] for full details.
+
+. When creating the backend, you must configure the following to specify SMB volumes. For all FSx for ONTAP backend configuration options, refer to link:trident-fsx-examples.html[FSx for ONTAP configuration options and examples].
++
+[cols="1,2,1",options="header"]
+|===
+|Parameter |Description | Example
+
+|`smbShare`
+| You can specify one of the following: the name of an SMB share created using the Microsoft Management Console or ONTAP CLI; a name to allow Trident to create the SMB share; or you can leave the parameter blank to prevent common share access to volumes. 
+
+This parameter is optional for on-premises ONTAP. 
+
+This parameter is required for Amazon FSx for ONTAP backends and cannot be blank.
+
+| `smb-share` 
+
+|`nasType`
+| *Must set to `smb`.* If null, defaults to `nfs`.
+|`smb`
+
+|`securityStyle` 
+|Security style for new volumes. 
+
+*Must be set to `ntfs` or `mixed` for SMB volumes.*
+|`ntfs` or `mixed` for SMB volumes
+
+|`unixPermissions`
+|Mode for new volumes. *Must be left empty for SMB volumes.*
+|""
+|===

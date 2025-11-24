@@ -119,7 +119,7 @@ This table describes the parameters for the SCC option:
 +
 [source,console]
 ----
-helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml --reuse-values
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml --reuse-values
 ----  
 +
 This will replace the default values with those specified in the `sccconfig.yaml` file.

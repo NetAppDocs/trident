@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-protect-apps.html
 keywords: protect, snapshots, demand, configuration, cluster, appvault
 summary: Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 ---
-= Protect applications using Trident protect
+= Protect applications using Trident Protect
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,9 +12,9 @@ summary: Protect all apps by taking snapshots and backups using an automated pro
 :imagesdir: ../media/
 
 [.lead]
-You can protect all apps managed by Trident protect by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
+You can protect all apps managed by Trident Protect by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 
-NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
+NOTE: You can configure Trident Protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident Protect].
 
 == Create an on-demand snapshot
 You can create an on-demand snapshot at any time.
@@ -345,14 +345,14 @@ kubectl get backup -n <namespace_name> <my_backup_cr_name> -o jsonpath='{.status
 
 == Enable backup and restore for azure-netapp-files (ANF) operations
 
-If you have installed Trident protect, you can enable space-efficient backup and restore functionality for storage backends that use the azure-netapp-files storage class and were created prior to Trident 24.06. This funtionality works with NFSv4 volumes and does not consume additional space from the capacity pool.
+If you have installed Trident Protect, you can enable space-efficient backup and restore functionality for storage backends that use the azure-netapp-files storage class and were created prior to Trident 24.06. This funtionality works with NFSv4 volumes and does not consume additional space from the capacity pool.
 
 .Before you begin
 
 Ensure the following:
 
-* You have installed Trident protect.
-* You have defined an application in Trident protect. This application will have limited protection functionality until you complete this procedure.
+* You have installed Trident Protect.
+* You have defined an application in Trident Protect. This application will have limited protection functionality until you complete this procedure.
 * You have `azure-netapp-files` selected as the default storage class for your storage backend.
 
 .Expand for configuration steps
@@ -378,10 +378,10 @@ Response:
 ----
 snapshotDirectory: "true"
 ----
-When the snapshot directory is not enabled, Trident protect chooses the regular backup functionality, which temporarily consumes space in the capacity pool during the backup process. In this case, ensure that sufficient space is available in the capacity pool to create a temporary volume of the size of the volume being backed up.
+When the snapshot directory is not enabled, Trident Protect chooses the regular backup functionality, which temporarily consumes space in the capacity pool during the backup process. In this case, ensure that sufficient space is available in the capacity pool to create a temporary volume of the size of the volume being backed up.
 
 .Result
-The application is ready for backup and restore using Trident protect. Each PVC is also available to be used by other applications for backups and restores.
+The application is ready for backup and restore using Trident Protect. Each PVC is also available to be used by other applications for backups and restores.
 ====
 
 

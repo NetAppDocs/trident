@@ -2,9 +2,9 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-installation.html
 keywords: install, trident, protect, requirements, registry
-summary: If your environment meets the requirements, you can follow these steps to install Trident protect.
+summary: If your environment meets the requirements, you can follow these steps to install Trident Protect.
 ---
-= Install and configure Trident protect
+= Install and configure Trident Protect
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,13 +12,13 @@ summary: If your environment meets the requirements, you can follow these steps 
 :imagesdir: ../media/
 
 [.lead]
-If your environment meets the requirements for Trident protect, you can follow these steps to install Trident protect on your cluster. You can obtain Trident protect from NetApp, or install it from your own private registry. Installing from a private registry is helpful if your cluster cannot access the Internet.
+If your environment meets the requirements for Trident Protect, you can follow these steps to install Trident Protect on your cluster. You can obtain Trident Protect from NetApp, or install it from your own private registry. Installing from a private registry is helpful if your cluster cannot access the Internet.
 
-== Install Trident protect
+== Install Trident Protect
 
 [role="tabbed-block"]
 ====
-.Install Trident protect from NetApp
+.Install Trident Protect from NetApp
 --
 .Steps
 . Add the Trident Helm repository:
@@ -27,7 +27,7 @@ If your environment meets the requirements for Trident protect, you can follow t
 ----
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
-. Use Helm to install Trident protect. Replace `<name-of-cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots:
+. Use Helm to install Trident Protect. Replace `<name-of-cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots:
 +
 [source,console]
 ----
@@ -43,9 +43,9 @@ helm install trident-protect netapp-trident-protect/trident-protect --set cluste
 +
 Debug logging helps NetApp support troubleshoot issues without requiring log level changes or problem reproduction.
 --
-.Install Trident protect from a private registry
+.Install Trident Protect from a private registry
 --
-You can install Trident protect from a private image registry if your Kubernetes cluster is unable to access the Internet. In these examples, replace values in brackets with information from your environment:
+You can install Trident Protect from a private image registry if your Kubernetes cluster is unable to access the Internet. In these examples, replace values in brackets with information from your environment:
 
 .Steps
 . Pull the following images to your local machine, update the tags, and then push them to your private registry:
@@ -82,7 +82,7 @@ docker push <private-registry-url>/controller:25.10.0
 ----
 +
 NOTE: To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2510.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2510.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2510.0.tgz` instead of the repository reference in the final step.
-. Create the Trident protect system namespace:
+. Create the Trident Protect system namespace:
 +
 [source,console]
 ----
@@ -108,7 +108,7 @@ kubectl create secret docker-registry regcred --docker-username=<registry-userna
 helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-helm-chart
 ----
 
-. Create a file named `protectValues.yaml`. Ensure that it contains the following Trident protect settings:
+. Create a file named `protectValues.yaml`. Ensure that it contains the following Trident Protect settings:
 +
 [source,yaml]
 ----
@@ -120,7 +120,7 @@ imagePullSecrets:
 +
 NOTE: The `imageRegistry` and `imagePullSecrets` values apply to all component images including `resourcebackup` and `resourcerestore`. If you push images to a specific repository path within your registry (for example, `example.com:443/my-repo`), include the full path in the registry field. This will ensure that all images are pulled from `<private-registry-url>/<image-name>:<tag>`.
 
-. Use Helm to install Trident protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
+. Use Helm to install Trident Protect. Replace `<name_of_cluster>` with a cluster name, which will be assigned to the cluster and used to identify the cluster's backups and snapshots: 
 +
 [source,console]
 ----
@@ -138,5 +138,5 @@ Debug logging helps NetApp support troubleshoot issues without requiring log lev
 --
 ====
 
-NOTE: For additional Helm chart configuration options, including AutoSupport settings and namespace filtering, refer to link:trident-protect-customize-installation.html#configure-additional-trident-protect-helm-chart-settings[Customize Trident protect installation].
+NOTE: For additional Helm chart configuration options, including AutoSupport settings and namespace filtering, refer to link:trident-protect-customize-installation.html#configure-additional-trident-protect-helm-chart-settings[Customize Trident Protect installation].
 

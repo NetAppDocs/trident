@@ -2,24 +2,24 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-customize-installation.html
 keywords: customize, trident protect, resource limits, security context constraints, SCC, NetApp AutoSupport, proxy connection, helm, helm chart, helm upgrade
-summary: Customize the default settings of Trident protect to meet your specific needs.
+summary: Customize the default settings of Trident Protect to meet your specific needs.
 ---
 
-= Customize Trident protect installation
+= Customize Trident Protect installation
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-You can customize the default configuration of Trident protect to meet the specific requirements of your environment.
+You can customize the default configuration of Trident Protect to meet the specific requirements of your environment.
 
-== Specify Trident protect container resource limits
-You can use a configuration file to specify resource limits for Trident protect containers after you install Trident protect. Setting resource limits enables you to control how much of the cluster's resources are consumed by Trident protect operations.
+== Specify Trident Protect container resource limits
+You can use a configuration file to specify resource limits for Trident Protect containers after you install Trident Protect. Setting resource limits enables you to control how much of the cluster's resources are consumed by Trident Protect operations.
 
 .Steps
 
 . Create a file named `resourceLimits.yaml`.
-. Populate the file with resource limit options for Trident protect containers according to the needs of your environment. 
+. Populate the file with resource limit options for Trident Protect containers according to the needs of your environment. 
 +
 The following example configuration file shows the available settings and contains the default values for each resource limit:
 +
@@ -83,7 +83,7 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 
 == Customize security context constraints 
 
-You can use a configuration file to modify OpenShift security context constraint (SCCs) for Trident protect containers after you install Trident protect. These constraints define security restrictions for pods in a Red Hat OpenShift cluster.
+You can use a configuration file to modify OpenShift security context constraint (SCCs) for Trident Protect containers after you install Trident Protect. These constraints define security restrictions for pods in a Red Hat OpenShift cluster.
 
 .Steps
 . Create a file named `sccconfig.yaml`.
@@ -124,7 +124,7 @@ helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig
 +
 This will replace the default values with those specified in the `sccconfig.yaml` file.
 
-== Configure additional Trident protect helm chart settings
+== Configure additional Trident Protect helm chart settings
 
 You can customize AutoSupport settings and namespace filtering to meet your specific requirements. The following table describes the available configuration parameters:
 
@@ -139,7 +139,7 @@ You can customize AutoSupport settings and namespace filtering to meet your spec
 |Skips TLS verification for AutoSupport proxy connections when set to `true`. Use only for insecure proxy connections. (default: `false`)
 |autoSupport.enabled
 |boolean
-|Enables or disables daily Trident protect AutoSupport bundle uploads. When set to `false`, scheduled daily uploads are disabled, but you can still manually generate support bundles. (default: `true`)
+|Enables or disables daily Trident Protect AutoSupport bundle uploads. When set to `false`, scheduled daily uploads are disabled, but you can still manually generate support bundles. (default: `true`)
 |restoreSkipNamespaceAnnotations
 |string
 |Comma-separated list of namespace annotations to exclude from backup and restore operations. Allows you to filter namespaces based on annotations.
@@ -193,9 +193,9 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 --
 ====
 
-== Restrict Trident protect pods to specific nodes
+== Restrict Trident Protect pods to specific nodes
 
-You can use the Kubernetes nodeSelector node selection constraint to control which of your nodes are eligible to run Trident protect pods, based on node labels. By default, Trident protect is restricted to nodes that are running Linux. You can further customize these constraints depending on your needs.
+You can use the Kubernetes nodeSelector node selection constraint to control which of your nodes are eligible to run Trident Protect pods, based on node labels. By default, Trident Protect is restricted to nodes that are running Linux. You can further customize these constraints depending on your needs.
 
 .Steps
 . Create a file named `nodeSelectorConfig.yaml`.

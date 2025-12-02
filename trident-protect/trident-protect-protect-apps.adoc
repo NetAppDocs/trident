@@ -190,12 +190,12 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
 * ##*spec.backupRetention*: (_Required_) The number of backups to retain. Zero indicates that no backups should be created (snapshots only).##
 * ##*spec.backupReclaimPolicy*: (_Optional_) Determines what happens to a backup if the backup CR is deleted during its retention period. After the retention period, backups are always deleted. Possible values (case sensitive):##
-** Retain (default)
-** Delete
+** `Retain` (default)
+** `Delete`
 * ##*spec.snapshotRetention*: (_Required_) The number of snapshots to retain. Zero indicates that no snapshots should be created.##
 * ##*spec.snapshotReclaimPolicy*: (_Optional_) Determines what happens to a snapshot if the snapshot CR is deleted during its retention period. After the retention period, snapshots are always deleted. Possible values (case sensitive):##
-** Retain
-** Delete (default)
+** `Retain`
+** `Delete` (default)
 * *spec.granularity*: The frequency at which the schedule should run. Possible values, along with required associated fields:
 ** `Hourly` (requires that you specify `spec.minute`)
 ** `Daily` (requires that you specify `spec.minute` and `spec.hour`)

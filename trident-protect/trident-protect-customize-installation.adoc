@@ -119,7 +119,7 @@ This table describes the parameters for the SCC option:
 +
 [source,console]
 ----
-helm upgrade trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml --reuse-values
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f sccconfig.yaml --reuse-values
 ----  
 +
 This will replace the default values with those specified in the `sccconfig.yaml` file.
@@ -186,8 +186,8 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
 helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect \
   --set autoSupport.enabled=false \
   --set autoSupport.proxy=http://my.proxy.url \
-  --set restoreSkipNamespaceAnnotations="annotation1,annotation2" \
-  --set restoreSkipNamespaceLabels="label1,label2" \
+  --set-string restoreSkipNamespaceAnnotations="{annotation1,annotation2}" \
+  --set-string restoreSkipNamespaceLabels="{label1,label2}" \
   --reuse-values
 ----
 --

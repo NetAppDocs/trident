@@ -188,8 +188,14 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 ** `Kopia` (default)
 * *spec.applicationRef*: The Kubernetes name of the application to back up.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
-* *spec.backupRetention*: The number of backups to retain. Zero indicates that no backups should be created (snapshots only).
-* *spec.snapshotRetention*: The number of snapshots to retain. Zero indicates that no snapshots should be created.
+* *spec.backupRetention*: (_Required_) The number of backups to retain. Zero indicates that no backups should be created (snapshots only).
+* *spec.backupReclaimPolicy*: (_Optional_) Determines what happens to a backup if the backup CR is deleted during its retention period. After the retention period, backups are always deleted. Possible values (case sensitive):
+** `Retain` (default)
+** `Delete`
+* *spec.snapshotRetention*: (_Required_) The number of snapshots to retain. Zero indicates that no snapshots should be created.
+* *spec.snapshotReclaimPolicy*: (_Optional_) Determines what happens to a snapshot if the snapshot CR is deleted during its retention period. After the retention period, snapshots are always deleted. Possible values (case sensitive):
+** `Retain`
+** `Delete` (default)
 * *spec.granularity*: The frequency at which the schedule should run. Possible values, along with required associated fields:
 ** `Hourly` (requires that you specify `spec.minute`)
 ** `Daily` (requires that you specify `spec.minute` and `spec.hour`)
@@ -259,7 +265,22 @@ NOTE: You can use `tridentctl-protect create schedule --help` to view detailed h
 +
 [source,console]
 ----
-tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace> --full-backup-rule <string>
+tridentctl-protect create schedule <my_schedule_name> \
+  --appvault <my_appvault_name> \
+  --app <name_of_app_to_snapshot> \
+  --backup-retention <how_many_backups_to_retain> \
+  --backup-reclaim-policy <Retain|Delete (default Retain)> \
+  --data-mover <Kopia_or_Restic> \
+  --day-of-month <day_of_month_to_run_schedule> \
+  --day-of-week <day_of_week_to_run_schedule> \
+  --granularity <frequency_to_run> \
+  --hour <hour_of_day_to_run> \
+  --minute <minute_of_hour_to_run> \
+  --recurrence-rule <recurrence> \
+  --snapshot-retention <how_many_snapshots_to_retain> \
+  --snapshot-reclaim-policy <Retain|Delete (default Delete)> \
+  --full-backup-rule <string> \
+  -n <application_namespace>
 ----
 +
 You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday,Thursday"` to schedule full backup on Mondays and Thursdays.

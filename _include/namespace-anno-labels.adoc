@@ -8,7 +8,9 @@ You can prevent specific annotations in the destination namespace from being ove
 
 [source,console]
 -----
-helm upgrade trident-protect --set restoreSkipNamespaceAnnotations=<annotation_key_to_skip_1>,<annotation_key_to_skip_2> --reuse-values
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect \
+  --set-string restoreSkipNamespaceAnnotations="{<annotation_key_to_skip_1>,<annotation_key_to_skip_2>}" \
+  --reuse-values
 -----
 
 NOTE: When performing restore or failover operation, any namespace annotations and labels specified in `restoreSkipNamespaceAnnotations` and `restoreSkipNamespaceLabels` are excluded from the restore or failover operation. Ensure these settings are configured during the initial Helm installation. To learn more, refer to link:../trident-protect/trident-protect-customize-installation.html#configure-additional-trident-protect-helm-chart-settings[Configure additional Trident Protect helm chart settings].

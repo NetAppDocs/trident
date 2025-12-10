@@ -520,6 +520,34 @@ The `providerType` and `providerConfig` keys in an AppVault CR require specific 
 
 ////
 
+=== Supported `providerConfig.s3` configuration options
+See the following table for the S3 provider configuration options:
+
+[cols="1,3,2,1" options="header"]
+|===
+|Parameter |Description |Default |Example
+|`providerConfig.s3.skipCertValidation`
+|Disable SSL/TLS certificate verification.
+|false
+|"true", "false"
+|`providerConfig.s3.secure`
+|Enable secure HTTPS communication with the S3 endpoint.
+|true
+|"true", "false"
+|`providerConfig.s3.proxyURL`
+|Specify the URL of the proxy server used to connect to S3.
+|None
+|http://proxy.example.com:8080
+|`providerConfig.s3.rootCA`
+|Provide a custom root CA certificate for SSL/TLS verification. 
+|None
+|"CN=MyCustomCA"
+|`providerConfig.s3.useIAM`  
+|Enable IAM authentication for accessing S3 buckets. Applicable for EKS Pod Identity.
+|false
+|true, false
+|===
+
 == View AppVault information
 You can use the Trident Protect CLI plugin to view information about AppVault objects that you have created on the cluster.
 

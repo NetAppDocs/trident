@@ -4,7 +4,7 @@ permalink: trident-protect/trident-protect-protect-apps.html
 keywords: protect, snapshots, demand, configuration, cluster, appvault
 summary: Protect all apps by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 ---
-= Protect applications using Trident protect
+= Protect applications using Trident Protect
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,9 +12,9 @@ summary: Protect all apps by taking snapshots and backups using an automated pro
 :imagesdir: ../media/
 
 [.lead]
-You can protect all apps managed by Trident protect by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
+You can protect all apps managed by Trident Protect by taking snapshots and backups using an automated protection policy or on an ad-hoc basis.
 
-NOTE: You can configure Trident protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident protect].
+NOTE: You can configure Trident Protect to freeze and unfreeze filesystems during data protection operations. link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Learn more about configuring filesystem freezing with Trident Protect].
 
 == Create an on-demand snapshot
 You can create an on-demand snapshot at any time.
@@ -188,8 +188,14 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 ** `Kopia` (default)
 * *spec.applicationRef*: The Kubernetes name of the application to back up.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents should be stored.
-* *spec.backupRetention*: The number of backups to retain. Zero indicates that no backups should be created (snapshots only).
-* *spec.snapshotRetention*: The number of snapshots to retain. Zero indicates that no snapshots should be created.
+* *spec.backupRetention*: (_Required_) The number of backups to retain. Zero indicates that no backups should be created (snapshots only).
+* *spec.backupReclaimPolicy*: (_Optional_) Determines what happens to a backup if the backup CR is deleted during its retention period. After the retention period, backups are always deleted. Possible values (case sensitive):
+** `Retain` (default)
+** `Delete`
+* *spec.snapshotRetention*: (_Required_) The number of snapshots to retain. Zero indicates that no snapshots should be created.
+* *spec.snapshotReclaimPolicy*: (_Optional_) Determines what happens to a snapshot if the snapshot CR is deleted during its retention period. After the retention period, snapshots are always deleted. Possible values (case sensitive):
+** `Retain`
+** `Delete` (default)
 * *spec.granularity*: The frequency at which the schedule should run. Possible values, along with required associated fields:
 ** `Hourly` (requires that you specify `spec.minute`)
 ** `Daily` (requires that you specify `spec.minute` and `spec.hour`)
@@ -259,7 +265,22 @@ NOTE: You can use `tridentctl-protect create schedule --help` to view detailed h
 +
 [source,console]
 ----
-tridentctl-protect create schedule <my_schedule_name> --appvault <my_appvault_name> --app <name_of_app_to_snapshot> --backup-retention <how_many_backups_to_retain> --data-mover <Kopia_or_Restic> --day-of-month <day_of_month_to_run_schedule> --day-of-week <day_of_month_to_run_schedule> --granularity <frequency_to_run> --hour <hour_of_day_to_run> --minute <minute_of_hour_to_run> --recurrence-rule <recurrence> --snapshot-retention <how_many_snapshots_to_retain> -n <application_namespace> --full-backup-rule <string>
+tridentctl-protect create schedule <my_schedule_name> \
+  --appvault <my_appvault_name> \
+  --app <name_of_app_to_snapshot> \
+  --backup-retention <how_many_backups_to_retain> \
+  --backup-reclaim-policy <Retain|Delete (default Retain)> \
+  --data-mover <Kopia_or_Restic> \
+  --day-of-month <day_of_month_to_run_schedule> \
+  --day-of-week <day_of_week_to_run_schedule> \
+  --granularity <frequency_to_run> \
+  --hour <hour_of_day_to_run> \
+  --minute <minute_of_hour_to_run> \
+  --recurrence-rule <recurrence> \
+  --snapshot-retention <how_many_snapshots_to_retain> \
+  --snapshot-reclaim-policy <Retain|Delete (default Delete)> \
+  --full-backup-rule <string> \
+  -n <application_namespace>
 ----
 +
 You can set the `--full-backup-rule` flag to `always` for constant full backup or customize it based on your requirements. For instance, if you choose daily granularity, you can specify the weekdays on which the full backup should occur. For example, use `--full-backup-rule "Monday,Thursday"` to schedule full backup on Mondays and Thursdays.
@@ -345,14 +366,14 @@ kubectl get backup -n <namespace_name> <my_backup_cr_name> -o jsonpath='{.status
 
 == Enable backup and restore for azure-netapp-files (ANF) operations
 
-If you have installed Trident protect, you can enable space-efficient backup and restore functionality for storage backends that use the azure-netapp-files storage class and were created prior to Trident 24.06. This funtionality works with NFSv4 volumes and does not consume additional space from the capacity pool.
+If you have installed Trident Protect, you can enable space-efficient backup and restore functionality for storage backends that use the azure-netapp-files storage class and were created prior to Trident 24.06. This funtionality works with NFSv4 volumes and does not consume additional space from the capacity pool.
 
 .Before you begin
 
 Ensure the following:
 
-* You have installed Trident protect.
-* You have defined an application in Trident protect. This application will have limited protection functionality until you complete this procedure.
+* You have installed Trident Protect.
+* You have defined an application in Trident Protect. This application will have limited protection functionality until you complete this procedure.
 * You have `azure-netapp-files` selected as the default storage class for your storage backend.
 
 .Expand for configuration steps
@@ -378,10 +399,10 @@ Response:
 ----
 snapshotDirectory: "true"
 ----
-When the snapshot directory is not enabled, Trident protect chooses the regular backup functionality, which temporarily consumes space in the capacity pool during the backup process. In this case, ensure that sufficient space is available in the capacity pool to create a temporary volume of the size of the volume being backed up.
+When the snapshot directory is not enabled, Trident Protect chooses the regular backup functionality, which temporarily consumes space in the capacity pool during the backup process. In this case, ensure that sufficient space is available in the capacity pool to create a temporary volume of the size of the volume being backed up.
 
 .Result
-The application is ready for backup and restore using Trident protect. Each PVC is also available to be used by other applications for backups and restores.
+The application is ready for backup and restore using Trident Protect. Each PVC is also available to be used by other applications for backups and restores.
 ====
 
 

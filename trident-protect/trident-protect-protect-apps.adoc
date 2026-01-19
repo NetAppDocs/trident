@@ -206,7 +206,7 @@ A protection policy protects an app by creating snapshots, backups, or both at a
 * *spec.dayOfWeek*: (_Optional_) The day of the week (0 - 7) that the schedule should run. Values of 0 or 7 indicate Sunday. This field is required if the granularity is set to `Weekly`. The value must be provided as a string.
 * *spec.hour*: (_Optional_) The hour of the day (0 - 23) that the schedule should run. This field is required if the granularity is set to `Daily`, `Weekly`, or `Monthly`. The value must be provided as a string.
 * *spec.minute*: (_Optional_) The minute of the hour (0 - 59) that the schedule should run. This field is required if the granularity is set to `Hourly`, `Daily`, `Weekly`, or `Monthly`. The value must be provided as a string.
-* ##ASTRACTL-36882 update## *spec.runImmediately*: ##(_Optional_) Set to `true` to trigger a one-time, immediate baseline run (backup and/or snapshot per retention settings) when the schedule is created. Defaults to `false`. This does not modify subsequent recurrence.##
+//* ##ASTRACTL-36882 update## *spec.runImmediately*: ##(_Optional_) Set to `true` to trigger a one-time, immediate baseline run (backup and/or snapshot per retention settings) when the schedule is created. Defaults to `false`. This does not modify subsequent recurrence.##
 +
 Example YAML for backup and snapshot schedule:
 +
@@ -249,27 +249,27 @@ spec:
   minute: "0"
 ----
 +
-##ASTRACTL-36882 update-Example YAML for schedule with immediate run:##
-+
-[source,yaml]
-----
----
-apiVersion: protect.trident.netapp.io/v1
-kind: Schedule
-metadata:
-  namespace: my-app-namespace
-  name: my-daily-schedule-run-immediately
-spec:
-  applicationRef: my-application
-  appVaultRef: appvault-name
-  backupRetention: "7"
-  snapshotRetention: "7"
-  granularity: Daily
-  hour: "3"
-  minute: "0"
-  runImmediately: true
-----
-+
+//##ASTRACTL-36882 update-Example YAML for schedule with immediate run:##
+//+
+//[source,yaml]
+//----
+//---
+//apiVersion: protect.trident.netapp.io/v1
+//kind: Schedule
+//metadata:
+//  namespace: my-app-namespace
+//  name: my-daily-schedule-run-immediately
+//spec:
+//  applicationRef: my-application
+//  appVaultRef: appvault-name
+//  backupRetention: "7"
+//  snapshotRetention: "7"
+//  granularity: Daily
+//  hour: "3"
+//  minute: "0"
+//  runImmediately: true
+//----
+//+
 . After you populate the `trident-protect-schedule-cr.yaml` file with the correct values, apply the CR:
 +
 [source,console]
@@ -307,14 +307,14 @@ tridentctl-protect create schedule <my_schedule_name> \
 +
 The following flags provide additional control over your schedule:
 +
-* ##ASTRACTL-36609 update-*Full backup scheduling*: Use the `--full-backup-rule` flag to schedule non-incremental full backups. This flag only works with `--granularity Daily`. Possible values:##
+* *Full backup scheduling*: Use the `--full-backup-rule` flag to schedule non-incremental full backups. This flag only works with `--granularity Daily`. Possible values:
 +
-** ##`Always`: Create a full backup every day.##
-** ##Specific weekdays: Specify one or more days separated by commas (for example, `"Monday,Thursday"`). Valid values: Monday, Tuesday, Wednesday, Thursday, Friday.##
+** `Always`: Create a full backup every day.
+** Specific weekdays: Specify one or more days separated by commas (for example, `"Monday,Thursday"`). Valid values: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 +
-##NOTE:The `--full-backup-rule` flag does not work with Hourly, Weekly, or Monthly granularity.##
+NOTE:The `--full-backup-rule` flag does not work with Hourly, Weekly, or Monthly granularity.
 +
-* ##ASTRACTL-36882 update *Immediate baseline protection*: Use `--run-immediately true` to create an initial backup or snapshot immediately when the schedule is created, rather than waiting for the first scheduled run time. Default is `false`.##
+//* ##ASTRACTL-36882 update *Immediate baseline protection*: Use `--run-immediately true` to create an ///initial backup or snapshot immediately when the schedule is created, rather than waiting for the first scheduled run time. Default is `false`.##
 +
 * *Snapshot-only schedules*: Set `--backup-retention 0` and specify a value greater than zero for `--snapshot-retention`.
 ====
@@ -332,7 +332,7 @@ The following table describes the annotations you can use when creating a schedu
 |Default value
 |protect.trident.netapp.io/full-backup-rule
 |string
-|## ASTRACTL-36609 update-Specifies the rule for scheduling full backups. You can set it to `Always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur (for example, `"Monday,Thursday"`). Valid weekday values are: Monday, Tuesday, Wednesday, Thursday, Friday. Note that this annotation can only be used with schedules that have `granularity` set to `Daily`.##
+|Specifies the rule for scheduling full backups. You can set it to `Always` for constant full backup or customize it based on your requirements. For example, if you choose daily granularity, you can specify the weekdays on which full backup should occur (for example, `"Monday,Thursday"`). Valid weekday values are: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Note that this annotation can only be used with schedules that have `granularity` set to `Daily`.
 |Not set (all backups are incremental)
 |protect.trident.netapp.io/snapshot-completion-timeout
 |string

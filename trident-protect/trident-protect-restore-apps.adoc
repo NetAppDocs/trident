@@ -28,7 +28,7 @@ When you restore a backup to a different namespace using a BackupRestore CR, Tri
 [NOTE] 
 ====
 * Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
-* ##When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.##
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
 ====
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
@@ -166,7 +166,7 @@ You can restore a backup to a different cluster if there is an issue with the or
 [NOTE]
 ====
 * When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident Protect CLI.
-* ##When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.##
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
 ====
 
 .Before you begin
@@ -283,7 +283,7 @@ You can restore data from a snapshot using a custom resource (CR) file either to
 [NOTE]
 ====
 * SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
-* ##When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.##
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
 ====
 
 include::../_include/restore-include-sessiontoken-note.adoc[]

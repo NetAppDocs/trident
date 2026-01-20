@@ -99,6 +99,7 @@ helm install trident trident-operator-100.2502.0.tgz --set cloudProvider=$CP --s
 --set ontapConfigurator.svms[0].protocols[1]=nfs \
 --set ontapConfigurator.svms[0].authType="awsarn"
 ----
+
 NOTE: To disable automatic backend configuration, upgrade the Trident release version and set the *ontapConfigurator* to *false*. 
 ////
 
@@ -182,6 +183,7 @@ After the add-on installation is complete, you see your installed add-on.
 
 
 *For Pod Identity, use the following format*:
+
 NOTE: Use the 
 [source,json]
 ----

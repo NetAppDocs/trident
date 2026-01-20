@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Trident using Helm. Thi
 [.lead]
 You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Trident 25.06
+== Critical information about Trident 25.10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -21,7 +21,7 @@ You can deploy the Trident operator and install Trident using Helm. This process
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.33 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.34 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -42,7 +42,7 @@ In addition to the link:../trident-get-started/kubernetes-deploy.html#before-you
 . Add the Trident Helm repository:
 +
 ----
-helm repo add netapp-trident https://artifacthub.io/packages/helm/netapp-trident/trident-operator
+helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
 . Use `helm install` and specify a name for your deployment as in the following example where `100.2506.0` is the version of Trident you are installing. 
@@ -213,6 +213,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 
 |`tridentDebug`
 |Allows the log level of Trident to be set to `debug`.
+You can automate the force-detach process through integration with node health check (NHC) operator. For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].
 |`false`
 
 |`tridentLogWorkflows`
@@ -255,12 +256,132 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 
 |`iscsiSelfHealingWaitTime` |The duration after which iSCSI self-healing initiates an attempt to resolve a stale session by performing a logout and subsequent login.|`7m0s`
 
-|`nodePrep`
-a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
-*Currently, `iscsi` is the only value supported.*
+|`nodePrep` |Enables Trident to prepare the nodes of the Kubernetes cluster to manage volumes using the specified data storage protocol. 
+*Currently, `iscsi` is the only value supported.* 
+NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1. |
 
-NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
-|
+| `enableConcurrency`
+
+a| Enables concurrent Trident controller operations for improved throughput. 
+
+NOTE: *Tech Preview*: This feature is experimental and currently supports limited parallel workflows with the ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9) drivers, in addition to the existing tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9).
+|false
+
+|`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value. |`100`; optional
+
+|`resources` a|Sets Kubernetes resource limits and requests for the Trident controller, node, and operator pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
+
+For more information about configuring resource requests and limits, refer to link:https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Resource Management for Pods and Containers^].
+
+[WARNING] 
+====
+* DO NOT change the names of any containers or fields.
+* DO NOT change the indentation - YAML indentation is critical for proper parsing.
+====
+
+[NOTE]
+=====
+* No limits are applied by default - only requests have default values and are automatically applied if not specified.
+* Container names are listed as they appear in the pod specifications.
+* Sidecars are listed under each main container.
+* Check the TORC's `status.CurrentInstallationParams` field to view the values currently applied.
+=====  a|
+
+
+[source,yaml]
+----
+resources:
+  controller:
+    trident-main:
+      requests:
+        cpu: 10m
+        memory: 80Mi
+      limits:
+          cpu: 
+          memory:
+    csi-provisioner:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-attacher:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-resizer:
+      requests:
+        cpu: 3m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-snapshotter:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    trident-autosupport:
+      requests:
+        cpu: 1m
+        memory: 30Mi
+      limits:
+        cpu: 
+        memory:
+  node:
+    linux:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 60Mi
+        limits:
+          cpu: 
+          memory:
+      node-driver-registrar:
+        requests:
+          cpu: 1m
+          memory: 10Mi
+        limits:
+          cpu: 
+          memory:
+    windows:
+      trident-main:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        limits:
+          cpu: 
+          memory:
+      node-driver-registrar:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        limits:
+          cpu:
+          memory:
+      liveness-probe:
+        requests:
+          cpu: 2m
+          memory: 40Mi
+        limits:
+          cpu:
+          memory:
+  operator:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      cpu:
+      memory:
+----
+|`httpsMetrics`|Enable HTTPS for Prometheus metrics endpoint. |false
+|`hostNetwork` a|Enables host networking for the Trident controller. This is useful when you want to separate the frontend and backend traffic in a multi-home network. |false
 
 |===
 
@@ -271,3 +392,4 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 
 * The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
 * The node plugin handles attaching the storage to the node.
+

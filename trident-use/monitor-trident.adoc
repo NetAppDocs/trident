@@ -21,7 +21,7 @@ The metrics provided by Trident enable you to do the following:
 * Maintain a mapping of the amount of volumes provisioned on available backends.
 * Track performance. You can take a look at how long it takes for Trident to communicate to backends and perform operations.
 
-NOTE: By default, Trident's metrics are exposed on the target port `8001` at the `/metrics` endpoint. These metrics are *enabled by default* when Trident is installed.
+NOTE: By default, Trident's metrics are exposed on the target port `8001` at the `/metrics` endpoint. These metrics are *enabled by default* when Trident is installed. You can configure to consume Trident metrics over HTTPS on port `8444` as well.
 
 .What you'll need
 
@@ -30,7 +30,7 @@ NOTE: By default, Trident's metrics are exposed on the target port `8001` at the
 
 == Step 1: Define a Prometheus target
 
-You should define a Prometheus target to gather the metrics and obtain information about the backends Trident manages, the volumes it creates, and so on. This https://netapp.io/2020/02/20/prometheus-and-trident/[blog^] explains how you can use Prometheus and Grafana with Trident to retrieve metrics. The blog explains how you can run Prometheus as an operator in your Kubernetes cluster and the creation of a ServiceMonitor to obtain Trident metrics.
+You should define a Prometheus target to gather the metrics and obtain information about the backends Trident manages, the volumes it creates, and so on. See link:https://prometheus-operator.dev/docs/developer/getting-started/[Prometheus Operator documentation^].
 
 == Step 2: Create a Prometheus ServiceMonitor
 
@@ -58,10 +58,60 @@ spec:
       interval: 15s
 ----
 
-This ServiceMonitor definition retrieves metrics returned by the `trident-csi` service and specifically looks for the `metrics` endpoint of the service. As a result, Prometheus is now configured to understand Trident's
-metrics.
+This ServiceMonitor definition retrieves metrics returned by the `trident-csi` service and specifically looks for the `metrics` endpoint of the service. As a result, Prometheus is now configured to understand Trident's metrics.
 
 In addition to metrics available directly from Trident, kubelet exposes many `kubelet_volume_*` metrics via it's own metrics endpoint. Kubelet can provide information about the volumes that are attached, and pods and other internal operations it handles. Refer to https://kubernetes.io/docs/concepts/cluster-administration/monitoring/[here^].
+
+=== Consume Trident metrics over HTTPS
+
+To consume Trident metrics over HTTPS (port 8444), you must modify the ServiceMonitor definition to include TLS configuration. You also need to copy the `trident-csi` secret from the `trident` namespace to the namespace where Prometheus is running. You can do this using the following command:
+
+`kubectl get secret trident-csi -n trident -o yaml | sed 's/namespace: trident/namespace: monitoring/' | kubectl apply -f -`
+
+A sample ServiceMonitor for HTTPS metrics looks like this:
+
+[source,yaml]
+----
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: trident-sm
+  namespace: monitoring
+  labels:
+    release: prom-operator
+spec:
+  jobLabel: trident
+  selector:
+    matchLabels:
+      app: controller.csi.trident.netapp.io
+  namespaceSelector:
+    matchNames:
+      - trident
+  endpoints:
+    - interval: 15s
+      path: /metrics
+      port: https-metrics
+      scheme: https
+      tlsConfig:
+        ca:
+          secret:
+            key: caCert
+            name: trident-csi
+        cert:
+          secret:
+            key: clientCert
+            name: trident-csi
+        keySecret:
+          key: clientKey
+          name: trident-csi
+        serverName: trident-csi
+----
+
+Trident support HTTPS metrics in all the installation methods: tridentctl, Helm chart, and Operator:
+
+* If you are using the `tridentctl install` command, you can pass the `--https-metrics` flag to enable HTTPS metrics.
+* If you are using the Helm chart, you can set the `httpsMetrics` parameter to enable HTTPS metrics.
+* If you are using YAML files, you can add the `--https_metrics` flag to the `trident-main` container in the `trident-deployment.yaml` file.
 
 == Step 3: Query Trident metrics with PromQL
 

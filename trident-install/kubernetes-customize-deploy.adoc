@@ -14,7 +14,7 @@ summary: The Trident operator enables you to customize the manner in which Tride
 The Trident operator allows you to customize Trident installation using the attributes in the `TridentOrchestrator` spec. If you want to customize the installation beyond what `TridentOrchestrator` arguments allow, consider using `tridentctl` to generate custom YAML manifests to modify as needed.
 
 == Understanding controller pods and node pods
-Trident runs as a single controller pod, plus a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount a Trident volume. 
+Trident runs as a single controller pod and a node pod on each worker node in the cluster. The node pod must be running on any host where you want to potentially mount a Trident volume. 
 
 Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[node selectors^] and link:https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/[tolerations and taints^] are used to constrain a pod to run on a specific or preferred node. Using the`ControllerPlugin` and `NodePlugin`, you can specify constraints and overrides.
 
@@ -34,7 +34,9 @@ This table details `TridentOrchestrator` attributes.
 
 |`enableForceDetach` |`ontap-san`, `ontap-san-economy`, `ontap-nas`, and `ontap-nas-economy` only. 
 
-Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. |`false`
+Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster administrators ability to safely migrate workloads with mounted volumes to new nodes should a node become unhealthy. 
+
+For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].|`false`
 
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
@@ -56,7 +58,7 @@ NOTE: The `k8sTimeout` parameter is applicable only for Trident installation.  |
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport:25.06"`
+|`"netapp/trident-autosupport10"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -65,7 +67,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Trident image to install |`"netapp/trident:25.06"`
+|`tridentImage` |Trident image to install |`"netapp/trident:25.10"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"registry.k8s.io"`
@@ -100,28 +102,124 @@ a|Enables Trident to prepare the nodes of the Kubernetes cluster to manage volum
 NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
 |
 
+|`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value.|`100`; optional
+
+|`enableConcurrency` a|Enables concurrent Trident controller operations for improved throughput.
+
+NOTE: *Tech Preview*: This feature is experimental and currently supports limited parallel workflows with the ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9) drivers, in addition to the existing tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9).|false
+
+|`resources` a|Sets Kubernetes resource limits and requests for the Trident controller and node pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
+
+For more information about configuring resource requests and limits, refer to link:https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Resource Management for Pods and Containers^].
+
+[WARNING] 
+====
+* DO NOT change the names of any containers or fields.
+* DO NOT change the indentation - YAML indentation is critical for proper parsing.
+====
+
+[NOTE]
+=====
+* No limits are applied by default - only requests have default values and are applied automatically if not specified.
+* Container names are listed as they appear in the pod specifications.
+* Sidecars are listed under each main container.
+* Check the TORC's `status.CurrentInstallationParams` field to view the values currently applied.
+=====
+
+a|
+
+[source,yaml]
+----
+resources:
+  controller:
+    trident-main:
+      requests:
+        cpu: 10m
+        memory: 80Mi
+      limits:
+          cpu: 
+          memory:
+    csi-provisioner:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-attacher:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-resizer:
+      requests:
+        cpu: 3m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    csi-snapshotter:
+      requests:
+        cpu: 2m
+        memory: 20Mi
+      limits:
+        cpu: 
+        memory:
+    trident-autosupport:
+      requests:
+        cpu: 1m
+        memory: 30Mi
+      limits:
+        cpu: 
+        memory:
+  node:
+    linux:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 60Mi
+        limits:
+          cpu: 
+          memory:
+      node-driver-registrar:
+        requests:
+          cpu: 1m
+          memory: 10Mi
+        limits:
+          cpu: 
+          memory:
+    windows:
+      trident-main:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        limits:
+          cpu: 
+          memory:
+      node-driver-registrar:
+        requests:
+          cpu: 6m
+          memory: 40Mi
+        limits:
+          cpu:
+          memory:
+      liveness-probe:
+        requests:
+          cpu: 2m
+          memory: 40Mi
+        limits:
+          cpu:
+          memory:
+----
+|`httpsMetrics`|Enable HTTPS for Prometheus metrics endpoint. |false
+|`hostNetwork` a|Enables host networking for the Trident controller. This is useful when you want to separate the frontend and backend traffic in a multi-home network. |false
+
 |===
+
 [NOTE] 
 For more information on formatting pod parameters, refer to link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[Assigning Pods to Nodes^].
-
-=== Details about force detach
-Force detach is available for `ontap-san`, `ontap-san-economy`, `onatp-nas`, and `onatp-nas-economy` only. Before enabling force detach, non-graceful node shutdown (NGNS) must be enabled on the Kubernetes cluster. NGNS is enabled by default for Kubernetes 1.28 and above. For more information, refer to link:https://kubernetes.io/docs/concepts/cluster-administration/node-shutdown/#non-graceful-node-shutdown[Kubernetes: Non Graceful node shutdown^]. 
-
-NOTE: When using the `ontap-nas` or `ontap-nas-economy` driver, you need to set the `autoExportPolicy` parameter in the backend configuration to `true` so that Trident can restrict access from the Kubernetes node with the taint applied using managed export policies.
-
-WARNING: Because Trident relies on Kubernetes NGNS, do not remove `out-of-service` taints from an unhealthy node until all non-tolerable workloads are rescheduled. Recklessly applying or removing the taint can jeopardize backend data protection.  
-
-When the Kubernetes cluster administrator has applied the `node.kubernetes.io/out-of-service=nodeshutdown:NoExecute` taint to the node and `enableForceDetach` is set to `true`, Trident will determine the node status and:
-
-. Cease backend I/O access for volumes mounted to that node.
-. Mark the Trident node object as `dirty` (not safe for new publications).
-+
-NOTE: The Trident controller will reject new publish volume requests until the node is re-qualified (after having been marked as `dirty`) by the Trident node pod. Any workloads scheduled with a mounted PVC (even after the cluster node is healthy and ready) will be not be accepted until Trident can verify the node `clean` (safe for new publications).
-
-When node health is restored and the taint is removed, Trident will:
-
-. Identify and clean stale published paths on the node.
-. If the node is in a `cleanable` state (the out-of-service taint has been removed and the node is in `Ready` state) and all stale, published paths are clean, Trident will readmit the node as `clean` and allow new published volumes to the node.
 
 == Sample configurations
 You can use the attributes in <<Configuration options>> when defining `TridentOrchestrator` to customize your installation. 
@@ -256,5 +354,199 @@ spec:
   location: us-west2
   serviceLevel: Premium
   storagePool: pool-premium1
+----
+====
+
+.Kubernetes resource requests and limits configuration for Trident controller and Trident Linux node pods
+[%collapsible%closed]
+====
+
+This example configures Kubernetes resource requests and limits for Trident controller and Trident Linux node pods.
+
+WARNING: *Disclaimer*: The request and limit values provided in this example are for demonstration purposes only. Adjust these values based on your environment and workload requirements.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullSecrets:
+  - thisisasecret
+  resources:
+    controller:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 80Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+      # sidecars
+      csi-provisioner:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-attacher:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-resizer:
+        requests:
+          cpu: 3m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-snapshotter:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      trident-autosupport:
+        requests:
+          cpu: 1m
+          memory: 30Mi
+        limits:
+          cpu: 50m
+          memory: 128Mi
+    node:
+      linux:
+        trident-main:
+          requests:
+            cpu: 10m
+            memory: 60Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        # sidecars
+        node-driver-registrar:
+          requests:
+            cpu: 1m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+
+----
+====
+
+.Kubernetes resource requests and limits configuration for Trident controller and Trident Windows and Linux node pods
+[%collapsible%closed]
+====
+
+This example configures Kubernetes resource requests and limits for Trident controller and Trident Windows and Linux node pods.
+
+WARNING: *Disclaimer*: The request and limit values provided in this example are for demonstration purposes only. Adjust these values based on your environment and workload requirements.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+  imagePullSecrets:
+  - thisisasecret
+  windows: true
+  resources:
+    controller:
+      trident-main:
+        requests:
+          cpu: 10m
+          memory: 80Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        # sidecars
+      csi-provisioner:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-attacher:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-resizer:
+        requests:
+          cpu: 3m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      csi-snapshotter:
+        requests:
+          cpu: 2m
+          memory: 20Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      trident-autosupport:
+        requests:
+          cpu: 1m
+          memory: 30Mi
+        limits:
+          cpu: 50m
+          memory: 128Mi
+    node:
+      linux:
+        trident-main:
+          requests:
+            cpu: 10m
+            memory: 60Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        # sidecars
+        node-driver-registrar:
+          requests:
+            cpu: 1m
+            memory: 10Mi
+          limits:
+            cpu: 50m
+            memory: 32Mi
+      windows:
+        trident-main:
+          requests:
+            cpu: 6m
+            memory: 40Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        # sidecars
+        node-driver-registrar:
+          requests:
+            cpu: 6m
+            memory: 40Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        liveness-probe:
+          requests:
+            cpu: 2m
+            memory: 40Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+
 ----
 ====

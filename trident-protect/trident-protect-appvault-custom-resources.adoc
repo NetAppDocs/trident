@@ -2,9 +2,9 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-appvault-custom-resources.html
 keywords: trident. appvault, custom, protect, kubernetes
-summary: The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVaults are the declarative Kubernetes workflow representation of a storage bucket. 
+summary: The bucket custom resource (CR) for Trident Protect is known as an AppVault. AppVaults are the declarative Kubernetes workflow representation of a storage bucket. 
 ---
-= Use Trident protect AppVault objects to manage buckets
+= Use Trident Protect AppVault objects to manage buckets
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,24 +12,24 @@ summary: The bucket custom resource (CR) for Trident protect is known as an AppV
 :imagesdir: ../media/
 
 [.lead]
-The bucket custom resource (CR) for Trident protect is known as an AppVault. AppVault objects are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication. Only administrators can create AppVaults.
+The bucket custom resource (CR) for Trident Protect is known as an AppVault. AppVault objects are the declarative Kubernetes workflow representation of a storage bucket. An AppVault CR contains the configurations necessary for a bucket to be used in protection operations, such as backups, snapshots, restore operations, and SnapMirror replication. Only administrators can create AppVaults.
 
 You need to create an AppVault CR manually or from the command line when you perform data protection operations on an application. The AppVault CR is specific to your environment, and you can use the examples on this page as a guide when creating AppVault CRs.
 
-NOTE: Ensure the AppVault CR is on the cluster where Trident protect is installed. If the AppVault CR does not exist or you cannot access it, the command line shows an error.
+NOTE: Ensure the AppVault CR is on the cluster where Trident Protect is installed. If the AppVault CR does not exist or you cannot access it, the command line shows an error.
 
 
 == Configure AppVault authentication and passwords
 Before you create an AppVault CR, ensure the AppVault and the data mover you choose can authenticate with the provider and any related resources.
 
 === Data mover repository passwords
-When you create AppVault objects using CRs or the Trident protect CLI plugin, you can specify a Kubernetes secret with custom passwords for Restic and Kopia encryption. If you don't specify a secret, Trident protect uses a default password.
+When you create AppVault objects using CRs or the Trident Protect CLI plugin, you can specify a Kubernetes secret with custom passwords for Restic and Kopia encryption. If you don't specify a secret, Trident Protect uses a default password.
 
 * When manually creating AppVault CRs, use the *spec.dataMoverPasswordSecretRef* field to specify the secret.
-* When creating AppVault objects using the Trident protect CLI, use the `--data-mover-password-secret-ref` argument to specify the secret.
+* When creating AppVault objects using the Trident Protect CLI, use the `--data-mover-password-secret-ref` argument to specify the secret.
 
 ==== Create a data mover repository password secret
-Use the following examples to create the password secret. When you create AppVault objects, you can instruct Trident protect to use this secret to authenticate with the data mover repository. 
+Use the following examples to create the password secret. When you create AppVault objects, you can instruct Trident Protect to use this secret to authenticate with the data mover repository. 
 
 [NOTE]
 ====
@@ -70,7 +70,7 @@ kubectl create secret generic my-optional-data-mover-secret \
 ====
 
 === S3-compatible storage IAM permissions
-When you access S3-compatible storage such as Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html[StorageGrid S3^], or https://docs.netapp.com/us-en/ontap/s3-config/[ONTAP S3^] using Trident protect, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident protect. You can apply this policy to the user that manages S3-compatible bucket policies.
+When you access S3-compatible storage such as Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html[StorageGrid S3^], or https://docs.netapp.com/us-en/ontap/s3-config/[ONTAP S3^] using Trident Protect, you need to ensure that the user credentials you provide have the necessary permissions to access the bucket. The following is an example of a policy that grants the minimum required permissions for access with Trident Protect. You can apply this policy to the user that manages S3-compatible bucket policies.
 
 [source,json]
 ----
@@ -95,15 +95,15 @@ For more information about Amazon S3 policies, refer to the examples in the http
 
 === EKS Pod Identity for Amazon S3 (AWS) authentication
 
-Trident protect supports EKS Pod Identity for Kopia data mover operations. This feature enables secure access to S3 buckets without storing AWS credentials in Kubernetes secrets.
+Trident Protect supports EKS Pod Identity for Kopia data mover operations. This feature enables secure access to S3 buckets without storing AWS credentials in Kubernetes secrets.
 
-*Requirements for EKS Pod Identity with Trident protect*
+*Requirements for EKS Pod Identity with Trident Protect*
 
-Before using EKS Pod Identity with Trident protect, ensure the following:
+Before using EKS Pod Identity with Trident Protect, ensure the following:
 
 * Your EKS cluster has Pod Identity enabled.
 * You have created an IAM role with the necessary S3 bucket permissions. To learn more, refer to link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-appvault-custom-resources.html#s3-compatible-storage-iam-permissions[S3-compatible storage IAM permissions].
-* The IAM role is associated with the following Trident protect service accounts:
+* The IAM role is associated with the following Trident Protect service accounts:
 ** `<trident-protect>-controller-manager`
 ** `<trident-protect>-resource-backup` 
 ** `<trident-protect>-resource-restore`
@@ -393,7 +393,7 @@ spec:
 ====
 // end tabbed block
 
-=== AppVault creation examples using the Trident protect CLI
+=== AppVault creation examples using the Trident Protect CLI
 You can use the following CLI command examples to create AppVault CRs for each provider.
 
 [NOTE]
@@ -520,8 +520,36 @@ The `providerType` and `providerConfig` keys in an AppVault CR require specific 
 
 ////
 
+=== Supported `providerConfig.s3` configuration options
+See the following table for the S3 provider configuration options:
+
+[cols="1,3,2,1" options="header"]
+|===
+|Parameter |Description |Default |Example
+|`providerConfig.s3.skipCertValidation`
+|Disable SSL/TLS certificate verification.
+|false
+|"true", "false"
+|`providerConfig.s3.secure`
+|Enable secure HTTPS communication with the S3 endpoint.
+|true
+|"true", "false"
+|`providerConfig.s3.proxyURL`
+|Specify the URL of the proxy server used to connect to S3.
+|None
+|http://proxy.example.com:8080
+|`providerConfig.s3.rootCA`
+|Provide a custom root CA certificate for SSL/TLS verification. 
+|None
+|"CN=MyCustomCA"
+|`providerConfig.s3.useIAM`  
+|Enable IAM authentication for accessing S3 buckets. Applicable for EKS Pod Identity.
+|false
+|true, false
+|===
+
 == View AppVault information
-You can use the Trident protect CLI plugin to view information about AppVault objects that you have created on the cluster.
+You can use the Trident Protect CLI plugin to view information about AppVault objects that you have created on the cluster.
 
 .Steps
 
@@ -554,7 +582,7 @@ tridentctl-protect get appvaultcontent gcp-vault \
 
 . Optionally, to see the AppVaultPath for each resource, use the flag `--show-paths`.
 +
-The cluster name in the first column of the table is only available if a cluster name was specified in the Trident protect helm installation. For example: `--set clusterName=production1`. 
+The cluster name in the first column of the table is only available if a cluster name was specified in the Trident Protect helm installation. For example: `--set clusterName=production1`. 
 
 == Remove an AppVault
 You can remove an AppVault object at any time.
@@ -577,7 +605,7 @@ kubectl delete appvault <appvault-name> \
 ----
 
 --
-.Remove an AppVault using the Trident protect CLI
+.Remove an AppVault using the Trident Protect CLI
 --
 . Remove the AppVault object, replacing `appvault-name` with the name of the AppVault object to remove:
 +

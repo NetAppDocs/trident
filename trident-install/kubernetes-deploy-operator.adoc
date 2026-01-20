@@ -13,7 +13,7 @@ summary: You can manually deploy the Trident operator to install Trident. This p
 [.lead]
 You can manually deploy the Trident operator to install Trident. This process applies to installations where the container images required by Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-operator-mirror.html[process for offline deployment].
 
-== Critical information about Trident 25.06
+== Critical information about Trident 25.10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -21,7 +21,7 @@ You can manually deploy the Trident operator to install Trident. This process ap
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.33 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.34 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -65,8 +65,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^].  
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v25.06.0/trident-installer-25.06.0.tar.gz
-tar -xf trident-installer-25.06.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v25.10.0/trident-installer-25.10.0.tar.gz
+tar -xf trident-installer-25.10.0.tar.gz
 cd trident-installer
 ----
 
@@ -144,7 +144,7 @@ Status:
   Current Installation Params:
     IPv6:                      false
     Autosupport Hostname:
-    Autosupport Image:         netapp/trident-autosupport:25.06
+    Autosupport Image:         netapp/trident-autosupport:25.10
     Autosupport Proxy:
     Autosupport Serial Number:
     Debug:                     true
@@ -154,10 +154,10 @@ Status:
     Kubelet Dir:          /var/lib/kubelet
     Log Format:           text
     Silence Autosupport:  false
-    Trident Image:        netapp/trident:25.06.0
+    Trident Image:        netapp/trident:25.10.0
   Message:                  Trident installed  Namespace:                trident
   Status:                   Installed
-  Version:                  v25.06.0
+  Version:                  v25.10.0
 Events:
     Type Reason Age From Message ---- ------ ---- ---- -------Normal
     Installing 74s trident-operator.netapp.io Installing Trident Normal
@@ -217,6 +217,6 @@ You can use `tridentctl` to check the version of Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 25.06.0        | 25.06.0        |
+| 25.10.0        | 25.10.0        |
 +----------------+----------------+
 ----

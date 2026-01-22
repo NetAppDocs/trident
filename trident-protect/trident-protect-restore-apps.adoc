@@ -53,6 +53,7 @@ NOTE: When you restore backups using Kopia as the data mover, you can optionally
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
+* ##*spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.##
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 [source,yaml]
@@ -66,6 +67,7 @@ metadata:
 spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
+  destinationApplicationName: my-new-app-name
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
 -------
 +
@@ -82,13 +84,13 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 .Use the CLI
 --
 .Steps
-. Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. For example:
+. Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. ##For example:##
 +
 [source,console]
 -----
 tridentctl-protect create backuprestore <my_restore_name> \
 --backup <backup_namespace>/<backup_to_restore> \
---namespace-mapping <source_to_destination_namespace_mapping> \
+--namespace-mapping <source_to_destination_namespace_mapping> \ --destination-app-name<custom_app_name>\
 -n <application_namespace>
 -----
 --
@@ -232,8 +234,8 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 ----
 +
 NOTE: If BackupRestore CR is not available, you can use the command mentioned in step 2 to view the backup contents.
-
 +
+* ##*spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.##
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 For example:
@@ -248,6 +250,7 @@ metadata:
 spec:
   appVaultRef: appvault-name
   appArchivePath: my-backup-path
+  destinationApplicationName: my-new-app-name
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
 ----
 . After you populate the `trident-protect-backup-restore-cr.yaml` file with the correct values, apply the CR:
@@ -269,6 +272,7 @@ tridentctl-protect create backuprestore <restore_name> \
 --namespace-mapping <source_to_destination_namespace_mapping> \
 --appvault <appvault_name> \
 --path <backup_path> \
+--destination-app-name <custom_app_name> \
 --context <destination_cluster_name> \
 -n <application_namespace>
 ----
@@ -306,6 +310,7 @@ include::../_include/restore-include-sessiontoken-note.adoc[]
 kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 +
+* ##*spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.##
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 [source,yaml]
@@ -347,6 +352,7 @@ For example:
 tridentctl-protect create snapshotrestore <my_restore_name> \
 --snapshot <namespace/snapshot_to_restore> \
 --namespace-mapping <source_to_destination_namespace_mapping> \
+--destination-app-name <custom_app_name> \
 -n <application_namespace>
 -----
 --

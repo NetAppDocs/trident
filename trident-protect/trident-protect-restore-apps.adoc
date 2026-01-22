@@ -387,7 +387,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: appvault-name
-    appArchivePath: my-snapshot-path
+  appArchivePath: my-snapshot-path
 -------
 +
 include::../_include/restore-include-selective-restore.adoc[]
@@ -407,7 +407,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 [source,console]
 -----
 tridentctl-protect create snapshotinplacerestore <my_restore_name> \
---snapshot <snapshot_to_restore> \
+--snapshot <namespace/snapshot_to_restore> \
 -n <application_namespace>
 -----
 --

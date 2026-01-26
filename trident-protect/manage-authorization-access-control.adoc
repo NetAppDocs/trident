@@ -2,14 +2,14 @@
 permalink: trident-protect/manage-authorization-access-control.html
 sidebar: sidebar
 keywords: manage, authentication, rbac
-summary: "Trident protect uses the Kubernetes model of role-based access control (RBAC). You can use Trident protect RBAC features to more finely control access to resources."
+summary: "Trident Protect uses the Kubernetes model of role-based access control (RBAC). You can use Trident Protect RBAC features to more finely control access to resources."
 ---
-= Manage Trident protect authorization and access control
+= Manage Trident Protect authorization and access control
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Trident protect uses the Kubernetes model of role-based access control (RBAC). By default, Trident protect provides a single system namespace and its associated default service account. If you have an organization with many users or specific security needs, you can use the RBAC features of Trident protect to gain more granular control over access to resources and namespaces.
+Trident Protect uses the Kubernetes model of role-based access control (RBAC). By default, Trident Protect provides a single system namespace and its associated default service account. If you have an organization with many users or specific security needs, you can use the RBAC features of Trident Protect to gain more granular control over access to resources and namespaces.
 
 The cluster administrator always has access to resources in the default `trident-protect` namespace, and can also access resources in all other namespaces. To control access to resources and applications, you need to create additional namespaces and add resources and applications to those namespaces.
 
@@ -17,10 +17,10 @@ Note that no users can create application data management CRs in the default `tr
 
 [NOTE]
 ======
-Only administrators should have access to privileged Trident protect custom resource objects, which include:
+Only administrators should have access to privileged Trident Protect custom resource objects, which include:
 
 * *AppVault*: Requires bucket credential data
-* *AutoSupportBundle*: Collects metrics, logs, and other sensitive Trident protect data
+* *AutoSupportBundle*: Collects metrics, logs, and other sensitive Trident Protect data
 * *AutoSupportBundleSchedule*: Manages log collection schedules
 
 As a best practice, use RBAC to restrict access to privileged objects to administrators.
@@ -112,7 +112,7 @@ type: kubernetes.io/service-account-token
 
 
 === Step 4: Create a RoleBinding object to bind the ClusterRole object to each new service account
-A default ClusterRole object is created when you install Trident protect. You can bind this ClusterRole to the service account by creating and applying a RoleBinding object. 
+A default ClusterRole object is created when you install Trident Protect. You can bind this ClusterRole to the service account by creating and applying a RoleBinding object. 
 
 .Steps
 . Bind the ClusterRole to the engineering service account:
@@ -195,7 +195,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: AppVault
 metadata:
   name: appvault-for-eng-user-only
-  namespace: trident-protect # Trident protect system namespace 
+  namespace: trident-protect # Trident Protect system namespace 
 spec:
   providerConfig:
     azure:
@@ -292,8 +292,8 @@ yes
 The users you have granted AppVault permissions to should be able to use authorized AppVault objects for application data management operations, and should not be able to access any resources outside of the assigned namespaces or create new resources that they do not have access to.
 
 ////
-== Trident protect prevents unauthorized resource creation
-Trident protect prevents users from creating and accessing unauthorized resources by using a ValidatingWebhookConfiguration; resource creation requests are validated before Trident protect acts on them. You can verify this for specific users by following these example steps.
+== Trident Protect prevents unauthorized resource creation
+Trident Protect prevents users from creating and accessing unauthorized resources by using a ValidatingWebhookConfiguration; resource creation requests are validated before Trident Protect acts on them. You can verify this for specific users by following these example steps.
 
 .Steps
 

@@ -13,7 +13,7 @@ summary: You can install Trident using `tridentctl`. This process applies to ins
 [.lead]
 You can install Trident using `tridentctl`. This process applies to installations where the container images required by Trident are stored either in a private registry or not. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
-== Critical information about Trident 25.06
+== Critical information about Trident10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -63,8 +63,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Trident version. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v25.06.0/trident-installer-25.06.0.tar.gz
-tar -xf trident-installer-25.06.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v25.10.0/trident-installer-25.10.0.tar.gz
+tar -xf trident-installer-25.10.0.tar.gz
 cd trident-installer
 ----
 
@@ -85,14 +85,14 @@ Install Trident in the desired namespace by executing the `tridentctl install` c
 .Images in one registry
 --
 ----
-./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:25.06 --trident-image <your-registry>/trident:25.06.0
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:25.10 --trident-image <your-registry>/trident:25.10.0
 ----
 --
 
 .Images in different registries
 --
 ----
-./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:25.06 --trident-image <your-registry>/trident:25.06.0
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:25.10 --trident-image <your-registry>/trident:25.10.0
 ----
 --
 
@@ -113,7 +113,7 @@ INFO Created Trident daemonset.
 INFO Waiting for Trident pod to start.
 INFO Trident pod started.                          namespace=trident pod=trident-controller-679648bd45-cv2mx
 INFO Waiting for Trident REST interface.
-INFO Trident REST interface is up.                 version=25.06.0
+INFO Trident REST interface is up.                 version=25.10.0
 INFO Trident installation succeeded.
 ....
 ----
@@ -146,7 +146,7 @@ You can use `tridentctl` to check the version of Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 25.06.0        | 25.06.0        |
+| 25.10.0        | 25.10.0        |
 +----------------+----------------+
 ----
 
@@ -165,8 +165,22 @@ tridentctl install --windows -n trident
 .Force detach
 [%collapsible%closed]
 ====
-For more information about force detach, refer to link:..trident-get-started/kubernetes-customize-deploy.html[Customize Trident operator installation].
+For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].
 ----
 tridentctl install --enable-force-detach=true -n trident
 ----
 ====
+
+.Enable concurrent Trident controller operations
+[%collapsible%closed]
+====
+To enable concurrent Trident controller operations for improved throughput, add the `--enable-concurrency` option during the installation as shown in this example. 
+
+NOTE: *Tech Preview*: This feature is experimental and currently supports limited parallel workflows with the ONTAP-NAS (NFS only) and ONTAP-SAN (NVMe for unified ONTAP 9) drivers, in addition to the existing tech preview for the ONTAP-SAN driver (iSCSI and FCP protocols in unified ONTAP 9).
+
+----
+tridentctl install --enable-concurrency -n trident
+----
+====
+
+

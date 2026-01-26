@@ -13,12 +13,17 @@ summary: Understand the requirements, authentication options, and export policie
 [.lead]
 Understand the requirements, authentication options, and export policies for configuring an ONTAP backend with ONTAP NAS drivers.
 
+Beginning with the 25.10 release, NetApp Trident supports link:https://docs.netapp.com/us-en/ontap-afx/index.html[NetApp AFX storage system^]. NetApp AFX storage systems differ from other ONTAP systems (ASA, AFF, and FAS) in the implementation of their storage layer.
+
+NOTE: Only the `ontap-nas` driver (with NFS protocol) is supported for  AFX systems; SMB protocol is not supported.
+
+In the Trident backend configuration, you need not specify that your system is AFX. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the AFX systems. 
+
 == Requirements
 * For all ONTAP backends, Trident requires at least one aggregate be assigned to the SVM.
 * You can run more than one driver, and create storage classes that point to one or the other. For example, you could configure a Gold class that uses the `ontap-nas` driver and a Bronze class that uses the `ontap-nas-economy` one.
 * All your Kubernetes worker nodes must have the appropriate NFS tools installed. Refer to link:worker-node-prep.html[here] for more details.
 * Trident supports SMB volumes mounted to pods running on Windows nodes only. Refer to <<Prepare to provision SMB volumes>> for details. 
-
 
 == Authenticate the ONTAP backend
 

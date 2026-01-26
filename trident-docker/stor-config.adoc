@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-docker/stor-config.html
-keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protocol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, storage pool, cvs, cvs-performance, service type, service level, cloud volumes service, cloud volumes
+keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protocol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, storage pool, service type, service level, cloud volumes
 summary: See the configuration options available for your Trident configurations.
 ---
 
@@ -194,6 +194,10 @@ a|`xfs`
 |`tieringPolicy`
 a|Tiering policy to use, default is `none`.
 a|`none`
+
+|`skipRecoveryQueue`
+a|During volume deletion, bypass the recovery queue in storage and delete the volume immediately.
+a|``
 
 |===
 

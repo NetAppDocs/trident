@@ -13,7 +13,7 @@ summary: You can manually deploy the Trident operator to install Trident. This p
 [.lead]
 You can manually deploy the Trident operator to install Trident. This process applies to installations where the container images required by Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-operator.html[process for standard deployment].
 
-== Critical information about Trident 25.06
+== Critical information about Trident10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -21,7 +21,7 @@ You can manually deploy the Trident operator to install Trident. This process ap
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.33 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.34 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -65,13 +65,13 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Trident installer package contains everything you need to deploy the Trident operator and install Trident. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v6.0/trident-installer-25.06.0.tar.gz
-tar -xf trident-installer-25.06.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v6.0/trident-installer-25.10.0.tar.gz
+tar -xf trident-installer-25.10.0.tar.gz
 cd trident-installer
 ----
 
 === Step 2: Create the `TridentOrchestrator` CRD
-Create the `TridentOrchestrator` Custom Resource Definition (CRD). You creates a `TridentOrchestrator` Custom Resources later. Use the appropriate CRD YAML version in `deploy/crds` to create the `TridentOrchestrator` CRD:
+Create the `TridentOrchestrator` Custom Resource Definition (CRD). You will create a `TridentOrchestrator` Custom Resources later. Use the appropriate CRD YAML version in `deploy/crds` to create the `TridentOrchestrator` CRD:
 
 ----
 kubectl create -f deploy/crds/<VERSION>.yaml
@@ -79,10 +79,10 @@ kubectl create -f deploy/crds/<VERSION>.yaml
 
 === Step 3: Update the registry location in the operator
 
-In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:25.06.0` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
+In `/deploy/operator.yaml`, update `image: docker.io/netapp/trident-operator:25.10.0` to reflect the location of your image registry. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. For example:
 
-* `image: <your-registry>/trident-operator:25.06.0` if your images are all located in one registry.
-* `image: <your-registry>/netapp/trident-operator:25.06.0` if your Trident image is located in a different registry from your CSI images. 
+* `image: <your-registry>/trident-operator:25.10.0` if your images are all located in one registry.
+* `image: <your-registry>/netapp/trident-operator:25.10.0` if your Trident image is located in a different registry from your CSI images.
 
 === Step 4: Deploy the Trident operator
 The Trident installer provides a bundle file that can be used to install the operator and create associated objects. The bundle file is an easy way to deploy the operator and install Trident using a default configuration. 
@@ -135,8 +135,8 @@ Your link:../trident-get-started/requirements.html#container-images-and-correspo
 --
 ----
 imageRegistry: "<your-registry>"
-autosupportImage: "<your-registry>/trident-autosupport:25.06"
-tridentImage: "<your-registry>/trident:25.06.0"
+autosupportImage: "<your-registry>/trident-autosupport:25.10"
+tridentImage: "<your-registry>/trident:25.10.0"
 ----
 --
 
@@ -144,8 +144,8 @@ tridentImage: "<your-registry>/trident:25.06.0"
 --
 ----
 imageRegistry: "<your-registry>"
-autosupportImage: "<your-registry>/trident-autosupport:25.06"
-tridentImage: "<your-registry>/trident:25.06.0"
+autosupportImage: "<your-registry>/trident-autosupport:25.10"
+tridentImage: "<your-registry>/trident:25.10.0"
 ----
 --
 ====
@@ -168,16 +168,16 @@ API Version: trident.netapp.io/v1
 Kind:        TridentOrchestrator
 ...
 Spec:
-  Autosupport Image:  <your-registry>/trident-autosupport:25.06
+  Autosupport Image:  <your-registry>/trident-autosupport:25.10
   Debug:              true
   Image Registry:     <your-registry>
   Namespace:          trident
-  Trident Image:      <your-registry>/trident:25.06.0
+  Trident Image:      <your-registry>/trident:25.10.0
 Status:
   Current Installation Params:
     IPv6:                       false
     Autosupport Hostname:      
-    Autosupport Image:          <your-registry>/trident-autosupport:25.06
+    Autosupport Image:          <your-registry>/trident-autosupport:25.10
     Autosupport Proxy:         
     Autosupport Serial Number: 
     Debug:                      true
@@ -189,11 +189,11 @@ Status:
     Log Format:           text
     Probe Port:           17546
     Silence Autosupport:  false
-    Trident Image:        <your-registry>/trident:25.06.0
+    Trident Image:        <your-registry>/trident:25.10.0
   Message:                Trident installed
   Namespace:              trident
   Status:                 Installed
-  Version:                v25.06.0
+  Version:                v25.10.0
 Events:
     Type Reason Age From Message ---- ------ ---- ---- -------Normal
     Installing 74s trident-operator.netapp.io Installing Trident Normal
@@ -253,6 +253,6 @@ You can use `tridentctl` to check the version of Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 25.06.0        | 25.06.0        |
+| 25.10.0        | 25.10.0        |
 +----------------+----------------+
 ----

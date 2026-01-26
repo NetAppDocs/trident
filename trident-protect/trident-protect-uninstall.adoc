@@ -2,9 +2,9 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-uninstall.html
 keywords: trident, protect, netapp, uninstall, full version
-summary: You might need to remove Trident protect components if you are upgrading from a trial to a full version of the product. 
+summary: You might need to remove Trident Protect components if you are upgrading from a trial to a full version of the product. 
 ---
-= Uninstall Trident protect
+= Uninstall Trident Protect
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,12 +12,12 @@ summary: You might need to remove Trident protect components if you are upgradin
 :imagesdir: ../media/
 
 [.lead]
-You might need to remove Trident protect components if you are upgrading from a trial to a full version of the product.
+You might need to remove Trident Protect components if you are upgrading from a trial to a full version of the product.
 
-To remove Trident protect, perform the following steps.
+To remove Trident Protect, perform the following steps.
 
 .Steps
-. Remove the Trident protect CR files:
+. Remove the Trident Protect CR files:
 +
 NOTE: This step is not required for version 25.06 and later.
 +
@@ -25,13 +25,13 @@ NOTE: This step is not required for version 25.06 and later.
 ----
 helm uninstall -n trident-protect trident-protect-crds
 ----
-. Remove Trident protect:
+. Remove Trident Protect:
 +
 [source,console]
 ----
 helm uninstall -n trident-protect trident-protect
 ----
-. Remove the Trident protect namespace:
+. Remove the Trident Protect namespace:
 +
 [source,console]
 ----

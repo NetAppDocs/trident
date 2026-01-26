@@ -11,7 +11,7 @@ summary: Trident provides Kubernetes users the ability to expand their volumes a
 :imagesdir: ../media/
 
 [.lead]
-Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI, NFS, and FC volumes.
+Trident provides Kubernetes users the ability to expand their volumes after they are created. Find information about the configurations required to expand iSCSI, NFS, SMB, NVMe/TCP, and FC volumes.
 
 == Expand an iSCSI volume
 
@@ -305,7 +305,7 @@ tridentctl get volumes -n trident
 
 == Expand an NFS volume
 
-Trident supports volume expansion for NFS PVs provisioned on `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `gcp-cvs`, and `azure-netapp-files` backends.
+Trident supports volume expansion for NFS PVs provisioned on `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, and `azure-netapp-files` backends.
 
 === Step 1: Configure the StorageClass to support volume expansion
 

@@ -199,3 +199,8 @@ Bring up the dataLIFS to restore full functionality.
 
 .Workaround
 Add the `hostNQN` back to the subsystem.
+
+== NFSv4.2 clients report "invalid argument" after upgrading ONTAP when when expecting "v4.2-xattrs" being enabled 
+After upgrading ONTAP, NFSv4.2 clients might report "invalid argument" errors when attempting to mount NFSv4.2 exports. This issue occurs when the `v4.2-xattrs` option is not enabled on the SVM.
+.Workaround
+Enable the `v4.2-xattrs` option on the SVM or upgrade to ONTAP 9.12.1 or later, where this option is enabled by default.

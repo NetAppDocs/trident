@@ -98,7 +98,12 @@ tridentctl-protect create backuprestore <my_restore_name> \
 // end tabbed block
 
 == Restore from a backup to the original namespace
-You can restore a backup to the original namespace at any time.
+##You can restore a backup to the original namespace at any time. When you perform an in-place restore from a backup, Trident Protect automatically manages protection schedules and in-progress operations to prevent invalid recovery points.##
+
+* ##All enabled protection schedules for the application are disabled before the restore begins. This prevents scheduled backups or snapshots from running while the application resources are being restored. ##
+* ##After the restore completes successfully, only the schedules that were enabled before the restore are re-enabled. Schedules that were already disabled remain disabled.##
+* ##Any in-progress backup or snapshot operations are cancelled before the restore begins. If an operation does not cancel within 5 minutes, the restore proceeds and logs a warning in the restore CR status.##
+
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
@@ -361,7 +366,11 @@ tridentctl-protect create snapshotrestore <my_restore_name> \
 
 
 == Restore from a snapshot to the original namespace
-You can restore a snapshot to the original namespace at any time.
+##You can restore a snapshot to the original namespace at any time. When you perform an in-place restore, Trident Protect automatically manages protection schedules and in-progress operations to prevent invalid recovery points.##
+
+* ##All enabled protection schedules for the application are disabled before the restore begins. This prevents scheduled backups or snapshots from running while the application resources are being restored. ##
+* ##After the restore completes successfully, only the schedules that were enabled before the restore are re-enabled. Schedules that were already disabled remain disabled.##
+* ##Any in-progress backup or snapshot operations are cancelled before the restore begins. If an operation does not cancel within 5 minutes, the restore proceeds and logs a warning in the restore CR status.##
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 

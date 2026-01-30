@@ -25,7 +25,11 @@ You can use Trident Protect to restore your application from a snapshot or backu
 
 When you restore a backup to a different namespace using a BackupRestore CR, Trident Protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
-NOTE: Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
+[NOTE] 
+====
+* Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
+====
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
@@ -159,7 +163,11 @@ tridentctl-protect create backupinplacerestore <my_restore_name> \
 
 You can restore a backup to a different cluster if there is an issue with the original cluster.
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident Protect CLI.
+[NOTE]
+====
+* When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident Protect CLI.
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
+====
 
 .Before you begin
 
@@ -272,7 +280,11 @@ tridentctl-protect create backuprestore <restore_name> \
 
 You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident Protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
-NOTE: SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
+[NOTE]
+====
+* SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
+====
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
@@ -375,7 +387,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: appvault-name
-    appArchivePath: my-snapshot-path
+  appArchivePath: my-snapshot-path
 -------
 +
 include::../_include/restore-include-selective-restore.adoc[]
@@ -395,7 +407,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 [source,console]
 -----
 tridentctl-protect create snapshotinplacerestore <my_restore_name> \
---snapshot <snapshot_to_restore> \
+--snapshot <namespace/snapshot_to_restore> \
 -n <application_namespace>
 -----
 --

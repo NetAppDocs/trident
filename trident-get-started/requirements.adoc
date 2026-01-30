@@ -56,7 +56,7 @@ To use Trident, you need one or more of the following supported backends:
 * Cloud Volumes ONTAP
 * Google Cloud NetApp Volumes
 * NetApp All SAN Array (ASA)
-* On-premises FAS, AFF, or ASA r2 (iSCSI, NVMe/TCP, and FC) cluster versions under NetApp's limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
+* On-premises FAS, AFF, or ASA r2 (iSCSI, NVMe/TCP, and FC) running ONTAP versions under NetApp full or limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
 * NetApp HCI/Element software 11 or above
 
 == Trident support for KubeVirt and OpenShift Virtualization
@@ -127,12 +127,13 @@ a|No
 
 Though Trident does not officially support specific operating systems, the following are known to work:
 
-* Red Hat Enterprise Linux CoreOS (RHCOS) versions as supported by OpenShift Container Platform (AMD64 and ARM64)
-* RHEL 8+ (AMD64 and ARM64)
+* Red Hat Enterprise Linux CoreOS (RHCOS) versions supported by OpenShift Container Platform on AMD64 and ARM64
+* Red Hat Enterprise Linux (RHEL) 8 or later on AMD64 and ARM64
 +
 NOTE: NVMe/TCP requires RHEL 9 or later.
-* Ubuntu 22.04 or later (AMD64 and ARM64)
+* Ubuntu 22.04 LTS or later on AMD64 and ARM64
 * Windows Server 2022
+* SUSE Linux Enterprise Server (SLES) 15 or later
 
 By default, Trident runs in a container and will, therefore, run on any Linux worker. However, those workers need to be able to mount the volumes that Trident provides using the standard NFS client or iSCSI initiator, depending on the backends you are using.
 

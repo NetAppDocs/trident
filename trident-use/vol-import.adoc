@@ -11,7 +11,7 @@ summary: You can import existing storage volumes as a Kubernetes PV using `tride
 :imagesdir: ../media/
 
 [.lead]
-##You can import existing storage volumes as a Kubernetes PV using `tridentctl import` or by creating a Persistent Volume Claim (PVC) with Trident import annotations.##
+You can import existing storage volumes as a Kubernetes PV using `tridentctl import` or by creating a Persistent Volume Claim (PVC) with Trident import annotations.
 
 == Overview and considerations
 
@@ -40,7 +40,7 @@ WARNING: This is especially important for block volumes as Kubernetes would be u
 TIP: These options are useful if you want to use Kubernetes for containerized workloads but otherwise want to manage the lifecycle of the storage volume outside of Kubernetes.
 * An annotation is added to the PVC and PV that serves a dual purpose of indicating that the volume was imported and if the PVC and PV are managed. This annotation should not be modified or removed.
 
-== ##Import a volume##
+== Import a volume
 You can import a volume using either `tridentctl import` or by creating a PVC with Trident import annotations. 
 
 NOTE: If you use PVC annotations, you don't need to download or use `tridentctl` to import the volume.
@@ -180,7 +180,7 @@ tridentctl import volume nas_blog unmanaged_volume -f <path-to-pvc-file> --no-ma
 
 // end tabbed area
 
-.##ONTAP NAS examples using PVC annotations##
+.ONTAP NAS examples using PVC annotations
 The following examples show how to import managed and unmanaged volumes using PVC annotations.
 
 [role="tabbed-block"]

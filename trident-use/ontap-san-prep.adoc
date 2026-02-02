@@ -113,7 +113,7 @@ security certificate install -type client-ca -cert-name <certificate-name> -vser
 security ssl modify -vserver <vserver-name> -client-enabled true
 ----
 +
-NOTE: ##After running this command, ONTAP prompts for certificate input. Paste the contents of the `k8senv.pem` file generated in step 1, then enter `END` to complete the installation.##
+NOTE: After running this command, ONTAP prompts for certificate input. Paste the contents of the `k8senv.pem` file generated in step 1, then enter `END` to complete the installation.
 . Confirm the ONTAP security login role supports `cert` authentication method.
 +
 ----

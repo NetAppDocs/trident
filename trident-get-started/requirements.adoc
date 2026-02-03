@@ -37,7 +37,7 @@ Trident supports multiple container engines and orchestrators, including the fol
 * OpenShift 4.12, 4.14 - 4.20 (If you plan to use iSCSI node preparation with OpenShift 4.19, the minimum Trident version supported is 25.06.1.)
 +
 NOTE: Trident continues to support older OpenShift versions in alignment with the link:https://access.redhat.com/support/policy/updates/openshift[Red Hat Extended Update Support (EUS) release lifecycle], even if they rely on Kubernetes versions that are no longer officially supported upstream. While installing Trident in such cases, you can safely ignore any warning messages about the Kubernetes version.
-* Rancher Kubernetes Engine 2 (RKE2) v1.27.x - 1.34.x
+* Rancher Kubernetes Engine 2 (RKE2) v1.28.x - 1.34.x
 +
 NOTE: _While Trident is supported on Rancher Kubernetes Engine 2 (RKE2) versions 1.27.x - 1.34.x, Trident has currently been qualified on RKE2 v1.28.5+rke2r1 only._
 
@@ -56,7 +56,7 @@ To use Trident, you need one or more of the following supported backends:
 * Cloud Volumes ONTAP
 * Google Cloud NetApp Volumes
 * NetApp All SAN Array (ASA)
-* On-premises FAS, AFF, or ASA r2 (iSCSI, NVMe/TCP, and FC) cluster versions under NetApp's limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
+* On-premises FAS, AFF, or ASA r2 (iSCSI, NVMe/TCP, and FC) running ONTAP versions under NetApp full or limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
 * NetApp HCI/Element software 11 or above
 
 == Trident support for KubeVirt and OpenShift Virtualization
@@ -127,12 +127,13 @@ a|No
 
 Though Trident does not officially support specific operating systems, the following are known to work:
 
-* Red Hat Enterprise Linux CoreOS (RHCOS) versions as supported by OpenShift Container Platform (AMD64 and ARM64)
-* RHEL 8+ (AMD64 and ARM64)
+* Red Hat Enterprise Linux CoreOS (RHCOS) versions supported by OpenShift Container Platform on AMD64 and ARM64
+* Red Hat Enterprise Linux (RHEL) 8 or later on AMD64 and ARM64
 +
 NOTE: NVMe/TCP requires RHEL 9 or later.
-* Ubuntu 22.04 or later (AMD64 and ARM64)
+* Ubuntu 22.04 LTS or later on AMD64 and ARM64
 * Windows Server 2022
+* SUSE Linux Enterprise Server (SLES) 15 or later
 
 By default, Trident runs in a container and will, therefore, run on any Linux worker. However, those workers need to be able to mount the volumes that Trident provides using the standard NFS client or iSCSI initiator, depending on the backends you are using.
 

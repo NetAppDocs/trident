@@ -2,9 +2,9 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-restore-apps.html
 keywords: trident, protect, restore, data, backup
-summary: You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
+summary: You can use Trident Protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 ---
-= Restore applications using Trident protect
+= Restore applications using Trident Protect
 :hardbreaks:
 :nofooter:
 :icons: font
@@ -12,24 +12,28 @@ summary: You can use Trident protect to restore your application from a snapshot
 :imagesdir: ../media/
 
 [.lead]
-You can use Trident protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
+You can use Trident Protect to restore your application from a snapshot or backup. Restoring from an existing snapshot will be faster when restoring the application to the same cluster.
 
 [NOTE]
 ====
 * When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
 * Restoring from a backup to a different namespace or to the original namespace is supported for qtree volumes. However, restoring from a snapshot to a different namespace or to the original namespace is not supported for qtree volumes.
-* You can use advanced settings to customize restore operations. To learn more, refer to link:../trident-protect/trident-protect-restore-settings.html[Use advanced Trident protect restore settings].
+* You can use advanced settings to customize restore operations. To learn more, refer to link:../trident-protect/trident-protect-restore-settings.html[Use advanced Trident Protect restore settings].
 ====
 
 == Restore from a backup to a different namespace
 
-When you restore a backup to a different namespace using a BackupRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
+When you restore a backup to a different namespace using a BackupRestore CR, Trident Protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
-NOTE: Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
+[NOTE] 
+====
+* Restoring a backup to a different namespace with existing resources will not alter any resources that share names with those in the backup. To restore all resources in the backup, either delete and re-create the target namespace, or restore the backup to a new namespace.
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
+====
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident Protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -96,7 +100,7 @@ You can restore a backup to the original namespace at any time.
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident Protect CLI.
 
 // begin tabbed block
 [role="tabbed-block"]
@@ -159,21 +163,25 @@ tridentctl-protect create backupinplacerestore <my_restore_name> \
 
 You can restore a backup to a different cluster if there is an issue with the original cluster.
 
-NOTE: When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident protect CLI.
+[NOTE]
+====
+* When you restore backups using Kopia as the data mover, you can optionally specify annotations in the CR or using the CLI to control the behavior of the temporary storage used by Kopia. Refer to the https://kopia.io/docs/getting-started/[Kopia documentation^] for more information about the options you can configure. Use the `tridentctl-protect create --help` command for more information about specifying annotations with the Trident Protect CLI.
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
+====
 
 .Before you begin
 
 Ensure the following prerequisites are met:
 
-* The destination cluster has Trident protect installed.
+* The destination cluster has Trident Protect installed.
 * The destination cluster has access to the bucket path of the same AppVault as the source cluster, where the backup is stored.
-* Ensure that your local environment can connect to the object storage bucket defined in the AppVault CR when running the `tridentctl-protect get appvaultcontent` command. If network restrictions prevent access, run the Trident protect CLI from within a pod on the destination cluster instead.
+* Ensure that your local environment can connect to the object storage bucket defined in the AppVault CR when running the `tridentctl-protect get appvaultcontent` command. If network restrictions prevent access, run the Trident Protect CLI from within a pod on the destination cluster instead.
 * Ensure that the AWS session token expiration is sufficient for any long-running restore operations. If the token expires during the restore operation, the operation can fail.
 ** Refer to the https://docs.aws.amazon.com/STS/latest/APIReference/API_GetSessionToken.html[AWS API documentation^] for more information about checking the current session token expiration.
 ** Refer to the https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html[AWS documentation^] for more information about credentials with AWS resources.
 
 .Steps
-. Check the availability of the AppVault CR on the destination cluster using Trident protect CLI plugin:
+. Check the availability of the AppVault CR on the destination cluster using Trident Protect CLI plugin:
 +
 [source,console]
 ----
@@ -270,9 +278,13 @@ tridentctl-protect create backuprestore <restore_name> \
 
 == Restore from a snapshot to a different namespace
 
-You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
+You can restore data from a snapshot using a custom resource (CR) file either to a different namespace or the original source namespace. When you restore a snapshot to a different namespace using a SnapshotRestore CR, Trident Protect restores the application in a new namespace and creates an application CR for the restored application. To protect the restored application, create on-demand backups or snapshots, or establish a protection schedule.
 
-NOTE: SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
+[NOTE]
+====
+* SnapshotRestore supports the `spec.storageClassMapping` attribute, but only when the source and destination storage classes use the same storage backend. If you attempt to restore to a `StorageClass` that uses a different storage backend, the restore operation will fail.
+* When using a CR to restore to a new namespace, you must manually create the destination namespace before applying the CR. Trident Protect automatically creates namespaces only when using the CLI.
+====
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 
@@ -375,7 +387,7 @@ metadata:
   namespace: my-app-namespace
 spec:
   appVaultRef: appvault-name
-    appArchivePath: my-snapshot-path
+  appArchivePath: my-snapshot-path
 -------
 +
 include::../_include/restore-include-selective-restore.adoc[]
@@ -395,7 +407,7 @@ kubectl apply -f trident-protect-snapshot-ipr-cr.yaml
 [source,console]
 -----
 tridentctl-protect create snapshotinplacerestore <my_restore_name> \
---snapshot <snapshot_to_restore> \
+--snapshot <namespace/snapshot_to_restore> \
 -n <application_namespace>
 -----
 --

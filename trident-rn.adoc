@@ -17,7 +17,7 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 
 
 == What's new in 25.10
-Learn what's new in Trident and Trident protect, including enhancements, fixes, and deprecations.
+Learn what's new in Trident and Trident Protect, including enhancements, fixes, and deprecations.
 
 === Trident
 
@@ -59,8 +59,8 @@ NOTE: Not for use in production environments.
 * Fixed issue where slow storage operations were leading to ContextDeadline errors.
 * Trident Operator will wait for configurable k8s-timeout to check Trident version.
 
-=== Trident protect
-NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+=== Trident Protect
+NetApp Trident Protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
 
 ==== Enhancements
 
@@ -70,8 +70,8 @@ NetApp Trident protect provides advanced application data management capabilitie
 ** `protect.trident.netapp.io/volume-snapshots-ready-to-use-timeout`
 ** `protect.trident.netapp.io/volume-snapshots-created-timeout`
 +
-See link:trident-protect-protect-apps.html[Supported backup and schedule annotations^].
-* Added an annotation to the schedule CR to configure PVC bind timeout, which will be used by the backup CR: `protect.trident.netapp.io/pvc-bind-timeout-sec`. See link:trident-protect-protect-apps.html[Supported backup and schedule annotations^].
+See link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-protect-apps.html[Supported backup and schedule annotations^].
+* Added an annotation to the schedule CR to configure PVC bind timeout, which will be used by the backup CR: `protect.trident.netapp.io/pvc-bind-timeout-sec`. See link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-protect-apps.html[Supported backup and schedule annotations^].
 * Improved `tridentctl-protect` backup and snapshot listings with a new field to indicate execution hook failures.
 
 == Changes in 25.06.2
@@ -143,8 +143,8 @@ NOTE: This feature is experimental and currently supports limited parallel workf
 ==== Deprecations:
 * *Kubernetes*: Updated minimum supported Kubernetes to v1.27.
 
-=== Trident protect
-NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+=== Trident Protect
+NetApp Trident Protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
 
 ==== Enhancements
 
@@ -177,7 +177,7 @@ NetApp Trident protect provides advanced application data management capabilitie
 
 
 == Changes in 25.02
-Beginning with Trident 25.02, the What's New summary provides details about enhancements, fixes, and deprecations for both Trident and Trident protect releases.  
+Beginning with Trident 25.02, the What's New summary provides details about enhancements, fixes, and deprecations for both Trident and Trident Protect releases.  
 
 === Trident
 
@@ -212,18 +212,18 @@ Beginning with Trident 25.02, the What's New summary provides details about enha
 ** Added option to disable the auto configurator reconciliation in the Trident operator (link:https://github.com/NetApp/trident/issues/924[Issue #924]).
 ** Added securityContext for csi-resizer container (link:https://github.com/NetApp/trident/issues/976[Issue #976]).
 
-=== Trident protect
-NetApp Trident protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
+=== Trident Protect
+NetApp Trident Protect provides advanced application data management capabilities that enhance the functionality and availability of stateful Kubernetes applications backed by NetApp ONTAP storage systems and the NetApp Trident CSI storage provisioner.
 
 ==== Enhancements
 
-* Added backup and restore support for KubeVirt / OpenShift Virtualization VMs for both volumeMode: File and volumeMode: Block (raw device) storage. This support is compatible with all Trident drivers, and enhances the existing protection features when replicating storage using NetApp SnapMirror with Trident protect.
+* Added backup and restore support for KubeVirt / OpenShift Virtualization VMs for both volumeMode: File and volumeMode: Block (raw device) storage. This support is compatible with all Trident drivers, and enhances the existing protection features when replicating storage using NetApp SnapMirror with Trident Protect.
 * Added the capability to control freeze behavior at application level for Kubevirt environments.
 * Added support for configuring AutoSupport proxy connections.
 * Added the ability to define a secret for data mover encryption (Kopia / Restic).
 * Added the ability to manually run an execution hook.
-* Added the ability to configure security context constraints (SCCs) during Trident protect installation.
-* Added support for configuring nodeSelector during Trident protect installation.
+* Added the ability to configure security context constraints (SCCs) during Trident Protect installation.
+* Added support for configuring nodeSelector during Trident Protect installation.
 * Added support for HTTP / HTTPS egress proxy for AppVault objects.
 * Extended ResourceFilter to enable exclusion of cluster-scoped resources.
 * Added support for the AWS session token in S3 AppVault credentials.
@@ -275,7 +275,7 @@ NetApp Trident protect provides advanced application data management capabilitie
 ** Disaster recovery
 ** Application mobility
 +
-link:./trident-protect/learn-about-trident-protect.html[Learn more about Trident protect].
+link:./trident-protect/learn-about-trident-protect.html[Learn more about Trident Protect].
 * Added a new flag `--k8s-api-qps` to installers to set the QPS value used by Trident to communicate with the Kubernetes API server.
 * Added `--node-prep` flag to installers for automatic management of storage protocol dependencies on Kubernetes cluster nodes. Tested and verified compatibility with Amazon Linux 2023 iSCSI storage protocol
 * Added support for force detach for ONTAP-NAS-Economy volumes during Non-Graceful Node Shutdown scenarios.
@@ -321,7 +321,7 @@ Beginning with the 24.10 release, Astra Trident is rebranded to Trident (Netapp 
 * Added Bottlerocket support for NFS volumes.
 * Added technical preview support for Google Cloud NetApp Volumes. 
 
-//=== Trident protect
+//=== Trident Protect
 //* Added KubeVirt support for SnapMirror. link:https://kubevirt.io/[Learn more about KubeVirt^].
 
 ==== Kubernetes

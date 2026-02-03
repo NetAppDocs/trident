@@ -15,14 +15,14 @@ Learn more about the ports that Trident uses for communication.
 
 == Overview
 
-Trident uses various ports for communication inside Kubernetes clusters and with storage backends. Below is a summary of key ports, their purposes, and security considerations.
+Trident uses various ports for communication inside Kubernetes clusters and with storage backends. The following is a summary of key ports, their purposes, and security considerations.
 
 * **Outbound focus**: Kubernetes nodes (controller and worker) primarily initiate traffic to storage LIFs/IPs, so iptables rules should allow outbound from node IPs to specific storage IPs on these ports. Avoid broad "any-to-any" rules.
-* **Inbound restrictions**: Limit internal Trident ports to cluster-internal traffic (e.g., via CNI like Calico). No unnecessary inbound exposure on host firewalls.
+* **Inbound restrictions**: Limit internal Trident ports to cluster-internal traffic (for example, using CNI like Calico). No unnecessary inbound exposure on host firewalls.
 * **Protocol security**: 
 ** Use TCP where possible (more reliable). 
 ** Enable CHAP/IPsec for iSCSI if sensitive; TLS/HTTPS for management (port 443/8443). 
-** For NFSv4 (default in Trident), prune UDP/older NFSv3 ports (e.g., 4045-4049) if not needed. 
+** For NFSv4 (default in Trident), prune UDP/older NFSv3 ports (for example, 4045-4049) if not needed. 
 ** Restrict to trusted subnets; monitor with tools like Prometheus (optional port 8001).
 
 
@@ -50,7 +50,7 @@ These ports are primarily for Trident operator (backend management). All interna
 | Inbound (cluster-internal, optional)
 | Prometheus metrics
 | All
-| Expose only to monitoring tools (e.g., via RBAC); disable if unused.
+| Expose only to monitoring tools (for example, using RBAC); disable if unused.
 
 | TCP 443
 | Outbound

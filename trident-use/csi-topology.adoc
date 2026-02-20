@@ -147,21 +147,21 @@ See the following example:
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
-metadata: null
-name: netapp-san-us-east1
+metadata:
+  name: netapp-san-us-east1
 provisioner: csi.trident.netapp.io
 volumeBindingMode: WaitForFirstConsumer
 allowedTopologies:
-  - matchLabelExpressions: null
-  - key: topology.kubernetes.io/zone
-    values:
-      - us-east1-a
-      - us-east1-b
-  - key: topology.kubernetes.io/region
-    values:
-      - us-east1
+  - matchLabelExpressions:
+    - key: topology.kubernetes.io/zone
+      values:
+        - us-east1-a
+        - us-east1-b
+    - key: topology.kubernetes.io/region
+      values:
+        - us-east1
 parameters:
-  fsType: ext4
+  fsType: ext4 
 ----
 In the StorageClass definition provided above, `volumeBindingMode` is set to `WaitForFirstConsumer`. PVCs that are requested with this StorageClass will not be acted upon until they are referenced in a pod. And, `allowedTopologies` provides the zones and region to be used. The `netapp-san-us-east1` StorageClass creates PVCs on the `san-backend-us-east1` backend defined above.
 

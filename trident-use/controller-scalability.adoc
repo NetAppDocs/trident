@@ -1,0 +1,108 @@
+---
+sidebar: sidebar
+permalink: trident-use/controller-scalability.html
+keywords: trident, controller scalability, concurrency, san, nas, san-nvme, gcnv, nas-eco, san-eco
+summary: Understand controller scalability, concurrency behavior, and feature maturity for Trident 26.02.
+---
+
+= Controller scalability in Trident 26.02
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Trident introduces expanded controller scalability through improved concurrency across multiple storage drivers.
+Customers can identify which Trident drivers support controller scalability at general availability and which drivers are available as a technical preview in Trident 26.02.
+This enables informed deployment decisions and appropriate risk management for scalable Kubernetes environments.
+
+
+== Key concepts and definitions
+
+=== Controller scalability
+
+Controller scalability refers to the Trident controller’s ability to process multiple storage operations concurrently.
+These operations include volume creation, deletion, resizing, snapshot management, and backend interactions.
+
+Improved controller scalability reduces provisioning latency and improves throughput in environments with high numbers of PersistentVolumeClaims and backends.
+
+=== Concurrency
+
+Concurrency is the number of storage operations that the Trident controller can execute in parallel.
+Concurrency applies at the controller level and affects how quickly Trident processes requests across all managed backends.
+
+Concurrency behavior varies by storage driver and feature maturity.
+
+== Controller scalability support in Trident 26.02
+
+Trident 26.02 supports controller scalability with different maturity levels depending on the storage driver.
+
+=== General availability in 26.02
+
+The following drivers support controller scalability at general availability in Trident 26.02:
+
+* `san`
+* `nas`
+* `san-nvme`
+
+For these drivers:
+
+* Controller concurrency is enabled by default
+* Concurrent provisioning and management operations are supported
+* Behavior is production-ready and supported for enterprise workloads
+
+=== Technical preview in 26.02
+
+The following drivers support controller scalability as a technical preview in Trident 26.02:
+
+* `google-cloud-netapp-volumes`
+* `nas-eco`
+* `san-eco`
+
+For these drivers:
+
+* Controller concurrency is available for evaluation and testing
+* Behavior may change in future releases
+* Use in production environments is not recommended
+
+== Concurrency behavior
+
+When controller scalability is enabled:
+
+* Trident processes multiple volume operations in parallel
+* Operations are queued and executed concurrently based on controller capacity
+* Concurrency applies across backends using the same driver
+
+Concurrency does not guarantee ordering of operations.
+Applications and automation workflows must not assume sequential execution.
+
+== Known limits and considerations
+
+The following considerations apply to controller scalability in Trident 26.02:
+
+* Concurrency is managed internally by the Trident controller
+* There are no user-configurable concurrency limits in this release
+* Overall throughput depends on:
+  ** The storage driver in use
+  ** Backend responsiveness
+  ** Kubernetes API server performance
+* High concurrency can increase load on backend storage systems
+
+== Caveats and limitations
+
+The following limitations apply in Trident 26.02:
+
+* Controller scalability behavior is not identical across all drivers
+* Technical preview drivers may exhibit:
+  ** Inconsistent performance under high load
+  ** Changes in behavior between releases
+* Debugging concurrent operations may be more complex due to parallel execution
+* Metrics and logs may show interleaved operation output
+
+== Recommendations
+
+NetApp recommends the following:
+
+* Use general availability drivers for production environments that require high scalability
+* Evaluate technical preview drivers in non-production environments
+* Monitor backend and controller performance when operating at scale
+* Avoid assuming operation ordering in automation scripts

@@ -1,108 +1,222 @@
 ---
 sidebar: sidebar
-permalink: trident-use/controller-scalability.html
-keywords: trident, controller scalability, concurrency, san, nas, san-nvme, gcnv, nas-eco, san-eco
-summary: Understand controller scalability, concurrency behavior, and feature maturity for Trident 26.02.
+permalink: trident-use/aws-fsx-automatic-backend-configuration.html
+keywords: trident, aws, fsx, fsxn, ontap, storageclass, automatic backend, kubernetes
+summary: Configure automatic Trident backend creation for AWS FSx for NetApp ONTAP using Kubernetes StorageClasses in Trident 26.02.
 ---
 
-= Controller scalability in Trident 26.02
+= Automatic backend configuration for AWS FSx for NetApp ONTAP
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Trident introduces expanded controller scalability through improved concurrency across multiple storage drivers.
-Customers can identify which Trident drivers support controller scalability at general availability and which drivers are available as a technical preview in Trident 26.02.
-This enables informed deployment decisions and appropriate risk management for scalable Kubernetes environments.
-
+Trident supports automatic backend creation for AWS FSx for NetApp ONTAP.
+By creating a Kubernetes StorageClass with the required parameters, administrators can provision and manage FSx for NetApp ONTAP backends without creating separate backend configuration files.
+This enables Kubernetes-native lifecycle management and reduces operational overhead.
 
 == Key concepts and definitions
 
-=== Controller scalability
+=== Automatic backend configuration
 
-Controller scalability refers to the Trident controller’s ability to process multiple storage operations concurrently.
-These operations include volume creation, deletion, resizing, snapshot management, and backend interactions.
+Automatic backend configuration allows Trident to create and manage storage backends based on StorageClass definitions.
+When a StorageClass includes supported FSx for NetApp ONTAP parameters, Trident generates the corresponding backend internally.
 
-Improved controller scalability reduces provisioning latency and improves throughput in environments with high numbers of PersistentVolumeClaims and backends.
+Backend lifecycle is tied to the StorageClass.
 
-=== Concurrency
+=== StorageClass annotations
 
-Concurrency is the number of storage operations that the Trident controller can execute in parallel.
-Concurrency applies at the controller level and affects how quickly Trident processes requests across all managed backends.
+Trident uses annotations on the StorageClass to report backend creation status.
+These annotations indicate whether backend configuration succeeded or failed and provide diagnostic information.
 
-Concurrency behavior varies by storage driver and feature maturity.
+== Supported parameters
 
-== Controller scalability support in Trident 26.02
+To enable automatic backend creation, the StorageClass must include the following parameters.
 
-Trident 26.02 supports controller scalability with different maturity levels depending on the storage driver.
+[cols="1,1,1,3",options="header"]
+|===
+| Parameter | Required | Type | Description
 
-=== General availability in 26.02
+| `fsxFilesystemID`
+| Yes
+| string
+| AWS FSx for NetApp ONTAP filesystem ID
 
-The following drivers support controller scalability at general availability in Trident 26.02:
+| `storageDriverName`
+| Yes
+| string
+| Trident storage driver, such as `ontap-nas` or `ontap-san`
 
-* `san`
-* `nas`
-* `san-nvme`
+| `credentialsName`
+| Yes
+| string
+| AWS Secrets Manager ARN containing ONTAP credentials
+|===
 
-For these drivers:
+All parameter values must be specified as strings.
 
-* Controller concurrency is enabled by default
-* Concurrent provisioning and management operations are supported
-* Behavior is production-ready and supported for enterprise workloads
+== Create a StorageClass with automatic backend creation
 
-=== Technical preview in 26.02
+The following example creates a StorageClass that triggers automatic backend creation for AWS FSx for NetApp ONTAP.
 
-The following drivers support controller scalability as a technical preview in Trident 26.02:
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-fsx-demo
+  annotations:
+    description: "StorageClass for AWS FSx for NetApp ONTAP with automatic backend creation"
+provisioner: csi.trident.netapp.io
+parameters:
+  fsxFilesystemID: "fs-0abc123"
+  storageDriverName: "ontap-nas"
+  credentialsName: "arn:aws:secretsmanager:us-west-2:123456789012:secret:trident-creds"
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+----
 
-* `google-cloud-netapp-volumes`
-* `nas-eco`
-* `san-eco`
+After you apply this StorageClass, Trident creates the backend automatically.
 
-For these drivers:
+== Verify backend configuration status
 
-* Controller concurrency is available for evaluation and testing
-* Behavior may change in future releases
-* Use in production environments is not recommended
+Trident reports backend creation status through annotations on the StorageClass.
 
-== Concurrency behavior
+=== View StorageClass annotations
 
-When controller scalability is enabled:
+[source,bash]
+----
+kubectl get storageclass ontap-fsx-demo -o yaml
+----
 
-* Trident processes multiple volume operations in parallel
-* Operations are queued and executed concurrently based on controller capacity
-* Concurrency applies across backends using the same driver
+=== Status annotations
 
-Concurrency does not guarantee ordering of operations.
-Applications and automation workflows must not assume sequential execution.
+[cols="1,3",options="header"]
+|===
+| Annotation | Description
 
-== Known limits and considerations
+| `trident.netapp.io/configuratorStatus`
+| Backend creation result: `Success` or `Failed`
 
-The following considerations apply to controller scalability in Trident 26.02:
+| `trident.netapp.io/configuratorMessage`
+| Detailed success or error message
 
-* Concurrency is managed internally by the Trident controller
-* There are no user-configurable concurrency limits in this release
-* Overall throughput depends on:
-  ** The storage driver in use
-  ** Backend responsiveness
-  ** Kubernetes API server performance
-* High concurrency can increase load on backend storage systems
+| `trident.netapp.io/configuratorName`
+| Internal Trident configurator identifier
+
+| `trident.netapp.io/managed`
+| Indicates that the backend is managed by Trident
+|===
+
+=== Example successful configuration
+
+[source,yaml]
+----
+metadata:
+  annotations:
+    trident.netapp.io/configuratorStatus: Success
+    trident.netapp.io/configuratorMessage: Completed Trident backend configuration
+    trident.netapp.io/configuratorName: tconf-nas-sc1
+    trident.netapp.io/managed: "true"
+----
+
+== Success and failure behavior
+
+=== Successful backend creation
+
+When backend creation succeeds:
+
+* The StorageClass becomes operational
+* PersistentVolumeClaims can be created immediately
+* Trident provisions volumes using the automatically created backend
+
+=== Failed backend creation
+
+When backend creation fails:
+
+* Trident sets `configuratorStatus` to `Failed`
+* `configuratorMessage` describes the failure
+* Trident does not create a usable backend
+
+Correct the issue and reapply the StorageClass.
+
+== Create PersistentVolumeClaims
+
+You can use the StorageClass to provision volumes for application workloads.
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fsx-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ontap-fsx-demo
+  resources:
+    requests:
+      storage: 100Gi
+----
+
+== Add additional FSx for NetApp ONTAP file systems
+
+You can attach additional FSx for NetApp ONTAP file systems to an existing StorageClass to expand capacity.
+
+=== Update the StorageClass
+
+[source,bash]
+----
+kubectl edit storageclass ontap-fsx-demo
+----
+
+Add the following annotation.
+
+[source,yaml]
+----
+metadata:
+  annotations:
+    trident.netapp.io/additionalFsxNFileSystemID: '["fs-03cc1a718cddd6e248"]'
+----
+
+=== Behavior
+
+When you add additional file systems:
+
+* Trident attaches the new filesystem to the existing backend
+* Trident extends available storage pools
+* Existing workloads continue without interruption
 
 == Caveats and limitations
 
-The following limitations apply in Trident 26.02:
+The following limitations apply to automatic backend configuration:
 
-* Controller scalability behavior is not identical across all drivers
-* Technical preview drivers may exhibit:
-  ** Inconsistent performance under high load
-  ** Changes in behavior between releases
-* Debugging concurrent operations may be more complex due to parallel execution
-* Metrics and logs may show interleaved operation output
+* Backend lifecycle is tied to the StorageClass
+* Configuration errors appear only in StorageClass annotations
+* Backend changes require editing or reapplying the StorageClass
+
+== WARNING: Deleting a StorageClass
+
+Deleting a StorageClass can delete the underlying Trident backend.
+
+This can:
+
+* Disrupt storage connectivity
+* Break running applications
+* Cause permanent data access loss
+
+Before deleting a StorageClass:
+
+* Identify dependent workloads
+* Confirm backend deletion behavior
+* Plan a controlled migration if required
 
 == Recommendations
 
 NetApp recommends the following:
 
-* Use general availability drivers for production environments that require high scalability
-* Evaluate technical preview drivers in non-production environments
-* Monitor backend and controller performance when operating at scale
-* Avoid assuming operation ordering in automation scripts
+* Use automatic backend configuration for simplified onboarding
+* Verify StorageClass annotations before deploying production workloads
+* Track StorageClass changes using version control
+* Test StorageClass deletion behavior in non-production environments

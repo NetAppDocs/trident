@@ -1,0 +1,262 @@
+---
+sidebar: sidebar
+permalink: trident-use/automatic-volume-expansion.html
+keywords: trident, autogrow, automatic volume expansion, pvc resize, ontap, kubernetes, capacity management
+summary: Configure and operate automatic volume expansion for Persistent Volumes managed by Trident and ONTAP.
+---
+
+= Automatic volume expansion in Trident
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+Automatic volume expansion allows Trident to monitor Persistent Volume utilization and expand volumes automatically before they reach full capacity.
+This capability prevents application disruption caused by storage exhaustion and reduces the operational overhead of manual volume management in Kubernetes environments.
+Automatic volume expansion works in coordination with ONTAP to ensure that Kubernetes, Trident, and backend storage remain capacity-consistent throughout the lifecycle of a volume.
+
+== Overview
+
+In Kubernetes environments, Persistent Volumes are traditionally expanded through manual resize operations.
+Although Kubernetes supports online resizing, administrators must still monitor volume utilization, update PersistentVolumeClaim sizes, and ensure that backend storage capacity is adjusted correctly.
+
+This operational model does not scale well in large or dynamic environments.
+Volumes can fill faster than operators can respond, and manual expansion of ONTAP FlexVols outside Kubernetes can lead to inconsistent capacity states that are later reconciled incorrectly.
+
+Automatic volume expansion addresses these challenges by allowing Trident to manage volume growth proactively and in a coordinated manner.
+
+Persistent Volumes can reach full capacity for several reasons that are difficult to manage manually:
+
+* Application data grows steadily or unpredictably over time
+* High data churn in small volumes prevents timely space reclamation
+* Snapshot reserve consumption reduces usable volume space
+* Snapshot retention policies consume capacity faster than anticipated
+
+When a volume becomes full, applications may enter a read-only state or fail write operations.
+For containerized applications and virtual machines, this behavior can result in service outages and data unavailability.
+
+Automatic volume expansion prevents these outcomes by expanding volumes before capacity exhaustion occurs.
+
+== Key concepts and definitions
+
+=== Automatic volume expansion
+
+Automatic volume expansion, also referred to as autogrow, is a Trident capability that resizes Persistent Volumes without manual intervention.
+When enabled, Trident continuously evaluates volume utilization and initiates expansion operations when configured thresholds are exceeded.
+
+Trident coordinates resizing across all layers involved in storage provisioning, including:
+
+* The PersistentVolumeClaim
+* The ONTAP FlexVol
+* The guest filesystem or raw block device
+* The snapshot reserve directory
+
+This coordination ensures consistent capacity reporting across Kubernetes and ONTAP and prevents capacity drift.
+
+=== Utilization threshold
+
+A utilization threshold defines the percentage of used capacity that triggers an expansion.
+When the used capacity of a volume exceeds this threshold, Trident initiates a resize operation.
+
+Threshold-based triggering ensures that expansion occurs proactively rather than reactively.
+
+=== Maximum volume size
+
+The maximum volume size defines an upper limit for automatic expansion.
+Once a volume reaches this size, Trident stops expanding it automatically, even if utilization continues to increase.
+
+This parameter prevents unbounded growth and supports predictable capacity planning.
+
+=== Configuration scope and precedence
+
+Automatic volume expansion can be configured at multiple scopes.
+
+Supported scopes include:
+
+* Backend
+* StorageClass
+* PersistentVolumeClaim
+
+Configuration precedence follows this order:
+
+. PersistentVolumeClaim
+. StorageClass
+. Backend
+
+Settings defined at a lower scope override settings defined at a higher scope.
+
+== How automatic volume expansion works
+
+When automatic volume expansion is enabled, Trident performs a continuous evaluation cycle.
+
+The process follows these steps:
+
+. Trident periodically evaluates the used capacity of managed volumes
+. Trident compares current utilization against configured thresholds
+. When a threshold is exceeded, Trident calculates a new target size
+. Trident expands the PersistentVolumeClaim
+. Trident expands the underlying ONTAP FlexVol
+. Trident resizes the filesystem or raw block device, if applicable
+. Trident updates internal state to reflect the new capacity
+
+These operations occur without taking the volume offline and without interrupting application input or output.
+
+== Configuration guide
+
+You enable automatic volume expansion by defining policies at one or more supported scopes.
+Policies define when expansion occurs and how far a volume may grow.
+
+=== Backend-level configuration
+
+Backend-level configuration defines default automatic expansion behavior for all volumes provisioned by the backend.
+This approach is appropriate when most workloads share similar growth characteristics.
+
+Example backend configuration:
+
+[source,yaml]
+----
+version: 1
+storageDriverName: ontap-nas
+backendName: ontap-backend
+managementLIF: 10.0.0.1
+dataLIF: 10.0.0.2
+svm: svm1
+
+autogrow:
+  enabled: true
+  utilizationThreshold: 80
+  maxVolumeSize: 2Ti
+----
+
+When configured at the backend level, these settings apply unless overridden by a StorageClass or PersistentVolumeClaim.
+
+=== StorageClass-level configuration
+
+StorageClass-level configuration applies to all volumes provisioned using that StorageClass.
+This approach allows administrators to define different growth policies for different workload classes.
+
+Example StorageClass configuration:
+
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-autogrow
+provisioner: csi.trident.netapp.io
+parameters:
+  autogrowEnabled: "true"
+  autogrowThreshold: "75"
+  autogrowMaxSize: "5Ti"
+allowVolumeExpansion: true
+----
+
+Volumes provisioned using this StorageClass inherit these autogrow settings unless overridden at the PersistentVolumeClaim level.
+
+=== PersistentVolumeClaim-level configuration
+
+PersistentVolumeClaim-level configuration provides fine-grained control for individual workloads.
+This approach is useful for applications with unique or unpredictable growth patterns.
+
+Example PersistentVolumeClaim configuration:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-data
+  annotations:
+    trident.netapp.io/autogrow-enabled: "true"
+    trident.netapp.io/autogrow-threshold: "85"
+    trident.netapp.io/autogrow-max-size: "10Ti"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ontap-autogrow
+  resources:
+    requests:
+      storage: 500Gi
+----
+
+PersistentVolumeClaim-level settings override backend and StorageClass defaults.
+
+== Autogrow parameters
+
+The following parameters control automatic volume expansion behavior.
+
+[cols="1,3",options="header"]
+|===
+| Parameter | Description
+
+| `enabled`
+| Enables or disables automatic volume expansion.
+
+| `utilizationThreshold`
+| Percentage of used capacity that triggers an expansion operation.
+
+| `maxVolumeSize`
+| Maximum size to which Trident can automatically expand the volume.
+
+| `allowVolumeExpansion`
+| Kubernetes flag that allows online volume resizing.
+|===
+
+== Supported workloads and environments
+
+Automatic volume expansion is supported for:
+
+* All Kubernetes distributions supported by Trident
+* All ONTAP storage backends supported by Trident
+* File-based volumes and raw block volumes
+* Filesystem mode and block mode PersistentVolumes
+* Single-node and multi-node access modes
+* Containerized applications and virtual machines
+
+== Non-disruptive expansion behavior
+
+Automatic volume expansion does not interrupt application input or output.
+Applications continue to read from and write to volumes while expansion operations are in progress.
+
+This behavior is critical for production environments where downtime or service interruption is unacceptable.
+
+== Snapshot reserve handling
+
+Snapshot activity can reduce usable volume space by consuming snapshot reserve.
+Automatic volume expansion accounts for snapshot reserve usage and expands the volume when snapshot activity reduces available capacity.
+
+This behavior prevents unexpected application failures caused by snapshot-induced capacity exhaustion.
+
+== Evaluation frequency and responsiveness
+
+Trident evaluates automatic volume expansion triggers at a high frequency.
+The evaluation interval is one minute or less.
+
+Frequent evaluation allows Trident to respond quickly to sudden data growth and rapidly changing workloads.
+
+== Cloud deployments and capacity pool expansion
+
+In cloud environments, automatic volume expansion can interact with elastic storage capacity pools.
+When expanding volumes consumes available backend capacity, Trident can expand the underlying virtual capacity pool to accommodate growth.
+
+This capability allows Kubernetes environments to benefit from cloud elasticity while maintaining consistent volume management semantics.
+
+== Limitations
+
+The following considerations apply to automatic volume expansion:
+
+* Automatic volume expansion must be explicitly enabled
+* Aggressive thresholds can result in frequent resize operations
+* Maximum volume size limits must align with backend capacity
+* Expansion operations increase backend storage utilization
+* Troubleshooting resize behavior may require correlating Kubernetes, Trident, and ONTAP logs
+
+== Operational recommendations
+
+NetApp recommends the following best practices:
+
+* Configure conservative utilization thresholds for production workloads
+* Define maximum volume sizes based on realistic growth expectations
+* Monitor backend capacity regularly
+* Validate automatic volume expansion behavior in non-production environments
+* Combine automatic volume expansion with proactive capacity planning in cloud deployments

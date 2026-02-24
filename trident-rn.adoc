@@ -16,6 +16,27 @@ Release Notes provide information about new features, enhancements, and bug fixe
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
 
+== What's new in 26.02
+Learn what's new in Trident and Trident Protect, including enhancements, fixes, and deprecations.
+
+=== Trident Protect
+
+==== Enhancements
+
+* ##ASTRACTL-36392, doc ticket-ASTRACTL-37052## Trident Protect now automatically disables protection schedules and cancels in-progress operations before an in-place restore, and re-enables them after the restore completes. To learn more, refer to link:trident-protect/trident-protect-restore-apps.html[Restore applications using Trident Protect^].
+* ##ASTRACTL-36719, doc ticket-ASTRACTL-36882## Added the `runImmediately` field to the schedule CR and `--run-immediately` CLI flag to trigger an immediate backup or snapshot upon schedule creation. To learn more, refer to link:trident-protect/trident-protect-protect-apps.html#create-a-data-protection-schedule[Create a data protection schedule^].
+* ##ASTRACTL-36849## Added support for specifying a custom name for the restored application using the `destinationApplicationName` field in the restore CR or the `--destination-app-name` CLI flag. To learn more, refer to link:trident-protect/trident-protect-restore-apps.html[Restore applications using Trident Protect^].
+
+==== ##Fixes##
+
+* Fixed restore failures caused by pods being created before their required service accounts were available.
+* Fixed `Roles` and `RoleBindings` being skipped during application restores.
+* Fixed the originating cluster name not being displayed in `tridentctl-protect get appvaultcontent` output despite being correctly configured.
+* Fixed Kopia restore errors that were ignored due to missing `pipefail` handling.
+* Fixed snapshot and backup failures caused by resource filters that excluded persistent volumes.
+* Fixed incorrect PVC restoration in multi-namespace applications with identically named PVCs across namespaces, which could result in data loss. ##for this issue, a note will be added to down-level repos, see ASTRACTL-36941##
+
+
 == What's new in 25.10
 Learn what's new in Trident and Trident Protect, including enhancements, fixes, and deprecations.
 

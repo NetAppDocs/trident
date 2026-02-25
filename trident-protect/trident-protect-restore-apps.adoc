@@ -53,7 +53,7 @@ NOTE: When you restore backups using Kopia as the data mover, you can optionally
 kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
-* ##*spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.##
+* *spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 [source,yaml]
@@ -84,7 +84,7 @@ kubectl apply -f trident-protect-backup-restore-cr.yaml
 .Use the CLI
 --
 .Steps
-. Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. ##For example:##
+. Restore the backup to a different namespace, replacing values in brackets with information from your environment. The `namespace-mapping` argument uses colon-separated namespaces to map source namespaces to the correct destination namespaces in the format `source1:dest1,source2:dest2`. For example:
 +
 [source,console]
 -----
@@ -98,11 +98,11 @@ tridentctl-protect create backuprestore <my_restore_name> \
 // end tabbed block
 
 == Restore from a backup to the original namespace
-##You can restore a backup to the original namespace at any time. When you perform an in-place restore, Trident Protect automatically manages protection schedules and in-progress operations to prevent invalid recovery points:##
+You can restore a backup to the original namespace at any time. When you perform an in-place restore, Trident Protect automatically manages protection schedules and in-progress operations to prevent invalid recovery points:
 
-* ##All enabled protection schedules for the application are disabled before the restore begins. This prevents scheduled backups or snapshots from running while the application resources are being restored. ##
-* ##After the restore completes successfully, only the schedules that were enabled before the restore are re-enabled. Schedules that were already disabled remain disabled.##
-* ##Any in-progress backup or snapshot operations are cancelled before the restore begins. If an operation does not cancel within 5 minutes, the restore proceeds and logs a warning in the restore CR status.##
+* All enabled protection schedules for the application are disabled before the restore begins. This prevents scheduled backups or snapshots from running while the application resources are being restored. 
+* After the restore completes successfully, only the schedules that were enabled before the restore are re-enabled. Schedules that were already disabled remain disabled.
+* Any in-progress backup or snapshot operations are cancelled before the restore begins. If an operation does not cancel within 5 minutes, the restore proceeds and logs a warning in the restore CR status.
 
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
@@ -240,7 +240,7 @@ kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appA
 +
 NOTE: If BackupRestore CR is not available, you can use the command mentioned in step 2 to view the backup contents.
 +
-* ##*spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.##
+* *spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 For example:
@@ -315,7 +315,7 @@ include::../_include/restore-include-sessiontoken-note.adoc[]
 kubectl get snapshots <SNAPHOT_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 -----
 +
-* ##*spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.##
+* *spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.
 +
 [source,yaml]
@@ -366,11 +366,11 @@ tridentctl-protect create snapshotrestore <my_restore_name> \
 
 
 == Restore from a snapshot to the original namespace
-##You can restore a snapshot to the original namespace at any time. When you perform an in-place restore, Trident Protect automatically manages protection schedules and in-progress operations to prevent invalid recovery points:##
+You can restore a snapshot to the original namespace at any time. When you perform an in-place restore, Trident Protect automatically manages protection schedules and in-progress operations to prevent invalid recovery points:
 
-* ##All enabled protection schedules for the application are disabled before the restore begins. This prevents scheduled backups or snapshots from running while the application resources are being restored. ##
-* ##After the restore completes successfully, only the schedules that were enabled before the restore are re-enabled. Schedules that were already disabled remain disabled.##
-* ##Any in-progress backup or snapshot operations are cancelled before the restore begins. If an operation does not cancel within 5 minutes, the restore proceeds and logs a warning in the restore CR status.##
+* All enabled protection schedules for the application are disabled before the restore begins. This prevents scheduled backups or snapshots from running while the application resources are being restored. 
+* After the restore completes successfully, only the schedules that were enabled before the restore are re-enabled. Schedules that were already disabled remain disabled.
+* Any in-progress backup or snapshot operations are cancelled before the restore begins. If an operation does not cancel within 5 minutes, the restore proceeds and logs a warning in the restore CR status.
 
 include::../_include/restore-include-sessiontoken-note.adoc[]
 

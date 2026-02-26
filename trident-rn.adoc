@@ -33,21 +33,23 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 
 ==== Fixes
 
+* *Kubernetes*:
+
+** Fixed an issue where unpublishing a read-only clone removed export policy rules from the source volume in ONTAP-NAS, ONTAP-NAS-Economy, and Google Cloud NetApp Volumes drivers link:https://github.com/NetApp/trident/issues/1086[Issue #1086].
+** Switched kubectl images to lightweight Alpine-based variants to prevent pull failures following Bitnami's public image deprecation https://github.com/NetApp/trident/issues/1080[Issue #1080].
+** Fixed preserving annotation of existing deployment during Trident upgrade link:https://github.com/NetApp/trident/issues/1004[Issue #1004].
+** Allow clone across different storage classes if both storage classes are pointing to the same backend link:https://github.com/NetApp/trident/issues/1104[Issue #1104].
+** Fixed node prep failures caused by timeouts in cloud environments with network latencies. Increased timeout values for cloud-based installations.
+** Fixed an issue in LUN creation that caused the filesystem type attribute to remain unset when the process entered a retry state.
+** Fixed REST API volume lookup to ignore volume state, preventing false negatives during volume queries.
+** Improved Trident controller efficiency for ontap-nas-economy driver when used at scale.
+** Set internalID during LUN import in ontap-san-economy driver.
+** Increased Azure Resource Graph query limits to handle more subnets.
+** Improved CSI and ONTAP clone split timeouts to avoid race conditions with some backup applications link:https://github.com/NetApp/trident/issues/1098[Issue #1098], link:https://github.com/NetApp/trident/issues/1100[ #1100].
+** Fixed suppression of LUKS error messages link:https://github.com/NetApp/trident/issues/1069[Issue #1069].
+** Fixed handling of stale LUKS mappers for both iSCSI and NVMe protocols. Enhanced cleanup logic prevents mount failures from orphaned device mappers.
 * Fixed scale limitations for RWX NVMe volumes.
 * Updated the OpenTelemetry-Go package to fix link:https://nvd.nist.gov/vuln/detail/cve-2026-24051[CVE-2026-24051].
-* Kubernetes: Fixed an issue where unpublishing a read-only clone removed export policy rules from the source volume in ONTAP-NAS, ONTAP-NAS-Economy, and Google Cloud NetApp Volumes drivers link:https://github.com/NetApp/trident/issues/1086[Issue #1086].
-* Kubernetes: Switched kubectl images to lightweight Alpine-based variants to prevent pull failures following Bitnami's public image deprecation https://github.com/NetApp/trident/issues/1080[Issue #1080].
-* Kubernetes: Fixed preserving annotation of existing deployment during Trident upgrade link:https://github.com/NetApp/trident/issues/1004[Issue #1004].
-* Kubernetes: Allow clone across different storage classes if both storage classes are pointing to the same backend link:https://github.com/NetApp/trident/issues/1104[Issue #1104].
-* Kubernetes: Fixed node prep failures caused by timeouts in cloud environments with network latencies. Increased timeout values for cloud-based installations.
-* Kubernetes: Fixed an issue in LUN creation that caused the filesystem type attribute to remain unset when the process entered a retry state.
-* Kubernetes: Fixed REST API volume lookup to ignore volume state, preventing false negatives during volume queries.
-* Kubernetes: Improved Trident controller efficiency for ontap-nas-economy driver when used at scale.
-* Kubernetes: Set internalID during LUN import in ontap-san-economy driver.
-* Kubernetes: Increased Azure Resource Graph query limits to handle more subnets.
-* Kubernetes: Improved CSI and ONTAP clone split timeouts to avoid race conditions with some backup applications link:https://github.com/NetApp/trident/issues/1098[Issue #1098], link:https://github.com/NetApp/trident/issues/1100[ #1100].
-* Kubernetes: Fixed suppression of LUKS error messages link:https://github.com/NetApp/trident/issues/1069[Issue #1069].
-* Kubernetes: Fixed handling of stale LUKS mappers for both iSCSI and NVMe protocols. Enhanced cleanup logic prevents mount failures from orphaned device mappers.
 
 === Trident Protect
 

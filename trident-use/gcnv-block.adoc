@@ -17,6 +17,10 @@ protocol from Google Cloud NetApp Volumes. SAN volumes are provisioned from
 
 This driver is dedicated to block workloads and does not support NAS protocols.
 
+NOTE: The `google-cloud-netapp-volumes-san` backend is required to provision iSCSI block
+volumes. The `google-cloud-netapp-volumes` backend supports NAS protocols only and
+cannot be used for SAN workloads.
+
 == NAS volumes and iSCSI block volumes
 
 Google Cloud NetApp Volumes supports both NAS and block storage, which differ in

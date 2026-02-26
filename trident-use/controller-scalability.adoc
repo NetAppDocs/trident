@@ -2,16 +2,16 @@
 sidebar: sidebar
 permalink: trident-use/controller-scalability.html
 keywords: trident, controller scalability, concurrency, san, nas, san-nvme, gcnv, nas-eco, san-eco
-summary: Understand controller scalability, concurrency behavior, and feature maturity for Trident 26.02.
+summary: Understand controller scalability, concurrency behavior, and feature maturity.
 ---
 
-= Controller scalability in Trident 26.02
+= Controller scalability
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-Trident introduces expanded controller scalability through improved concurrency across multiple storage drivers.
+Trident introduces controller scalability through improved concurrency across multiple storage drivers.
 Customers can identify which Trident drivers support controller scalability at general availability and which drivers are available as a technical preview in Trident 26.02.
 This enables informed deployment decisions and appropriate risk management for scalable Kubernetes environments.
 
@@ -20,41 +20,142 @@ This enables informed deployment decisions and appropriate risk management for s
 
 === Controller scalability
 
-Controller scalability refers to the Trident controller’s ability to process multiple storage operations concurrently.
-These operations include volume creation, deletion, resizing, snapshot management, and backend interactions.
+Controller scalability refers to the Trident controller's ability to process multiple storage operations in parallel rather than serializing them behind a single lock.
+These operations include volume creation, deletion, resizing, snapshot creation and deletion, volume publish and unpublish, and backend management.
 
-Improved controller scalability reduces provisioning latency and improves throughput in environments with high numbers of PersistentVolumeClaims and backends.
+When controller scalability is enabled, operations on different volumes and backends proceed concurrently.
+This increases throughput and reduces end-to-end operation time in environments with high numbers of concurrent PersistentVolumeClaim and VolumeSnapshot operations.
 
-=== Concurrency
+== Controller scalability support
 
-Concurrency is the number of storage operations that the Trident controller can execute in parallel.
-Concurrency applies at the controller level and affects how quickly Trident processes requests across all managed backends.
+Trident supports controller scalability with different maturity levels depending on the storage driver.
 
-Concurrency behavior varies by storage driver and feature maturity.
-
-== Controller scalability support in Trident 26.02
-
-Trident 26.02 supports controller scalability with different maturity levels depending on the storage driver.
-
-=== General availability in 26.02
+=== General availability
 
 The following drivers support controller scalability at general availability in Trident 26.02:
 
 * `san`
 * `nas`
 * `san-nvme`
+* `google-cloud-netapp-volumes`
 
-For these drivers:
 
-* Controller concurrency is enabled by default
-* Concurrent provisioning and management operations are supported
-* Behavior is production-ready and supported for enterprise workloads
+== Enable controller scalability
 
-=== Technical preview in 26.02
+Controller scalability is controlled by the `enableConcurrency` configuration option. This option must be explicitly enabled during Trident installation or by updating an existing deployment.
+
+=== Trident operator deployment
+
+To enable controller scalability with the Trident operator, set `enableConcurrency` to `true` in the `TridentOrchestrator` custom resource.
+
+==== New installation
+
+Create or edit the `TridentOrchestrator` CR with `enableConcurrency` set to `true`:
+
+[source,yaml]
+```
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  namespace: trident
+  enableConcurrency: true
+```
+
+Apply the CR:
+
+[source,console]
+```
+kubectl apply -f tridentorchestrator_cr.yaml
+```
+
+==== Existing installation
+
+Patch the existing `TridentOrchestrator` CR to enable controller scalability:
+
+[source,console]
+```
+kubectl patch torc trident --type=merge -p '{"spec":{"enableConcurrency":true}}'
+```
+
+Verify the setting was applied:
+
+[source,console]
+```
+kubectl get torc trident -o jsonpath='{.status.currentInstallationParams.enableConcurrency}'
+```
+
+=== Helm deployment
+
+To enable controller scalability with Helm, set the `enableConcurrency` value to `true`.
+
+==== New installation
+
+[source,console]
+```
+helm install trident netapp-trident/trident-operator --namespace trident --create-namespace --set enableConcurrency=true
+```
+
+==== Existing installation
+
+[source,console]
+```
+helm upgrade trident netapp-trident/trident-operator --namespace trident --set enableConcurrency=true
+```
+
+Alternatively, set `enableConcurrency` to `true` in a custom `values.yaml` file:
+
+[source,yaml]
+```
+# values.yaml
+enableConcurrency: true
+```
+
+Then install or upgrade using the values file:
+
+[source,console]
+```
+helm install trident netapp-trident/trident-operator --namespace trident --create-namespace -f values.yaml
+```
+
+=== tridentctl deployment
+
+To enable controller scalability with `tridentctl`, pass the `--enable-concurrency` flag during installation.
+
+==== New installation
+
+[source,console]
+```
+tridentctl install -n trident --enable-concurrency
+```
+
+==== Existing installation
+
+To enable controller scalability on an existing `tridentctl`-based deployment, uninstall and reinstall with the flag:
+
+[source,console]
+```
+tridentctl uninstall -n trident
+tridentctl install -n trident --enable-concurrency
+```
+
+=== Verify controller scalability is enabled
+
+After enabling controller scalability, verify that the Trident controller is running with concurrency enabled by checking the controller pod logs:
+
+[source,console]
+```
+kubectl logs -n trident deploy/trident-controller | grep -i concurrency
+```
+
+You should see a log entry indicating that concurrency is enabled.
+
+
+=== Technical preview
 
 The following drivers support controller scalability as a technical preview in Trident 26.02:
 
-* `google-cloud-netapp-volumes`
 * `nas-eco`
 * `san-eco`
 
@@ -68,16 +169,16 @@ For these drivers:
 
 When controller scalability is enabled:
 
-* Trident processes multiple volume operations in parallel
-* Operations are queued and executed concurrently based on controller capacity
-* Concurrency applies across backends using the same driver
+* Trident replaces the single global lock with fine-grained, per-resource locking
+* Operations that modify the same resource are serialized to maintain data consistency
+* Operations that only read from a resource can proceed concurrently with other read operations on that resource
+* Trident limits concurrent ONTAP API requests to 20 per management LIF to prevent overloading backend storage systems
+* If multiple backends share the same management LIF, they share this 20-request limit
 
-Concurrency does not guarantee ordering of operations.
-Applications and automation workflows must not assume sequential execution.
 
-== Known limits and considerations
+== Known limitations and considerations
 
-The following considerations apply to controller scalability in Trident 26.02:
+The following considerations apply to controller scalability:
 
 * Concurrency is managed internally by the Trident controller
 * There are no user-configurable concurrency limits in this release
@@ -100,9 +201,7 @@ The following limitations apply in Trident 26.02:
 
 == Recommendations
 
-NetApp recommends the following:
-
-* Use general availability drivers for production environments that require high scalability
+* Use general availability (GA) drivers for production environments that require high scalability
 * Evaluate technical preview drivers in non-production environments
 * Monitor backend and controller performance when operating at scale
 * Avoid assuming operation ordering in automation scripts

@@ -31,6 +31,12 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 * Added support for Google Cloud NetApp Volumes block storage (SAN/iSCSI). 
 * Added support for auto-tiering for Google Cloud NetApp Volumes. You can now optimize storage costs by now Add Kubernetes-native controls to configure ONTAP FabricPool auto-tiering for Google Cloud NetApp Volumes (GCNV) through NetApp Trident.
 
+==== Experimental Enhancements
+
+NOTE: Not for use in production environments.
+
+* *[Tech Preview]*: Added support for concurrency for ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers.
+
 ==== Fixes
 
 * *Kubernetes*:
@@ -45,7 +51,7 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 ** Improved Trident controller efficiency for ontap-nas-economy driver when used at scale.
 ** Set internalID during LUN import in ontap-san-economy driver.
 ** Increased Azure Resource Graph query limits to handle more subnets.
-** Improved CSI and ONTAP clone split timeouts to avoid race conditions with some backup applications link:https://github.com/NetApp/trident/issues/1098[Issue #1098], link:https://github.com/NetApp/trident/issues/1100[ #1100].
+** Improved CSI and ONTAP clone split timeouts to avoid race conditions with some backup applications link:https://github.com/NetApp/trident/issues/1098[Issue #1098], link:https://github.com/NetApp/trident/issues/1100[Issue #1100].
 ** Fixed suppression of LUKS error messages link:https://github.com/NetApp/trident/issues/1069[Issue #1069].
 ** Fixed handling of stale LUKS mappers for both iSCSI and NVMe protocols. Enhanced cleanup logic prevents mount failures from orphaned device mappers.
 * Fixed scale limitations for RWX NVMe volumes.

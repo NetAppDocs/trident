@@ -1,0 +1,45 @@
+sidebar: sidebar
+permalink: trident-asar2-support.html
+keywords: asar2, trident, fcp, nvme, tcp, nvme/tcp, fibre channel
+summary: NetApp Trident supports ONTAP ASA r2 for iSCSI and NVMe/TCP.
+---
+= NetApp Trident support for ONTAP ASA r2 storage systems
+:hardbreaks:
+:icons: font
+:imagesdir: ./media/
+
+[.lead]
+NetApp Trident 25.02 and later supports NetApp ASA r2 systems as storage backends. Refer to link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] for more information.
+
+ASA r2 systems require the `ontap-san` driver. Trident does not support the `ontap-san-economy` driver for ASA r2 systems.
+
+When you specify `ontap-san` as the `storageDriverName` in the backend configuration, Trident automatically detects the ASA r2 storage system.
+
+Trident provides limited data protection for ASA r2 systems with Trident protect.
+
+Supported SAN protocols depend on your Trident version:
+
+* Trident 25.02 and later supports iSCSI.
+* Trident 25.06 and later supports NVMe/TCP in addition to iSCSI.
+
+You must assign at least one aggregate to the storage virtual machine (SVM) for ONTAP backend storage. Refer to link:https://kb.netapp.com/on-prem/ASAr2/ASAr2_KBs/su_create_by_SVM_admin_using_CLI_fails_with_error_No_candidate_aggregates_are_available_for_storage_services[Assigning aggregates to SVMs in ASA r2 systems^] for instructions.
+
+== Supported operations
+
+* Provisioning persistent volumes (PVs)
+* Dynamic volume provisioning
+* Creating and deleting volumes
+* Cloning volumes
+* Expanding volumes
+* Managing storage classes
+
+== Unsupported operations
+
+* LUKS encryption
+* SnapMirror volume replication
+* Limiting aggregate usage
+* Space reservation mode
+* Snapshots
+* Tiering
+
+For more information, refer to link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san-examples.html[ONTAP SAN configuration options and examples^] .

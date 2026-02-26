@@ -1,262 +1,400 @@
 ---
 sidebar: sidebar
 permalink: trident-use/automatic-volume-expansion.html
-keywords: trident, autogrow, automatic volume expansion, pvc resize, ontap, kubernetes, capacity management
-summary: Configure and operate automatic volume expansion for Persistent Volumes managed by Trident and ONTAP.
+keywords: trident, autogrow, automatic volume expansion, autogrow policy, pvc resize, ontap, kubernetes
+summary: Configure and manage automatic volume expansion using Trident Autogrow Policies in Trident 26.02 and later.
 ---
 
 = Automatic volume expansion
-:hardbreaks:
-:icons: font
-:imagesdir: ../media/
 
-[.lead]
-Automatic volume expansion allows Trident to monitor Persistent Volume utilization and expand volumes automatically before they reach full capacity.
-This capability prevents application disruption caused by storage exhaustion and reduces the operational overhead of manual volume management in Kubernetes environments.
-Automatic volume expansion works in coordination with ONTAP to ensure that Kubernetes, Trident, and backend storage remain capacity-consistent throughout the lifecycle of a volume.
+Automatic volume expansion enables Persistent Volumes (PVs) provisioned by Trident to grow automatically when their used capacity reaches a defined threshold.
 
-== Overview
+This capability is implemented using *Autogrow Policies (AGPs)*. An Autogrow Policy defines:
 
-In Kubernetes environments, Persistent Volumes are traditionally expanded through manual resize operations.
-Although Kubernetes supports online resizing, administrators must still monitor volume utilization, update PersistentVolumeClaim sizes, and ensure that backend storage capacity is adjusted correctly.
+* The utilization threshold that triggers expansion
+* The amount by which the volume grows
+* The maximum size the volume can reach
 
-This operational model does not scale well in large or dynamic environments.
-Volumes can fill faster than operators can respond, and manual expansion of ONTAP FlexVols outside Kubernetes can lead to inconsistent capacity states that are later reconciled incorrectly.
+Automatic volume expansion reduces operational overhead and helps prevent application disruption caused by full volumes.
 
-Automatic volume expansion addresses these challenges by allowing Trident to manage volume growth proactively and in a coordinated manner.
+== Requirements
 
-Persistent Volumes can reach full capacity for several reasons that are difficult to manage manually:
+* Trident 26.02 or later
+* RBAC permissions to create `TridentAutogrowPolicy` custom resources
+* StorageClasses must include `allowVolumeExpansion: true`
+* Supported ONTAP protocols:
+** NFS
+** iSCSI
+** FCP
+** NVMe
 
-* Application data grows steadily or unpredictably over time
-* High data churn in small volumes prevents timely space reclamation
-* Snapshot reserve consumption reduces usable volume space
-* Snapshot retention policies consume capacity faster than anticipated
+NOTE: ONTAP NVMe raw block volumes earlier than ONTAP 9.16.1 do not support automatic expansion.
 
-When a volume becomes full, applications may enter a read-only state or fail write operations.
-For containerized applications and virtual machines, this behavior can result in service outages and data unavailability.
+NOTE: For SAN volumes, if `growthAmount` is less than or equal to 50MiB, Trident increases the value to 51MiB before resizing, provided the resulting size does not exceed `maxSize`.
 
-Automatic volume expansion prevents these outcomes by expanding volumes before capacity exhaustion occurs.
+NOTE: In brownfield environments, automatic expansion might not function for certain existing volumes due to volume publication migration behavior.
 
-== Key concepts and definitions
+== Create an Autogrow Policy
 
-=== Automatic volume expansion
+Autogrow Policies are Kubernetes custom resources of type `TridentAutogrowPolicy`.
 
-Automatic volume expansion, also referred to as autogrow, is a Trident capability that resizes Persistent Volumes without manual intervention.
-When enabled, Trident continuously evaluates volume utilization and initiates expansion operations when configured thresholds are exceeded.
+An Autogrow Policy defines when and how volumes expand.
 
-Trident coordinates resizing across all layers involved in storage provisioning, including:
+=== Field definitions
 
-* The PersistentVolumeClaim
-* The ONTAP FlexVol
-* The guest filesystem or raw block device
-* The snapshot reserve directory
+[cols="1,3,1",options="header"]
+|===
+| Field | Description | Required
 
-This coordination ensures consistent capacity reporting across Kubernetes and ONTAP and prevents capacity drift.
+| `metadata.name`
+| Unique policy identifier.
+| Yes
 
-=== Utilization threshold
+| `usedThreshold`
+| Percentage of used capacity that triggers expansion.
+| Yes
 
-A utilization threshold defines the percentage of used capacity that triggers an expansion.
-When the used capacity of a volume exceeds this threshold, Trident initiates a resize operation.
+| `growthAmount`
+| Amount to grow when the threshold is reached. Can be specified as a percentage (for example, `"10%"`) or a fixed size (for example, `"5Gi"`). Defaults to `10%` if not specified.
+| No
 
-Threshold-based triggering ensures that expansion occurs proactively rather than reactively.
+| `maxSize`
+| Maximum volume size limit. If not specified, the volume can grow without an enforced upper limit.
+| No
+|===
 
-=== Maximum volume size
+=== Example: Standard Autogrow Policy
 
-The maximum volume size defines an upper limit for automatic expansion.
-Once a volume reaches this size, Trident stops expanding it automatically, even if utilization continues to increase.
-
-This parameter prevents unbounded growth and supports predictable capacity planning.
-
-=== Configuration scope and precedence
-
-Automatic volume expansion can be configured at multiple scopes.
-
-Supported scopes include:
-
-* Backend
-* StorageClass
-* PersistentVolumeClaim
-
-Configuration precedence follows this order:
-
-. PersistentVolumeClaim
-. StorageClass
-. Backend
-
-Settings defined at a lower scope override settings defined at a higher scope.
-
-== How automatic volume expansion works
-
-When automatic volume expansion is enabled, Trident performs a continuous evaluation cycle.
-
-The process follows these steps:
-
-. Trident periodically evaluates the used capacity of managed volumes
-. Trident compares current utilization against configured thresholds
-. When a threshold is exceeded, Trident calculates a new target size
-. Trident expands the PersistentVolumeClaim
-. Trident expands the underlying ONTAP FlexVol
-. Trident resizes the filesystem or raw block device, if applicable
-. Trident updates internal state to reflect the new capacity
-
-These operations occur without taking the volume offline and without interrupting application input or output.
-
-== Configuration guide
-
-You enable automatic volume expansion by defining policies at one or more supported scopes.
-Policies define when expansion occurs and how far a volume may grow.
-
-=== Backend-level configuration
-
-Backend-level configuration defines default automatic expansion behavior for all volumes provisioned by the backend.
-This approach is appropriate when most workloads share similar growth characteristics.
-
-Example backend configuration:
+The following example creates a policy that triggers expansion at 80% utilization, grows by 10%, and limits growth to 500Gi.
 
 [source,yaml]
 ----
-version: 1
-storageDriverName: ontap-nas
-backendName: ontap-backend
-managementLIF: 10.0.0.1
-dataLIF: 10.0.0.2
-svm: svm1
-
-autogrow:
-  enabled: true
-  utilizationThreshold: 80
-  maxVolumeSize: 2Ti
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: standard-autogrow
+spec:
+  usedThreshold: "80%"
+  growthAmount: "10%"
+  maxSize: "500Gi"
 ----
 
-When configured at the backend level, these settings apply unless overridden by a StorageClass or PersistentVolumeClaim.
+=== Create the policy
 
-=== StorageClass-level configuration
+. Save the YAML definition to a file.
+. Apply the policy:
 
-StorageClass-level configuration applies to all volumes provisioned using that StorageClass.
-This approach allows administrators to define different growth policies for different workload classes.
+----
+kubectl apply -f autogrow-policy.yaml
+----
 
-Example StorageClass configuration:
+. Verify creation:
+
+----
+kubectl get tridentautogrowpolicy standard-autogrow
+----
+
+Expected output:
+
+----
+NAME                USED THRESHOLD   GROWTH AMOUNT   STATE
+standard-autogrow   80%              10%             Success
+----
+
+== Configuration examples
+
+=== Conservative policy for production databases
+
+Use a lower threshold and larger growth increment for production database workloads where avoiding capacity exhaustion is critical.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: production-db-policy
+spec:
+  usedThreshold: "75%"
+  growthAmount: "20%"
+  maxSize: "5Ti"
+----
+
+=== Log storage with fixed growth
+
+Use a fixed-size increment when predictable growth steps are preferred.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: log-storage-policy
+spec:
+  usedThreshold: "90%"
+  growthAmount: "10Gi"
+  maxSize: "100Gi"
+----
+
+=== Autogrow Policy with defaults
+
+If only `usedThreshold` is specified, `growthAmount` defaults to `10%` and `maxSize` is unlimited.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: logs-policy
+spec:
+  usedThreshold: "85%"
+----
+
+=== Autogrow Policy with default growthAmount
+
+Specify a maximum size while using the default growth increment.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: default-ga-policy
+spec:
+  usedThreshold: "70%"
+  maxSize: "100Gi"
+----
+
+=== Autogrow Policy with default maxSize
+
+Allow unrestricted growth while specifying a custom growth percentage.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: default-ms-policy
+spec:
+  usedThreshold: "80%"
+  growthAmount: "150%"
+----
+
+=== Autogrow Policy with fractional percentages
+
+Fractional percentages allow granular control of thresholds and growth increments.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentAutogrowPolicy
+metadata:
+  name: fractional-policy
+spec:
+  usedThreshold: "80.28%"
+  growthAmount: "10.65%"
+  maxSize: "100Gi"
+----
+
+== Policy states
+
+[cols="1,3",options="header"]
+|===
+| State | Description
+
+| Success
+| Policy validated and ready for use.
+
+| Failed
+| Validation errors detected. Review and correct the specification.
+
+| Deleting
+| Deletion in progress. Finalizers prevent removal while volumes reference the policy.
+|===
+
+== Manage Autogrow Policies
+
+=== List policies
+
+----
+kubectl get tridentautogrowpolicy
+----
+
+=== View policy details
+
+----
+kubectl describe tridentautogrowpolicy production-db-policy
+----
+
+=== Using tridentctl
+
+----
+tridentctl get autogrowpolicy
+tridentctl get autogrowpolicy production-db-policy -o yaml
+----
+
+=== Update an Autogrow Policy
+
+IMPORTANT: Changes affect all volumes currently using the policy.
+
+----
+kubectl edit tridentautogrowpolicy production-db-policy
+----
+
+Updates apply during the next growth operation. Volume restart is not required.
+
+=== Delete an Autogrow Policy
+
+Autogrow Policies include finalizer protection to prevent deletion while in use.
+
+----
+kubectl delete tridentautogrowpolicy production-db-policy
+----
+
+If volumes reference the policy, it remains in the `Deleting` state until all references are removed.
+
+To identify volumes using a policy:
+
+----
+tridentctl get autogrowpolicy production-db-policy -o yaml
+----
+
+Remove policy from volumes:
+
+----
+kubectl annotate pvc <pvc-name> \
+  trident.netapp.io/autogrowPolicy="none" \
+  --overwrite
+----
+
+== Configure Autogrow Policy on a StorageClass
+
+Associate a policy using the `trident.netapp.io/autogrowPolicy` annotation.
 
 [source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: ontap-autogrow
+  name: ontap-gold
+  annotations:
+    trident.netapp.io/autogrowPolicy: "production-db-policy"
 provisioner: csi.trident.netapp.io
 parameters:
-  autogrowEnabled: "true"
-  autogrowThreshold: "75"
-  autogrowMaxSize: "5Ti"
+  backendType: "ontap-san"
+  fsType: "ext4"
 allowVolumeExpansion: true
 ----
 
-Volumes provisioned using this StorageClass inherit these autogrow settings unless overridden at the PersistentVolumeClaim level.
+Verify annotation:
 
-=== PersistentVolumeClaim-level configuration
+----
+kubectl get storageclass ontap-gold \
+  -o jsonpath='{.metadata.annotations.trident\.netapp\.io/autogrowPolicy}'
+----
 
-PersistentVolumeClaim-level configuration provides fine-grained control for individual workloads.
-This approach is useful for applications with unique or unpredictable growth patterns.
+=== Update Autogrow Policy on a StorageClass
 
-Example PersistentVolumeClaim configuration:
+----
+kubectl annotate storageclass ontap-gold \
+  trident.netapp.io/autogrowPolicy="standard-autogrow" \
+  --overwrite
+----
+
+=== Remove Autogrow Policy from a StorageClass
+
+Option 1: Remove annotation
+
+----
+kubectl annotate storageclass ontap-gold \
+  trident.netapp.io/autogrowPolicy-
+----
+
+Option 2: Set annotation to `none`
+
+----
+kubectl annotate storageclass ontap-gold \
+  trident.netapp.io/autogrowPolicy="none" \
+  --overwrite
+----
+
+== Apply Autogrow Policy to a PVC
+
+Apply a policy at the PVC level to override StorageClass behavior.
 
 [source,yaml]
 ----
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: app-data
+  name: database-pvc
   annotations:
-    trident.netapp.io/autogrow-enabled: "true"
-    trident.netapp.io/autogrow-threshold: "85"
-    trident.netapp.io/autogrow-max-size: "10Ti"
+    trident.netapp.io/autogrowPolicy: "production-db-policy"
 spec:
+  storageClassName: ontap-gold
   accessModes:
     - ReadWriteOnce
-  storageClassName: ontap-autogrow
   resources:
     requests:
       storage: 500Gi
 ----
 
-PersistentVolumeClaim-level settings override backend and StorageClass defaults.
+Disable Autogrow on a PVC:
 
-== Autogrow parameters
+----
+kubectl annotate pvc database-pvc \
+  trident.netapp.io/autogrowPolicy="none" \
+  --overwrite
+----
 
-The following parameters control automatic volume expansion behavior.
+== Monitor Autogrow Policy Usage
 
-[cols="1,3",options="header"]
+List policies:
+
+----
+kubectl get tridentautogrowpolicy
+----
+
+Find which policy a PVC uses:
+
+----
+kubectl get pvc database-pvc \
+  -o jsonpath='{.metadata.annotations.trident\.netapp\.io/autogrowPolicy}'
+----
+
+Monitor events:
+
+----
+kubectl get events \
+  --field-selector involvedObject.kind=TridentAutogrowPolicy
+----
+
+== Troubleshooting
+
+[cols="1,3,2",options="header"]
 |===
-| Parameter | Description
+| Issue | Possible cause | Resolution
 
-| `enabled`
-| Enables or disables automatic volume expansion.
+| Policy in `Failed` state
+| Invalid specification
+| Correct the policy and reapply
 
-| `utilizationThreshold`
-| Percentage of used capacity that triggers an expansion operation.
+| Volume does not expand
+| `maxSize` reached
+| Increase `maxSize`
 
-| `maxVolumeSize`
-| Maximum size to which Trident can automatically expand the volume.
+| Frequent expansions
+| Threshold too low
+| Increase `usedThreshold`
 
-| `allowVolumeExpansion`
-| Kubernetes flag that allows online volume resizing.
+| PVC shows `AutogrowPolicyNotFound`
+| Policy does not exist
+| Verify policy name
+
+| PVC shows `AutogrowPolicyNotUsable`
+| Policy in `Failed` state
+| Resolve validation errors
+
+| TAGRI repeatedly rejected
+| `maxSize` exceeded
+| Increase `maxSize` or adjust `growthAmount`
 |===
-
-== Supported workloads and environments
-
-Automatic volume expansion is supported for:
-
-* All Kubernetes distributions supported by Trident
-* All ONTAP storage backends supported by Trident
-* File-based volumes and raw block volumes
-* Filesystem mode and block mode PersistentVolumes
-* Single-node and multi-node access modes
-* Containerized applications and virtual machines
-
-== Non-disruptive expansion behavior
-
-Automatic volume expansion does not interrupt application input or output.
-Applications continue to read from and write to volumes while expansion operations are in progress.
-
-This behavior is critical for production environments where downtime or service interruption is unacceptable.
-
-== Snapshot reserve handling
-
-Snapshot activity can reduce usable volume space by consuming snapshot reserve.
-Automatic volume expansion accounts for snapshot reserve usage and expands the volume when snapshot activity reduces available capacity.
-
-This behavior prevents unexpected application failures caused by snapshot-induced capacity exhaustion.
-
-== Evaluation frequency and responsiveness
-
-Trident evaluates automatic volume expansion triggers at a high frequency.
-The evaluation interval is one minute or less.
-
-Frequent evaluation allows Trident to respond quickly to sudden data growth and rapidly changing workloads.
-
-== Cloud deployments and capacity pool expansion
-
-In cloud environments, automatic volume expansion can interact with elastic storage capacity pools.
-When expanding volumes consumes available backend capacity, Trident can expand the underlying virtual capacity pool to accommodate growth.
-
-This capability allows Kubernetes environments to benefit from cloud elasticity while maintaining consistent volume management semantics.
-
-== Limitations
-
-The following considerations apply to automatic volume expansion:
-
-* Automatic volume expansion must be explicitly enabled
-* Aggressive thresholds can result in frequent resize operations
-* Maximum volume size limits must align with backend capacity
-* Expansion operations increase backend storage utilization
-* Troubleshooting resize behavior may require correlating Kubernetes, Trident, and ONTAP logs
-
-== Operational recommendations
-
-NetApp recommends the following best practices:
-
-* Configure conservative utilization thresholds for production workloads
-* Define maximum volume sizes based on realistic growth expectations
-* Monitor backend capacity regularly
-* Validate automatic volume expansion behavior in non-production environments
-* Combine automatic volume expansion with proactive capacity planning in cloud deployments

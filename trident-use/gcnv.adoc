@@ -10,30 +10,31 @@ summary: Configure Trident to provision NAS (NFS and SMB) volumes from Google Cl
 :imagesdir: ../media/
 
 [.lead]
-You can configure Trident to provision NAS storage volumes using the NFS or SMB
-protocols from Google Cloud NetApp Volumes. NAS volumes are provisioned by using
-the `google-cloud-netapp-volumes` storage driver.
+[.lead]
+You can configure Google Cloud NetApp Volumes as a backend for Trident to provision
+file-based storage volumes. Trident can attach NFS and SMB volumes by using a
+Google Cloud NetApp Volumes backend.
 
-You can deploy shared, file-based workloads on Google Kubernetes Engine using
-Trident-managed NAS storage from Google Cloud NetApp Volumes.
+Trident uses separate backends for NAS and SAN workloads in Google Cloud NetApp Volumes.
+The `google-cloud-netapp-volumes` backend supports file-based protocols only and cannot
+be used to provision iSCSI volumes.
 
-This driver is dedicated to file-based workloads and does not support block
-or iSCSI volumes.
+To provision iSCSI block volumes, use the
+`google-cloud-netapp-volumes-san` backend, which is a separate backend type designed
+specifically for SAN workloads.
 
 == NAS volumes and iSCSI block volumes
 
-Google Cloud NetApp Volumes supports both NAS and block storage, which differ in
-how applications access and manage data.
+Google Cloud NetApp Volumes supports both NAS and block storage, which differ in how
+applications access and manage data.
 
 NAS volumes provide file-based storage and are accessed through standard file
 protocols such as NFS or SMB. Volumes are mounted as shared filesystems and support
-concurrent access from multiple pods or nodes. NAS storage is well suited to
-workloads that require shared read-write access, filesystem semantics, and minimal
-node-level configuration.
+concurrent access from multiple pods or nodes.
 
 iSCSI block volumes provide raw block storage and are accessed as block devices
-attached to Kubernetes nodes. Block storage is typically used when applications
-require block-level access or tighter control over I/O behavior.
+attached to Kubernetes nodes. Block storage is typically used when workloads
+require block-level access or application-managed I/O behavior.
 
 This applies to the following environments:
 
@@ -45,68 +46,90 @@ This applies to the following environments:
 For block (iSCSI) workloads, see
 xref:trident-use/gcnv-block.html[Configure block storage (iSCSI)].
 
-== NAS storage model
+== Google Cloud NetApp Volumes driver details
 
-NAS storage provides shared, file-based access to data. Volumes are mounted as
-filesystems and accessed using standard POSIX or SMB semantics.
+Trident provides the `google-cloud-netapp-volumes` driver to provision NAS storage
+from Google Cloud NetApp Volumes.
 
-Trident manages the full lifecycle of NAS volumes, including volume creation,
-export configuration, mounting, and deletion.
+The driver supports the following access modes:
 
-== When to use NAS storage
+* ReadWriteOnce (RWO)
+* ReadOnlyMany (ROX)
+* ReadWriteMany (RWX)
+* ReadWriteOncePod (RWOP)
 
-Use NAS storage when your workload requires:
-
-* Shared read-write access from multiple pods or nodes
-* Filesystem semantics
-* Minimal node-level storage configuration
-* Support for the `ReadWriteMany` access mode
-
-== NAS volumes
-
-NAS volumes are provisioned as file volumes in Google Cloud NetApp Volumes and
-mounted into pods as directories.
-
-NAS volumes:
-
-* Use the NFS or SMB protocols
-* Are mounted as filesystems
-* Support multi-node access
-* Do not require iSCSI or multipath configuration
-
-== Supported protocols
-
-The NAS driver supports the following protocols:
-
-* NFS
-* SMB
-
-== Access modes
-
-NAS volumes support the following Kubernetes access modes:
-
-* `ReadWriteOnce` (RWO)
-* `ReadOnlyMany` (ROX)
-* `ReadWriteMany` (RWX)
-* `ReadWriteOncePod` (RWOP)
-
-== volumeMode behavior
-
-NAS volumes always use `volumeMode: Filesystem`.
-
-== Storage driver
-
-NAS workloads use the following Trident storage driver:
-
-[cols="2,2,2,2", options="header"]
+[cols="2,1,1,2,2", options="header"]
 |===
-|Driver |Protocols |volumeMode |Usage
+|Driver |Protocol |volumeMode |Access modes supported |File systems supported
 
 |`google-cloud-netapp-volumes`
-|NFS, SMB
-|Filesystem
-|NAS workloads
+a|NFS
+SMB
+a|Filesystem
+a|RWO, ROX, RWX, RWOP
+a|`nfs`, `smb`
 |===
+
+== Cloud identity for Google Kubernetes Engine
+
+Cloud identity enables Kubernetes workloads to access Google Cloud resources by
+authenticating as a workload identity instead of using static Google Cloud
+credentials.
+
+To use cloud identity with Google Cloud NetApp Volumes, you must have:
+
+* A Kubernetes cluster deployed using Google Kubernetes Engine (GKE)
+* Workload identity enabled on the GKE cluster and the metadata server enabled on
+  the node pools
+* A Google Cloud service account with the Google Cloud NetApp Volumes Admin role
+  (`roles/netapp.admin`) or an equivalent custom role
+* Trident installed with the cloud provider set to `GCP` and the cloud identity
+  annotation configured
+
+[role="tabbed-block"]
+====
+
+.Trident operator
+--
+To install Trident using the Trident operator, edit `tridentorchestrator_cr.yaml`
+to set `cloudProvider` to `GCP` and `cloudIdentity` to the GKE service account.
+
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  namespace: trident
+  cloudProvider: "GCP"
+  cloudIdentity: "iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"
+----
+--
+
+.Helm
+--
+Set the cloud provider and cloud identity when installing Trident with Helm.
+
+----
+helm install trident trident-operator-100.6.0.tgz \
+  --set cloudProvider=GCP \
+  --set cloudIdentity="iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"
+----
+--
+
+.tridentctl
+--
+Install Trident by specifying the cloud provider and cloud identity.
+
+----
+tridentctl install \
+  --cloud-provider=GCP \
+  --cloud-identity="iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com" \
+  -n trident
+----
+--
+====
 
 == Configure a Trident NAS backend
 

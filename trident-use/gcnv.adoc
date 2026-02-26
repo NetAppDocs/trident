@@ -151,3 +151,85 @@ spec:
       cloud: gcp
     network: "<vpc-network>"
 ----
+
+== Provision NAS volumes
+
+NAS volumes are provisioned using the `google-cloud-netapp-volumes`
+backend and support NFS and SMB protocols.
+
+=== StorageClass for NFS volumes
+
+To provision NFS volumes, set `nasType` to `nfs`.
+
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gcnv-nfs
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "google-cloud-netapp-volumes"
+  trident.netapp.io/nasType: "nfs"
+allowVolumeExpansion: true
+----
+
+=== StorageClass for SMB volumes
+
+Using `nasType`, `csi.storage.k8s.io/node-stage-secret-name`, and
+`csi.storage.k8s.io/node-stage-secret-namespace`, you can specify an SMB volume
+and provide the required Active Directory credentials.
+
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gcnv-smb
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "google-cloud-netapp-volumes"
+  trident.netapp.io/nasType: "smb"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: "default"
+allowVolumeExpansion: true
+----
+
+=== PersistentVolumeClaim example (RWX)
+
+NAS volumes support concurrent access and are commonly provisioned with
+`ReadWriteMany`.
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gcnv-nas-rwx
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: gcnv-nfs
+----
+
+=== PersistentVolumeClaim example (RWO)
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gcnv-nas-rwo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: gcnv-nfs
+----
+
+NOTE: NAS volumes use `volumeMode: Filesystem`.

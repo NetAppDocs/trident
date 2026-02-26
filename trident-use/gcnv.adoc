@@ -1,334 +1,130 @@
 ---
 sidebar: sidebar
 permalink: trident-use/gcnv.html
-keywords: trident backend, google cloud netapp volumes, iscsi, block storage, san, unified pools, gke, storageclass, pvc
-summary: Configure Trident to provision NAS and block (iSCSI) volumes using Google Cloud NetApp Volumes Unified pools.
+keywords: Trident backend, Google Cloud NetApp Volumes, NAS, NFS, SMB, file storage, GKE
+summary: Configure Trident to provision NAS (NFS and SMB) volumes from Google Cloud NetApp Volumes.
 ---
 
-= Configure a Google Cloud NetApp Volumes backend
-:hardbreaks:
-:icons: font
+= Configure Google Cloud NetApp Volumes for NAS workloads
+
 :imagesdir: ../media/
 
 [.lead]
-You can configure Google Cloud NetApp Volumes as a backend for Trident to provision both file (NAS) and block (SAN/iSCSI) volumes using Unified storage pools.
+You can configure Trident to provision NAS storage volumes using the NFS or SMB
+protocols from Google Cloud NetApp Volumes. NAS volumes are provisioned by using
+the `google-cloud-netapp-volumes` storage driver.
 
-== Key concepts and definitions
+You can deploy shared, file-based workloads on Google Kubernetes Engine using
+Trident-managed NAS storage from Google Cloud NetApp Volumes.
 
-This section defines storage concepts used throughout this page.
+This driver is dedicated to file-based workloads and does not support block
+or iSCSI volumes.
 
-=== Unified storage pools
+== NAS volumes and iSCSI block volumes
 
-A Unified storage pool in Google Cloud NetApp Volumes is a storage pool that supports both file and block protocols.
-A single Unified pool can serve:
+Google Cloud NetApp Volumes supports both NAS and block storage, which differ in
+how applications access and manage data.
 
-* File volumes using NFS or SMB
-* Block volumes using iSCSI
+NAS volumes provide file-based storage and are accessed through standard file
+protocols such as NFS or SMB. Volumes are mounted as shared filesystems and support
+concurrent access from multiple pods or nodes. NAS storage is well suited to
+workloads that require shared read-write access, filesystem semantics, and minimal
+node-level configuration.
 
-Unified pools differ from NAS-only pools, which support file protocols only.
+iSCSI block volumes provide raw block storage and are accessed as block devices
+attached to Kubernetes nodes. Block storage is typically used when applications
+require block-level access or tighter control over I/O behavior.
 
-=== NAS volumes
+This applies to the following environments:
 
-NAS volumes provide shared file system access.
-They are mounted into pods as directories and support multi-node access.
+* Trident 26.02 and later
+* Google Kubernetes Engine (GKE)
+* Google Cloud NetApp Volumes NAS pools
+* NFS and SMB workloads
 
-Characteristics of NAS volumes:
+For block (iSCSI) workloads, see
+xref:trident-use/gcnv-block.html[Configure block storage (iSCSI)].
 
-* Use NFS or SMB
-* Use `volumeMode: Filesystem`
+== NAS storage model
+
+NAS storage provides shared, file-based access to data. Volumes are mounted as
+filesystems and accessed using standard POSIX or SMB semantics.
+
+Trident manages the full lifecycle of NAS volumes, including volume creation,
+export configuration, mounting, and deletion.
+
+== When to use NAS storage
+
+Use NAS storage when your workload requires:
+
+* Shared read-write access from multiple pods or nodes
+* Filesystem semantics
+* Minimal node-level storage configuration
+* Support for the `ReadWriteMany` access mode
+
+== NAS volumes
+
+NAS volumes are provisioned as file volumes in Google Cloud NetApp Volumes and
+mounted into pods as directories.
+
+NAS volumes:
+
+* Use the NFS or SMB protocols
+* Are mounted as filesystems
 * Support multi-node access
-* Are mounted directly into the pod file system
+* Do not require iSCSI or multipath configuration
 
-=== Block volumes
+== Supported protocols
 
-Block volumes provide raw block devices to pods.
-They are backed by iSCSI LUNs and attached to a single node.
+The NAS driver supports the following protocols:
 
-Characteristics of block volumes:
+* NFS
+* SMB
 
-* Use the iSCSI protocol
-* Use `volumeMode: Block`
-* Support single-node access only
-* Are exposed as raw devices, not file systems
+== Access modes
 
-Applications are responsible for formatting and mounting block devices if required.
+NAS volumes support the following Kubernetes access modes:
 
-=== iSCSI
+* `ReadWriteOnce` (RWO)
+* `ReadOnlyMany` (ROX)
+* `ReadWriteMany` (RWX)
+* `ReadWriteOncePod` (RWOP)
 
-iSCSI is a block storage protocol that allows a host to access storage over an IP network.
-Kubernetes nodes act as iSCSI initiators and connect to iSCSI targets provided by Google Cloud NetApp Volumes.
+== volumeMode behavior
 
-=== Logical Unit Numbers
+NAS volumes always use `volumeMode: Filesystem`.
 
-A Logical Unit Number represents a block device exported over iSCSI.
-Each block PersistentVolume provisioned by Trident corresponds to a Logical Unit Number in a Unified storage pool.
+== Storage driver
 
-=== Host groups
+NAS workloads use the following Trident storage driver:
 
-A host group is a collection of initiators that are allowed to access a Logical Unit Number.
-Trident manages host groups automatically and maps Logical Unit Numbers to Kubernetes nodes based on PersistentVolumeClaim usage.
-
-=== Access modes
-
-Access modes define how a volume can be accessed by pods:
-
-* ReadWriteOnce (RWO): mounted read-write by a single node
-* ReadOnlyMany (ROX): mounted read-only by many nodes
-* ReadWriteMany (RWX): mounted read-write by many nodes
-* ReadWriteOncePod (RWOP): mounted by a single pod
-
-Block volumes support ReadWriteOnce (RWO) only.
-
-=== volumeMode
-
-The `volumeMode` field defines how a volume is presented to a pod:
-
-* `Filesystem`: the volume is formatted and mounted as a directory
-* `Block`: the volume is exposed as a raw block device
-
-NAS volumes use `Filesystem`.
-Block volumes use `Block`.
-
-=== Attach and mount behavior
-
-Attach and mount are separate operations:
-
-* Attach: the storage device is connected to the Kubernetes node
-* Mount: the storage is made available inside the pod
-
-For block volumes, Trident performs the attach operation only.
-Formatting and mounting are handled by the application or container runtime.
-
-== Google Cloud NetApp Volumes Unified pools
-
-Google Cloud NetApp Volumes Unified pools support both file and block protocols from the same storage pool.
-This enables Kubernetes workloads to consume NAS and SAN storage using a single Trident backend.
-
-Unified pools differ from NAS-only pools in the following ways:
-
-* Support file protocols (NFS, SMB) and the block protocol (iSCSI)
-* Provision block volumes as Logical Unit Number-backed PersistentVolumes
-* Require iSCSI initiator configuration on Kubernetes nodes
-* Use host groups to manage access to block volumes
-
-== Google Cloud NetApp Volumes driver details
-
-Trident provides the `google-cloud-netapp-volumes` driver to provision storage from Google Cloud NetApp Volumes Unified pools.
-
-[cols="2,2,2,2,2", options="header"]
+[cols="2,2,2,2", options="header"]
 |===
-|Driver
-|Protocol
-|volumeMode
-|Access modes supported
-|File systems supported
+|Driver |Protocols |volumeMode |Usage
 
 |`google-cloud-netapp-volumes`
-a|NFS
-SMB
-a|Filesystem
-a|ReadWriteOnce (RWO), ReadOnlyMany (ROX), ReadWriteMany (RWX), ReadWriteOncePod (RWOP)
-a|`nfs`, `smb`
-
-|`google-cloud-netapp-volumes`
-|iSCSI
-|Block
-|ReadWriteOnce (RWO)
-|Raw block device
+|NFS, SMB
+|Filesystem
+|NAS workloads
 |===
 
-Block volumes support the ReadWriteOnce (RWO) access mode only.
-
-== Cloud identity for Google Kubernetes Engine
-
-Cloud identity enables Kubernetes pods to access Google Cloud resources by authenticating as a workload identity instead of by providing explicit Google Cloud credentials.
-
-To use cloud identity with Google Cloud NetApp Volumes, you must have:
-
-* A Kubernetes cluster deployed using Google Kubernetes Engine
-* Workload identity enabled on the cluster and the metadata server enabled on node pools
-* A Google Cloud service account with the Google Cloud NetApp Volumes Admin role (`roles/netapp.admin`) or an equivalent custom role
-* Trident installed with the cloud provider set to Google Cloud and the cloud identity annotation configured
-
-[role="tabbed-block"]
-====
-.Trident operator
---
-Edit `tridentorchestrator_cr.yaml` to set the cloud provider and cloud identity:
+== Configure a Trident NAS backend
 
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
-kind: TridentOrchestrator
+kind: TridentBackendConfig
 metadata:
-  name: trident
-spec:
+  name: gcnv-nas
   namespace: trident
-  cloudProvider: "GCP"
-  cloudIdentity: "iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"
-----
---
-
-.Helm
---
-Install Trident with cloud provider and cloud identity values:
-
-----
-helm install trident trident-operator-100.6.0.tgz \
-  --set cloudProvider=GCP \
-  --set cloudIdentity="iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com"
-----
---
-
-.tridentctl
---
-Install Trident using the command-line installer:
-
-----
-tridentctl install \
-  --cloud-provider=GCP \
-  --cloud-identity="iam.gke.io/gcp-service-account: cloudvolumes-admin-sa@mygcpproject.iam.gserviceaccount.com" \
-  -n trident
-----
---
-====
-
-== Node prerequisites for iSCSI volumes
-
-Kubernetes nodes must meet the following requirements to attach block volumes provisioned from Google Cloud NetApp Volumes:
-
-* iSCSI initiator installed and running
-* Multipath enabled and configured
-* Network connectivity to the Google Cloud NetApp Volumes iSCSI endpoints
-
-=== iSCSI initiator
-
-The iSCSI initiator must be installed on every node that may attach a block volume.
-
-Example for RHEL-based distributions:
-
-----
-yum install -y iscsi-initiator-utils
-systemctl enable iscsid
-systemctl start iscsid
-----
-
-=== Multipath configuration
-
-Multipath is required for production use of iSCSI volumes.
-
-Ensure that:
-
-* `device-mapper-multipath` is installed
-* `multipathd` is enabled and running
-* Default multipath configuration is not overridden
-
-== Configure a Trident backend for Unified pools
-
-A Trident backend can connect to a Google Cloud NetApp Volumes Unified pool and provision both file and block volumes.
-The backend configuration is the same for NAS and block volumes.
-Protocol selection occurs at the StorageClass level.
-
-== Provision block volumes
-
-=== StorageClass for iSCSI volumes
-
-Create a StorageClass that provisions block volumes using iSCSI.
-
-[source,yaml]
-----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: google-cloud-netapp-volumes-iscsi
-provisioner: csi.trident.netapp.io
-parameters:
-  protocol: iscsi
-volumeBindingMode: Immediate
-allowVolumeExpansion: true
-----
-
-=== PersistentVolumeClaim for block volumes
-
-Create a PersistentVolumeClaim that requests a raw block device.
-
-[source,yaml]
-----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: iscsi-pvc
 spec:
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Block
-  storageClassName: google-cloud-netapp-volumes-iscsi
-  resources:
-    requests:
-      storage: 100Gi
+  version: 1
+  storageDriverName: google-cloud-netapp-volumes
+  projectNumber: "<project-number>"
+  location: "<region>"
+  sdkTimeout: "600"
+  storage:
+  - labels:
+      cloud: gcp
+    network: "<vpc-network>"
 ----
-== Attach and mount behavior
-
-For block volumes provisioned from Google Cloud NetApp Volumes:
-
-* Trident provisions a Logical Unit Number in the Unified pool
-* The Logical Unit Number is mapped to a host group
-* The volume is attached to the node using iSCSI
-* The device is exposed to the pod as a raw block device
-
-Trident does not format or mount block volumes.
-Applications are responsible for formatting and mounting the device if required.
-
-== Host groups and Logical Unit Number management
-
-Trident manages host groups automatically for iSCSI volumes provisioned from Google Cloud NetApp Volumes.
-
-* Each Kubernetes node is added to a host group
-* Logical Unit Numbers are mapped to host groups based on PersistentVolumeClaim usage
-* Multi-node access to the same Logical Unit Number is not supported
-
-This behavior differs from NAS volumes, which support multi-node access using shared file systems.
-
-== Supported operations for block volumes
-
-The following Trident operations are supported for block volumes provisioned from Google Cloud NetApp Volumes:
-
-* Create
-* Delete
-* Clone
-* Snapshot
-* Resize
-
-== NAS and block behavior comparison
-
-[cols="2,2,2", options="header"]
-|===
-|Feature
-|NAS volumes
-|Block volumes
-
-|Protocol
-|NFS / SMB
-|iSCSI
-
-|Access modes
-|RWO, ROX, RWX, RWOP
-|RWO only
-
-|Multi-node access
-|Supported
-|Not supported
-
-|Mount type
-|Filesystem
-|Raw block device
-
-|Node prerequisites
-|None
-|iSCSI initiator and multipath
-|===
-
-== Outcome
-
-You can deploy Kubernetes workloads on Google Cloud NetApp Volumes using block (iSCSI) storage backed by Unified pools.
-This enables enterprise SAN workloads to run on Google Kubernetes Engine using Trident-managed storage.

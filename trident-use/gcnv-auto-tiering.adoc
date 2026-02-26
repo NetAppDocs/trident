@@ -7,132 +7,98 @@ summary: Configure Google Cloud NetApp Volumes auto-tiering using Kubernetes-nat
 
 = Configure auto-tiering for Google Cloud NetApp Volumes
 :hardbreaks:
-:icons: font
+:icons: font:
 :imagesdir: ../media/
 
 [.lead]
-You can configure auto-tiering for Google Cloud NetApp Volumes using Kubernetes-native mechanisms with Trident.
-Auto-tiering settings are defined using StorageClass parameters and PersistentVolumeClaim annotations, without requiring out-of-band configuration.
+This page describes how to configure auto-tiering for Google Cloud NetApp Volumes using Trident.
+Auto-tiering is configured through Trident backend parameters and PersistentVolumeClaim annotations during volume provisioning.
 
-== Key concepts and definitions
+== Overview
+Auto-tiering allows Trident to provision volumes that automatically move inactive data from a performance tier to a capacity tier.
+This reduces storage cost while preserving performance for frequently accessed data.
 
-This section defines concepts used throughout this page.
+Trident applies auto-tiering settings only at volume creation time.
+Post-provisioning changes are not supported in Trident 26.02.
+
+== Concepts
 
 === Auto-tiering
-
-Auto-tiering is a data management feature that moves infrequently accessed data from a performance tier to a capacity tier based on access patterns.
-This optimizes cost while maintaining performance for active data.
+Auto-tiering moves infrequently accessed data from a performance tier to a capacity tier based on access patterns.
+Data movement occurs asynchronously and is not immediate.
 
 === Tiering policy
+The tiering policy determines whether auto-tiering is enabled for a volume.
 
-The tiering policy controls whether auto-tiering is enabled for a volume.
-
-Supported policies:
-
+The following policies are supported:
 * `auto`: Enables automatic tiering based on access patterns
 * `none`: Disables auto-tiering
 
 === Cooling days
-
-Cooling days define the number of days a block of data must remain inactive before it is eligible to move to the capacity tier.
+Cooling days specify the minimum number of days a block of data must remain inactive before it becomes eligible for tiering.
 Cooling days apply only when the tiering policy is set to `auto`.
 
-=== Scope of configuration
+== Configuration model
 
-Auto-tiering settings can be applied at different scopes:
+=== Configuration scopes
+Auto-tiering can be configured at multiple scopes:
 
-* Pool scope: applies to all volumes provisioned from a storage pool
-* Volume scope: applies to an individual volume
+* **Storage pool scope**  
+  Applies to all volumes provisioned from the pool.
 
-In Trident, configuration scope is controlled by where the setting is specified.
+* **Volume scope**  
+  Applies to a single volume through PersistentVolumeClaim annotations.
 
-== Auto-tiering support in Trident 26.02
+Trident determines the effective configuration based on where each setting is defined.
+
+=== Configuration precedence
+When the same setting is defined at multiple scopes, Trident applies the following precedence order:
+
+. PersistentVolumeClaim annotations
+. Trident backend configuration
+. Storage pool defaults
+
+Settings defined at a higher precedence override lower-level values.
+
+== Supported functionality in Trident 26.02
 
 Trident 26.02 supports the following auto-tiering capabilities for Google Cloud NetApp Volumes:
 
-* Enable or disable auto-tiering using Kubernetes-native configuration
-* Configure tiering policy using StorageClass parameters
-* Override tiering behavior using PersistentVolumeClaim annotations
-* Configure cooling days for eligible volumes
+* Enabling or disabling auto-tiering during volume provisioning
+* Defining a tiering policy in the Trident backend configuration
+* Overriding the tiering policy and cooling days per volume using PVC annotations
+* Configuring cooling days for volumes with auto-tiering enabled
 
-The following are not supported in Trident 26.02:
+== Unsupported functionality in Trident 26.02
+The following operations are not supported:
 
-* Dynamic modification of auto-tiering settings after volume creation
-* Policy changes on existing volumes using Kubernetes updates
-* Tiering configuration outside of volume provisioning workflows
+* Modifying auto-tiering settings after volume creation
+* Changing tiering policies on existing volumes using Kubernetes updates
+* Applying auto-tiering settings outside of Trident-managed provisioning workflows
 
-== Configuration scope and precedence
-
-Auto-tiering configuration follows this precedence order:
-
-. PersistentVolumeClaim annotations (highest priority)
-. StorageClass parameters
-. Storage pool defaults (lowest priority)
-
-If a setting is defined at multiple levels, the PersistentVolumeClaim annotation takes precedence.
-
-== Configure auto-tiering using a StorageClass
-
-Use StorageClass parameters to define default auto-tiering behavior for volumes provisioned with that class.
-
-=== StorageClass parameters
-
-The following parameters are supported:
+== Backend configuration parameters
+The following parameters control auto-tiering behavior when defined in the Trident backend configuration:
 
 [cols="2,1,2", options="header"]
 |===
-|Parameter
-|Required
-|Description
-
-|`tieringPolicy`
-|No
-|Tiering policy for volumes (`auto` or `none`)
-
-|`coolingDays`
-|No
-|Number of inactive days before data is tiered
+|Parameter |Required |Description
+|tieringPolicy |No |Tiering policy for volumes (`auto` or `none`)
+|tieringMinimumCoolingDays |No |Number of inactive days before data is tiered (range: 2–183, default: 31)
 |===
 
-=== Example StorageClass with auto-tiering enabled
-
-[source,yaml]
-----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: google-cloud-netapp-volumes-auto-tiering
-provisioner: csi.trident.netapp.io
-parameters:
-  tieringPolicy: auto
-  coolingDays: "31"
-allowVolumeExpansion: true
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
-----
-
-Volumes provisioned using this StorageClass inherit the specified auto-tiering settings unless overridden by a PersistentVolumeClaim annotation.
-
-== Override auto-tiering using PersistentVolumeClaim annotations
-
-PersistentVolumeClaim annotations allow per-volume control of auto-tiering behavior.
+== Volume-level overrides using PersistentVolumeClaim annotations
 
 === Supported annotations
+PersistentVolumeClaim annotations allow per-volume overrides of auto-tiering settings.
 
 [cols="2,2", options="header"]
 |===
-|Annotation
-|Description
-
-|`trident.netapp.io/tieringPolicy`
-|Overrides the tiering policy for the volume
-
-|`trident.netapp.io/coolingDays`
-|Overrides the cooling days value for the volume
+|Annotation |Description
+|`trident.netapp.io/tieringPolicy` |Overrides the tiering policy for the volume
+|`trident.netapp.io/tieringMinimumCoolingDays` |Overrides the cooling days value for the volume
 |===
 
-=== Example PersistentVolumeClaim with auto-tiering override
-
+=== Example: PersistentVolumeClaim with auto-tiering overrides
 [source,yaml]
 ----
 apiVersion: v1
@@ -141,7 +107,7 @@ metadata:
   name: auto-tiering-pvc
   annotations:
     trident.netapp.io/tieringPolicy: auto
-    trident.netapp.io/coolingDays: "45"
+    trident.netapp.io/tieringMinimumCoolingDays: "45"
 spec:
   accessModes:
     - ReadWriteOnce
@@ -151,32 +117,18 @@ spec:
       storage: 500Gi
 ----
 
-In this example, the PersistentVolumeClaim overrides the StorageClass cooling days setting for this volume only.
+== Behavior and limitations
 
-== Disable auto-tiering
+=== Provisioning behavior
+* Auto-tiering settings are evaluated and applied only at volume creation time.
+* Trident does not reconcile tiering configuration after provisioning.
+* Cooling days are ignored when the tiering policy is set to `none`.
 
-To disable auto-tiering, set the tiering policy to `none`.
+=== Platform limitations
+* Auto-tiering is supported only for NAS volumes (NFS and SMB).
+* Block volumes (iSCSI) do not support auto-tiering.
+* The Google Cloud NetApp Volumes storage pool must have auto-tiering enabled in Google Cloud.
 
-=== Disable auto-tiering using a StorageClass
-
-[source,yaml]
-----
-parameters:
-  tieringPolicy: none
-----
-
-=== Disable auto-tiering using a PersistentVolumeClaim annotation
-
-[source,yaml]
-----
-metadata:
-  annotations:
-    trident.netapp.io/tieringPolicy: none
-----
-
-== Behavior notes and limitations
-
-* Auto-tiering settings are applied at volume creation time
-* Changing tiering settings on an existing volume is not supported in Trident 26.02
-* Cooling days apply only when the tiering policy is set to `auto`
-* Auto-tiering behavior depends on data access patterns and is not immediate
+=== Supported values
+* Valid range for `tieringMinimumCoolingDays`: 2 to 183
+* Default value: 31

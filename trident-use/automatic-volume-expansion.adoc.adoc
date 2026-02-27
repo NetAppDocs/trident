@@ -65,7 +65,7 @@ You can create Autogrow Policies at any point in your workflow:
 
 This flexibility allows you to introduce automatic expansion without recreating existing resources.
 
-=== Autogrow Policy specification
+=== Autogrow Policy specifications
 
 Autogrow Policies are Kubernetes custom resources defined as follows:
 
@@ -102,12 +102,11 @@ Autogrow Policies are Kubernetes custom resources defined as follows:
 | Unlimited
 |===
 
-=== Create an Autogrow Policy
+== Create an Autogrow Policy
 
-. Create a YAML file defining your Autogrow Policy.
-. Apply the policy to your cluster.
-. Verify successful creation.
-
+.Steps
+. Create a YAML file that defines your Autogrow Policy:
++
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
@@ -120,19 +119,133 @@ spec:
   maxSize: "500Gi"
 ----
 
+. Apply the policy to your cluster:
++
+[source,console]
 ----
 kubectl apply -f autogrow-policy.yaml
-kubectl get tridentautogrowpolicy standard-autogrow
 ----
 
-Expected output:
-
+. Verify that the policy was created:
++
+[source,console]
+----
+kubectl get tridentautogrowpolicy standard-autogrow
+----
++
+.Expected output
+[source,console]
 ----
 NAME                USED THRESHOLD   GROWTH AMOUNT   STATE
 standard-autogrow   80%              10%             Success
 ----
 
+== Policy states
+
+After you create a policy, Trident validates the specification and assigns one of the following states:
+
+[cols="1,2,2", options="header"]
+|===
+|State
+|Description
+|Action required
+
+|Success
+|Policy is validated and ready to use.
+|None.
+
+|Failed
+|Validation errors detected.
+|Review and fix the specification.
+
+|Deleting
+|Deletion is in progress.
+|Wait for completion.
+|===
+
+== Associate a policy with a StorageClass
+
+You can associate an Autogrow Policy with a StorageClass by using the `trident.netapp.io/autogrowPolicy` annotation. All volumes provisioned from that StorageClass inherit the policy.
+
+NOTE: The StorageClass must have `allowVolumeExpansion: true`.
+
+.Steps
+. Create or modify a StorageClass with the Autogrow Policy annotation:
++
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-gold
+  annotations:
+    trident.netapp.io/autogrowPolicy: "production-db-policy"
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  fsType: "ext4"
+allowVolumeExpansion: true
+----
+
+. Apply the StorageClass:
++
+[source,console]
+----
+kubectl apply -f storageclass.yaml
+----
+
+. Verify the annotation:
++
+[source,console]
+----
+kubectl get storageclass ontap-gold -o jsonpath='{.metadata.annotations.trident\.netapp\.io/autogrowPolicy}'
+----
++
+.Expected output
+[source,console]
+----
+production-db-policy
+----
+
+== Policy precedence
+
+When Autogrow Policy annotations are set on both a StorageClass and a PVC, Trident applies the following precedence rules:
+
+. *PVC annotation takes priority.* If a PVC sets `trident.netapp.io/autogrowPolicy`, that value is always used.
+. *StorageClass annotation applies only when the PVC has no annotation.*
+. *If neither has the annotation,* no Autogrow Policy is applied.
+
+.Precedence examples
+[cols="1,1,2", options="header"]
+|===
+|StorageClass annotation
+|PVC annotation
+|Effective behavior
+
+|`trident.netapp.io/autogrowPolicy: standard-agp`
+|Not set
+|Uses `standard-agp`.
+
+|`trident.netapp.io/autogrowPolicy: standard-agp`
+|`trident.netapp.io/autogrowPolicy: logs-policy`
+|Uses `logs-policy` (PVC overrides StorageClass).
+
+|`trident.netapp.io/autogrowPolicy: standard-agp`
+|`trident.netapp.io/autogrowPolicy: "none"`
+|No Autogrow Policy (PVC disables autogrow).
+
+|Not set
+|`trident.netapp.io/autogrowPolicy: dev-policy`
+|Uses `dev-policy`.
+
+|Not set
+|Not set
+|No Autogrow Policy.
+|===
+
 == Configuration examples
+
+The following examples show common Autogrow Policy configurations for different use cases.
 
 === Conservative policy for production databases
 
@@ -148,21 +261,23 @@ spec:
   maxSize: "5Ti"
 ----
 
-=== Log storage with fixed growth
+=== Log storage with fixed growth increments
 
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentAutogrowPolicy
 metadata:
-  name: dev-policy
+  name: log-storage-policy
 spec:
   usedThreshold: "90%"
   growthAmount: "10Gi"
   maxSize: "100Gi"
 ----
 
-=== Autogrow Policy with defaults
+=== Minimal policy with defaults
+
+When you omit `growthAmount` and `maxSize`, Trident uses the defaults (`10%` growth, unlimited size):
 
 [source,yaml]
 ----
@@ -174,131 +289,49 @@ spec:
   usedThreshold: "85%"
 ----
 
-=== Autogrow Policy with default growthAmount
+=== Policy with a custom maxSize and default growthAmount
 
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentAutogrowPolicy
 metadata:
-  name: default-GA-policy
+  name: default-ga-policy
 spec:
   usedThreshold: "70%"
   maxSize: "100Gi"
 ----
 
-=== Autogrow Policy with default maxSize
+=== Aggressive growth with unlimited maxSize
 
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentAutogrowPolicy
 metadata:
-  name: default-MS-policy
+  name: aggressive-growth-policy
 spec:
   usedThreshold: "80%"
   growthAmount: "150%"
 ----
 
-=== Autogrow Policy with fractional percentages
+=== Policy with fractional percentages
 
 [source,yaml]
 ----
 apiVersion: trident.netapp.io/v1
 kind: TridentAutogrowPolicy
 metadata:
-  name: fractional-policy
+  name: precise-policy
 spec:
   usedThreshold: "80.28%"
   growthAmount: "10.65%"
   maxSize: "100Gi"
 ----
 
-== Policy states
+NOTE: Fractional percentages are supported. If you specify more than three decimal places, Trident rounds the value to three decimal places.
 
-[cols="1,3,2",options="header"]
-|===
-| State | Description | Action Required
-
-| Success
-| Policy validated and ready to use
-| None
-
-| Failed
-| Validation errors detected
-| Review and correct specification
-
-| Deleting
-| Deletion in progress
-| Wait until volumes are disassociated
-|===
-
-== Manage Autogrow Policies
-
-After creating Autogrow Policies, you can view, update, and delete them.
-
-=== View Autogrow Policies
-
-----
-kubectl get tridentautogrowpolicy
-kubectl describe tridentautogrowpolicy production-db-policy
-----
-
-=== Using the Trident command-line utility
-
-----
-tridentctl get autogrowpolicy
-tridentctl get autogrowpolicy production-db-policy -o yaml
-----
-
-=== Update an Autogrow Policy
-
-IMPORTANT: Changes affect all volumes currently using the policy.
-
-----
-kubectl edit tridentautogrowpolicy production-db-policy
-----
-
-=== Update considerations
-
-* Changes apply immediately to all associated volumes.
-* Expansion uses updated parameters during the next growth event.
-* Restarting volumes or pods is not required.
-* Test changes in non-production environments before applying broadly.
-
-=== Delete an Autogrow Policy
-
-----
-kubectl delete tridentautogrowpolicy production-db-policy
-----
-
-If volumes reference the policy, it remains in the `Deleting` state.
-
-=== Deletion states
-
-[cols="1,3",options="header"]
-|===
-| Scenario | Behavior
-
-| No volumes reference policy
-| Deleted immediately
-
-| Volumes reference policy
-| Enters Deleting state
-
-| All volumes disassociated
-| Policy deleted
-|===
-
-== Storage Class configuration
-
-You can associate an Autogrow Policy with a StorageClass using the `trident.netapp.io/autogrowPolicy` annotation.
-
-=== Prerequisites
-
-* StorageClass must include `allowVolumeExpansion: true`
-
-=== Example: Network File System storage class
+=== NAS StorageClass with Autogrow
 
 [source,yaml]
 ----
@@ -309,132 +342,25 @@ metadata:
   annotations:
     trident.netapp.io/autogrowPolicy: "standard-autogrow"
 provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-nas"
+  fsType: "ext4"
 allowVolumeExpansion: true
 ----
 
-=== Example: Interface storage class
+=== SAN StorageClass with Autogrow
 
 [source,yaml]
 ----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: ontap-san-autogrow
+  name: database-storage
   annotations:
     trident.netapp.io/autogrowPolicy: "production-db-policy"
 provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  fsType: "ext4"
 allowVolumeExpansion: true
 ----
-
-=== Remove policy from StorageClass
-
-----
-kubectl annotate storageclass ontap-gold trident.netapp.io/autogrowPolicy-
-----
-
-== Volume operations
-
-=== Provision volume with StorageClass default policy
-
-Create a PersistentVolumeClaim using a StorageClass that has an Autogrow Policy applied.
-
-=== Create volume with custom Autogrow Policy
-
-Add the annotation to the PersistentVolumeClaim:
-
-[source,yaml]
-----
-metadata:
-  annotations:
-    trident.netapp.io/autogrowPolicy: "production-db-policy"
-----
-
-=== Disable Autogrow on a volume
-
-----
-kubectl annotate pvc database-pvc trident.netapp.io/autogrowPolicy="none" --overwrite
-----
-
-== Monitor Autogrow Policy usage
-
-=== Check volumes using a policy
-
-----
-tridentctl get autogrowpolicy production-db-policy -o json
-----
-
-=== Check which policy a volume uses
-
-----
-kubectl get pvc database-pvc -o jsonpath='{.metadata.annotations.trident\.netapp\.io/autogrowPolicy}'
-----
-
-=== Monitor policy events
-
-----
-kubectl get events --field-selector involvedObject.kind=TridentAutogrowPolicy
-----
-
-== Troubleshooting
-
-=== Policy shows Failed state
-
-Correct specification errors and reapply.
-
-=== Cannot delete policy
-
-Ensure all volumes are disassociated before deletion.
-
-=== Volume not expanding
-
-* Confirm StorageClass has `allowVolumeExpansion: true`
-* Verify `maxSize` not reached
-* Check policy state
-
-=== Frequent expansions
-
-Increase `usedThreshold`.
-
-=== TAGRI rejected
-
-Adjust `maxSize` or `growthAmount`.
-
-== Getting help
-
-If you need assistance troubleshooting Autogrow Policies or automatic volume expansion, gather the following information before contacting support:
-
-* Trident controller and node logs
-* The Autogrow Policy definition
-* PersistentVolumeClaim annotations
-* Relevant Kubernetes events
-
-To verify the installed Trident version:
-
-----
-tridentctl version
-----
-
-Providing this information helps support teams diagnose configuration, policy, and backend issues more efficiently.
-
-
-== Frequently asked questions
-
-=== Can I create an Autogrow Policy after volumes are provisioned?
-
-Yes. Apply the policy to existing PersistentVolumeClaims using annotations.
-
-=== Can I change the policy for existing volumes?
-
-Yes. Update the annotation to reference a different policy.
-
-=== Can multiple StorageClasses use the same policy?
-
-Yes.
-
-=== How do I disable Autogrow for a volume?
-
-Set the annotation value to `none`.
-
-=== How do I monitor Autogrow activity?
-
-Use Kubernetes events and the Trident command-line utility.

@@ -45,6 +45,13 @@ Before configuring automatic volume expansion, ensure that the following require
 ** Fibre Channel Protocol
 ** Non-Volatile Memory Express over Fabrics
 
+== Provision Volumes with Autogrow Policy
+
+Autogrow Policy can be configured at two levels: 
+
+* Storage class level: Sets default for all volumes (using annotation) 
+* PVC level: Overrides storage class default (using annotation)
+
 == Create an Autogrow Policy
 
 Autogrow Policies enable automatic volume expansion when volumes reach a defined capacity threshold.

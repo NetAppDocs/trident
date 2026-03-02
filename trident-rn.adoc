@@ -23,8 +23,6 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 
 ==== Enhancements
 
-== Enhancements
-
 * *Kubernetes*:
 
 ** Added general availability (GA) support for concurrency for ONTAP-NAS (NFS only), ONTAP-SAN (iSCSI, FCP, NVMe), and Google Cloud NetApp Volumes (GCNV) drivers, graduating this functionality from Tech Preview. See the link:https://docs.netapp.com/us-en/trident/trident-use/controller-scalability.html[Controller scalability documentation] for more information.
@@ -41,6 +39,19 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 NOTE: Not for use in production environments.
 
 * *[Tech Preview]*: Added support for concurrency for ONTAP-NAS-Economy and ONTAP-SAN-Economy drivers.
+
+==== Known issues
+
+[WARNING]
+====
+There is a known issue with the `csi-snapshotter` sidecar. In all Kubernetes versions, VolumeGroupSnapshots `v1beta1` prevents VolumeSnapshots from reaching the `ReadyToUse` state.
+====
+
+Two workarounds are available:
+
+. Delete the VolumeGroupSnapshots CRDs to disable VolumeGroupSnapshots, and then reinstall Trident.
+
+. Install VolumeGroupSnapshots `v1beta2` and `snapshot-controller` version 8.4.0 or later, and then reinstall Trident. VolumeGroupSnapshots do not function on Kubernetes versions earlier than v1.34.
 
 ==== Fixes
 
@@ -148,7 +159,7 @@ See link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-p
 
 === Trident
 
-IMPORTANT: For customers using SolidFire, please do not upgrade to 25.06.1 due to a known issue when unpublishing volumes. 25.06.2 will be released soon to address this issue.
+IMPORTANT: For customers using SolidFire, do not upgrade to 25.06.1 due to a known issue when unpublishing volumes. 25.06.2 will be released soon to address this issue.
 
 ==== Fixes
 

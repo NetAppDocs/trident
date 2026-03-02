@@ -23,14 +23,18 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 
 ==== Enhancements
 
-* Concurrency support for ONTAP-NAS (NFS only), ONTAP-SAN (iSCSI, FCP, NVMe), and Google Cloud NetApp Volumes drivers is now generally available (GA).
-* Added support for automatic backend configuration for Amazon FSx for NetApp ONTAP. When you create a StorageClass that includes the required parameters, NetApp Trident automatically creates the corresponding backend and VolumeSnapshotClass (if needed).
-* Added support for different Microsoft Azure clouds, such as Azure Government and Azure China, and custom cloud configuration for Azure NetApp Files backends.
-* Improved controller scalability for NVMe volumes.
-* Added support for volume autogrow functionality. You can control autogrow behavior by defining custom NetApp Trident autogrow policies.
-* Added support for Google Cloud NetApp Volumes block storage (SAN/iSCSI). 
-* Added support for auto-tiering for Google Cloud NetApp Volumes. You can now optimize storage costs by now Add Kubernetes-native controls to configure ONTAP FabricPool auto-tiering for Google Cloud NetApp Volumes through NetApp Trident.
-* Added support for Kubernetes 1.35.
+== Enhancements
+
+* *Kubernetes*:
+
+** Added general availability (GA) support for concurrency for ONTAP-NAS (NFS only), ONTAP-SAN (iSCSI, FCP, NVMe), and Google Cloud NetApp Volumes (GCNV) drivers, graduating this functionality from Tech Preview. See the link:https://docs.netapp.com/us-en/trident/trident-use/controller-scalability.html[Controller scalability documentation] for more information.
+** Added support for volume autogrow in Trident based on custom, user-defined Trident AutoGrow policies. See the link:https://docs.netapp.com/us-en/trident/trident-use/automatic-volume-expansion.html[Automatic volume expansion documentation] for more information.
+** Enhanced Trident node concurrency to improve the scalability of node operations for NVMe volumes. See the link:https://docs.netapp.com/us-en/trident/trident-use/trident-nvme-rwx-subsystem-limits.html[NVMe volumes documentation] for more information.
+** Added support for GCNV NAS volume auto-tiering through PVC annotations (`tieringPolicy`, `tieringMinimumCoolingDays`), including pool selection and clone inheritance. See the link:https://docs.netapp.com/us-en/trident/trident-use/gcnv-auto-tiering.html[Configure auto-tiering for Google Cloud NetApp Volumes documentation] for more information.
+** Added support for GCNV SAN block (iSCSI) volumes using the `google-cloud-netapp-volumes-san` driver, including provisioning, per-node host group mapping for LUN access, and clone-from-volume operations. See the link:https://docs.netapp.com/us-en/trident/trident-use/gcnv-block.html[Google Cloud NetApp Volumes block configuration documentation] for more information.
+** Added support for automatic backend configuration for Amazon FSx for NetApp ONTAP. When you create a StorageClass that includes the required parameters, Trident automatically creates the corresponding backend and VolumeSnapshotClass, if needed. See the link:https://docs.netapp.com/us-en/trident/trident-use/trident-fsx-auto-backend-configuration.html#add-additional-fsxn-file-systems[Amazon FSx for NetApp ONTAP backend configuration documentation] for more information.
+** Added support for different Microsoft Azure clouds, such as Azure Government and Azure China, and custom cloud configuration for Azure NetApp Files backends. See the link:https://docs.netapp.com/us-en/trident/trident-use/anf.html[Azure NetApp Files backend configuration documentation] for more information.
+** Added support for Kubernetes 1.35. See the link:https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html[Requirements documentation] for more information.
 
 ==== Experimental Enhancements
 

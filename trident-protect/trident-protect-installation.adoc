@@ -52,15 +52,15 @@ You can install Trident Protect from a private image registry if your Kubernetes
 +
 [source,console]
 ----
-docker.io/netapp/controller:25.10.0
-docker.io/netapp/restic:25.10.0
-docker.io/netapp/kopia:25.10.0
-docker.io/netapp/kopiablockrestore:25.10.0
-docker.io/netapp/trident-autosupport:25.10.0
-docker.io/netapp/exechook:25.10.0
-docker.io/netapp/resourcebackup:25.10.0
-docker.io/netapp/resourcerestore:25.10.0
-docker.io/netapp/resourcedelete:25.10.0
+docker.io/netapp/controller:26.02.0
+docker.io/netapp/restic:26.02.0
+docker.io/netapp/kopia:26.02.0
+docker.io/netapp/kopiablockrestore:26.02.0
+docker.io/netapp/trident-autosupport:26.02.0
+docker.io/netapp/exechook:26.02.0
+docker.io/netapp/resourcebackup:26.02.0
+docker.io/netapp/resourcerestore:26.02.0
+docker.io/netapp/resourcedelete:26.02.0
 docker.io/netapp/trident-protect-utils:v1.0.0
 ----
 +
@@ -68,17 +68,17 @@ For example:
 +
 [source,console]
 ----
-docker pull docker.io/netapp/controller:25.10.0
+docker pull docker.io/netapp/controller:26.02.0
 ----
 +
 [source,console]
 ----
-docker tag docker.io/netapp/controller:25.10.0 <private-registry-url>/controller:25.10.0
+docker tag docker.io/netapp/controller:26.02.0 <private-registry-url>/controller:26.02.0
 ----
 +
 [source,console]
 ----
-docker push <private-registry-url>/controller:25.10.0
+docker push <private-registry-url>/controller:26.02.0
 ----
 +
 NOTE: To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2510.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2510.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2510.0.tgz` instead of the repository reference in the final step.

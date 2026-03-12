@@ -31,14 +31,14 @@ helm repo add netapp-trident-protect https://netapp.github.io/trident-protect-he
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --version 100.2510.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --version 100.2602.0 --create-namespace --namespace trident-protect
 ----
 +
 . Optionally, to enable debug logging (recommended for troubleshooting), use:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set logLevel=debug --version 100.2510.0 --create-namespace --namespace trident-protect
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set logLevel=debug --version 100.2602.0 --create-namespace --namespace trident-protect
 ----
 +
 Debug logging helps NetApp support troubleshoot issues without requiring log level changes or problem reproduction.
@@ -81,7 +81,7 @@ docker tag docker.io/netapp/controller:26.02.0 <private-registry-url>/controller
 docker push <private-registry-url>/controller:26.02.0
 ----
 +
-NOTE: To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2510.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2510.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2510.0.tgz` instead of the repository reference in the final step.
+NOTE: To obtain the Helm chart, first download the Helm chart on a machine with internet access using `helm pull trident-protect --version 100.2602.0 --repo https://netapp.github.io/trident-protect-helm-chart`, then copy the resulting `trident-protect-100.2602.0.tgz` file to your offline environment and install using `helm install trident-protect ./trident-protect-100.2602.0.tgz` instead of the repository reference in the final step.
 . Create the Trident Protect system namespace:
 +
 [source,console]
@@ -124,14 +124,14 @@ NOTE: The `imageRegistry` and `imagePullSecrets` values apply to all component i
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2510.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name_of_cluster> --version 100.2602.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
 +
 . Optionally, to enable debug logging (recommended for troubleshooting), use:
 +
 [source,console]
 ----
-helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set logLevel=debug --version 100.2510.0 --create-namespace --namespace trident-protect -f protectValues.yaml
+helm install trident-protect netapp-trident-protect/trident-protect --set clusterName=<name-of-cluster> --set logLevel=debug --version 100.2602.0 --create-namespace --namespace trident-protect -f protectValues.yaml
 ----
 +
 Debug logging helps NetApp support troubleshoot issues without requiring log level changes or problem reproduction.

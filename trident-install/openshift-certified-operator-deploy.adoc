@@ -5,18 +5,18 @@ keywords: deploy, trident, methods, operator, openshift, operatorhub, certified 
 summary: If you use Red Hat OpenShift, you can switch to the certified Trident operator from the community operator, a Helm-based installation, or a manually deployed operator.
 ---
 
-= ##Switch to the OpenShift certified Trident operator##
+= Switch to the OpenShift certified Trident operator
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-##You can switch to the Red Hat OpenShift certified Trident operator from the community operator, a Helm-based installation, or a manually deployed operator. The process for each method involves uninstalling the existing operator and then installing the certified operator using the OperatorHub.##
+You can switch to the Red Hat OpenShift certified Trident operator from the community operator, a Helm-based installation, or a manually deployed operator. The process for each method involves uninstalling the existing operator and then installing the certified operator using the OperatorHub.
 
 .Before you begin
 Before you begin the installation, link:../trident-get-started/requirements.html[prepare your environment for Trident installation].
 
-IMPORTANT: ##Do not delete the `TridentOrchestrator` custom resource (CR) during the uninstall process. The `TridentOrchestrator` CR preserves your backend and storage class configuration, which is required after you install the certified operator.##
+IMPORTANT: Do not delete the `TridentOrchestrator` custom resource (CR) during the uninstall process. The `TridentOrchestrator` CR preserves your backend and storage class configuration, which is required after you install the certified operator.
 
 == Switch from the community operator
 
@@ -34,7 +34,7 @@ WARNING: Do not select *Delete all operand instances from this operator*.
 . Click *Uninstall*.
 . After the uninstall completes, proceed to <<install-certified,Install the OpenShift certified operator>>.
 
-== ##Switch from a Helm-based operator installation##
+== Switch from a Helm-based operator installation
 
 .Steps
 
@@ -50,7 +50,7 @@ helm uninstall <release-name> -n trident
 ----
 . After the uninstall completes, proceed to <<install-certified,Install the OpenShift certified operator>>.
 
-== ##Switch from a manually deployed operator##
+== Switch from a manually deployed operator
 
 If you installed Trident by manually deploying the operator using a `bundle.yaml` from the installer package, remove it by deleting the same manifest.
 

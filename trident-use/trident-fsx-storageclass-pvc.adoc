@@ -11,12 +11,108 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 :imagesdir: ../media/
 
 [.lead]
-Configure a Kubernetes StorageClass object and create the storage class to instruct Trident how to provision volumes. Create a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request access to the PV. You can then mount the PV to a pod.
+The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies a provisioner and instructs the provisioner how to provision volumes.  This section shows you how to configure a Kubernetes StorageClass object that specifies Trident as the provisioner. Following that, this sections includes instructions on how to create a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request a PV. If successful, you can then mount the PV to a pod.
 
-== Create a storage class
+== Create a StorageClass Object
+There are two ways to configure a StorageClass for use with Trident and FSx for ONTAP:
+- Creating a StorageClass with the required parameters to trigger automatic backend configuration.
+- Create the Trident backend and then a StorageClass separately.
 
-=== Configure a Kubernetes StorageClass object
-The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] object identifies Trident as the provisioner that is used for that class and instructs Trident how to provision a volume. Use this example to setup Storageclass for volumes using NFS (Refer to Trident Attribute section below for the full list of attributes):
+=== Configure a Kubernetes StorageClass object with automatic backend configuration support for FSx for ONTAP
+Trident supports automatic backend configuration for AWS FSx for NetApp ONTAP (FSxN). When you create a StorageClass that includes the required FSxN parameters, Trident automatically creates the corresponding backend and a VolumeSnapshotClass.
+
+=== Understand how automatic backend configuration works
+Trident derives backend configuration from the StorageClass definition.
+When you apply the StorageClass, Trident validates the required parameters, creates the backend, and annotates the StorageClass with status.
+
+Trident creates the VolumeSnapshotClass only once. Trident reuses the same VolumeSnapshotClass for subsequent StorageClasses.
+
+=== Specify required StorageClass parameters
+To trigger automatic backend creation, define the required parameters in the StorageClass `parameters` section.
+
+[cols="2,1,1,3", options="header"]
+|===
+|Parameter |Required |Type |Description
+|`fsxFilesystemID` |Yes |string |FSx for NetApp ONTAP filesystem ID
+|`storageDriverName` |Yes |string |Trident storage driver (for example, `ontap-nas` or `ontap-san`)
+|`credentialsName` |Yes |string |Name of the Kubernetes Secret that contains FSx for ONTAP credentials
+|===
+
+=== Specify optional parameters
+You can pass optional backend parameters through the StorageClass. Define all optional values as strings in the StorageClass `parameters` section. For a complete list of backend parameters, see:
+xref:trident-fsx-storage-backend.html#backend-advanced-configuration-and-examples[FSx for NetApp ONTAP backend configuration].
+
+=== Create a StorageClass
+The following example shows a StorageClass that triggers automatic backend configuration.
+
+[source,yaml]
+----
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ontap-fsx-demo
+  annotations:
+    description: "Demo StorageClass for FSx for NetApp ONTAP"
+provisioner: csi.trident.netapp.io
+parameters:
+  fsxFilesystemID: "fs-0abc123"
+  storageDriverName: "ontap-nas"
+  credentialsName: trident-fsx-credentials
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+----
+
+After you apply the StorageClass, Trident creates the backend automatically. You can then create PersistentVolumeClaims that reference this StorageClass.
+
+=== Verify backend configuration status
+Trident records the result of backend creation in StorageClass annotations.
+
+[cols="2,2", options="header"]
+|===
+|Annotation |Description
+|`trident.netapp.io/configuratorStatus` |Configuration result (`Success` or `Failure`)
+|`trident.netapp.io/configuratorMessage` |Detailed status or error message
+|`trident.netapp.io/configuratorName` |Name of the internal configurator resource
+|`trident.netapp.io/managed` |Indicates the StorageClass is managed by Trident
+|`trident.netapp.io/additionalStoragePools` |Storage pools created for this backend
+|===
+
+To verify status, run:
+
+[source,bash]
+----
+kubectl get storageclass ontap-fsx-demo -o yaml
+----
+
+Confirm that `trident.netapp.io/configuratorStatus` is set to `Success`.
+If the value is `Failure`, review `trident.netapp.io/configuratorMessage` for the error.
+
+== Add additional FSxN file systems
+If you need additional storage capacity while continuing to use the same StorageClass, add additional FSxN file system IDs.
+
+Edit the StorageClass and add the following annotation:
+
+[source,yaml]
+----
+metadata:
+  annotations:
+    trident.netapp.io/additionalFsxNFileSystemID: '["fs-03cc1a718cddd6e248"]'
+----
+
+After you apply the change, Trident updates the backend configuration and updates the StorageClass annotations.
+
+=== Operational considerations and limitations
+
+* Deleting a StorageClass that as the automatic backend configuration usually deletes the associated Trident backend. This can disrupt storage connectivity and break running workloads. Validate the impact before you delete a managed StorageClass.
+
+* Automatic backend configuration is supported only for AWS FSx for NetApp ONTAP.
+
+== Create a Kubernetes StorageClass without automatic backend configuration
+If you decide you want to create the Trident backend and StorageClass separately follow these steps.
+
+=== Configure just a Storage Class
+You can use this example to setup StorageClass for volumes using NFS (Refer to Trident Attribute section below for the full list of attributes):
 
 [source,YAML]
 ----
@@ -31,7 +127,7 @@ parameters:
   snapshots: "true"
 ----
 
-Use this example to setup Storageclass for volumes using iSCSI:
+Use this example to setup StorageClass for volumes using iSCSI:
 
 [source,YAML]
 ----
@@ -68,6 +164,7 @@ mountOptions:
 Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Trident provisions volumes. 
 
 === Create a storage class
+Once you have configured the StorageClass, you can create it in Kubernetes.
 
 .Steps
 . This is a Kubernetes object, so use `kubectl` to create it in Kubernetes.
@@ -95,7 +192,7 @@ A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolu
 
 The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level. 
 
-After you create the PVC, you can mount the volume in a pod.
+Once you have created the Trident backend and StorageClass you are ready to create a PVC. Once the PVC has been crated, you can mount the volume in a pod.
 
 === Sample manifests
 
@@ -182,4 +279,4 @@ These parameters determine which Trident-managed storage pools should be utilize
 |IOPS |int |positive integer |Pool is capable of guaranteeing IOPS in this range |Volume guaranteed these IOPS |solidfire-san
 |===
 
-^1^: Not supported by ONTAP Select systems
+^1^: Not supported by ONTAP Select or FSx for ONTAP systems

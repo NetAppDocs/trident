@@ -14,6 +14,15 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 
 == ONTAP SAN and NAS driver integration
 
+Before you can provision volumes using Trident, you need to integrate your storage backend with Trident by creating a Trident Backend Configuration (TBC). The TBC defines how Trident connects to the storage backend and provides the necessary information for Trident to manage the storage resources.
+
+== Create a Trident Backend Configuration (TBC)
+There are two way to configura the Trident backend to use an FSx for ONTAP file system:
+* By creating a StorageClass that leverages the Automatic Backend feature.
+* By creating the backend and StorageClass separately.
+
+The steps in this section will cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to xref:trident-fsx-storageclass-pvc.html[Configure StorageClass and PVC] for more information.
+
 To create a storage backend, you need to create a configuration file in either JSON or YAML format. The file needs to specify the type of storage you want (NAS or SAN), the file system, and SVM to get it from and how to authenticate with it. The following example shows how to define NAS-based storage and using an AWS secret to store the credentials to the SVM you want to use:
 
 [role="tabbed-block"]

@@ -12,14 +12,13 @@ summary: Configure Trident to provision block (iSCSI) volumes from Google Cloud 
 :imagesdir: ../media/
 
 [.lead]
-You can configure Trident to provision block storage volumes using the iSCSI
-protocol from Google Cloud NetApp Volumes. SAN volumes are provisioned from
-*Flex Unified* storage pools by using the
-`google-cloud-netapp-volumes-san` storage driver.
+You can configure Trident to provision block storage volumes using the iSCSI protocol from Google Cloud NetApp Volumes. SAN volumes are provisioned from Flex Unified storage pools by using the `google-cloud-netapp-volumes-san` storage driver.
 
+[NOTE]
 This driver is dedicated to block workloads and does not support NAS protocols.
 
-NOTE: The `google-cloud-netapp-volumes-san` backend is required to provision iSCSI block
+[NOTE]
+The `google-cloud-netapp-volumes-san` backend is required to provision iSCSI block
 volumes. The `google-cloud-netapp-volumes` backend supports NAS protocols only and
 cannot be used for SAN workloads.
 

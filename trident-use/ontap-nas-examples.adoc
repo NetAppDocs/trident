@@ -11,17 +11,15 @@ summary: Learn how to create and use ONTAP NAS drivers with your Trident install
 :imagesdir: ../media/
 
 [.lead]
-Learn to create and use ONTAP NAS drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses.
-
-Beginning with the 25.10 release, NetApp Trident supports link:https://docs.netapp.com/us-en/ontap-afx/index.html[NetApp AFX storage systems^]. NetApp AFX storage systems differ from other ONTAP-based systems (ASA, AFF, and FAS) in the implementation of their storage layer.
+Learn to create and use ONTAP NAS drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses. Beginning with the 25.10 release, NetApp Trident supports link:https://docs.netapp.com/us-en/ontap-afx/index.html[NetApp AFX storage systems^]. NetApp AFX storage systems differ from other ONTAP-based systems (ASA, AFF, and FAS) in the implementation of their storage layer.
 
 NOTE: Only the `ontap-nas` driver (with NFS protocol) is supported for NetApp AFX systems; SMB protocol is not supported.
 
-In the Trident backend configuration, you need not specify that your system is an NetApp AFX storage system. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the AFX storage system. Some backend configuration parameters are not applicable to AFX storage systems as noted in the table below.
-
 == Backend configuration options
 
-See the following table for the backend configuration options:
+In the Trident backend configuration, you need not specify that your system is an NetApp AFX storage system. When you select `ontap-nas` as the `storageDriverName`, Trident detects automatically the AFX storage system. Some backend configuration parameters are not applicable to AFX storage systems.
+
+The following table displays backend configuration options:
 
 [cols="1,3,2",options="header"]
 |===

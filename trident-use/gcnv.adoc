@@ -9,16 +9,17 @@ summary: Configure Trident to provision NAS (NFS and SMB) volumes from Google Cl
 
 :imagesdir: ../media/
 
+
 [.lead]
-[.lead]
-You can configure Google Cloud NetApp Volumes as a backend for Trident to provision
-file-based storage volumes. Trident can attach NFS and SMB volumes by using a
+You can configure Google Cloud NetApp Volumes as a backend for Trident to provision file-based storage volumes. Trident can attach NFS and SMB volumes by using a
 Google Cloud NetApp Volumes backend.
 
+[NOTE]
 Trident uses separate backends for NAS and SAN workloads in Google Cloud NetApp Volumes.
 The `google-cloud-netapp-volumes` backend supports file-based protocols only and cannot
 be used to provision iSCSI volumes.
 
+[NOTE]
 To provision iSCSI block volumes, use the
 `google-cloud-netapp-volumes-san` backend, which is a separate backend type designed
 specifically for SAN workloads.

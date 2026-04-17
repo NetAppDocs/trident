@@ -18,7 +18,7 @@ Note there are two ways to configure a StorageClass for use with Trident and FSx
 
 * Creating a StorageClass with the required parameters to trigger automatic backend configuration. This is the recommended approach for most users and simplifies the setup process. Follow the instructions in the next section to configure a StorageClass with automatic backend configuration.
 
-* Create the Trident backend manually and then the StorageClass. The instructions on how to do that are in the <<Create-a-Kubernetes-StorageClass-without-automatic-backend-configuration>> section below.
+* Create the Trident backend manually and then the StorageClass. The instructions on how to do that are in the <<create-a-kubernetes-storageclass-without-automatic-backend-configuration>> section below.
 
 === Configure a Kubernetes StorageClass object with automatic backend configuration support
 Trident supports automatic backend configuration for AWS FSx for NetApp ONTAP (FSxN). When you create a StorageClass that includes the required FSxN parameters, Trident automatically creates the corresponding Trident backend and a VolumeSnapshotClass.

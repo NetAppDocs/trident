@@ -14,8 +14,8 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 This sections includes instructions on how to create a PersistentVolumeClaim (PVC) that uses the configured Kubernetes StorageClass to request a PV.
 If successful, you can then mount the PV to a pod.
 
-== Create the PVC                                                                                                                                                                                                                                                                                                                                                                                                 A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster.
-                                                                                                                                                                                                         The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level.
+== Create the PVC
+A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level.
 
 Once you have created the Trident backend and StorageClass you are ready to create a PVC. Once the PVC has been crated, you can mount the volume in a pod.
 

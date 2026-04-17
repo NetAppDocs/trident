@@ -18,7 +18,7 @@ Note there are two ways to configure a StorageClass for use with Trident and FSx
 
 * Creating a StorageClass with the required parameters to trigger automatic backend configuration. This is the recommended approach for most users and simplifies the setup process. Follow the instructions in the next section to configure a StorageClass with automatic backend configuration.
 
-* Create the Trident backend manually and then the StorageClass. The instructions on how to do that are in the <Create-a-Kubernetes-StorageClass-without-automatic-backend-configuration> section below.
+* Create the Trident backend manually and then the StorageClass. The instructions on how to do that are in the <<Create-a-Kubernetes-StorageClass-without-automatic-backend-configuration>> section below.
 
 === Configure a Kubernetes StorageClass object with automatic backend configuration support
 Trident supports automatic backend configuration for AWS FSx for NetApp ONTAP (FSxN). When you create a StorageClass that includes the required FSxN parameters, Trident automatically creates the corresponding Trident backend and a VolumeSnapshotClass.
@@ -227,7 +227,7 @@ spec:
 
 You can integrate Trident with Amazon FSx for NetApp ONTAP using the following drivers:
 
-[cols="2,2", options="header"]
+[cols="1,4", options="header"]
 |===
 |Driver Name|Description
 |`ontap-san` | Each PV provisioned is a LUN within its own Amazon FSx for NetApp ONTAP volume. Recommended for block storage.
@@ -266,7 +266,7 @@ NAME                         BACKEND NAME         BACKEND UUID                  
 backend-tbc-ontap-nas        tbc-ontap-nas        933e0071-66ce-4324-b9ff-f96d916ac5e9   Bound   Success
 ----
 
-For more information on other configuration options, see the <Backend-advanced-configuration-and-examples> section below.
+For more information on other configuration options, see the <<Backend-advanced-configuration-and-examples>> section below.
 
 === Configure a Storage Class *without* automatic backend configuration
 
@@ -377,7 +377,7 @@ basic-csi    csi.trident.netapp.io   15h
 
 == Provision SMB volumes
 You can provision SMB volumes using the `ontap-nas` driver. 
-Before you complete <<ONTAP SAN and NAS driver integration>> complete these steps: link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes].
+However, to do so you must complete these steps: link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes].
 
 == Backend advanced configuration and examples
 
@@ -412,7 +412,7 @@ If you provide the `fsxFilesystemID` under the `aws` field, you need not to prov
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs. Can be changed after initial setting.
 
 *ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 

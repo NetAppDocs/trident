@@ -14,22 +14,10 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 The https://kubernetes.io/docs/concepts/storage/storage-classes/[Kubernetes StorageClass object^] identifies a provisioner and instructs the provisioner how to provision volumes. This section shows you how to configure a Kubernetes StorageClass object that specifies Trident as the provisioner.
 
 == Create a StorageClass Object
-Note there are two ways to configure a StorageClass for use with Trident and FSx for ONTAP:
+Note that when creating a storage class Trident will automatically create the backend configuration. Please refer to the <<create-a-kubernetes-storageclass-without-automatic-backend-configuration>> section for how to create the Trident backend and storage class separately.
 
-* Creating a StorageClass with the required parameters to trigger automatic backend configuration. This is the recommended approach for most users and simplifies the setup process. Follow the instructions in the next section to configure a StorageClass with automatic backend configuration.
-
-* Create the Trident backend manually and then the StorageClass. The instructions on how to do that are in the <<create-a-kubernetes-storageclass-without-automatic-backend-configuration>> section below.
-
-=== Configure a Kubernetes StorageClass object with automatic backend configuration support
-Trident supports automatic backend configuration for AWS FSx for NetApp ONTAP (FSxN). When you create a StorageClass that includes the required FSxN parameters, Trident automatically creates the corresponding Trident backend and a VolumeSnapshotClass.
-
-==== Understand how automatic backend configuration works
-Trident derives backend configuration from the StorageClass definition. When you apply the StorageClass, Trident validates the required parameters, creates the backend, and annotates the StorageClass with status.
-
-Trident creates the VolumeSnapshotClass only once. Trident reuses the same VolumeSnapshotClass for subsequent StorageClasses.
-
-==== Specify required StorageClass parameters
-To trigger automatic backend creation, define the required parameters in the StorageClass `parameters` section.
+=== Specify required StorageClass parameters
+To ensure Trident is able to configure the backend,, define the required parameters in the StorageClass `parameters` section.
 
 [cols="2,1,1,3", options="header"]
 |===
@@ -160,8 +148,14 @@ After you apply the change, Trident updates the backend configuration and update
 
 * Automatic backend configuration is supported only for AWS FSx for NetApp ONTAP.
 
-== Create a Kubernetes StorageClass *without* automatic backend configuration
-If you decide you want to create the Trident backend and StorageClass separately follow these steps.
+=== Create a Kubernetes StorageClass without automatic backend configuration
+If you want to create the Trident backend and StorageClass separately then follow these steps.
+
+==== Understand how automatic backend configuration works
+Trident derives backend configuration from the StorageClass definition. When you apply the StorageClass, Trident validates the required parameters, creates the backend, and annotates the StorageClass with status.
+
+Trident creates the VolumeSnapshotClass only once. Trident reuses the same VolumeSnapshotClass for subsequent StorageClasses.
+
 
 === Create the Trident backend
 To create a Trident backend, you need to create a configuration file in either JSON or YAML format. The file needs to specify the type of storage you want (NAS or SAN), the file system, and SVM to get it from and how to authenticate with it. The following example shows how to define NAS-based storage and using an AWS secret to store the credentials to the SVM you want to use:

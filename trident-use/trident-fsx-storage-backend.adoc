@@ -17,11 +17,11 @@ summary: Using Trident with Amazon FSx for NetApp ONTAP, you can ensure that you
 Before you can provision volumes using Trident, you need to integrate your storage backend with Trident by creating a Trident Backend Configuration (TBC). The TBC defines how Trident connects to the storage backend and provides the necessary information for Trident to manage the storage resources.
 
 == Create a Trident Backend Configuration (TBC) for FSx for ONTAP
-There are two way to configura the Trident backend to use an FSx for ONTAP file system:
-* By creating a StorageClass that leverages the Automatic Backend feature.
-* By creating the backend and StorageClass separately.
+There are two ways to configure the Trident backend to use an FSx for ONTAP file system:
+* Create a StorageClass that leverages the Automatic Backend feature.
+* Create the backend and StorageClass separately.
 
-The steps in this section will cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to xref:trident-fsx-storageclass-pvc.html#configure-a-kubernetes-storageclass-object-with-automatic-backend-configuration-support-for-fsx-for-ontap[Configure StorageClass and PVC] section for more information.
+The steps in this section cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to the xref:trident-fsx-storageclass-pvc.html#configure-a-kubernetes-storageclass-object-with-automatic-backend-configuration-support-for-fsx-for-ontap[Configure StorageClass and PVC] section for more information.
 
 To create a storage backend, you need to create a configuration file in either JSON or YAML format. The file needs to specify the type of storage you want (NAS or SAN), the file system, and SVM to get it from and how to authenticate with it. The following example shows how to define NAS-based storage and using an AWS secret to store the credentials to the SVM you want to use:
 

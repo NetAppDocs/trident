@@ -17,11 +17,11 @@ If successful, you can then mount the PV to a pod.
 == Create the PVC
 A https://kubernetes.io/docs/concepts/storage/persistent-volumes[_PersistentVolumeClaim_^] (PVC) is a request for access to the PersistentVolume on the cluster. The PVC can be configured to request storage of a certain size or access mode. Using the associated StorageClass, the cluster administrator can control more than PersistentVolume size and access mode--such as performance or service level.
 
-Once you have created the Trident backend and StorageClass you are ready to create a PVC. Once the PVC has been created, you can mount the volume in a pod.
+After you create the Trident backend and StorageClass you can create a PVC. After the PVC is created, you can mount the volume in a pod.
 
 === Sample manifests
 
-These examples show basic PVC configuration options.
+The following examples show basic PVC configuration options.
 
 .PVC with RWX access
 This example shows a basic PVC with RWX access that is associated with a StorageClass named `basic-csi`.

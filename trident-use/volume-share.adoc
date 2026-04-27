@@ -130,7 +130,7 @@ Trident reads the `shareFromPVC` annotation on the destination PVC and creates t
 You can delete a volume that is shared across multiple namespaces. Trident will remove access to the volume on the source namespace and maintain access for other namespaces that share the volume. When all namespaces that reference the volume are removed, Trident deletes the volume. 
 
 == Use `tridentctl get` to query subordinate volumes
-Using the `tridentctl` utility, you can run the `get` command to get subordinate volumes. For more information, refer to link:../trident-reference/tridentctl.html[`tridentctl` commands and options].
+Using the `tridentctl` utility, you can run the `get` command to get subordinate volumes. For more information, refer to link:../trident-reference/trident-cl.html[`tridentctl` commands and options].
 
 ----
 Usage:

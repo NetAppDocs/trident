@@ -188,15 +188,15 @@ Ensure the following prerequisites are met:
 ** Refer to the https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html[AWS documentation^] for more information about credentials with AWS resources.
 
 .Steps
-. Check the availability of the AppVault CR on the destination cluster using Trident Protect CLI plugin:
+. Verify that the AppVault CR exists on the destination cluster using the Trident Protect CLI plugin:
 +
 [source,console]
 ----
 tridentctl-protect get appvault --context <destination_cluster_name>
 ----
 +
-NOTE: Ensure that the namespace intended for the application restore exists on the destination cluster.
-. View the backup contents of the available AppVault from the destination cluster:
+NOTE: If the AppVault CR does not exist on the destination cluster, create it by following the steps in link:trident-protect-appvault-custom-resources.html[Use Trident Protect AppVault objects to manage buckets].
+. View the backup contents of the available AppVault on the destination cluster, and note `appArchivePath` of the backup you want to restore:
 +
 [source,console]
 ----
@@ -220,6 +220,8 @@ Running this command displays the available backups in the AppVault, including t
 ----
 . Restore the application to the destination cluster using the AppVault name and archive path:
 
+NOTE: When using a CR, ensure that the namespace intended for the application restore exists on the destination cluster.
+
 // begin tabbed block
 [role="tabbed-block"]
 ====
@@ -231,14 +233,7 @@ Running this command displays the available backups in the AppVault, including t
 +
 * *metadata.name*: (_Required_) The name of this custom resource; choose a unique and sensible name for your environment.
 * *spec.appVaultRef*: (_Required_) The name of the AppVault where the backup contents are stored.
-* *spec.appArchivePath*: The path inside AppVault where the backup contents are stored. You can use the following command to find this path:
-+
-[source,console]
-----
-kubectl get backups <BACKUP_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
-----
-+
-NOTE: If BackupRestore CR is not available, you can use the command mentioned in step 2 to view the backup contents.
+* *spec.appArchivePath*: (_Required_) The path inside AppVault where the backup contents are stored. Use the command from step 2 to view the backup contents and find `appArchivePath` for the backup you want to restore.
 +
 * *spec.destinationApplicationName*: (_Optional_) The name for the restored application. If provided, the restored application uses this name. If not provided, the restored application uses the source application name.
 * *spec.namespaceMapping*: The mapping of the source namespace of the restore operation to the destination namespace. Replace `my-source-namespace` and `my-destination-namespace` with information from your environment.

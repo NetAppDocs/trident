@@ -93,7 +93,7 @@ tridentctl install \
 [NOTE]
 For Google Cloud NetApp Volumes UNIFIED storage pools, Trident applies UNIFIED-specific naming and validation rules during volume operations.
 
-Trident also improves volume lookup behavior by using fallback matching based on internal name when the InternalID is not available. This improves reliability of volume create and lookup operations.
+When locating a volume, Trident may try more than one compatible form of the volume name (for example, *hyphen* and *underscore* variants), which improves import and discovery reliability.
 
 === Driver details
 

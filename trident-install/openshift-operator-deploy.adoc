@@ -34,38 +34,53 @@ NOTE: Make sure that you select the most recent Operator version.
 + 
 image::../media/openshift-operator-03.png[Install]
 +
-Once the installation is complete, the Operator is visible in the list of installed operators and it is ready to use.
 . Click *View Operator* to view the details of the Operator.
-+ 
-image::../media/openshift-operator-04.png[Installed]
-. Under *Trident Orchestrator*, click *Create instance*.
 + 
 image::../media/openshift-operator-07.png[Installed]
 . Click *YAML view* and paste the following in the form:
 +
 [source,yaml]
 -------
-apiVersion: trident.netapp.io/v1 
-kind: TridentOrchestrator 
-metadata: 
-  name: trident 
-  namespace: openshift-operators 
-spec: 
-  IPv6: false 
-  debug: false 
-  nodePrep: 
-  - iscsi 
-  imageRegistry: '' 
-  k8sTimeout: 180s 
-  namespace: trident 
-  silenceAutosupport: false 
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+  namespace: openshift-operators
+spec:
+  IPv6: false
+  debug: false
+  nodePrep:
+  - iscsi
+  imageRegistry: ''
+  k8sTimeout: 180s
+  namespace: trident
+  silenceAutosupport: false
 -------
 +
+[NOTE]
+====
+The UI provides a default example. You can edit it directly instead of copying a full configuration.
+====
+
+[NOTE]
+====
+Optional: Enable concurrency
+
+To enable concurrency, add the following field to the spec:
+
+[source,yaml]
+----
+enableConcurrency: true
+----
+====
+
+[NOTE]
 ====
 * Red Hat Enterprise Linux CoreOS (RHCOS) does not have iSCSI enabled and configured.  
 * You can add the `nodePrep` parameter to configure and enable both iSCSI and Multipath services on all OpenShift worker nodes.
 * Beginning with OpenShift 4.19, the minimum Trident version supported for this feature is 25.06.1.
 ====
+
 . Click *Create*; the Trident Orchestrator will be fully installed.
 + 
 image::../media/openshift-operator-08.png[Installed]

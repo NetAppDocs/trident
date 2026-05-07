@@ -24,8 +24,22 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 
 * *Kubernetes*:
 
-** Fixed Google Cloud NetApp Volumes (GCNV) SAN behavior to allow Flex Unified ZONAL pools for block (iSCSI) workloads.
-** Fixed Google Cloud NetApp Volumes (GCNV) NAS UNIFIED pool volume handling to improve reliability of volume create and lookup operations.
+* Fixed Google Cloud NetApp Volumes (GCNV) SAN behavior to support Flex Unified ZONAL pools for block (iSCSI) workloads. Both zonal and regional configurations are now supported.
+* Fixed Google Cloud NetApp Volumes (GCNV) NAS UNIFIED pool handling by improving volume creation, validation, naming, and fallback volume lookup operations when `InternalID` is absent.
+* Fixed an issue where iSCSI device resize operations could fail when available paths and portals did not match.
+* Fixed an intermittent issue where `blkid` incorrectly identified the filesystem type for LUKS devices, preventing new volume creation.
+* Fixed an issue where LUKS publish and stage operations at scale could block the Trident controller. Users are now expected to track LUKS passphrases associated with volumes.
+* Fixed an issue where iSCSI multipath partitions could appear as ghost devices, preventing CSI `NodeUnstage` operations from succeeding.
+* Fixed an NVMe/TCP namespace race condition during concurrent volume creation (Issue #1089).
+* Fixed concurrent clone snapshot operations when snapshots were executed within the same second.
+* Fixed an issue preventing KubeVirt VMs using `dataVolumes` from failing over with Trident Automated Workload Failover.
+* Fixed an error that occurred when deleting an invalid `TridentMirrorRelationship` custom resource while using the Trident concurrent core.
+* Fixed indentation in the `tridentactionmirrorupdates` Kubernetes CRD YAML definition (Issue #1120).
+* Fixed the REST qtree asynchronous delete API call (Issue #1121).
+* Fixed `ControllerPublish` to use the volume configuration filesystem type instead of an incorrect default filesystem type.
+* Fixed controller startup logging to correctly report concurrent driver status.
+* Fixed handling of suspended backends in concurrent Trident.
+* Enhanced AWS ARN handling to support special regions.
 
 
 == What's new in 26.02

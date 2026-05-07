@@ -29,7 +29,7 @@ SAN volumes are provisioned from Flex Unified storage pools and presented to Kub
 This applies to the following environments:
 
 * Trident 26.02 and later
-* Google Kubernetes Engine (GKE)
+* Google Kubernetes Engine (GKE) or Red Hat OpenShift
 * Google Cloud NetApp Volumes Flex Unified storage pools
 * iSCSI-based workloads
 
@@ -37,8 +37,8 @@ This applies to the following environments:
 
 Flex Unified storage pools provide block storage using the iSCSI protocol and are required for SAN provisioning:
 
-* Flex Unified *REGIONAL* pools are supported.
-* Flex Unified *ZONAL* pools are supported starting with Trident 26.02.1.
+* Flex Unified REGIONAL pools are supported.
+* Flex Unified ZONAL pools are supported starting with Trident 26.02.1.
 * Only the *Flex* service level is supported for SAN workloads.
 
 == Configure a Trident SAN backend

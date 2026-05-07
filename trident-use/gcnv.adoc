@@ -90,6 +90,11 @@ tridentctl install \
 [[nas]]
 == Configure NAS storage
 
+[NOTE]
+For Google Cloud NetApp Volumes UNIFIED storage pools, Trident applies UNIFIED-specific naming and validation rules during volume operations.
+
+When locating a volume, Trident can evaluate multiple compatible volume name variants (for example, hyphen and underscore formats) to improve import and discovery reliability.
+
 === Driver details
 
 Trident provides the `google-cloud-netapp-volumes` driver to provision NAS storage from Google Cloud NetApp Volumes.

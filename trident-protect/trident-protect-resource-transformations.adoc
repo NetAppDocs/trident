@@ -16,7 +16,7 @@ Resource transformations enable you to modify a resource as it is being restored
 
 == How resource modification works
 
-The `transformations` field in `SnapshotRestore`, `BackupRestore`, `AppMirrorRelationship`, and other restore resources enables you to modify Kubernetes resources during the restore process. This is useful for adapting applications or virtual machines to a new cluster by changing hostnames, registry URLs, resource limits, or environment variables.
+The `transformations` field in `SnapshotRestore`, `BackupRestore`, `AppMirrorRelationship`, and other restore resources enables you to modify Kubernetes resources during the restore process. This is useful when the restored application needs to be configured differently from the original, for example, changing hostnames, registry URLs, resource limits, or environment variables.
 
 Resource transformations use https://www.rfc-editor.org/rfc/rfc6902[RFC 6902 JSON Patch^] operations and https://www.rfc-editor.org/rfc/rfc6901[RFC 6901 JSON Pointer^] paths to target and modify specific fields within Kubernetes resources.
 

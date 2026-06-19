@@ -21,7 +21,7 @@ There are two ways to configure the Trident backend to use an FSx for ONTAP file
 * Create a StorageClass that leverages the Automatic Backend feature.
 * Create the backend and StorageClass separately.
 
-The steps in this section cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to the xref:trident-fsx-storageclass-pvc.html#configure-a-kubernetes-storageclass-object-with-automatic-backend-configuration-support-for-fsx-for-ontap[Configure StorageClass and PVC] section for more information.
+The steps in this section cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to the link:trident-fsx-storageclass-pvc.html#configure-a-kubernetes-storageclass-object-with-automatic-backend-configuration-support-for-fsx-for-ontap[Configure StorageClass and PVC] section for more information.
 
 To create a storage backend, you need to create a configuration file in either JSON or YAML format. The file needs to specify the type of storage you want (NAS or SAN), the file system, and SVM to get it from and how to authenticate with it. The following example shows how to define NAS-based storage and using an AWS secret to store the credentials to the SVM you want to use:
 
@@ -342,7 +342,7 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |`false`
 
 |`luksEncryption` 
-| Enable LUKS encryption. Refer to link:../trident-reco/security-reco.html#Use-Linux-Unified-Key-Setup-(LUKS)[Use Linux Unified Key Setup (LUKS)]. 
+| Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 SAN only. 
 | ""

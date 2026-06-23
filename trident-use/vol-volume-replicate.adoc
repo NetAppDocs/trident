@@ -214,21 +214,21 @@ During a planned failover (migration), perform the following steps to promote th
 
 
 . On the primary Kubernetes cluster, create a snapshot of the PVC and wait until the snapshot is created.
-. On the primary Kubernetes cluster, create the SnapshotInfo CR to obtain internal details.
+. On the primary Kubernetes cluster, create the TridentSnapshotInfo CR to obtain internal details.
 +
 .Example
 +
 [source,yaml]
 ----
-kind: SnapshotInfo
+kind: TridentSnapshotInfo
 apiVersion: trident.netapp.io/v1
 metadata:
   name: csi-nas
 spec:
-  snapshot-name: csi-nas-snapshot
+  snapshotName: csi-nas-snapshot
 ----
 
-. On secondary Kubernetes cluster, update the _spec.state_ field of the _TridentMirrorRelationship_ CR to _promoted_ and _spec.promotedSnapshotHandle_ to be the internalName of the snapshot.
+. On secondary Kubernetes cluster, update the _spec.state_ field of the _TridentMirrorRelationship_ CR to _promoted_ and _spec.volumeMappings[].promotedSnapshotHandle_ to be the internalName of the snapshot.
 . On secondary Kubernetes cluster, confirm the status (status.state field) of TridentMirrorRelationship to promoted.
 
 == Restore a mirror relationship after a failover

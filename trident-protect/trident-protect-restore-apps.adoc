@@ -19,7 +19,9 @@ You can use Trident Protect to restore your application from a snapshot or backu
 * When you restore an application, all execution hooks configured for the application are restored with the app. If a post-restore execution hook is present, it runs automatically as part of the restore operation.
 * Restoring from a backup to a different namespace or to the original namespace is supported for qtree volumes. However, restoring from a snapshot to a different namespace or to the original namespace is not supported for qtree volumes.
 * You can use advanced settings to customize restore operations. To learn more, refer to link:../trident-protect/trident-protect-restore-settings.html[Use advanced Trident Protect restore settings].
+* ##To restore specific KubeVirt virtual machines (VMs) from an archive without restoring all namespace resources, use the `includedVirtualMachines` field on a restore CR. For supported CRs, field reference, and YAML examples, refer to link:trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect].##
 ====
+
 
 == Restore from a backup to a different namespace
 
@@ -70,6 +72,7 @@ spec:
   destinationApplicationName: my-new-app-name
   namespaceMapping: [{"source": "my-source-namespace", "destination": "my-destination-namespace"}]
 -------
+
 +
 include::../_include/restore-include-selective-restore.adoc[]
 + 
@@ -141,6 +144,7 @@ spec:
   appArchivePath: my-backup-path
   appVaultRef: appvault-name
 -------
+
 +
 include::../_include/restore-include-selective-restore.adoc[]
 +
@@ -386,6 +390,7 @@ include::../_include/restore-include-sessiontoken-note.adoc[]
 ------
 kubectl get snapshots <SNAPSHOT_NAME> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 ------
++
 +
 [source,yaml]
 -------

@@ -320,7 +320,7 @@ apiVersion: protect.trident.netapp.io/v1
 kind: SnapshotRestore
 metadata:
   name: my-cr-name
-  namespace: my-app-namespace
+  namespace: my-destination-namespace
 spec:
   appVaultRef: appvault-name
   appArchivePath: my-snapshot-path

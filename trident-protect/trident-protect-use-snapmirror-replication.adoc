@@ -258,6 +258,14 @@ NOTE: When using a CR, manually create the destination namespace before applying
 ** *spec.sourceApplicationName*: (_Required_) This value must match the name of the source application you defined in the source application CR.
 ** *spec.sourceApplicationUID*: (Required) This value must match the UID of the source application you defined in the source application CR.
 ** *spec.storageClassName*: (_Optional_) Choose the name of a valid storage class on the cluster. The storage class must be linked to an ONTAP storage VM that is peered with the source environment. If the storage class is not provided, the default storage class on the cluster will be used by default.
+** *spec.storageClassMapping*: (_Optional_) ##Maps source storage classes to destination storage classes for individual PVCs within the same AMR. Each entry requires a `source` and `destination` storage class name. When set, `storageClassMapping` overrides `storageClassName` entirely; PVCs without a matching source entry use the cluster default storage class, not `storageClassName`.##
++
+##When using `storageClassMapping` in an AppMirrorRelationship CR, be aware of the following restrictions:##
++
+* `storageClassMapping` overrides `storageClassName` entirely. When both fields are set, `storageClassName` is ignored.
+* PVCs with source storage classes that have no matching entry in `storageClassMapping` use the cluster default storage class, not `storageClassName`.
+* Each entry requires both a `source` and `destination` value.
+* Changing the destination storage class can force deletion and recreation of existing destination PVCs.
 ** *spec.recurrenceRule*: Define a start date in UTC time and a recurrence interval.
 +
 Example YAML:
@@ -298,10 +306,12 @@ kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 +
 [source,console]
 ----
-tridentctl-protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --source-app-vault <my_vault_name> --recurrence-rule <rule> --namespace-mapping <ns_mapping> --source-app-id <source_app_UID> --source-app <my_source_app_name> --storage-class <storage_class_name> -n <application_namespace>
+##tridentctl-protect create appmirrorrelationship <name_of_appmirorrelationship> --destination-app-vault <my_vault_name> --source-app-vault <my_vault_name> --recurrence-rule <rule> --namespace-mapping <ns_mapping> --source-app-id <source_app_UID> --source-app <my_source_app_name> --storage-class <storage_class_name> --storageclass-mapping  <src_class:dst_class> -n <application_namespace>##
 ----
 +
-*Example:*
+NOTE: ##Use `--storageclass-mapping` to map individual source storage classes to destination storage classes. Specify one or more `source:destination` pairs separated by commas (for example, `"class-a:class-b,class-c:class-d"`). Use `*:destination-class` as a wildcard to map all unmapped PVCs to a single destination storage class. When `--storageclass-mapping` is set, `--storage-class` is ignored.##
++
+##*Example using a single destination storage class (`--storage-class`):*##
 +
 [source,console]  
 ----

@@ -15,6 +15,17 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 26.06
+Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
+
+=== Trident Protect
+
+==== Enhancements
+
+* Added OpenShift Service CA Operator integration to automate TLS certificate management for the Trident Protect admission webhook. Set `useOpenshiftServiceCA` to `true` in your Helm values to enable this feature. To learn more, refer to link:trident-protect/trident-protect-customize-installation.html[Customize Trident Protect installation].
+* ##Added support for resource transformations, enabling you to add, remove, and modify Kubernetes resource attributes during the restore process. To learn more, refer to link:trident-protect/trident-protect-resource-transformations.html[Modify resources as you restore them using custom resources].##
+* ##Added support for `storageClassMapping` in AppMirrorRelationship (AMR), enabling storage class mapping for individual PVCs within a single AMR definition. To learn more, refer to link:trident-protect/trident-protect-use-snapmirror-replication.html[Replicate applications using NetApp SnapMirror and Trident Protect^].##
+
 == What's new in 26.02.1
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 

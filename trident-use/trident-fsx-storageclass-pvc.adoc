@@ -30,7 +30,7 @@ The following three parameters need to be defined when creating a StorageClass:
 |===
 
 ==== Specify optional parameters
-You can pass optional backend parameters through the StorageClass. Define all optional values as strings in the StorageClass `parameters` section. For a complete list of backend parameters, see: xref:trident-fsx-storage-backend.html#backend-advanced-configuration-and-examples[FSx for NetApp ONTAP backend configuration].
+You can pass optional backend parameters through the StorageClass. Define all optional values as strings in the StorageClass `parameters` section. For a complete list of backend parameters, see: link:trident-fsx-storage-backend.html#backend-advanced-configuration-and-examples[FSx for NetApp ONTAP backend configuration].
 
 ==== Example StorageClass configuration files.
 The following example shows a StorageClass that triggers automatic backend configuration.
@@ -373,7 +373,7 @@ basic-csi    csi.trident.netapp.io   15h
 
 == Provision SMB volumes
 You can provision SMB volumes using the `ontap-nas` driver. 
-However, to do so you must complete these steps: link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes].
+However, to do so you must complete these steps: link:worker-node-prep.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes].
 
 == Backend advanced configuration and examples
 
@@ -580,7 +580,7 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |`false`
 
 |`luksEncryption` 
-| Enable LUKS encryption. Refer to link:../trident-reco/security-reco.html#Use-Linux-Unified-Key-Setup-(LUKS)[Use Linux Unified Key Setup (LUKS)]. 
+| Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 SAN only. 
 | ""

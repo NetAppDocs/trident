@@ -21,7 +21,7 @@ There are two ways to configure the Trident backend to use an FSx for ONTAP file
 * Create a StorageClass that leverages the Automatic Backend feature.
 * Create the backend and StorageClass separately.
 
-The steps in this section cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to the xref:trident-fsx-storageclass-pvc.html#configure-a-kubernetes-storageclass-object-with-automatic-backend-configuration-support-for-fsx-for-ontap[Configure StorageClass and PVC] section for more information.
+The steps in this section cover how to create the backend separately. For information on how to use the Automatic Backend feature, refer to the link:trident-fsx-storageclass-pvc.html#configure-a-kubernetes-storageclass-object-with-automatic-backend-configuration-support-for-fsx-for-ontap[Configure StorageClass and PVC] section for more information.
 
 To create a storage backend, you need to create a configuration file in either JSON or YAML format. The file needs to specify the type of storage you want (NAS or SAN), the file system, and SVM to get it from and how to authenticate with it. The following example shows how to define NAS-based storage and using an AWS secret to store the credentials to the SVM you want to use:
 
@@ -170,7 +170,7 @@ If you provide the `fsxFilesystemID` under the `aws` field, you need not to prov
 |`dataLIF` 
 |IP address of protocol LIF. 
 
-*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs. Can be changed after initial setting. Refer to <<Update `dataLIF` after initial configuration>>. 
+*ONTAP NAS drivers*: NetApp recommends specifying dataLIF. If not provided, Trident fetches dataLIFs from the SVM. You can specify a fully-qualified domain name (FQDN) to be used for the NFS mount operations, allowing you to create a round-robin DNS to load-balance across multiple dataLIFs. Can be changed after initial setting. Refer to https://kb.netapp.com/Cloud/Astra/Trident/Is_it_possible_to_update_the_DataLIF_on_the_trident_backend[Update dataLIF after initial configuration^]. 
 
 *ONTAP SAN drivers*: Do not specify for iSCSI. Trident uses ONTAP Selective LUN Map to discover the iSCI LIFs needed to establish a multi path session. A warning is generated if dataLIF is explicitly defined.
 
@@ -342,7 +342,7 @@ If NAE is enabled on the backend, any volume provisioned in Trident will be NAE 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |`false`
 
 |`luksEncryption` 
-| Enable LUKS encryption. Refer to link:../trident-reco/security-reco.html#Use-Linux-Unified-Key-Setup-(LUKS)[Use Linux Unified Key Setup (LUKS)]. 
+| Enable LUKS encryption. Refer to link:../trident-reco/security-luks.html[Use Linux Unified Key Setup (LUKS)]. 
 
 SAN only. 
 | ""
@@ -372,4 +372,4 @@ SMB default is `ntfs`.
 
 == Provision SMB volumes
 You can provision SMB volumes using the `ontap-nas` driver. 
-Before you complete <<ONTAP SAN and NAS driver integration>> complete these steps: link:https://docs.netapp.com/us-en/trident/trident-use/worker-node-prep.html#prepare-to-provision-smb-volumes[Prepare to provision SMB volumes].
+Before you complete link:trident-fsx-storage-backend.html#ontap-san-and-nas-driver-integration[ONTAP SAN and NAS driver integration] complete these steps: link:worker-node-prep.html#prepare-to-provision-smb-volumes.html[Prepare to provision SMB volumes].

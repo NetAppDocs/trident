@@ -27,6 +27,20 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 * ##Added support for resource transformations, enabling you to add, remove, and modify Kubernetes resource attributes during the restore process. To learn more, refer to link:trident-protect/trident-protect-resource-transformations.html[Modify resources as you restore them using custom resources].##
 * ##Added support for `storageClassMapping` in AppMirrorRelationship (AMR), enabling storage class mapping for individual PVCs within a single AMR definition. To learn more, refer to link:trident-protect/trident-protect-use-snapmirror-replication.html[Replicate applications using NetApp SnapMirror and Trident Protect^].##
 
+==== Fixes
+
+* Fixed an issue where Trident Protect removed the snapshot tracking object when a `VolumeSnapshot` entered a terminating state, without confirming the backing snapshot was deleted in ONTAP. This could leave snapshots orphaned when the backend delete was blocked, for example, by an active volume clone.
+* Fixed cross-cluster VM restores failing with an admission webhook error caused by the webhook incorrectly validating the source application namespace against the destination cluster, where it does not exist.
+* Fixed a spec mismatch between the scoped restore definition and the live application that caused selective virtual machine in-place restores to fail at the application creation step.
+* Fixed virtual machine in-place restore jobs getting stuck in arRunning state when both the virtual machine and its PVC were deleted before the restore.
+* Fixed a recurrence rule change on an existing protection schedule incorrectly triggering an immediate backup or snapshot run.
+* Fixed virtual machine in-place restores causing a significant increase in protected storage capacity due to sparse PVC data being written as fully allocated volumes during the PVC copy step.
+* Fixed PVCs being incorrectly deleted alongside the virtual machine instance during AppMirrorRelationship reverse, reverse resync, and resync operations on KubeVirt applications.
+* Fixed snapshots not proceeding when a virtual machine freeze operation failed, even though `ContinueOnFailure` was set to `true`.
+* Fixed the snapshot finalizer erroring when the associated application CR was deleted before the unfreeze step completed.
+
+
+
 == What's new in 26.02.1
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 

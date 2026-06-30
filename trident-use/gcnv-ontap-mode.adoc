@@ -46,7 +46,7 @@ Before you configure an ONTAP-mode backend, ensure that you have the following:
 * Trident 26.06 or later.
 * A GCNV ONTAP-mode storage pool in your target project and location.
 * GCP IAM permissions for proxy operations, scoped appropriately for your environment.
-* A backend configuration that includes `proxyURL`, `projectNumber`, `location`, `poolID`, and the ONTAP `svm`.
+* A backend configuration that includes `proxyURL`, `projectNumber`, `location`, and `poolID`.
 * For iSCSI SAN workflows, the node-side iSCSI and multipath prerequisites for your platform. Refer to link:../trident-use/worker-node-prep.html[Prepare the worker node].
 
 == Configure the backend
@@ -98,6 +98,37 @@ spec:
     projectNumber: "<project-number>"
     location: "<region-or-zone>"
     poolID: "<pool-id>"
+    apiKey:
+      type: service_account
+      project_id: "<project-id>"
+      client_email: "<service-account-email>"
+      client_id: "<client-id>"
+      auth_uri: "https://accounts.google.com/o/oauth2/auth"
+      token_uri: "https://oauth2.googleapis.com/token"
+      auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
+      client_x509_cert_url: "<client-x509-cert-url>"
+----
+.Secret
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gcnv-sa-secret
+  namespace: trident
+type: Opaque
+stringData:
+  private_key_id: "<private-key-id>"
+  private_key: |
+    -----BEGIN PRIVATE KEY-----
+    <private-key>
+    -----END PRIVATE KEY-----
+----
+[NOTE]
+====
+Do not put `private_key` or `private_key_id` in the `TridentBackendConfig` spec—the CRD rejects them. Use `ontap-san` with the same `gcnv` and credential pattern for block storage.
+====
+
   svm: "<svm-name>"
 ----
 
@@ -117,12 +148,9 @@ For this Tech Preview, use the following practices:
 
 == Validation and initialization behavior
 
-Trident validates an ONTAP-mode backend during initialization and fails fast rather than partially initializing. Backend initialization fails when any of the following is true:
+Trident validates an ONTAP-mode backend during initialization and fails fast rather than partially initializing. 
 
-* A required `gcnv` field is missing (`proxyURL`, `projectNumber`, `location`, or `poolID`).
-* The ONTAP driver type is not supported for ONTAP-mode.
-* The backend uses the ASA r2 mode.
-* Credential resolution or authentication fails.
+Backend initialization fails if a required `gcnv` field is missing, the driver is unsupported for ONTAP-mode, or credential resolution fails.
 
 == Known limitations
 
@@ -141,18 +169,4 @@ ONTAP-mode is opt-in per backend through the `gcnv` configuration block:
 
 == What's next?
 
-After you create the backend configuration file, create the backend:
-
-[source,console]
-----
-kubectl create -f <backend-file>
-----
-
-Verify that the backend reaches the `Bound` phase with a `Success` status:
-
-[source,console]
-----
-kubectl get tridentbackendconfig
-----
-
-After the backend is created, create a storage class and a `PersistentVolumeClaim` as you would for any `ontap-san` or `ontap-nas` backend. Refer to link:../trident-use/create-stor-class.html[Create a storage class^].
+Apply secret before TBC; use `kubectl apply` and `-n trident` to match examples.

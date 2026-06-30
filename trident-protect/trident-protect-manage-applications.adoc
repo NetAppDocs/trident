@@ -20,6 +20,8 @@ You need to create an AppVault CR that will be used when performing data protect
 == Define an application
 You need to define each application that you want to manage with Trident Protect. You can define an application for management by either manually creating an application CR or by using the Trident Protect CLI.
 
+NOTE: To define a VM-scoped Application that protects specific KubeVirt virtual machines (VMs) by name instead of entire namespaces, use the `spec.includedVirtualMachines` field in the Application CR or the `--virtual-machines` flag in the CLI. For details, field reference, and YAML examples, refer to link:trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect].
+
 [role="tabbed-block"]
 ====
 .Add an application using a CR
@@ -152,7 +154,7 @@ kubectl apply -f maria-app.yaml
 --
 .Steps
 . Create and apply the application definition using one of the following examples, replacing values in brackets with information from your environment. You can include namespaces and resources in the application definition using comma-separated lists with the arguments shown in the examples.
-+
+
 You can optionally use an annotation when you create an app to specify whether the application can write to the filesystem during a snapshot. This is only applicable to applications defined from virtual machines, such as in KubeVirt environments, where filesystem freezes occur before snapshots. If you set the annotation to `true`, the application ignores the global setting and can write to the filesystem during a snapshot. If you set it to `false`, the application ignores the global setting and the filesystem is frozen during a snapshot. If you use the annotation but the application has no virtual machines in the application definition, the annotation is ignored. If you don't use the annotation, the application follows the link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[global Trident Protect freeze setting].
 +
 To specify the annotation when you use the CLI to create an application, you can use the `--annotation` flag.

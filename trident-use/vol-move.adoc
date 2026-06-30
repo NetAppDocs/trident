@@ -21,7 +21,7 @@ Before you move a volume, ensure that the following requirements are met:
 * The backend uses the `ontap-san` driver with the ONTAP REST API.
 * The ONTAP cluster has at least two nodes.
 * You have one of the following sets of credentials:
-** ONTAP 9.19.1 or later with the dedicated custom ONTAP role.
+** ONTAP 9.19.1 or later if using the dedicated custom ONTAP role.
 ** Cluster-admin credentials on earlier ONTAP releases.
 
 == How it works
@@ -94,7 +94,7 @@ kubectl apply -f tridentvolumemove.yaml
 
 === Monitor the move
 
-Track progress using the `tvm` short name:
+Track progress using the `tvm` short name or `tridentvolumemove`:
 
 [source,console]
 ----

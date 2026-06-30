@@ -18,6 +18,10 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 == What's new in 26.06
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 
+=== Trident
+
+==== Fixes
+
 === Trident Protect
 
 ==== Enhancements
@@ -38,7 +42,6 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 * Fixed Trident Protect deleting the Kubernetes snapshot object before confirming deletion of the backing snapshot in ONTAP; the finalizer now waits for `VolumeSnapshot` deletion.
 * Fixed snapshots not proceeding when a virtual machine freeze operation failed; freeze and unfreeze operations now continue on failure.
 * Fixed KubeVirt virtual machine applications incorrectly recreating PersistentVolumeClaims during AppMirrorRelationship reverse, reverse resync, and resync operations.
-
 
 
 == What's new in 26.02.1
@@ -67,6 +70,16 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 * Fixed handling of suspended backends in concurrent Trident.
 * Enhanced AWS ARN handling to support special regions.
 
+=== Trident Protect
+
+==== Fixes
+Updated Trident Protect dependencies to resolve security vulnerabilities:
+
+* gRPC-Go: link:https://nvd.nist.gov/vuln/detail/CVE-2026-33186[CVE-2026-33186^]
+* Go x/crypto SSH: link:https://nvd.nist.gov/vuln/detail/CVE-2024-45337[CVE-2024-45337^]
+* OpenTelemetry-Go: link:https://nvd.nist.gov/vuln/detail/CVE-2026-24051[CVE-2026-24051^]
+* Go runtime: link:https://nvd.nist.gov/vuln/detail/CVE-2025-22871[CVE-2025-22871^]
+* Additional dependencies: link:https://nvd.nist.gov/vuln/detail/CVE-2025-23109[CVE-2025-23109^]
 
 == What's new in 26.02
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.

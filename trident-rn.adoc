@@ -22,12 +22,12 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 
 ==== Enhancements
 
-* ##Added OpenShift Service CA Operator integration to automate TLS certificate management for the Trident Protect admission webhook. Enable by setting `useOpenshiftServiceCA` to `true` in your Helm values. To learn more, refer to link:trident-protect/trident-protect-customize-installation.html[Customize Trident Protect installation^].##
-* ##Added support for backing up and restoring KubeVirt VMs on OpenShift Virtualization. Protect all VMs in a namespace or target specific VMs by name, and selectively restore individual VMs from a backup or snapshot. To learn more, refer to link:trident-protect/trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect^].##
-* ##Added support for resource transformations, enabling you to add, remove, and modify Kubernetes resource attributes during the restore process. To learn more, refer to link:trident-protect/trident-protect-resource-transformations.html[Modify resources as you restore them using custom resources].##
-* ##Added support for `storageClassMapping` in AppMirrorRelationship (AMR), enabling storage class mapping for individual PVCs within a single AMR definition. To learn more, refer to link:trident-protect/trident-protect-use-snapmirror-replication.html[Replicate applications using NetApp SnapMirror and Trident Protect^].##
+* Added OpenShift Service CA Operator integration to automate TLS certificate management for the Trident Protect admission webhook. Enable by setting `useOpenshiftServiceCA` to `true` in your Helm values. To learn more, refer to link:trident-protect/trident-protect-customize-installation.html[Customize Trident Protect installation^].
+* Added support for backing up and restoring KubeVirt VMs on OpenShift Virtualization. Protect all VMs in a namespace or target specific VMs by name, and selectively restore individual VMs from a backup or snapshot. To learn more, refer to link:trident-protect/trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect^].
+* Added support for resource transformations, enabling you to add, remove, and modify Kubernetes resource attributes during the restore process. To learn more, refer to link:trident-protect/trident-protect-resource-transformations.html[Modify resources as you restore them using custom resources].
+* Added support for `storageClassMapping` in AppMirrorRelationship (AMR), enabling storage class mapping for individual PVCs within a single AMR definition. To learn more, refer to link:trident-protect/trident-protect-use-snapmirror-replication.html[Replicate applications using NetApp SnapMirror and Trident Protect^].
 
-==== ##Fixes##
+==== Fixes
 
 * Fixed cross-cluster virtual machine restores failing with an admission webhook error when the source application namespace did not exist on the destination cluster.
 * Fixed selective virtual machine in-place restores failing at the application creation step due to a specification mismatch with an existing application custom resource; the existing application is now reused.

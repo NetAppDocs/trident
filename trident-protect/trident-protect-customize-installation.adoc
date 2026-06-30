@@ -126,7 +126,7 @@ This will replace the default values with those specified in the `sccconfig.yaml
 
 == Configure additional Trident Protect helm chart settings
 
-##You can customize AutoSupport settings, namespace filtering, and OpenShift webhook certificate management to meet your specific requirements. The following table describes the available configuration parameters:##
+You can customize AutoSupport settings, namespace filtering, and OpenShift webhook certificate management to meet your specific requirements. The following table describes the available configuration parameters:
 
 [options="header"]
 |===
@@ -146,7 +146,7 @@ This will replace the default values with those specified in the `sccconfig.yaml
 |restoreSkipNamespaceLabels
 |string
 |Comma-separated list of namespace labels to exclude from backup and restore operations. Allows you to filter namespaces based on labels.
-|##useOpenshiftServiceCA##
+|useOpenshiftServiceCA
 |boolean
 |Enables integration with OpenShift's native Service CA Operator for automatic TLS certificate creation and injection for the Trident Protect admission webhook. When set to `true`, the Service CA Operator manages webhook TLS certificates automatically. Use only on OpenShift clusters. (default: `false`)
 |===
@@ -171,7 +171,7 @@ autoSupport:
   insecure: true
 restoreSkipNamespaceAnnotations: "annotation1,annotation2"
 restoreSkipNamespaceLabels: "label1,label2"
-##useOpenshiftServiceCA: true##
+useOpenshiftServiceCA: true
 ----
 . After you populate the `values.yaml` file with the correct values, apply the configuration file:
 +
@@ -192,7 +192,7 @@ helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-p
   --set autoSupport.proxy=http://my.proxy.url \
   --set-string restoreSkipNamespaceAnnotations="{annotation1,annotation2}" \
   --set-string restoreSkipNamespaceLabels="{label1,label2}" \
-  ##--set useOpenshiftServiceCA=true \##
+  --set useOpenshiftServiceCA=true \
   --reuse-values
 ----
 --

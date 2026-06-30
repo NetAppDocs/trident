@@ -20,7 +20,7 @@ You need to create an AppVault CR that will be used when performing data protect
 == Define an application
 You need to define each application that you want to manage with Trident Protect. You can define an application for management by either manually creating an application CR or by using the Trident Protect CLI.
 
-NOTE: ##To define a VM-scoped Application that protects specific KubeVirt virtual machines (VMs) by name instead of entire namespaces, use the `spec.includedVirtualMachines` field in the Application CR or the `--virtual-machines` flag in the CLI. For details, field reference, and YAML examples, refer to link:trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect].##
+NOTE: To define a VM-scoped Application that protects specific KubeVirt virtual machines (VMs) by name instead of entire namespaces, use the `spec.includedVirtualMachines` field in the Application CR or the `--virtual-machines` flag in the CLI. For details, field reference, and YAML examples, refer to link:trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect].
 
 [role="tabbed-block"]
 ====

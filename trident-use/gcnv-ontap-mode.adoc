@@ -51,7 +51,9 @@ Before you configure an ONTAP-mode backend, ensure that you have the following:
 
 == Configure the backend
 
-Enable ONTAP-mode per backend by adding the `gcnv` block to an `ontap-san` or `ontap-nas` backend configuration. Store your GCP service account credentials in a Kubernetes secret and reference it from the backend.
+A `TridentBackendConfig` requires `credentials`. For ONTAP-mode, that secret holds GCP proxy credentials—not ONTAP `managementLIF` / `username` / `password`. `svm` is optional: each GCNV ONTAP-mode pool currently has one SVM, and Trident derives it from the pool when omitted.
+
+Use the same service account pattern as native GCNV: non-sensitive fields in `gcnv.apiKey`, `private_key` and `private_key_id` in the secret. See link:../trident-use/gcnv-examples.html[Google Cloud NetApp Volumes configuration examples^].
 
 .ontap-san backend
 [source,yaml]

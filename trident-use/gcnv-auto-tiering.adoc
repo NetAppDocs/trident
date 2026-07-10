@@ -18,7 +18,7 @@ Auto-tiering allows Trident to provision volumes that automatically move inactiv
 This reduces storage cost while preserving performance for frequently accessed data.
 
 Trident applies auto-tiering settings only at volume creation time.
-Post-provisioning changes are not supported in Trident 26.02.
+Post-provisioning changes are not supported in Trident 26.06.
 
 == Concepts
 
@@ -59,16 +59,16 @@ When the same setting is defined at multiple scopes, Trident applies the followi
 
 Settings defined at a higher precedence override lower-level values.
 
-== Supported functionality in Trident 26.02
+== Supported functionality in Trident 26.06
 
-Trident 26.02 supports the following auto-tiering capabilities for Google Cloud NetApp Volumes:
+Trident 26.06 supports the following auto-tiering capabilities for Google Cloud NetApp Volumes:
 
 * Enabling or disabling auto-tiering during volume provisioning
 * Defining a tiering policy in the Trident backend configuration
 * Overriding the tiering policy and cooling days per volume using PVC annotations
 * Configuring cooling days for volumes with auto-tiering enabled
 
-== Unsupported functionality in Trident 26.02
+== Unsupported functionality in Trident 26.06
 The following operations are not supported:
 
 * Modifying auto-tiering settings after volume creation

@@ -11,11 +11,13 @@ summary: Learn about how to create and use ONTAP SAN drivers with your Trident i
 :imagesdir: ../media/
 
 [.lead]
-Learn how to create and use ONTAP SAN drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses. link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] differ from other ONTAP systems (ASA, AFF, and FAS) in the implementation of their storage layer. These variations impact the usage of certain parameters as notated.  link:https://docs.netapp.com/us-en/asa-r2/learn-more/hardware-comparison.html[Learn more about the differences between ASA r2 systems and other ONTAP systems^]. In the Trident backend configuration, you need not specify that your system is ASA r2. When you select `ontap-san` as the `storageDriverName`, Trident detects automatically the ASA r2  or other ONTAP systems. Some backend configuration parameters are not applicable to ASA r2 systems as noted in the table below. 
+Create and use ONTAP SAN drivers with your Trident installation. This section provides backend configuration examples and details for mapping backends to StorageClasses. link:https://docs.netapp.com/us-en/asa-r2/get-started/learn-about.html[ASA r2 systems^] differ from other ONTAP systems (ASA, AFF, and FAS) in the implementation of their storage layer. These variations impact the usage of certain parameters as notated.  link:https://docs.netapp.com/us-en/asa-r2/learn-more/hardware-comparison.html[Learn more about the differences between ASA r2 systems and other ONTAP systems^]. In the Trident backend configuration, you need not specify that your system is ASA r2. When you select `ontap-san` as the `storageDriverName`, Trident detects automatically the ASA r2  or other ONTAP systems. Some backend configuration parameters are not applicable to ASA r2 systems as noted in the table below. 
 
 NOTE: Only the `ontap-san` driver (with iSCSI, NVMe/TCP, and FC protocols) is supported for ASA r2 systems. 
 
 == Backend configuration options
+
+Beginning with the 26.06 release, you can enable ONTAP balanced placement so that ONTAP selects the aggregate for new volumes. Refer to link:ontap-balanced-placement.html[Use balanced placement with ONTAP backends] for requirements and examples.
 
 See the following table for the backend configuration options:
 
@@ -91,17 +93,24 @@ For Active Directory authentication, see link:../trident-use/ontap-san-examples.
 
 |`storagePrefix` |Prefix used when provisioning new volumes in the SVM. 
 
-Cannot be modified later. To update this parameter, you will need to create a new backend.|`trident`
+Cannot be modified later. To update this parameter, you need to create a new backend.|`trident`
 
 |`aggregate`
-a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. If not assigned, any of the available aggregates can be used to provision a FlexGroup volume.
+a|Aggregate for provisioning (optional; if set, must be assigned to the SVM). For the `ontap-nas-flexgroup` driver, this option is ignored. If not assigned, any of the available aggregates can be used to provision a FlexGroup volume.
 
-NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend will move to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
+NOTE: When the aggregate is updated in SVM, it is updated in Trident automatically by polling SVM without having to restart the Trident Controller. When you have configured a specific aggregate in Trident to provision volumes, if the aggregate is renamed or moved out of the SVM, the backend moves to failed state in Trident while polling the SVM aggregate. You must either change the aggregate to one that is present on the SVM or remove it altogether to bring the backend back online.
 
 *Do not specify for ASA r2 systems*.
 
+*Do not specify when `useBalancedPlacement` is set to `true`.*
+
 a|""
 
+|`useBalancedPlacement`
+a|Delegate aggregate selection for new volumes to ONTAP [Boolean]. Requires ONTAP 9.19.1 or later and `useREST` set to `true`. Cannot be combined with `aggregate`.
+
+Refer to link:ontap-balanced-placement.html[Use balanced placement with ONTAP backends] for requirements and examples.
+|`false`
 
 |`limitAggregateUsage` |Fail provisioning if usage is above this percentage. 
 
@@ -139,7 +148,7 @@ Use to select `iscsi` for iSCSI, `nvme` for NVMe/TCP or `fcp` for SCSI over Fibr
 | `iscsi` if blank
 
 |`formatOptions`
-a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which will be applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
+a| Use `formatOptions` to specify command line arguments for the `mkfs` command, which is applied whenever a volume is formatted. This allows you to format the volume according to your preferences. Make sure to specify the formatOptions similar to that of the mkfs command options, excluding the device path.
 Example: "-E nodiscard" 
 
 *Supported for `ontap-san` and `ontap-san-economy` drivers with iSCSI protocol.* 
@@ -214,7 +223,7 @@ Using QoS policy groups with Trident requires ONTAP 9.8 or later. You should use
 
 |`encryption` |Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
-If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 
+If NAE is enabled on the backend, any volume provisioned in Trident is NAE enabled. 
 
 For more information, refer to: link:../trident-reco/security-reco.html[How Trident works with NVE and NAE]. |"false"
 
@@ -266,7 +275,7 @@ defaults:
 
 ----
 
-NOTE: For all volumes created using the `ontap-san` driver, Trident adds an extra 10 percent capacity to the FlexVol to accommodate the LUN metadata. The LUN will be provisioned with the exact size that the user requests in the PVC. Trident adds 10 percent to the FlexVol (shows as Available size in ONTAP). Users will now get the amount of usable capacity they requested. This change also prevents LUNs from becoming read-only unless the available space is fully utilized. This does not apply to ontap-san-economy.
+NOTE: For all volumes created using the `ontap-san` driver, Trident adds an extra 10 percent capacity to the FlexVol to accommodate the LUN metadata. The LUN is provisioned with the exact size that the user requests in the PVC. Trident adds 10 percent to the FlexVol (shows as Available size in ONTAP). Users now get the amount of usable capacity they requested. This change also prevents LUNs from becoming read-only unless the available space is fully utilized. This does not apply to ontap-san-economy.
 
 For backends that define `snapshotReserve`, Trident calculates the size of volumes as follows:
 ----
@@ -402,6 +411,24 @@ chapTargetUsername: iJF4heBRT0TCwxyz
 chapUsername: uh2aNCLSd6cNwxyz
 username: vsadmin
 password: <password>
+----
+====
+
+.Balanced placement example
+[%collapsible%closed]
+====
+This example enables ONTAP balanced placement so that ONTAP selects the aggregate for new volumes. Balanced placement requires ONTAP 9.19.1 or later. Refer to link:ontap-balanced-placement.html[Use balanced placement with ONTAP backends] for details.
+[source,yaml]
+----
+---
+version: 1
+storageDriverName: ontap-san
+backendName: san-balanced-placement
+managementLIF: 10.0.0.1
+svm: svm_iscsi
+username: vsadmin
+password: <password>
+useBalancedPlacement: true
 ----
 ====
 
@@ -634,9 +661,9 @@ storage:
 
 == Map backends to StorageClasses
 
-The following StorageClass definitions refer to the <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume will have the aspects defined in the chosen virtual pool.
+The following StorageClass definitions refer to the <<Examples of backends with virtual pools>>. Using the `parameters.selector` field, each StorageClass calls out which virtual pools can be used to host a volume. The volume now has the aspects defined in the chosen virtual pool.
 
-* The `protection-gold` StorageClass will map to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold-level protection.
+* The `protection-gold` StorageClass maps to the first virtual pool in the `ontap-san` backend. This is the only pool offering gold-level protection.
 +
 [source,yaml]
 ----
@@ -650,7 +677,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `protection-not-gold` StorageClass will map to the second and third virtual pool in `ontap-san` backend. These are the only pools offering a protection level other than gold.
+* The `protection-not-gold` StorageClass maps to the second and third virtual pool in `ontap-san` backend. These are the only pools offering a protection level other than gold.
 +
 [source,yaml]
 ----
@@ -664,7 +691,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `app-mysqldb` StorageClass will map to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for the mysqldb type app.
+* The `app-mysqldb` StorageClass maps to the third virtual pool in `ontap-san-economy` backend. This is the only pool offering storage pool configuration for the mysqldb type app.
 +
 [source,yaml]
 ----
@@ -678,7 +705,7 @@ parameters:
   fsType: "ext4"
 ----
 
-* The `protection-silver-creditpoints-20k` StorageClass will map to the second virtual pool in `ontap-san` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
+* The `protection-silver-creditpoints-20k` StorageClass maps to the second virtual pool in `ontap-san` backend. This is the only pool offering silver-level protection and 20000 creditpoints.
 +
 [source,yaml]
 ----
@@ -691,7 +718,7 @@ parameters:
   selector: "protection=silver; creditpoints=20000"
   fsType: "ext4"
 ----
-* The `creditpoints-5k` StorageClass will map to the third virtual pool in `ontap-san` backend and the fourth virtual pool in the `ontap-san-economy` backend. These are the only pool offerings with 5000 creditpoints.
+* The `creditpoints-5k` StorageClass maps to the third virtual pool in `ontap-san` backend and the fourth virtual pool in the `ontap-san-economy` backend. These are the only pool offerings with 5000 creditpoints.
 +
 [source,yaml]
 ----
@@ -704,7 +731,7 @@ parameters:
   selector: "creditpoints=5000"
   fsType: "ext4"
 ----
-* The `my-test-app-sc` StorageClass will map to the `testAPP` virtual pool in the `ontap-san` driver with `sanType: nvme`. This is the only pool offering `testApp`. 
+* The `my-test-app-sc` StorageClass maps to the `testAPP` virtual pool in the `ontap-san` driver with `sanType: nvme`. This is the only pool offering `testApp`. 
 +
 [source,yaml]
 ----
@@ -719,4 +746,4 @@ parameters:
   fsType: "ext4"
 ----
 
-Trident will decide which virtual pool is selected and ensures the storage requirement is met.
+Trident decides which virtual pool is selected and ensures the storage requirement is met.

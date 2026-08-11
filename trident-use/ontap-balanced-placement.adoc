@@ -1,0 +1,150 @@
+---
+sidebar: sidebar
+permalink: trident-use/ontap-balanced-placement.html
+keywords: trident backend, ontap, balanced placement, useBalancedPlacement, aggregates, afx, unified, provisioning, storage pools
+summary: "Trident supports ONTAP balanced placement, which delegates aggregate selection to ONTAP when Trident provisions volumes on ONTAP backends."
+---
+
+= Use balanced placement with ONTAP backends
+:hardbreaks:
+:icons: font
+:linkattrs:
+:relative_path: ./
+:imagesdir: ../media/
+
+[.lead]
+You can enable ONTAP balanced placement on ONTAP backends. With balanced placement, ONTAP selects the optimal aggregate for each new volume, so you do not need to manage aggregate assignment in Trident.
+
+== How balanced placement works
+
+By default, Trident discovers the aggregates assigned to an SVM, treats each aggregate as a storage pool, and selects an aggregate when it provisions a volume.
+
+When you enable balanced placement:
+
+* Trident reports the entire SVM as a single storage pool instead of reporting individual aggregates.
+* ONTAP selects the aggregate for each new volume and balances volumes across the available aggregates.
+* Trident creates volumes using the ONTAP `/application/containers` REST API.
+
+Balanced placement is available for unified ONTAP systems (AFF, FAS, and ASA) and NetApp AFX storage systems.
+
+== Requirements
+
+* The backend must use ONTAP 9.19.1 or later.
+* Trident must communicate with ONTAP using REST. Balanced placement is not available with ZAPI.
+* The backend configuration must not specify aggregates. You cannot combine balanced placement with explicit aggregate selection.
+
+== Default values
+
+The default value of `useBalancedPlacement` depends on the storage system:
+
+[cols="1,1,2", options="header"]
+|===
+|Storage system |Default |Notes
+
+|Unified ONTAP (AFF, FAS, ASA)
+|`false`
+|Trident selects aggregates unless you enable balanced placement.
+
+|NetApp AFX (ONTAP 9.19.1 or later)
+|`true`
+|Balanced placement is required. Setting `useBalancedPlacement` to `false` causes backend validation to fail.
+
+|NetApp AFX (earlier than ONTAP 9.19.1)
+|`false`
+|Balanced placement is not available.
+|===
+
+== Configuration option
+
+[cols="1,2,1", options="header"]
+|===
+|Parameter |Description |Default
+
+|`useBalancedPlacement`
+|Delegates aggregate selection for new volumes to ONTAP. Set this option at the root of the backend configuration or on individual virtual pools.
+|`false`; `true` for AFX on ONTAP 9.19.1 or later
+|===
+
+== Balanced placement with virtual pools
+
+Balanced placement works with or without virtual pools:
+
+* Without virtual pools, Trident reports the SVM as a single storage pool and creates all new volumes using balanced placement.
+* With virtual pools, Trident reports the virtual pools and matches volumes to them as usual. If the matching virtual pool has balanced placement enabled, ONTAP selects the aggregate for the volume.
+
+Set `useBalancedPlacement` at the root of the backend configuration to apply it to all virtual pools, or set it on individual virtual pools to enable it selectively.
+
+== Examples
+
+The following example enables balanced placement on a unified ONTAP backend:
+
+----
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: nas-balanced-placement
+managementLIF: 10.0.0.1
+dataLIF: 10.0.0.2
+svm: trident_svm
+username: cluster-admin
+password: <password>
+useBalancedPlacement: true
+----
+
+The following example enables balanced placement using `TridentBackendConfig`:
+
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nas
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: nas-balanced-placement
+  managementLIF: 10.0.0.1
+  svm: trident_svm
+  useBalancedPlacement: true
+  credentials:
+    name: backend-tbc-ontap-nas-secret
+----
+
+The following example enables balanced placement on the `gold` virtual pool only. Trident continues to select aggregates for volumes that match the `bronze` virtual pool:
+
+----
+---
+version: 1
+storageDriverName: ontap-nas
+backendName: nas-virtual-pools
+managementLIF: 10.0.0.1
+svm: trident_svm
+username: cluster-admin
+password: <password>
+storage:
+- labels:
+    performance: gold
+  useBalancedPlacement: true
+- labels:
+    performance: bronze
+----
+
+== Backend validation errors
+
+Backend creation or update fails in the following cases:
+
+[cols="2,2", options="header"]
+|===
+|Configuration |Result
+
+|`useBalancedPlacement: true` on ONTAP earlier than 9.19.1
+|Validation fails. Upgrade to ONTAP 9.19.1 or later.
+
+|`useBalancedPlacement: true` on a backend using ZAPI
+|Validation fails. Configure the backend to use REST.
+
+|`useBalancedPlacement: true` combined with specific aggregates
+|Validation fails. Remove the aggregate configuration or disable balanced placement.
+
+|`useBalancedPlacement: false` on AFX with ONTAP 9.19.1 or later
+|Validation fails. Balanced placement is required for AFX on ONTAP 9.19.1 or later.
+|===

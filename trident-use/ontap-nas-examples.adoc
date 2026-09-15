@@ -28,7 +28,9 @@ The following table displays backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
  
-|`storageDriverName` a| Name of the storage driver
+|`storageDriverName` a| Name of the storage driver.
+
+Cannot be modified after creation. To update this parameter, you must create a new backend.
  
 NOTE: For NetApp AFX systems, only `ontap-nas` is supported.  |`ontap-nas`, `ontap-nas-economy`, or `ontap-nas-flexgroup`
  

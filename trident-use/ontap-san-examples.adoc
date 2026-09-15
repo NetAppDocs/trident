@@ -26,7 +26,9 @@ See the following table for the backend configuration options:
 |Parameter |Description |Default
 |`version` | |Always 1
 
-|`storageDriverName` | Name of the storage driver |`ontap-san` or `ontap-san-economy`
+|`storageDriverName` | Name of the storage driver.
+
+Cannot be modified after creation. To update this parameter, you must create a new backend. |`ontap-san` or `ontap-san-economy`
 
 |`backendName`  |Custom name or the storage backend |Driver name + "_" + dataLIF
 

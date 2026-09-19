@@ -150,7 +150,9 @@ See the following table for the backend configuration options:
 |Always 1
 
 |`storageDriverName` 
-| Name of the storage driver 
+| Name of the storage driver. 
+
+Cannot be modified after creation. To update this parameter, you must create a new backend.
 |`ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san`, `ontap-san-economy`
 
 |`backendName`  
@@ -223,6 +225,8 @@ Using the `autoExportPolicy` and `autoExportCIDRs` options, Trident can manage e
 
 Cannot be modified after creation. To update this parameter, you will need to create a new backend.
 |`trident`
+
+NOTE: Backend configuration parameters that affect backend identity and volume naming, such as `storageDriverName` and `storagePrefix`, cannot be changed after creation. To update them, you must create a new backend.
 
 |`limitAggregateUsage` |*Do not specify for Amazon FSx for NetApp ONTAP.* 
 

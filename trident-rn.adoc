@@ -15,6 +15,25 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 26.06.2
+Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
+
+=== Trident
+
+==== Enhancements
+
+* *Kubernetes*:
+
+** Added support for Kubernetes 1.37.
+
+==== Fixes
+
+* *Kubernetes*:
+
+** Fixed ONTAP-NAS export policy rules being silently deleted when the Trident controller restarted or a `TridentBackendConfig` was updated while `enableConcurrency` was set to `true`. This could strand already-mounted volumes (link:https://github.com/NetApp/trident/issues/1166[Issue #1166], link:https://github.com/NetApp/trident/issues/1179[Issue #1179]).
+** Fixed backend updates running a per-volume orphan scan for non-material changes, such as credentials and QoS, which could block CSI operations for hours on large backends. The scan now runs only when the SVM or storage prefix changes.
+** Fixed credentials appearing in Trident debug logs, including CSI gRPC request dumps, the startup environment dump, and `TridentBackendConfig` specifications logged by the CRD controller. The startup environment dump now logs values only for Trident's own `TRIDENT_*` variables and lists other variables by name.
+
 == What's new in 26.06.1
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 

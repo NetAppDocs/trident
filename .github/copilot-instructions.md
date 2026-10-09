@@ -1,52 +1,63 @@
 ## Copilot instructions for Trident documentation
 
 ### Repository overview
-Product: Trident
+Product: NetApp Trident
 
-Trident is NetApp's storage provisioner and data-management framework for Kubernetes and containerized workloads. It dynamically provisions persistent storage, manages storage classes and backends, and supports operational features such as snapshots, replication, and application protection.
+Trident is a fully supported open source Container Storage Interface (CSI) compliant dynamic storage orchestrator maintained by NetApp that integrates natively with Kubernetes to provision and manage persistent storage from NetApp storage platforms. It also provides direct integration with Docker through the NetApp Docker Volume Plugin (nDVP).
 
 ### Repository structure
-- `trident-get-started/` – Introductory docs covering Trident overview, architecture, quick-start onboarding, and prerequisites for new users.
-- `trident-install/` – Installation and deployment guidance for Kubernetes, OpenShift, Helm, the Trident operator, customizations, and `tridentctl`-based setups.
-- `trident-use/` – Day-to-day storage usage and management tasks for creating, using, and operating volumes in Kubernetes workloads.
-- `trident-managing-k8s/` – Upgrade, uninstall, and lifecycle management procedures for Trident in Kubernetes clusters.
-- `trident-docker/` – Docker-specific setup, deployment, and legacy configuration guidance for non-Kubernetes environments.
-- `trident-concepts/` – Core storage concepts and abstractions, including provisioning, snapshots, virtual storage pools, and volume access groups.
-- `trident-protect/` – Documentation for Trident Protect, including installation, authorization, monitoring, backups, restores, replication, migration, and KubeVirt application protection.
-- `trident-reco/` – Recommended practices and operational guidance for designing reliable, resilient Trident deployments.
-- `trident-reference/` – Reference material, command details, and backend or configuration specifics for administrators and integrators.
-- `_include/` – Shared AsciiDoc snippets, notes, and reusable content fragments used throughout the documentation set.
-- `media/` – Graphics, screenshots, and other visual assets referenced in the docs.
-- `.github/` – Repository automation, issue templates, and AI/copilot guidance files used to support contributors and workflows.
-- Top-level docs such as `faq.adoc`, `troubleshooting.adoc`, `known-issues.adoc`, `get-help.adoc`, `trident-rn.adoc`, `blog-posts.adoc`, `earlier-versions.adoc`, and `legal-notices.adoc` – Support, release, troubleshooting, lifecycle, and navigation content for the documentation site.
+- `trident-get-started/` – Introduction, architecture overview, quickstart, and requirements for Trident on Kubernetes
+- `trident-install/` – Installation methods (Trident operator, Helm, tridentctl) for Kubernetes and OpenShift, including standard, offline, and remote modes
+- `trident-managing-k8s/` – Day-2 operations: managing Trident with tridentctl, upgrading, and uninstalling
+- `trident-use/` – Backend configuration for all supported storage platforms, storage class management, and volume operations (snapshots, clones, expansion, import, migration)
+- `trident-concepts/` – Core concepts: provisioning workflow, virtual storage pools, volume access groups, and snapshots
+- `trident-protect/` – Trident Protect installation, configuration, and use cases: application protection (snapshots, backups), restore, migration, SnapMirror replication, and KubeVirt VM support
+- `trident-reco/` – Recommendations and best practices for storage configuration, security, backup, and Trident integration design
+- `trident-reference/` – Reference documentation: Kubernetes objects, REST API, tridentctl CLI, ports, and pod security
+- `trident-docker/` – Trident deployment and configuration for Docker environments using nDVP
+- `_include/` – Shared content snippets reused across multiple pages (AsciiDoc includes)
+- `media/` – Images and diagrams used in documentation pages
 
 ### Product-specific context
 
 **Architecture and components:**
-- Trident runs as a storage orchestrator in Kubernetes, with a controller and driver interfaces that communicate with backend storage systems such as NetApp ONTAP and Element.
-- StorageClass objects define how workloads request storage, while Trident maps those requests to backend capabilities and policies.
-- The `tridentctl` CLI and the Trident operator are the primary deployment and operational management tools for installation, upgrades, and configuration.
-- Trident Protect builds on the core provisioner to provide application-centric backup, restore, replication, and migration workflows.
+- Trident runs as a single *Controller Pod* (manages volume provisioning and snapshots, runs as a Kubernetes Deployment) and one or more *Node Pods* (handles mounting/unmounting storage on each worker node, runs as a Kubernetes DaemonSet)
+- The Trident operator (`TridentOrchestrator` CR) is the recommended installation method; it manages Trident lifecycle, provides self-healing, and handles Kubernetes upgrades automatically
+- `tridentctl` is the command-line utility for managing Trident installations and resources
+- *Trident Protect* is a separate component that provides advanced application data management (backup, restore, snapshot scheduling, SnapMirror replication, migration) for stateful Kubernetes applications
 
 **Key concepts:**
-- `StorageClass` – The Kubernetes object that tells Trident which storage backend and policy to use for a workload.
-- `Backend` – The underlying storage system or set of storage resources configured for Trident.
-- `Volume` – The persistent storage object created by Trident for a workload.
-- `Snapshot` – A point-in-time copy of a volume for backup or restore workflows.
-- `Virtual storage pool` – A policy-based grouping of backend capabilities such as performance, protection, or capacity.
-- `Volume access group` – A mechanism for controlling which workloads or nodes can access a volume.
+- *Backend* – Defines the relationship between Trident and a NetApp storage system; specifies how Trident communicates with the storage system and provisions volumes from it
+- *Storage class* – A Kubernetes `StorageClass` that maps to one or more Trident backends via storage pool attributes and selectors
+- *Virtual pool* – An abstraction layer within a backend that lets administrators define groups of storage pools with distinct attributes (performance, location, protection) without exposing backend details to `StorageClasses`
+- *Storage pool* – A subset of storage capacity within a backend; Trident matches storage pools to storage classes based on requested attributes
+- *AppVault* – A Trident Protect object that defines a location (object store bucket) where application backup and snapshot data is stored
+- *TridentOrchestrator* – The custom resource (CR) used to install and configure Trident when using the operator installation method
+
+**Supported storage platforms and backend drivers:**
+- *ONTAP NAS drivers*: `ontap-nas` (FlexVolume per PV), `ontap-nas-economy` (qtrees per FlexVolume), `ontap-nas-flexgroup` (FlexGroup per PV) — use NFS or SMB protocols
+- *ONTAP SAN drivers*: `ontap-san` (LUN per PV in its own FlexVolume), `ontap-san-economy` (multiple LUNs per FlexVolume) — use iSCSI, NVMe/TCP, or FC protocols
+- *Cloud platforms*: Amazon FSx for NetApp ONTAP, Azure NetApp Files (ANF), Google Cloud NetApp Volumes (GCNV), Cloud Volumes ONTAP
+- *Element software*: Used for NetApp HCI and SolidFire environments
+- NAS drivers support ReadWriteMany (RWX) access mode; SAN drivers in Filesystem volume mode do not support RWX
 
 **Naming conventions and terminology:**
-- Use “Trident” for the core storage provisioner; use “Trident Protect” only when referring to the application data protection product.
-- Use `tridentctl` for the CLI command and “Trident operator” for the operator-based deployment model.
-- “Backend” is the configured storage system or storage pool definition that Trident provisions from; do not confuse it with a Kubernetes workload or backing pod.
-- “OpenShift” is a Kubernetes distribution; treat it as a variant of Kubernetes that may require OpenShift-specific installation or certification guidance.
-- “ONTAP,” “Element,” and “backend configuration” are common storage-system terms in this repo; use them consistently when describing storage capabilities.
+- *Trident* always refers to the CSI storage orchestrator (not "NetApp Trident" in running text unless introducing the product)
+- *tridentctl* is the CLI utility (lowercase, no spaces)
+- *nDVP* is the NetApp Docker Volume Plugin used for Docker integration
+- *TridentOrchestrator* is the exact CR name (CamelCase, no spaces)
+- Backend driver names are lowercase with hyphens: `ontap-nas`, `ontap-san`, `ontap-nas-economy`, `ontap-san-economy`, `ontap-nas-flexgroup`
+- Access modes use abbreviations: RWO (ReadWriteOnce), ROX (ReadOnlyMany), RWX (ReadWriteMany), RWOP (ReadWriteOncePod)
+- *AppVault* and *AppArchive* are Trident Protect-specific terms (CamelCase)
 
 ### Typical user workflows
 
-**Initial setup:** Learn about Trident → Review requirements → Install with the operator or `tridentctl` → Configure a backend and `StorageClass` → Provision and attach workloads
+**Deploy Trident on Kubernetes:** Review requirements → Choose installation method (operator/Helm/tridentctl) → Install Trident → Verify deployment with `tridentctl version`
 
-**Operational maintenance:** Monitor backend health → Upgrade or patch Trident → Manage snapshots and persistent volumes → Troubleshoot storage configuration issues
+**Configure storage backend:** Create backend configuration file (JSON or YAML) → Apply with `tridentctl create backend` or `kubectl apply` → Verify backend is online
 
-**Data protection:** Define application protection requirements → Install and configure Trident Protect → Back up, restore, or replicate applications → Validate recovery and migration workflows
+**Provision persistent storage:** Configure backend → Create `StorageClass` referencing backend attributes → Create `PersistentVolumeClaim` (PVC) → Trident provisions volume from matching backend
+
+**Protect applications with Trident Protect:** Install Trident Protect → Configure AppVault (object store) → Define application scope → Create protection policy or on-demand snapshot/backup → Restore from snapshot or backup as needed
+
+**Upgrade Trident:** Review upgrade requirements → Choose upgrade method matching installation method (operator/Helm/tridentctl) → Perform upgrade → Verify with `tridentctl version`

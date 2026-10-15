@@ -175,7 +175,7 @@ The group snapshot name includes the first eight characters of the `Snapshot` UI
 
 .Resolve an HTTP 409 error
 
-If `error` reports HTTP 409 (conflict), a leftover `cg-snapshot-*` consistency group might exist on the SVM. Trident (the CSI driver) creates a temporary consistency group for each group snapshot and normally deletes it afterward. Until the leftover group is deleted, each new attempt returns HTTP 409. To resolve the error, delete the leftover `cg-snapshot-*` consistency group in ONTAP, and then create a new snapshot. Deleting the consistency group does not delete its volumes.
+If `error` reports HTTP 409 (conflict), a leftover `+cg-snapshot-*+` consistency group might exist on the SVM. Trident (the CSI driver) creates a temporary consistency group for each group snapshot and normally deletes it afterward. Until the leftover group is deleted, each new attempt returns HTTP 409. To resolve the error, delete the leftover `+cg-snapshot-*+` consistency group in ONTAP, and then create a new snapshot. Deleting the consistency group does not delete its volumes.
 
 .Temporary PVC labels and cleanup
 

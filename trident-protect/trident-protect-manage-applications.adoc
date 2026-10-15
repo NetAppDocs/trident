@@ -39,7 +39,7 @@ NOTE: To define a VM-scoped Application that protects specific KubeVirt virtual 
 ** *groupVersionKind*: (_Required_) Specifies the API group, version, and kind of the cluster-scoped resource.
 +
 ** *labelSelector*: (_Optional_)  Filters the cluster-scoped resources based on their labels.
-* *spec.volumeGroups*: (_Optional_) Use this attribute to snapshot related volumes together as crash-consistent volume group snapshots. For details, refer to link:trident-protect-volume-group-snapshots.html[Use volume group snapshots with Trident Protect].
+* *spec.volumeGroups*: (_Optional_) ##Use this attribute to snapshot related volumes together as crash-consistent volume group snapshots. For details, refer to link:trident-protect-volume-group-snapshots.html[Use volume group snapshots with Trident Protect].##
 * *metadata.annotations.protect.trident.netapp.io/skip-vm-freeze*: (_Optional_) This annotation is only applicable to applications defined from virtual machines, such as in KubeVirt environments, where filesystem freezes occur before snapshots. Specify whether this application can write to the filesystem during a snapshot. If set to true, the application ignores the global setting and can write to the filesystem during a snapshot. If set to false, the application ignores the global setting and the filesystem is frozen during a snapshot. If specified but the application has no virtual machines in the application definition, the annotation is ignored. If not specified, the application follows the link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[global Trident Protect freeze setting].
 +
 [NOTE]

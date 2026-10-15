@@ -39,7 +39,11 @@ Both modes support additional filtering:
 * Use `resourceFilter` to include or exclude specific resources.
 * Use `includedClusterScopedResources` to include compatible cluster-scoped resources, such as `StorageClass` objects.
 
-NOTE: Trident Protect can freeze and unfreeze KubeVirt VM filesystems during data protection operations to ensure consistency. For configuration details, see link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Protecting data with KubeVirt VMs].
+[NOTE]
+====
+* Trident Protect can freeze and unfreeze KubeVirt VM filesystems during data protection operations to ensure consistency. For configuration details, see link:trident-protect-requirements.html#protecting-data-with-kubevirt-vms[Protecting data with KubeVirt VMs].
+* To snapshot all the disks of a VM at the same point in time, use volume group snapshots. Refer to link:trident-protect-volume-group-snapshots.html[Use volume group snapshots with Trident Protect].
+====
 
 == Resources collected during backup and snapshot
 

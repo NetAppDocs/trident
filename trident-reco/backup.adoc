@@ -83,7 +83,7 @@ Trident cannot configure SnapMirror replication relationships, however, the stor
 
 You can then import the recovered volumes into Trident using link:../trident-use/vol-import.html[tridentctl volume import].
 
-NOTE: Import is not supported on `ontap-nas-economy`,  `ontap-san-economy`, or `ontap-flexgroup-economy` drivers.
+NOTE: Volume import is supported with the `ontap-san-economy` driver. Qtree import with the `ontap-nas-economy` driver is a Tech Preview feature and is not supported for production use. Import is not supported with the `ontap-flexgroup-economy` driver. For details, see link:../trident-use/vol-import.html[Import Trident volumes].
 
 == Snapshot data protection 
 You can protect and restore data using: 

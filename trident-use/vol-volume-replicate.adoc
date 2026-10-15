@@ -161,11 +161,17 @@ metadata:
   name: csi-nas
 spec:
   state: established
+  replicationPolicy: MirrorAllSnapshots
+  replicationSchedule: 5min
   volumeMappings:
   - localPVCName: csi-nas
     remoteVolumeHandle: "datavserver:trident_pvc_3bedd23c_46a8_4384_b12b_3c38b313c1e1"
 ----
-Trident will create a SnapMirror relationship with the configured relationship policy name (or default for ONTAP) and initialize it.
+The TMR `spec` has four top-level fields: `state`, which sets the desired relationship state (see <<Volume Replication States>>); `volumeMappings`, which associates local PVCs with their remote volume handles; and the optional `replicationPolicy` and `replicationSchedule` fields described below.
+
+The `replicationPolicy` and `replicationSchedule` fields are optional. Set `replicationPolicy` to the name of an asynchronous SnapMirror policy on ONTAP and `replicationSchedule` to the name of an ONTAP schedule. If either field is omitted, Trident uses the corresponding replication policy or schedule configured on the backend. Set these fields when you create the relationship; you cannot change the policy or schedule after the relationship is established. To use different settings, delete and recreate the TMR.
+
+Trident creates and initializes a SnapMirror relationship using the configured replication policy and schedule.
 
 .. Create a PVC with previously created StorageClass to act as the secondary (SnapMirror destination).
 +
@@ -237,7 +243,7 @@ Before restoring a mirror relationship, choose the side that you want to make as
 
 .Steps
 . On the secondary Kubernetes cluster, ensure that the values for the _spec.remoteVolumeHandle_ field on the TridentMirrorRelationship is updated.
-. On secondary Kubernetes cluster, update the _spec.mirror_ field of TridentMirrorRelationship to `reestablished`.
+. On secondary Kubernetes cluster, update the _spec.state_ field of TridentMirrorRelationship to `reestablished`.
 
 == Additional operations
 

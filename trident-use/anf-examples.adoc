@@ -49,6 +49,8 @@ Optional when managed identities or cloud identity is used on an AKS cluster. |
 
 Optional when managed identities is enabled on an AKS cluster. |
 
+|`cloudConfiguration.cloudName` |Identifies the Azure cloud environment for the backend. Set to `AzureGovernment` when using Azure Government. |
+
 |`resourceGroups` |List of resource groups for filtering discovered resources |"[]" (no filter)
 
 |`netappAccounts` |List of NetApp accounts for filtering discovered resources |"[]" (no filter)
@@ -99,9 +101,18 @@ Supported Azure clouds include:
 
 * Azure Commercial
 * Azure Government (Azure Government / MAG)
+* Azure China
 
 When you deploy Trident or create an Azure NetApp Files backend, ensure that Azure Resource Manager and authentication endpoints match your Azure cloud environment.
 If the endpoints do not match, `tridentctl` cannot authenticate and backend creation fails.
+
+For an Azure Government backend, set `cloudConfiguration.cloudName` in the backend configuration:
+
+[source,yaml]
+----
+cloudConfiguration:
+  cloudName: AzureGovernment
+----
 
 === Required permissions and resources
 If you receive a "No capacity pools found" error when creating a PVC, it is likely your app registration doesn't have the required permissions and resources (subnet, virtual network, capacity pool) associated.

@@ -30,11 +30,11 @@ A failover can use only a snapshot that has not expired. The snapshot schedule o
 
 .Before you begin
 
-* A snapshot schedule exists on the source application. [##Confirm with engineering: which schedule applies (replication schedule or a separate schedule), and whether snapshots from a separate schedule can be promoted.##]
+A snapshot schedule exists on the source application.
 
 .Steps
 
-. On the source cluster, edit the schedule CR file and set *spec.snapshotRetention* to the number of snapshots to retain. [##Confirm with engineering: the replication schedule example requires snapshotRetention of 2.##]
+. On the source cluster, edit the schedule CR file and set *spec.snapshotRetention* to the number of snapshots to retain. To have a snapshot older than the most recent one available for failover, set a value greater than 1.
 . Apply the CR:
 +
 [source,console]

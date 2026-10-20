@@ -50,14 +50,14 @@ The following table describes what happens in common situations.
 |A PVC matches more than one `volumeGroups` entry
 |Trident Protect adds the PVC to both volume groups, and one of the group snapshots can fail. The group snapshot that fails falls back to individual snapshots. Make sure that each PVC matches only one entry.
 
-|A volume group includes PVCs that use NFS or another unsupported backend
+|A volume group includes PVCs that use a driver or protocol that does not support volume group snapshots
 |The group snapshot fails, and Trident Protect creates individual snapshots of those PVCs.
 |===
 
 
 .Before you begin
 
-* Your PVCs must be provisioned with the `ontap-san` driver and use iSCSI. This release does not support NFS or other NAS backends.
+* Your PVCs must use a storage driver and protocol that support volume group snapshots. For the supported drivers and protocols, refer to link:../trident-use/vol-group-snapshots.html[Work with Trident volume group snapshots].
 * Your cluster must run Kubernetes 1.36 or later.
 * The Kubernetes snapshot controller must be version 8.5.0 or later, with the `CSIVolumeGroupSnapshot` feature gate enabled.
 * The `v1` CRDs for `VolumeGroupSnapshot`, `VolumeGroupSnapshotClass`, and `VolumeGroupSnapshotContent` must be installed.
@@ -172,10 +172,6 @@ The group snapshot name includes the first eight characters of the `Snapshot` UI
 * `ready: true` means that the group snapshot succeeded. The snapshots that make up the group are also listed under `status.volumeSnapshots`. These are the group's member snapshots, not additional snapshots of the same volumes.
 * `skipped: true` means that Trident Protect did not try to create the group snapshot, because the volume group has more than 80 PVCs in that namespace. Trident Protect creates individual snapshots of the group's volumes instead and adds the `skipReason` text to `status.warnings`.
 * `failed: true` means that Trident Protect tried to create the group snapshot, but it failed. Trident Protect creates individual snapshots of the group's volumes instead and adds the `error` text to `status.warnings`.
-
-.Resolve an HTTP 409 error
-
-If `error` reports HTTP 409 (conflict), a leftover `+cg-snapshot-*+` consistency group might exist on the SVM. Trident (the CSI driver) creates a temporary consistency group for each group snapshot and normally deletes it afterward. Until the leftover group is deleted, each new attempt returns HTTP 409. To resolve the error, delete the leftover `+cg-snapshot-*+` consistency group in ONTAP, and then create a new snapshot. Deleting the consistency group does not delete its volumes.
 
 .Temporary PVC labels and cleanup
 

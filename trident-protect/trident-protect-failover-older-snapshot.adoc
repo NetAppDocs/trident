@@ -30,11 +30,11 @@ A failover can use only a snapshot that has not expired. The snapshot schedule o
 
 .Before you begin
 
-A snapshot schedule exists on the source application.
+A snapshot schedule (with `snapshotRetention` greater than 1) exists on the source application.
 
 .Steps
 
-. On the source cluster, edit the schedule CR file and set *spec.snapshotRetention* to the number of snapshots to retain. To have a snapshot older than the most recent one available for failover, set a value greater than 1.
+. On the source cluster, edit the schedule CR file and set *spec.snapshotRetention* to the number of snapshots to retain.
 . Apply the CR:
 +
 [source,console]
@@ -89,13 +89,7 @@ Specify the snapshot to promote, and acknowledge the data loss by adding an anno
 ----
 kubectl annotate appmirrorrelationship <relationship_name> -n my-app-namespace protect.trident.netapp.io/allow-promotion-with-older-snapshots="true"
 ----
-. Fail over to the snapshot:
-+
-[role="tabbed-block"]
-====
-.Use a CR
---
-.. Edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`):
+. Edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`):
 +
 * Set *spec.desiredState* to `Promoted`.
 * Set *spec.promotedSnapshot* to the basename.
@@ -115,24 +109,12 @@ spec:
   desiredState: Promoted
   promotedSnapshot: <basename>
 ----
-.. Apply the CR:
+. Apply the CR:
 +
 [source,console]
 ----
 kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
 ----
---
-.Use the CLI
---
-.. Run the following command:
-+
-[source,console]
-----
-tridentctl-protect patch appmirrorrelationship <relationship_name> --desired-state promoted --promoted-snapshot <basename> -n my-app-namespace
-----
---
-====
-
 . Check the status of the relationship:
 +
 [source,console]

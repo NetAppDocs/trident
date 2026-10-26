@@ -12,26 +12,23 @@ summary: Configure Trident to provision block (iSCSI) volumes from Google Cloud 
 :imagesdir: ../media/
 
 [.lead]
-You can configure Trident to provision block storage volumes using the iSCSI protocol from Google Cloud NetApp Volumes. SAN volumes are provisioned from Flex Unified storage pools by using the `google-cloud-netapp-volumes-san` storage driver.
+Use the `google-cloud-netapp-volumes-san` driver to provision iSCSI block volumes from Google Cloud NetApp Volumes Flex Unified storage pools.
 
 [NOTE]
-This driver is dedicated to block workloads and does not support NAS protocols.
-
-[NOTE]
-The `google-cloud-netapp-volumes-san` backend is required to provision iSCSI block volumes. The `google-cloud-netapp-volumes` backend supports NAS protocols only and cannot be used for SAN workloads.
+The SAN driver supports block workloads only. To provision NAS volumes, use the `google-cloud-netapp-volumes` driver.
 
 == Overview
 
-Trident supports Google Cloud NetApp Volumes SAN (iSCSI) workloads using the `google-cloud-netapp-volumes-san` driver.
+The driver provisions volumes from Flex Unified storage pools and presents them to Kubernetes nodes as iSCSI block devices.
 
-SAN volumes are provisioned from Flex Unified storage pools and presented to Kubernetes nodes as iSCSI block devices.
-
-This applies to the following environments:
+The driver supports the following environments:
 
 * Trident 26.02 and later
-* Google Kubernetes Engine (GKE) or Red Hat OpenShift
+* Google Kubernetes Engine (GKE), or Red Hat OpenShift clusters running on GCP
 * Google Cloud NetApp Volumes Flex Unified storage pools
 * iSCSI-based workloads
+
+Starting with Trident 26.10, the SAN driver supports Google Cloud Workload Identity Federation (WIF) on self-managed OpenShift Container Platform (OCP, including IPI deployments) and OpenShift Dedicated (OSD) clusters running on GCP. For WIF prerequisites and backend configuration, see link:gcnv.html#openshift-wif[Use Workload Identity Federation on OpenShift]. Use the SAN driver name and Flex Unified storage settings on this page.
 
 == Flex Unified storage pools
 
@@ -68,7 +65,7 @@ spec:
 
 After configuring the SAN backend, create a StorageClass that references the `google-cloud-netapp-volumes-san` driver.
 
-The filesystem type is defined in the StorageClass, not in the backend.
+Specify the filesystem type in the StorageClass, not in the backend.
 
 [source,yaml]
 ----
@@ -83,7 +80,7 @@ parameters:
 allowVolumeExpansion: true
 ----
 
-Supported filesystem types:
+The driver supports the following filesystem types:
 
 * `ext4` (default)
 * `ext3`
@@ -210,25 +207,25 @@ Block volumes provisioned using the `google-cloud-netapp-volumes-san` driver sup
 * Resize
 * Import
 
-== Extra GiB overprovisioning behavior
+== Volume size overhead
 
-Google Cloud NetApp Volumes block volumes include internal metadata overhead. This overhead reduces the kernel-visible device size compared to the provisioned capacity.
+Google Cloud NetApp Volumes block volumes include internal metadata overhead. As a result, the device size visible to the kernel is smaller than the provisioned capacity.
 
-Testing shows:
+Observed overhead:
 
-* Approximately 300 KiB overhead on initial creation
-* Up to approximately 107 MiB overhead after a resize
+* Approximately 300 KiB when a volume is created
+* Up to approximately 107 MiB after a resize
 
-Because Google Cloud NetApp Volumes accepts only whole-GiB allocations, Trident ensures that the usable device size always meets or exceeds the PVC request by:
+Google Cloud NetApp Volumes accepts capacity allocations in whole GiB. To ensure that the usable device size meets or exceeds the PVC request, Trident:
 
-* Rounding the requested size up to the next whole GiB
-* Adding an additional 1 GiB buffer
+* Rounds the requested size up to the next whole GiB.
+* Adds a 1 GiB buffer.
 
-Example:
+For example:
 
-* PVC request: 100 GiB
-* Provisioned size in Google Cloud NetApp Volumes: 101 GiB
-* Usable space visible to the application: at least 100 GiB
+* PVC request: 100 GiB.
+* Provisioned capacity: 101 GiB.
+* Usable capacity visible to the application: at least 100 GiB.
 
 == Pod examples
 

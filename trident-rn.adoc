@@ -23,6 +23,7 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 ==== Enhancements
 
 * Added support for encrypting AppVault snapshot and backup metadata, with a custom vault password for each AppVault. One password rotation updates every Kopia and Restic repository in the AppVault. To learn more, refer to link:trident-protect/trident-protect-encrypt-appvault-metadata.html[Encrypt AppVault metadata for Trident Protect snapshots and backups^].
+* Added support for retaining the MAC address of KubeVirt VMs during restore, which is useful when an application license is tied to a MAC address. To enable it, set the protect.trident.netapp.io/retain-mac-address annotation to "true". To learn more, refer to link:trident-protect/trident-protect-kubevirt-vms.html#retain-a-virtual-machine-mac-address[Retain a virtual machine MAC address^].
 
 == What's new in 26.06.1
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.

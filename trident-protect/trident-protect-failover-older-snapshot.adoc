@@ -24,26 +24,7 @@ CAUTION: Failing over to an older snapshot causes ONTAP SnapMirror to delete the
 
 * An AppMirrorRelationship exists and is in the `Established` state. To create one, refer to link:trident-protect-use-snapmirror-replication.html#set-up-a-replication-relationship[Set up a replication relationship]. To verify the state, run `kubectl get amr -n <namespace> <relationship_name> -o=jsonpath='{.status}'`.
 * The source and destination clusters use ONTAP storage backends with SnapMirror replication. Azure NetApp Files and other non-ONTAP backends are not supported. Refer to link:trident-protect-requirements.html#requirements-for-snapmirror-replication[Requirements for SnapMirror replication].
-
-== Set snapshot retention
-A failover can use only a snapshot that has not expired. The snapshot schedule on the source application determines how many snapshots are kept. Set a retention value that covers the oldest recovery point that might be needed.
-
-.Before you begin
-
-A snapshot schedule (with `snapshotRetention` greater than 1) exists on the source application.
-
-.Steps
-
-. On the source cluster, edit the schedule CR file and set *spec.snapshotRetention* to the number of snapshots to retain.
-. Apply the CR:
-+
-[source,console]
-----
-kubectl apply -f trident-protect-schedule.yaml -n my-app-namespace
-----
-
-.Result
-Trident Protect retains the specified number of snapshots.
+* A snapshot schedule (with `snapshotRetention` greater than 1) exists on the source application.
 
 == Identify the snapshot
 Each snapshot has a completion time, so you can pick the point in time you want.

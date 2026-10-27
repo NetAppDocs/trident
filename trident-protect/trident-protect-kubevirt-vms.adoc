@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-kubevirt-vms.html
 keywords: kubevirt, openshift virtualization, virtual machine, vm, backup, restore, includedvirtualmachines, mac address, retain-mac-address
-summary: Protect KubeVirt virtual machines on OpenShift Virtualization with Trident Protect. Back up all VMs in a namespace or target specific VMs by name. Selectively restore individual VMs from a backup or snapshot archive. Optionally retain a virtual machine MAC address during restore.
+summary: Protect KubeVirt virtual machines on OpenShift Virtualization with Trident Protect. Back up all VMs in a namespace or target specific VMs by name. Selectively restore individual VMs from a backup or snapshot archive.---
 ---
 
 = Protect KubeVirt virtual machines with Trident Protect
@@ -13,7 +13,7 @@ summary: Protect KubeVirt virtual machines on OpenShift Virtualization with Trid
 :imagesdir: ../media/
 
 [.lead]
-Trident Protect enables you to back up and restore KubeVirt virtual machines (VMs) running on OpenShift Virtualization. You can protect all VMs across one or more namespaces at once, or use the `includedVirtualMachines` field to target specific VMs by name. Trident Protect automatically collects all dependent VM resources during backup, and during restore, you can recover the entire archive or selectively restore individual VMs. ##When a guest application or license is bound to a MAC address, you can retain that address during restore.##
+Trident Protect enables you to back up and restore KubeVirt virtual machines (VMs) running on OpenShift Virtualization. You can protect all VMs across one or more namespaces at once, or use the `includedVirtualMachines` field to target specific VMs by name. Trident Protect automatically collects all dependent VM resources during backup, and during restore, you can recover the entire archive or selectively restore individual VMs.
 
 == KubeVirt protection modes
 
@@ -183,7 +183,7 @@ During restore, Trident Protect applies KubeVirt-aware transforms to remove sour
 [NOTE]
 ====
 * Trident Protect restores KubeVirt resources in a defined order to avoid dependency issues. CDI DataVolumes (`cdi.kubevirt.io`) are restored first so VM disk data is available before the VM objects are created. After that, VirtualMachines (`kubevirt.io`) are restored before VirtualMachineInstances.
-* ##By default, Trident Protect removes the MAC address from the first network interface of each restored VM. To keep it, refer to <<Retain a virtual machine MAC address>>.##
+* By default, Trident Protect removes the MAC address from the first network interface of each restored VM. To retain it, use the `protect.trident.netapp.io/retain-mac-address` annotation. Refer to link:trident-protect-restore-settings.html#supported-annotations[Use advanced Trident Protect restore settings].
 ====
 
 == Dynamic VM protection with label selectors
@@ -528,51 +528,6 @@ spec:
 For `BackupRestore`, `SnapshotRestore`, and `ReplicateSnapshotRestore`, `namespaceMapping` and `storageClassMapping` work alongside `includedVirtualMachines`. Namespace references in `includedVirtualMachines` correspond to source namespaces as they appear in the archive. Namespace and storage class mappings are applied during the restore transform phase after filtering is complete.
 
 For restore behavior details, refer to link:trident-protect-restore-apps.html[Restore applications using Trident Protect].
-
-== ##Retain a virtual machine MAC address##
-
-By default, Trident Protect removes the MAC address from the first network interface of each KubeVirt VM during restore (`spec.template.spec.domain.devices.interfaces[0].macAddress`). KubeVirt then assigns a new address, which prevents MAC address collisions. If your application or license is bound to a specific MAC address, you can retain the original address by setting an annotation on the restore CR.
-
-IMPORTANT: If the source VM is still running on the same network, a retained MAC address creates a duplicate address and can disrupt network traffic. Shut down the source VM or restore to an isolated network before you retain the MAC address.
-
-.Steps
-. Add the `protect.trident.netapp.io/retain-mac-address: "true"` annotation to the restore CR. The annotation is supported on `BackupRestore`, `BackupInplaceRestore`, `SnapshotRestore`, `SnapshotInplaceRestore`, `ReplicateSnapshotRestore`, and `AppMirrorRelationship` CRs. For example:
-+
-[source,yaml]
-----
-apiVersion: protect.trident.netapp.io/v1
-kind: BackupRestore
-metadata:
-  name: <restore_name>
-  namespace: <destination_namespace>
-  annotations:
-    protect.trident.netapp.io/retain-mac-address: "true"
-spec:
-  appVaultRef: <appvault_name>
-  appArchivePath: <archive_path>
-  namespaceMapping:
-    - source: <source_namespace>
-      destination: <destination_namespace>
-----
-+
-If you use the CLI, add the `--annotation` flag to the restore command:
-+
-[source,console]
-----
-tridentctl-protect create backuprestore <restore_name> \
-  --backup <backup_namespace>/<backup_name> \
-  --namespace-mapping <source_namespace>:<destination_namespace> \
-  -n <application_namespace> \
-  --annotation protect.trident.netapp.io/retain-mac-address="true"
-----
-. Apply the CR:
-+
-[source,console]
-----
-kubectl apply -f <restore_cr_file>.yaml
-----
-
-NOTE: To retain MAC addresses during a SnapMirror failover, set the annotation on the `AppMirrorRelationship` before you set `spec.desiredState` to `Promoted`. For the procedure, refer to link:trident-protect-use-snapmirror-replication.html#fail-over-to-destination-cluster[Fail over to destination cluster].
 
 == Create a VM-scoped application using the CLI
 

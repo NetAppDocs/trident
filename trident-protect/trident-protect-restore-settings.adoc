@@ -53,6 +53,6 @@ This section lists the supported annotations for configuring various behaviors i
 |"1200" (20 minutes)
 |##protect.trident.netapp.io/retain-mac-address##
 |string
-|For KubeVirt VMs, set to `"true"` to retain the MAC address of the first network interface on restore. Applies to all restore CR types and AppMirrorRelationship. Refer to link:trident-protect-kubevirt-vms.html#retain-a-virtual-machine-mac-address[Retain a virtual machine MAC address].
+|For KubeVirt VMs, set to `"true"` to retain the MAC address of the first network interface on restore, for example when an application license is bound to it. Applies to all restore CR types and to AppMirrorRelationship (set it before you promote the relationship). By default, Trident Protect removes this MAC address to prevent collisions. If the source VM is still running on the same network, shut it down or restore to an isolated network first to avoid a duplicate MAC address.
 |Not set (MAC address is removed)
 |===

@@ -13,7 +13,7 @@ summary: You can encrypt the snapshot and backup metadata that Trident Protect s
 
 // cspell:words Kopia Restic
 [.lead]
-You can encrypt the snapshot and backup metadata that Trident Protect stores in an AppVault, including sensitive information in Kubernetes Secrets. You can also change the password that protects the encrypted data. A single password change moves every Kopia repository and every Restic repository in the AppVault to the new password.
+You can encrypt the snapshot and backup metadata that Trident Protect stores in an AppVault, including sensitive information in Kubernetes Secrets. You can also change the password that protects the encrypted data. ##A single password change re-encrypts the metadata encryption key and moves every Kopia repository and every Restic repository in the AppVault to the new password.##
 
 Encryption is disabled by default. When you enable it, Trident Protect encrypts new snapshot and backup metadata before it stores the metadata in the AppVault. This protects your application resources, including sensitive information in Secrets, unless you explicitly exclude those resources from the application snapshot or backup.
 
@@ -119,7 +119,7 @@ If `spec.vaultPasswordSecretRef` is empty, the AppVault uses the insecure defaul
 The AppVault uses your custom password to protect the metadata encryption key.
 
 == Rotate the vault password
-You can rotate the password for an AppVault that already stores data. One rotation moves every Kopia repository and every Restic repository in the AppVault to the new password.
+You can rotate the password for an AppVault that already stores data. ##One rotation re-encrypts the metadata encryption key and moves every Kopia repository and every Restic repository in the AppVault to the new password.##
 
 .About this task
 During rotation, Trident Protect does the following:
@@ -135,8 +135,7 @@ During rotation, Trident Protect does the following:
 protect.trident.netapp.io/vault-password-rotation-suspended: <namespace>/<appvault-name>
 ----
 
-When rotation finishes, Trident Protect enables again only the schedules that have this annotation. A schedule that you disabled manually stays disabled. To enable it, set `spec.enabled` to `true`.
-
+When rotation finishes, Trident Protect enables again only the schedules that have this annotation.
 If a rotation fails, it resumes from where it stopped. Repositories that already use the new password are not changed again.
 
 .Before you begin
@@ -171,7 +170,7 @@ NOTE: You must set `spec.enableRotation` to `true` before you change the passwor
 . After rotation finishes, delete the previous Secret if nothing else uses it.
 
 .Result
-Every Kopia and Restic repository in the AppVault uses the new password, and the schedules that Trident Protect suspended are enabled again.
+##The metadata encryption key and every Kopia and Restic repository in the AppVault are protected by the new password, and the schedules that Trident Protect suspended are enabled again.##
 
 == Monitor password rotation
 You can check the progress of a password rotation and confirm that it is complete.
@@ -285,22 +284,6 @@ spec:
 ----
 --
 ====
-
-== Disable metadata encryption
-You can stop encrypting new snapshot and backup metadata.
-
-.About this task
-Disabling encryption affects only new data. Trident Protect can still read data that was encrypted earlier, and it does not decrypt or rewrite existing encrypted data. Keep the vault password Secret so that you can continue to read the encrypted data.
-
-.Steps
-. Set `resourceBackupEncryptionEnabled` to `false`:
-+
-[source,console]
-----
-helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect \
-  --set resourceBackupEncryptionEnabled=false \
-  --reuse-values
-----
 
 == Related information
 

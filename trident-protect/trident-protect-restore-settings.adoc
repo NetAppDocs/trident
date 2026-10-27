@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar
 permalink: trident-protect/trident-protect-restore-settings.html
-keywords: trident, protect, restore, data, backup
+keywords: trident, protect, restore, data, backup, mac address, retain-mac-address
 summary: You can customize Trident Protect restore operations using annotations, namespace settings, and storage options. 
 ---
 = Use advanced Trident Protect restore settings
@@ -51,4 +51,8 @@ This section lists the supported annotations for configuring various behaviors i
 |string
 |Maximum time (in seconds) to wait for any newly created PersistentVolumeClaims (PVCs) to reach the `Bound` phase before the operations fails. Applies to all restore CR types (BackupRestore, BackupInplaceRestore, SnapshotRestore, SnapshotInplaceRestore). Use a higher value if your storage backend or cluster often requires more time.
 |"1200" (20 minutes)
+|##protect.trident.netapp.io/retain-mac-address##
+|string
+|For KubeVirt VMs, set to `"true"` to retain the MAC address of the first network interface on restore. Applies to all restore CR types and AppMirrorRelationship. Refer to link:trident-protect-kubevirt-vms.html#retain-a-virtual-machine-mac-address[Retain a virtual machine MAC address].
+|Not set (MAC address is removed)
 |===

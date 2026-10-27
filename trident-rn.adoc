@@ -15,6 +15,15 @@ Release Notes provide information about new features, enhancements, and bug fixe
 
 WARNING: The `tridentctl` binary for Linux that is provided in the installer zip file is the tested and supported version. Be aware that the `macos` binary provided in the `/extras` part of the zip file is not tested or supported.
 
+== What's new in 26.10
+Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
+
+=== Trident Protect
+
+==== Enhancements
+
+* Added support for retaining the MAC address of KubeVirt VMs during restore, which is useful when an application license is tied to a MAC address. To enable it, set the protect.trident.netapp.io/retain-mac-address annotation to "true". To learn more, refer to link:trident-protect/trident-protect-kubevirt-vms.html#retain-a-virtual-machine-mac-address[Retain a virtual machine MAC address^].
+
 == What's new in 26.06.2
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 

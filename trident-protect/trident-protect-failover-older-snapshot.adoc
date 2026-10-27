@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-protect/trident-protect-failover-older-snapshot.html
 keywords: trident protect, netapp, snapmirror, failover, older snapshot, recovery point, ransomware, AppMirrorRelationship, promotedSnapshot
-summary: Fail over a replicated application to an older snapshot when the most recently transferred snapshot contains damaged or compromised data.
+summary: Fail over a replicated application to an earlier snapshot, allowing recovery from a point in time before data was damaged or compromised.
 ---
 
 = Fail over to an older snapshot using Trident Protect
@@ -13,10 +13,10 @@ summary: Fail over a replicated application to an older snapshot when the most r
 :imagesdir: ../media/
 
 [.lead]
-Use Trident Protect to fail over a replicated application to an older snapshot and recover its data from a point in time before the most recently replicated data was damaged or compromised.
+Use Trident Protect to fail over a replicated application to an earlier snapshot, allowing recovery from a point in time before data was damaged or compromised.
 
 .About this task
-By default, a failover uses the most recently transferred snapshot. If the source data was damaged before that snapshot was taken, the failed-over application contains the same damage. To avoid this, retain older snapshots and fail over to one that was taken before the damage occurred. This procedure applies only to applications replicated with ONTAP SnapMirror.
+By default, a failover uses the most recently transferred snapshot. You can fail over to an earlier snapshot to recover the application from an earlier point in time. One example is recovery from a point before source data was damaged or compromised. This procedure applies only to applications replicated with ONTAP SnapMirror.
 
 CAUTION: Failing over to an older snapshot causes ONTAP SnapMirror to delete the snapshots on the destination cluster that are newer than the selected snapshot, because they are no longer valid. Add the annotation in this procedure only if this data loss is acceptable.
 

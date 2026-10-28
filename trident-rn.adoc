@@ -27,6 +27,11 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 * Added support for volume group snapshots, which capture related persistent volume claims of an application at the same point in time. Define volume groups in `spec.volumeGroups` on the Application custom resource by label, by KubeVirt virtual machine, or both. To learn more, refer to link:trident-protect/trident-protect-volume-group-snapshots.html[Use volume group snapshots with Trident Protect^].
 * Added support for failing over to an earlier snapshot of a replicated application, allowing recovery from a point in time before data was damaged or compromised. To learn more, refer to link:trident-protect/trident-protect-failover-older-snapshot.html[Fail over to an older snapshot using Trident Protect^].
 
+==== Fixes
+
+* Fixed Trident Protect installations failing on the `trident-protect-pre-upgrade-hook` job because the `trident-protect-controller-manager` ServiceAccount was missing (link:https://github.com/NetApp/trident/issues/1154[Issue #1154]).
+* Fixed PVC-only restores to include an `ownerReference` only when the owner exists.
+
 == What's new in 26.06.2
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 

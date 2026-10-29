@@ -1,0 +1,57 @@
+---
+sidebar: sidebar
+permalink: trident-install/talos.html
+keywords: deploy, Trident, Talos, NVMe/TCP, iSCSI, NFS, system extensions
+summary: Prepare Talos OS with the system extensions required to run Trident.
+---
+
+= Run Trident on Talos OS
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+To use Trident on Talos OS, create Talos boot and installer images that include the system extensions required by your storage protocols. Install and manage Trident through the Kubernetes API.
+
+== Before you begin
+
+* Review the link:../trident-get-started/requirements.html[Trident requirements] and verify that your Kubernetes version and storage platform are supported.
+* Confirm the required system extensions and their compatibility with your Talos OS version with Sidero Labs. The extension names below are subject to that confirmation.
+* Install and configure `kubectl` and `talosctl` on an administration host that can access your cluster.
+* Ensure that all Talos nodes that can run Trident or workloads using Trident volumes have the required extensions.
+
+== Select the system extensions
+
+Include the extensions for each protocol you plan to use:
+
+[cols="1,3",options="header"]
+|===
+|Protocol
+|Talos system extensions
+
+|NFSv4
+a|`siderolabs/nfs-utils`
+
+|iSCSI
+a|`siderolabs/iscsi-tools`, `siderolabs/multipath-tools`, `siderolabs/trident-iscsi-tools`
+
+|NVMe/TCP
+a|`siderolabs/nvme-cli`, `siderolabs/util-linux-tools`, `siderolabs/trident-iscsi-tools`
+|===
+
+== Create Talos images with the extensions
+
+. Open the link:https://factory.talos.dev/[Talos Image Factory^] and create a schematic for the Talos version you plan to run.
+. Add the extensions required for your storage protocols. Use the extension versions compatible with your Talos release, as confirmed by Sidero Labs.
+. Generate and download the Talos boot image and installer image for your platform and architecture.
+. Install Talos using the generated boot image and configure the cluster to use the generated installer image. Follow the Talos documentation for your platform and installation method.
+
+When upgrading Talos, use an installer image that includes the required extensions. Confirm the upgrade procedure and extension compatibility with Sidero Labs.
+
+== Install Trident
+
+From an administration host configured to access the cluster, install Trident using one of the supported Kubernetes installation methods. See the link:kubernetes-deploy.html[Trident installation overview] to choose a method and follow its instructions.
+
+== Verify storage access
+
+After Trident is installed, configure a backend and storage class for your selected protocol. Create a persistent volume claim and a workload that mounts it, then verify that the claim binds and the workload can access the volume. See the Trident documentation for your selected link:../trident-use/ontap-nas.html[NFS] or link:../trident-use/ontap-san.html[SAN] driver.

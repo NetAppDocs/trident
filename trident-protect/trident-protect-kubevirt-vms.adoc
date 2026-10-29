@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar
 permalink: trident-protect/trident-protect-kubevirt-vms.html
-keywords: kubevirt, openshift virtualization, virtual machine, vm, backup, restore, includedvirtualmachines
-summary: Protect KubeVirt virtual machines on OpenShift Virtualization with Trident Protect. Back up all VMs in a namespace or target specific VMs by name. Selectively restore individual VMs from a backup or snapshot archive.
+keywords: kubevirt, openshift virtualization, virtual machine, vm, backup, restore, includedvirtualmachines, mac address, retain-mac-address
+summary: Protect KubeVirt virtual machines on OpenShift Virtualization with Trident Protect. Back up all VMs in a namespace or target specific VMs by name. Selectively restore individual VMs from a backup or snapshot archive.---
 ---
 
 = Protect KubeVirt virtual machines with Trident Protect
@@ -184,7 +184,11 @@ During restore, Trident Protect applies KubeVirt-aware transforms to remove sour
 |Skipped when the pod has the `kubevirt.io=virt-launcher` label.
 |===
 
-NOTE: Trident Protect restores KubeVirt resources in a defined order to avoid dependency issues. CDI DataVolumes (`cdi.kubevirt.io`) are restored first so VM disk data is available before the VM objects are created. After that, VirtualMachines (`kubevirt.io`) are restored before VirtualMachineInstances.
+[NOTE]
+====
+* Trident Protect restores KubeVirt resources in a defined order to avoid dependency issues. CDI DataVolumes (`cdi.kubevirt.io`) are restored first so VM disk data is available before the VM objects are created. After that, VirtualMachines (`kubevirt.io`) are restored before VirtualMachineInstances.
+* By default, Trident Protect removes the MAC address from the first network interface of each restored VM. To retain it, use the `protect.trident.netapp.io/retain-mac-address` annotation. Refer to link:trident-protect-restore-settings.html#supported-annotations[Use advanced Trident Protect restore settings].
+====
 
 == Dynamic VM protection with label selectors
 
@@ -529,7 +533,6 @@ For `BackupRestore`, `SnapshotRestore`, and `ReplicateSnapshotRestore`, `namespa
 
 For restore behavior details, refer to link:trident-protect-restore-apps.html[Restore applications using Trident Protect].
 
-
 == Create a VM-scoped application using the CLI
 
 Use the `--virtual-machines` flag to scope an application to specific KubeVirt VMs instead of whole namespaces. The `--virtual-machines` flag is mutually exclusive with `--namespaces`.
@@ -561,5 +564,6 @@ tridentctl-protect create application <application_name> \
 * link:trident-protect-protect-apps.html[Protect applications]
 * link:trident-protect-restore-apps.html[Restore applications using Trident Protect]
 * link:trident-protect-restore-settings.html[Use advanced restore settings]
+* link:trident-protect-use-snapmirror-replication.html[Replicate applications using NetApp SnapMirror and Trident Protect]
 * link:trident-protect-cli.html[Install the Trident Protect CLI plugin]
 * link:trident-protect-appvault-custom-resources.html[Use AppVault objects to manage buckets]

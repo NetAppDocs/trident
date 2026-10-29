@@ -276,6 +276,10 @@ NOTE: The `tridentK8sTimeout` parameter is applicable only for Trident installat
 You can automate the force-detach process through integration with node health check (NHC) operator. For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].
 |`false`
 
+|`enableDataLIFRefresh`
+|Refreshes NVMe data LIFs for published volumes when LIFs are added, removed, or assigned a new address. Applies to `ontap-san` with `sanType: nvme` on unified ONTAP and NVMe/TCP on ASA r2. For more information, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].
+|`false`
+
 |`excludePodSecurityPolicy`
 |Excludes the operator pod security policy from creation.
 |`false`

@@ -38,6 +38,8 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].|`false`
 
+|`enableDataLIFRefresh` a|Enables refresh of NVMe data LIFs for published volumes when LIFs are added, removed, or assigned a new address. Applies to `ontap-san` with `sanType: nvme` on unified ONTAP and NVMe/TCP on ASA r2. For more information, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].|`false`
+
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
 |`cloudProvider` a| Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. 

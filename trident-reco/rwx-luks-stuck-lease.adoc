@@ -2,17 +2,17 @@
 sidebar: sidebar
 permalink: trident-reco/rwx-luks-stuck-lease.html
 keywords: LUKS, RWX, Lease, cryptsetup, troubleshooting, remediation
-summary: Identify and safely remediate a stuck Kubernetes Lease for an RWX LUKS volume.
+summary: Identify and safely remediate a stuck Kubernetes Lease for a ReadWriteMany (RWX) Linux Unified Key Setup (LUKS) volume.
 ---
 
 [[rwx-luks-stuck-lease]]
-= Remediate a stuck RWX LUKS Lease
+= Remediate a stuck Lease for RWX Linux Unified Key Setup (LUKS) volumes
 :hardbreaks:
 :icons: font
 :imagesdir: ../media/
 
 [.lead]
-An RWX LUKS volume can become blocked if a node fails while holding its Kubernetes Lease. Confirm that no `cryptsetup` operation is still running before deleting the Lease; deleting it during an operation can put the LUKS header at risk.
+A ReadWriteMany (RWX) Linux Unified Key Setup (LUKS) volume can become blocked if a node fails while holding its Kubernetes Lease. Confirm that no `cryptsetup` operation is still running before deleting the Lease; deleting it during an operation can put the LUKS header at risk.
 
 == Understand the Lease
 

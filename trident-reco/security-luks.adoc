@@ -11,7 +11,7 @@ summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and 
 :imagesdir: ../media/
 
 [.lead]
-You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Trident. Trident supports passphrase rotation and volume expansion for LUKS-encrypted volumes.
+Linux Unified Key Setup (LUKS) is a disk-encryption specification. Trident uses LUKS to provide per-volume, host-side encryption for ONTAP SAN and ONTAP SAN ECONOMY volumes, with support for passphrase rotation and volume expansion.
 
 In Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
@@ -124,7 +124,7 @@ LUKS2 stores redundant copies of its encryption header at the start of the block
 
 To prevent concurrent header access, Trident uses a Kubernetes Lease for each RWX LUKS volume. Before a node runs any `cryptsetup` command for the volume, it must hold the Lease. Trident releases the Lease after a successful operation. If another node requests an operation while the Lease is held, Trident returns a retryable error and Kubernetes retries later. Operations on different volumes are independent.
 
-If a `cryptsetup` operation fails, Trident intentionally retains the Lease so only the same node can retry. A warning event with reason `LeaseRetained` records the failure. Leases do not expire automatically; an administrator should remove a Lease only after confirming that no `cryptsetup` operation is running on its holder node. For recovery steps, see <<rwx-luks-stuck-lease,Remediate a stuck RWX LUKS Lease>>.
+If a `cryptsetup` operation fails, Trident intentionally retains the Lease so only the same node can retry. A warning event with reason `LeaseRetained` records the failure. Leases do not expire automatically; an administrator should remove a Lease only after confirming that no `cryptsetup` operation is running on its holder node. For recovery steps, see <<rwx-luks-stuck-lease,Remediate a stuck Lease for RWX Linux Unified Key Setup (LUKS) volumes>>.
 
 Because nodes take turns opening the volume, starting workloads on many different nodes can take longer than with an unencrypted volume. Kubernetes retries transient lock errors after the current operation finishes. Pods may remain in `ContainerCreating` longer during large scale-outs; workloads on the same node can share a single open device mapping.
 

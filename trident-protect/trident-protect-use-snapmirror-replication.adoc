@@ -251,7 +251,7 @@ NOTE: When using a CR, manually create the destination namespace before applying
 .. Configure the following attributes:
 +
 ** *metadata.name:* (Required) The name of the AppMirrorRelationship custom resource.
-** *metadata.annotations.protect.trident.netapp.io/retain-mac-address*: ##(_Optional_) Set to `"true"` to retain the MAC address of KubeVirt VMs on the destination cluster. Refer to link:trident-protect-restore-settings.html#supported-annotations[Use advanced Trident Protect restore settings].##
+** *metadata.annotations.protect.trident.netapp.io/retain-mac-address*: (_Optional_) Set to `"true"` to retain the MAC address of KubeVirt VMs on the destination cluster. Refer to link:trident-protect-restore-settings.html#supported-annotations[Use advanced Trident Protect restore settings].
 ** *spec.destinationAppVaultRef*: (_Required_) This value must match the name of the AppVault for the destination application on the destination cluster.
 //** *spec.destinationApplicationRef*: (_Required_) This value must match the name of the destination application CR file.
 ** *spec.namespaceMapping*: (_Required_) The destination and source namespaces must match the application namespace defined in the respective application CR.

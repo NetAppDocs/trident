@@ -51,7 +51,7 @@ This section lists the supported annotations for configuring various behaviors i
 |string
 |Maximum time (in seconds) to wait for any newly created PersistentVolumeClaims (PVCs) to reach the `Bound` phase before the operations fails. Applies to all restore CR types (BackupRestore, BackupInplaceRestore, SnapshotRestore, SnapshotInplaceRestore). Use a higher value if your storage backend or cluster often requires more time.
 |"1200" (20 minutes)
-|##protect.trident.netapp.io/retain-mac-address##
+|protect.trident.netapp.io/retain-mac-address
 |string
 |For KubeVirt VMs, set to `"true"` to retain the MAC address of the first network interface on restore, for example when an application license is bound to it. Applies to all restore CR types and to AppMirrorRelationship (set it before you promote the relationship). By default, Trident Protect removes this MAC address to prevent collisions. If the source VM is still running on the same network, shut it down or restore to an isolated network first to avoid a duplicate MAC address.
 |Not set (MAC address is removed)

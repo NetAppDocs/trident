@@ -1,0 +1,96 @@
+---
+sidebar: sidebar
+permalink: trident-reco/rwx-luks-stuck-lease.html
+keywords: LUKS, RWX, Lease, cryptsetup, troubleshooting, remediation
+summary: Identify and safely remediate a stuck Kubernetes Lease for an RWX LUKS volume.
+---
+
+[[rwx-luks-stuck-lease]]
+= Remediate a stuck RWX LUKS Lease
+:hardbreaks:
+:icons: font
+:imagesdir: ../media/
+
+[.lead]
+An RWX LUKS volume can become blocked if a node fails while holding its Kubernetes Lease. Confirm that no `cryptsetup` operation is still running before deleting the Lease; deleting it during an operation can put the LUKS header at risk.
+
+== Understand the Lease
+
+Trident uses a Kubernetes Lease to ensure that only one node at a time runs `cryptsetup` commands on an RWX LUKS volume. Leases are created in the Trident namespace, and the Lease name is the PersistentVolume (PV) name. The holder identity identifies the node running the operation.
+
+Trident deletes the Lease after a successful operation. If an operation fails, Trident retains the Lease so that only the same node can retry. Leases do not expire or renew automatically. A warning event with reason `LeaseRetained` includes details about a failed operation.
+
+== Identify a potentially stuck Lease
+
+Symptoms can include pods stuck in `ContainerCreating` or `Terminating`, failed volume expansion, or transient lock errors.
+
+. Find the PVC used by an affected pod:
++
+[source,console]
+----
+kubectl get pod -n <app-namespace> <pod-name> \
+  -o jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}'
+----
+
+. Find the PV bound to the PVC:
++
+[source,console]
+----
+kubectl get pvc -n <app-namespace> <pvc-name> \
+  -o jsonpath='{.spec.volumeName}'
+----
+
+. List Leases in the Trident namespace and identify the Lease with the PV name:
++
+[source,console]
+----
+kubectl get lease -n <trident-namespace>
+----
+
+. Inspect the matching Lease, including its holder, age, and events:
++
+[source,console]
+----
+kubectl describe lease -n <trident-namespace> <pv-name>
+----
+
+`cryptsetup` operations normally complete within seconds. A Lease older than 5 to 10 minutes may indicate a deadlock. Check the `LeaseRetained` events for repeated errors, identify the holder node, and check node health:
+
+[source,console]
+----
+kubectl get nodes
+kubectl get pods -A -o wide --field-selector spec.nodeName=<lease-holder-node>
+----
+
+If the node is healthy and the Lease has no warning events, inspect the Trident node pod logs on the holder node before concluding that the Lease is stuck:
+
+[source,console]
+----
+kubectl get pods -n <trident-namespace> -o wide \
+  --field-selector spec.nodeName=<lease-holder-node>
+kubectl logs -n <trident-namespace> <trident-node-pod> -c trident-main
+----
+
+If the underlying node or network issue can be fixed, do so first. The Lease can resolve when Trident successfully completes the operation.
+
+== Safely resolve the stuck Lease
+
+[IMPORTANT]
+====
+Do not delete a Lease while its holder may still be running a `cryptsetup` operation. Concurrent `cryptsetup` commands from different nodes can interrupt header repair or modification and may corrupt the LUKS header.
+====
+
+Use the remediation that matches the node condition:
+
+* **Holder node has failed and is powered off:** Identify the Leases held by that node and delete the affected Lease. If the node recovers before its workloads are rescheduled, allow Trident to finish its operation and release the Lease. If workloads have already moved, wait for their pods on the recovered node to fully terminate, confirm the deadlock remains, and then remove the stale Lease.
+* **Holder node has lost control-plane connectivity:** The node may still be running workloads. Prefer shutting down the node before deleting the Lease. If the node remains accessible, stop the Trident node container on that node or verify from its logs that it cannot acquire or delete the Lease and is not running `cryptsetup`. Trident requires access to the Kubernetes API to acquire the Lease before each operation; after connectivity is lost, it cannot start another operation. Wait at least five minutes from Lease creation before considering deletion, to allow any in-progress command to finish.
+* **Holder node and network are healthy:** Inspect the Lease warning events and Trident node logs to identify the failing operation. If you need to move the affected workload to another node, cordon the holder node, delete the affected application pods without force deletion, wait for them to terminate, and uncordon the node. Delete the Lease only after confirming the original operation is no longer running.
+
+Delete the Lease only after you have confirmed it is safe to do so:
+
+[source,console]
+----
+kubectl delete lease -n <trident-namespace> <pv-name>
+----
+
+Monitor the affected pods and volume operations after remediation. If the Lease is retained again, investigate the cryptsetup error reported in the Lease events and resolve the underlying issue.

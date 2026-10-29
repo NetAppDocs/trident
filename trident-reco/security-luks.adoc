@@ -11,7 +11,7 @@ summary: You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and 
 :imagesdir: ../media/
 
 [.lead]
-You can enable Linux Unified Key Setup (LUKS) to encrypt ONTAP SAN and ONTAP SAN ECONOMY volumes on Trident. Trident supports passphrase rotation and volume expansion for LUKS-encrypted volumes.
+Linux Unified Key Setup (LUKS) is a disk-encryption specification. Trident uses LUKS to provide per-volume, host-side encryption for ONTAP SAN and ONTAP SAN ECONOMY volumes, with support for passphrase rotation and volume expansion.
 
 In Trident, LUKS-encrypted volumes use the aes-xts-plain64 cypher and mode, as recommended by link:https://csrc.nist.gov/publications/detail/sp/800-38e/final[NIST^].
 
@@ -90,6 +90,43 @@ stringData:
   luks-passphrase-name: A
   luks-passphrase: secretA
 ----
+
+== Use LUKS with RWX raw block volumes
+
+Beginning with Trident 26.10, you can use LUKS encryption with iSCSI-backed raw block volumes that are attached to multiple Kubernetes nodes using the `ReadWriteMany` (RWX) access mode. This is useful for workloads such as KubeVirt virtual machines that need to attach the same encrypted volume on a destination node while it is still attached on the source node during live migration.
+
+RWX LUKS support is limited to raw block volumes. Filesystem-mode RWX LUKS volumes are not supported. The application is responsible for coordinating concurrent access to the decrypted data; Trident coordinates LUKS operations only.
+
+Configure LUKS on the backend, StorageClass, and passphrase Secret as described in <<Enable LUKS encryption>>. Then create a PVC with `volumeMode: Block` and `ReadWriteMany`:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-rwx-pvc
+  namespace: my-app
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Block
+  storageClassName: san-luks-rwx
+  resources:
+    requests:
+      storage: 10Gi
+----
+
+Pods on multiple nodes can attach this PVC as a raw block device. Trident formats the device with LUKS2 on its first attachment and opens the existing encrypted volume on subsequent nodes. Existing LUKS operations, including passphrase rotation and volume expansion, are supported.
+
+=== Why Trident serializes LUKS operations
+
+LUKS2 stores redundant copies of its encryption header at the start of the block device. `cryptsetup` can repair a header when it detects that the copies differ, including during commands that appear to be read-only. Its locking is local to a node and cannot coordinate operations on other nodes. If one node is updating the header while another runs `cryptsetup`, the second node could trigger header repair and interrupt the update, potentially corrupting the header.
+
+To prevent concurrent header access, Trident uses a Kubernetes Lease for each RWX LUKS volume. Before a node runs any `cryptsetup` command for the volume, it must hold the Lease. Trident releases the Lease after a successful operation. If another node requests an operation while the Lease is held, Trident returns a retryable error and Kubernetes retries later. Operations on different volumes are independent.
+
+If a `cryptsetup` operation fails, Trident intentionally retains the Lease so only the same node can retry. A warning event with reason `LeaseRetained` records the failure. Leases do not expire automatically; an administrator should remove a Lease only after confirming that no `cryptsetup` operation is running on its holder node. For recovery steps, see <<rwx-luks-stuck-lease,Remediate a stuck Lease for RWX Linux Unified Key Setup (LUKS) volumes>>.
+
+Because nodes take turns opening the volume, starting workloads on many different nodes can take longer than with an unencrypted volume. Kubernetes retries transient lock errors after the current operation finishes. Pods may remain in `ContainerCreating` longer during large scale-outs; workloads on the same node can share a single open device mapping.
 
 === Limitations
 

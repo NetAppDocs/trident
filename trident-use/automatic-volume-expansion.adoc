@@ -16,6 +16,8 @@ Automatic volume expansion enables Persistent Volumes provisioned by Trident to 
 * The amount by which the volume grows
 * The maximum size the volume can reach
 
+Trident Autogrow Policies expand the PVC. This differs from link:ontap-autosize.html[ONTAP volume autosize], which grows the backing FlexVol without changing the PVC size.
+
 [NOTE]
 Volumes increase in size automatically when the defined utilization threshold is exceeded. Volumes are never automatically reduced.
 

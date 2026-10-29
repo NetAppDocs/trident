@@ -106,7 +106,7 @@ For OSD, create or select a GCP WIF configuration when creating the cluster. For
 ocm gcp create wif-config --name <wif-name> --project <gcp-project-id>
 ----
 
-Select Workload Identity Federation as the cluster authentication type and associate the WIF configuration with the cluster. For self-managed OCP, configure a Google Cloud OIDC provider that trusts the cluster's service account token issuer. Cluster provisioning and token projection steps differ between OSD and self-managed OCP; follow the applicable Red Hat guidance and make the projected token available to the Trident controller at `/var/run/secrets/wif-token/token`.
+Select Workload Identity Federation as the cluster authentication type and associate the WIF configuration with the cluster. For self-managed OCP, configure a Google Cloud OIDC provider that trusts the cluster's service account token issuer. Cluster provisioning differs between OSD and self-managed OCP; follow the applicable Red Hat guidance. Trident 26.10 writes `/var/run/secrets/wif-token/token` only when that same audience is set at install time: `tridentctl install --cloud-provider GCP --gcp-wif-audience "<audience>" -n trident`, or `spec.gcpWIFAudience` on the TridentOrchestrator, or Helm `gcpWIFAudience`. Do not also set a GKE `cloudIdentity`. Do not patch the Deployment afterward; the operator removes that change.
 
 Before installing or configuring Trident, verify that the OpenShift identity used for installation has the cluster permissions required by your chosen installation method. After installation, confirm that the controller and node pods are healthy:
 

@@ -18,6 +18,39 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 == What's new in 26.10
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 
+=== Trident Protect
+
+==== Enhancements
+
+* Added support for encrypting AppVault snapshot and backup metadata. Use a custom vault password for each AppVault. Rotating the vault password re-encrypts the metadata encryption key and updates every Kopia and Restic repository in the AppVault. To learn more, refer to link:trident-protect/trident-protect-encrypt-appvault-metadata.html[Encrypt AppVault metadata for Trident Protect snapshots and backups^].
+* Added support for retaining the MAC address of KubeVirt VMs during restore, which is useful when an application license is tied to a MAC address. To enable it, set the protect.trident.netapp.io/retain-mac-address annotation to "true". To learn more, refer to link:trident-protect/trident-protect-restore-settings.html#supported-annotations[Use advanced Trident Protect restore settings^].
+* Added support for volume group snapshots, which capture related persistent volume claims of an application at the same point in time. Define volume groups in `spec.volumeGroups` on the Application custom resource by label, by KubeVirt virtual machine, or both. To learn more, refer to link:trident-protect/trident-protect-volume-group-snapshots.html[Use volume group snapshots with Trident Protect^].
+* Added support for failing over to an earlier snapshot of a replicated application, allowing recovery from a point in time before data was damaged or compromised. To learn more, refer to link:trident-protect/trident-protect-failover-older-snapshot.html[Fail over to an older snapshot using Trident Protect^].
+
+==== Fixes
+
+* Fixed Trident Protect installations failing on the `trident-protect-pre-upgrade-hook` job because the `trident-protect-controller-manager` ServiceAccount was missing (link:https://github.com/NetApp/trident/issues/1154[Issue #1154]).
+* Fixed PVC-only restores to include an `ownerReference` only when the owner exists.
+
+== What's new in 26.06.2
+Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
+
+=== Trident
+
+==== Enhancements
+
+* *Kubernetes*:
+
+** Added support for Kubernetes 1.37.
+
+==== Fixes
+
+* *Kubernetes*:
+
+** Fixed ONTAP-NAS export policy rules being silently deleted when the Trident controller restarted or a `TridentBackendConfig` was updated while `enableConcurrency` was set to `true`. This could strand already-mounted volumes (link:https://github.com/NetApp/trident/issues/1166[Issue #1166], link:https://github.com/NetApp/trident/issues/1179[Issue #1179]).
+** Fixed backend updates running a per-volume orphan scan for non-material changes, such as credentials and QoS, which could block CSI operations for hours on large backends. The scan now runs only when the SVM or storage prefix changes.
+** Fixed credentials appearing in Trident debug logs, including CSI gRPC request dumps, the startup environment dump, and `TridentBackendConfig` specifications logged by the CRD controller. The startup environment dump now logs values only for Trident's own `TRIDENT_*` variables and lists other variables by name.
+
 == What's new in 26.06.1
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 
@@ -108,7 +141,7 @@ NOTE: Not for use in production environments.
 * Added OpenShift Service CA Operator integration to automate TLS certificate management for the Trident Protect admission webhook. Enable by setting `useOpenshiftServiceCA` to `true` in your Helm values. To learn more, refer to link:trident-protect/trident-protect-customize-installation.html[Customize Trident Protect installation^].
 * Added support for backing up and restoring KubeVirt VMs on OpenShift Virtualization. Protect all VMs in a namespace or target specific VMs by name, and selectively restore individual VMs from a backup or snapshot. To learn more, refer to link:trident-protect/trident-protect-kubevirt-vms.html[Protect KubeVirt virtual machines with Trident Protect^].
 * Added support for resource transformations, enabling you to add, remove, and modify Kubernetes resource attributes during the restore process. To learn more, refer to link:trident-protect/trident-protect-resource-transformations.html[Modify resources as you restore them using custom resources].
-* Added support for `storageClassMapping` in AppMirrorRelationship (AMR), enabling storage class mapping for individual PVCs within a single AMR definition. To learn more, refer to link:trident-protect/trident-protect-use-snapmirror-replication.html[Replicate applications using NetApp SnapMirror and Trident Protect^].
+* Added support for `storageClassMapping` in AppMirrorRelationship (AMR), enabling storage class mapping for individual PVCs within a single AMR definition. To learn more, refer to link:trident-protect/trident-protect-use-snapmirror-replication.html[Set up and manage application replication using Trident Protect^].
 
 ==== Fixes
 

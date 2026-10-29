@@ -142,12 +142,6 @@ Footnote:
 Yesfootnote:1[]: Not managed by Trident
 --
 
-=== Google Cloud NetApp Volumes backend drivers
-
-Trident supports the `google-cloud-netapp-volumes` driver for NAS workloads and `google-cloud-netapp-volumes-san` for SAN (iSCSI) workloads. On OpenShift clusters running on GCP, both drivers support Google Cloud Workload Identity Federation starting with Trident 26.10. This includes self-managed OpenShift Container Platform (OCP, including IPI deployments) and OpenShift Dedicated (OSD).
-
-For backend configuration and WIF prerequisites, see link:../trident-use/gcnv.html[Configure Google Cloud NetApp Volumes] and link:../trident-use/gcnv-block.html[Configure Google Cloud NetApp Volumes for SAN workloads].
-
 == Storage class design
 
 Individual Storage classes need to be configured and applied to create a Kubernetes Storage Class object. This section discusses how to design a storage class for your application.

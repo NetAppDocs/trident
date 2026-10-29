@@ -13,10 +13,7 @@ summary: Fail over a replicated application to an earlier snapshot, allowing rec
 :imagesdir: ../media/
 
 [.lead]
-Use Trident Protect to fail over a replicated application to an earlier snapshot, allowing recovery from a point in time before data was damaged or compromised.
-
-.About this task
-By default, a failover uses the most recently transferred snapshot. You can fail over to an earlier snapshot to recover the application from an earlier point in time. One example is recovery from a point before source data was damaged or compromised. This procedure applies only to applications replicated with ONTAP SnapMirror.
+Use Trident Protect to fail over a replicated application to an earlier snapshot, allowing recovery from a point in time before data was damaged or compromised. By default, a failover uses the most recently transferred snapshot.
 
 CAUTION: Failing over to an older snapshot causes ONTAP SnapMirror to delete the snapshots on the destination cluster that are newer than the selected snapshot, because they are no longer valid. Add the annotation in this procedure only if this data loss is acceptable.
 
@@ -58,10 +55,6 @@ The basename of the selected snapshot is recorded.
 == Fail over to the selected snapshot
 Specify the snapshot to promote, and acknowledge the data loss by adding an annotation.
 
-.Before you begin
-
-* The basename of the selected snapshot is available from <<Identify the snapshot>>.
-
 .Steps
 
 . On the destination cluster, add the annotation to the AppMirrorRelationship. Without the annotation, a failover can use only the most recently transferred snapshot.
@@ -73,7 +66,7 @@ kubectl annotate appmirrorrelationship <relationship_name> -n my-app-namespace p
 . Edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`):
 +
 * Set *spec.desiredState* to `Promoted`.
-* Set *spec.promotedSnapshot* to the basename.
+* Set *spec.promotedSnapshot* to the basename you recorded in <<Identify the snapshot>>.
 +
 For example:
 +

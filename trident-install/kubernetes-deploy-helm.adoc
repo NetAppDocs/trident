@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Trident using Helm. Thi
 [.lead]
 You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are not stored in a private registry. If you do have a private image registry, use the link:kubernetes-deploy-helm-mirror.html[process for offline deployment].
 
-== Critical information about Trident 26.06
+== Critical information about Trident 26.10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -45,10 +45,10 @@ In addition to the link:kubernetes-deploy.html#before-you-begin[deployment prere
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment as in the following example where `100.2606.0` is the version of Trident you are installing. 
+. Use `helm install` and specify a name for your deployment as in the following example where `100.2610.0` is the version of Trident you are installing.
 +
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2606.0 --create-namespace --namespace <trident-namespace>
+helm install <name> netapp-trident/trident-operator --version 100.2610.0 --create-namespace --namespace <trident-namespace>
 ----
 +
 NOTE: If you already created a namespace for Trident, the `--create-namespace` parameter will not create an additional namespace.
@@ -73,10 +73,10 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following command where `100.2606.0` is the version of Trident you are installing:
+For example, to change the default value of `debug`, run the following command where `100.2610.0` is the version of Trident you are installing:
 
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2606.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2610.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 == Configuration options
@@ -391,4 +391,3 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 
 * The controller plugin handles volume provisioning and management, such as snapshots and resizing. 
 * The node plugin handles attaching the storage to the node.
-

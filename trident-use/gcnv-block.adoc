@@ -38,7 +38,7 @@ Configure a Google Cloud Workload Identity Pool and OIDC provider for the OpenSh
 
 Grant the WIF principal for the Trident controller service account the `roles/iam.workloadIdentityUser` role on the Google Cloud service account that Trident will impersonate. For the default Trident controller service account, the token subject is `system:serviceaccount:trident:trident-controller`; use the subject configured for your installation. Grant the impersonated service account `roles/netapp.admin`, or equivalent permissions, on the project that contains the Google Cloud NetApp Volumes resources.
 
-The projected token must be available to the Trident controller at `/var/run/secrets/wif-token/token`. Set `wipCredentialConfig.audience` to the same audience as the token and the provider's allowed audience. Add the following stanza to the `spec` of the SAN backend shown below, replacing the placeholders with values from your environment:
+Trident 26.10 writes `/var/run/secrets/wif-token/token` only when installed with that audience. See link:gcnv.html#openshift-wif[Use Workload Identity Federation on OpenShift]. Set `wipCredentialConfig.audience` to the same value. Add the following stanza to the `spec` of the SAN backend shown below, replacing the placeholders with values from your environment:
 
 [source,yaml]
 ----

@@ -77,7 +77,7 @@ If the underlying node or network issue can be fixed, do so first. The Lease can
 
 [IMPORTANT]
 ====
-Do not delete a Lease while its holder may still be running a `cryptsetup` operation. Concurrent `cryptsetup` commands from different nodes can interrupt header repair or modification and may corrupt the LUKS header.
+Do not delete a Lease while its holder may still be running a `cryptsetup` operation. Concurrent `cryptsetup` commands from different nodes that are not coordinated by the Lease can corrupt the LUKS header.
 ====
 
 Use the remediation that matches the node condition:

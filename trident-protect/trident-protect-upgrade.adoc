@@ -29,11 +29,11 @@ To avoid potential failures, you can disable all snapshot schedules before the u
 Trident Protect versions follow a date-based `YY.MM` naming convention, where "YY" is the last two digits of the year and "MM" is the month. Dot releases follow a `YY.MM.X` convention, where "X" is the patch level. You will select the version to upgrade to based on the version you are upgrading from.
 
 * You can perform a direct upgrade to any target release that is within a four-release window of your installed version. For example, you can directly upgrade from 24.10 (or any 24.10 dot release) to 25.10.
-* If you are upgrading from a release outside of the four-release window, perform a multi-step upgrade. Use the upgrade instructions for the link:../earlier-versions.html[earlier version] you are upgrading from to upgrade to the most recent release that fits the four-release window. For example, if you are running 24.10 and want to upgrade to 26.06:
+* If you are upgrading from a release outside of the four-release window, perform a multi-step upgrade. Use the upgrade instructions for the link:../earlier-versions.html[earlier version] you are upgrading from to upgrade to the most recent release that fits the four-release window. For example, if you are running 24.10 and want to upgrade to 26.10:
 
-. First upgrade from 24.10 to 25.02.
+. First upgrade from 24.10 to 25.06.
 
-. Then upgrade from 25.02 to 26.06.
+. Then upgrade from 25.06 to 26.10.
 
 == Step 2: Upgrade Trident Protect
 To upgrade Trident Protect, perform the following steps.
@@ -68,8 +68,7 @@ kubectl delete secret -n trident-protect -l name=trident-protect-crds,owner=helm
 +
 [source,console]
 ----
-helm upgrade trident-protect netapp-trident-protect/trident-protect --version 100.2606.0 --namespace trident-protect
+helm upgrade trident-protect netapp-trident-protect/trident-protect --version 100.2610.0 --namespace trident-protect
 ----
 +
 NOTE: You can configure the logging level during upgrade by adding `--set logLevel=debug` to the upgrade command. The default logging level is `warn`. Debug logging is recommended for troubleshooting as it helps NetApp support diagnose issues without requiring log level changes or problem reproduction.
-

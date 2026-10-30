@@ -1,0 +1,115 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-failover-older-snapshot.html
+keywords: trident protect, netapp, snapmirror, failover, older snapshot, recovery point, ransomware, AppMirrorRelationship, promotedSnapshot
+summary: Fail over a replicated application to an earlier snapshot, allowing recovery from a point in time before data was damaged or compromised.
+---
+
+= Fail over to an older snapshot using Trident Protect
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+[.lead]
+Use Trident Protect to fail over a replicated application to an earlier snapshot, allowing recovery from a point in time before data was damaged or compromised. By default, a failover uses the most recently transferred snapshot.
+
+CAUTION: Failing over to an older snapshot causes ONTAP SnapMirror to delete the snapshots on the destination cluster that are newer than the selected snapshot, because they are no longer valid. Add the annotation in this procedure only if this data loss is acceptable.
+
+.Before you begin
+
+* An AppMirrorRelationship exists and is in the `Established` state. To create one, refer to link:trident-protect-use-snapmirror-replication.html#set-up-a-replication-relationship[Set up a replication relationship]. To verify the state, run `kubectl get amr -n <namespace> <relationship_name> -o=jsonpath='{.status}'`.
+* The source and destination clusters use ONTAP storage backends with SnapMirror replication. Azure NetApp Files and other non-ONTAP backends are not supported. Refer to link:trident-protect-requirements.html#requirements-for-snapmirror-replication[Requirements for SnapMirror replication].
+* A snapshot schedule (with `snapshotRetention` greater than 1) exists on the source application.
+
+== Identify the snapshot
+Each snapshot has a completion time, so you can pick the point in time you want.
+
+.Steps
+
+. On the source cluster, list the snapshots:
++
+[source,console]
+----
+kubectl get snapshots -n my-app-namespace
+----
+. Find the snapshot to fail over to. Use the `completionTimestamp` value to select the point in time.
+. Get the archive path of that snapshot:
++
+[source,console]
+----
+kubectl get snapshots <snapshot_name> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
+----
+. Record the last part of the path, which is everything after the last slash. This part is the _basename_. For example:
++
+----
+20231114173500_schedule-20231114173500_f8df8bd3-a727-4a14-b954-9666aa618b55
+----
++
+NOTE: Use the basename, not the name of the snapshot custom resource.
+
+.Result
+The basename of the selected snapshot is recorded.
+
+== Fail over to the selected snapshot
+Specify the snapshot to promote, and acknowledge the data loss by adding an annotation.
+
+.Steps
+
+. On the destination cluster, add the annotation to the AppMirrorRelationship. Without the annotation, a failover can use only the most recently transferred snapshot.
++
+[source,console]
+----
+kubectl annotate appmirrorrelationship <relationship_name> -n my-app-namespace protect.trident.netapp.io/allow-promotion-with-older-snapshots="true"
+----
+. Edit the AppMirrorRelationship CR file (for example, `trident-protect-relationship.yaml`):
++
+* Set *spec.desiredState* to `Promoted`.
+* Set *spec.promotedSnapshot* to the basename you recorded in <<Identify the snapshot>>.
++
+For example:
++
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppMirrorRelationship
+metadata:
+  name: <relationship_name>
+  namespace: <namespace>
+  annotations:
+    protect.trident.netapp.io/allow-promotion-with-older-snapshots: "true"
+spec:
+  desiredState: Promoted
+  promotedSnapshot: <basename>
+----
+. Apply the CR:
++
+[source,console]
+----
+kubectl apply -f trident-protect-relationship.yaml -n my-app-namespace
+----
+. Check the status of the relationship:
++
+[source,console]
+----
+kubectl get amr -n my-app-namespace <relationship_name> -o=jsonpath='{.status}' | jq
+----
+
+.Result
+The relationship moves to the `Promoted` state, and the application runs on the destination cluster with the data from the selected snapshot.
+
+If the relationship stays in the `Promoting` state and `status.error` shows `The snapshot provided is invalid or older than the most recently transferred snapshot`, the annotation is missing or is not set to `true`. Add the annotation and try again.
+
+.What's next?
+To return to the original cluster, perform a link:trident-protect-use-snapmirror-replication.html#reverse-resync-a-failed-over-replication-relationship[reverse resync], and then link:trident-protect-use-snapmirror-replication.html#reverse-application-replication-direction[reverse the replication direction].
+
+CAUTION: To return to the original cluster, do not perform a normal resync. A normal resync discards the failed-over application and returns the relationship to the newest source snapshot.
+
+== Related information
+
+* link:trident-protect-use-snapmirror-replication.html[Set up and manage application replication using Trident Protect]
+* link:trident-protect-use-snapmirror-replication.html#fail-over-to-destination-cluster[Fail over to destination cluster]
+* link:trident-protect-use-snapmirror-replication.html#resync-a-failed-over-replication-relationship[Resync a failed over replication relationship]
+* link:trident-protect-use-snapmirror-replication.html#fail-back-applications-to-the-original-source-cluster[Fail back applications to the original source cluster]
+* link:trident-protect-protect-apps.html#create-a-data-protection-schedule[Create a data protection schedule]

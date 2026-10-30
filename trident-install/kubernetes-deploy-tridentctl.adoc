@@ -13,14 +13,14 @@ summary: You can install Trident using `tridentctl`. This process applies to ins
 [.lead]
 You can install Trident using `tridentctl`. This process applies to installations where the container images required by Trident are stored either in a private registry or not. To customize your `tridentctl` deployment, refer to  link:kubernetes-customize-deploy-tridentctl.html[Customize tridentctl deployment].
 
-== Critical information about Trident10
+== Critical information about Trident 26.10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
 .*Critical information about Trident*
 [%collapsible%open]
 ====
-* Kubernetes 1.27 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Kubernetes 1.37 is supported with Trident 26.10. Upgrade Trident before upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -64,8 +64,8 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 The Trident installer package creates a Trident pod, configures the CRD objects that are used to maintain its state, and initializes the CSI sidecars to perform actions such as provisioning and attaching volumes to the cluster hosts. Download and extract the latest version of the Trident installer from link:https://github.com/NetApp/trident/releases/latest[the _Assets_ section on GitHub^]. Update _<trident-installer-XX.XX.X.tar.gz>_ in the example with your selected Trident version. 
 
 ----
-wget https://github.com/NetApp/trident/releases/download/v26.06.0/trident-installer-26.06.0.tar.gz
-tar -xf trident-installer-26.06.0.tar.gz
+wget https://github.com/NetApp/trident/releases/download/v26.10.0/trident-installer-26.10.0.tar.gz
+tar -xf trident-installer-26.10.0.tar.gz
 cd trident-installer
 ----
 
@@ -86,14 +86,14 @@ Install Trident in the desired namespace by executing the `tridentctl install` c
 .Images in one registry
 --
 ----
-./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:26.06 --trident-image <your-registry>/trident:26.06.0
+./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:26.10 --trident-image <your-registry>/trident:26.10.0
 ----
 --
 
 .Images in different registries
 --
 ----
-./tridentctl install -n trident --image-registry <your-registry> --autosupport-image <your-registry>/trident-autosupport:26.06 --trident-image <your-registry>/trident:26.06.0
+./tridentctl install -n trident --image-registry <csi-registry> --autosupport-image <autosupport-registry>/trident-autosupport:26.10 --trident-image <trident-registry>/trident:26.10.0
 ----
 --
 
@@ -147,7 +147,7 @@ You can use `tridentctl` to check the version of Trident installed.
 +----------------+----------------+
 | SERVER VERSION | CLIENT VERSION |
 +----------------+----------------+
-| 26.06.0        | 26.06.0        |
+| 26.10.0        | 26.10.0        |
 +----------------+----------------+
 ----
 
@@ -182,4 +182,11 @@ tridentctl install --enable-concurrency -n trident
 ----
 ====
 
+.Refresh NVMe data LIFs
+[%collapsible%closed]
+====
+To refresh NVMe data LIFs for published volumes when the LIF configuration changes, install Trident with `--enable-datalif-refresh`. For supported drivers and configuration details, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].
 
+----
+tridentctl install --enable-datalif-refresh -n trident
+----

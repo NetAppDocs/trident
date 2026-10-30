@@ -28,6 +28,8 @@ When you create AppVault objects using CRs or the Trident Protect CLI plugin, yo
 * When manually creating AppVault CRs, use the *spec.dataMoverPasswordSecretRef* field to specify the secret.
 * When creating AppVault objects using the Trident Protect CLI, use the `--data-mover-password-secret-ref` argument to specify the secret.
 
+NOTE: To encrypt snapshot and backup metadata or to change the vault password, use the `spec.vaultPasswordSecretRef` field. Refer to link:trident-protect-encrypt-appvault-metadata.html[Encrypt AppVault metadata for Trident Protect snapshots and backups].
+
 ==== Create a data mover repository password secret
 Use the following examples to create the password secret. When you create AppVault objects, you can instruct Trident Protect to use this secret to authenticate with the data mover repository. 
 

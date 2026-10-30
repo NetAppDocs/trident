@@ -1,0 +1,293 @@
+---
+sidebar: sidebar
+permalink: trident-protect/trident-protect-encrypt-appvault-metadata.html
+keywords: trident protect, appvault, encryption, metadata, password, password rotation, vault password, secret, kopia, restic
+summary: You can encrypt the snapshot and backup metadata that Trident Protect stores in an AppVault, and change the password that protects the encrypted data.
+---
+= Encrypt AppVault metadata for Trident Protect snapshots and backups
+:hardbreaks:
+:nofooter:
+:icons: font
+:linkattrs:
+:imagesdir: ../media/
+
+// cspell:words Kopia Restic
+[.lead]
+You can encrypt the snapshot and backup metadata that Trident Protect stores in an AppVault, including sensitive information in Kubernetes Secrets. You can also change the password that protects the encrypted data. A single password change re-encrypts the metadata encryption key and moves every Kopia repository and every Restic repository in the AppVault to the new password.
+
+Encryption is disabled by default. When you enable it, Trident Protect encrypts new snapshot and backup metadata before it stores the metadata in the AppVault. This protects your application resources, including sensitive information in Secrets, unless you explicitly exclude those resources from the application snapshot or backup.
+
+A vault password protects the key that encrypts the data. Note the following behavior:
+
+* When you change the vault password, Trident Protect protects the same key with the new password. It does not rewrite data that is already encrypted.
+* Data that was stored before you enabled encryption remains readable.
+* Data that was encrypted remains readable, even if you later turn off encryption for new data.
+
+.About this task
+When you enable encryption, Trident Protect uses an insecure default password unless you specify a custom password. For each AppVault, create a custom vault password and reference it in `spec.vaultPasswordSecretRef`.
+
+If you enabled encryption with the default password and add a custom password later, you must rotate the password so that existing data and repositories move to the custom password. Refer to <<Rotate the vault password>>.
+
+Use a unique custom password for each AppVault. Rotate the password for one AppVault at a time, and confirm that the rotation is complete before you start another password change.
+
+.Before you begin
+Ensure that you have the following:
+
+* Access to the `trident-protect` namespace.
+* Permission to create Kubernetes Secrets and patch AppVault custom resources (CRs).
+* A separate password Secret planned for each AppVault.
+
+== Enable metadata encryption
+You enable metadata encryption by setting a Helm value for Trident Protect.
+
+.Steps
+. Set `resourceBackupEncryptionEnabled` to `true` by using a `values.yaml` file:
+.. Add the following to your `values.yaml` file:
++
+[source,yaml]
+----
+resourceBackupEncryptionEnabled: true
+----
+.. Apply the file:
++
+[source,console]
+----
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect -f values.yaml --reuse-values
+----
+. Alternatively, set `resourceBackupEncryptionEnabled` to `true` by using the Helm `--set` flag:
++
+[source,console]
+----
+helm upgrade trident-protect -n trident-protect netapp-trident-protect/trident-protect \
+  --set resourceBackupEncryptionEnabled=true \
+  --reuse-values
+----
+
+.Result
+Trident Protect encrypts new snapshot and backup metadata.
+
+.What's next?
+Create a custom vault password for each AppVault. Until you do, Trident Protect uses the insecure default password.
+
+== Create a custom vault password
+To use your own password, create a Kubernetes Secret that contains the password, and then reference the Secret in the AppVault.
+
+.About this task
+If you configure the custom password when you create the AppVault, before any data is stored, the AppVault uses the custom password immediately. You do not need to rotate the password.
+
+If the AppVault already has Kopia or Restic repositories, adding a new password does not change the password of those repositories. Do not use the steps in this section. Instead, follow the steps in <<Rotate the vault password>>.
+
+The `VAULT_PASSWORD` value must meet the following requirements:
+
+* Must not be empty
+* Must be shorter than 64 KiB
+* Must not contain a NUL character
+* Must not contain a line break
+* Must not start or end with a space or other blank character
+
+The password can contain other characters, including non-ASCII characters.
+
+.Steps
+. Create a Secret in the same namespace as the AppVault. The Secret must contain a key named `VAULT_PASSWORD`:
++
+[source,console]
+----
+kubectl -n trident-protect create secret generic vault-password \
+  --from-literal=VAULT_PASSWORD='<password>'
+----
++
+NOTE: If the AppVault reports that the password is not valid, check the `VAULT_PASSWORD` value against the requirements above. Common causes are an empty value, a trailing line feed, or spaces at the start or end of the password.
+. Reference the Secret in the `spec.vaultPasswordSecretRef` field of the AppVault CR:
++
+[source,yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: my-vault
+  namespace: trident-protect
+spec:
+  vaultPasswordSecretRef: vault-password
+  providerType: <provider-type>
+  providerConfig:
+    <provider-configuration>
+----
++
+If `spec.vaultPasswordSecretRef` is empty, the AppVault uses the insecure default password.
+
+.Result
+The AppVault uses your custom password to protect the metadata encryption key.
+
+== Rotate the vault password
+You can rotate the password for an AppVault that already stores data. One rotation re-encrypts the metadata encryption key and moves every Kopia repository and every Restic repository in the AppVault to the new password.
+
+.About this task
+During rotation, Trident Protect does the following:
+
+* Waits for running backup and restore jobs for the AppVault to finish before it starts.
+* Protects the metadata encryption key (`metadata-key.json`) with the new password. It does not rewrite the archive objects.
+* Finds each Kopia repository and each Restic repository under the AppVault prefix, and changes its password to the new password. Repositories that already open with the new password are not changed.
+* Skips repositories that a backup or restore job is still using, and retries them later.
+* Suspends the enabled schedules that reference the AppVault. For each schedule, Trident Protect sets `spec.enabled` to `false` and adds the following annotation:
++
+[source,yaml]
+----
+protect.trident.netapp.io/vault-password-rotation-suspended: <namespace>/<appvault-name>
+----
+
+When rotation finishes, Trident Protect enables again only the schedules that have this annotation.
+If a rotation fails, it resumes from where it stopped. Repositories that already use the new password are not changed again.
+
+.Before you begin
+Ensure that you have the following:
+
+* A new password that meets the <<Create a custom vault password,vault password requirements>>.
+* No other AppVault is rotating its password. If several AppVaults share the same bucket and prefix, only one of them can rotate the password. Refer to <<Manage rotation for AppVaults that share a bucket>>.
+
+.Steps
+. Create a new Secret with a name that is different from the name of the current Secret:
++
+[source,console]
+----
+kubectl -n trident-protect create secret generic vault-password-new \
+  --from-literal=VAULT_PASSWORD='<new-password>'
+----
++
+IMPORTANT: Do not edit or delete the current Secret before rotation finishes. Trident Protect needs the current password to open existing data until every repository uses the new password. If you delete the current Secret too early, re-create it with the same name and the original `VAULT_PASSWORD` value.
+. Enable rotation and set the AppVault to use the new Secret. Replace `my-vault` with the name of your AppVault:
++
+[source,console]
+----
+kubectl -n trident-protect patch appvault my-vault --type merge --patch '
+spec:
+  enableRotation: true
+  vaultPasswordSecretRef: vault-password-new
+'
+----
++
+NOTE: You must set `spec.enableRotation` to `true` before you change the password. If it is `false`, the AppVault reports that rotation is disabled and does not change the password.
+. Monitor the rotation by following the steps in <<Monitor password rotation>>.
+. After rotation finishes, delete the previous Secret if nothing else uses it.
+
+.Result
+The metadata encryption key and every Kopia and Restic repository in the AppVault are protected by the new password, and the schedules that Trident Protect suspended are enabled again.
+
+== Monitor password rotation
+You can check the progress of a password rotation and confirm that it is complete.
+
+.Steps
+. View the AppVault:
++
+[source,console]
+----
+kubectl -n trident-protect get appvault my-vault --output yaml
+----
+. In the output, check the `status.vaultPasswordRotation` section. While rotation is in progress, it looks like this:
++
+[source,yaml]
+----
+status:
+  vaultPasswordRotation:
+    state: Rotating
+    rotated: 3
+    pending: 1
+    message: <message>
+----
++
+This table describes the fields:
++
+[options="header"]
+|===
+| Field | Description
+|status.vaultPasswordRotation.state
+|Current rotation state.
+|status.vaultPasswordRotation.rotated
+|Number of repositories that now use the new password.
+|status.vaultPasswordRotation.pending
+|Number of repositories that were skipped because a backup or restore is using them.
+|status.vaultPasswordRotation.message
+|Latest progress or failure message.
+|===
+
+.Result
+Rotation is complete when all of the following are true:
+
+* `status.vaultPasswordRotation` is not present.
+* `status.previousRepositoryPasswordSecretRef` is empty.
+* `status.repositoryPasswordSecretRef` matches `spec.vaultPasswordSecretRef`.
+
+.What's next?
+If rotation does not finish, check the following:
+
+* *Rotation does not start*: `spec.enableRotation` might be `false`. Set it to `true`, and then set `spec.vaultPasswordSecretRef` to the new Secret.
+* *Repositories stay pending*: Backup or restore jobs are still using them. Wait for the jobs to finish. Trident Protect retries the pending repositories automatically.
+* *Rotation does not start because another AppVault owns the lock*: Refer to <<Manage rotation for AppVaults that share a bucket>>.
+* *The message field reports a failure*: Resolve the problem that the message describes. Rotation resumes from where it stopped.
+
+== Migrate from dataMoverPasswordSecretRef
+If an existing AppVault uses the older `spec.dataMoverPasswordSecretRef` field, you can move it to `spec.vaultPasswordSecretRef`.
+
+.About this task
+Trident Protect keeps `spec.dataMoverPasswordSecretRef` for backward compatibility. Use `spec.vaultPasswordSecretRef` for new AppVaults.
+
+.Steps
+. Keep `spec.dataMoverPasswordSecretRef` and its Secret in place.
+. Rotate the password to a new Secret by using `spec.vaultPasswordSecretRef`. Follow the steps in <<Rotate the vault password>>.
+. After rotation finishes, remove `spec.dataMoverPasswordSecretRef` from the AppVault.
+. Delete the old Secret if nothing else uses it.
+
+== Manage rotation for AppVaults that share a bucket
+If several AppVaults use the same bucket and prefix, only one of them can rotate the password.
+
+.About this task
+Password rotation uses a lock file named `password-rotation.lock`. The lock records the UID of the AppVault that is allowed to rotate the password for the bucket and prefix. If a second AppVault has `spec.enableRotation: true` and the lock names a different AppVault, the second AppVault cannot rotate.
+
+.Steps
+// begin tabbed block
+[role="tabbed-block"]
+====
+.Transfer rotation to another AppVault
+--
+. On the AppVault that owns the lock, clear `spec.enableRotation`:
++
+[source,console]
+----
+kubectl -n trident-protect patch appvault <current-owner> --type merge --patch '
+spec:
+  enableRotation: false
+'
+----
+. Wait for the lock to be removed.
+. On the AppVault that should rotate next, set `spec.enableRotation` to `true`:
++
+[source,console]
+----
+kubectl -n trident-protect patch appvault <new-owner> --type merge --patch '
+spec:
+  enableRotation: true
+'
+----
+--
+.Remove a lock left by a deleted AppVault
+--
+Use these steps if the AppVault that owns the lock no longer exists and the lock was not removed, for example after a crash.
+
+. Delete the `password-rotation.lock` file from the AppVault prefix in your bucket.
+. On the AppVault that should rotate, set `spec.enableRotation` to `true`:
++
+[source,console]
+----
+kubectl -n trident-protect patch appvault <appvault-name> --type merge --patch '
+spec:
+  enableRotation: true
+'
+----
+--
+====
+
+== Related information
+
+* link:trident-protect-appvault-custom-resources.html[Use Trident Protect AppVault objects to manage buckets]
+* link:trident-protect-customize-installation.html[Customize Trident Protect installation]
+* link:trident-protect-protect-apps.html[Protect applications]
+* link:trident-protect-restore-apps.html[Restore applications using Trident Protect]

@@ -31,7 +31,7 @@ Trident applies backend autosize settings when it creates, clones, or resizes a 
 
 * ONTAP volume autosize does not shrink FlexVols.
 * Autosize is configured per backend. Create separate backends to use different settings for different workloads.
-* Do not configure `ontapAutosize` on ONTAP NAS drivers, ASA r2 systems, NetApp AFX or other disaggregated ONTAP systems, or Google Cloud NetApp Volumes. Backend creation fails for these configurations.
+* ONTAP volume autosize is not supported on ONTAP NAS drivers, ASA r2 systems, NetApp AFX or other disaggregated ONTAP systems, or Google Cloud NetApp Volumes. Backend creation fails for these configurations.
 * TridentMirrorRelationship replication and MetroCluster configurations are not supported with ONTAP volume autosize. Trident does not prevent these configurations.
 * For `ontap-san-economy`, `maximumSize` must be a percentage.
 * For `ontap-san`, an absolute `maximumSize` acts as a size limit. Creating or expanding a PVC fails if the backing FlexVol must exceed that limit.
@@ -54,7 +54,7 @@ Set these options in the top-level `ontapAutosize` block of the backend configur
 |Enables or disables autosize. `grow` enables autosize; `off` disables it.
 |String
 |No
-|`grow`
+|`off`
 |`grow` or `off`
 
 |`growThresholdPercent`
@@ -193,6 +193,4 @@ ONTAP rejected the autosize settings, and the PVC events include the reason from
 == Related information
 
 * link:automatic-volume-expansion.html[Automatic volume expansion using Trident Autogrow Policies]
-* link:ontap-san-examples.html[ONTAP SAN configuration options and examples]
-* link:https://docs.netapp.com/us-en/ontap/volumes/enable-disable-volume-autosize-task.html[Configure ONTAP volumes to automatically grow and shrink^]
 * link:https://docs.netapp.com/us-en/ontap-cli/volume-autosize.html[ONTAP command reference: volume autosize^]

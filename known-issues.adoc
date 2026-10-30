@@ -15,6 +15,13 @@ Known issues identify problems that might prevent you from using this release of
 
 The following known issues affect the current release:
 
+== Volumes remain attached after upgrading from Trident 22.10 or earlier
+
+This issue affects customers who upgrade directly from Trident 22.10 or earlier to Trident 26.10 while volumes are attached. Upgrades from Trident 23.01 or later are not affected.
+
+After the upgrade, affected volumes might not detach. Pods using ReadWriteOnce (RWO) volumes cannot move to another node and might report a multi-attach error. Deleting the PersistentVolume (PV) might also hang.
+
+To work around this issue, on the node that has the stale volume attachment, delete the leftover `volumePublishInfo.json` file from that volume's `globalmount` directory.
 
 == VolumeSnapshots not reaching ReadyToUse state
 
@@ -31,4 +38,3 @@ Two workarounds are available:
 
 == Restoring Restic backups of large files can fail
 When restoring 30GB or larger files from an Amazon S3 backup that was made using Restic, the restore operation can fail. As a workaround, back up the data using Kopia as the data mover (Kopia is the default data mover for backups). Refer to https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-protect-apps.html[Protect applications using Trident Protect^] for instructions.
-

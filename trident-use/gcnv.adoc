@@ -37,6 +37,8 @@ link:gcnv-block.html[Configure block storage (iSCSI)].
 
 Cloud identity enables Kubernetes workloads to access Google Cloud resources by authenticating as a workload identity instead of using static credentials.
 
+Before configuring workload identity, use an account that is authorized to create the required identity resources. For GKE, this requires Google Cloud permissions to create and configure a Google Cloud service account. For OpenShift, this requires permission to create or select the cluster's WIF configuration and to configure the Google Cloud Workload Identity Pool and provider.
+
 === Use GKE workload identity
 
 To use GKE workload identity with Google Cloud NetApp Volumes, you must have:
@@ -108,6 +110,8 @@ ocm gcp create wif-config --name <wif-name> --project <gcp-project-id>
 
 Select Workload Identity Federation as the cluster authentication type and associate the WIF configuration with the cluster. For self-managed OCP, configure a Google Cloud OIDC provider that trusts the cluster's service account token issuer. Cluster provisioning and token projection steps differ between OSD and self-managed OCP; follow the applicable Red Hat guidance and make the projected token available to the Trident controller at `/var/run/secrets/wif-token/token`.
 
+OSD's WIF authentication is configured when you create the cluster. Trident's WIF audience is a separate installation setting; you do not need to recreate the cluster to enable WIF for Trident.
+
 Before installing or configuring Trident, verify that the OpenShift identity used for installation has the cluster permissions required by your chosen installation method. After installation, confirm that the controller and node pods are healthy:
 
 [source,console]
@@ -123,9 +127,73 @@ oc -n trident rollout status deploy/trident-controller --timeout=300s
 oc -n trident rollout status ds/trident-node-linux --timeout=300s
 ----
 
+==== Install Trident with the WIF audience
+
+Trident projects the token for WIF only when you configure the audience during installation. Use the same audience in the Google Cloud provider and the backend's `wipCredentialConfig.audience`:
+
+[source,text]
+----
+//iam.googleapis.com/projects/<wif-pool-project-number>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>
+----
+
+Set `cloudProvider` to `GCP` and configure `gcpWIFAudience` using the installation method you selected:
+
+[role="tabbed-block"]
+====
+
+.tridentctl
+--
+[source,console]
+----
+tridentctl install \
+  --cloud-provider GCP \
+  --gcp-wif-audience "<audience>" \
+  --namespace trident
+----
+--
+
+.Trident operator
+--
+Set these fields in the `TridentOrchestrator` spec:
+
+[source,yaml]
+----
+spec:
+  cloudProvider: GCP
+  gcpWIFAudience: "<audience>"
+----
+--
+
+.Helm
+--
+Set these values when installing the chart:
+
+[source,console]
+----
+helm install trident netapp-trident/trident-operator \
+  --set cloudProvider=GCP \
+  --set-string gcpWIFAudience="<audience>"
+----
+--
+====
+
+Do not also set the GKE `cloudIdentity` / `--cloud-identity` option for OpenShift WIF. Do not patch the Trident controller Deployment after installation; the operator reverts manual changes. The projected token is available to the backend at `/var/run/secrets/wif-token/token`. The `trident-main` container does not include a shell, so inspect the controller Deployment's volume configuration instead of using `oc exec` to check the file:
+
+[source,console]
+----
+oc -n trident get deploy trident-controller -o yaml
+----
+
 ==== Configure Google Cloud trust and permissions
 
 Configure a Google Cloud Workload Identity Pool and OIDC provider for the cluster. The provider issuer must match the token's `iss` claim, and its attribute mapping must map `assertion.sub` to `google.subject`. The provider's allowed audience must match the projected token's `aud` claim.
+
+[CAUTION]
+====
+For OSD, do not replace or restrict the audience list on a shared provider. When `allowedAudiences` is empty, Google accepts the provider's canonical resource name, with or without the `https://` prefix. Setting `--allowed-audiences` replaces that default list and can prevent other OSD components from exchanging tokens. Only add an audience when the provider already has an explicit list, and preserve every existing value. Do not add an attribute condition to OSD's shared provider. See the Google Cloud link:https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools.providers#Oidc[OIDC provider reference^].
+====
+
+Public `.well-known/openid-configuration` and JWKS endpoints are required only when using OIDC discovery. Google also supports uploading the JWKS directly using `jwksJson` or `--jwk-json-path`.
 
 Grant the WIF principal the `roles/iam.workloadIdentityUser` role on the Google Cloud service account that Trident will impersonate. For a token subject of `system:serviceaccount:trident:trident-controller`, the principal has this form:
 

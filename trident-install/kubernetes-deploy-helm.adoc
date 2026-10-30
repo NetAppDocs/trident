@@ -252,9 +252,11 @@ You can automate the force-detach process through integration with node health c
 |Excludes the operator pod security policy from creation.
 |`false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
+|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster, `"AWS"` when using a cloud identity on an EKS cluster, or `"GCP"` when using cloud identity on GKE or Workload Identity Federation on OpenShift. |`""`
 
-|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'") when using cloud identity on an EKS cluster.|`""`
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'") when using cloud identity on an EKS cluster. Set to the GKE cloud identity annotation when using cloud identity on GKE. Do not set for OpenShift Workload Identity Federation.|`""`
+
+|`gcpWIFAudience` |Audience for the projected service account token used with Google Cloud Workload Identity Federation on OpenShift. Use the provider's canonical resource name. For more information, see link:../trident-use/gcnv.html#openshift-wif[Configure Google Cloud NetApp Volumes with Workload Identity Federation].|`""`
 
 |`iscsiSelfHealingInterval` |The interval at which the iSCSI self-healing is invoked.|`5m0s`
 

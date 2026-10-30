@@ -13,7 +13,7 @@ summary: Understand controller scalability, concurrency behavior, and feature ma
 [.lead]
 Trident improves controller scalability through increased concurrency across multiple storage drivers. When you enable controller scalability, the Trident controller processes storage operations in parallel instead of serializing them, which increases throughput in Kubernetes environments with many concurrent operations.
 
-Before you deploy, determine which Trident drivers support controller scalability at general availability and which drivers are available as a technical preview in Trident 26.06. This helps you make informed deployment decisions and manage risk. Controller scalability is disabled by default.
+Before you deploy, determine which Trident drivers support controller scalability at general availability and which drivers are available as a technical preview in Trident 26.10. This helps you make informed deployment decisions and manage risk. Controller scalability is disabled by default.
 
 == Key concepts and definitions
 
@@ -35,7 +35,7 @@ Trident supports controller scalability at different maturity levels for differe
 
 === General availability
 
-The following drivers support controller scalability at general availability in Trident 26.06:
+The following drivers support controller scalability at general availability in Trident 26.10:
 
 * `ontap-san`
 * `ontap-nas`
@@ -53,7 +53,7 @@ The `google-cloud-netapp-volumes` and `google-cloud-netapp-volumes-san` drivers 
 
 === Technical preview
 
-The following driver supports controller scalability as a technical preview feature in Trident 26.06:
+The following driver supports controller scalability as a technical preview feature in Trident 26.10:
 
 * `asa-r2` (SAN and NVMe)
 
@@ -219,7 +219,7 @@ When controller scalability is enabled, the Trident controller applies the follo
 [[caveats-and-limitations]]
 == Caveats and limitations
 
-The following considerations apply to controller scalability in Trident 26.06:
+The following considerations apply to controller scalability in Trident 26.10:
 
 * Controller scalability supports only the drivers in the general availability and technical preview lists. For details, see <<before-you-enable,Before you enable>>.
 * The Trident controller manages concurrency internally. This release provides no user-configurable concurrency limits.

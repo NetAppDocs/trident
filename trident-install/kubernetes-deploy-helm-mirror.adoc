@@ -13,7 +13,7 @@ summary: You can deploy the Trident operator and install Trident using Helm. Thi
 [.lead]
 You can deploy the Trident operator and install Trident using Helm. This process applies to installations where the container images required by Trident are stored in a private registry. If you do not have a private image registry, use the link:kubernetes-deploy-helm.html[process for standard deployment].
 
-== Critical information about Trident 26.06
+== Critical information about Trident 26.10
 *You must read the following critical information about Trident.*
 
 // Start snippet: collapsible block (open on page load)
@@ -21,7 +21,7 @@ You can deploy the Trident operator and install Trident using Helm. This process
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.37 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident 26.10 supports Kubernetes 1.27 through 1.37. Check the version-specific image list in the link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident requirements] before upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -49,7 +49,7 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 ----
 
-. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `100.2606.0` is the version of Trident you are installing. 
+. Use `helm install` and specify a name for your deployment and image registry location. Your link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident and CSI images] can be located in one registry or different registries, but all CSI images must be located in the same registry. In the examples, `100.2610.0` is the version of Trident you are installing.
 +
 [role="tabbed-block"]
 ====
@@ -58,7 +58,7 @@ helm repo add netapp-trident https://netapp.github.io/trident-helm-chart
 --
 [source,console]
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2606.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
+helm install <name> netapp-trident/trident-operator --version 100.2610.0 --set imageRegistry=<your-registry> --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
 ----
 --
 
@@ -66,7 +66,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2606.0 --set i
 --
 [source,console]
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2606.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:26.06.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:26.06 --set tridentImage=<your-registry>/trident:26.06.0 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
+helm install <name> netapp-trident/trident-operator --version 100.2610.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:26.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:26.10 --set tridentImage=<your-registry>/trident:26.10.0 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
 ----
 --
 ====
@@ -94,16 +94,16 @@ a|Specify overrides on the command line.
 
 |===
 
-For example, to change the default value of `debug`, run the following command where `100.2606.0` is the version of Trident you are installing:
+For example, to change the default value of `debug`, run the following command where `100.2610.0` is the version of Trident you are installing:
 [source,console]
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2606.0  --create-namespace --namespace trident --set tridentDebug=true
+helm install <name> netapp-trident/trident-operator --version 100.2610.0  --create-namespace --namespace trident --set tridentDebug=true
 ----
 
 To add the nodePrep value, run the following command: 
 [source,console]
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2606.0  --create-namespace --namespace trident --set nodePrep={iscsi}
+helm install <name> netapp-trident/trident-operator --version 100.2610.0  --create-namespace --namespace trident --set nodePrep={iscsi}
 ----
 
 == Configuration options
@@ -223,6 +223,10 @@ NOTE: The `tridentK8sTimeout` parameter is applicable only for Trident installat
 |Allows disabling Trident periodic AutoSupport reporting.
 |`false`
 
+|`tridentExcludeAutosupport`
+|When set to `true`, Trident does not set up the AutoSupport container during installation.
+|`false`
+
 |`tridentAutosupportImageTag`
 |Allows overriding the tag of the image for Trident AutoSupport container.
 |`<version>`
@@ -274,6 +278,10 @@ NOTE: The `tridentK8sTimeout` parameter is applicable only for Trident installat
 |`enableForceDetach`
 |Allows enabling the force detach feature.
 You can automate the force-detach process through integration with node health check (NHC) operator. For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].
+|`false`
+
+|`enableDataLIFRefresh`
+|Refreshes NVMe data LIFs for published volumes when LIFs are added, removed, or assigned a new address. Applies to `ontap-san` with `sanType: nvme` on unified ONTAP and NVMe/TCP on ASA r2. For more information, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].
 |`false`
 
 |`excludePodSecurityPolicy`

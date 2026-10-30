@@ -38,6 +38,8 @@ Works with Kubernetes Non-Graceful Node Shutdown (NGNS) to grant cluster adminis
 
 For information, see link:../trident-reco/force-detach.html[Automating the failover of stateful applications with Trident].|`false`
 
+|`enableDataLIFRefresh` a|Enables refresh of NVMe data LIFs for published volumes when LIFs are added, removed, or assigned a new address. Applies to `ontap-san` with `sanType: nvme` on unified ONTAP and NVMe/TCP on ASA r2. For more information, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].|`false`
+
 |`windows` | Setting to `true` enables installation on Windows worker nodes. | `false`
 
 |`cloudProvider` a| Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. 
@@ -46,7 +48,9 @@ Set to `"GCP"` when using a cloud identity on a GKE cluster. |`""`
 
 |`cloudIdentity` a|Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. 
 Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'") when using cloud identity on an EKS cluster.
-Set to cloud identity ("'iam.gke.io/gcp-service-account: xxxx@mygcpproject.iam.gserviceaccount.com'") when using cloud identity on a GKE cluster.|`""` 
+Set to cloud identity ("'iam.gke.io/gcp-service-account: xxxx@mygcpproject.iam.gserviceaccount.com'") when using cloud identity on a GKE cluster.|`""`
+
+|`gcpWIFAudience` |Audience for the projected service account token used with Google Cloud Workload Identity Federation on OpenShift. Use the provider's canonical resource name. For more information, see link:../trident-use/gcnv.html#openshift-wif[Configure Google Cloud NetApp Volumes with Workload Identity Federation].|`""`
 
 |`IPv6` |Install Trident over IPv6 |false
 
@@ -58,7 +62,7 @@ NOTE: The `k8sTimeout` parameter is applicable only for Trident installation.  |
 automatically |`false`
 
 |`autosupportImage` |The container image for Autosupport Telemetry
-|`"netapp/trident-autosupport10"`
+|`"netapp/trident-autosupport:26.10"`
 
 |`autosupportProxy` |The address/port of a proxy for sending Autosupport
 Telemetry |`"http://proxy.example.com:8888"`
@@ -67,7 +71,7 @@ Telemetry |`"http://proxy.example.com:8888"`
 
 |`logFormat` |Trident logging format to be used [text,json] |`"text"`
 
-|`tridentImage` |Trident image to install |`"netapp/trident:26.06"`
+|`tridentImage` |Trident image to install |`"netapp/trident:26.10.0"`
 
 |`imageRegistry` |Path to internal registry, of the format
 `<registry FQDN>[:port][/subpath]` |`"registry.k8s.io"`
@@ -105,6 +109,8 @@ NOTE: Beginning with OpenShift 4.19, the minimum Trident version supported for t
 |`k8sAPIQPS` a|The queries per second (QPS) limit used by the controller while communicating with the Kubernetes API server. The Burst value is set automatically based on the QPS value.|`100`; optional
 
 |`enableConcurrency` a|Enables concurrent Trident controller operations for improved throughput. For more information on supported drivers, see the link: https://docs.netapp.com/us-en/trident/trident-use/controller-scalability.html#controller-scalability[Controller Scalability documentation].
+
+|`enableCOSI` a|Enables the Trident Container Object Storage Interface (COSI) frontend. Requires `enableConcurrency` to be set to `true`. Trident COSI cannot run alongside the community COSI controller. For more information, see link:../trident-use/cosi.html[Provision object storage with COSI].|`false`
 
 |`resources` a|Sets Kubernetes resource limits and requests for the Trident controller and node pods. You can configure CPU and memory for each container and sidecar to manage resource allocation in Kubernetes.
 

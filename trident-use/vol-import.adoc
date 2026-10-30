@@ -238,9 +238,14 @@ spec:
 ====
 
 [#import-qtrees]
-=== Import NFS qtrees
+=== Import qtrees
 
-Beginning with Trident 26.06, you can import existing ONTAP qtrees into Trident using the `ontap-nas-economy` driver. Identify the qtree by its FlexVol volume and qtree names in `flexvol/qtree` format, along with the UUID of the backend that contains it. The general import considerations in <<Overview and considerations>> also apply to qtree import.
+[NOTE]
+====
+Qtree import is a Tech Preview feature in Trident 26.10. Tech Preview features are not supported for production use.
+====
+
+You can import existing ONTAP qtrees into Trident using the `ontap-nas-economy` driver. Identify the qtree by its FlexVol volume and qtree names in `flexvol/qtree` format, along with the UUID of the backend that contains it. The general import considerations in <<Overview and considerations>> also apply to qtree import.
 
 .Import a qtree using tridentctl
 Specify the qtree in `flexvol/qtree` format as the volume name. The following example imports the qtree `qtree1` from the FlexVol volume `flexvol1` on the backend `ontap_nas_economy`:

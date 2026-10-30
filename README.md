@@ -1,4 +1,4 @@
-# trident
+# Trident
 Trident Documentation
 
 Welcome to the documentation for the latest version of Trident.

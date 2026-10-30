@@ -19,7 +19,7 @@ When you add an ONTAP SAN backend, Trident discovers the NVMe data LIFs for the 
 
 Set `enableDataLIFRefresh` to `true` to refresh NVMe data LIFs while Trident is running. Published NVMe volumes then use LIFs that are added, removed, or assigned a new address.
 
-This option is an installation parameter, not a backend configuration parameter. It is disabled by default. Do not set `dataLIF` in the backend for NVMe/TCP; Trident discovers the NVMe data LIFs from the SVM.
+This option is an installation parameter, not a backend configuration parameter. It is disabled by default.
 
 NVMe data LIF refresh is available starting with Trident 26.10.
 
@@ -27,6 +27,11 @@ This feature applies to:
 
 * `ontap-san` with `sanType: nvme` on unified ONTAP.
 * `ontap-san` using NVMe/TCP on ASA r2.
+
+[CAUTION]
+====
+Removing or replacing all data LIFs at the same time is disruptive. If you plan to remove or replace all data LIFs, make sure a replacement LIF is in place first so that data access is not interrupted.
+====
 
 == Enable NVMe data LIF refresh
 

@@ -21,7 +21,7 @@ You can deploy the Trident operator and install Trident using Helm. This process
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.37 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident 26.10 supports Kubernetes 1.27 through 1.37. Check the version-specific image list in the link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident requirements] before upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -191,6 +191,10 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 |Allows disabling Trident periodic AutoSupport reporting.
 |`false`
 
+|`tridentExcludeAutosupport`
+|When set to `true`, Trident does not set up the AutoSupport container during installation.
+|`false`
+
 |`tridentAutosupportImageTag`
 |Allows overriding the tag of the image for Trident AutoSupport container.
 |`<version>`
@@ -252,9 +256,11 @@ You can automate the force-detach process through integration with node health c
 |Excludes the operator pod security policy from creation.
 |`false`
 
-|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster. Set to "AWS" when using a cloud identity on an EKS cluster. |`""` 
+|`cloudProvider` | Set to `"Azure"` when using managed identities or a cloud identity on an AKS cluster, `"AWS"` when using a cloud identity on an EKS cluster, or `"GCP"` when using cloud identity on GKE or Workload Identity Federation on OpenShift. |`""`
 
-|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'") when using cloud identity on an EKS cluster.|`""`
+|`cloudIdentity` |Set to workload identity ("azure.workload.identity/client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx") when using cloud identity on an AKS cluster. Set to AWS IAM role ("'eks.amazonaws.com/role-arn: arn:aws:iam::123456:role/trident-role'") when using cloud identity on an EKS cluster. Set to the GKE cloud identity annotation when using cloud identity on GKE. Do not set for OpenShift Workload Identity Federation.|`""`
+
+|`gcpWIFAudience` |Audience for the projected service account token used with Google Cloud Workload Identity Federation on OpenShift. Use the provider's canonical resource name. For more information, see link:../trident-use/gcnv.html#openshift-wif[Configure Google Cloud NetApp Volumes with Workload Identity Federation].|`""`
 
 |`iscsiSelfHealingInterval` |The interval at which the iSCSI self-healing is invoked.|`5m0s`
 

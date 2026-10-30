@@ -104,6 +104,49 @@ kubectl apply -f tenant-secret.yaml
 kubectl apply -f trident-object-store.yaml
 ----
 
+== Configure an ONTAP S3 object store
+
+[NOTE]
+====
+ONTAP S3 support through COSI is a Tech Preview in Trident 26.10 and is not supported for production use. Configuration fields and behavior can change before general availability.
+====
+
+Create a Kubernetes Secret with the ONTAP S3 user credentials in the Trident namespace, then create a `TridentObjectStore` that references the Secret. Replace the placeholders with values for your ONTAP S3 environment:
+
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ontap-s3-credentials
+  namespace: trident
+type: Opaque
+stringData:
+  username: "<user>"
+  password: "<password>"
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentObjectStore
+metadata:
+  name: ontap-s3
+  namespace: trident
+spec:
+  objectStoreDriver: ontap-s3
+  objectStoreName: ontap-object-store
+  managementEndpoint: "<management-endpoint>"
+  svmName: "<svm-name>"
+  storagePrefix: trident
+  credentials:
+    secretName: ontap-s3-credentials
+----
+
+The `storagePrefix` is optional and defaults to `trident` when omitted. Apply the Secret and `TridentObjectStore`:
+
+[source,console]
+----
+kubectl apply -f ontap-s3-object-store.yaml
+----
+
 == Create a BucketClass and request a bucket
 
 A `BucketClass` can select an object store using a label selector, an object store type, or both. Without selection parameters, Trident can select from all configured object stores.

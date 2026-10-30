@@ -51,9 +51,9 @@ Before you configure an ONTAP-mode backend, ensure that you have the following:
 
 == Configure the backend
 
-A `TridentBackendConfig` requires `credentials`. For ONTAP-mode, that secret holds GCP proxy credentials—not ONTAP `managementLIF` / `username` / `password`. `svm` is optional: each GCNV ONTAP-mode pool currently has one SVM, and Trident derives it from the pool when omitted.
+A `TridentBackendConfig` requires `credentials` to reference a Kubernetes Secret. For ONTAP-mode, the secret provides credentials for GCP proxy access—not ONTAP `managementLIF` / `username` / `password`. Depending on the authentication method, it can contain service account key fields or be empty. `svm` is optional: each GCNV ONTAP-mode pool currently has one SVM, and Trident derives it from the pool when omitted.
 
-Use the same service account pattern as native GCNV: non-sensitive fields in `gcnv.apiKey`, `private_key` and `private_key_id` in the secret. See link:../trident-use/gcnv-examples.html[Google Cloud NetApp Volumes configuration examples^].
+For service account key authentication, use the same pattern as native GCNV: non-sensitive fields in `gcnv.apiKey`, `private_key` and `private_key_id` in the secret. See link:../trident-use/gcnv-examples.html[Google Cloud NetApp Volumes configuration examples^]. For Workload Identity Pool or GKE cloud identity authentication, see the examples in <<authentication>>.
 
 .ontap-san backend
 [source,yaml]
@@ -73,7 +73,7 @@ spec:
   gcnv:
     proxyURL: "https://netapp.googleapis.com"
     projectNumber: "<project-number>"
-    location: "<region-or-zone>"
+    location: "<pool-location>"
     poolID: "<pool-id>"
   svm: "<svm-name>"
 ----
@@ -96,7 +96,7 @@ spec:
   gcnv:
     proxyURL: "https://netapp.googleapis.com"
     projectNumber: "<project-number>"
-    location: "<region-or-zone>"
+    location: "<pool-location>"
     poolID: "<pool-id>"
     apiKey:
       type: service_account
@@ -107,6 +107,7 @@ spec:
       token_uri: "https://oauth2.googleapis.com/token"
       auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"
       client_x509_cert_url: "<client-x509-cert-url>"
+  svm: "<svm-name>"
 ----
 .Secret
 [source,yaml]
@@ -129,9 +130,7 @@ stringData:
 Do not put `private_key` or `private_key_id` in the `TridentBackendConfig` spec—the CRD rejects them. Use `ontap-san` with the same `gcnv` and credential pattern for block storage.
 ====
 
-  svm: "<svm-name>"
-----
-
+[[authentication]]
 == Authentication
 
 Trident resolves credentials for proxy access in the following order:
@@ -145,6 +144,86 @@ For this Tech Preview, use the following practices:
 * Prefer Workload Identity Pool where it is available.
 * Do not embed raw private keys in version-controlled backend files. Store credentials in a Kubernetes secret.
 * Apply least-privilege IAM scoping to the service account.
+
+The `location` in the `gcnv` block must match the pool's location: use the zone for a zonal pool and the region for a regional pool.
+
+=== Workload Identity Pool
+
+Use `gcnv.wipCredential` for explicit external-account federation configured on the `TridentBackendConfig`. On OpenShift, Trident projects the token at `/var/run/secrets/wif-token/token`; this is the only token path Trident projects for OpenShift WIF, so use it for `credential_source.file`. Install Trident with the WIF audience as described in link:gcnv.html#openshift-wif[Configure Google Cloud NetApp Volumes with Workload Identity Federation]. The `credentials` field still references a Secret, but the Secret must not contain a `private_key`.
+
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gcnv-ontap-empty
+  namespace: trident
+type: Opaque
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: gcnv-ontap-nas-wip
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: gcnv-ontap-nas-wip
+  useREST: true
+  nasType: nfs
+  nfsMountOptions: nfsvers=4.1
+  credentials:
+    name: gcnv-ontap-empty
+    type: secret
+  gcnv:
+    proxyURL: "https://netapp.googleapis.com"
+    projectNumber: "<project-number>"
+    location: "<pool-location>"
+    poolID: "<pool-id>"
+    wipCredential:
+      type: external_account
+      audience: "//iam.googleapis.com/projects/<wif-pool-project-number>/locations/global/workloadIdentityPools/<wif-pool-id>/providers/<provider-id>"
+      subject_token_type: "urn:ietf:params:oauth:token-type:jwt"
+      token_url: "https://sts.googleapis.com/v1/token"
+      service_account_impersonation_url: "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/<service-account-email>:generateAccessToken"
+      credential_source:
+        file: "/var/run/secrets/wif-token/token"
+----
+
+=== GKE cloud identity
+
+For GKE, configure Trident's cloud identity at installation as described in link:gcnv.html#use-gke-workload-identity[Use GKE workload identity]. The backend uses Application Default Credentials (ADC); omit both `gcnv.apiKey` and `gcnv.wipCredential`. The `credentials` field still references a Secret, but do not put a `private_key` in it.
+
+[source,yaml]
+----
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gcnv-ontap-empty
+  namespace: trident
+type: Opaque
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: gcnv-ontap-nas-wi
+  namespace: trident
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  backendName: gcnv-ontap-nas-wi
+  useREST: true
+  nasType: nfs
+  nfsMountOptions: nfsvers=4.1
+  credentials:
+    name: gcnv-ontap-empty
+    type: secret
+  gcnv:
+    proxyURL: "https://netapp.googleapis.com"
+    projectNumber: "<project-number>"
+    location: "<pool-location>"
+    poolID: "<pool-id>"
+----
 
 == Validation and initialization behavior
 

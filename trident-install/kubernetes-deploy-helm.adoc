@@ -244,6 +244,10 @@ You can automate the force-detach process through integration with node health c
 |Allows enabling the force detach feature.
 |`false`
 
+|`enableDataLIFRefresh`
+|Refreshes NVMe data LIFs for published volumes when LIFs are added, removed, or assigned a new address. Applies to `ontap-san` with `sanType: nvme` on unified ONTAP and NVMe/TCP on ASA r2. For more information, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].
+|`false`
+
 |`excludePodSecurityPolicy`
 |Excludes the operator pod security policy from creation.
 |`false`

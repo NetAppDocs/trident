@@ -133,7 +133,7 @@ Trident supports volume import using the `ontap-nas` and `ontap-nas-flexgroup` d
 
 [NOTE]
 ====
-* The `ontap-nas-economy` driver manages storage at the qtree level, so it does not support importing a FlexVol volume on its own. To import qtrees with the `ontap-nas-economy` driver, refer to <<import-qtrees,Import qtrees>> (Tech Preview). When Trident imports a qtree, it also imports the parent FlexVol as a bucket that contains the qtree.
+* To import qtrees with the `ontap-nas-economy` driver, refer to <<import-qtrees,Import NFS qtrees>>. When Trident imports a qtree, it also imports the parent FlexVol as a bucket that contains the qtree. Qtrees must be imported individually.
 * The `ontap-nas` and `ontap-nas-flexgroup` drivers do not allow duplicate volume names.
 ====
 
@@ -238,7 +238,7 @@ spec:
 ====
 
 [#import-qtrees]
-=== Import qtrees
+=== Import NFS qtrees
 
 [NOTE]
 ====

@@ -38,7 +38,7 @@ Trident supports multiple container engines and orchestrators, including the fol
 +
 NOTE: Trident continues to support older OpenShift versions in alignment with the link:https://access.redhat.com/support/policy/updates/openshift[Red Hat Extended Update Support (EUS) release lifecycle], even if they rely on Kubernetes versions that are no longer officially supported upstream. While installing Trident in such cases, you can safely ignore any warning messages about the Kubernetes version.
 * Rancher Kubernetes Engine 2 (RKE2) v1.28.x - 1.37.x
-* Talos OS for NFSv4, iSCSI, and NVMe/TCP. The following Talos system extensions are required for each protocol; confirm these requirements with Sidero Labs. For setup instructions, see link:../trident-install/talos.html[Run Trident on Talos OS].
+* Talos OS for NFSv4, iSCSI, and NVMe/TCP. The following Talos system extensions are required for each protocol; confirm these requirements with Sidero Labs.
 ** NFSv4: `siderolabs/nfs-utils`
 ** iSCSI: `siderolabs/iscsi-tools`, `siderolabs/multipath-tools`, and `siderolabs/trident-iscsi-tools`
 ** NVMe/TCP: `siderolabs/nvme-cli`, `siderolabs/util-linux-tools`, and `siderolabs/trident-iscsi-tools`

@@ -180,4 +180,12 @@ To enable concurrent Trident controller operations for improved throughput, add 
 ----
 tridentctl install --enable-concurrency -n trident
 ----
+
+.Refresh NVMe data LIFs
+[%collapsible%closed]
 ====
+To refresh NVMe data LIFs for published volumes when the LIF configuration changes, install Trident with `--enable-datalif-refresh`. For supported drivers and configuration details, see link:../trident-use/refresh-nvme-data-lifs.html[Refresh NVMe data LIFs].
+
+----
+tridentctl install --enable-datalif-refresh -n trident
+----

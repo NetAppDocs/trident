@@ -21,7 +21,7 @@ Before installing Trident you should review these general system requirements. S
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.37 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident 26.10 supports Kubernetes 1.27 through 1.37. Check the version-specific image list below before upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -203,7 +203,7 @@ link:../trident-reference/ports.html[Trident ports]
  
 For air-gapped installations, the following list is a reference of container images needed to install Trident. Use the `tridentctl images` command to verify the list of needed container images.
 
-Kubernetes 1.37 support is available starting with Trident 26.06. The 26.06.2 image list below includes the images for Kubernetes 1.37.
+The Trident 26.06.2 and 26.10 image lists below include the images for Kubernetes 1.37.
  
 === Container images required for Trident 26.10.0
 
@@ -212,7 +212,7 @@ Kubernetes 1.37 support is available starting with Trident 26.06. The 26.06.2 im
 |Kubernetes versions
 |Container image
 
-| v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0, v1.34.0, v1.35.0, v1.36.0
+| v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0, v1.34.0, v1.35.0, v1.36.0, v1.37.0
 a|
 * docker.io/netapp/trident:26.10.0
 * docker.io/netapp/trident-autosupport:26.10

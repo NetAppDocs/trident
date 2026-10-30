@@ -21,7 +21,7 @@ You can deploy the Trident operator and install Trident using Helm. This process
 [%collapsible%open]
 ====
 =======
-* Kubernetes 1.37 is now supported in Trident. Upgrade Trident prior to upgrading Kubernetes.
+* Trident 26.10 supports Kubernetes 1.27 through 1.37. Check the version-specific image list in the link:../trident-get-started/requirements.html#container-images-and-corresponding-kubernetes-versions[Trident requirements] before upgrading Kubernetes.
 * Trident strictly enforces the use of multipathing configuration in SAN environments, with a recommended value of `find_multipaths: no` in multipath.conf file. 
 +
 Use of non-multipathing configuration or use of `find_multipaths: yes` or `find_multipaths: smart` value in multipath.conf file will result in mount failures. Trident has recommended the use of `find_multipaths: no` since the 21.07 release.
@@ -189,6 +189,10 @@ IMPORTANT: When installing Trident in a private repository, if you are using the
 
 |`tridentSilenceAutosupport`
 |Allows disabling Trident periodic AutoSupport reporting.
+|`false`
+
+|`tridentExcludeAutosupport`
+|When set to `true`, Trident does not set up the AutoSupport container during installation.
 |`false`
 
 |`tridentAutosupportImageTag`

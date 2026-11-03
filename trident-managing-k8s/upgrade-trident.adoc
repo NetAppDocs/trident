@@ -18,7 +18,7 @@ When upgrading to the latest release of Trident, consider the following:
 
 [WARNING]
 ====
-Do not upgrade to Trident 26.10.0 from Trident 25.10 or any earlier version due to a critical bug. During startup, Trident node pods may detach volumes that are still in use, causing affected pods to fail with `volume ... is not staged`. This warning applies even when the upgrade is otherwise within the supported four-release window. Wait for a release with a fix before upgrading.
+Do not upgrade to Trident 26.10.0 from Trident 25.10 or any earlier version. During startup, Trident node pods might detach volumes that are still in use. Affected pods might fail with the error `volume ... is not staged`. This issue applies even when the upgrade is otherwise within the supported four-release window. Wait for a release that includes the fix before upgrading. For more information, see the link:../known-issues.html[known issues].
 ====
 
 * There should be only one Trident instance installed across all the namespaces in a given Kubernetes cluster.

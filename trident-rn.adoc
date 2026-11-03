@@ -20,7 +20,7 @@ Learn what's new in NetApp Trident and Trident Protect, including enhancements, 
 
 [WARNING]
 ====
-Do not upgrade to Trident 26.10.0 from Trident 25.10 or any earlier version due to a critical bug. During startup, Trident node pods may detach volumes that are still in use, causing affected pods to fail with `volume ... is not staged`. Wait for a release with a fix before upgrading.
+Do not upgrade to Trident 26.10.0 from Trident 25.10 or any earlier version. During startup, Trident node pods might detach volumes that are still in use. Affected pods might fail with the error `volume ... is not staged`. Wait for a release that includes the fix before upgrading. For more information, see the link:known-issues.html[known issues].
 ====
 
 === Trident

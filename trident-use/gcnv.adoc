@@ -99,6 +99,11 @@ Starting with Trident 26.10, you can use Google Cloud Workload Identity Federati
 
 WIF exchanges a projected Kubernetes service account token for short-lived Google Cloud credentials. Trident uses those credentials to impersonate a Google Cloud service account; that service account's IAM roles authorize its Google Cloud NetApp Volumes API calls. This avoids storing a long-lived service account key in the backend configuration.
 
+[IMPORTANT]
+====
+On OpenShift Dedicated, the OIDC provider can be shared with other OpenShift components. If the provider's `allowedAudiences` list is empty, Google accepts the provider's canonical resource name, with or without the `https://` prefix, so no provider change is needed for the Trident audience. Do not set an explicit audience list only for Trident. If the provider already has explicit audiences, append the Trident audience while preserving every existing value. Replacing the list can prevent other OpenShift components from exchanging tokens.
+====
+
 ==== Prepare the OpenShift cluster
 
 For OSD, create or select a GCP WIF configuration when creating the cluster. For example, the OpenShift Cluster Manager CLI can create one:
@@ -187,11 +192,6 @@ oc -n trident get deploy trident-controller -o yaml
 ==== Configure Google Cloud trust and permissions
 
 Configure a Google Cloud Workload Identity Pool and OIDC provider for the cluster. The provider issuer must match the token's `iss` claim, and its attribute mapping must map `assertion.sub` to `google.subject`. The provider's allowed audience must match the projected token's `aud` claim.
-
-[CAUTION]
-====
-For OSD, do not replace or restrict the audience list on a shared provider. When `allowedAudiences` is empty, Google accepts the provider's canonical resource name, with or without the `https://` prefix. Setting `--allowed-audiences` replaces that default list and can prevent other OSD components from exchanging tokens. Only add an audience when the provider already has an explicit list, and preserve every existing value. Do not add an attribute condition to OSD's shared provider. See the Google Cloud link:https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.locations.workloadIdentityPools.providers#Oidc[OIDC provider reference^].
-====
 
 Public `.well-known/openid-configuration` and JWKS endpoints are required only when using OIDC discovery. Google also supports uploading the JWKS directly using `jwksJson` or `--jwk-json-path`.
 

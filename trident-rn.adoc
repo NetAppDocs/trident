@@ -18,6 +18,11 @@ WARNING: The `tridentctl` binary for Linux that is provided in the installer zip
 == What's new in 26.10
 Learn what's new in NetApp Trident and Trident Protect, including enhancements, fixes, and deprecations.
 
+[WARNING]
+====
+Do not upgrade to Trident 26.10.0 from Trident 25.10 or any earlier version due to a critical bug. During startup, Trident node pods may detach volumes that are still in use, causing affected pods to fail with `volume ... is not staged`. Wait for a release with a fix before upgrading.
+====
+
 === Trident
 
 ==== Enhancements

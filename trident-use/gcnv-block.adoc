@@ -34,11 +34,52 @@ Starting with Trident 26.10, the SAN driver supports Google Cloud Workload Ident
 
 WIF exchanges a projected Kubernetes service account token for short-lived Google Cloud credentials. Trident uses these credentials to impersonate a Google Cloud service account when it calls the Google Cloud NetApp Volumes API.
 
-Configure a Google Cloud Workload Identity Pool and OIDC provider for the OpenShift cluster. The provider issuer must match the token's `iss` claim, its attribute mapping must map `assertion.sub` to `google.subject`, and its allowed audience must match the token's `aud` claim.
+Configure a Google Cloud Workload Identity Pool and OIDC provider for the OpenShift cluster. The provider issuer must match the token's `iss` claim, and its attribute mapping must map `assertion.sub` to `google.subject`.
 
-Grant the WIF principal for the Trident controller service account the `roles/iam.workloadIdentityUser` role on the Google Cloud service account that Trident will impersonate. For the default Trident controller service account, the token subject is `system:serviceaccount:trident:trident-controller`; use the subject configured for your installation. Grant the impersonated service account `roles/netapp.admin`, or equivalent permissions, on the project that contains the Google Cloud NetApp Volumes resources.
+Install Trident with the provider resource name as the WIF audience. This causes Trident to project the controller service account token at `/var/run/secrets/wif-token/token`.
 
-The projected token must be available to the Trident controller at `/var/run/secrets/wif-token/token`. Set `wipCredentialConfig.audience` to the same audience as the token and the provider's allowed audience. Add the following stanza to the `spec` of the SAN backend shown below, replacing the placeholders with values from your environment:
+.Trident operator
+[source,yaml]
+----
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  namespace: trident
+  cloudProvider: GCP
+  gcpWIFAudience: "//iam.googleapis.com/projects/<wif-pool-project-number>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>"
+----
+
+.Helm
+[source,console]
+----
+helm install trident <trident-operator-package> \
+  --namespace trident \
+  --create-namespace \
+  --set cloudProvider=GCP \
+  --set-string gcpWIFAudience="//iam.googleapis.com/projects/<wif-pool-project-number>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>"
+----
+
+.tridentctl
+[source,console]
+----
+tridentctl install \
+  --namespace trident \
+  --cloud-provider GCP \
+  --gcp-wif-audience "//iam.googleapis.com/projects/<wif-pool-project-number>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>"
+----
+
+Use the same audience for the Trident installation and `wipCredentialConfig.audience`. Do not also configure GKE `cloudIdentity` or `--cloud-identity`. Do not patch the controller Deployment to add the projected token; the Trident operator can overwrite that change.
+
+[IMPORTANT]
+====
+On OpenShift Dedicated, the OIDC provider can be shared with other OpenShift components. If the provider's `allowedAudiences` list is empty, Google accepts the provider's canonical resource name, with or without the `https://` prefix, so no provider change is needed for the audience above. Do not set an explicit audience list only for Trident. If the provider already has explicit audiences, append the Trident audience while preserving every existing value. Replacing the list can prevent other OpenShift components from exchanging tokens.
+====
+
+Grant the WIF principal for the Trident controller service account the `roles/iam.workloadIdentityUser` role on the Google Cloud service account that Trident will impersonate. For the default Trident controller service account, the token subject is `system:serviceaccount:trident:trident-controller`; use the subject configured for your installation. Grant the impersonated service account `roles/netapp.admin`, or equivalent permissions, on the project containing the Google Cloud NetApp Volumes resources.
+
+Add the following stanza to the `spec` of the SAN backend:
 
 [source,yaml]
 ----

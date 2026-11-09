@@ -66,7 +66,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2610.0 --set i
 --
 [source,console]
 ----
-helm install <name> netapp-trident/trident-operator --version 100.2610.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:26.10.0 --set tridentAutosupportImage=<your-registry>/trident-autosupport:26.10 --set tridentImage=<your-registry>/trident:26.10.0 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
+helm install <name> netapp-trident/trident-operator --version 100.2610.0 --set imageRegistry=<your-registry> --set operatorImage=<your-registry>/trident-operator:26.10.1 --set tridentAutosupportImage=<your-registry>/trident-autosupport:26.10 --set tridentImage=<your-registry>/trident:26.10.1 --create-namespace --namespace <trident-namespace> --set nodePrep={iscsi}
 ----
 --
 ====

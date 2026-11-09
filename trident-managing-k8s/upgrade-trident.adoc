@@ -16,11 +16,6 @@ Beginning with the 24.02 release, Trident follows a four-month release cadence, 
 == Considerations before upgrading
 When upgrading to the latest release of Trident, consider the following:
 
-[WARNING]
-====
-Do not upgrade to Trident 26.10.0 from Trident 25.10 or any earlier version. During startup, Trident node pods might detach volumes that are still in use. Affected pods might fail with the error `volume ... is not staged`. This issue applies even when the upgrade is otherwise within the supported four-release window. Wait for a release that includes the fix before upgrading. For more information, see the link:../known-issues.html[known issues].
-====
-
 * There should be only one Trident instance installed across all the namespaces in a given Kubernetes cluster.
 * Trident 23.07 and later requires v1 volume snapshots and no longer supports alpha or beta snapshots.  
 * When upgrading, it is important you provide `parameter.fsType` in `StorageClasses` used by Trident. You can delete and re-create `StorageClasses` without disrupting pre-existing volumes. 
@@ -37,8 +32,6 @@ Trident versions follow a date-based `YY.MM` naming convention, where "YY" is th
 . First upgrade from 23.07 to 24.06.
 
 . Then upgrade from 24.06 to 25.06.
-
-NOTE: When upgrading using the Trident operator on OpenShift Container Platform, you should upgrade to Trident 21.01.1 or later. The Trident operator released with 21.01.0 contains a known issue that has been fixed in 21.01.1. For more details, refer to the https://github.com/NetApp/trident/issues/517[issue details on GitHub^].
 
 == Step 2: Determine the original installation method
 To determine which version you used to originally install Trident: 

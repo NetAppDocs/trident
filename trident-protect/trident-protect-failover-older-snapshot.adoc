@@ -26,6 +26,8 @@ CAUTION: Failing over to an older snapshot causes ONTAP SnapMirror to delete the
 == Identify the snapshot
 Each snapshot has a completion time. Get its archive path with `kubectl` on the source cluster, or with the CLI.
 
+NOTE: Use the CLI when the source cluster is down or the snapshot custom resource is not available. Run the command on the destination cluster, or on any cluster that has the source AppVault.
+
 [role="tabbed-block"]
 ====
 .Use kubectl

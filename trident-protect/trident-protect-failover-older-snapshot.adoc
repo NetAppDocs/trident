@@ -24,29 +24,49 @@ CAUTION: Failing over to an older snapshot causes ONTAP SnapMirror to delete the
 * A snapshot schedule (with `snapshotRetention` greater than 1) exists on the source application.
 
 == Identify the snapshot
-Each snapshot has a completion time, so you can pick the point in time you want.
+Each snapshot has a completion time. Get its archive path with `kubectl` on the source cluster, or with the CLI.
 
-.Steps
+[role="tabbed-block"]
+====
+.Use kubectl
+--
+Use `kubectl` on the source cluster to get the archive path.
 
-. On the source cluster, list the snapshots:
+. On the source cluster, list the snapshots and note the `completionTimestamp` of the snapshot you want:
 +
 [source,console]
 ----
 kubectl get snapshots -n my-app-namespace
 ----
-. Find the snapshot to fail over to. Use the `completionTimestamp` value to select the point in time.
-. Get the archive path of that snapshot:
+. Get its archive path:
 +
 [source,console]
 ----
 kubectl get snapshots <snapshot_name> -n my-app-namespace -o jsonpath='{.status.appArchivePath}'
 ----
-. Record the last part of the path, which is everything after the last slash. This part is the _basename_. For example:
-+
+--
+.Use the CLI
+--
+Use the Trident Protect CLI to get the archive path. On the destination cluster, or on any cluster that has the source AppVault, list the snapshots. `TIMESTAMP` is the completion time and `PATH` is the archive path.
+
+[source,console]
+----
+tridentctl-protect get appvaultcontent <source_appvault_name> \
+--app <app_name> \
+--show-resources snapshot \
+--show-paths
+----
+
+NOTE: The AppVault CR of the source application must exist on the cluster where you run the command, and your environment must be able to connect to the object storage bucket defined in the AppVault CR. If network restrictions prevent access, run the CLI from within a pod on the cluster.
+--
+====
+
+The basename is everything after the last slash in the path. For example:
+
 ----
 20231114173500_schedule-20231114173500_f8df8bd3-a727-4a14-b954-9666aa618b55
 ----
-+
+
 NOTE: Use the basename, not the name of the snapshot custom resource.
 
 .Result

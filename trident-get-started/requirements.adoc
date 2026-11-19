@@ -34,10 +34,12 @@ Trident supports multiple container engines and orchestrators, including the fol
  
 * Anthos On-Prem (VMware) and Anthos on bare metal 1.16
 * Kubernetes 1.27 - 1.37
+* OpenShift 5.0
 * OpenShift 4.12, 4.14 - 4.22 (If you plan to use iSCSI node preparation with OpenShift 4.19, the minimum Trident version supported is 25.06.1.)
 +
 NOTE: Trident continues to support older OpenShift versions in alignment with the link:https://access.redhat.com/support/policy/updates/openshift[Red Hat Extended Update Support (EUS) release lifecycle], even if they rely on Kubernetes versions that are no longer officially supported upstream. While installing Trident in such cases, you can safely ignore any warning messages about the Kubernetes version.
-* Rancher Kubernetes Engine 2 (RKE2) v1.28.x - 1.37.x
+* SUSE Rancher Kubernetes Engine 2 (RKE2) v1.28.x - 1.37.x
+* SUSE Virtualization (Harvester) 1.8.x - 1.9.x (NFS, iSCSI, NVMe/TCP, and FC)
 * Talos OS for NFSv4, iSCSI, and NVMe/TCP. The following Talos system extensions are required for each protocol; confirm these requirements with Sidero Labs.
 ** NFSv4: `siderolabs/nfs-utils`
 ** iSCSI: `siderolabs/iscsi-tools`, `siderolabs/multipath-tools`, and `siderolabs/trident-iscsi-tools`
@@ -61,14 +63,20 @@ To use Trident, you need one or more of the following supported backends:
 * On-premises FAS, AFF, or ASA r2 (iSCSI, NVMe/TCP, and FC) running ONTAP versions under NetApp full or limited support. See link:https://mysupport.netapp.com/site/info/version-support[Software Version Support].
 * NetApp HCI/Element software 11 or above
  
-== Trident support for KubeVirt and OpenShift Virtualization
+== Trident support for KubeVirt, OpenShift Virtualization, and SUSE Virtualization
  
 .Storage drivers supported:
-Trident supports the following ONTAP drivers for KubeVirt and OpenShift Virtualization:
+Trident supports the following ONTAP drivers for KubeVirt, OpenShift Virtualization, and SUSE Virtualization:
  
 * ontap-nas
 * ontap-san (iSCSI, FCP, NVMe over TCP)
 * ontap-san-economy (iSCSI Only)
+
+.SUSE Virtualization certification reports
+The following Trident 26.10 configurations were validated with SUSE Virtualization. Testing was courtesy of Suresh Thoppay:
+
+* link:https://netapp-my.sharepoint.com/:w:/p/lrico/IQAF9GNKmi64SKJIhoBo4QcOASK58qAyI3j-Gm5QCd4fHa8?e=Z8G3cO[Trident 26.10 with SUSE Virtualization 1.8.2^]
+* link:https://netapp-my.sharepoint.com/:w:/p/lrico/IQCwh98Enw7CTYcbu_fRhSS0AVN__iDN_jYFTvVrELgxNYI?e=dLNcqx[Trident 26.10 with SUSE Virtualization 1.9.1^]
  
 .Points to consider:
 * Update storage class to have the `fsType` parameter (for example: `fsType: "ext4"`) in OpenShift Virtualization environment. If needed, set the volume mode to block explicitly using the `volumeMode=Block` parameter in the `dataVolumeTemplates` to notify CDI to create Block data volumes.
@@ -212,7 +220,7 @@ The Trident 26.10 image list below includes the images for Kubernetes 1.37.
 |Kubernetes versions
 |Container image
 
-| v1.27.0, v1.28.0, v1.29.0, v1.30.0, v1.31.0, v1.32.0, v1.33.0, v1.34.0, v1.35.0, v1.36.0, v1.37.0
+| v1.37.0
 a|
 * docker.io/netapp/trident:26.10.1
 * docker.io/netapp/trident-autosupport:26.10

@@ -72,9 +72,10 @@ kubectl create -f pvc.yaml
 ----
 kubectl get pvc
 ----
+[source,console,indent=2]
 ----
-NAME        STATUS VOLUME     CAPACITY ACCESS MODES STORAGECLASS AGE
-pvc-storage Bound  pv-name 2Gi      RWO                       5m
+NAME       STATUS   VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+fsx-demo   Bound    pvc-volume   1Gi        RWX            fsx-nfs        <unset>                 13s
 ----
 
 Refer to link:../trident-reference/objects.html[Kubernetes and Trident objects] for details on how storage classes interact with the `PersistentVolumeClaim` and parameters for controlling how Trident provisions volumes. 

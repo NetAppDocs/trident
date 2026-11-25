@@ -339,6 +339,8 @@ Not supported by ontap-nas-economy.
 
 |`splitOnClone` |Split a clone from its parent upon creation |`false`
 
+|`cloneSplitDelay` |Seconds to wait before Trident starts splitting a clone that keeps a snapshot busy during snapshot deletion. The default is `86400` seconds (24 hours). At the default or higher, Trident applies exponential backoff starting at 5 minutes and capping at 1 hour when ONTAP returns a "snapshot busy" error; retries within an interval do not call ONTAP. Below `86400`, Trident calls ONTAP for every CSI retry and does not use backoff. |`86400`
+
 |`encryption` |Enable NetApp Volume Encryption (NVE) on the new volume; defaults to `false`. NVE must be licensed and enabled on the cluster to use this option. 
 
 If NAE is enabled on the backend, any volume provisioned in Trident will be NAE enabled. 

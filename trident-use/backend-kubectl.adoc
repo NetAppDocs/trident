@@ -112,7 +112,9 @@ a|Password to connect to the cluster/SVM. Used for credential-based authenticati
 
 |ONTAP
 a|clientPrivateKey
-a|Base64-encoded value of client private key. Used for certificate-based authentication
+a|Base64-encoded value of client private key. Used for certificate-based authentication.
+
+When using certificate-based authentication, also include the `clientCertificate` parameter in the `TridentBackendConfig` spec, in addition to referencing this Secret through `spec.credentials`. If using a trusted CA, include `trustedCACertificate` in the backend spec as well. See link:ontap-san-prep.html#enable-certificate-based-authentication[Enable certificate-based authentication] for details.
 
 |ONTAP
 a|chapUsername

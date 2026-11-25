@@ -34,45 +34,15 @@ NOTE: Make sure that you select the most recent Operator version.
 + 
 image::../media/openshift-operator-03.png[Install]
 +
-. Click *View Operator* to view the details of the Operator.
-+ 
-image::../media/openshift-operator-07.png[Installed]
-. Click *YAML view* and paste the following in the form:
+. Click *View Operator* to view the Operator details. Select the *Trident Orchestrator* tab, then click *Create instance*.
+. In the create form, select *YAML view* and edit the `TridentOrchestrator` example provided by the UI. Do not replace it with a separate full configuration.
++
+To enable concurrency, add `enableConcurrency: true` under the existing `spec:` section:
 +
 [source,yaml]
--------
-apiVersion: trident.netapp.io/v1
-kind: TridentOrchestrator
-metadata:
-  name: trident
-  namespace: openshift-operators
-spec:
-  IPv6: false
-  debug: false
-  nodePrep:
-  - iscsi
-  imageRegistry: ''
-  k8sTimeout: 180s
-  namespace: trident
-  silenceAutosupport: false
--------
-+
-[NOTE]
-====
-The UI provides a default example. You can edit it directly instead of copying a full configuration.
-====
-
-[NOTE]
-====
-Optional: Enable concurrency
-
-To enable concurrency, add the following field to the spec:
-
-[source,yaml]
 ----
-enableConcurrency: true
+  enableConcurrency: true
 ----
-====
 
 [NOTE]
 ====

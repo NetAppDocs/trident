@@ -109,8 +109,8 @@ ssl modify -vserver <vserver-name> -server-enabled true -client-enabled true -co
 . Install the client certificate and key (from step 1) on the ONTAP cluster.
 +
 ----
-security certificate install -type client-ca -cert-name <certificate-name> -vserver <vserver-name>
-security ssl modify -vserver <vserver-name> -client-enabled true
+security certificate install -type client-ca -cert-name <certificate-name>
+security ssl modify -client-enabled true
 ----
 . Confirm the ONTAP security login role supports `cert` authentication method.
 +

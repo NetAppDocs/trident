@@ -2,7 +2,7 @@
 sidebar: sidebar
 permalink: trident-use/controller-scalability.html
 keywords: trident, controller scalability, concurrency, san, nas, san-nvme, gcnv, ontap-nas-economy, ontap-san-economy, ontap-nas-flexgroup, asa-r2
-summary: Understand controller scalability, concurrency behavior, and feature maturity.
+summary: Understand controller scalability, concurrency behavior, and supported drivers.
 ---
 
 = Controller scalability
@@ -13,7 +13,7 @@ summary: Understand controller scalability, concurrency behavior, and feature ma
 [.lead]
 Trident improves controller scalability through increased concurrency across multiple storage drivers. When you enable controller scalability, the Trident controller processes storage operations in parallel instead of serializing them, which increases throughput in Kubernetes environments with many concurrent operations.
 
-Before you deploy, determine which Trident drivers support controller scalability at general availability and which drivers are available as a technical preview in Trident 26.10. This helps you make informed deployment decisions and manage risk. Controller scalability is disabled by default.
+By default, `enableConcurrency` is set to `false` and Trident operates in serial mode.
 
 == Key concepts and definitions
 
@@ -25,18 +25,13 @@ When you enable controller scalability, operations on different volumes and back
 
 == Default behavior (serial mode)
 
-By default, the Trident controller processes operations one at a time. Each create, delete, resize, or snapshot request completes before Trident starts the next one. Serial mode is the supported default for all installations and requires no configuration.
-
-Serial mode is sufficient for most workloads. Enable controller scalability only when operation volume creates a backlog under serial processing.
+By default, `enableConcurrency` is set to `false` and Trident operates in serial mode for all new installations and upgrades from earlier Trident versions. Serial mode requires no configuration, and all backends and drivers function normally without additional configuration. No runtime behavior changes unless you explicitly set `enableConcurrency` to `true`.
 
 == Controller scalability support
 
-Trident supports controller scalability at different maturity levels for different storage drivers.
-
-=== General availability
-
 The following drivers support controller scalability at general availability in Trident 26.10:
 
+* `asa-r2` (SAN and NVMe)
 * `ontap-san`
 * `ontap-nas`
 * `ontap-nas-economy`
@@ -51,48 +46,42 @@ The following drivers support controller scalability at general availability in 
 The `google-cloud-netapp-volumes` and `google-cloud-netapp-volumes-san` drivers are different. Trident supports only `google-cloud-netapp-volumes`. Do not use `google-cloud-netapp-volumes-san` in backend configurations or examples.
 ====
 
-=== Technical preview
-
-The following driver supports controller scalability as a technical preview feature in Trident 26.10:
-
-* `asa-r2` (SAN and NVMe)
-
-This driver has the following limitations:
-
-* Controller concurrency is available for evaluation and testing only.
-* Behavior can change from one release to the next.
-* NetApp does not recommend use in production environments.
-
 == How enableConcurrency works
 
-When you set `enableConcurrency` to `true`, Trident applies concurrent processing across all backends that the controller manages. The setting applies to every backend at once. You cannot enable it for individual backends or individual drivers.
+The `enableConcurrency` option is a global, all-or-nothing setting. It cannot be scoped to individual drivers or backends. When you set it to `true`, all backends switch to concurrent mode simultaneously.
 
-Every configured backend must use a driver in the general availability or technical preview list. If any backend uses an unsupported driver, Trident does not start, and Trident does not add a backend that uses an unsupported driver.
+[IMPORTANT]
+====
+Before enabling controller scalability, verify that every backend uses a supported driver. If any backend uses an unsupported driver, Trident will refuse to start and all storage operations across all backends will fail. Trident will also refuse to add new backends that use unsupported drivers while concurrency is enabled.
+====
 
-To restore startup, remove or reconfigure any backend that uses an unsupported driver, or disable controller scalability.
+To identify the drivers used by your backends, run:
+
+[source,console]
+----
+tridentctl get backends -n trident
+----
+
+If Trident refuses to start because a backend uses an unsupported driver, remove or reconfigure that backend, or disable controller scalability.
 
 [[before-you-enable]]
 == Before you enable
 
-[IMPORTANT]
-====
-Before you enable controller scalability, confirm that every configured backend uses a driver in the general availability or technical preview list. If any backend uses an unsupported driver, Trident does not start after you enable the feature.
-====
+Before enabling controller scalability, identify the driver type for every backend in your Trident installation. Run `tridentctl get backends -n trident`, then use the table below to determine whether your environment is ready.
 
-Use the following table to decide whether to enable controller scalability.
-
-[cols="1,1", options="header"]
+[cols="2,1,1,3", options="header"]
 |===
-| If your environment | Then
+| Your backend environment | Can you enable concurrency? | Production-ready? | Guidance
 
-| Uses only supported drivers and experiences a backlog of controller operations
-| Enable controller scalability.
+| All backends use supported drivers (`asa-r2` SAN and NVMe, `ontap-san`, `ontap-nas`, `ontap-nas-economy`, `ontap-nas-flexgroup`, `ontap-san-economy`, `google-cloud-netapp-volumes`, `azure-netapp-files`, `solidfire-san`)
+| Yes
+| Yes
+| Safe to enable in production. All supported drivers will operate in concurrent mode.
 
-| Uses any unsupported driver
-| Keep the default serial mode. Do not enable controller scalability.
-
-| Handles low operation volume with no backlog
-| Keep the default serial mode.
+| Any backend uses an unsupported driver
+| No
+| No
+| Trident will refuse to start and all storage operations across all backends will fail. Remove or migrate unsupported backends before enabling.
 |===
 
 == Enable controller scalability
@@ -221,25 +210,23 @@ When controller scalability is enabled, the Trident controller applies the follo
 
 The following considerations apply to controller scalability in Trident 26.10:
 
-* Controller scalability supports only the drivers in the general availability and technical preview lists. For details, see <<before-you-enable,Before you enable>>.
+* Controller scalability supports only the drivers listed in <<before-you-enable,Before you enable>>.
 * The Trident controller manages concurrency internally. This release provides no user-configurable concurrency limits.
 * Overall throughput depends on the storage driver in use, backend responsiveness, and Kubernetes API server performance.
 * High concurrency can increase load on backend storage systems.
 * Controller scalability behavior is not identical across all drivers.
-* The technical preview driver can exhibit inconsistent performance under high load and can change behavior between releases.
 * Debugging concurrent operations can be more complex because of parallel execution. Metrics and logs can show interleaved operation output.
 
 == Recommendations
 
-Before you enable controller scalability, complete the following steps:
+Before enabling controller scalability:
 
-. Confirm that every configured backend uses a driver in the general availability or technical preview list.
-. Test the change in a non-production cluster before you apply it in production.
-. Verify that controller scalability is enabled after you apply the change.
-
-Apply the following general recommendations when you operate with controller scalability:
+. Run `tridentctl get backends -n trident` and note the driver type for every backend.
+. Confirm every driver appears in the supported driver list for your Trident version.
+. If any driver is not in the supported list, stop. Do not enable concurrency until those backends are removed or migrated to a supported driver.
+. After enabling, check the controller logs with `kubectl logs -n trident deploy/trident-controller | grep -i concurrency`.
+. Monitor backend and Kubernetes API server performance after enabling.
 
 * Use general availability drivers for production environments that require high scalability.
-* Evaluate the technical preview driver only in non-production environments.
 * Monitor backend and controller performance when you operate at scale.
 * Do not assume operation ordering in automation scripts.
